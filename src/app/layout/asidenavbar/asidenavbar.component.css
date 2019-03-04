@@ -1,0 +1,12 @@
+.main-sidebar {
+  background-color: #477FBE;
+}
+.sidebar-menu > li.header , .sidebar-menu>li{
+  background: #ce8933 !important;
+}
+.sidebar-menu>li{
+  background: #000000 !important;
+}
+.sidebar-menu>li>.treeview-menu {
+  margin: 0 0px;
+}
