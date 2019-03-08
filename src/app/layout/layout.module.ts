@@ -4,6 +4,7 @@ import {TopnavbarComponent} from './topnavbar/topnavbar.component';
 import {AsidenavbarComponent} from './asidenavbar/asidenavbar.component';
 import {FooternavbarComponent} from './footernavbar/footernavbar.component';
 import {SettingnavbarComponent} from './settingnavbar/settingnavbar.component';
+import {RouterModule} from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -13,7 +14,8 @@ import {SettingnavbarComponent} from './settingnavbar/settingnavbar.component';
     SettingnavbarComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    RouterModule
   ],
   exports: [
     TopnavbarComponent,

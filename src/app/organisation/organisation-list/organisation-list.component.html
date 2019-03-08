@@ -1,0 +1,30 @@
+<app-list-message [message]="message"></app-list-message>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-body table-responsive">
+        <table class="table table-bordered table-striped" id="organisations">
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Tin</th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let organisation of organisations">
+            <td> {{ organisation.name }}</td>
+            <td> {{ organisation.email }}</td>
+            <td> {{ organisation.tin }}</td>
+            <td class="actions no-wrap text-right">
+              <button class="btn btn-danger" (click)="deleteOrganisation(organisation)"> Delete</button>
+              <button class="btn btn-success btn-margin" (click)="editOrganisation(organisation)"  style="margin-left: 10px;"> Edit</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

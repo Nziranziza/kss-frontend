@@ -1,9 +1,10 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 
-import { AdminRoutingModule } from './admin-routing.module';
-import { AdminComponent } from './admin/admin.component';
+import {AdminRoutingModule} from './admin-routing.module';
+import {AdminComponent} from './admin/admin.component';
 import {LayoutModule} from '../layout/layout.module';
+
 
 @NgModule({
   declarations: [AdminComponent],
@@ -13,4 +14,5 @@ import {LayoutModule} from '../layout/layout.module';
     LayoutModule
   ]
 })
-export class AdminModule { }
+export class AdminModule {
+}

@@ -4,7 +4,7 @@ import {Observable, BehaviorSubject, ReplaySubject} from 'rxjs';
 
 import {ApiService} from './api.service';
 import {JwtService} from './jwt.service';
-import {User} from '../models';
+import {ApiResponse, User} from '../models';
 import {map, distinctUntilChanged} from 'rxjs/operators';
 
 
@@ -57,12 +57,11 @@ export class AuthenticationService {
     this.isAuthenticatedSubject.next(false);
   }
 
-  attemptAuth(type, credentials): Observable<User> {
-    const route = (type === 'login') ? '/login' : '';
+  attemptAuth(route, credentials): Observable<ApiResponse> {
     return this.apiService.post('/users' + route, {user: credentials})
       .pipe(map(
         data => {
-          this.setAuth(data.user);
+          this.setAuth(data.result);
           return data;
         }
       ));
@@ -73,13 +72,13 @@ export class AuthenticationService {
   }
 
   // Update the user on the server (email, pass, etc)
-  update(user): Observable<User> {
+  update(user): Observable<ApiResponse> {
     return this.apiService
       .put('/user', {user})
       .pipe(map(data => {
         // Update the currentUser observable
-        this.currentUserSubject.next(data.user);
-        return data.user;
+        this.currentUserSubject.next(data.result);
+        return data.result;
       }));
   }
 

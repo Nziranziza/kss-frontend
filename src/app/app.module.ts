@@ -9,6 +9,11 @@ import {HomeModule} from './home/home.module';
 import {CoreModule} from './core';
 import {SharedModule} from './shared';
 
+import {DataService} from './data.service';
+import {HttpClientInMemoryWebApiModule} from 'angular-in-memory-web-api';
+import {OrganisationModule} from './organisation/organisation.module';
+
+
 @NgModule({
   declarations: [
     AppComponent
@@ -20,7 +25,11 @@ import {SharedModule} from './shared';
     CoreModule,
     SharedModule,
     AdminModule,
-    HomeModule
+    HomeModule,
+    OrganisationModule,
+    HttpClientInMemoryWebApiModule.forRoot(
+      DataService, {dataEncapsulation: false}
+    )
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,9 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {Router, ActivatedRoute} from '@angular/router';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-
-import {AuthenticationService} from '../../core';
-import {Errors} from '../../core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AuthenticationService, HelperService} from '../../core';
 
 declare var $;
 
@@ -14,18 +12,19 @@ declare var $;
 })
 export class LoginComponent implements OnInit {
 
-  authType = 'login';
-  errors: Errors = {errors: {}};
+  urlRoute = 'login';
+  errors: string[];
   authForm: FormGroup;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private authenticationService: AuthenticationService,
-    private fb: FormBuilder
+    private formBuilder: FormBuilder,
+    private helperService: HelperService
   ) {
     // use FormBuilder to create a form group
-    this.authForm = this.fb.group({
+    this.authForm = this.formBuilder.group({
       email: ['', Validators.required],
       password: ['', Validators.required]
     });
@@ -44,20 +43,24 @@ export class LoginComponent implements OnInit {
   }
 
   submitForm() {
-    this.errors = {errors: {}};
+
+    this.errors = [];
+
+    if (this.authForm.invalid) {
+      this.errors = this.helperService.getFormValidationErrors(this.authForm);
+      return;
+    }
     const credentials = this.authForm.value;
-    this.authenticationService
-      .attemptAuth(this.authType, credentials)
-      .subscribe(
-        data => this.router.navigateByUrl('admin'),
-        err => {
-          this.errors = err;
-        }
-      );
+    this.authenticationService.attemptAuth(this.urlRoute, credentials).subscribe(data => {
+      if (data.status === 200) {
+        this.router.navigateByUrl('admin/organisations/list');
+      } else {
+        this.errors = data.errors;
+      }
+    });
   }
 
   login() {
-    this.router.navigate(['admin']);
+    this.router.navigateByUrl('admin');
   }
-
 }

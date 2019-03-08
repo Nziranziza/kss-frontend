@@ -3,7 +3,7 @@ import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import {RouterModule} from '@angular/router';
-import {ListErrorsComponent, HomeHeaderComponent, HomeFooterComponent } from './layout';
+import {ListErrorsComponent, HomeHeaderComponent, HomeFooterComponent, ListMessageComponent} from './layout';
 
 @NgModule({
   imports: [
@@ -14,7 +14,7 @@ import {ListErrorsComponent, HomeHeaderComponent, HomeFooterComponent } from './
     RouterModule
   ],
   declarations: [ListErrorsComponent,
-    HomeHeaderComponent, HomeFooterComponent],
+    HomeHeaderComponent, HomeFooterComponent, ListMessageComponent],
   exports: [
     CommonModule,
     FormsModule,
@@ -22,6 +22,7 @@ import {ListErrorsComponent, HomeHeaderComponent, HomeFooterComponent } from './
     HttpClientModule,
     RouterModule,
     ListErrorsComponent,
+    ListMessageComponent,
     HomeHeaderComponent,
     HomeFooterComponent
   ]

@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {AuthenticationService} from '../../core/services';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-topnavbar',
@@ -7,9 +9,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TopnavbarComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private authenticationService: AuthenticationService,
+    private router: Router) {
 
-  ngOnInit() {
   }
 
+  ngOnInit() {
+
+  }
+
+  logout() {
+    this.authenticationService.purgeAuth();
+    this.router.navigateByUrl('login');
+  }
 }
