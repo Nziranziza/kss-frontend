@@ -11,13 +11,13 @@ const routes: Routes = [
     component: AdminComponent,
     children: [
       {
-        path: 'list',
+        path: '',
         component: OrganisationListComponent
       }, {
         path: 'create',
         component: OrganisationCreateComponent
       }, {
-        path: 'edit',
+        path: 'edit/:id',
         component: OrganisationEditComponent,
       }
     ]

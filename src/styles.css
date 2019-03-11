@@ -4,10 +4,10 @@
 @import url("assets/bower_components/Ionicons/css/ionicons.min.css");
 @import url("assets/bower_components/jvectormap/jquery-jvectormap.css");
 @import url("assets/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css");
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
 @import url("assets/dist/css/AdminLTE.min.css");
 @import url("assets/dist/css/skins/_all-skins.min.css");
 @import url("assets/plugins/iCheck/square/blue.css");
-
 
 .content-wrapper, .login-page{
   background-color: white;

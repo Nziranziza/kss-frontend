@@ -21,7 +21,6 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private authenticationService: AuthenticationService,
     private formBuilder: FormBuilder,
-    private helperService: HelperService
   ) {
     // use FormBuilder to create a form group
     this.authForm = this.formBuilder.group({
@@ -45,10 +44,8 @@ export class LoginComponent implements OnInit {
   submitForm() {
 
     this.errors = [];
-
     if (this.authForm.invalid) {
-      this.errors = this.helperService.getFormValidationErrors(this.authForm);
-      return;
+      this.errors.push('invalid username or email');
     }
     const credentials = this.authForm.value;
     this.authenticationService.attemptAuth(this.urlRoute, credentials).subscribe(data => {

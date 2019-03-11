@@ -3,7 +3,16 @@ import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import {RouterModule} from '@angular/router';
-import {ListErrorsComponent, HomeHeaderComponent, HomeFooterComponent, ListMessageComponent} from './layout';
+import {
+  ListErrorsComponent,
+  HomeHeaderComponent,
+  HomeFooterComponent,
+  ListMessageComponent,
+
+} from './layout';
+import {MatDialogModule, MatIconModule} from '@angular/material';
+import {ConfirmDialogComponent} from './layout/confirm-dialog/confirm-dialog.component';
+
 
 @NgModule({
   imports: [
@@ -11,10 +20,10 @@ import {ListErrorsComponent, HomeHeaderComponent, HomeFooterComponent, ListMessa
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    RouterModule
+    RouterModule, MatIconModule, MatDialogModule
   ],
   declarations: [ListErrorsComponent,
-    HomeHeaderComponent, HomeFooterComponent, ListMessageComponent],
+    HomeHeaderComponent, HomeFooterComponent, ListMessageComponent, ConfirmDialogComponent],
   exports: [
     CommonModule,
     FormsModule,
@@ -24,8 +33,10 @@ import {ListErrorsComponent, HomeHeaderComponent, HomeFooterComponent, ListMessa
     ListErrorsComponent,
     ListMessageComponent,
     HomeHeaderComponent,
-    HomeFooterComponent
-  ]
+    HomeFooterComponent,
+    ConfirmDialogComponent
+  ],
+  entryComponents: [ConfirmDialogComponent]
 })
 export class SharedModule {
 }

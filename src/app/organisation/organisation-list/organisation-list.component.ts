@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {OrganisationService} from '../../core/services';
 import {Organisation} from '../../core/models';
 import {Router} from '@angular/router';
+import {ConfirmDialogService} from '../../core/services';
 
 declare var $;
 
@@ -13,7 +14,7 @@ declare var $;
 export class OrganisationListComponent implements OnInit {
 
   constructor(private organisationService: OrganisationService,
-              private router: Router) {
+              private router: Router, private  confirmDialogService: ConfirmDialogService) {
 
   }
 
@@ -31,13 +32,18 @@ export class OrganisationListComponent implements OnInit {
   }
 
   deleteOrganisation(organisation: Organisation): void {
-    if (confirm('Are you sure to delete this record?')) {
-      this.organisationService.destroy(organisation.id)
-        .subscribe(data => {
+
+    this.confirmDialogService.openConfirmDialog('Are you sure you want to delete this record?').afterClosed().subscribe(
+      res => {
+        if (res) {
+          this.organisationService.destroy(organisation.id)
+            .subscribe(data => {
+              this.getAllOrganisations();
+              this.message = data.message;
+            });
           this.getAllOrganisations();
-          this.message = data.message;
-        });
-    }
+        }
+      });
   }
 
   editOrganisation(organisation: Organisation): void {
@@ -52,7 +58,7 @@ export class OrganisationListComponent implements OnInit {
 
   getAllOrganisations(): void {
     this.organisationService.all().subscribe(data => {
-      this.organisations = data;
+      return this.organisations;
     });
   }
 
