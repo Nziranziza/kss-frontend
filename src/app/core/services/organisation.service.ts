@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {ApiService} from './api.service';
-import {ApiResponse} from '../models';
+import {ApiResponse, Organisation} from '../models';
 
 
 @Injectable()
@@ -23,13 +23,13 @@ export class OrganisationService {
     return this.apiService.delete('/organisations/' + id);
   }
 
-  save(organisation): Observable<ApiResponse> {
+  save(organisation: Organisation): Observable<ApiResponse> {
     // If we're updating an existing organisation
     if (organisation.id) {
-      return this.apiService.put('/organisations/' + organisation.id, {Organisation: organisation});
-    // Otherwise, create a new organisation
+      return this.apiService.put('/organisations/' + organisation.id, organisation);
+      // Otherwise, create a new organisation
     } else {
-      return this.apiService.post('/organisations/', {Organisation: organisation});
+      return this.apiService.post('/organisations/', organisation);
     }
   }
 }

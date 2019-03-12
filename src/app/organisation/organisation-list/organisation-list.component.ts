@@ -19,10 +19,7 @@ export class OrganisationListComponent implements OnInit {
   }
 
   message: string;
-  organisations: Organisation[] = [
-    {id: 1, name: 'Organisation 1', email: 'organistaion1@org.rw', tin: 1234},
-
-  ];
+  organisations: any;
 
   ngOnInit() {
     $(() => {
@@ -39,26 +36,16 @@ export class OrganisationListComponent implements OnInit {
           this.organisationService.destroy(organisation.id)
             .subscribe(data => {
               this.getAllOrganisations();
-              this.message = data.message;
+              this.message = 'Record successful deleted!';
             });
           this.getAllOrganisations();
         }
       });
   }
 
-  editOrganisation(organisation: Organisation): void {
-    window.localStorage.removeItem('editOrganisationId');
-    window.localStorage.setItem('editOrganisationId', organisation.id.toString());
-    this.router.navigateByUrl('admin/organisations/edit');
-  }
-
-  addOrganisation(): void {
-    this.router.navigateByUrl('admin/organisations/create');
-  }
-
   getAllOrganisations(): void {
     this.organisationService.all().subscribe(data => {
-      return this.organisations;
+      return this.organisations = data;
     });
   }
 

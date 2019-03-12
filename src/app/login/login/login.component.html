@@ -1,5 +1,5 @@
-<app-home-header></app-home-header>
 <div class="home">
+  <app-home-header></app-home-header>
   <div class="container">
     <div class="row">
       <div class="col-xs-12">
@@ -7,7 +7,7 @@
           <div class="login-box-body">
             <p class="login-box-msg">Sign in</p>
             <app-list-errors [errorList]="errors"></app-list-errors>
-            <form [formGroup]="authForm" (ngSubmit)="submitForm()">
+            <form [formGroup]="authForm" (ngSubmit)="onSubmit()">
               <div class="form-group has-feedback">
                 <input type="text" formControlName="email" class="form-control"
                        [ngClass]="{ 'is-invalid': submitted && authForm.email.errors }" placeholder="email"/>
@@ -41,6 +41,7 @@
     <!-- /.row -->
   </div>
   <!-- .container -->
+  <app-home-footer></app-home-footer>
 </div>
 <!-- /.home -->
-<app-home-footer></app-home-footer>
+

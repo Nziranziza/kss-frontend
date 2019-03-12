@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, Input} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {OrganisationService} from '../../core/services';
@@ -37,14 +37,15 @@ export class OrganisationEditComponent implements OnInit {
   onSubmit() {
 
     if (this.editForm.valid) {
+      this.router.navigateByUrl('admin/organisations');
       this.organisationService.save(this.editForm.value)
-        .subscribe(data => {
-          if (data.status === 200) {
-            this.router.navigateByUrl('admin/organisations/list');
-          } else {
-            this.errors = data.errors;
-          }
-        });
+        .subscribe((data) => {
+            this.router.navigateByUrl('admin/organisations');
+          },
+          (err) => {
+            this.errors = err;
+          });
     }
   }
+
 }

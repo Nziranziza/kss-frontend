@@ -34,7 +34,8 @@ import {ConfirmDialogComponent} from './layout/confirm-dialog/confirm-dialog.com
     ListMessageComponent,
     HomeHeaderComponent,
     HomeFooterComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    MatIconModule, MatDialogModule
   ],
   entryComponents: [ConfirmDialogComponent]
 })

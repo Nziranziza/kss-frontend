@@ -1,3 +1,7 @@
+<h3>
+  Organisations
+  <a class="btn btn-success pull-right" href ="admin/organisations/create"><i class="fa fa-plus"></i> New organisation</a>
+</h3>
 <app-list-message [message]="message"></app-list-message>
 <div class="row">
   <div class="col-xs-12">
@@ -19,7 +23,7 @@
             <td> {{ organisation.tin }}</td>
             <td class="actions no-wrap text-right">
               <button class="btn btn-danger" (click)="deleteOrganisation(organisation)"> Delete</button>
-              <a class="btn btn-success btn-margin" [routerLink]="['edit', organisation.id]"  style="margin-left: 10px;"> Edit</a>
+              <a class="btn btn-success btn-margin" [routerLink]="['edit/',organisation.id]"  style="margin-left: 10px;"> Edit</a>
             </td>
           </tr>
           </tbody>

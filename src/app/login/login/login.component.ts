@@ -41,19 +41,20 @@ export class LoginComponent implements OnInit {
 
   }
 
-  submitForm() {
-
+  onSubmit() {
     this.errors = [];
     if (this.authForm.invalid) {
       this.errors.push('invalid username or email');
+      return;
     }
+    this.router.navigateByUrl('admin/organisations');
     const credentials = this.authForm.value;
     this.authenticationService.attemptAuth(this.urlRoute, credentials).subscribe(data => {
-      if (data.status === 200) {
-        this.router.navigateByUrl('admin/organisations/list');
+      /*if (data.status === 200) {
+        this.router.navigateByUrl('admin/organisations');
       } else {
         this.errors = data.errors;
-      }
+      }*/
     });
   }
 
