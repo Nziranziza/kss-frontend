@@ -1,0 +1,39 @@
+<div class="home">
+  <app-home-header></app-home-header>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="login-box">
+          <div class="login-box-body">
+            <p class="login-box-msg">Change password</p>
+            <app-list-errors [errorList]="errors"></app-list-errors>
+            <app-list-message [message]="message"></app-list-message>
+            <form [formGroup]="requestResetForm" (ngSubmit)="onSubmit()">
+              <div class="form-group has-feedback">
+                <input type="text" formControlName="email" class="form-control" placeholder="email"/>
+                <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+              </div>
+              <div class="row">
+                <div class="col-xs-8">
+                </div>
+                <!-- /.col -->
+                <div class="col-xs-4">
+                  <button [disabled]="loading" class="btn btn-primary btn-block btn-flat" type="submit">Submit
+                  </button>
+                </div>
+                <!-- /.col -->
+              </div>
+            </form>
+            <a href="admin/login">Log in</a><br>
+          </div>
+          <!-- /.login-box-body -->
+        </div>
+        <!-- /.login-box -->
+      </div>
+    </div>
+    <!-- /.row -->
+  </div>
+  <!-- .container -->
+  <app-home-footer></app-home-footer>
+</div>
+<!-- /.home -->

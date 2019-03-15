@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {OrganisationService} from '../../core/services';
+import {HelperService} from '../../core/helpers';
 
 @Component({
   selector: 'app-organisation-create',
@@ -11,7 +12,7 @@ import {OrganisationService} from '../../core/services';
 export class OrganisationCreateComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
-              private router: Router, private organisationService: OrganisationService) {
+              private router: Router, private organisationService: OrganisationService, private helper: HelperService) {
   }
 
   createForm: FormGroup;
@@ -20,22 +21,30 @@ export class OrganisationCreateComponent implements OnInit {
   ngOnInit() {
 
     this.createForm = this.formBuilder.group({
-      email: ['', Validators.required],
       name: ['', Validators.required],
-      tin: ['', Validators.required]
+      email: ['', Validators.required],
+      phoneNumber: ['', Validators.required],
+      organisationType: ['', Validators.required],
+      website: ['', Validators.required]
     });
   }
 
   onSubmit() {
 
     if (this.createForm.valid) {
-      this.organisationService.save(this.createForm.value)
-        .subscribe((data) => {
+      const org = this.createForm.value;
+      this.organisationService.all().subscribe(data => {
+        org['id'.toString()] = data.length + 1;
+      });
+      this.organisationService.save(org)
+        .subscribe(data => {
             this.router.navigateByUrl('admin/organisations');
           },
           (err) => {
             this.errors = err;
           });
+    } else {
+      this.errors = this.helper.getFormValidationErrors(this.createForm);
     }
   }
 }

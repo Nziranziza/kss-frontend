@@ -1,0 +1,39 @@
+<h3>
+  Users
+  <a class="btn btn-success pull-right" href=""><i class="fa fa-plus"></i> New user</a>
+</h3>
+<app-list-message [message]="message"></app-list-message>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-body table-responsive">
+        <table class="table table-bordered table-striped" id="organisations">
+          <thead>
+          <tr>
+            <th>First name</th>
+            <th>Surname</th>
+            <th>Email</th>
+            <th>Phone number</th>
+            <th>Gender</th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let user of users">
+            <td> {{ user.firstName }}</td>
+            <td> {{ user.surname }}</td>
+            <td> {{ user.email }}</td>
+            <td> {{ user.phoneNumber }}</td>
+            <td> {{ user.gender }}</td>
+            <td class="actions no-wrap text-right">
+              <button class="btn btn-danger"> Delete</button>
+              <a class="btn btn-success btn-margin" href="#" style="margin-left: 10px;">
+                Edit</a>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

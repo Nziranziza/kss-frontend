@@ -6,6 +6,7 @@ import {OrganisationListComponent} from './organisation-list/organisation-list.c
 import {OrganisationEditComponent} from './organisation-edit/organisation-edit.component';
 import {OrganisationCreateComponent} from './organisation-create/organisation-create.component';
 import {SharedModule} from '../shared';
+import {RouterModule} from '@angular/router';
 
 
 @NgModule({
@@ -13,8 +14,10 @@ import {SharedModule} from '../shared';
   imports: [
     CommonModule,
     OrganisationRoutingModule,
+    RouterModule,
     SharedModule
-  ]
+  ],
+  exports: [RouterModule]
 })
 export class OrganisationModule {
 }

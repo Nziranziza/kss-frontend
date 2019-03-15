@@ -1,0 +1,62 @@
+<h3>
+  Edit user
+</h3>
+<app-list-errors [errorList]="errors"></app-list-errors>
+<form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-body">
+          <div class="row">
+            <div class="col-xs-6">
+              <div class="form-group">
+                <label class="control-label">First name</label>
+                <input type="text" formControlName="firstName" class="form-control">
+              </div>
+              <div class="form-group">
+                <label class="control-label">Last name</label>
+                <input type="text" formControlName="surname" class="form-control">
+              </div>
+              <div class="form-group">
+                <label class="control-label">Phone number</label>
+                <input type="text" formControlName="phoneNumber" class="form-control">
+              </div>
+              <div class="form-group">
+                <label class="control-label">Email</label>
+                <input type="text" formControlName="email" class="form-control">
+              </div>
+              <div class="form-group">
+                <div class="radio">
+                  <label>
+                    <input type="radio" formControlName="gender" value="male" checked="">
+                    Male
+                  </label>
+                </div>
+                <div class="radio">
+                  <label>
+                    <input type="radio" formControlName="gender" value="female" checked="">
+                    Female
+                  </label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label">Password</label>
+                <input type="text" formControlName="password" class="form-control">
+              </div>
+              <div class="form-group">
+                <label class="control-label">Confirm password</label>
+                <input type="text" formControlName="confirmPassword" class="form-control">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <a class="btn btn-warning btn-margin pull-right" href="admin/organisations/{{organisationId}}/users">Cancel</a>
+      <button class="btn btn-success pull-right">Save</button>
+    </div>
+  </div>
+</form>

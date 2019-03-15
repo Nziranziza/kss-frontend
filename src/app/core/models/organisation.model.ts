@@ -1,6 +1,8 @@
 export interface Organisation {
   id: number;
-  email: string;
   name: string;
-  tin: number;
+  email: string;
+  phoneNumber: string;
+  organisationType: string;
+  website: string;
 }

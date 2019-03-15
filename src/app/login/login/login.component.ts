@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {AuthenticationService, HelperService} from '../../core';
+import {AuthenticationService} from '../../core';
 
 declare var $;
 
@@ -12,7 +12,6 @@ declare var $;
 })
 export class LoginComponent implements OnInit {
 
-  urlRoute = 'login';
   errors: string[];
   authForm: FormGroup;
 
@@ -44,12 +43,12 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     this.errors = [];
     if (this.authForm.invalid) {
-      this.errors.push('invalid username or email');
+      this.errors.push('Invalid username or email');
       return;
     }
     this.router.navigateByUrl('admin/organisations');
     const credentials = this.authForm.value;
-    this.authenticationService.attemptAuth(this.urlRoute, credentials).subscribe(data => {
+    this.authenticationService.attemptAuth(credentials).subscribe(data => {
       /*if (data.status === 200) {
         this.router.navigateByUrl('admin/organisations');
       } else {

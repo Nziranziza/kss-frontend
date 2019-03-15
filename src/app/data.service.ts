@@ -11,16 +11,28 @@ export class DataService implements InMemoryDbService {
 
   createDb() {
     const organisations = [
-      {id: 1, name: 'Organisation 1', email: 'organistaion1@org.rw', tin: 1234},
-      {id: 2, name: 'Organisation 2', email: 'organistaion2@org.rw', tin: 1234},
+      {id: 1, name: 'Organisation 1', email: 'organistaion1@org.rw', phoneNumber: '0788880000',
+        organisationType: 'naeb', website: 'www.bk.rw'}
+
+    ];
+
+    const farmers = [
+      {
+        id: 1, userId: 1, userInfo: {
+          firstName: 'farmer first name', lastName: 'farmer last name',
+          phoneNumber: '0788888888', nationalId: '19701111111111'
+        },
+        address: 'address', treesNumber: 300, ownsLand: true, upiNumber: '12345', belongsToCooperative: true
+      }
+
     ];
 
     const users = [
-      {id: 1, username: 'admin', email: 'admin@bk.rw', token: 1234 , bio: 'biography', image: 'image'},
+      {id: 1, username: 'admin', email: 'admin@bk.rw'},
 
     ];
 
-    return { organisations, users };
+    return {organisations, users, farmers};
 
   }
 }

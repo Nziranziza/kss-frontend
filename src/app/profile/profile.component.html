@@ -1,0 +1,51 @@
+<div class="box box-primary">
+  <div class="box-header with-border">
+    <h3 class="box-title">About Me</h3>
+  </div>
+  <!-- /.box-header -->
+  <div class="box-body">
+    <p class="text-muted">
+      Email
+    </p>
+    <p class="text-muted">
+      Phone number
+    </p>
+    <hr>
+    <strong><i class="fa fa-map-marker margin-r-5"></i> Location</strong>
+    <p class="text-muted">Kigali, Rwanda</p>
+    <hr>
+    <strong><i class="fa fa-university margin-r-5"></i> Organisation</strong>
+    <p>
+    </p>
+    <hr>
+    <p>
+    <strong><i class="fa fa-lock margin-r-5"></i> Change password</strong>
+    </p>
+    <app-list-errors [errorList]="errors"></app-list-errors>
+    <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+      <div class="row">
+        <div class="col-xs-6">
+          <div class="form-group">
+            <p class="text-muted">
+              Password
+            </p>
+            <input type="text" formControlName="password" class="form-control">
+          </div>
+          <div class="form-group">
+            <p class="text-muted">
+              Confirm password
+            </p>
+            <input type="text" formControlName="password" class="form-control">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12">
+          <button class="btn btn-success">Save</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <!-- /.box-body -->
+</div>
+

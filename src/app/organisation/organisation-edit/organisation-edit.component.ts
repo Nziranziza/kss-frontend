@@ -1,4 +1,4 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {OrganisationService} from '../../core/services';
@@ -22,12 +22,13 @@ export class OrganisationEditComponent implements OnInit {
 
     this.editForm = this.formBuilder.group({
       id: [],
-      email: ['', Validators.required],
       name: ['', Validators.required],
-      tin: ['', Validators.required]
+      email: ['', Validators.required],
+      phoneNumber: ['', Validators.required],
+      organisationType: ['', Validators.required],
+      website: ['', Validators.required]
     });
     this.route.params.subscribe(params => {
-
       this.organisationService.get(params['id'.toString()]).subscribe(data => {
         this.editForm.patchValue(data);
       });
@@ -35,16 +36,14 @@ export class OrganisationEditComponent implements OnInit {
   }
 
   onSubmit() {
-
     if (this.editForm.valid) {
-      this.router.navigateByUrl('admin/organisations');
-      this.organisationService.save(this.editForm.value)
-        .subscribe((data) => {
-            this.router.navigateByUrl('admin/organisations');
-          },
-          (err) => {
-            this.errors = err;
-          });
+      this.organisationService.save(this.editForm.value).subscribe(data => {
+          this.router.navigateByUrl('admin/organisations');
+        },
+        (err) => {
+          this.errors = err;
+        });
+
     }
   }
 

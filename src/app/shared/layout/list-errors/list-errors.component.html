@@ -1,7 +1,5 @@
 <div class="alert alert-danger alert-dismissable"  *ngIf="errorList">
-  <ul class="error-messages">
-    <li *ngFor="let error of errorList">
-      {{ error }}
-    </li>
-  </ul>
+    <span *ngFor="let error of errorList">
+      {{ error }} <br />
+    </span>
 </div>
