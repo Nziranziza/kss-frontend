@@ -15,13 +15,13 @@ export class FarmerUploadComponent implements OnInit {
               private farmerService: FarmerService) {
   }
 
-  editForm: FormGroup;
+  uploadForm: FormGroup;
   errors: string[];
   title = 'Upload farmers';
 
   ngOnInit() {
 
-    this.editForm = this.formBuilder.group({
+    this.uploadForm = this.formBuilder.group({
       inputFile: []
     });
   }

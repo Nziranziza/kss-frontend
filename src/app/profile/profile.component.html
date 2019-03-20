@@ -22,7 +22,7 @@
     <strong><i class="fa fa-lock margin-r-5"></i> Change password</strong>
     </p>
     <app-list-errors [errorList]="errors"></app-list-errors>
-    <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="changePasswordForm" (ngSubmit)="onSubmit()">
       <div class="row">
         <div class="col-xs-6">
           <div class="form-group">

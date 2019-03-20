@@ -1,0 +1,20 @@
+image: trion/ng-cli-karma
+
+cache:
+  paths:
+    - node_modules/
+
+deploy_stage:
+  stage: deploy
+  environment: Staging
+  only:
+    - develop
+  script:
+    - rm ./package-lock.json
+    - npm install
+    - ./node_modules/@angular/cli/bin/ng build --progress false --prod --aot
+    - cd dist/
+    - ls
+    - sshpass -V
+    - export SSHPASS=admin
+    - sshpass -e scp -o stricthostkeychecking=no -r dist/basic-angular jrukundo@192.168.0.38:/var/www/html/smart-kungahara

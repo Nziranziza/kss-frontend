@@ -15,7 +15,7 @@ export class RequestResetComponent implements OnInit {
 
   errors: string[];
   message: string;
-  requestResetForm: FormGroup;
+  requestResetForm : FormGroup;
 
   constructor(
     private route: ActivatedRoute,
