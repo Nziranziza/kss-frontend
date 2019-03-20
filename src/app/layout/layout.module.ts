@@ -3,15 +3,15 @@ import {CommonModule} from '@angular/common';
 import {TopnavbarComponent} from './topnavbar/topnavbar.component';
 import {AsidenavbarComponent} from './asidenavbar/asidenavbar.component';
 import {FooternavbarComponent} from './footernavbar/footernavbar.component';
-import {SettingnavbarComponent} from './settingnavbar/settingnavbar.component';
+
 import {RouterModule} from '@angular/router';
 
 @NgModule({
   declarations: [
     TopnavbarComponent,
     AsidenavbarComponent,
-    FooternavbarComponent,
-    SettingnavbarComponent
+    FooternavbarComponent
+
   ],
   imports: [
     CommonModule,
@@ -20,8 +20,7 @@ import {RouterModule} from '@angular/router';
   exports: [
     TopnavbarComponent,
     AsidenavbarComponent,
-    FooternavbarComponent,
-    SettingnavbarComponent
+    FooternavbarComponent
   ]
 })
 export class LayoutModule {

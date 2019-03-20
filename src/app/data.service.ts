@@ -28,7 +28,8 @@ export class DataService implements InMemoryDbService {
     ];
 
     const users = [
-      {id: 1, username: 'admin', email: 'admin@bk.rw'},
+      {id: 1, firstName: 'first name', lastName: 'last name', title: 'officer',  phoneNumber: '078880000111',
+        email: 'user@naeb.rw', gender: 'male', organisationId: 1, password: 123456},
 
     ];
 

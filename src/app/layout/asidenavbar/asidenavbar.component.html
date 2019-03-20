@@ -4,28 +4,28 @@
     <!-- sidebar menu: : style can be found in sidebar.less -->
     <ul class="sidebar-menu tree" data-widget="tree">
       <li class="header">MAIN NAVIGATION</li>
-      <li class="">
-        <a href="admin/organisations">
+      <li routerLinkActive="active">
+        <a routerLink="/admin/organisations">
           <i class="fa fa-university" aria-hidden="true"></i>
           <span>Organisations</span>
         </a>
       </li>
-      <li class="">
-        <a href="admin/farmers">
+      <li routerLinkActive="active">
+        <a routerLink="/admin/farmers">
           <i class="fa fa-users" aria-hidden="true"></i>
           <span>Farmers</span>
         </a>
       </li>
-      <li class="treeview">
-        <a href="#">
+      <li class="treeview" routerLinkActive="active">
+        <a>
           <i class="fa fa-pie-chart"></i>
           <span>Reports</span>
           <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
         </a>
-        <ul class="treeview-menu" style="display: none;">
-          <li><a href="admin/registration-reports">Registration reports</a></li>
+        <ul class="treeview-menu">
+          <li routerLinkActive="active"><a routerLink="/admin/registration-reports">Registration reports</a></li>
         </ul>
       </li>
     </ul>

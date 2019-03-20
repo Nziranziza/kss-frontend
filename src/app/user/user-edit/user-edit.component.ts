@@ -25,10 +25,13 @@ export class UserEditComponent implements OnInit {
     this.editForm = this.formBuilder.group({
       id: [],
       firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      title: ['', Validators.required],
       email: ['', Validators.required],
       phoneNumber: ['', Validators.required],
-      organisationType: ['', Validators.required],
-      website: ['', Validators.required]
+      gender: ['', Validators.required],
+      password: ['', Validators.required],
+      confirmPassword: ['', Validators.required]
     });
     this.route.params.subscribe(params => {
       this.organisationId = params['organisationId'.toString()];

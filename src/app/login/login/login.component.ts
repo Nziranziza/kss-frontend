@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit {
       this.errors.push('Invalid username or email');
       return;
     }
-    this.router.navigateByUrl('admin/organisations');
+    this.router.navigateByUrl('admin/farmers');
     const credentials = this.authForm.value;
     this.authenticationService.attemptAuth(credentials).subscribe(data => {
       /*if (data.status === 200) {

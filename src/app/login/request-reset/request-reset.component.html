@@ -5,7 +5,7 @@
       <div class="col-xs-12">
         <div class="login-box">
           <div class="login-box-body">
-            <p class="login-box-msg">Change password</p>
+            <p class="login-box-msg">Reset password</p>
             <app-list-errors [errorList]="errors"></app-list-errors>
             <app-list-message [message]="message"></app-list-message>
             <form [formGroup]="requestResetForm" (ngSubmit)="onSubmit()">
@@ -18,13 +18,13 @@
                 </div>
                 <!-- /.col -->
                 <div class="col-xs-4">
-                  <button [disabled]="loading" class="btn btn-primary btn-block btn-flat" type="submit">Submit
+                  <button class="btn btn-primary btn-block btn-flat" type="submit">Submit
                   </button>
                 </div>
                 <!-- /.col -->
               </div>
             </form>
-            <a href="admin/login">Log in</a><br>
+            <a href="login">Log in</a><br>
           </div>
           <!-- /.login-box-body -->
         </div>
