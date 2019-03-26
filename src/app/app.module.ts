@@ -36,7 +36,7 @@ import {UserModule} from './user/user.module';
     RegistrationReportModule,
     ProfileModule,
     RouterModule, UserModule,
-    HttpClientInMemoryWebApiModule.forRoot(DataService)
+    /*HttpClientInMemoryWebApiModule.forRoot(DataService)*/
   ],
   providers: [Title, {provide: HTTP_INTERCEPTORS, useClass: HttpTokenInterceptor, multi: true},],
   bootstrap: [AppComponent]

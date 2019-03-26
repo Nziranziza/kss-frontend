@@ -10,10 +10,7 @@ const routes: Routes = [
     path: 'admin',
     component: AdminComponent,
     children: [
-      {
-        path: 'organisations/:organisationId/users',
-        component: UserListComponent
-      },
+
       {
         path: 'organisations/:organisationId/users/create',
         component: UserCreateComponent
