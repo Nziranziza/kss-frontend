@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthenticationService} from '../../core/services';
 import {Router} from '@angular/router';
+import {first} from 'rxjs/operators';
 
 @Component({
   selector: 'app-topnavbar',
@@ -9,6 +10,9 @@ import {Router} from '@angular/router';
 })
 export class TopnavbarComponent implements OnInit {
 
+  private surname: string;
+  private regNumber: string;
+
   constructor(
     private authenticationService: AuthenticationService,
     private router: Router) {
@@ -16,7 +20,8 @@ export class TopnavbarComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    this.surname = this.authenticationService.getCurrentUser().surname;
+    this.regNumber = this.authenticationService.getCurrentUser().regNumber;
   }
 
   logout() {

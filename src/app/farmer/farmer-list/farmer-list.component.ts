@@ -24,7 +24,7 @@ export class FarmerListComponent implements OnInit {
     $(() => {
       $('#farmers').DataTable();
     });
-    this.getAllFarmers();
+    /*this.getAllFarmers();*/
   }
 
   deleteFarmer(farmer: Farmer): void {

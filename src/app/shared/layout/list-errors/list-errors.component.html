@@ -1,5 +1,5 @@
 <div class="alert alert-danger alert-dismissable"  *ngIf="errorList">
     <span *ngFor="let error of errorList">
-      {{ error }} <br />
+      {{ error | lowercase }} <br />
     </span>
 </div>

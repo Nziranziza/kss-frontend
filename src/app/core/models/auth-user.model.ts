@@ -1,10 +1,6 @@
 export interface AuthUser {
-  id: number;
-  firstName: string;
-  lastName: string;
-  email: string;
-  title: string;
-  organisationId: number;
-  roles: string[];
+  surname: string;
+  regNumber: string;
+  hasAccessTo: string[];
   token: string;
 }

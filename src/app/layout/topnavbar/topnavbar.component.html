@@ -5,7 +5,7 @@
     <!-- mini logo for sidebar mini 50x50 pixels -->
     <span class="logo-mini"><b>S</b>K</span>
     <!-- logo for regular state and mobile devices -->
-    <span class="logo-lg"><b>MART</b> Kungahara</span>
+    <span class="logo-lg"><b>SMART</b> Kungahara</span>
   </a>
 
   <!-- Header Navbar: style can be found in header.less -->
@@ -20,14 +20,14 @@
         <!-- User Account: style can be found in dropdown.less -->
         <li class="dropdown user user-menu">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            <span class="hidden-xs">Admin</span>
+            <span class="hidden-xs">{{ surname | titlecase }}</span>
           </a>
           <ul class="dropdown-menu">
             <!-- User image -->
             <li class="user-header">
               <p>
-                Admin
-                <small>Member since 2019</small>
+                Reg number
+                <small> {{ regNumber }}</small>
               </p>
             </li>
             <!-- Menu Footer-->

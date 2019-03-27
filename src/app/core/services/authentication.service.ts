@@ -36,9 +36,11 @@ export class AuthenticationService {
   }
 
   attemptAuth(credentials): Observable<any> {
-    return this.apiService.post('/users/login', credentials)
+    return this.apiService.post('/users/sign.in', credentials)
       .pipe(map(
+
         data => {
+          console.log(data);
           this.setAuth(data.content);
           return data;
         }
