@@ -13,22 +13,18 @@
             <th>Name</th>
             <th>Email</th>
             <th>Phone number</th>
-            <th>Organisation type</th>
-            <th>Website</th>
             <th>Actions</th>
           </tr>
           </thead>
           <tbody>
           <tr *ngFor="let organisation of organisations">
-            <td> {{ organisation.name }}</td>
+            <td> {{ organisation.organizationName }}</td>
             <td> {{ organisation.email }}</td>
-            <td> {{ organisation.phoneNumber }}</td>
-            <td> {{ organisation.organisationType | uppercase }}</td>
-            <td> {{ organisation.website }}</td>
+            <td> {{ organisation.phone_number }}</td>
             <td class="actions no-wrap text-right">
-              <a routerLink="/admin/organisations/{{organisation.id}}/users" class="btn btn-info"><i class="fa fa-users"></i>Users</a>
+              <a routerLink="/admin/organisations/{{organisation._id}}/users" class="btn btn-info"><i class="fa fa-users"></i>Users</a>
               <button class="btn btn-danger btn-margin" (click)="deleteOrganisation(organisation)"> Delete</button>
-              <a class="btn btn-success btn-margin" [routerLink]="['edit/',organisation.id]"  style="margin-left: 10px;"> Edit</a>
+              <a class="btn btn-success btn-margin" [routerLink]="['edit/', organisation._id]"  style="margin-left: 10px;"> Edit</a>
             </td>
           </tr>
           </tbody>

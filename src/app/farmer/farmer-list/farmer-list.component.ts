@@ -32,7 +32,7 @@ export class FarmerListComponent implements OnInit {
     this.confirmDialogService.openConfirmDialog('Are you sure you want to delete this record?').afterClosed().subscribe(
       res => {
         if (res) {
-          this.farmerService.destroy(farmer.id)
+          this.farmerService.destroy(farmer._id)
             .subscribe(data => {
               this.getAllFarmers();
               this.message = 'Record successful deleted!';

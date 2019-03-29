@@ -6,7 +6,7 @@ import {LoginModule} from './login/login.module';
 import {AppRoutingModule} from './app-routing.module';
 import {AdminModule} from './admin/admin.module';
 import {HomeModule} from './home/home.module';
-import {CoreModule, HttpTokenInterceptor} from './core';
+import {CoreModule, ErrorInterceptor, HttpTokenInterceptor} from './core';
 import {SharedModule} from './shared';
 
 import {DataService} from './data.service';
@@ -18,6 +18,7 @@ import {FarmerModule} from './farmer/farmer.module';
 import {RegistrationReportModule} from './registration-report/registration-report.module';
 import {RouterModule} from '@angular/router';
 import {UserModule} from './user/user.module';
+import {OrganisationTypeModule} from './organisation-type/organisation-type.module';
 
 @NgModule({
   declarations: [
@@ -35,10 +36,13 @@ import {UserModule} from './user/user.module';
     FarmerModule,
     RegistrationReportModule,
     ProfileModule,
-    RouterModule, UserModule,
+    RouterModule,
+    UserModule,
+    OrganisationTypeModule
     /*HttpClientInMemoryWebApiModule.forRoot(DataService)*/
   ],
-  providers: [Title, {provide: HTTP_INTERCEPTORS, useClass: HttpTokenInterceptor, multi: true},],
+  providers: [Title, {provide: HTTP_INTERCEPTORS, useClass: HttpTokenInterceptor, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true}],
   bootstrap: [AppComponent]
 })
 export class AppModule {

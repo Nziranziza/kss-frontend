@@ -16,7 +16,19 @@
           <span>Farmers</span>
         </a>
       </li>
-      <li class="treeview" routerLinkActive="active menu-open">
+      <li routerLinkActive="active">
+        <a routerLink="/admin/organisation-types">
+          <i class="fa fa-list" aria-hidden="true"></i>
+          <span>Organisation types</span>
+        </a>
+      </li>
+      <li routerLinkActive="active">
+        <a routerLink="/admin/registration-reports">
+          <i class="fa fa-bar-chart" aria-hidden="true"></i>
+          <span>Registration reports</span>
+        </a>
+      </li>
+     <!-- <li class="treeview" routerLinkActive="active menu-open">
         <a>
           <i class="fa fa-pie-chart"></i>
           <span>Reports</span>
@@ -27,6 +39,12 @@
         <ul class="treeview-menu">
           <li routerLinkActive="active"><a routerLink="/admin/registration-reports">Registration reports</a></li>
         </ul>
+      </li>-->
+      <li routerLinkActive="active">
+        <a routerLink="/logout">
+          <i class="fa fa-fw fa-lock" aria-hidden="true"></i>
+          <span>Logout</span>
+        </a>
       </li>
     </ul>
    </section>

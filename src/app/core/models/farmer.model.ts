@@ -1,5 +1,5 @@
 export interface Farmer {
-  id: number;
+  _id: number;
   userId: number;
   address: string;
   upiNumber: string;

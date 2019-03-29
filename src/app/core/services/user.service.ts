@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {ApiService} from './api.service';
 import {Observable} from 'rxjs';
 import {User} from '../models';
@@ -26,10 +26,8 @@ export class UserService {
   }
 
   save(organisationId: number, user: User): Observable<any> {
-    // If we're updating an existing user
     if (user.id) {
       return this.apiService.put('organisations/' + organisationId + '/users/' + user.id, user);
-      // Otherwise, create a new user
     } else {
       return this.apiService.post('organisations/' + organisationId + '/users/', user);
     }

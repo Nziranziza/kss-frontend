@@ -1,3 +1,8 @@
-.navbar-nav>.user-menu>.dropdown-menu>li.user-header {
+.navbar-nav > .user-menu > .dropdown-menu > li.user-header {
   height: auto;
+}
+
+.navbar-nav > .user-menu > .dropdown-menu > li.user-header > p {
+  color: #ffffff;
+  font-size: small;
 }

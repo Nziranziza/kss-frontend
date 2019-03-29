@@ -1,5 +1,12 @@
-<div class="alert alert-danger alert-dismissable"  *ngIf="errorList">
+<div class="alert alert-danger alert-dismissable" *ngIf="errorList">
+  <div *ngIf="isArray">
     <span *ngFor="let error of errorList">
-      {{ error | lowercase }} <br />
+      {{ error | lowercase }} <br/>
     </span>
+  </div>
+  <div *ngIf="!isArray">
+    <span>
+      {{ errorList }} <br/>
+    </span>
+  </div>
 </div>

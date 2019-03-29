@@ -1,5 +1,4 @@
 <header class="main-header">
-
   <!-- Logo -->
   <a href="admin" class="logo">
     <!-- mini logo for sidebar mini 50x50 pixels -->
@@ -7,7 +6,6 @@
     <!-- logo for regular state and mobile devices -->
     <span class="logo-lg"><b>SMART</b> Kungahara</span>
   </a>
-
   <!-- Header Navbar: style can be found in header.less -->
   <nav class="navbar navbar-static-top">
     <!-- Sidebar toggle button-->
@@ -20,14 +18,17 @@
         <!-- User Account: style can be found in dropdown.less -->
         <li class="dropdown user user-menu">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            <span class="hidden-xs">{{ surname | titlecase }}</span>
+            <i class="fa fa-user"></i>
+           <!-- <span class="hidden-xs" style="font-weight: bolder">{{ surname | titlecase }}</span> -->
+            <span class="hidden-xs" style="font-weight: bolder"> Ernest </span>
           </a>
           <ul class="dropdown-menu">
             <!-- User image -->
             <li class="user-header">
-              <p>
-                Reg number
-                <small> {{ regNumber }}</small>
+              <p style="font-weight: bold;">
+                Registration number
+               <!-- <small> {{ regNumber }}</small>-->
+                <small> 123456 </small>
               </p>
             </li>
             <!-- Menu Footer-->
@@ -36,13 +37,12 @@
                 <a routerLink="/admin/users/profile"  class="btn btn-default btn-flat">Profile</a>
               </div>
               <div class="pull-right">
-                <button  class="btn btn-default btn-flat" (click)="logout()">Sign out</button>
+                <a routerLink="/logout" class="btn btn-default btn-flat">Logout</a>
               </div>
             </li>
           </ul>
         </li>
       </ul>
     </div>
-
   </nav>
 </header>

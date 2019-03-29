@@ -2,7 +2,15 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
-import {ApiService, AuthenticationService, AuthGuard, ConfirmDialogService, JwtService, OrganisationService} from './services';
+import {
+  ApiService,
+  AuthenticationService,
+  AuthGuard,
+  ConfirmDialogService,
+  JwtService,
+  OrganisationService,
+  OrganisationTypeService
+} from './services';
 import {HelperService} from './helpers';
 import {MatDialogModule} from '@angular/material';
 import {SharedModule} from '../shared';
@@ -20,7 +28,8 @@ import {FarmerService} from './services/farmer.service';
     OrganisationService,
     HelperService,
     FarmerService,
-    ConfirmDialogService
+    ConfirmDialogService,
+    OrganisationTypeService
   ],
   declarations: []
 })

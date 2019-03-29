@@ -29,11 +29,10 @@ export class OrganisationListComponent implements OnInit {
   }
 
   deleteOrganisation(organisation: Organisation): void {
-
     this.confirmDialogService.openConfirmDialog('Are you sure you want to delete this record?').afterClosed().subscribe(
       res => {
         if (res) {
-          this.organisationService.destroy(organisation.id)
+          this.organisationService.destroy(organisation._id)
             .subscribe(data => {
               this.getAllOrganisations();
               this.message = 'Record successful deleted!';
@@ -45,7 +44,7 @@ export class OrganisationListComponent implements OnInit {
 
   getAllOrganisations(): void {
     this.organisationService.all().subscribe(data => {
-      return this.organisations = data;
+      return this.organisations = data.content;
     });
   }
 

@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {MatDialog} from '@angular/material';
-import {ConfirmDialogComponent} from '../../shared/layout/confirm-dialog/confirm-dialog.component';
+import {ConfirmDialogComponent} from '../../shared/layout';
 
 
 @Injectable({
@@ -19,7 +19,6 @@ export class ConfirmDialogService {
         message: msg,
       },
       position: {top: '8%'}
-
     });
   }
 }

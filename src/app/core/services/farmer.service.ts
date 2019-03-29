@@ -24,10 +24,8 @@ export class FarmerService {
   }
 
   save(farmer: Farmer): Observable<any> {
-    // If we're updating an existing organisation
-    if (farmer.id) {
-      return this.apiService.put('/farmers/' + farmer.id, farmer);
-      // Otherwise, create a new organisation
+    if (farmer._id) {
+      return this.apiService.put('/farmers/' + farmer._id, farmer);
     } else {
       return this.apiService.post('/farmers/', farmer);
     }

@@ -1,6 +1,5 @@
 export interface AuthUser {
-  surname: string;
-  regNumber: string;
-  hasAccessTo: string[];
+  info: any;
+  parameter: any;
   token: string;
 }

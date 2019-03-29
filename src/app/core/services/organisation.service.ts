@@ -11,25 +11,27 @@ export class OrganisationService {
   ) {
   }
 
-  all(): Observable<any[]> {
-    return this.apiService.get('/organisations');
+  all(): Observable<any> {
+    return this.apiService.get('/organizations');
   }
 
   get(id: number): Observable<any> {
-    return this.apiService.get('/organisations/' + id);
+    return this.apiService.get('/organizations/' + id);
   }
 
   destroy(id: number): Observable<any> {
-    return this.apiService.delete('/organisations/' + id);
+    return this.apiService.delete('/organizations/' + id);
   }
 
   save(organisation: Organisation): Observable<any> {
-    // If we're updating an existing organisation
-    if (organisation.id) {
-      return this.apiService.put('/organisations/' + organisation.id, organisation);
-    // Otherwise, create a new organisation
-    } else {
-      return this.apiService.post('/organisations/', organisation);
-    }
+    return this.apiService.post('/organizations/', organisation);
+  }
+
+  update(organisation: Organisation, id: string): Observable<any> {
+    return this.apiService.put('/organizations/' + id, organisation);
+  }
+
+  possibleRoles(): Observable<any> {
+    return this.apiService.get('/organizations/organization.roles/list');
   }
 }

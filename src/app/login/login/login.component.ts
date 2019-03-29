@@ -37,6 +37,7 @@ export class LoginComponent implements OnInit {
         increaseArea: '20%' /* optional */
       });
     });
+    // this.authenticationService.purgeAuth();
 
   }
 
