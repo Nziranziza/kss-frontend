@@ -15,11 +15,11 @@ export class OrganisationService {
     return this.apiService.get('/organizations');
   }
 
-  get(id: number): Observable<any> {
+  get(id: string): Observable<any> {
     return this.apiService.get('/organizations/' + id);
   }
 
-  destroy(id: number): Observable<any> {
+  destroy(id: string): Observable<any> {
     return this.apiService.delete('/organizations/' + id);
   }
 

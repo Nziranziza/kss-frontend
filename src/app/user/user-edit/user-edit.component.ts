@@ -10,7 +10,7 @@ import {UserService} from '../../core/services/user.service';
 })
 export class UserEditComponent implements OnInit {
 
-  organisationId: number;
+  organisationId: string;
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute, private router: Router,
@@ -21,17 +21,15 @@ export class UserEditComponent implements OnInit {
   errors: string[];
 
   ngOnInit() {
-
     this.editForm = this.formBuilder.group({
-      id: [],
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      title: ['', Validators.required],
-      email: ['', Validators.required],
-      phoneNumber: ['', Validators.required],
-      gender: ['', Validators.required],
-      password: ['', Validators.required],
-      confirmPassword: ['', Validators.required]
+      foreName: [''],
+      surname: [''],
+      email: [''],
+      phone_number: [''],
+      sex: [''],
+      NID: [''],
+      password: [''],
+      org_id: ['']
     });
     this.route.params.subscribe(params => {
       this.organisationId = params['organisationId'.toString()];
@@ -43,7 +41,9 @@ export class UserEditComponent implements OnInit {
 
   onSubmit() {
     if (this.editForm.valid) {
-      this.userService.save(this.organisationId, this.editForm.value).subscribe(data => {
+      const user = this.editForm.value;
+      user['org_id'.toString()] = this.organisationId;
+      this.userService.save(this.editForm.value).subscribe(data => {
           this.router.navigateByUrl('admin/organisations/' + this.organisationId + '/users');
         },
         (err) => {

@@ -28,15 +28,6 @@ export class OrganisationEditComponent implements OnInit {
       this.genres = data.content;
     });
 
-    this.organisationService.possibleRoles().subscribe(data => {
-      this.possibleRoles = Object.keys(data.content).map(key => {
-        return {name: [key], value: data.content[key]};
-      });
-      this.possibleRoles.map(role => {
-        const control = new FormControl(false);
-        (this.editForm.controls.organizationRole as FormArray).push(control);
-      });
-    });
     this.editForm = this.formBuilder.group({
       organizationName: [''],
       email: [''],
@@ -50,6 +41,20 @@ export class OrganisationEditComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.id = params['id'.toString()];
       this.organisationService.get(params['id'.toString()]).subscribe(data => {
+        this.organisationService.possibleRoles().subscribe(roles => {
+          this.possibleRoles = Object.keys(roles.content).map(key => {
+            return {name: [key], value: roles.content[key]};
+          });
+          this.possibleRoles.map(role => {
+            if (data.content.organizationRole.includes(role.value)) {
+              const control = new FormControl(true);
+              (this.editForm.controls.organizationRole as FormArray).push(control);
+            } else {
+              const control = new FormControl(false);
+              (this.editForm.controls.organizationRole as FormArray).push(control);
+            }
+          });
+        });
         const org = data.content;
         org['genreId'.toString()] = org.genre._id;
         this.editForm.patchValue(data.content);
@@ -68,7 +73,6 @@ export class OrganisationEditComponent implements OnInit {
           this.router.navigateByUrl('admin/organisations');
         },
         (err) => {
-          console.log(err);
           this.errors = err.errors;
         });
     } else {

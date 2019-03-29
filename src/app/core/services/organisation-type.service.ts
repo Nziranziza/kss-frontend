@@ -17,11 +17,11 @@ export class OrganisationTypeService {
     return this.apiService.get('/orgtypes');
   }
 
-  get(id: number): Observable<any> {
+  get(id: string): Observable<any> {
     return this.apiService.get('/orgtypes/' + id);
   }
 
-  destroy(id: number): Observable<any> {
+  destroy(id: string): Observable<any> {
     return this.apiService.delete('/orgtypes/' + id);
   }
 
@@ -34,7 +34,7 @@ export class OrganisationTypeService {
     }
   }
 
-  organisations(organisationTypeId: number): Observable<any> {
+  organisations(organisationTypeId: string): Observable<any> {
     return this.apiService.get('/orgtypes/' + organisationTypeId + 'organizations');
   }
 }

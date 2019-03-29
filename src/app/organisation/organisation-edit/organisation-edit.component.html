@@ -48,7 +48,7 @@
             </div>-->
             <div class="col-xs-6">
               <label class="control-label label-required">Roles</label>
-              <div class="checkbox" formArrayName="organizationRole" *ngFor="let role of editForm.controls.organizationRole.controls; let i = index">
+              <div class="checkbox" formArrayName="organizationRole" *ngFor="let role of editForm.get('organizationRole')['controls']; let i = index">
                 <label>
                   <input type="checkbox" formControlName="{{i}}">
                   {{possibleRoles[i].name}}

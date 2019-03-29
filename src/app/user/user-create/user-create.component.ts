@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from '../../core/services/user.service';
+import {OrganisationService} from '../../core/services';
 
 @Component({
   selector: 'app-user-create',
@@ -10,34 +11,65 @@ import {UserService} from '../../core/services/user.service';
 })
 export class UserCreateComponent implements OnInit {
 
-  organisationId: number;
+  organisationId: string;
+  createForm: FormGroup;
+  errors: string[];
+  userTypes: any[];
+  orgPossibleRoles: any[];
+  possibleRoles: any[];
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute, private router: Router,
-              private userService: UserService) {
+              private userService: UserService,
+              private organisationService: OrganisationService) {
   }
-
-  createForm: FormGroup;
-  errors: string[];
 
   ngOnInit() {
 
     this.createForm = this.formBuilder.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      title: ['', Validators.required],
-      email: ['', Validators.required],
-      phoneNumber: ['', Validators.required],
-      gender: ['', Validators.required],
-      password: ['', Validators.required],
-      confirmPassword: ['', Validators.required]
+      foreName: [''],
+      surname: [''],
+      email: [''],
+      phone_number: [''],
+      sex: [''],
+      NID: [''],
+      password: [''],
+      org_id: [''],
+      userType: [''],
+      userRoles: new FormArray([])
+    });
+    this.userService.userTypes().subscribe(data => {
+      this.userTypes = Object.keys(data.content).map(key => {
+        return {name: key, value: data.content[key]};
+      });
+    });
+
+    this.organisationService.possibleRoles().subscribe(data => {
+      this.possibleRoles = Object.keys(data.content).map(key => {
+        return {name: key, value: data.content[key]};
+      });
+    });
+
+    this.route.params.subscribe(params => {
+      this.organisationId = params['organisationId'.toString()];
+    });
+
+    this.organisationService.get(this.organisationId).subscribe(data => {
+      this.orgPossibleRoles = data.content.organizationRole.map(role => {
+        return this.possibleRoles.find(roles => roles.value === role);
+      });
+      this.orgPossibleRoles.map(role => {
+        const control = new FormControl(false);
+        (this.createForm.controls.userRoles as FormArray).push(control);
+      });
     });
   }
 
   onSubmit() {
     if (this.createForm.valid) {
-      console.log('test');
-      this.userService.save(this.organisationId, this.createForm.value).subscribe(data => {
+      const user = this.createForm.value;
+      user['org_id'.toString()] = this.organisationId;
+      this.userService.save(user).subscribe(data => {
           this.router.navigateByUrl('admin/organisations/' + this.organisationId + '/users');
         },
         (err) => {

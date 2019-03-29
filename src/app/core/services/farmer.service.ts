@@ -15,11 +15,11 @@ export class FarmerService {
     return this.apiService.get('/farmers');
   }
 
-  get(id: number): Observable<any> {
+  get(id: string): Observable<any> {
     return this.apiService.get('/farmers/' + id);
   }
 
-  destroy(id: number): Observable<any> {
+  destroy(id: string): Observable<any> {
     return this.apiService.delete('/farmers/' + id);
   }
 

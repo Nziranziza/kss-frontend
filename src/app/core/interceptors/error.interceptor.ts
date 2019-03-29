@@ -17,7 +17,7 @@ export class ErrorInterceptor implements HttpInterceptor {
         this.authenticationService.purgeAuth();
         this.router.navigateByUrl('/login');
       }
-      const error = err.error.message || err.statusText;
+      const error = err.error;
       return throwError(error);
     }));
   }

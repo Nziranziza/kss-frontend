@@ -1,6 +1,5 @@
 export interface OrganisationType {
-  _id: number;
-  possibleRole: number [];
+  _id: string;
   genre: string;
   __v: string;
 }

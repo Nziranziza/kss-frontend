@@ -1,6 +1,6 @@
 export interface Farmer {
-  _id: number;
-  userId: number;
+  _id: string;
+  userId: string;
   address: string;
   upiNumber: string;
   treesNumber: number;

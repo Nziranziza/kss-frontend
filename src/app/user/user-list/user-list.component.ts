@@ -1,8 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {UserService} from '../../core/services/user.service';
-import {Organisation, User} from '../../core/models';
-import {ConfirmDialogComponent} from '../../shared/layout';
+import {User} from '../../core/models';
 import {ConfirmDialogService} from '../../core/services';
 
 declare var $;
@@ -14,7 +13,7 @@ declare var $;
 })
 export class UserListComponent implements OnInit {
 
-  organisationId: number;
+  organisationId: string;
   users: User[];
   message: string;
 
@@ -36,7 +35,7 @@ export class UserListComponent implements OnInit {
     this.confirmDialogService.openConfirmDialog('Are you sure you want to delete this record?').afterClosed().subscribe(
       res => {
         if (res) {
-          this.userService.destroy(this.organisationId, user.id)
+          this.userService.destroy(this.organisationId, user._id)
             .subscribe(data => {
               this.getAllUsers();
               this.message = 'Record successful deleted!';
@@ -48,10 +47,5 @@ export class UserListComponent implements OnInit {
 
   getAllUsers(): void {
 
-    this.users = [{
-      id: 1, firstName: 'first name', lastName: 'last name', title: 'officer', phoneNumber: '078880000111',
-      email: 'user@naeb.rw', gender: 'male', organisationId: 1, password: '123456'
-    }];
   }
-
 }
