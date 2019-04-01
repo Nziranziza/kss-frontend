@@ -1,6 +1,8 @@
 <h3>
   {{ title }}
+<!--
   <a class="btn btn-success pull-right" routerLink="/admin/farmers/upload"><i class="fa fa-plus"></i> Upload farmers list</a>
+-->
 </h3>
 <app-list-message [message]="message"></app-list-message>
 <div class="row">
@@ -22,17 +24,17 @@
           </thead>
           <tbody>
           <tr *ngFor="let farmer of farmers">
-            <td> {{ farmer.userInfo.firstName }}</td>
-            <td> {{ farmer.userInfo.lastName }}</td>
-            <td> {{ farmer.userInfo.nationalId }}</td>
+            <td> {{ farmer.info.foreName }}</td>
+            <td> {{ farmer.info.surname }}</td>
+            <td> {{ farmer.info.nationalId }}</td>
             <td> {{ farmer.address }}</td>
-            <td> {{ farmer.userInfo.phoneNumber }}</td>
+            <td> {{ farmer.info.phone_number }}</td>
             <td> {{ farmer.upiNumber }}</td>
             <td> {{ farmer.treesNumber }}</td>
-            <td class="actions no-wrap text-right">
+           <!-- <td class="actions no-wrap text-right">
               <button class="btn btn-danger btn-margin" (click)="deleteFarmer(farmer)"> Delete</button>
               <a class="btn btn-success btn-margin" [routerLink]="['edit/',farmer.id]"  style="margin-left: 10px;"> Edit</a>
-            </td>
+            </td>-->
           </tr>
           </tbody>
         </table>

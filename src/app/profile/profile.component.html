@@ -11,9 +11,6 @@
       Phone number
     </p>
     <hr>
-    <strong><i class="fa fa-map-marker margin-r-5"></i> Location</strong>
-    <p class="text-muted">Kigali, Rwanda</p>
-    <hr>
     <strong><i class="fa fa-university margin-r-5"></i> Organisation</strong>
     <p>
     </p>
@@ -22,6 +19,7 @@
     <strong><i class="fa fa-lock margin-r-5"></i> Change password</strong>
     </p>
     <app-list-errors [errorList]="errors"></app-list-errors>
+    <app-list-message [message]="message"></app-list-message>
     <form [formGroup]="changePasswordForm" (ngSubmit)="onSubmit()">
       <div class="row">
         <div class="col-xs-6">

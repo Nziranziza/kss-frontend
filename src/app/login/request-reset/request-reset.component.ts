@@ -15,7 +15,7 @@ export class RequestResetComponent implements OnInit {
 
   errors: string[];
   message: string;
-  requestResetForm : FormGroup;
+  requestResetForm: FormGroup;
 
   constructor(
     private route: ActivatedRoute,
@@ -47,10 +47,10 @@ export class RequestResetComponent implements OnInit {
       this.errors = this.helperService.getFormValidationErrors(this.requestResetForm);
       return;
     }
-    this.router.navigateByUrl('admin/organisations');
-    const email = this.requestResetForm.value;
-    this.authenticationService.requestReset(email).subscribe( data => {
-      this.message = data.message;
+
+    this.authenticationService.requestReset(this.requestResetForm.value).subscribe(data => {
+        this.message = data.message;
+        return;
       },
       (err) => {
         this.errors = err.errors;

@@ -11,10 +11,13 @@ export class ConfirmDialogService {
   constructor(private dialog: MatDialog) {
   }
 
-  openConfirmDialog(msg: string) {
+  openConfirmDialog(msg: string, size?: string) {
+    if (!size) {
+      size = '450px';
+    }
     return this.dialog.open(ConfirmDialogComponent, {
       disableClose: true,
-      width: '450px',
+      width: size + 'px',
       data: {
         message: msg,
       },

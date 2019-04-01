@@ -22,9 +22,8 @@ export class FarmerEditComponent implements OnInit {
   ngOnInit() {
 
     this.editForm = this.formBuilder.group({
-      id: [],
-      firstName: [''],
-      lastName: [''],
+      foreName: [''],
+      surname: [''],
       address: [''],
       ownsLand: [''],
       upiNumber: [''],

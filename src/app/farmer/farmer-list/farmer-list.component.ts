@@ -4,6 +4,7 @@ import {Router} from '@angular/router';
 import {Farmer} from '../../core/models';
 
 declare var $;
+
 @Component({
   selector: 'app-farmer-list',
   templateUrl: './farmer-list.component.html',

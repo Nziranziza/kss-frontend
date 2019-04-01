@@ -17,25 +17,31 @@ export class ProfileComponent implements OnInit {
 
   changePasswordForm: FormGroup;
   errors: string[];
+  phoneNumber: string;
+  email: string;
+  message: string;
+
 
   ngOnInit() {
 
     this.changePasswordForm = this.formBuilder.group({
-      id: [],
       password: [''],
       confirm_password: ['']
     });
-    this.changePasswordForm.patchValue(this.authenticationService.getCurrentUser());
+    /*
+    this.email = this.authenticationService.getCurrentUser().info.email;
+    this.phoneNumber = this.authenticationService.getCurrentUser().info.phoneNumber;
+    */
   }
 
   onSubmit() {
     if (this.changePasswordForm.valid) {
-      this.authenticationService.update(this.changePasswordForm.value).subscribe(data => {
-          /*this.router.navigateByUrl('admin');*/
+      this.authenticationService.resetPassword(this.changePasswordForm.value).subscribe(data => {
+          this.message = data.message;
           return;
         },
         (err) => {
-          this.errors = err;
+          this.errors = err.errors;
         });
 
     }

@@ -13,20 +13,20 @@ export class UserService {
   ) {
   }
 
-  all(organisationId: string): Observable<any[]> {
-    return this.apiService.get('/organisations/' + organisationId + '/users');
+  all(organisationId: string): Observable<any> {
+    return this.apiService.get('/users/organization/' + organisationId);
   }
 
-  get(organisationId: string, id: string): Observable<any> {
-    return this.apiService.get('/organisations/' + organisationId + '/users/' + id);
+  get(id: string): Observable<any> {
+    return this.apiService.get('/users/' + id);
   }
 
-  destroy(organisationId: string, id: string): Observable<any> {
-    return this.apiService.delete('/organisations/' + organisationId + '/users/' + id);
+  destroy(id: string): Observable<any> {
+    return this.apiService.delete('/users/' + id);
   }
 
   save(user: User): Observable<any> {
-    return this.apiService.post('/users/', user);
+    return this.apiService.post('/users', user);
   }
 
   update(user: User, id: string): Observable<any> {

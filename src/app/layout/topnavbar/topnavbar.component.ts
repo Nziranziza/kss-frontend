@@ -15,7 +15,9 @@ export class TopnavbarComponent implements OnInit {
   }
 
   ngOnInit() {
-   /* this.surname = this.authenticationService.getCurrentUser().info.surname;
-    this.regNumber = this.authenticationService.getCurrentUser().info.regNumber;*/
+    /*
+    this.surname = this.authenticationService.getCurrentUser().info.surname;
+    this.regNumber = this.authenticationService.getCurrentUser().info.regNumber;
+    */
   }
 }

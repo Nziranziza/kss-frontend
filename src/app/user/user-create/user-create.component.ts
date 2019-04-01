@@ -55,9 +55,7 @@ export class UserCreateComponent implements OnInit {
     });
 
     this.organisationService.get(this.organisationId).subscribe(data => {
-      this.orgPossibleRoles = data.content.organizationRole.map(role => {
-        return this.possibleRoles.find(roles => roles.value === role);
-      });
+      this.orgPossibleRoles = this.possibleRoles.filter(roles => data.content.organizationRole.includes(roles.value));
       this.orgPossibleRoles.map(role => {
         const control = new FormControl(false);
         (this.createForm.controls.userRoles as FormArray).push(control);
@@ -66,14 +64,20 @@ export class UserCreateComponent implements OnInit {
   }
 
   onSubmit() {
+    console.log(this.createForm.value);
     if (this.createForm.valid) {
+      const selectedRoles = this.createForm.value.userRoles
+        .map((checked, index) => checked ? this.orgPossibleRoles[index].value : null)
+        .filter(value => value !== null);
       const user = this.createForm.value;
+      user['userRoles'.toString()] = selectedRoles;
       user['org_id'.toString()] = this.organisationId;
+      user['action'.toString()] = 'create';
       this.userService.save(user).subscribe(data => {
           this.router.navigateByUrl('admin/organisations/' + this.organisationId + '/users');
         },
         (err) => {
-          this.errors = err;
+          this.errors = err.errors;
         });
 
     }

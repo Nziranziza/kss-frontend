@@ -10,37 +10,37 @@
           <div class="row">
             <div class="col-xs-6">
               <div class="form-group">
-                <label class="control-label">First name</label>
+                <label class="control-label label-required">First name</label>
                 <input type="text" formControlName="foreName" class="form-control">
               </div>
             </div>
             <div class="col-xs-6">
               <div class="form-group">
-                <label class="control-label">Last name</label>
+                <label class="control-label label-required">Last name</label>
                 <input type="text" formControlName="surname" class="form-control">
               </div>
             </div>
             <div class="col-xs-6">
               <div class="form-group">
-                <label class="control-label">Email</label>
+                <label class="control-label label-required">Email</label>
                 <input type="text" formControlName="email" class="form-control">
               </div>
             </div>
             <div class="col-xs-6">
               <div class="form-group">
-                <label class="control-label">NID</label>
+                <label class="control-label label-required">NID</label>
                 <input type="text" formControlName="NID" class="form-control">
               </div>
             </div>
             <div class="col-xs-6">
               <div class="form-group">
-                <label class="control-label">Phone number</label>
+                <label class="control-label label-required">Phone number</label>
                 <input type="text" formControlName="phone_number" class="form-control">
               </div>
             </div>
             <div class="col-xs-6">
               <div class="form-group">
-                <label class="control-label">Gender</label>
+                <label class="control-label label-required">Gender</label>
                 <div class="radio">
                   <label>
                     <input type="radio" formControlName="sex" value="m" checked="">
@@ -49,7 +49,7 @@
                 </div>
                 <div class="radio">
                   <label>
-                    <input type="radio" formControlName="sex" value="female" checked="">
+                    <input type="radio" formControlName="sex" value="f" checked="">
                     Female
                   </label>
                 </div>
@@ -63,18 +63,18 @@
                 </select>
               </div>
             </div>
-              <!-- <div class="col-xs-6">
+            <div class="col-xs-6">
                 <label class="control-label label-required">Roles</label>
-                <div class="checkbox" formArrayName="userRoles" *ngFor="let role of createForm.get('organizationRole')['controls']; let i = index">
+                <div class="checkbox" formArrayName="userRoles" *ngFor="let role of createForm.get('userRoles')['controls']; let i = index">
                   <label>
                     <input type="checkbox" formControlName="{{i}}">
-                    {{possibleRoles[i].name}}
+                    {{orgPossibleRoles[i].name}}
                   </label>
                 </div>
-              </div>-->
+            </div>
             <div class="col-xs-6">
               <div class="form-group">
-                <label class="control-label">Password</label>
+                <label class="control-label label-required">Password</label>
                 <input type="text" formControlName="password" class="form-control">
               </div>
             </div>

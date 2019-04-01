@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from '../../core/services/user.service';
+import {OrganisationService} from '../../core/services';
 
 @Component({
   selector: 'app-user-edit',
@@ -11,16 +12,22 @@ import {UserService} from '../../core/services/user.service';
 export class UserEditComponent implements OnInit {
 
   organisationId: string;
+  editForm: FormGroup;
+  errors: string[];
+  userTypes: any[];
+  orgPossibleRoles: any[];
+  possibleRoles: any[];
+  id: string;
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute, private router: Router,
-              private userService: UserService) {
+              private userService: UserService,
+              private organisationService: OrganisationService) {
   }
 
-  editForm: FormGroup;
-  errors: string[];
 
   ngOnInit() {
+
     this.editForm = this.formBuilder.group({
       foreName: [''],
       surname: [''],
@@ -28,29 +35,60 @@ export class UserEditComponent implements OnInit {
       phone_number: [''],
       sex: [''],
       NID: [''],
-      password: [''],
-      org_id: ['']
+      org_id: [''],
+      userType: [''],
+      userRoles: new FormArray([])
     });
+    this.userService.userTypes().subscribe(data => {
+      this.userTypes = Object.keys(data.content).map(key => {
+        return {name: key, value: data.content[key]};
+      });
+    });
+
+    this.organisationService.possibleRoles().subscribe(data => {
+      this.possibleRoles = Object.keys(data.content).map(key => {
+        return {name: key, value: data.content[key]};
+      });
+    });
+
     this.route.params.subscribe(params => {
       this.organisationId = params['organisationId'.toString()];
-      this.userService.get(this.organisationId, params['id'.toString()]).subscribe(data => {
-        this.editForm.patchValue(data);
+      this.id = params['id'.toString()];
+    });
+    this.route.params.subscribe(params => {
+      this.organisationService.get(params['id'.toString()]).subscribe(user => {
+        this.organisationService.get(this.organisationId).subscribe(data => {
+          this.orgPossibleRoles = this.possibleRoles.filter(roles => data.content.organizationRole.includes(roles.value));
+          this.orgPossibleRoles.map(role => {
+            if (data.content.usersRoles.includes(role.value)) {
+              const control = new FormControl(true);
+              (this.editForm.controls.userRoles as FormArray).push(control);
+            } else {
+              const control = new FormControl(false);
+              (this.editForm.controls.userRoles as FormArray).push(control);
+            }
+          });
+        });
+        const usr = user.content;
+        this.editForm.patchValue(usr);
       });
     });
   }
 
   onSubmit() {
     if (this.editForm.valid) {
+      const selectedRoles = this.editForm.value.userRoles
+        .map((checked, index) => checked ? this.orgPossibleRoles[index].value : null)
+        .filter(value => value !== null);
       const user = this.editForm.value;
+      user['userRoles'.toString()] = selectedRoles;
       user['org_id'.toString()] = this.organisationId;
-      this.userService.save(this.editForm.value).subscribe(data => {
+      this.userService.update(user, this.id).subscribe(data => {
           this.router.navigateByUrl('admin/organisations/' + this.organisationId + '/users');
         },
         (err) => {
-          this.errors = err;
+          this.errors = err.errors;
         });
-
     }
   }
-
 }

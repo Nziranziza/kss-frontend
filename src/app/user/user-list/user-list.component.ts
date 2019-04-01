@@ -35,7 +35,7 @@ export class UserListComponent implements OnInit {
     this.confirmDialogService.openConfirmDialog('Are you sure you want to delete this record?').afterClosed().subscribe(
       res => {
         if (res) {
-          this.userService.destroy(this.organisationId, user._id)
+          this.userService.destroy(user._id)
             .subscribe(data => {
               this.getAllUsers();
               this.message = 'Record successful deleted!';
@@ -46,6 +46,8 @@ export class UserListComponent implements OnInit {
   }
 
   getAllUsers(): void {
-
+    this.userService.all(this.organisationId).subscribe(data => {
+      return this.users = data.content;
+    });
   }
 }

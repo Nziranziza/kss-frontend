@@ -11,7 +11,7 @@ export class FarmerService {
   ) {
   }
 
-  all(): Observable<any[]> {
+  all(): Observable<any> {
     return this.apiService.get('/farmers');
   }
 
@@ -24,10 +24,10 @@ export class FarmerService {
   }
 
   save(farmer: Farmer): Observable<any> {
-    if (farmer._id) {
-      return this.apiService.put('/farmers/' + farmer._id, farmer);
-    } else {
-      return this.apiService.post('/farmers/', farmer);
-    }
+    return this.apiService.post('/farmers/', farmer);
+  }
+
+  update(farmer: Farmer, id: string): Observable<any> {
+    return this.apiService.put('/farmers/' + id, farmer);
   }
 }

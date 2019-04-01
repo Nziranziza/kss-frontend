@@ -48,7 +48,11 @@ export class AuthenticationService {
   }
 
   requestReset(email): Observable<any> {
-    return this.apiService.post('/users/request-reset', email);
+    return this.apiService.post('/users/', email);
+  }
+
+  resetPassword(password): Observable<any> {
+    return this.apiService.post('/users/', password);
   }
 
   update(user): Observable<any> {
