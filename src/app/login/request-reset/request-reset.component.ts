@@ -38,7 +38,6 @@ export class RequestResetComponent implements OnInit {
         increaseArea: '20%' /* optional */
       });
     });
-
   }
 
   onSubmit() {

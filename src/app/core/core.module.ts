@@ -5,16 +5,16 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
   ApiService,
   AuthenticationService,
-  AuthGuard,
   ConfirmDialogService,
   JwtService,
   OrganisationService,
-  OrganisationTypeService
+  OrganisationTypeService, PoliceService
 } from './services';
 import {HelperService} from './helpers';
 import {MatDialogModule} from '@angular/material';
 import {SharedModule} from '../shared';
-import {FarmerService} from './services/farmer.service';
+import {FarmerService} from './services';
+import {CookieService} from 'ngx-cookie-service';
 
 @NgModule({
   imports: [
@@ -22,14 +22,15 @@ import {FarmerService} from './services/farmer.service';
   ],
   providers: [
     ApiService,
-    AuthGuard,
     JwtService,
     AuthenticationService,
     OrganisationService,
     HelperService,
     FarmerService,
     ConfirmDialogService,
-    OrganisationTypeService
+    OrganisationTypeService,
+    CookieService,
+    PoliceService
   ],
   declarations: []
 })

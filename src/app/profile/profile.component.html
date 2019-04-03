@@ -4,15 +4,14 @@
   </div>
   <!-- /.box-header -->
   <div class="box-body">
+    <strong><i class="fa fa-mail-forward margin-r-5"></i> Email</strong>
     <p class="text-muted">
-      Email
-    </p>
-    <p class="text-muted">
-      Phone number
+    {{ userInfo.email }}
     </p>
     <hr>
     <strong><i class="fa fa-university margin-r-5"></i> Organisation</strong>
-    <p>
+    <p class="text-muted">
+    {{ orgInfo.orgName | uppercase }}
     </p>
     <hr>
     <p>

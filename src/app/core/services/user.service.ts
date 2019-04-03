@@ -18,7 +18,7 @@ export class UserService {
   }
 
   get(id: string): Observable<any> {
-    return this.apiService.get('/users/' + id);
+    return this.apiService.get('/users/id/' + id);
   }
 
   destroy(id: string): Observable<any> {

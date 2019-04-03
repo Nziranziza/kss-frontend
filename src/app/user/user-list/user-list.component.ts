@@ -22,13 +22,14 @@ export class UserListComponent implements OnInit {
     $(() => {
       $('#organisations').DataTable();
     });
-    this.getAllUsers();
   }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.organisationId = params['organisationId'.toString()];
+
     });
+    this.getAllUsers();
   }
 
   deleteUser(user: User): void {
@@ -47,7 +48,9 @@ export class UserListComponent implements OnInit {
 
   getAllUsers(): void {
     this.userService.all(this.organisationId).subscribe(data => {
-      return this.users = data.content;
+      if (data) {
+        this.users = data.content;
+      }
     });
   }
 }

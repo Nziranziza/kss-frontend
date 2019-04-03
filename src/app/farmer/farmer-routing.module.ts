@@ -3,7 +3,6 @@ import {RouterModule, Routes} from '@angular/router';
 import {AdminComponent} from '../admin/admin/admin.component';
 import {FarmerEditComponent} from './farmer-edit/farmer-edit.component';
 import {FarmerListComponent} from './farmer-list/farmer-list.component';
-import {FarmerUploadComponent} from './farmer-upload/farmer-upload.component';
 
 const routes: Routes = [
   {
@@ -16,9 +15,6 @@ const routes: Routes = [
       }, {
         path: 'edit/:id',
         component: FarmerEditComponent,
-      }, {
-        path: 'upload',
-        component: FarmerUploadComponent,
       }
     ]
   }

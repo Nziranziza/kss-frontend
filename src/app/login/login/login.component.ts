@@ -14,6 +14,8 @@ export class LoginComponent implements OnInit {
 
   errors: string[];
   authForm: FormGroup;
+  ste: any;
+  message: string;
 
   constructor(
     private route: ActivatedRoute,
@@ -37,8 +39,6 @@ export class LoginComponent implements OnInit {
         increaseArea: '20%' /* optional */
       });
     });
-    // this.authenticationService.purgeAuth();
-
   }
 
   onSubmit() {
@@ -54,6 +54,10 @@ export class LoginComponent implements OnInit {
       err => {
         this.errors = err.errors;
       });
+    if (this.router.getCurrentNavigation()) {
+      this.ste = this.router.getCurrentNavigation().extras.state;
+      this.message = this.ste.message;
+    }
   }
 
   login() {

@@ -56,11 +56,11 @@ export class UserEditComponent implements OnInit {
       this.id = params['id'.toString()];
     });
     this.route.params.subscribe(params => {
-      this.organisationService.get(params['id'.toString()]).subscribe(user => {
+      this.userService.get(params['id'.toString()]).subscribe(user => {
         this.organisationService.get(this.organisationId).subscribe(data => {
           this.orgPossibleRoles = this.possibleRoles.filter(roles => data.content.organizationRole.includes(roles.value));
           this.orgPossibleRoles.map(role => {
-            if (data.content.usersRoles.includes(role.value)) {
+            if (user.content.userRoles.includes(role.value)) {
               const control = new FormControl(true);
               (this.editForm.controls.userRoles as FormArray).push(control);
             } else {
@@ -70,6 +70,7 @@ export class UserEditComponent implements OnInit {
           });
         });
         const usr = user.content;
+        console.log(usr);
         this.editForm.patchValue(usr);
       });
     });

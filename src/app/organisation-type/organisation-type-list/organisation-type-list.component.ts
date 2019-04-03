@@ -43,7 +43,9 @@ export class OrganisationTypeListComponent implements OnInit {
 
   getAllOrganisationTypes(): void {
     this.organisationTypeService.all().subscribe(data => {
-      return this.organisationTypes = data.content;
+      if (data) {
+        this.organisationTypes = data.content;
+      }
     });
   }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AuthenticationService} from '../../core/services';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
@@ -13,10 +13,12 @@ declare var $;
 })
 export class ResetPasswordComponent implements OnInit {
 
-
   errors: string[];
   message: string;
   resetPasswordForm: FormGroup;
+  userId: string;
+  isValidToken = false;
+  token: string;
 
   constructor(
     private route: ActivatedRoute,
@@ -31,7 +33,6 @@ export class ResetPasswordComponent implements OnInit {
     });
   }
 
-
   ngOnInit() {
     document.body.className = 'hold-transition login-page';
     $(() => {
@@ -41,7 +42,16 @@ export class ResetPasswordComponent implements OnInit {
         increaseArea: '20%' /* optional */
       });
     });
-
+    this.route.params.subscribe(params => {
+      this.token = params['token'.toString()];
+    });
+    this.authenticationService.validateResetToken(this.token).subscribe(data => {
+        this.isValidToken = true;
+        this.userId = data.content._id;
+      },
+      (err) => {
+        this.errors = err.errors;
+      });
   }
 
   onSubmit() {
@@ -50,9 +60,19 @@ export class ResetPasswordComponent implements OnInit {
       this.errors = this.helperService.getFormValidationErrors(this.resetPasswordForm);
       return;
     }
-    this.authenticationService.resetPassword(this.resetPasswordForm.value).subscribe(data => {
-        this.message = data.message;
-        this.router.navigateByUrl('login');
+    const password = this.resetPasswordForm.controls.password.value;
+    const confirmPassword = this.resetPasswordForm.controls.confirmPass.value;
+
+    if (password === confirmPassword) {
+      this.errors = ['passwords do not match'];
+      return;
+    }
+    const resets = this.resetPasswordForm.value;
+    resets['userId'.toString()] = this.userId;
+    resets['token'.toString()] = this.token;
+    resets['isLoggedIn'.toString()] = false;
+    this.authenticationService.resetPassword(resets).subscribe(data => {
+        this.router.navigateByUrl('login', {state: {message: 'Password successfully reset'}});
       },
       (err) => {
         this.errors = err.errors;

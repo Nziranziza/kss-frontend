@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {PoliceService} from '../../core/services';
 
 @Component({
   selector: 'app-asidenavbar',
@@ -7,9 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AsidenavbarComponent implements OnInit {
 
-  constructor() { }
-
-  ngOnInit() {
+  constructor(private policeService: PoliceService) {
   }
 
+  police: any;
+
+  ngOnInit() {
+    this.police = this.policeService;
+  }
 }

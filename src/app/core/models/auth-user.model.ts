@@ -1,5 +1,6 @@
 export interface AuthUser {
   info: any;
-  parameter: any;
+  parameters: any;
   token: string;
+  orgInfo: any;
 }

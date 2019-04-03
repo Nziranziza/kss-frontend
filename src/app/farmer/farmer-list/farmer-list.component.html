@@ -1,40 +1,30 @@
 <h3>
   {{ title }}
-<!--
-  <a class="btn btn-success pull-right" routerLink="/admin/farmers/upload"><i class="fa fa-plus"></i> Upload farmers list</a>
--->
 </h3>
 <app-list-message [message]="message"></app-list-message>
 <div class="row">
   <div class="col-xs-12">
     <div class="box">
       <div class="box-body table-responsive">
-        <table class="table table-bordered table-striped" id="farmers">
+        <table class="table table-condensed" id="farmers">
           <thead>
           <tr>
             <th>First name</th>
             <th>Last name</th>
             <th>National ID</th>
-            <th>Address</th>
-            <th>Phone number</th>
-            <th>UPI number</th>
+            <th>Reg number</th>
+            <th>Season</th>
             <th>Number of trees</th>
-            <th>Actions</th>
           </tr>
           </thead>
           <tbody>
-          <tr *ngFor="let farmer of farmers">
-            <td> {{ farmer.info.foreName }}</td>
-            <td> {{ farmer.info.surname }}</td>
-            <td> {{ farmer.info.nationalId }}</td>
-            <td> {{ farmer.address }}</td>
-            <td> {{ farmer.info.phone_number }}</td>
-            <td> {{ farmer.upiNumber }}</td>
-            <td> {{ farmer.treesNumber }}</td>
-           <!-- <td class="actions no-wrap text-right">
-              <button class="btn btn-danger btn-margin" (click)="deleteFarmer(farmer)"> Delete</button>
-              <a class="btn btn-success btn-margin" [routerLink]="['edit/',farmer.id]"  style="margin-left: 10px;"> Edit</a>
-            </td>-->
+          <tr *ngFor="let farmer of farmers; let i index">
+            <td> {{ farmer.userInfo.foreName }}</td>
+            <td> {{ farmer.userInfo.surname }}</td>
+            <td> {{ farmer.userInfo.NID }}</td>
+            <td> {{ farmer.userInfo.regNumber }}</td>
+            <td> {{ farmer.request.season }}</td>
+            <td> {{ farmer.request.requestInfo[0].numberOfTrees }}</td>
           </tr>
           </tbody>
         </table>

@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable, BehaviorSubject, ReplaySubject} from 'rxjs';
+import {Observable} from 'rxjs';
 
 import {ApiService} from './api.service';
 import {JwtService} from './jwt.service';
@@ -10,27 +10,19 @@ import {map} from 'rxjs/operators';
 
 @Injectable()
 export class AuthenticationService {
-  private currentUserSubject = new BehaviorSubject<AuthUser>({} as AuthUser);
-  private isAuthenticatedSubject = new ReplaySubject<boolean>(1);
-  public isAuthenticated = this.isAuthenticatedSubject.asObservable();
-
   constructor(
     private apiService: ApiService,
     private http: HttpClient,
-    private jwtService: JwtService
-  ) {
+    private jwtService: JwtService) {
   }
 
   setAuth(user: AuthUser) {
     this.jwtService.saveToken(user.token);
-    this.currentUserSubject.next(user);
-    this.isAuthenticatedSubject.next(true);
+    window.localStorage.setItem('user', JSON.stringify(user));
   }
 
   purgeAuth() {
     this.jwtService.destroyToken();
-    this.currentUserSubject.next({} as AuthUser);
-    this.isAuthenticatedSubject.next(false);
   }
 
   attemptAuth(credentials): Observable<any> {
@@ -44,23 +36,18 @@ export class AuthenticationService {
   }
 
   getCurrentUser(): AuthUser {
-    return this.currentUserSubject.value;
+    return JSON.parse(window.localStorage.getItem('user'));
   }
 
   requestReset(email): Observable<any> {
-    return this.apiService.post('/users/', email);
+    return this.apiService.post('/users/request/reset', email);
   }
 
   resetPassword(password): Observable<any> {
-    return this.apiService.post('/users/', password);
+    return this.apiService.post('/users/password-reset', password);
   }
 
-  update(user): Observable<any> {
-    return this.apiService
-      .put('/users', user)
-      .pipe(map(data => {
-        this.currentUserSubject.next(data.content);
-        return data;
-      }));
+  validateResetToken(token: string) {
+    return this.apiService.get('/users/confirmation/' + token);
   }
 }

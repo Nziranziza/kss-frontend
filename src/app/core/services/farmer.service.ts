@@ -12,7 +12,7 @@ export class FarmerService {
   }
 
   all(): Observable<any> {
-    return this.apiService.get('/farmers');
+    return this.apiService.get('/coffeefarmers');
   }
 
   get(id: string): Observable<any> {

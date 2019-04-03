@@ -64,7 +64,6 @@ export class UserCreateComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.createForm.value);
     if (this.createForm.valid) {
       const selectedRoles = this.createForm.value.userRoles
         .map((checked, index) => checked ? this.orgPossibleRoles[index].value : null)

@@ -5,9 +5,9 @@
       <div class="col-xs-12">
         <div class="login-box">
           <div class="login-box-body">
-            <p class="login-box-msg">Reset password</p>
             <app-list-errors [errorList]="errors"></app-list-errors>
             <app-list-message [message]="message"></app-list-message>
+            <p class="login-box-msg">Reset password</p>
             <form [formGroup]="requestResetForm" (ngSubmit)="onSubmit()">
               <div class="form-group has-feedback">
                 <input type="text" formControlName="email" class="form-control" placeholder="email"/>

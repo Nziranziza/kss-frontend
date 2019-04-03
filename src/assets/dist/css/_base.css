@@ -26,3 +26,8 @@ html, body {
 .box {
   border-top: 3px solid #3c8dbc;
 }
+.list-sub-header{
+  font-style: italic;
+  font-size: 6px;
+  color: #99a4ac;
+}

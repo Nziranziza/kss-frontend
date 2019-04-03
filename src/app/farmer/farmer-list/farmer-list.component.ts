@@ -12,9 +12,7 @@ declare var $;
 })
 export class FarmerListComponent implements OnInit {
 
-  constructor(private farmerService: FarmerService,
-              private router: Router, private  confirmDialogService: ConfirmDialogService) {
-
+  constructor(private farmerService: FarmerService, private router: Router, private  confirmDialogService: ConfirmDialogService) {
   }
 
   message: string;
@@ -25,7 +23,7 @@ export class FarmerListComponent implements OnInit {
     $(() => {
       $('#farmers').DataTable();
     });
-    /*this.getAllFarmers();*/
+    this.getAllFarmers();
   }
 
   deleteFarmer(farmer: Farmer): void {
@@ -45,8 +43,9 @@ export class FarmerListComponent implements OnInit {
 
   getAllFarmers(): void {
     this.farmerService.all().subscribe(data => {
-      return this.farmers = data;
+      if (data) {
+        this.farmers = data.content;
+      }
     });
   }
-
 }
