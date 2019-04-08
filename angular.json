@@ -26,13 +26,12 @@
               "src/styles.css"
             ],
             "scripts": [
-              "src/assets/bower_components/jquery/dist/jquery.min.js",
+              "node_modules/jquery/dist/jquery.js",
               "src/assets/bower_components/bootstrap/dist/js/bootstrap.min.js",
               "src/assets/bower_components/jquery-sparkline/dist/jquery.sparkline.min.js",
               "src/assets/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js",
               "src/assets/plugins/jvectormap/jquery-jvectormap-world-mill-en.js",
-              "src/assets/bower_components/datatables.net/js/jquery.dataTables.min.js",
-              "src/assets/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js",
+              "node_modules/datatables.net/js/jquery.dataTables.js",
               "src/assets/bower_components/fastclick/lib/fastclick.js",
               "src/assets/bower_components/jquery-slimscroll/jquery.slimscroll.min.js",
               "src/assets/plugins/iCheck/icheck.min.js",

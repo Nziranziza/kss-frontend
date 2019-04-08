@@ -8,7 +8,7 @@ import {
   ConfirmDialogService,
   JwtService,
   OrganisationService,
-  OrganisationTypeService, PoliceService
+  OrganisationTypeService
 } from './services';
 import {HelperService} from './helpers';
 import {MatDialogModule} from '@angular/material';
@@ -29,8 +29,7 @@ import {CookieService} from 'ngx-cookie-service';
     FarmerService,
     ConfirmDialogService,
     OrganisationTypeService,
-    CookieService,
-    PoliceService
+    CookieService
   ],
   declarations: []
 })

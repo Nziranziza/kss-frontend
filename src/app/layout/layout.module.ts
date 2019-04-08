@@ -5,6 +5,7 @@ import {AsidenavbarComponent} from './asidenavbar/asidenavbar.component';
 import {FooternavbarComponent} from './footernavbar/footernavbar.component';
 
 import {RouterModule} from '@angular/router';
+import {SharedModule} from '../shared';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import {RouterModule} from '@angular/router';
   ],
   imports: [
     CommonModule,
-    RouterModule
+    RouterModule,
+    SharedModule
   ],
   exports: [
     TopnavbarComponent,

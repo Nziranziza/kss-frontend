@@ -11,7 +11,9 @@ import {
 
 } from './layout';
 import {MatDialogModule, MatIconModule} from '@angular/material';
-import {ConfirmDialogComponent} from './layout/confirm-dialog/confirm-dialog.component';
+import {ConfirmDialogComponent} from './layout';
+import {DataTablesModule} from 'angular-datatables';
+import {RequiredRolesDirective} from './directives/required-roles';
 
 
 @NgModule({
@@ -20,10 +22,10 @@ import {ConfirmDialogComponent} from './layout/confirm-dialog/confirm-dialog.com
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    RouterModule, MatIconModule, MatDialogModule
+    RouterModule, MatIconModule, MatDialogModule, DataTablesModule
   ],
   declarations: [ListErrorsComponent,
-    HomeHeaderComponent, HomeFooterComponent, ListMessageComponent, ConfirmDialogComponent],
+    HomeHeaderComponent, HomeFooterComponent, ListMessageComponent, ConfirmDialogComponent, RequiredRolesDirective],
   exports: [
     CommonModule,
     FormsModule,
@@ -35,7 +37,7 @@ import {ConfirmDialogComponent} from './layout/confirm-dialog/confirm-dialog.com
     HomeHeaderComponent,
     HomeFooterComponent,
     ConfirmDialogComponent,
-    MatIconModule, MatDialogModule
+    MatIconModule, MatDialogModule, DataTablesModule, RequiredRolesDirective
   ],
   entryComponents: [ConfirmDialogComponent]
 })

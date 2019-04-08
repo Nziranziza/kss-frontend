@@ -19,6 +19,7 @@ import {RegistrationReportModule} from './registration-report/registration-repor
 import {RouterModule} from '@angular/router';
 import {UserModule} from './user/user.module';
 import {OrganisationTypeModule} from './organisation-type/organisation-type.module';
+import {DataTablesModule} from 'angular-datatables';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import {OrganisationTypeModule} from './organisation-type/organisation-type.modu
     ProfileModule,
     RouterModule,
     UserModule,
-    OrganisationTypeModule
+    OrganisationTypeModule,
+    DataTablesModule
     /*HttpClientInMemoryWebApiModule.forRoot(DataService)*/
   ],
   providers: [Title, {provide: HTTP_INTERCEPTORS, useClass: HttpTokenInterceptor, multi: true},

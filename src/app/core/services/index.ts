@@ -4,5 +4,4 @@ export * from './authentication.service';
 export * from './organisation.service';
 export * from './confirm-dialog.service';
 export * from './farmer.service';
-export * from './organisation-type.service';
-export * from './police.service';
+export * from './organisation-type.service'

@@ -1,8 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {UserService} from '../../core/services/user.service';
 import {User} from '../../core/models';
 import {ConfirmDialogService} from '../../core/services';
+import {Subject} from 'rxjs';
 
 declare var $;
 
@@ -11,11 +12,14 @@ declare var $;
   templateUrl: './user-list.component.html',
   styleUrls: ['./user-list.component.css']
 })
-export class UserListComponent implements OnInit {
+export class UserListComponent implements OnInit, OnDestroy {
 
   organisationId: string;
   users: User[];
   message: string;
+  dtOptions: DataTables.Settings = {};
+  // @ts-ignore
+  dtTrigger: Subject = new Subject();
 
   constructor(private route: ActivatedRoute, private userService: UserService,
               private confirmDialogService: ConfirmDialogService) {
@@ -30,6 +34,15 @@ export class UserListComponent implements OnInit {
 
     });
     this.getAllUsers();
+    this.dtOptions = {
+      pagingType: 'full_numbers',
+      pageLength: 25
+    };
+  }
+
+  ngOnDestroy(): void {
+    // Do not forget to unsubscribe the event
+    this.dtTrigger.unsubscribe();
   }
 
   deleteUser(user: User): void {
@@ -50,6 +63,7 @@ export class UserListComponent implements OnInit {
     this.userService.all(this.organisationId).subscribe(data => {
       if (data) {
         this.users = data.content;
+        this.dtTrigger.next();
       }
     });
   }

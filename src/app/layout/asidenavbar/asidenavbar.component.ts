@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {PoliceService} from '../../core/services';
 
 @Component({
   selector: 'app-asidenavbar',
@@ -8,12 +7,9 @@ import {PoliceService} from '../../core/services';
 })
 export class AsidenavbarComponent implements OnInit {
 
-  constructor(private policeService: PoliceService) {
+  constructor() {
   }
 
-  police: any;
-
   ngOnInit() {
-    this.police = this.policeService;
   }
 }

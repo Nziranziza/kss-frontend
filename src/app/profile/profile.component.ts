@@ -35,28 +35,28 @@ export class ProfileComponent implements OnInit {
   }
 
   onSubmit() {
-    this.errors = [];
-    if (this.changePasswordForm.invalid) {
+    if (!this.changePasswordForm.invalid) {
+      const password = this.changePasswordForm.controls.password.value;
+      const confirmPassword = this.changePasswordForm.controls.confirmPassword.value;
+
+      if (password !== confirmPassword) {
+        this.errors = ['passwords do not match'];
+        return;
+      }
+      const resets = {};
+      resets['isLoggedIn'.toString()] = true;
+      resets['password'.toString()] = password;
+      this.authenticationService.resetPassword(resets).subscribe(data => {
+          this.router.navigateByUrl('login', {state: {message: 'Password successfully reset'}});
+        },
+        (err) => {
+          this.errors = err.errors;
+        });
+    } else {
       this.errors = this.helperService.getFormValidationErrors(this.changePasswordForm);
       return;
-    }
-    const password = this.changePasswordForm.controls.password.value;
-    const confirmPassword = this.changePasswordForm.controls.confirmPass.value;
 
-    if (password === confirmPassword) {
-      this.errors = ['passwords do not match'];
-      return;
     }
-    const resets = this.changePasswordForm.value;
-    resets['id'.toString()] = this.userInfo._id;
-    resets['token'.toString()] = this.jwtService.getToken();
-    resets['isLoggedIn'.toString()] = true;
-    this.authenticationService.resetPassword(resets).subscribe(data => {
-        this.router.navigateByUrl('login', {state: {message: 'Password successfully reset'}});
-      },
-      (err) => {
-        this.errors = err.errors;
-      });
   }
 
 }

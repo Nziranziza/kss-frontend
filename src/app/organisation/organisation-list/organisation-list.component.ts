@@ -1,8 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {OrganisationService} from '../../core/services';
 import {Organisation} from '../../core/models';
 import {Router} from '@angular/router';
 import {ConfirmDialogService} from '../../core/services';
+import {Subject} from 'rxjs';
 
 declare var $;
 
@@ -11,7 +12,7 @@ declare var $;
   templateUrl: './organisation-list.component.html',
   styleUrls: ['./organisation-list.component.css']
 })
-export class OrganisationListComponent implements OnInit {
+export class OrganisationListComponent implements OnInit, OnDestroy {
 
   constructor(private organisationService: OrganisationService,
               private router: Router, private  confirmDialogService: ConfirmDialogService) {
@@ -20,12 +21,24 @@ export class OrganisationListComponent implements OnInit {
 
   message: string;
   organisations: any;
+  dtOptions: DataTables.Settings = {};
+  // @ts-ignore
+  dtTrigger: Subject = new Subject();
 
   ngOnInit() {
     $(() => {
       $('#organisations').DataTable();
     });
     this.getAllOrganisations();
+    this.dtOptions = {
+      pagingType: 'full_numbers',
+      pageLength: 25
+    };
+  }
+
+  ngOnDestroy(): void {
+    // Do not forget to unsubscribe the event
+    this.dtTrigger.unsubscribe();
   }
 
   deleteOrganisation(organisation: Organisation): void {
@@ -46,8 +59,8 @@ export class OrganisationListComponent implements OnInit {
     this.organisationService.all().subscribe(data => {
       if (data) {
         this.organisations = data.content;
+        this.dtTrigger.next();
       }
     });
   }
-
 }

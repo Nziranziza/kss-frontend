@@ -40,7 +40,7 @@ export class AuthenticationService {
   }
 
   requestReset(email): Observable<any> {
-    return this.apiService.post('/users/request/reset', email);
+    return this.apiService.post('/users/request/password-reset', email);
   }
 
   resetPassword(password): Observable<any> {

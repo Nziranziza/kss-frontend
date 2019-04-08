@@ -31,3 +31,6 @@ html, body {
   font-size: 6px;
   color: #99a4ac;
 }
+input.ng-invalid.ng-touched {
+  border: 1px solid indianred;
+}

@@ -55,27 +55,28 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   onSubmit() {
-    this.errors = [];
-    if (this.resetPasswordForm.invalid) {
+    if (!this.resetPasswordForm.invalid) {
+      const password = this.resetPasswordForm.controls.password.value;
+      const confirmPassword = this.resetPasswordForm.controls.confirmPass.value;
+
+      if (password === confirmPassword) {
+        this.errors = ['passwords do not match'];
+        return;
+      }
+      const resets = this.resetPasswordForm.value;
+      resets['userId'.toString()] = this.userId;
+      resets['token'.toString()] = this.token;
+      resets['isLoggedIn'.toString()] = false;
+      this.authenticationService.resetPassword(resets).subscribe(data => {
+
+          this.router.navigateByUrl('login', {state: {message: 'Password successfully reset'}});
+        },
+        (err) => {
+          this.errors = err.errors;
+        });
+    } else {
       this.errors = this.helperService.getFormValidationErrors(this.resetPasswordForm);
       return;
     }
-    const password = this.resetPasswordForm.controls.password.value;
-    const confirmPassword = this.resetPasswordForm.controls.confirmPass.value;
-
-    if (password === confirmPassword) {
-      this.errors = ['passwords do not match'];
-      return;
-    }
-    const resets = this.resetPasswordForm.value;
-    resets['userId'.toString()] = this.userId;
-    resets['token'.toString()] = this.token;
-    resets['isLoggedIn'.toString()] = false;
-    this.authenticationService.resetPassword(resets).subscribe(data => {
-        this.router.navigateByUrl('login', {state: {message: 'Password successfully reset'}});
-      },
-      (err) => {
-        this.errors = err.errors;
-      });
   }
 }

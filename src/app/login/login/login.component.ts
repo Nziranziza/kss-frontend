@@ -42,21 +42,21 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
-    this.errors = [];
-    if (this.authForm.invalid) {
+    if (!this.authForm.invalid) {
+      const credentials = this.authForm.value;
+      this.authenticationService.attemptAuth(credentials).subscribe(data => {
+          this.router.navigateByUrl('admin/organisations');
+        },
+        err => {
+          this.errors = err.errors;
+        });
+      if (this.router.getCurrentNavigation()) {
+        this.ste = this.router.getCurrentNavigation().extras.state;
+        this.message = this.ste.message;
+      }
+    } else {
       this.errors.push('Invalid username or email');
       return;
-    }
-    const credentials = this.authForm.value;
-    this.authenticationService.attemptAuth(credentials).subscribe(data => {
-        this.router.navigateByUrl('admin/organisations');
-      },
-      err => {
-        this.errors = err.errors;
-      });
-    if (this.router.getCurrentNavigation()) {
-      this.ste = this.router.getCurrentNavigation().extras.state;
-      this.message = this.ste.message;
     }
   }
 

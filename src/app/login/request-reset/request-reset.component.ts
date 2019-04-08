@@ -41,19 +41,18 @@ export class RequestResetComponent implements OnInit {
   }
 
   onSubmit() {
-    this.errors = [];
-    if (this.requestResetForm.invalid) {
+    if (!this.requestResetForm.invalid) {
+      this.authenticationService.requestReset(this.requestResetForm.value).subscribe(data => {
+          this.message = data.message;
+          return;
+        },
+        (err) => {
+          this.errors = err.errors;
+        });
+    } else {
       this.errors = this.helperService.getFormValidationErrors(this.requestResetForm);
       return;
     }
-
-    this.authenticationService.requestReset(this.requestResetForm.value).subscribe(data => {
-        this.message = data.message;
-        return;
-      },
-      (err) => {
-        this.errors = err.errors;
-      });
   }
 
 }
