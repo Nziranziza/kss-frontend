@@ -13,23 +13,52 @@
             <th>Last name</th>
             <th>National ID</th>
             <th>Reg number</th>
-            <th>Season</th>
-            <th>Number of trees</th>
+          <!--  <th>Season</th>
+            <th>Number of trees</th>-->
           </tr>
           </thead>
           <tbody *ngIf="farmers?.length != 0">
-          <tr *ngFor="let farmer of farmers; let i index">
+          <tr *ngFor="let farmer of farmers; let i index" (click)="viewDetails(farmer.userInfo._id)">
             <td> {{ farmer.userInfo.foreName }}</td>
             <td> {{ farmer.userInfo.surname }}</td>
             <td> {{ farmer.userInfo.NID }}</td>
             <td> {{ farmer.userInfo.regNumber }}</td>
-            <td> {{ farmer.request.season }}</td>
-            <td> {{ farmer.request.requestInfo[0].numberOfTrees }}</td>
+           <!-- <td> {{ farmer.request.season }}</td>
+            <td> {{ farmer.request.requestInfo[0].numberOfTrees }}</td>-->
           </tr>
           </tbody>
         </table>
-      </div>
+       <!-- <table class="table table-striped table-hover datatables dataTable no-footer" id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
+          <thead>
+          <tr role="row"><th class="details-control sorting_asc" rowspan="1" colspan="1" aria-label="" style="width: 99px;"></th><th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Firstname aktivoi järjestääksesi sarake nousevasti" style="width: 347px;">Firstname</th><th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Lastname aktivoi järjestääksesi sarake nousevasti" style="width: 341px;">Lastname</th><th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email aktivoi järjestääksesi sarake nousevasti" style="width: 240px;">Email</th></tr>
+          </thead>
+          <tbody>
+          <tr role="row" class="odd">
+            <td class="details-control sorting_1">
+            </td><td>Charles</td><td>Daniels</td><td>cdaniels0@java.com</td>
+          </tr>
+          <tr class="details-row"><td colspan="4"><div class="details-container"><table cellpadding="5" cellspacing="0" border="0" class="details-table"><tbody><tr><td class="title">Person ID:</td><td>1</td></tr><tr><td class="title">Name:</td><td>Charles Daniels</td><td class="title">Email:</td><td>cdaniels0@java.com</td></tr><tr><td class="title">Country:</td><td>China</td><td class="title">IP Address:</td><td>27.159.97.60</td></tr></tbody></table></div></td></tr>
+          <tr role="row" class="even">
+            <td class="details-control sorting_1"></td><td>Stephen</td><td>Martinez</td><td>smartinez1@hhs.gov</td></tr>        </table>
+-->      </div>
     </div>
   </div>
 </div>
+<script>
+  $('.datatables tbody').on('click', 'td.details-control', function() {
+    var tr  = $(this).closest('tr'),
+      row = table.row(tr);
+
+    if (row.child.isShown()) {
+      tr.next('tr').removeClass('details-row');
+      row.child.hide();
+      tr.removeClass('shown');
+    }
+    else {
+      row.child(format(row.data())).show();
+      tr.next('tr').addClass('details-row');
+      tr.addClass('shown');
+    }
+  });
+</script>
 

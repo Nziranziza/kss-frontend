@@ -6,6 +6,7 @@ import {ApiService} from './api.service';
 import {JwtService} from './jwt.service';
 import {AuthUser} from '../models';
 import {map} from 'rxjs/operators';
+import {environment} from '../../../environments/environment';
 
 
 @Injectable()
@@ -43,8 +44,8 @@ export class AuthenticationService {
     return this.apiService.post('/users/request/password-reset', email);
   }
 
-  resetPassword(password): Observable<any> {
-    return this.apiService.post('/users/password-reset', password);
+  resetPassword(password, options?): Observable<any> {
+    return this.http.post(`${environment.api_url}${'/users/password-reset'}`, password, options);
   }
 
   validateResetToken(token: string) {

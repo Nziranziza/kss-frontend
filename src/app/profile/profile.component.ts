@@ -3,7 +3,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AuthenticationService} from '../core/services';
 import {HelperService} from '../core/helpers';
-import {JwtService} from '../core/services';
+import {MessageService} from '../core/services/message.service';
 
 @Component({
   selector: 'app-profile',
@@ -14,8 +14,8 @@ export class ProfileComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute, private router: Router,
-              private authenticationService: AuthenticationService, private helperService: HelperService,
-              private jwtService: JwtService) {
+              private authenticationService: AuthenticationService,
+              private helperService: HelperService, private messageService: MessageService) {
   }
 
   changePasswordForm: FormGroup;
@@ -40,14 +40,15 @@ export class ProfileComponent implements OnInit {
       const confirmPassword = this.changePasswordForm.controls.confirmPassword.value;
 
       if (password !== confirmPassword) {
-        this.errors = ['passwords do not match'];
+        this.errors = ['Passwords do not match'];
         return;
       }
       const resets = {};
       resets['isLoggedIn'.toString()] = true;
       resets['password'.toString()] = password;
       this.authenticationService.resetPassword(resets).subscribe(data => {
-          this.router.navigateByUrl('login', {state: {message: 'Password successfully reset'}});
+          this.messageService.setMessage('Password successfully reset');
+          this.router.navigate(['login']);
         },
         (err) => {
           this.errors = err.errors;
@@ -55,7 +56,6 @@ export class ProfileComponent implements OnInit {
     } else {
       this.errors = this.helperService.getFormValidationErrors(this.changePasswordForm);
       return;
-
     }
   }
 

@@ -8,7 +8,6 @@ import {Component, OnInit} from '@angular/core';
 export class RegistrationReportComponent implements OnInit {
 
   title = 'Registration reports';
-
   constructor() {
   }
 

@@ -34,3 +34,10 @@ html, body {
 input.ng-invalid.ng-touched {
   border: 1px solid indianred;
 }
+div .wrapper {
+  background-color: #367fa9;
+}
+
+.skin-blue .wrapper {
+  background-color: #367fa9;
+}

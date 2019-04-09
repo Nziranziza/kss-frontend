@@ -9,9 +9,8 @@ import {isPlatformBrowser} from '@angular/common';
 })
 export class FarmerDetailsComponent implements OnInit {
 
-  private modal: NgbActiveModal;
-
-  @Input() public farmer;
+  modal: NgbActiveModal;
+  @Input() farmer;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,

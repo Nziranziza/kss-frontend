@@ -4,6 +4,8 @@ import {CommonModule} from '@angular/common';
 import {AdminRoutingModule} from './admin-routing.module';
 import {AdminComponent} from './admin/admin.component';
 import {LayoutModule} from '../layout/layout.module';
+import {HTTP_INTERCEPTORS} from '@angular/common/http';
+import {ErrorInterceptor, HttpTokenInterceptor} from '../core/interceptors';
 
 
 @NgModule({
@@ -12,7 +14,9 @@ import {LayoutModule} from '../layout/layout.module';
     CommonModule,
     AdminRoutingModule,
     LayoutModule
-  ]
+  ],
+  providers: [{provide: HTTP_INTERCEPTORS, useClass: HttpTokenInterceptor, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true}]
 })
 export class AdminModule {
 }

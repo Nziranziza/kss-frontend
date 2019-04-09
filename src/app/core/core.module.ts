@@ -15,6 +15,7 @@ import {MatDialogModule} from '@angular/material';
 import {SharedModule} from '../shared';
 import {FarmerService} from './services';
 import {CookieService} from 'ngx-cookie-service';
+import {MessageService} from './services/message.service';
 
 @NgModule({
   imports: [
@@ -29,7 +30,8 @@ import {CookieService} from 'ngx-cookie-service';
     FarmerService,
     ConfirmDialogService,
     OrganisationTypeService,
-    CookieService
+    CookieService,
+    MessageService
   ],
   declarations: []
 })

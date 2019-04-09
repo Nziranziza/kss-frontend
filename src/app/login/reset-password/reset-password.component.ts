@@ -3,6 +3,8 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {AuthenticationService} from '../../core/services';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {HelperService} from '../../core/helpers';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {MessageService} from '../../core/services/message.service';
 
 declare var $;
 
@@ -24,7 +26,9 @@ export class ResetPasswordComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private authenticationService: AuthenticationService,
-    private formBuilder: FormBuilder, private helperService: HelperService
+    private http: HttpClient,
+    private formBuilder: FormBuilder, private helperService: HelperService,
+    private messageService: MessageService
   ) {
     // use FormBuilder to create a form group
     this.resetPasswordForm = this.formBuilder.group({
@@ -57,19 +61,23 @@ export class ResetPasswordComponent implements OnInit {
   onSubmit() {
     if (!this.resetPasswordForm.invalid) {
       const password = this.resetPasswordForm.controls.password.value;
-      const confirmPassword = this.resetPasswordForm.controls.confirmPass.value;
+      const confirmPassword = this.resetPasswordForm.controls.confirmPassword.value;
 
-      if (password === confirmPassword) {
-        this.errors = ['passwords do not match'];
+      if (password !== confirmPassword) {
+        this.errors = ['Passwords do not match'];
         return;
       }
-      const resets = this.resetPasswordForm.value;
-      resets['userId'.toString()] = this.userId;
-      resets['token'.toString()] = this.token;
+      const resets = {};
       resets['isLoggedIn'.toString()] = false;
-      this.authenticationService.resetPassword(resets).subscribe(data => {
-
-          this.router.navigateByUrl('login', {state: {message: 'Password successfully reset'}});
+      resets['password'.toString()] = password;
+      const headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        'x-auth-token': this.token });
+      const options = { headers };
+      this.authenticationService.purgeAuth();
+      this.authenticationService.resetPassword(resets, options).subscribe(data => {
+          this.messageService.setMessage('Password successfully reset!');
+          this.router.navigate(['login']);
         },
         (err) => {
           this.errors = err.errors;

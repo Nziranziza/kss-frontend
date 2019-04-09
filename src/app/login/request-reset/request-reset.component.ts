@@ -43,7 +43,7 @@ export class RequestResetComponent implements OnInit {
   onSubmit() {
     if (!this.requestResetForm.invalid) {
       this.authenticationService.requestReset(this.requestResetForm.value).subscribe(data => {
-          this.message = data.message;
+          this.message = 'Request successful submitted!';
           return;
         },
         (err) => {

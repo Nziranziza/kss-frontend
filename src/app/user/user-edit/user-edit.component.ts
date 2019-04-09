@@ -25,7 +25,6 @@ export class UserEditComponent implements OnInit {
               private organisationService: OrganisationService) {
   }
 
-
   ngOnInit() {
 
     this.editForm = this.formBuilder.group({

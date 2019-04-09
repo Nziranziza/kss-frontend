@@ -1,7 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthenticationService} from '../../core';
+import {MessageService} from '../../core/services/message.service';
 
 declare var $;
 
@@ -14,7 +15,6 @@ export class LoginComponent implements OnInit {
 
   errors: string[];
   authForm: FormGroup;
-  ste: any;
   message: string;
 
   constructor(
@@ -22,6 +22,7 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private authenticationService: AuthenticationService,
     private formBuilder: FormBuilder,
+    private messageService: MessageService
   ) {
     // use FormBuilder to create a form group
     this.authForm = this.formBuilder.group({
@@ -39,6 +40,7 @@ export class LoginComponent implements OnInit {
         increaseArea: '20%' /* optional */
       });
     });
+    this.message = this.messageService.getMessage();
   }
 
   onSubmit() {
@@ -50,10 +52,7 @@ export class LoginComponent implements OnInit {
         err => {
           this.errors = err.errors;
         });
-      if (this.router.getCurrentNavigation()) {
-        this.ste = this.router.getCurrentNavigation().extras.state;
-        this.message = this.ste.message;
-      }
+
     } else {
       this.errors.push('Invalid username or email');
       return;
