@@ -4,12 +4,11 @@ import {FarmerRoutingModule} from './farmer-routing.module';
 import {FarmerListComponent} from './farmer-list/farmer-list.component';
 import {FarmerEditComponent} from './farmer-edit/farmer-edit.component';
 import {SharedModule} from '../shared';
-import {RequestEditComponent} from './request-edit/request-edit.component';
 import {FarmerDetailsComponent} from './farmer-details/farmer-details.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
-  declarations: [FarmerListComponent, FarmerEditComponent, RequestEditComponent, FarmerDetailsComponent],
+  declarations: [FarmerListComponent, FarmerEditComponent, FarmerDetailsComponent],
   imports: [
     CommonModule,
     FarmerRoutingModule,

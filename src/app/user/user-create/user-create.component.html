@@ -10,6 +10,12 @@
           <div class="row">
             <div class="col-xs-6">
               <div class="form-group">
+                <label class="control-label">NID</label>
+                <input type="text" formControlName="NID" class="form-control">
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <div class="form-group">
                 <label class="control-label label-required">First name</label>
                 <input type="text" formControlName="foreName" class="form-control">
               </div>
@@ -24,12 +30,6 @@
               <div class="form-group">
                 <label class="control-label label-required">Email</label>
                 <input type="text" formControlName="email" class="form-control">
-              </div>
-            </div>
-            <div class="col-xs-6">
-              <div class="form-group">
-                <label class="control-label label-required">NID</label>
-                <input type="text" formControlName="NID" class="form-control">
               </div>
             </div>
             <div class="col-xs-6">
@@ -72,6 +72,52 @@
                   </label>
                 </div>
             </div>
+            <fieldset class="location" *ngIf="needLocation">
+              <legend>
+                <label class="control-label label-required">&nbsp; Location</label></legend>
+              <div formGroupName="location">
+                <div class="col-xs-2">
+                  <div class="form-group">
+                    <span class="">Province</span>
+                    <select class="form-control" formControlName="prov_id">
+                      <option *ngFor="let province of provinces" value="{{province._id}}">{{province.namee}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-xs-2">
+                  <div class="form-group">
+                    <span class="">District</span>
+                    <select class="form-control" formControlName="dist_id">
+                      <option *ngFor="let district of districts" value="{{district._id}}">{{district.name}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-xs-2">
+                  <div class="form-group">
+                    <span class="">Sector</span>
+                    <select class="form-control" formControlName="sect_id">
+                      <option *ngFor="let sector of sectors" value="{{sector._id}}">{{sector.name}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-xs-2">
+                  <div class="form-group">
+                    <span class="">Cell</span>
+                    <select class="form-control" formControlName="cell_id">
+                      <option *ngFor="let cell of cells" value="{{cell._id}}">{{cell.name}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-xs-2">
+                  <div class="form-group">
+                    <span class="">village</span>
+                    <select class="form-control" formControlName="village_id">
+                      <option *ngFor="let village of villages" value="{{village._id}}">{{village.name}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
             <div class="col-xs-6">
               <div class="form-group">
                 <label class="control-label label-required">Password</label>

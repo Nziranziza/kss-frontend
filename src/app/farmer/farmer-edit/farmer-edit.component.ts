@@ -26,10 +26,7 @@ export class FarmerEditComponent implements OnInit {
       surname: [''],
       address: [''],
       ownsLand: [''],
-      upiNumber: [''],
-      treesNumber: [''],
       belongsToCooperative: ['']
-
     });
     this.route.params.subscribe(params => {
       this.farmerService.get(params['id'.toString()]).subscribe(data => {

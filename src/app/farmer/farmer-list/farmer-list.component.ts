@@ -23,19 +23,19 @@ export class FarmerListComponent implements OnInit, OnDestroy {
   message: string;
   farmers: any;
   title = 'Farmers';
+  i: number;
   dtOptions: DataTables.Settings = {};
   // @ts-ignore
   dtTrigger: Subject = new Subject();
 
 
   ngOnInit() {
-    $(() => {
-      $('#farmers').DataTable();
-    });
+
     this.getAllFarmers();
     this.dtOptions = {
       pagingType: 'full_numbers',
-      pageLength: 25
+      pageLength: 10,
+      responsive: true,
     };
   }
 
@@ -69,9 +69,9 @@ export class FarmerListComponent implements OnInit, OnDestroy {
     });
   }
 
-  viewDetails(id: string) {
-    console.log(id);
-    const modalRef = this.modal.open(FarmerDetailsComponent, { size: 'lg'});
-    modalRef.componentInstance.farmer = id;
+  viewDetails(farmer: Farmer) {
+    console.log(farmer);
+    const modalRef = this.modal.open(FarmerDetailsComponent, {size: 'lg'});
+    modalRef.componentInstance.farmer = farmer;
   }
 }

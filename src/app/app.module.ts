@@ -15,7 +15,7 @@ import {OrganisationModule} from './organisation/organisation.module';
 import {ProfileModule} from './profile/profile.module';
 
 import {FarmerModule} from './farmer/farmer.module';
-import {RegistrationReportModule} from './registration-report/registration-report.module';
+import {RegistrationReportModule} from './reports/registration-report.module';
 import {RouterModule} from '@angular/router';
 import {UserModule} from './user/user.module';
 import {OrganisationTypeModule} from './organisation-type/organisation-type.module';

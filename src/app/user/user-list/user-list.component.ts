@@ -5,8 +5,6 @@ import {User} from '../../core/models';
 import {ConfirmDialogService} from '../../core/services';
 import {Subject} from 'rxjs';
 
-declare var $;
-
 @Component({
   selector: 'app-user',
   templateUrl: './user-list.component.html',
@@ -23,9 +21,7 @@ export class UserListComponent implements OnInit, OnDestroy {
 
   constructor(private route: ActivatedRoute, private userService: UserService,
               private confirmDialogService: ConfirmDialogService) {
-    $(() => {
-      $('#organisations').DataTable();
-    });
+
   }
 
   ngOnInit() {
@@ -36,7 +32,8 @@ export class UserListComponent implements OnInit, OnDestroy {
     this.getAllUsers();
     this.dtOptions = {
       pagingType: 'full_numbers',
-      pageLength: 25
+      pageLength: 10,
+      responsive: true,
     };
   }
 
