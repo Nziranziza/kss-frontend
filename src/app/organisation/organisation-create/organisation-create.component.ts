@@ -70,6 +70,9 @@ export class OrganisationCreateComponent implements OnInit {
         .filter(value => value !== null);
       const org = this.createForm.value;
       org['organizationRole'.toString()] = selectedRoles;
+      if (!(selectedRoles.includes(1) || selectedRoles.includes(2))) {
+        delete org.location;
+      }
       this.organisationService.save(org)
         .subscribe(data => {
             this.router.navigateByUrl('admin/organisations');
@@ -91,7 +94,7 @@ export class OrganisationCreateComponent implements OnInit {
           .filter(value => value !== null);
         if (
           selectedRoles.includes(1) ||
-          selectedRoles.includes(2) ) {
+          selectedRoles.includes(2)) {
           this.needLocation = true;
         } else {
           this.needLocation = false;

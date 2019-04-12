@@ -18,6 +18,7 @@ export class UserEditComponent implements OnInit {
   orgPossibleRoles: any[];
   possibleRoles: any[];
   id: string;
+  needLocation: false;
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute, private router: Router,

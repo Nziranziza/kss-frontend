@@ -89,6 +89,9 @@ export class UserCreateComponent implements OnInit {
       user['userRoles'.toString()] = selectedRoles;
       user['org_id'.toString()] = this.organisationId;
       user['action'.toString()] = 'create';
+      if (!(selectedRoles.includes(6) || selectedRoles.includes(7))) {
+        delete user.location;
+      }
       this.userService.save(user).subscribe(data => {
           this.router.navigateByUrl('admin/organisations/' + this.organisationId + '/users');
         },

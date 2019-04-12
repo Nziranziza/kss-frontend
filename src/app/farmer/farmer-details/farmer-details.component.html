@@ -5,45 +5,74 @@
 </div>
 <div class="modal-body">
   <section class="invoice">
-    <!--<div class="row">
+    <div class="row">
       <div class="col-xs-12">
         <h2 class="page-header">
-          <i class="fa fa-globe"></i> Farmer profile
+          <i class="fa fa-user"></i> Farmer profile
         </h2>
       </div>
     </div>
     <div class="row invoice-info">
       <div class="col-sm-4 invoice-col">
-        <address>
-          <strong>{{ farmer.userInfo.foreName }}</strong><br>
-           {{ farmer.userInfo.surname }}<br>
-           {{ farmer.userInfo.NID }}<br>
-           {{ farmer.userInfo.regNumber }}<br>
-        </address>
+        <div class="row">
+          <div class="col-sm-6">
+            First name
+          </div>
+          <div class="col-sm-6">
+            <strong>{{ farmer.userInfo.foreName }}</strong><br>
+          </div>
+          <div class="col-sm-6">
+            Last name
+          </div>
+          <div class="col-sm-6">
+            {{ farmer.userInfo.surname }}<br>
+          </div>
+          <div class="col-sm-6">
+            NID
+          </div>
+          <div class="col-sm-6">
+            {{ farmer.userInfo.NID }}<br>
+          </div>
+          <div class="col-sm-6">
+            REG number
+          </div>
+          <div class="col-sm-6">
+            {{ farmer.userInfo.regNumber }}<br>
+          </div>
+        </div>
       </div>
     </div>
+    <br/> <br/>
     <div class="row">
       <div class="col-xs-12 table-responsive">
         <table class="table table-striped">
           <thead>
           <tr>
             <th>Season</th>
-            <th>UPI</th>
             <th>Location</th>
+            <th>Is land leased</th>
             <th>Number of trees</th>
+            <th>Fertilizer needed</th>
           </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let farmer.request of request; let i = index">
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
+          <tr *ngFor="let request of requests;">
+            <td>{{farmer.request.season}}</td>
+            <td>
+                 <span *ngIf="request.location.prov_id">{{ request.location.prov_id.namek }}</span>
+              /  <span *ngIf="request.location.dist_id">{{ request.location.dist_id.name }}</span>
+              /  <span *ngIf="request.location.sect_id">{{ request.location.sect_id.name }}</span>
+              /  <span *ngIf="request.location.cell_id">{{ request.location.cell_id.name }}</span>
+              /  <span *ngIf="request.location.village_id">{{ request.location.village_id.name }}</span>
+            </td>
+            <td>{{ request.isLandLeased }}</td>
+            <td>{{ request.numberOfTrees }}</td>
+            <td>{{ request.fertilizer_need }} Kg</td>
+          </tr>
           </tbody>
         </table>
       </div>
-    </div>   -->
+    </div>
   </section>
 </div>
 

@@ -1,38 +1,35 @@
 <div class="home">
   <app-home-header></app-home-header>
-  <div class="row">
-    <div class="col-xs-12">
-
-      <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-          <ol class="carousel-indicators">
-            <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-            <li data-target="#carousel-example-generic" data-slide-to="0" class=""></li>
-          </ol>
-          <div class="carousel-inner">
-            <div class="item active">
-              <img src="assets/dist/img/naeb/coffee-plantation.jpg" alt="First slide"
-                   style="object-fit: cover; height: fit-content; width: 100%; max-height: fit-content" class="img-responsive">
-              <div class="carousel-caption">
-                Rwandan Coffee
-              </div>
-            </div>
-            <div class="item">
-              <img src="assets/dist/img/naeb/tea-plantation.jpg" alt="First slide"
-                   style="object-fit: cover; height:fit-content;  width: 100%; max-height: fit-content" class="img-responsive">
-              <div class="carousel-caption">
-                Rwanda Tea
-              </div>
-            </div>
+  <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+    <ol class="carousel-indicators">
+      <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+      <li data-target="#carousel-example-generic" data-slide-to="0" class=""></li>
+    </ol>
+    <div class="carousel-inner">
+      <div class="item active">
+        <div class="img" style="background-image: url('assets/dist/img/naeb/coffee-plantation.jpg')">
+          <div class="carousel-caption">
+            Rwandan Coffee
           </div>
-          <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
-            <span class="fa fa-angle-left"></span>
-          </a>
-          <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
-            <span class="fa fa-angle-right"></span>
-          </a>
         </div>
       </div>
-      <!-- /.row -->
+      <div class="item">
+        <div class="img" style="background-image: url('assets/dist/img/naeb/tea-plantation.jpg')">
+          <div class="carousel-caption">
+            Rwanda Tea
+          </div>
+        </div>
+      </div>
     </div>
-  <app-home-footer></app-home-footer>
+    <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+      <span class="fa fa-angle-left"></span>
+    </a>
+    <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+      <span class="fa fa-angle-right"></span>
+    </a>
+  </div>
 </div>
+<app-home-footer></app-home-footer>
+
+
+

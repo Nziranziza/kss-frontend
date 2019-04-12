@@ -118,6 +118,9 @@ export class OrganisationEditComponent implements OnInit {
         .filter(value => value !== null);
       const org = this.editForm.value;
       org['organizationRole'.toString()] = selectedRoles;
+      if (!(selectedRoles.includes(1) || selectedRoles.includes(2))) {
+        delete org.location;
+      }
       this.organisationService.update(org, this.id).subscribe(data => {
           this.router.navigateByUrl('admin/organisations');
         },
@@ -138,12 +141,7 @@ export class OrganisationEditComponent implements OnInit {
           .filter(value => value !== null);
         if (
           selectedRoles.includes(1) ||
-          selectedRoles.includes(2) ||
-          selectedRoles.includes(3) ||
-          selectedRoles.includes(6) ||
-          selectedRoles.includes(7) ||
-          selectedRoles.includes(8)
-
+          selectedRoles.includes(2)
         ) {
           this.needLocation = true;
         } else {

@@ -11,7 +11,7 @@ export class FarmerDetailsComponent implements OnInit {
 
   modal: NgbActiveModal;
   @Input() farmer;
-
+  requests: any;
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
     private injector: Injector) {
@@ -22,5 +22,7 @@ export class FarmerDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.requests = this.farmer.request.requestInfo;
+    console.log(this.requests);
   }
 }
