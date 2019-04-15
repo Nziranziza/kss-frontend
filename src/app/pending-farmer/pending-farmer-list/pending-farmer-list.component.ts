@@ -43,9 +43,7 @@ export class PendingFarmerListComponent implements OnInit, OnDestroy {
   }
 
   getAllFarmers(): void {
-    console.log('test');
     this.farmerService.listPending().subscribe(data => {
-      console.log(data);
       if (data) {
         this.farmers = data.content;
         this.dtTrigger.next();
@@ -55,7 +53,6 @@ export class PendingFarmerListComponent implements OnInit, OnDestroy {
   }
 
   viewDetails(farmer: Farmer) {
-    console.log(farmer);
     const modalRef = this.modal.open(PendingFarmerListComponent, {size: 'lg'});
     modalRef.componentInstance.farmer = farmer;
   }
