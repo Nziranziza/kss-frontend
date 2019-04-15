@@ -2,12 +2,15 @@
   {{ title }}
 </h3>
 <app-list-message [message]="message"></app-list-message>
+
 <div class="row">
   <div class="col-xs-12">
     <div class="box">
       <div class="box-body table-responsive">
-        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover" class="table table-condensed">
-          <thead>
+
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover"
+               class="table table-condensed">
+          <thead *ngIf="!loading">
           <tr>
             <th>First name</th>
             <th>Last name</th>
@@ -16,19 +19,26 @@
             <th></th>
           </tr>
           </thead>
-          <tbody>
-            <tr *ngFor="let farmer of farmers; let i = index" (click)="viewDetails(farmer)">
-              <td> {{ farmer.userInfo.foreName }}</td>
-              <td> {{ farmer.userInfo.surname }}</td>
-              <td> {{ farmer.userInfo.NID }}</td>
-              <td> {{ farmer.userInfo.regNumber }}</td>
-              <td class="">
-                <button class="btn btn-default btn-margin pull-right">...</button>
-              </td>
-            </tr>
+          <tbody *ngIf="!loading">
+          <tr *ngFor="let farmer of farmers; let i = index" (click)="viewDetails(farmer)">
+            <td> {{ farmer.userInfo.foreName }}</td>
+            <td> {{ farmer.userInfo.surname }}</td>
+            <td> {{ farmer.userInfo.NID }}</td>
+            <td> {{ farmer.userInfo.regNumber }}</td>
+            <td class="">
+              <button class="btn btn-default btn-margin pull-right">...</button>
+            </td>
+          </tr>
+          </tbody>
+          <tbody *ngIf="loading">
+          <tr>
+          <td class="image-container">
+            <img src="assets/dist/img/naeb/spinner.jpeg" class="spinner"/>
+          </td>
+          </tr>
           </tbody>
         </table>
-    </div>
+      </div>
     </div>
   </div>
 </div>

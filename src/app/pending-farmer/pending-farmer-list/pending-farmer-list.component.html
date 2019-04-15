@@ -7,7 +7,7 @@
     <div class="box">
       <div class="box-body table-responsive">
         <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover" class="table table-condensed">
-          <thead>
+          <thead *ngIf="!loading">
           <tr>
             <th>First name</th>
             <th>Last name</th>
@@ -16,13 +16,20 @@
             <th>Missing Info</th>
           </tr>
           </thead>
-          <tbody>
+          <tbody *ngIf="!loading">
           <tr *ngFor="let farmer of farmers; let i = index">
             <td> {{ farmer.foreName }}</td>
             <td> {{ farmer.surname }}</td>
             <td> {{ farmer.NID }}</td>
             <td> {{ farmer.fertilizer_need }}</td>
             <td> {{ farmer.reason.join(', ')  }}</td>
+          </tr>
+          </tbody>
+          <tbody *ngIf="loading">
+          <tr>
+            <td class="image-container">
+              <img src="assets/dist/img/naeb/spinner.jpeg" class="spinner"/>
+            </td>
           </tr>
           </tbody>
         </table>

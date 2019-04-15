@@ -23,6 +23,5 @@ export class FarmerDetailsComponent implements OnInit {
 
   ngOnInit() {
     this.requests = this.farmer.request.requestInfo;
-    console.log(this.requests);
   }
 }

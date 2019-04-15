@@ -24,6 +24,7 @@ export class PendingFarmerListComponent implements OnInit, OnDestroy {
   dtOptions: DataTables.Settings = {};
   // @ts-ignore
   dtTrigger: Subject = new Subject();
+  loading = true;
 
 
   ngOnInit() {
@@ -31,7 +32,7 @@ export class PendingFarmerListComponent implements OnInit, OnDestroy {
     this.getAllFarmers();
     this.dtOptions = {
       pagingType: 'full_numbers',
-      pageLength: 10,
+      pageLength: 25,
       responsive: true,
     };
   }
@@ -48,6 +49,7 @@ export class PendingFarmerListComponent implements OnInit, OnDestroy {
       if (data) {
         this.farmers = data.content;
         this.dtTrigger.next();
+        this.loading = false;
       }
     });
   }

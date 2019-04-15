@@ -50,9 +50,9 @@
           <tr>
             <th>Season</th>
             <th>Location</th>
-            <th>Is land leased</th>
             <th>Number of trees</th>
             <th>Fertilizer needed</th>
+            <th>Fertilizer allocated</th>
           </tr>
           </thead>
           <tbody>
@@ -65,9 +65,9 @@
               /  <span *ngIf="request.location.cell_id">{{ request.location.cell_id.name }}</span>
               /  <span *ngIf="request.location.village_id">{{ request.location.village_id.name }}</span>
             </td>
-            <td>{{ request.isLandLeased }}</td>
             <td>{{ request.numberOfTrees }}</td>
             <td>{{ request.fertilizer_need }} Kg</td>
+            <td>{{ request.fertilizer_allocate }} Kg</td>
           </tr>
           </tbody>
         </table>

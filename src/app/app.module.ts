@@ -43,7 +43,7 @@ import {PendingFarmerModule} from './pending-farmer/pending-farmer.module';
     UserModule,
     OrganisationTypeModule,
     DataTablesModule,
-    PendingFarmerModule
+    PendingFarmerModule,
     /*HttpClientInMemoryWebApiModule.forRoot(DataService)*/
   ],
   providers: [Title],

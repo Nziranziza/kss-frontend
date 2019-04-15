@@ -26,15 +26,15 @@ export class FarmerListComponent implements OnInit, OnDestroy {
   dtOptions: DataTables.Settings = {};
   // @ts-ignore
   dtTrigger: Subject = new Subject();
-
+  loading = true;
 
   ngOnInit() {
-
     this.getAllFarmers();
     this.dtOptions = {
       pagingType: 'full_numbers',
-      pageLength: 10,
+      pageLength: 25,
       responsive: true,
+      processing: true,
     };
   }
 
@@ -64,12 +64,12 @@ export class FarmerListComponent implements OnInit, OnDestroy {
       if (data) {
         this.farmers = data.content;
         this.dtTrigger.next();
+        this.loading = false;
       }
     });
   }
 
   viewDetails(farmer: Farmer) {
-    console.log(farmer);
     const modalRef = this.modal.open(FarmerDetailsComponent, {size: 'lg'});
     modalRef.componentInstance.farmer = farmer;
   }
