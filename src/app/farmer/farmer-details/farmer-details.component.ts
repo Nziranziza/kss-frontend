@@ -1,5 +1,5 @@
 import {Component, Inject, Injector, Input, OnInit, PLATFORM_ID} from '@angular/core';
-import {NgbActiveModal, NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {isPlatformBrowser} from '@angular/common';
 
 @Component({
