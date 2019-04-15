@@ -20,6 +20,7 @@ import {RouterModule} from '@angular/router';
 import {UserModule} from './user/user.module';
 import {OrganisationTypeModule} from './organisation-type/organisation-type.module';
 import {DataTablesModule} from 'angular-datatables';
+import {PendingFarmerModule} from './pending-farmer/pending-farmer.module';
 
 
 @NgModule({
@@ -42,6 +43,7 @@ import {DataTablesModule} from 'angular-datatables';
     UserModule,
     OrganisationTypeModule,
     DataTablesModule,
+    PendingFarmerModule
     /*HttpClientInMemoryWebApiModule.forRoot(DataService)*/
   ],
   providers: [Title],

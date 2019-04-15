@@ -88,7 +88,44 @@ export class UserCreateComponent implements OnInit {
       const user = this.createForm.value;
       user['userRoles'.toString()] = selectedRoles;
       user['org_id'.toString()] = this.organisationId;
+
+      /*--------------------------------- Check user ------------------------------*/
+      const checkEmailBody = {
+        email: user.email,
+        reason: 'registration'
+      };
+      const checkNIDBody = {
+        nid: user.NID,
+        reason: 'registration'
+      };
       user['action'.toString()] = 'create';
+      this.userService.checkEmail(checkEmailBody).subscribe(data => {
+          const response = data.content;
+          if (response.existsInCas) {
+            this.errors = ['User with this email already exists'];
+            return;
+          }
+          if (response.existsInSns) {
+            user['action'.toString()] = 'import';
+          }
+          if (!(response.existsInCas || response.existsInSns)) {
+            this.userService.checkNID(checkNIDBody).subscribe(result => {
+                const res = result.content;
+                if (res.existsInCas) {
+                  this.errors = ['User with this NID already exists'];
+                  return;
+                }
+                if (res.existsInSns) {
+                  user['action'.toString()] = 'import';
+                }
+              },
+              () => {
+              });
+          }
+        },
+        () => {
+        });
+
       if (!(selectedRoles.includes(6) || selectedRoles.includes(7))) {
         delete user.location;
       }
@@ -98,7 +135,6 @@ export class UserCreateComponent implements OnInit {
         (err) => {
           this.errors = err.errors;
         });
-
     }
   }
 
@@ -168,4 +204,5 @@ export class UserCreateComponent implements OnInit {
       this.provinces = data;
     });
   }
+
 }

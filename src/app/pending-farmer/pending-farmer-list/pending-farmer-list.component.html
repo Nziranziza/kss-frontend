@@ -1,0 +1,33 @@
+<h3>
+  {{ title }}
+</h3>
+<app-list-message [message]="message"></app-list-message>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-body table-responsive">
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover" class="table table-condensed">
+          <thead>
+          <tr>
+            <th>First name</th>
+            <th>Last name</th>
+            <th>National ID</th>
+            <th>Needed Fertilizer</th>
+            <th>Missing Info</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let farmer of farmers; let i = index">
+            <td> {{ farmer.foreName }}</td>
+            <td> {{ farmer.surname }}</td>
+            <td> {{ farmer.NID }}</td>
+            <td> {{ farmer.fertilizer_need }}</td>
+            <td> {{ farmer.reason.join(', ')  }}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -70,6 +70,7 @@ export class OrganisationEditComponent implements OnInit {
         });
         const org = data.content;
         org['genreId'.toString()] = org.genre._id;
+        delete org.genre;
         if (
           org.organizationRole.includes(1) ||
           org.organizationRole.includes(2)) {
@@ -105,10 +106,13 @@ export class OrganisationEditComponent implements OnInit {
             this.villages = villages;
           });
         }
+        if (org.location == null) {
+          delete org.location;
+        }
         this.editForm.patchValue(org);
-        this.onChanges();
       });
     });
+    this.onChanges();
   }
 
   onSubmit() {

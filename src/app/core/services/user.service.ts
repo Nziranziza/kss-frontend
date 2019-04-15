@@ -35,4 +35,12 @@ export class UserService {
   userTypes(): Observable<any> {
     return this.apiService.get('/users/user.types/list');
   }
+
+  checkEmail(body: any): Observable<any> {
+    return this.apiService.post('/users/email', body);
+  }
+
+  checkNID(body: any): Observable<any> {
+    return this.apiService.post('/users/nid', body);
+  }
 }

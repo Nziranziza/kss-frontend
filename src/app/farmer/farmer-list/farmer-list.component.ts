@@ -6,7 +6,6 @@ import {Subject} from 'rxjs';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {FarmerDetailsComponent} from '../farmer-details/farmer-details.component';
 
-declare var $;
 
 @Component({
   selector: 'app-farmer-list',

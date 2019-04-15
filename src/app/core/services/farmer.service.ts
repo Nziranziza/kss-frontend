@@ -30,4 +30,8 @@ export class FarmerService {
   update(farmer: Farmer, id: string): Observable<any> {
     return this.apiService.put('/farmers/' + id, farmer);
   }
+
+  listPending(): Observable<any> {
+    return this.apiService.get('/pendingfarmers');
+  }
 }

@@ -1,5 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 
+declare var $;
+
 @Component({
   selector: 'app-asidenavbar',
   templateUrl: './asidenavbar.component.html',
@@ -11,5 +13,9 @@ export class AsidenavbarComponent implements OnInit {
   }
 
   ngOnInit() {
+    $(document).ready(() => {
+      const trees: any = $('[data-widget="tree"]');
+      trees.tree();
+    });
   }
 }
