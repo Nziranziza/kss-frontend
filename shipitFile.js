@@ -1,4 +1,4 @@
-const deployPath = '/var/www/html/smart-kungahara';
+const deployPath = '/home/joseph/Documents/Deployment';
 const currentPath = `${deployPath}/current`;
 module.exports = shipit => {
   require('shipit-deploy')(shipit);
@@ -9,14 +9,14 @@ module.exports = shipit => {
       deployTo: deployPath,
       repositoryUrl: 'https://gitlab.com/bk_techouse/frontend-naeb',
       ignores: [],
-      keepReleases: 3,
+      keepReleases: 2,
       branch: 'master',
       key: '~/.ssh/id_rsa.pub',
       shallowClone: false
     },
     staging: {
-      servers: 'jrukundo@105.179.10.30:2202',
-      build : 'ng build --prod --aot'
+      servers: 'joseph@192.168.0.194:22',
+      build: 'ng build --prod --aot'
     }
   });
   // Override 'fetch' step of shipit-deploy
