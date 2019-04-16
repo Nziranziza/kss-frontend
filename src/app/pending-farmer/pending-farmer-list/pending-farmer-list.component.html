@@ -12,6 +12,8 @@
             <th>First name</th>
             <th>Last name</th>
             <th>National ID</th>
+            <th>Phone number</th>
+            <th>Number of trees</th>
             <th>Needed Fertilizer</th>
             <th>Missing Info</th>
           </tr>
@@ -21,6 +23,8 @@
             <td> {{ farmer.foreName }}</td>
             <td> {{ farmer.surname }}</td>
             <td> {{ farmer.NID }}</td>
+            <td> {{ farmer.phone_number }}</td>
+            <td> {{ farmer.numberOfTrees }}</td>
             <td> {{ farmer.fertilizer_need }}</td>
             <td> {{ farmer.reason.join(', ')  }}</td>
           </tr>
