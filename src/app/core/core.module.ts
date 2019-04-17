@@ -16,6 +16,7 @@ import {SharedModule} from '../shared';
 import {FarmerService} from './services';
 import {CookieService} from 'ngx-cookie-service';
 import {MessageService} from './services/message.service';
+import {AuthorisationService} from './services/authorisation.service';
 
 @NgModule({
   imports: [
@@ -31,7 +32,8 @@ import {MessageService} from './services/message.service';
     ConfirmDialogService,
     OrganisationTypeService,
     CookieService,
-    MessageService
+    MessageService,
+    AuthorisationService
   ],
   declarations: []
 })

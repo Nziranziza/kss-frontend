@@ -20,7 +20,19 @@
           </thead>
           <tbody>
           <ng-container *ngFor="let organisation of organisations">
-            <tr *ngIf="organisation._id!='5ca717e17245be7a96bb55c2'">
+            <tr *ngIf="organisation.organizationRole.indexOf(0) > -1 && isSuperAdmin">
+              <td> {{ organisation.organizationName }}</td>
+              <td> {{ organisation.email }}</td>
+              <td> {{ organisation.phone_number }}</td>
+              <td class="actions no-wrap text-right">
+                <a routerLink="/admin/organisations/{{organisation._id}}/users" class="btn btn-info"><i
+                  class="fa fa-users"></i>Users</a>
+                <!-- <button class="btn btn-danger btn-margin" (click)="deleteOrganisation(organisation)"> Delete</button> -->
+                <a class="btn btn-success btn-margin" [routerLink]="['edit/', organisation._id]"
+                   style="margin-left: 10px;"> Edit</a>
+              </td>
+            </tr>
+            <tr *ngIf="organisation.organizationRole.indexOf(0) == -1 && organisation.organizationName !== 'BK Techouse'">
               <td> {{ organisation.organizationName }}</td>
               <td> {{ organisation.email }}</td>
               <td> {{ organisation.phone_number }}</td>

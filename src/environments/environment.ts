@@ -4,8 +4,7 @@
 
 export const environment = {
   production: false,
-  /*api_url: 'http://105.179.10.30:9078/api'*/
-  api_url: 'https://smartkungahara.rw/api'
+  api_url: 'http://105.179.10.30:9078/api'
 };
 
 /*

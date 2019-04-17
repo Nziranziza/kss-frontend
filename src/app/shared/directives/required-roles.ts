@@ -6,7 +6,7 @@ import {AuthorisationService} from '../../core/services/authorisation.service';
 })
 export class RequiredRolesDirective implements OnInit {
 
-  @Input('appRequiredRoles') roles: string [];
+  @Input('appRequiredRoles') roles: any [];
 
   constructor(private el: ElementRef, private renderer: Renderer2, private authorisationService: AuthorisationService) {
   }
@@ -15,5 +15,6 @@ export class RequiredRolesDirective implements OnInit {
     if (!this.authorisationService.hasRoles(this.roles)) {
       this.renderer.setStyle(this.el.nativeElement, 'display', 'none');
     }
+    this.authorisationService.clear();
   }
 }

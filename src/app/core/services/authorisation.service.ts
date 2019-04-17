@@ -13,12 +13,14 @@ export class AuthorisationService {
   hasAccess = false;
 
   hasRoles(roles: string[]): boolean {
-
     roles.forEach((role) => {
       if (this.userRoles.includes(role)) {
         this.hasAccess = true;
       }
     });
     return this.hasAccess;
+  }
+  clear() {
+    this.hasAccess = false;
   }
 }

@@ -12,7 +12,6 @@ import {SharedModule} from '../shared';
     TopnavbarComponent,
     AsidenavbarComponent,
     FooternavbarComponent
-
   ],
   imports: [
     CommonModule,

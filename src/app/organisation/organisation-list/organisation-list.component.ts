@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {OrganisationService} from '../../core/services';
+import {AuthenticationService, OrganisationService} from '../../core/services';
 import {Organisation} from '../../core/models';
 import {Router} from '@angular/router';
 import {ConfirmDialogService} from '../../core/services';
@@ -15,7 +15,9 @@ declare var $;
 export class OrganisationListComponent implements OnInit, OnDestroy {
 
   constructor(private organisationService: OrganisationService,
-              private router: Router, private  confirmDialogService: ConfirmDialogService) {
+              private router: Router, private  confirmDialogService: ConfirmDialogService,
+              private authenticationService: AuthenticationService
+  ) {
 
   }
 
@@ -24,6 +26,7 @@ export class OrganisationListComponent implements OnInit, OnDestroy {
   dtOptions: DataTables.Settings = {};
   // @ts-ignore
   dtTrigger: Subject = new Subject();
+  isSuperAdmin = false;
 
   ngOnInit() {
     $(() => {
@@ -34,6 +37,7 @@ export class OrganisationListComponent implements OnInit, OnDestroy {
       pagingType: 'full_numbers',
       pageLength: 25
     };
+    this.isSuperAdmin = this.authenticationService.getCurrentUser().parameters.role.includes(0);
   }
 
   ngOnDestroy(): void {
