@@ -6,6 +6,7 @@ import {
   ApiService,
   AuthenticationService,
   ConfirmDialogService,
+  FarmerService,
   JwtService,
   OrganisationService,
   OrganisationTypeService
@@ -13,10 +14,8 @@ import {
 import {HelperService} from './helpers';
 import {MatDialogModule} from '@angular/material';
 import {SharedModule} from '../shared';
-import {FarmerService} from './services';
 import {CookieService} from 'ngx-cookie-service';
 import {MessageService} from './services/message.service';
-import {AuthorisationService} from './services/authorisation.service';
 
 @NgModule({
   imports: [
@@ -32,8 +31,7 @@ import {AuthorisationService} from './services/authorisation.service';
     ConfirmDialogService,
     OrganisationTypeService,
     CookieService,
-    MessageService,
-    AuthorisationService
+    MessageService
   ],
   declarations: []
 })

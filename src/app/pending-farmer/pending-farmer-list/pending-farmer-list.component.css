@@ -1,8 +1,4 @@
 table.table-bordered.dataTable td:last-child, table.table-bordered.dataTable td:last-child {
   min-width: 150px;
 }
-.image-container {
-  text-align: center;
-  vertical-align: middle;
-  display: table-cell;
-}
+
