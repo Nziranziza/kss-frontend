@@ -1,5 +1,5 @@
-const deployPath = '/home/joseph/Documents/Deployment';
-const currentPath = `${deployPath}/current`;
+const deployPath = '/home/joseph/Documents/sks-front-end';
+const currentPath = `${deployPath}`;
 module.exports = shipit => {
   require('shipit-deploy')(shipit);
   //createDeployTasks(shipit);
@@ -9,7 +9,7 @@ module.exports = shipit => {
       deployTo: deployPath,
       repositoryUrl: 'https://gitlab.com/bk_techouse/frontend-naeb',
       ignores: [],
-      keepReleases: 2,
+      keepReleases: 0,
       branch: 'master',
       key: '~/.ssh/id_rsa.pub',
       shallowClone: false
