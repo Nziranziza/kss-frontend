@@ -5,6 +5,8 @@ import {OrganisationService, OrganisationTypeService} from '../../core/services'
 import {HelperService} from '../../core/helpers';
 import {LocationService} from '../../core/services/location.service';
 
+declare var $;
+
 @Component({
   selector: 'app-organisation-create',
   templateUrl: './organisation-create.component.html',
@@ -28,6 +30,10 @@ export class OrganisationCreateComponent implements OnInit {
   cells: any;
   villages: any;
   needLocation = false;
+  viewDistricts = false;
+  viewSectors = false;
+  viewCells = false;
+  viewVillages = false;
 
   ngOnInit() {
 
@@ -106,6 +112,7 @@ export class OrganisationCreateComponent implements OnInit {
         if (value !== null) {
           this.locationService.getDistricts(value).subscribe((data) => {
             this.districts = data;
+            this.createForm.controls.location.get('dist_id'.toString()).setValue('');
             this.sectors = null;
             this.cells = null;
             this.villages = null;
@@ -144,7 +151,6 @@ export class OrganisationCreateComponent implements OnInit {
       }
     );
   }
-
   initial() {
     this.locationService.getProvinces().subscribe((data) => {
       this.provinces = data;

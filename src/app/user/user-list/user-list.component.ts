@@ -32,8 +32,7 @@ export class UserListComponent implements OnInit, OnDestroy {
     this.getAllUsers();
     this.dtOptions = {
       pagingType: 'full_numbers',
-      pageLength: 10,
-      responsive: true,
+      pageLength: 10
     };
   }
 

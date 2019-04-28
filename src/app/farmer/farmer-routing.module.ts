@@ -1,8 +1,8 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {AdminComponent} from '../admin/admin/admin.component';
-import {FarmerEditComponent} from './farmer-edit/farmer-edit.component';
 import {FarmerListComponent} from './farmer-list/farmer-list.component';
+import {FarmerRequestEditComponent} from './farmer-request-edit/farmer-request-edit.component';
 
 const routes: Routes = [
   {
@@ -13,8 +13,8 @@ const routes: Routes = [
         path: '',
         component: FarmerListComponent
       }, {
-        path: 'edit/:id',
-        component: FarmerEditComponent,
+        path: ':farmerId/request/edit/:id',
+        component: FarmerRequestEditComponent,
       }
     ]
   }

@@ -23,19 +23,20 @@ export class OrganisationListComponent implements OnInit, OnDestroy {
 
   message: string;
   organisations: any;
-  dtOptions: DataTables.Settings = {};
+  dtOptions: any = {};
   // @ts-ignore
   dtTrigger: Subject = new Subject();
   isSuperAdmin = false;
 
   ngOnInit() {
-    $(() => {
-      $('#organisations').DataTable();
-    });
     this.getAllOrganisations();
     this.dtOptions = {
       pagingType: 'full_numbers',
-      pageLength: 25
+      pageLength: 25,
+      columns: [{}, {}, {}, {
+        class: 'none'
+      }, {}],
+      responsive: true
     };
     this.isSuperAdmin = this.authenticationService.getCurrentUser().parameters.role.includes(0);
   }

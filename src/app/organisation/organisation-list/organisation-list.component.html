@@ -15,6 +15,7 @@
             <th>Name</th>
             <th>Email</th>
             <th>Phone number</th>
+            <th></th>
             <th>Actions</th>
           </tr>
           </thead>
@@ -24,6 +25,12 @@
               <td> {{ organisation.organizationName }}</td>
               <td> {{ organisation.email }}</td>
               <td> {{ organisation.phone_number }}</td>
+              <td>
+                  <span class="details-row-title">Genre : </span>
+                  <span class="details-row-data">{{ organisation.genre.genre }}</span>
+                  <span class="details-row-title">Street number : </span>
+                  <span class="details-row-data">{{ organisation.streetNumber }}</span>
+              </td>
               <td class="actions no-wrap text-right">
                 <a routerLink="/admin/organisations/{{organisation._id}}/users" class="btn btn-info"><i
                   class="fa fa-users"></i>Users</a>
@@ -32,10 +39,17 @@
                    style="margin-left: 10px;"> Edit</a>
               </td>
             </tr>
-            <tr *ngIf="organisation.organizationRole.indexOf(0) == -1 && organisation.organizationName !== 'BK Techouse'">
+            <tr
+              *ngIf="organisation.organizationRole.indexOf(0) == -1 && organisation.organizationName !== 'BK Techouse'">
               <td> {{ organisation.organizationName }}</td>
               <td> {{ organisation.email }}</td>
               <td> {{ organisation.phone_number }}</td>
+              <td>
+                <span class="details-row-title">Genre : </span>
+                <span class="details-row-data">{{ organisation.genre.genre }}</span>
+                <span class="details-row-title">Street number : </span>
+                <span class="details-row-data">{{ organisation.streetNumber }}</span>
+              </td>
               <td class="actions no-wrap text-right">
                 <a routerLink="/admin/organisations/{{organisation._id}}/users" class="btn btn-info"><i
                   class="fa fa-users"></i>Users</a>

@@ -15,7 +15,7 @@ import {OrganisationModule} from './organisation/organisation.module';
 import {ProfileModule} from './profile/profile.module';
 
 import {FarmerModule} from './farmer/farmer.module';
-import {RegistrationReportModule} from './reports/registration-report.module';
+import {ReportModule} from './reports/report.module';
 import {RouterModule} from '@angular/router';
 import {UserModule} from './user/user.module';
 import {OrganisationTypeModule} from './organisation-type/organisation-type.module';
@@ -37,7 +37,7 @@ import {PendingFarmerModule} from './pending-farmer/pending-farmer.module';
     HomeModule,
     OrganisationModule,
     FarmerModule,
-    RegistrationReportModule,
+    ReportModule,
     ProfileModule,
     RouterModule,
     UserModule,

@@ -1,15 +1,14 @@
 <div class="modal-header">
-  <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
-    <span aria-hidden="true">&times;</span>
-  </button>
+  <i class="fa fa-times-circle close" style="font-size: 24px;" aria-label="Close" (click)="modal.dismiss()">
+  </i>
 </div>
 <div class="modal-body">
   <section class="invoice">
     <div class="row">
       <div class="col-xs-12">
-        <h2 class="page-header">
+        <h3 class="page-header">
           <i class="fa fa-user"></i> Farmer profile
-        </h2>
+        </h3>
       </div>
     </div>
     <div class="row invoice-info">
@@ -65,11 +64,11 @@
           <tr *ngFor="let request of requests;">
             <td>{{farmer.request.season}}</td>
             <td>
-                 <span *ngIf="request.location.prov_id">{{ request.location.prov_id.namek }}</span>
-              /  <span *ngIf="request.location.dist_id">{{ request.location.dist_id.name }}</span>
-              /  <span *ngIf="request.location.sect_id">{{ request.location.sect_id.name }}</span>
-              /  <span *ngIf="request.location.cell_id">{{ request.location.cell_id.name }}</span>
-              /  <span *ngIf="request.location.village_id">{{ request.location.village_id.name }}</span>
+              <span class="details-row-title-sm" style="margin-left: 0px">Province </span> : <span class="details-row-data-sm" *ngIf="request.location.prov_id">{{ request.location.prov_id.namek }}</span>
+              <span class="details-row-title-sm">District </span> : <span class="details-row-data-sm" *ngIf="request.location.dist_id">{{ request.location.dist_id.name }}</span>
+              <span class="details-row-title-sm">Sector </span> : <span class="details-row-data-sm" *ngIf="request.location.sect_id">{{ request.location.sect_id.name }}</span>
+              <span class="details-row-title-sm">Cell </span> : <span class="details-row-data-sm" *ngIf="request.location.cell_id">{{ request.location.cell_id.name }}</span>
+              <span class="details-row-title-sm">Village </span> : <span class="details-row-data-sm" *ngIf="request.location.village_id">{{ request.location.village_id.name }}</span>
             </td>
             <td>{{ request.numberOfTrees }}</td>
             <td>{{ request.fertilizer_need }} Kg</td>

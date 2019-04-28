@@ -32,8 +32,7 @@ export class PendingFarmerListComponent implements OnInit, OnDestroy {
     this.getAllFarmers();
     this.dtOptions = {
       pagingType: 'full_numbers',
-      pageLength: 25,
-      responsive: true,
+      pageLength: 25
     };
   }
 

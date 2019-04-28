@@ -11,7 +11,7 @@ declare var $;
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
 
   errors: string[];
   authForm: FormGroup;
@@ -59,7 +59,7 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  login() {
-    this.router.navigateByUrl('admin');
+  ngOnDestroy() {
+    this.messageService.setMessage(null);
   }
 }

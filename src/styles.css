@@ -6,6 +6,7 @@
 @import url("assets/bower_components/jvectormap/jquery-jvectormap.css");
 @import url("assets/plugins/iCheck/square/blue.css");
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import "~datatables.net-responsive-dt/css/responsive.dataTables.css";
 @import "~datatables.net-dt/css/jquery.dataTables.css";
 @import url("assets/dist/css/AdminLTE.min.css");
 @import url("assets/dist/css/skins/_all-skins.min.css");

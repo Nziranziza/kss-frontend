@@ -1,14 +1,14 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FarmerService} from '../../core/services';
 
 @Component({
   selector: 'app-farmer-edit',
-  templateUrl: './farmer-edit.component.html',
-  styleUrls: ['./farmer-edit.component.css']
+  templateUrl: './farmer-request-edit.component.html',
+  styleUrls: ['./farmer-request-edit.component.css']
 })
-export class FarmerEditComponent implements OnInit {
+export class FarmerRequestEditComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute, private router: Router,
@@ -17,17 +17,10 @@ export class FarmerEditComponent implements OnInit {
 
   editForm: FormGroup;
   errors: string[];
-  title = 'Edit farmer';
+  title = 'Edit request';
 
   ngOnInit() {
-
-    this.editForm = this.formBuilder.group({
-      foreName: [''],
-      surname: [''],
-      address: [''],
-      ownsLand: [''],
-      belongsToCooperative: ['']
-    });
+    this.editForm = this.formBuilder.group({});
     this.route.params.subscribe(params => {
       this.farmerService.get(params['id'.toString()]).subscribe(data => {
         this.editForm.patchValue(data);

@@ -1,5 +1,5 @@
 table.table-bordered.dataTable td:last-child, table.table-bordered.dataTable td:last-child {
-  min-width: 150px;
+  min-width: 100px;
 }
 
 .image-container {

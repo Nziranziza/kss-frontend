@@ -6,7 +6,6 @@ import {Subject} from 'rxjs';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {FarmerDetailsComponent} from '../farmer-details/farmer-details.component';
 
-
 @Component({
   selector: 'app-farmer-list',
   templateUrl: './farmer-list.component.html',
@@ -26,20 +25,36 @@ export class FarmerListComponent implements OnInit, OnDestroy {
   dtOptions: DataTables.Settings = {};
   // @ts-ignore
   dtTrigger: Subject = new Subject();
-  loading = true;
 
-  ngOnInit() {
-    this.getAllFarmers();
+  ngOnInit(): void {
+
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 25,
-      responsive: true,
+      serverSide: true,
       processing: true,
+      orderCellsTop: true,
+      language: {
+        processing: 'Loading...'
+      },
+      ajax: (dataTablesParameters: any, callback) => {
+        this.farmerService.getFarmers(dataTablesParameters)
+          .subscribe(data => {
+            this.farmers = data.data;
+            callback({
+              recordsTotal: data.recordsTotal,
+              recordsFiltered: data.recordsFiltered,
+              data: []
+            });
+          });
+
+      },
+
     };
+
   }
 
   ngOnDestroy(): void {
-    // Do not forget to unsubscribe the event
     this.dtTrigger.unsubscribe();
   }
 
@@ -50,23 +65,10 @@ export class FarmerListComponent implements OnInit, OnDestroy {
         if (res) {
           this.farmerService.destroy(farmer._id)
             .subscribe(data => {
-              this.getAllFarmers();
-              this.dtTrigger.next();
               this.message = 'Record successful deleted!';
             });
-          this.getAllFarmers();
         }
       });
-  }
-
-  getAllFarmers(): void {
-    this.farmerService.all().subscribe(data => {
-      if (data) {
-        this.farmers = data.content;
-        this.dtTrigger.next();
-        this.loading = false;
-      }
-    });
   }
 
   viewDetails(farmer: Farmer) {

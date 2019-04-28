@@ -10,14 +10,12 @@
           <span>Organisations</span>
         </a>
       </li>
-
       <li routerLinkActive="active" [appRequiredRoles]="[0]">
         <a routerLink="/admin/organisation-types">
           <i class="fa fa-list" aria-hidden="true"></i>
           <span>Organisation types</span>
         </a>
       </li>
-
       <li class="treeview" routerLinkActive="active">
         <a href="#">
           <i class="fa fa-users"></i> <span>Farmers</span>
@@ -40,11 +38,21 @@
           </li>
         </ul>
       </li>
-      <li routerLinkActive="active">
-        <a routerLink="/admin/registration-reports">
-          <i class="fa fa-bar-chart" aria-hidden="true"></i>
-          <span>Registration reports</span>
+      <li class="treeview" routerLinkActive="active">
+        <a href="#">
+          <i class="fa fa-bar-chart"></i> <span>Reports</span>
+          <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
         </a>
+        <ul class="treeview-menu">
+          <li routerLinkActive="active">
+            <a routerLink="/admin/report/farmers">
+              <i class="fa fa-circle-o"></i>
+              <span>Farmers</span>
+            </a>
+          </li>
+        </ul>
       </li>
       <li routerLinkActive="active">
         <a routerLink="/logout">

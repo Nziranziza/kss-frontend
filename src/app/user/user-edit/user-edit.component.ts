@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from '../../core/services/user.service';
 import {OrganisationService} from '../../core/services';
+import {LocationService} from '../../core/services/location.service';
 
 @Component({
   selector: 'app-user-edit',
@@ -18,12 +19,18 @@ export class UserEditComponent implements OnInit {
   orgPossibleRoles: any[];
   possibleRoles: any[];
   id: string;
-  needLocation: false;
+  needLocation = false;
+  provinces: any;
+  districts: any;
+  sectors: any;
+  cells: any;
+  villages: any;
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute, private router: Router,
               private userService: UserService,
-              private organisationService: OrganisationService) {
+              private organisationService: OrganisationService,
+              private locationService: LocationService) {
   }
 
   ngOnInit() {
@@ -37,7 +44,14 @@ export class UserEditComponent implements OnInit {
       NID: [''],
       org_id: [''],
       userType: [''],
-      userRoles: new FormArray([])
+      userRoles: new FormArray([]),
+      location: this.formBuilder.group({
+        prov_id: [''],
+        dist_id: [''],
+        sect_id: [''],
+        cell_id: [''],
+        village_id: [''],
+      })
     });
     this.userService.userTypes().subscribe(data => {
       this.userTypes = Object.keys(data.content).map(key => {
@@ -57,6 +71,7 @@ export class UserEditComponent implements OnInit {
     });
     this.route.params.subscribe(params => {
       this.userService.get(params['id'.toString()]).subscribe(user => {
+        console.log(user);
         this.organisationService.get(this.organisationId).subscribe(data => {
           this.orgPossibleRoles = this.possibleRoles.filter(roles => data.content.organizationRole.includes(roles.value));
           this.orgPossibleRoles.map(role => {
@@ -70,10 +85,75 @@ export class UserEditComponent implements OnInit {
           });
         });
         const usr = user.content;
-        console.log(usr);
+        usr.hasAccessTo.map(access => {
+          if (access.app === 2) {
+            usr['userType'.toString()] = access.userType;
+          }
+        });
         this.editForm.patchValue(usr);
       });
     });
+  }
+
+  onChanges() {
+
+    this.editForm.controls['userRoles'.toString()].valueChanges.subscribe(
+      (data) => {
+        const selectedRoles = data
+          .map((checked, index) => checked ? this.orgPossibleRoles[index].value : null)
+          .filter(value => value !== null);
+        if (
+          selectedRoles.includes(6) ||
+          selectedRoles.includes(7)
+        ) {
+          this.needLocation = true;
+        } else {
+          this.needLocation = false;
+        }
+      });
+
+    this.editForm.controls.location.get('prov_id'.toString()).valueChanges.subscribe(
+      (value) => {
+        if (value !== null) {
+          this.locationService.getDistricts(value).subscribe((data) => {
+            this.districts = data;
+            this.sectors = null;
+            this.cells = null;
+            this.villages = null;
+          });
+        }
+      }
+    );
+    this.editForm.controls.location.get('dist_id'.toString()).valueChanges.subscribe(
+      (value) => {
+        if (value !== null) {
+          this.locationService.getSectors(value).subscribe((data) => {
+            this.sectors = data;
+            this.cells = null;
+            this.villages = null;
+          });
+        }
+      }
+    );
+    this.editForm.controls.location.get('sect_id'.toString()).valueChanges.subscribe(
+      (value) => {
+        if (value !== null) {
+          this.locationService.getCells(value).subscribe((data) => {
+            this.cells = data;
+            this.villages = null;
+          });
+        }
+      }
+    );
+    this.editForm.controls.location.get('cell_id'.toString()).valueChanges.subscribe(
+      (value) => {
+        if (value !== null) {
+          this.locationService.getVillages(value).subscribe((data) => {
+            this.villages = data;
+          });
+        }
+      }
+    );
   }
 
   onSubmit() {

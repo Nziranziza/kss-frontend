@@ -1,0 +1,121 @@
+<h3>
+  {{ title }}
+</h3>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-body">
+        <div class="col-xs-12">
+          <button class="btn btn-success pull-right btn-margin" type="button" (click)="onExport()">Export
+          </button>
+        </div>
+        <app-list-errors [errorList]="errors"></app-list-errors>
+        <form [formGroup]="filterForm">
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="col-xs-2">
+                <div class="form-group">
+                  <span class="">Report</span>
+                  <select class="form-control" formControlName="reportBy">
+                    <option *ngFor="let report of reportBy" value="{{report.value}}">{{report.name}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xs-2" *ngIf="byFarmers">
+                <div class="form-group">
+                  <span class="">Option</span>
+                  <select class="form-control" formControlName="option">
+                    <option value="status" selected="selected">Status</option>
+                    <option *ngFor="let opt of options" value="{{opt.value}}">{{opt.name}}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div formGroupName="location">
+                <div class="col-xs-2">
+                  <div class="form-group">
+                    <span class="">Province</span>
+                    <div class="input-group input-group-sm">
+                      <select class="form-control" formControlName="prov_id">
+                        <option value="" selected="selected">ALL PROVINCES</option>
+                        <option *ngFor="let province of provinces" value="{{province._id}}">{{province.namee}}</option>
+                      </select>
+                      <span class="input-group-btn">
+                      <button type="button" class="btn btn-default btn-flat" (click)="onSubmit('province')">
+                        <i class="fa fa-search"></i>
+                      </button>
+                    </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xs-2">
+                  <div class="form-group">
+                    <span class="">District</span>
+                    <div class="input-group input-group-sm">
+                      <select class="form-control" formControlName="dist_id">
+                        <option *ngFor="let district of districts" value="{{district._id}}">{{district.name}}</option>
+                      </select>
+                      <span class="input-group-btn">
+                      <button type="button" class="btn btn-default btn-flat" (click)="onSubmit('district')" [disabled]="!distId">
+                        <i class="fa fa-search"></i>
+                      </button>
+                    </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xs-2">
+                  <div class="form-group">
+                    <span class="">Sector</span>
+                    <div class="input-group input-group-sm">
+                      <select class="form-control" formControlName="sect_id">
+                        <option *ngFor="let sector of sectors" value="{{sector._id}}">{{sector.name}}</option>
+                      </select>
+                      <span class="input-group-btn">
+                      <button type="button" class="btn btn-default btn-flat" (click)="onSubmit('sector')" [disabled]="!sectorId">
+                        <i class="fa fa-search"></i>
+                      </button>
+                    </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xs-2">
+                  <div class="form-group">
+                    <span class="">Cell</span>
+                    <div class="input-group input-group-sm">
+                      <select class="form-control" formControlName="cell_id">
+                        <option *ngFor="let cell of cells" value="{{cell._id}}">{{cell.name}}</option>
+                      </select>
+                      <span class="input-group-btn">
+                      <button type="button" class="btn btn-default btn-flat" (click)="onSubmit('cell')" [disabled]="!cellId">
+                        <i class="fa fa-search"></i>
+                      </button>
+                    </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div style="margin: 0 auto; width: fit-content; float: left">
+                <google-chart #chart
+                              [type]="graph.type"
+                              [data]="graph.data"
+                              [options]="graph.options"
+                              [width]="graph.width"
+                              [columnNames]="graph.columnNames"
+                              [height]="graph.height">
+                </google-chart>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+

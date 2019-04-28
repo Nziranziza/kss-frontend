@@ -15,6 +15,13 @@ export class FarmerService {
     return this.apiService.get('/coffeefarmers');
   }
 
+  getFarmers(parameters: any): Observable<any> {
+    delete parameters.columns;
+    delete parameters.order;
+    delete parameters.search;
+    return this.apiService.post('/coffeefarmers/getfarmers/', parameters);
+  }
+
   get(id: string): Observable<any> {
     return this.apiService.get('/farmers/' + id);
   }
@@ -34,4 +41,16 @@ export class FarmerService {
   listPending(): Observable<any> {
     return this.apiService.get('/pendingfarmers');
   }
+
+  report(data: any): Observable<any> {
+    return this.apiService.post('/report/farmers/', data);
+  }
+
+  reportPending(data: any): Observable<any> {
+    return this.apiService.post('/report/pending/farmers/', data);
+  }
+  updateFarmerRequest(data: any): Observable<any> {
+    return this.apiService.post('/farmers/request/', data);
+  }
+
 }

@@ -7,7 +7,6 @@ import {LayoutModule} from '../layout/layout.module';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import {ErrorInterceptor, HttpTokenInterceptor} from '../core/interceptors';
 
-
 @NgModule({
   declarations: [AdminComponent],
   imports: [
