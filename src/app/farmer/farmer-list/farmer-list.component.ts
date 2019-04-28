@@ -6,6 +6,8 @@ import {Subject} from 'rxjs';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {FarmerDetailsComponent} from '../farmer-details/farmer-details.component';
 
+declare var $;
+
 @Component({
   selector: 'app-farmer-list',
   templateUrl: './farmer-list.component.html',
@@ -26,6 +28,7 @@ export class FarmerListComponent implements OnInit, OnDestroy {
   // @ts-ignore
   dtTrigger: Subject = new Subject();
 
+
   ngOnInit(): void {
 
     this.dtOptions = {
@@ -33,7 +36,8 @@ export class FarmerListComponent implements OnInit, OnDestroy {
       pageLength: 25,
       serverSide: true,
       processing: true,
-      orderCellsTop: true,
+      ordering: false,
+      searching: false,
       language: {
         processing: 'Loading...'
       },
