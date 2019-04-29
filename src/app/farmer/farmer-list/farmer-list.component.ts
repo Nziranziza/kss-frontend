@@ -2,11 +2,9 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ConfirmDialogService, FarmerService} from '../../core/services';
 import {Router} from '@angular/router';
 import {Farmer} from '../../core/models';
-import {Subject} from 'rxjs';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {FarmerDetailsComponent} from '../farmer-details/farmer-details.component';
-
-declare var $;
+import {OrderPipe} from 'ngx-order-pipe';
 
 @Component({
   selector: 'app-farmer-list',
@@ -17,53 +15,70 @@ export class FarmerListComponent implements OnInit, OnDestroy {
 
   constructor(private farmerService: FarmerService,
               private router: Router, private  confirmDialogService: ConfirmDialogService,
-              private modal: NgbModal) {
+              private modal: NgbModal, private orderPipe: OrderPipe) {
+    this.parameters = {
+      length: 25,
+      start: 0,
+      draw: 1
+    };
   }
 
+  maxSize = 9;
+  order = 'userInfo.foreName';
+  reverse = true;
+  directionLinks = true;
   message: string;
   farmers: any;
   title = 'Farmers';
-  i: number;
-  dtOptions: DataTables.Settings = {};
-  // @ts-ignore
-  dtTrigger: Subject = new Subject();
-
+  parameters: any;
+  config: any;
+  autoHide = false;
+  responsive = true;
+  labels: any = {
+    previousLabel: 'Previous',
+    nextLabel: 'Next',
+    screenReaderPaginationLabel: 'Pagination',
+    screenReaderPageLabel: 'page',
+    screenReaderCurrentLabel: `You're on page`
+  };
 
   ngOnInit(): void {
 
-    this.dtOptions = {
-      pagingType: 'full_numbers',
-      pageLength: 25,
-      serverSide: true,
-      processing: true,
-      ordering: false,
-      searching: false,
-      language: {
-        processing: 'Loading...'
-      },
-      ajax: (dataTablesParameters: any, callback) => {
-        this.farmerService.getFarmers(dataTablesParameters)
-          .subscribe(data => {
-            this.farmers = data.data;
-            callback({
-              recordsTotal: data.recordsTotal,
-              recordsFiltered: data.recordsFiltered,
-              data: []
-            });
-          });
+    this.farmerService.getFarmers(this.parameters)
+      .subscribe(data => {
+        this.farmers = data.data;
+        this.config = {
+          itemsPerPage: this.parameters.length,
+          currentPage: this.parameters.start + 1,
+          totalItems: data.recordsTotal
+        };
 
-      },
+      });
+  }
 
-    };
+  onPageChange(event) {
+    this.config.currentPage = event;
+    if (event > 1) {
+      this.parameters.start = (event - 1) * this.config.itemsPerPage;
+    }
 
+    this.farmerService.getFarmers(this.parameters)
+      .subscribe(data => {
+        this.farmers = data.data;
+      });
+  }
+
+  setOrder(value: string) {
+    if (this.order === value) {
+      this.reverse = !this.reverse;
+    }
+    this.order = value;
   }
 
   ngOnDestroy(): void {
-    this.dtTrigger.unsubscribe();
   }
 
   deleteFarmer(farmer: Farmer): void {
-
     this.confirmDialogService.openConfirmDialog('Are you sure you want to delete this record?').afterClosed().subscribe(
       res => {
         if (res) {

@@ -94,3 +94,53 @@ table.dataTable > tbody > tr.child:hover{
   background-color: #fffeee !important;
 }
 /*------------------------------------------------------*/
+
+.custom-pagination .ngx-pagination {
+  padding: 5px;
+  align-items: center;
+  width: 48%;
+  float: right;
+}
+
+.custom-pagination .ngx-pagination li {
+  box-sizing: border-box;
+  display: inline-block;
+  min-width: 1.5em;
+  margin-left: 2px;
+  text-align: center;
+  text-decoration: none !important;
+  cursor: pointer;
+  *cursor: hand;
+  color: #333333 !important;
+  border: 1px solid transparent;
+  border-radius: 2px;
+}
+
+.custom-pagination .ngx-pagination li a, .custom-pagination .ngx-pagination li button {
+  color: #0a0a0a;
+  display: block;
+  padding: 0.5em 1em
+}
+
+.custom-pagination .ngx-pagination .current{
+  color: #333333 !important;
+  border: 1px solid #979797;
+  padding: 0.5em 1em;
+  background-color: white;
+  background: linear-gradient(to bottom, white 0%, gainsboro 100%);
+}
+
+.custom-pagination .ngx-pagination li:hover a, .custom-pagination .ngx-pagination li:hover button{
+  color: white !important;
+  background-color: #2d2d2d;
+  display: block;
+}
+
+.custom-pagination .ngx-pagination li:hover{
+  color: white !important;
+  background-color: #2d2d2d;
+}
+
+.custom-pagination .ngx-pagination .small-screen{
+  display: none;
+}
