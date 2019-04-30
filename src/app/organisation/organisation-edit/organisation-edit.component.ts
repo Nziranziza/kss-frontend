@@ -45,7 +45,8 @@ export class OrganisationEditComponent implements OnInit {
         cell_id: [''],
         village_id: [''],
       }),
-      organizationRole: new FormArray([])
+      organizationRole: new FormArray([]),
+     /* usersNIDRequired: ['']*/
     });
 
     this.organisationTypeService.all().subscribe(types => {

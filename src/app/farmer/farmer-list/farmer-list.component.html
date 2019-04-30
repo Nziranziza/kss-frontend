@@ -1,6 +1,19 @@
-<h3>
-  {{ title }}
-</h3>
+<div class="row">
+  <div class="col-xs-12">
+    <h3>
+      {{ title }}
+      <div class="filter-form pull-right">
+        <form [formGroup]="filterForm" (ngSubmit)="onFilter()">
+          <div class="form-inline">
+            <input type="text" formControlName="term" class="form-control" placeholder="search..">
+            <button class="btn btn-warning pull-right btn-margin" type="button" (click)="onClearFilter()">Clear</button>
+            <button class="btn btn-success pull-right btn-margin" type="submit"><i class="fa fa-search"></i> Search</button>
+          </div>
+        </form>
+      </div>
+    </h3>
+  </div>
+</div>
 <app-list-message [message]="message"></app-list-message>
 <div class="row">
   <div class="col-xs-12">
@@ -15,11 +28,12 @@
             <th (click)="setOrder('userInfo.NID')">National ID <i class="fa fa-sort sorting"></i></th>
             <th (click)="setOrder('userInfo.phone_number')">Phone number <i class="fa fa-sort sorting"></i></th>
             <th (click)="setOrder('userInfo.regNumber')">Reg number <i class="fa fa-sort sorting"></i></th>
-          <th></th>
+            <th></th>
           </tr>
           </thead>
           <tbody>
-          <tr *ngFor="let farmer of (farmers | orderBy : order:reverse:'case-insensitive') | paginate: config" (click)="viewDetails(farmer)">
+          <tr *ngFor="let farmer of (farmers | orderBy : order:reverse:'case-insensitive') | paginate: config"
+              (click)="viewDetails(farmer)">
             <td> {{ farmer.userInfo.foreName }}</td>
             <td> {{ farmer.userInfo.surname }}</td>
             <td> {{ farmer.userInfo.NID }}</td>
@@ -32,18 +46,20 @@
           </tbody>
         </table>
         <div style="width: 100%;  border-top: 1px solid #0a0a0a;">
-        <div style=" clear: both; float: left; padding-top: 0.755em;">Showing {{(config.currentPage - 1)* config.itemsPerPage + 1}} to {{config.currentPage* config.itemsPerPage}}  of {{config.totalItems}} entries</div>
-        <pagination-controls class="custom-pagination"
-          [maxSize]="maxSize"
-          [directionLinks]="directionLinks"
-          [autoHide]="autoHide"
-          [responsive]="responsive"
-          [previousLabel]="labels.previousLabel"
-          [nextLabel]="labels.nextLabel"
-          [screenReaderPaginationLabel]="labels.screenReaderPaginationLabel"
-          [screenReaderPageLabel]="labels.screenReaderPageLabel"
-          [screenReaderCurrentLabel]="labels.screenReaderCurrentLabel"
-          (pageChange)="onPageChange($event)"></pagination-controls>
+          <div style=" clear: both; float: left; padding-top: 0.755em;">Showing {{(config.currentPage - 1)*
+            config.itemsPerPage + 1}} to {{config.currentPage* config.itemsPerPage}} of {{config.totalItems}} entries
+          </div>
+          <pagination-controls class="custom-pagination"
+                               [maxSize]="maxSize"
+                               [directionLinks]="directionLinks"
+                               [autoHide]="autoHide"
+                               [responsive]="responsive"
+                               [previousLabel]="labels.previousLabel"
+                               [nextLabel]="labels.nextLabel"
+                               [screenReaderPaginationLabel]="labels.screenReaderPaginationLabel"
+                               [screenReaderPageLabel]="labels.screenReaderPageLabel"
+                               [screenReaderCurrentLabel]="labels.screenReaderCurrentLabel"
+                               (pageChange)="onPageChange($event)"></pagination-controls>
         </div>
       </div>
     </div>

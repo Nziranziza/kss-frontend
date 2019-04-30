@@ -27,7 +27,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     // use FormBuilder to create a form group
     this.authForm = this.formBuilder.group({
       email: ['', Validators.required],
-      password: ['', Validators.required]
+      password: ['', Validators.minLength(8)]
     });
   }
 
@@ -54,7 +54,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         });
 
     } else {
-      this.errors.push('Invalid username or email');
+      this.errors = ['Invalid username or email'];
       return;
     }
   }

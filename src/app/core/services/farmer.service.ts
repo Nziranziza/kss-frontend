@@ -16,9 +16,6 @@ export class FarmerService {
   }
 
   getFarmers(parameters: any): Observable<any> {
-    delete parameters.columns;
-    delete parameters.order;
-    delete parameters.search;
     return this.apiService.post('/coffeefarmers/getfarmers/', parameters);
   }
 
@@ -43,14 +40,10 @@ export class FarmerService {
   }
 
   report(data: any): Observable<any> {
-    return this.apiService.post('/report/farmers/', data);
+    return this.apiService.post('/stats/farmer.data?subRegions=true', data);
   }
 
-  reportPending(data: any): Observable<any> {
-    return this.apiService.post('/report/pending/farmers/', data);
-  }
   updateFarmerRequest(data: any): Observable<any> {
-    return this.apiService.post('/farmers/request/', data);
+    return this.apiService.post('/stats/farmer.data?subRegions=true', data);
   }
-
 }

@@ -4,7 +4,7 @@ import {Router} from '@angular/router';
 import {Farmer} from '../../core/models';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {FarmerDetailsComponent} from '../farmer-details/farmer-details.component';
-import {OrderPipe} from 'ngx-order-pipe';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-farmer-list',
@@ -15,7 +15,7 @@ export class FarmerListComponent implements OnInit, OnDestroy {
 
   constructor(private farmerService: FarmerService,
               private router: Router, private  confirmDialogService: ConfirmDialogService,
-              private modal: NgbModal, private orderPipe: OrderPipe) {
+              private modal: NgbModal, private formBuilder: FormBuilder) {
     this.parameters = {
       length: 25,
       start: 0,
@@ -23,6 +23,7 @@ export class FarmerListComponent implements OnInit, OnDestroy {
     };
   }
 
+  filterForm: FormGroup;
   maxSize = 9;
   order = 'userInfo.foreName';
   reverse = true;
@@ -43,7 +44,6 @@ export class FarmerListComponent implements OnInit, OnDestroy {
   };
 
   ngOnInit(): void {
-
     this.farmerService.getFarmers(this.parameters)
       .subscribe(data => {
         this.farmers = data.data;
@@ -54,6 +54,9 @@ export class FarmerListComponent implements OnInit, OnDestroy {
         };
 
       });
+    this.filterForm = this.formBuilder.group({
+      term: ['', Validators.minLength(4)]
+    });
   }
 
   onPageChange(event) {
@@ -73,6 +76,25 @@ export class FarmerListComponent implements OnInit, OnDestroy {
       this.reverse = !this.reverse;
     }
     this.order = value;
+  }
+
+  onFilter() {
+    if (this.filterForm.valid) {
+      this.parameters['search'.toString()] = this.filterForm.value;
+      this.farmerService.getFarmers(this.parameters)
+        .subscribe(data => {
+          this.farmers = data.data;
+        });
+    }
+  }
+
+  onClearFilter() {
+    this.filterForm.reset();
+    delete this.parameters.search;
+    this.farmerService.getFarmers(this.parameters)
+      .subscribe(data => {
+        this.farmers = data.data;
+      });
   }
 
   ngOnDestroy(): void {

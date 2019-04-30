@@ -22,7 +22,6 @@ import {OrganisationTypeModule} from './organisation-type/organisation-type.modu
 import {DataTablesModule} from 'angular-datatables';
 import {PendingFarmerModule} from './pending-farmer/pending-farmer.module';
 
-
 @NgModule({
   declarations: [
     AppComponent

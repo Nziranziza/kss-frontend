@@ -34,9 +34,9 @@ export class FarmersReportComponent implements OnInit {
       ['Kigali', 500, 800]
     ],
     options: {
-      colors: ['#e2431e', '#e7711b']
+      colors: ['#367fa9', '#e7711b']
     },
-    columnNames:  ['Location', 'Approved', 'Pending'],
+    columnNames: ['Location', 'Approved', 'Pending'],
     width: 1050,
     height: 450
   };
@@ -68,14 +68,22 @@ export class FarmersReportComponent implements OnInit {
   onSubmit(searchBy: string) {
     if (this.filterForm.valid) {
       const filters = this.filterForm.value;
-      filters.location['searchBy'.toString()] = searchBy;
+      if (filters.location.prov_id === '' && searchBy === 'province') {
+        delete filters.location;
+        filters['location'.toString()] = {
+          searchBy: 'all provinces'
+        };
+      } else {
+        filters.location['searchBy'.toString()] = searchBy;
+      }
       this.farmerService.report(filters).subscribe((data) => {
-        console.log(data);
       });
-
     } else {
       this.errors = this.helper.getFormValidationErrors(this.filterForm);
     }
+  }
+
+  onExport() {
   }
 
   onChanges() {

@@ -10,6 +10,10 @@ const routes: Routes = [
     component: LoginComponent
   },
   {
+    path: 'login/:action',
+    component: LoginComponent
+  },
+  {
     path: 'auth/request-reset',
     component: RequestResetComponent
   },

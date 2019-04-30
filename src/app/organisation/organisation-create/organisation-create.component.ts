@@ -50,7 +50,8 @@ export class OrganisationCreateComponent implements OnInit {
         cell_id: [''],
         village_id: [''],
       }),
-      organizationRole: new FormArray([])
+      organizationRole: new FormArray([]),
+      /*usersNIDRequired: ['']*/
     });
     this.organisationTypeService.all().subscribe(data => {
       this.genres = data.content;

@@ -1,4 +1,4 @@
-nst deployPath = '/var/www/html/sks-front-end';
+const deployPath = '/var/www/html/sks-front-end';
 const currentPath = `${deployPath}`;
 module.exports = shipit => {
   require('shipit-deploy')(shipit);
