@@ -20,7 +20,11 @@ export class AuthorisationService {
     });
     return this.hasAccess;
   }
+
   clear() {
     this.hasAccess = false;
+  }
+
+  isNaebUser() {
   }
 }

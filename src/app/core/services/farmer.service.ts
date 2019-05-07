@@ -39,6 +39,10 @@ export class FarmerService {
     return this.apiService.get('/pendingfarmers');
   }
 
+  getPendingFarmers(parameters: any): Observable<any> {
+    return this.apiService.post('/pendingfarmers/gettempofarmers/', parameters);
+  }
+
   report(data: any): Observable<any> {
     return this.apiService.post('/stats/farmer.data?subRegions=true', data);
   }

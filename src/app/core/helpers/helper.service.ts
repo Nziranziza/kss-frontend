@@ -21,4 +21,11 @@ export class HelperService {
     });
     return errors;
   }
+  cleanObject(obj) {
+    for (const propName in obj) {
+      if (obj[propName] === '' || obj[propName] === undefined) {
+        delete obj[propName];
+      }
+    }
+  }
 }

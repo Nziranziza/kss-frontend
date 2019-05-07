@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {ApiService} from './api.service';
+import {Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -29,4 +30,7 @@ export class LocationService {
     return this.apiService.get('/villages/' + id);
   }
 
+  getCoveredVillages(id: string): Observable<any> {
+    return this.apiService.get('/organizations/villages/list/' + id);
+  }
 }

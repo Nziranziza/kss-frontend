@@ -2,19 +2,23 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {AdminComponent} from '../admin/admin/admin.component';
 import {FarmerListComponent} from './farmer-list/farmer-list.component';
-import {FarmerRequestEditComponent} from './farmer-request-edit/farmer-request-edit.component';
+import {FarmerCreateComponent} from './farmer-create/farmer-create.component';
+import {FarmerEditComponent} from './farmer-edit/farmer-edit.component';
 
 const routes: Routes = [
   {
-    path: 'admin/farmers',
+    path: 'admin',
     component: AdminComponent,
     children: [
       {
-        path: '',
+        path: 'farmers',
         component: FarmerListComponent
       }, {
-        path: ':farmerId/request/edit/:id',
-        component: FarmerRequestEditComponent,
+        path: 'farmers/edit/:id',
+        component: FarmerEditComponent,
+      }, {
+        path: 'farmers/create',
+        component: FarmerCreateComponent,
       }
     ]
   }
@@ -24,4 +28,5 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class FarmerRoutingModule { }
+export class FarmerRoutingModule {
+}

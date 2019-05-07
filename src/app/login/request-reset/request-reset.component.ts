@@ -47,6 +47,7 @@ export class RequestResetComponent implements OnInit {
           return;
         },
         (err) => {
+          this.message = '';
           this.errors = err.errors;
         });
     } else {

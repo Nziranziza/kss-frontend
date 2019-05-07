@@ -41,6 +41,7 @@ export class UserListComponent implements OnInit, OnDestroy {
     this.dtTrigger.unsubscribe();
   }
 
+
   deleteUser(user: User): void {
     this.confirmDialogService.openConfirmDialog('Are you sure you want to delete this record?').afterClosed().subscribe(
       res => {

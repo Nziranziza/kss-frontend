@@ -57,13 +57,13 @@
             </div>
             <div class="col-xs-6">
               <div class="form-group">
-                <label class="control-label label-required">User type</label>
-                <select class="form-control" formControlName="userType">
+                <label class="control-label label-required" >User type</label>
+                <select class="form-control" formControlName="userType" disabled>
                   <option *ngFor="let type of userTypes" value="{{type.value}}">{{type.name}}</option>
                 </select>
               </div>
             </div>
-            <div class="col-xs-6">
+            <div class="col-xs-6" *ngIf="!isFromSuperOrg">
               <label class="control-label label-required">Roles</label>
               <div class="checkbox" formArrayName="userRoles"
                    *ngFor="let role of editForm.get('userRoles')['controls']; let i = index">
@@ -81,6 +81,7 @@
                   <div class="form-group">
                     <span class="">Province</span>
                     <select class="form-control" formControlName="prov_id">
+                      <option value=""></option>
                       <option *ngFor="let province of provinces" value="{{province._id}}">{{province.namee}}</option>
                     </select>
                   </div>
@@ -89,6 +90,7 @@
                   <div class="form-group">
                     <span class="">District</span>
                     <select class="form-control" formControlName="dist_id">
+                      <option value=""></option>
                       <option *ngFor="let district of districts" value="{{district._id}}">{{district.name}}</option>
                     </select>
                   </div>
@@ -97,6 +99,7 @@
                   <div class="form-group">
                     <span class="">Sector</span>
                     <select class="form-control" formControlName="sect_id">
+                      <option value=""></option>
                       <option *ngFor="let sector of sectors" value="{{sector._id}}">{{sector.name}}</option>
                     </select>
                   </div>
@@ -105,6 +108,7 @@
                   <div class="form-group">
                     <span class="">Cell</span>
                     <select class="form-control" formControlName="cell_id">
+                      <option value=""></option>
                       <option *ngFor="let cell of cells" value="{{cell._id}}">{{cell.name}}</option>
                     </select>
                   </div>
@@ -113,6 +117,7 @@
                   <div class="form-group">
                     <span class="">village</span>
                     <select class="form-control" formControlName="village_id">
+                      <option value=""></option>
                       <option *ngFor="let village of villages" value="{{village._id}}">{{village.name}}</option>
                     </select>
                   </div>

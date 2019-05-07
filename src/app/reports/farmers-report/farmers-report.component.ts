@@ -4,6 +4,7 @@ import {LocationService} from '../../core/services/location.service';
 import {Router} from '@angular/router';
 import {FarmerService, OrganisationService, OrganisationTypeService} from '../../core/services';
 import {HelperService} from '../../core/helpers';
+import {forEach} from '@angular/router/src/utils/collection';
 
 @Component({
   selector: 'app-farmers-report',
@@ -24,19 +25,16 @@ export class FarmersReportComponent implements OnInit {
   distId = false;
   sectorId = false;
   cellId = false;
+  showReport = false;
+  reportData = [];
+  message: string;
   graph = {
     type: 'ColumnChart',
-    data: [
-      ['South', 1000, 400],
-      ['North', 1170, 460],
-      ['West', 660, 1120],
-      ['East', 1030, 540],
-      ['Kigali', 500, 800]
-    ],
+    data: [],
     options: {
-      colors: ['#367fa9', '#e7711b']
+      colors: ['#367fa9']
     },
-    columnNames: ['Location', 'Approved', 'Pending'],
+    columnNames: ['Location', 'Farmers'],
     width: 1050,
     height: 450
   };
@@ -75,8 +73,22 @@ export class FarmersReportComponent implements OnInit {
         };
       } else {
         filters.location['searchBy'.toString()] = searchBy;
+        this.helper.cleanObject(filters.location);
       }
       this.farmerService.report(filters).subscribe((data) => {
+        if (data.content.length !== 0) {
+          this.reportData = [];
+          data.content.map((item) => {
+            const temp = [item.name, item.uniqueFarmersCount];
+            this.reportData.push(temp);
+          });
+          this.graph.data = this.reportData;
+          this.showReport = true;
+          this.message = '';
+        } else {
+          this.showReport = false;
+          this.message = 'Sorry no data found to this location !';
+        }
       });
     } else {
       this.errors = this.helper.getFormValidationErrors(this.filterForm);
@@ -84,12 +96,13 @@ export class FarmersReportComponent implements OnInit {
   }
 
   onExport() {
+
   }
 
   onChanges() {
     this.filterForm.controls.location.get('prov_id'.toString()).valueChanges.subscribe(
       (value) => {
-        if (value !== null && value !== '') {
+        if (value !== '') {
           this.locationService.getDistricts(value).subscribe((data) => {
             this.districts = data;
             this.sectors = null;
@@ -101,35 +114,41 @@ export class FarmersReportComponent implements OnInit {
     );
     this.filterForm.controls.location.get('dist_id'.toString()).valueChanges.subscribe(
       (value) => {
-        if (value !== null) {
+        if (value !== '') {
           this.locationService.getSectors(value).subscribe((data) => {
             this.sectors = data;
             this.cells = null;
             this.villages = null;
+            this.distId = true;
           });
-          this.distId = true;
+        } else {
+          this.distId = false;
         }
       }
     );
     this.filterForm.controls.location.get('sect_id'.toString()).valueChanges.subscribe(
       (value) => {
-        if (value !== null) {
+        if (value !== '') {
           this.locationService.getCells(value).subscribe((data) => {
             this.cells = data;
             this.villages = null;
+            this.sectorId = true;
           });
-          this.sectorId = true;
+        } else {
+          this.sectorId = false;
         }
       }
     );
     this.filterForm.controls.location.get('cell_id'.toString()).valueChanges.subscribe(
       (value) => {
-        if (value !== null) {
+        if (value !== '') {
           this.locationService.getVillages(value).subscribe((data) => {
             this.villages = data;
+            this.cellId = true;
           });
+        } else {
+          this.cellId = false;
         }
-        this.cellId = true;
       }
     );
     this.filterForm.get('reportBy'.toString()).valueChanges.subscribe(

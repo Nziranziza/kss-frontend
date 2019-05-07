@@ -2,6 +2,8 @@
   <div class="col-xs-12">
     <h3>
       {{ title }}
+      <a class="btn btn-success btn-margin pull-right" routerLink="/admin/farmers/create"><i class="fa fa-plus"></i> New Farmer
+      </a>
       <div class="filter-form pull-right">
         <form [formGroup]="filterForm" (ngSubmit)="onFilter()">
           <div class="form-inline">
@@ -32,15 +34,16 @@
           </tr>
           </thead>
           <tbody>
-          <tr *ngFor="let farmer of (farmers | orderBy : order:reverse:'case-insensitive') | paginate: config"
-              (click)="viewDetails(farmer)">
+          <tr *ngFor="let farmer of (farmers | orderBy : order:reverse:'case-insensitive') | paginate: config">
             <td> {{ farmer.userInfo.foreName }}</td>
             <td> {{ farmer.userInfo.surname }}</td>
             <td> {{ farmer.userInfo.NID }}</td>
             <td> {{ farmer.userInfo.phone_number }}</td>
             <td> {{ farmer.userInfo.regNumber }}</td>
             <td>
-              <button class="btn btn-default btn-margin pull-right details-button">...</button>
+              <button class="btn btn-default btn-margin btn-sm pull-right details-button" (click)="viewDetails(farmer)">...</button>
+              <button class="btn btn-success btn-margin pull-right btn-sm" style="margin-left: 10px;">
+                Edit</button>
             </td>
           </tr>
           </tbody>
@@ -59,7 +62,8 @@
                                [screenReaderPaginationLabel]="labels.screenReaderPaginationLabel"
                                [screenReaderPageLabel]="labels.screenReaderPageLabel"
                                [screenReaderCurrentLabel]="labels.screenReaderCurrentLabel"
-                               (pageChange)="onPageChange($event)"></pagination-controls>
+                               (pageChange)="onPageChange($event)">
+          </pagination-controls>
         </div>
       </div>
     </div>

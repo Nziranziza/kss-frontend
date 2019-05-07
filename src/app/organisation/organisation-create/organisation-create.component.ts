@@ -5,8 +5,6 @@ import {OrganisationService, OrganisationTypeService} from '../../core/services'
 import {HelperService} from '../../core/helpers';
 import {LocationService} from '../../core/services/location.service';
 
-declare var $;
-
 @Component({
   selector: 'app-organisation-create',
   templateUrl: './organisation-create.component.html',
@@ -30,13 +28,12 @@ export class OrganisationCreateComponent implements OnInit {
   cells: any;
   villages: any;
   needLocation = false;
-  viewDistricts = false;
-  viewSectors = false;
-  viewCells = false;
-  viewVillages = false;
+  coverVillages = false;
+  coveredVillages = [];
+  selectedRoles: any;
+  villagesOfSector = [];
 
   ngOnInit() {
-
     this.createForm = this.formBuilder.group({
       organizationName: [''],
       email: [''],
@@ -51,8 +48,10 @@ export class OrganisationCreateComponent implements OnInit {
         village_id: [''],
       }),
       organizationRole: new FormArray([]),
+      coveredVillages: [[]]
       /*usersNIDRequired: ['']*/
     });
+
     this.organisationTypeService.all().subscribe(data => {
       this.genres = data.content;
     });
@@ -80,6 +79,17 @@ export class OrganisationCreateComponent implements OnInit {
       if (!(selectedRoles.includes(1) || selectedRoles.includes(2))) {
         delete org.location;
       }
+      if (selectedRoles.includes(1)) {
+        const temp = [];
+        org.coveredVillages.map((id) => {
+          const village = this.villagesOfSector.find(obj => obj._id === id);
+          temp.push({
+            village_id: id,
+            name: village.name
+          });
+        });
+        org.coveredVillages = temp;
+      }
       this.organisationService.save(org)
         .subscribe(data => {
             this.router.navigateByUrl('admin/organisations');
@@ -92,25 +102,47 @@ export class OrganisationCreateComponent implements OnInit {
     }
   }
 
-  onChanges() {
+  public onMouseDown(event: MouseEvent, item) {
+    event.preventDefault();
+    event.target['selected'.toString()] = !event.target['selected'.toString()];
+    if (event.target['selected'.toString()]) {
+      this.createForm.controls['coveredVillages'.toString()].value.push(item._id);
+      this.coveredVillages.push(item.name);
+    } else {
+      let index: number;
+      index = this.createForm.value.coveredVillages.indexOf(item._id);
+      if (index > -1) {
+        this.createForm.controls['coveredVillages'.toString()].value.splice(index, 1);
+        this.coveredVillages.splice(index, 1);
+      }
+    }
+  }
 
+  onChanges() {
     this.createForm.controls['organizationRole'.toString()].valueChanges.subscribe(
       (data) => {
-        const selectedRoles = data
+        this.selectedRoles = data
           .map((checked, index) => checked ? this.possibleRoles[index].value : null)
           .filter(value => value !== null);
         if (
-          selectedRoles.includes(1) ||
-          selectedRoles.includes(2)) {
+          this.selectedRoles.includes(1) ||
+          this.selectedRoles.includes(2)) {
           this.needLocation = true;
         } else {
           this.needLocation = false;
         }
+        if (
+          this.selectedRoles.includes(1)) {
+          this.coverVillages = true;
+        } else {
+          this.coverVillages = false;
+          this.coveredVillages = [];
+          this.createForm.controls.coveredVillages.reset([]);
+        }
       });
-
     this.createForm.controls.location.get('prov_id'.toString()).valueChanges.subscribe(
       (value) => {
-        if (value !== null) {
+        if (value !== '') {
           this.locationService.getDistricts(value).subscribe((data) => {
             this.districts = data;
             this.createForm.controls.location.get('dist_id'.toString()).setValue('');
@@ -123,7 +155,7 @@ export class OrganisationCreateComponent implements OnInit {
     );
     this.createForm.controls.location.get('dist_id'.toString()).valueChanges.subscribe(
       (value) => {
-        if (value !== null) {
+        if (value !== '') {
           this.locationService.getSectors(value).subscribe((data) => {
             this.sectors = data;
             this.cells = null;
@@ -134,17 +166,20 @@ export class OrganisationCreateComponent implements OnInit {
     );
     this.createForm.controls.location.get('sect_id'.toString()).valueChanges.subscribe(
       (value) => {
-        if (value !== null) {
+        if (value !== '') {
           this.locationService.getCells(value).subscribe((data) => {
             this.cells = data;
             this.villages = null;
+          });
+          this.locationService.getCoveredVillages(value).subscribe((data) => {
+            this.villagesOfSector = data;
           });
         }
       }
     );
     this.createForm.controls.location.get('cell_id'.toString()).valueChanges.subscribe(
       (value) => {
-        if (value !== null) {
+        if (value !== '') {
           this.locationService.getVillages(value).subscribe((data) => {
             this.villages = data;
           });
@@ -152,6 +187,7 @@ export class OrganisationCreateComponent implements OnInit {
       }
     );
   }
+
   initial() {
     this.locationService.getProvinces().subscribe((data) => {
       this.provinces = data;

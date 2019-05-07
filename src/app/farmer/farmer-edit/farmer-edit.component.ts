@@ -5,13 +5,13 @@ import {FarmerService, OrganisationService} from '../../core/services';
 import {LocationService} from '../../core/services/location.service';
 
 @Component({
-  selector: 'app-farmer-create',
-  templateUrl: './farmer-create.component.html',
-  styleUrls: ['./farmer-create.component.css']
+  selector: 'app-farmer-edit',
+  templateUrl: './farmer-edit.component.html',
+  styleUrls: ['./farmer-edit.component.css']
 })
-export class FarmerCreateComponent implements OnInit {
+export class FarmerEditComponent implements OnInit {
 
-  createForm: FormGroup;
+  editForm: FormGroup;
   errors: string[];
   provinces = [];
   districts = [];
@@ -19,6 +19,7 @@ export class FarmerCreateComponent implements OnInit {
   cells = [];
   villages = [];
   requestIndex = 0;
+  farmer: any;
   public requestList: FormArray;
 
   constructor(private formBuilder: FormBuilder,
@@ -29,7 +30,7 @@ export class FarmerCreateComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.createForm = this.formBuilder.group({
+    this.editForm = this.formBuilder.group({
       foreName: [''],
       surname: [''],
       email: [''],
@@ -39,13 +40,17 @@ export class FarmerCreateComponent implements OnInit {
       individualOrGroup: [''],
       requests: new FormArray([])
     });
-
-    (this.createForm.controls.requests as FormArray).push(this.createRequest());
     this.initial();
+    this.route.params.subscribe(params => {
+      this.farmerService.get(params['id'.toString()]).subscribe(data => {
+        this.farmer = data.content;
+      });
+    });
+    this.editForm.patchValue(this.farmer);
   }
 
   onSubmit() {
-    if (this.createForm.valid) {
+    if (this.editForm.valid) {
     }
   }
 
@@ -64,18 +69,18 @@ export class FarmerCreateComponent implements OnInit {
   }
 
   addRequest() {
-    (this.createForm.controls.requests as FormArray).push(this.createRequest());
+    (this.editForm.controls.requests as FormArray).push(this.createRequest());
     this.locationService.getProvinces().subscribe((data) => {
       this.provinces.push(data);
     });
   }
 
   removeRequest(index: number) {
-    (this.createForm.controls.requests as FormArray).removeAt(index);
+    (this.editForm.controls.requests as FormArray).removeAt(index);
   }
 
   getRequestsFormGroup(index): FormGroup {
-    this.requestList = this.createForm.get('requests') as FormArray;
+    this.requestList = this.editForm.get('requests') as FormArray;
     return this.requestList.controls[index] as FormGroup;
   }
 
@@ -126,4 +131,5 @@ export class FarmerCreateComponent implements OnInit {
       this.provinces.push(data);
     });
   }
+
 }

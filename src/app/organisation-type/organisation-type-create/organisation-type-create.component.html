@@ -1,0 +1,28 @@
+<h3>
+  Create organisation type
+</h3>
+<app-list-errors [errorList]="errors"></app-list-errors>
+<form [formGroup]="createForm" (ngSubmit)="onSubmit()">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-body">
+          <div class="row">
+            <div class="col-xs-6">
+              <div class="form-group">
+                <label class="control-label label-required">Genre</label>
+                <input type="text" formControlName="genre" class="form-control">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <a class="btn btn-warning btn-margin pull-right" routerLink="/admin/organisation-types">Cancel</a>
+      <button class="btn btn-success pull-right">Save</button>
+    </div>
+  </div>
+</form>

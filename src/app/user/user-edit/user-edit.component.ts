@@ -25,6 +25,7 @@ export class UserEditComponent implements OnInit {
   sectors: any;
   cells: any;
   villages: any;
+  isFromSuperOrg = false;
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute, private router: Router,
@@ -71,8 +72,8 @@ export class UserEditComponent implements OnInit {
     });
     this.route.params.subscribe(params => {
       this.userService.get(params['id'.toString()]).subscribe(user => {
-        console.log(user);
         this.organisationService.get(this.organisationId).subscribe(data => {
+          this.isSuperOrganisation(data.content);
           this.orgPossibleRoles = this.possibleRoles.filter(roles => data.content.organizationRole.includes(roles.value));
           this.orgPossibleRoles.map(role => {
             if (user.content.userRoles.includes(role.value)) {
@@ -93,6 +94,14 @@ export class UserEditComponent implements OnInit {
         this.editForm.patchValue(usr);
       });
     });
+  }
+
+  isSuperOrganisation(organisation: any) {
+    if (organisation.organizationRole.indexOf(0) > -1) {
+      this.isFromSuperOrg  = true;
+    } else {
+      this.isFromSuperOrg = false;
+    }
   }
 
   onChanges() {

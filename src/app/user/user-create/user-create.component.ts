@@ -24,6 +24,7 @@ export class UserCreateComponent implements OnInit {
   villages: any;
   needLocation = false;
   possibleRoles: any[];
+  isFromSuperOrg = false;
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute, private router: Router,
@@ -42,7 +43,7 @@ export class UserCreateComponent implements OnInit {
       NID: [''],
       password: [''],
       org_id: [''],
-      userType: [''],
+      userType: [1],
       location: this.formBuilder.group({
         prov_id: [''],
         dist_id: [''],
@@ -69,6 +70,7 @@ export class UserCreateComponent implements OnInit {
     });
 
     this.organisationService.get(this.organisationId).subscribe(data => {
+      this.isSuperOrganisation(data.content);
       this.orgPossibleRoles = this.possibleRoles.filter(roles => data.content.organizationRole.includes(roles.value));
       this.orgPossibleRoles.map(role => {
         const control = new FormControl(false);
@@ -77,6 +79,14 @@ export class UserCreateComponent implements OnInit {
     });
     this.initial();
     this.onChanges();
+  }
+
+  isSuperOrganisation(organisation: any) {
+    if (organisation.organizationRole.indexOf(0) > -1) {
+      this.isFromSuperOrg  = true;
+    } else {
+      this.isFromSuperOrg = false;
+    }
   }
 
   onSubmit() {

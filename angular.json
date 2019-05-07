@@ -36,7 +36,11 @@
               "src/assets/bower_components/jquery-slimscroll/jquery.slimscroll.min.js",
               "src/assets/plugins/iCheck/icheck.min.js",
               "src/assets/dist/js/adminlte.min.js",
-              "src/assets/dist/js/demo.js"
+              "src/assets/dist/js/demo.js",
+              "src/assets/bower_components/select2/dist/js/select2.full.min.js",
+              "src/assets/plugins/input-mask/jquery.inputmask.js",
+              "src/assets/plugins/input-mask/jquery.inputmask.date.extensions.js",
+              "src/assets/plugins/input-mask/jquery.inputmask.extensions.js"
             ],
             "es5BrowserSupport": true
           },

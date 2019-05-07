@@ -42,8 +42,15 @@ export class OrganisationListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // Do not forget to unsubscribe the event
     this.dtTrigger.unsubscribe();
+  }
+
+  isNotSuperOrganisation(organisation: any) {
+    if (organisation.organizationRole.indexOf(0) === -1 && organisation.organizationName !== 'BK Techouse') {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   deleteOrganisation(organisation: Organisation): void {

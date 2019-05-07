@@ -1,4 +1,4 @@
-<h3>
+<h3 xmlns="http://www.w3.org/1999/html">
   {{ title }}
 </h3>
 <div class="row">
@@ -16,7 +16,7 @@
               <div class="col-xs-2">
                 <div class="form-group">
                   <span class="">Report</span>
-                  <select class="form-control" formControlName="reportBy">
+                  <select class="form-control" formControlName="reportBy" disabled>
                     <option *ngFor="let report of reportBy" value="{{report.value}}">{{report.name}}</option>
                   </select>
                 </div>
@@ -24,7 +24,7 @@
               <div class="col-xs-2" *ngIf="byFarmers">
                 <div class="form-group">
                   <span class="">Option</span>
-                  <select class="form-control" formControlName="option">
+                  <select class="form-control" formControlName="option" disabled>
                     <option value="status" selected="selected">Status</option>
                     <option *ngFor="let opt of options" value="{{opt.value}}">{{opt.name}}</option>
                   </select>
@@ -56,6 +56,7 @@
                     <span class="">District</span>
                     <div class="input-group input-group-sm">
                       <select class="form-control" formControlName="dist_id">
+                        <option value=""></option>
                         <option *ngFor="let district of districts" value="{{district._id}}">{{district.name}}</option>
                       </select>
                       <span class="input-group-btn">
@@ -71,6 +72,7 @@
                     <span class="">Sector</span>
                     <div class="input-group input-group-sm">
                       <select class="form-control" formControlName="sect_id">
+                        <option value=""></option>
                         <option *ngFor="let sector of sectors" value="{{sector._id}}">{{sector.name}}</option>
                       </select>
                       <span class="input-group-btn">
@@ -86,6 +88,7 @@
                     <span class="">Cell</span>
                     <div class="input-group input-group-sm">
                       <select class="form-control" formControlName="cell_id">
+                        <option value=""></option>
                         <option *ngFor="let cell of cells" value="{{cell._id}}">{{cell.name}}</option>
                       </select>
                       <span class="input-group-btn">
@@ -99,9 +102,12 @@
               </div>
             </div>
           </div>
-          <div class="row">
+          <div class="row" >
             <div class="col-sm-12">
-              <div style="margin: 0 auto; width: fit-content; float: left">
+              <div style="margin: 15px">
+              <app-list-message [message]="message"></app-list-message>
+              </div>
+              <div style="margin: 0 auto; width: fit-content; float: left" *ngIf="showReport">
                 <google-chart #chart
                               [type]="graph.type"
                               [data]="graph.data"

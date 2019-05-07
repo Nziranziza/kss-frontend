@@ -18,9 +18,9 @@ import {FarmerModule} from './farmer/farmer.module';
 import {ReportModule} from './reports/report.module';
 import {RouterModule} from '@angular/router';
 import {UserModule} from './user/user.module';
-import {OrganisationTypeModule} from './organisation-type/organisation-type.module';
 import {DataTablesModule} from 'angular-datatables';
 import {PendingFarmerModule} from './pending-farmer/pending-farmer.module';
+import {OrganisationTypeModule} from './organisation-type/organisation-type.module';
 
 @NgModule({
   declarations: [

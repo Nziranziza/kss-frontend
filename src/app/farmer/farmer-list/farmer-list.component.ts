@@ -31,10 +31,11 @@ export class FarmerListComponent implements OnInit, OnDestroy {
   message: string;
   farmers: any;
   title = 'Farmers';
+  id = 'farmers_list';
   parameters: any;
   config: any;
   autoHide = false;
-  responsive = true;
+  responsive = false;
   labels: any = {
     previousLabel: 'Previous',
     nextLabel: 'Next',
