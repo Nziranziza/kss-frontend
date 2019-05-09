@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FarmerLandsComponent implements OnInit {
 
+  requests: any;
+  message: string;
   constructor() { }
 
   ngOnInit() {
