@@ -79,6 +79,7 @@ export class OrganisationCreateComponent implements OnInit {
       if (!(selectedRoles.includes(1) || selectedRoles.includes(2))) {
         delete org.location;
       }
+      // is organisation a cws ?
       if (selectedRoles.includes(1)) {
         const temp = [];
         org.coveredVillages.map((id) => {
@@ -169,6 +170,7 @@ export class OrganisationCreateComponent implements OnInit {
         if (value !== '') {
           this.locationService.getCells(value).subscribe((data) => {
             this.cells = data;
+            this.coveredVillages = [];
             this.villages = null;
           });
           this.locationService.getCoveredVillages(value).subscribe((data) => {

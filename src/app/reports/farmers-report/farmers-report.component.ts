@@ -4,7 +4,6 @@ import {LocationService} from '../../core/services/location.service';
 import {Router} from '@angular/router';
 import {FarmerService, OrganisationService, OrganisationTypeService} from '../../core/services';
 import {HelperService} from '../../core/helpers';
-import {forEach} from '@angular/router/src/utils/collection';
 
 @Component({
   selector: 'app-farmers-report',
@@ -78,11 +77,23 @@ export class FarmersReportComponent implements OnInit {
       this.farmerService.report(filters).subscribe((data) => {
         if (data.content.length !== 0) {
           this.reportData = [];
-          data.content.map((item) => {
-            const temp = [item.name, item.uniqueFarmersCount];
-            this.reportData.push(temp);
-          });
-          this.graph.data = this.reportData;
+          if (filters.reportBy === 'farmers') {
+            data.content.map((item) => {
+              const temp = [item.name, item.uniqueFarmersCount];
+              this.reportData.push(temp);
+            });
+            this.graph.data = this.reportData;
+            this.graph.options.colors = ['#367fa9'];
+            this.graph.columnNames = ['Location', 'Farmers'];
+          } else {
+            data.content.map((item) => {
+              const temp = [item.name, item.totalTrees];
+              this.reportData.push(temp);
+            });
+            this.graph.data = this.reportData;
+            this.graph.options.colors = ['#4b8214'];
+            this.graph.columnNames = ['Location', 'Trees'];
+          }
           this.showReport = true;
           this.message = '';
         } else {

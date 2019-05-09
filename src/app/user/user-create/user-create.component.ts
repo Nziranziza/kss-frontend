@@ -25,6 +25,7 @@ export class UserCreateComponent implements OnInit {
   needLocation = false;
   possibleRoles: any[];
   isFromSuperOrg = false;
+  userNIDInfo = {};
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute, private router: Router,
@@ -83,9 +84,20 @@ export class UserCreateComponent implements OnInit {
 
   isSuperOrganisation(organisation: any) {
     if (organisation.organizationRole.indexOf(0) > -1) {
-      this.isFromSuperOrg  = true;
+      this.isFromSuperOrg = true;
     } else {
       this.isFromSuperOrg = false;
+    }
+  }
+
+  onBlurNID(nid: string) {
+    if (nid !== '') {
+      this.userService.verifyNID(nid).subscribe(data => {
+        this.userNIDInfo['foreName'.toString()] = data.content.foreName;
+        this.userNIDInfo['surname'.toString()] = data.content.surname;
+        this.userNIDInfo['sex'.toString()] = data.content.sex.toLowerCase();
+        this.createForm.patchValue(this.userNIDInfo);
+      });
     }
   }
 
@@ -137,6 +149,9 @@ export class UserCreateComponent implements OnInit {
 
       if (!(selectedRoles.includes(6) || selectedRoles.includes(7))) {
         delete user.location;
+      }
+      if (this.isFromSuperOrg){
+        user['userRoles'.toString()] = [0];
       }
       this.userService.save(user).subscribe(data => {
           this.router.navigateByUrl('admin/organisations/' + this.organisationId + '/users');

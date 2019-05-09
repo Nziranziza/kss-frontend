@@ -6,10 +6,11 @@ import {OrganisationEditComponent} from './organisation-edit/organisation-edit.c
 import {OrganisationCreateComponent} from './organisation-create/organisation-create.component';
 import {SharedModule} from '../shared';
 import {RouterModule} from '@angular/router';
+import { OrganisationFarmersComponent } from './organisation-farmers/organisation-farmers.component';
 
 
 @NgModule({
-  declarations: [OrganisationListComponent, OrganisationEditComponent, OrganisationCreateComponent],
+  declarations: [OrganisationListComponent, OrganisationEditComponent, OrganisationCreateComponent, OrganisationFarmersComponent],
   imports: [
     CommonModule,
     OrganisationRoutingModule,

@@ -7,6 +7,9 @@
       <div class="filter-form pull-right">
         <form [formGroup]="filterForm" (ngSubmit)="onFilter()">
           <div class="form-inline">
+            <select class="form-control" formControlName="searchBy" style="margin-right: 10px">
+              <option *ngFor="let field of searchFields"  value="{{field.value}}">{{field.name}}</option>
+            </select>
             <input type="text" formControlName="term" class="form-control" placeholder="search..">
             <button class="btn btn-warning pull-right btn-margin" type="button" (click)="onClearFilter()">Clear</button>
             <button class="btn btn-success pull-right btn-margin" type="submit"><i class="fa fa-search"></i> Search</button>
@@ -39,9 +42,11 @@
             <td> {{ farmer.userInfo.surname }}</td>
             <td> {{ farmer.userInfo.NID }}</td>
             <td> {{ farmer.userInfo.phone_number }}</td>
-            <td> {{ farmer.userInfo.regNumber }}</td>
+            <td> {{ farmer.userInfo.regNumber | uppercase}}</td>
             <td>
               <button class="btn btn-default btn-margin btn-sm pull-right details-button" (click)="viewDetails(farmer)">...</button>
+              <button class="btn btn-default btn-margin pull-right btn-sm" style="margin-left: 10px;">
+                Lands</button>
               <button class="btn btn-success btn-margin pull-right btn-sm" style="margin-left: 10px;">
                 Edit</button>
             </td>

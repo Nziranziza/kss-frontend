@@ -55,11 +55,28 @@
                 </div>
               </div>
             </div>
+            <div class="col-xs-6">
+              <div class="form-group">
+                <label class="control-label">Group or individual</label>
+                <div class="radio">
+                  <label>
+                    <input type="radio" formControlName="individualOrGroup" value="1">
+                    Individual
+                  </label>
+                </div>
+                <div class="radio">
+                  <label>
+                    <input type="radio" formControlName="individualOrGroup" value="2">
+                    Group
+                  </label>
+                </div>
+              </div>
+            </div>
             <div class="col-xs-12">
               <button class="btn btn-success btn-circle btn-lg  pull-right" (click)="addRequest()"><i
                 class="fa fa-plus"></i></button>
             </div>
-            <div *ngFor="let request of createForm.controls.requests.controls; let i=index" formArrayName="requests">
+            <div *ngFor="let request of formRequests.controls; let i=index" formArrayName="requests">
               <fieldset class="request" [formGroupName]="i">
                 <legend><label class="control-label label-required">&nbsp;Land</label></legend>
                 <div class="row">

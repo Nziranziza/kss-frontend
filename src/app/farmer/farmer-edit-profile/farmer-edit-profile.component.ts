@@ -5,11 +5,11 @@ import {FarmerService, OrganisationService} from '../../core/services';
 import {LocationService} from '../../core/services/location.service';
 
 @Component({
-  selector: 'app-farmer-edit',
-  templateUrl: './farmer-edit.component.html',
-  styleUrls: ['./farmer-edit.component.css']
+  selector: 'app-farmer-edit-profile',
+  templateUrl: './farmer-edit-profile.component.html',
+  styleUrls: ['./farmer-edit-profile.component.css']
 })
-export class FarmerEditComponent implements OnInit {
+export class FarmerEditProfileComponent implements OnInit {
 
   editForm: FormGroup;
   errors: string[];
@@ -67,6 +67,8 @@ export class FarmerEditComponent implements OnInit {
       }),
     });
   }
+
+  get formRequests() { return this.editForm.get('requests') as FormArray; }
 
   addRequest() {
     (this.editForm.controls.requests as FormArray).push(this.createRequest());

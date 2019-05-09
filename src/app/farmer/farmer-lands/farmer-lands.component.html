@@ -1,0 +1,35 @@
+<h3>
+  Lands
+</h3>
+<app-list-message [message]="message"></app-list-message>
+<div class="row">
+  <div class="col-xs-12 table-responsive">
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>Season</th>
+        <th>Location</th>
+        <th>Number of trees</th>
+        <th>Fertilizer needed</th>
+        <th>Fertilizer allocated</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let request of requests;">
+        <td>{{farmer.request.season}}</td>
+        <td>
+          <span class="details-row-title-sm" style="margin-left: 0px">Province </span> : <span class="details-row-data-sm" *ngIf="request.location.prov_id">{{ request.location.prov_id.namek }}</span>
+          <span class="details-row-title-sm">District </span> : <span class="details-row-data-sm" *ngIf="request.location.dist_id">{{ request.location.dist_id.name }}</span>
+          <span class="details-row-title-sm">Sector </span> : <span class="details-row-data-sm" *ngIf="request.location.sect_id">{{ request.location.sect_id.name }}</span>
+          <span class="details-row-title-sm">Cell </span> : <span class="details-row-data-sm" *ngIf="request.location.cell_id">{{ request.location.cell_id.name }}</span>
+          <span class="details-row-title-sm">Village </span> : <span class="details-row-data-sm" *ngIf="request.location.village_id">{{ request.location.village_id.name }}</span>
+        </td>
+        <td>{{ request.numberOfTrees }}</td>
+        <td>{{ request.fertilizer_need }} Kg</td>
+        <td>{{ request.fertilizer_allocate }} Kg</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+

@@ -4,6 +4,7 @@ import {OrganisationListComponent} from './organisation-list/organisation-list.c
 import {AdminComponent} from '../admin/admin/admin.component';
 import {OrganisationCreateComponent} from './organisation-create/organisation-create.component';
 import {OrganisationEditComponent} from './organisation-edit/organisation-edit.component';
+import {OrganisationFarmersComponent} from './organisation-farmers/organisation-farmers.component';
 
 const routes: Routes = [
   {
@@ -19,6 +20,10 @@ const routes: Routes = [
       }, {
         path: 'edit/:id',
         component: OrganisationEditComponent,
+      }
+      , {
+        path: ':organisationId/farmers',
+        component: OrganisationFarmersComponent,
       }
     ]
   }

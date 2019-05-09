@@ -34,5 +34,8 @@ export class OrganisationService {
   possibleRoles(): Observable<any> {
     return this.apiService.get('/organizations/organization.roles/list');
   }
+  getOrgFarmers(id: string): Observable<any> {
+    return this.apiService.get('/coffeefarmers/farmer_by_cws/' + id);
+  }
 
 }

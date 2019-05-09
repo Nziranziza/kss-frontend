@@ -3,6 +3,9 @@
   <div class="filter-form pull-right">
     <form [formGroup]="filterForm" (ngSubmit)="onFilter()">
       <div class="form-inline">
+        <select class="form-control" formControlName="searchBy" style="margin-right: 10px">
+          <option *ngFor="let field of searchFields"  value="{{field.value}}">{{field.name}}</option>
+        </select>
         <input type="text" formControlName="term" class="form-control" placeholder="search..">
         <button class="btn btn-warning pull-right btn-margin" type="button" (click)="onClearFilter()">Clear</button>
         <button class="btn btn-success pull-right btn-margin" type="submit"><i class="fa fa-search"></i> Search</button>
@@ -36,7 +39,7 @@
             <td> {{ farmer.numberOfTrees }}</td>
             <td> {{ farmer.fertilizer_need }}</td>
             <td>
-              <a class="btn btn-success btn-sm pull-right" routerLink="/admin/farmers/create">Approve
+              <a class="btn btn-success btn-sm pull-right" [routerLink]="['/admin/farmers/create', {id: farmer._id}]">Approve
               </a>
             </td>
           </tr>

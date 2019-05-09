@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {OrganisationService, OrganisationTypeService} from '../../core/services';
 import {HelperService} from '../../core/helpers';
@@ -98,7 +98,6 @@ export class OrganisationEditComponent implements OnInit {
           this.provinces = provinces;
         });
         if (org.location) {
-
           const restoreCoveredVillages = [];
           org.coveredVillages.map((obj) => {
             restoreCoveredVillages.push(obj.village_id);
@@ -115,11 +114,18 @@ export class OrganisationEditComponent implements OnInit {
           });
           this.locationService.getCells(org.location.sect_id).subscribe((cells) => {
             this.cells = cells;
+            this.locationService.getCoveredVillages(org.location.sect_id).subscribe((items) => {
+              this.villagesOfSector = items;
+            });
           });
           this.locationService.getVillages(org.location.cell_id).subscribe((villages) => {
             this.villages = villages;
-            this.editForm.patchValue(org);
           });
+          if (org.organizationRole.includes(1)) {
+            this.coverVillages = true;
+          }
+          this.editForm.patchValue(org);
+          this.onChanges();
 
         } else {
           if (org.location == null) {
@@ -127,10 +133,11 @@ export class OrganisationEditComponent implements OnInit {
           }
           this.isSuperOrganisation(org);
           this.editForm.patchValue(org);
+          this.onChanges();
         }
       });
     });
-    this.onChanges();
+
   }
 
   isSuperOrganisation(organisation: any) {
@@ -208,6 +215,7 @@ export class OrganisationEditComponent implements OnInit {
         } else {
           this.coverVillages = false;
           this.coveredVillages = [];
+          this.editForm.controls['coveredVillages'.toString()].setValue([]);
         }
       });
 
@@ -240,6 +248,8 @@ export class OrganisationEditComponent implements OnInit {
           this.locationService.getCells(value).subscribe((data) => {
             this.cells = data;
             this.villages = null;
+            this.coveredVillages = [];
+            this.editForm.controls['coveredVillages'.toString()].setValue([]);
           });
           this.locationService.getCoveredVillages(value).subscribe((data) => {
             this.villagesOfSector = data;

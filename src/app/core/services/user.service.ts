@@ -29,8 +29,8 @@ export class UserService {
     return this.apiService.post('/users', user);
   }
 
-  update(user: User, id: string): Observable<any> {
-    return this.apiService.put('/users/' + id, user);
+  update(user: User): Observable<any> {
+    return this.apiService.put('/users/full', user);
   }
   userTypes(): Observable<any> {
     return this.apiService.get('/users/user.types/list');
@@ -42,5 +42,9 @@ export class UserService {
 
   checkNID(body: any): Observable<any> {
     return this.apiService.post('/users/nid', body);
+  }
+
+  verifyNID(nid: string): Observable<any> {
+    return this.apiService.get('/users/verifyNID/' + nid);
   }
 }

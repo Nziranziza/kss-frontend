@@ -41,6 +41,10 @@ export class OrganisationListComponent implements OnInit, OnDestroy {
     this.isSuperAdmin = this.authenticationService.getCurrentUser().parameters.role.includes(0);
   }
 
+  isOrgCWS(org: any) {
+    return org.organizationRole.includes(1) ? true : false;
+  }
+
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
   }

@@ -2,8 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from '../../core/services/user.service';
-import {OrganisationService} from '../../core/services';
+import {AuthenticationService, OrganisationService} from '../../core/services';
 import {LocationService} from '../../core/services/location.service';
+import {AuthorisationService} from '../../core/services/authorisation.service';
 
 @Component({
   selector: 'app-user-edit',
@@ -26,16 +27,22 @@ export class UserEditComponent implements OnInit {
   cells: any;
   villages: any;
   isFromSuperOrg = false;
+  userNIDInfo = {};
+  possibleStatuses = [
+    {name: 'Pending', value: 2},
+    {name: 'Approved', value: 3},
+    {name: 'Locked', value: 4},
+    {name: 'Expired', value: 5},
+  ];
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute, private router: Router,
               private userService: UserService,
               private organisationService: OrganisationService,
-              private locationService: LocationService) {
+              private locationService: LocationService, private authenticationService: AuthenticationService) {
   }
 
   ngOnInit() {
-
     this.editForm = this.formBuilder.group({
       foreName: [''],
       surname: [''],
@@ -52,7 +59,8 @@ export class UserEditComponent implements OnInit {
         sect_id: [''],
         cell_id: [''],
         village_id: [''],
-      })
+      }),
+      status: ['']
     });
     this.userService.userTypes().subscribe(data => {
       this.userTypes = Object.keys(data.content).map(key => {
@@ -91,6 +99,7 @@ export class UserEditComponent implements OnInit {
             usr['userType'.toString()] = access.userType;
           }
         });
+        usr.sex = usr.sex.toLowerCase();
         this.editForm.patchValue(usr);
       });
     });
@@ -98,14 +107,24 @@ export class UserEditComponent implements OnInit {
 
   isSuperOrganisation(organisation: any) {
     if (organisation.organizationRole.indexOf(0) > -1) {
-      this.isFromSuperOrg  = true;
+      this.isFromSuperOrg = true;
     } else {
       this.isFromSuperOrg = false;
     }
   }
 
-  onChanges() {
+  onBlurNID(nid: string) {
+    if (nid !== '') {
+      this.userService.verifyNID(nid).subscribe(data => {
+        this.userNIDInfo['foreName'.toString()] = data.content.foreName;
+        this.userNIDInfo['surname'.toString()] = data.content.fatherName;
+        this.userNIDInfo['sex'.toString()] = data.content.sex;
+        this.editForm.patchValue(this.userNIDInfo);
+      });
+    }
+  }
 
+  onChanges() {
     this.editForm.controls['userRoles'.toString()].valueChanges.subscribe(
       (data) => {
         const selectedRoles = data
@@ -173,7 +192,20 @@ export class UserEditComponent implements OnInit {
       const user = this.editForm.value;
       user['userRoles'.toString()] = selectedRoles;
       user['org_id'.toString()] = this.organisationId;
-      this.userService.update(user, this.id).subscribe(data => {
+      user['id'.toString()] = this.id;
+      if (this.isFromSuperOrg) {
+        user['userRoles'.toString()] = [0];
+      }
+      if (!(selectedRoles.includes(6) || selectedRoles.includes(7))) {
+        delete user.location;
+      }
+      user['lastModifiedBy'.toString()] = {
+        _id: this.authenticationService.getCurrentUser().info._id,
+        name: this.authenticationService.getCurrentUser().info.surname
+      };
+      delete user.email;
+      delete user.userType;
+      this.userService.update(user).subscribe(data => {
           this.router.navigateByUrl('admin/organisations/' + this.organisationId + '/users');
         },
         (err) => {

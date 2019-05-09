@@ -43,6 +43,13 @@ export class FarmerListComponent implements OnInit, OnDestroy {
     screenReaderPageLabel: 'page',
     screenReaderCurrentLabel: `You're on page`
   };
+  searchFields = [
+    {value: 'phone_number', name: 'phone number'},
+    {value: 'reg_number', name: 'registration number'},
+    {value: 'nid', name: 'NID'},
+    {value: 'names', name: 'names'},
+    {value: 'location', name: 'location'},
+  ];
 
   ngOnInit(): void {
     this.farmerService.getFarmers(this.parameters)
@@ -56,7 +63,8 @@ export class FarmerListComponent implements OnInit, OnDestroy {
 
       });
     this.filterForm = this.formBuilder.group({
-      term: ['', Validators.minLength(4)]
+      term: ['', Validators.minLength(4)],
+      searchBy: ['names']
     });
   }
 
@@ -85,12 +93,17 @@ export class FarmerListComponent implements OnInit, OnDestroy {
       this.farmerService.getFarmers(this.parameters)
         .subscribe(data => {
           this.farmers = data.data;
+          this.config = {
+            itemsPerPage: this.parameters.length,
+            currentPage: this.parameters.start + 1,
+            totalItems: data.recordsTotal
+          };
         });
     }
   }
 
   onClearFilter() {
-    this.filterForm.reset();
+    this.filterForm.controls.term.reset();
     delete this.parameters.search;
     this.farmerService.getFarmers(this.parameters)
       .subscribe(data => {

@@ -50,7 +50,9 @@
                 <span class="details-row-data">{{ organisation.streetNumber }}</span>
               </td>
               <td class="actions no-wrap text-right">
-                <a routerLink="/admin/organisations/{{organisation._id}}/users" class="btn btn-info"><i
+                <a routerLink="/admin/organisations/{{organisation._id}}/farmers" class="btn btn-info" *ngIf="isOrgCWS(organisation)"><i
+                  class="fa fa-users"></i>Farmers</a>
+                <a routerLink="/admin/organisations/{{organisation._id}}/users" class="btn btn-info" style="margin-left: 10px"><i
                   class="fa fa-users"></i>Users</a>
                 <a class="btn btn-success btn-margin" [routerLink]="['edit/', organisation._id]"
                    style="margin-left: 10px;"> Edit</a>

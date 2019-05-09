@@ -3,6 +3,7 @@ import {FarmerService} from '../../core/services';
 import {Router} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {MessageService} from '../../core/services/message.service';
 
 @Component({
   selector: 'app-pending-farmer-list',
@@ -13,7 +14,7 @@ export class PendingFarmerListComponent implements OnInit, OnDestroy {
 
   constructor(private farmerService: FarmerService,
               private router: Router,
-              private modal: NgbModal, private formBuilder: FormBuilder) {
+              private modal: NgbModal, private formBuilder: FormBuilder, private messageService: MessageService) {
     this.parameters = {
       length: 25,
       start: 0,
@@ -41,6 +42,13 @@ export class PendingFarmerListComponent implements OnInit, OnDestroy {
     screenReaderPageLabel: 'page',
     screenReaderCurrentLabel: `You're on page`
   };
+  searchFields = [
+    {value: 'phone_number', name: 'phone number'},
+    {value: 'reg_number', name: 'registration number'},
+    {value: 'nid', name: 'NID'},
+    {value: 'names', name: 'names'}
+  ];
+
 
   ngOnInit() {
     this.farmerService.getPendingFarmers(this.parameters)
@@ -54,8 +62,10 @@ export class PendingFarmerListComponent implements OnInit, OnDestroy {
 
       });
     this.filterForm = this.formBuilder.group({
-      term: ['', Validators.minLength(4)]
+      term: ['', Validators.minLength(4)],
+      searchBy: ['names']
     });
+    this.message = this.messageService.getMessage();
   }
 
   onPageChange(event) {
@@ -80,7 +90,7 @@ export class PendingFarmerListComponent implements OnInit, OnDestroy {
   onFilter() {
     if (this.filterForm.valid) {
       this.parameters['search'.toString()] = this.filterForm.value;
-      this.farmerService.getFarmers(this.parameters)
+      this.farmerService.getPendingFarmers(this.parameters)
         .subscribe(data => {
           this.farmers = data.data;
         });
@@ -88,13 +98,13 @@ export class PendingFarmerListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-
+    this.messageService.setMessage('');
   }
 
   onClearFilter() {
-    this.filterForm.reset();
+    this.filterForm.controls.term.reset();
     delete this.parameters.search;
-    this.farmerService.getFarmers(this.parameters)
+    this.farmerService.getPendingFarmers(this.parameters)
       .subscribe(data => {
         this.farmers = data.data;
       });

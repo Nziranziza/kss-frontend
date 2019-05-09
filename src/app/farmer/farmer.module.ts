@@ -8,11 +8,12 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {NgxPaginationModule} from 'ngx-pagination';
 import {OrderModule} from 'ngx-order-pipe';
 import {FarmerCreateComponent } from './farmer-create/farmer-create.component';
-import {FarmerEditComponent } from './farmer-edit/farmer-edit.component';
+import {FarmerEditProfileComponent } from './farmer-edit-profile/farmer-edit-profile.component';
+import { FarmerLandsComponent } from './farmer-lands/farmer-lands.component';
 
 
 @NgModule({
-  declarations: [FarmerListComponent, FarmerDetailsComponent, FarmerCreateComponent, FarmerEditComponent],
+  declarations: [FarmerListComponent, FarmerDetailsComponent, FarmerCreateComponent, FarmerEditProfileComponent, FarmerLandsComponent],
   imports: [
     CommonModule,
     FarmerRoutingModule,
