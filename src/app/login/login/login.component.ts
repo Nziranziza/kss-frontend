@@ -3,6 +3,8 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthenticationService} from '../../core';
 import {MessageService} from '../../core/services/message.service';
+import {UserService} from '../../core/services/user.service';
+import {HttpHeaders} from '@angular/common/http';
 
 declare var $;
 
@@ -22,7 +24,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     private router: Router,
     private authenticationService: AuthenticationService,
     private formBuilder: FormBuilder,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private userService: UserService
   ) {
     // use FormBuilder to create a form group
     this.authForm = this.formBuilder.group({
@@ -41,6 +44,22 @@ export class LoginComponent implements OnInit, OnDestroy {
       });
     });
     this.message = this.messageService.getMessage();
+    this.route.params
+      .subscribe(params => {
+        if (params.token !== undefined) {
+          const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'x-auth-token': params.token });
+          const options = { headers };
+          const body = {};
+          this.authenticationService.unlock(body, options).subscribe(data => {
+            if (data) {
+              this.message = 'Account successfully unlocked!';
+              return;
+            }
+          });
+        }
+      });
   }
 
   onSubmit() {
@@ -60,6 +79,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.messageService.setMessage(null);
+    this.messageService.setMessage('');
   }
 }

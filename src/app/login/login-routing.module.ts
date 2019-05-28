@@ -10,7 +10,7 @@ const routes: Routes = [
     component: LoginComponent
   },
   {
-    path: 'login/:action',
+    path: 'login/unlock/:token',
     component: LoginComponent
   },
   {

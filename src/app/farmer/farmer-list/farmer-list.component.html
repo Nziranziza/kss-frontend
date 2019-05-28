@@ -25,6 +25,7 @@
     <div></div>
     <div class="box">
       <div class="box-body table-responsive">
+        <app-loader *ngIf="loading"></app-loader>
         <table class="row-border hover table table-condensed">
           <thead>
           <tr>
@@ -38,17 +39,16 @@
           </thead>
           <tbody>
           <tr *ngFor="let farmer of (farmers | orderBy : order:reverse:'case-insensitive') | paginate: config">
-            <td> {{ farmer.userInfo.foreName }}</td>
+            <td *ngIf="farmer.userInfo.type===1"> {{ farmer.userInfo.foreName }}</td>
+            <td *ngIf="farmer.userInfo.type===2"> {{ farmer.userInfo.groupName }}</td>
             <td> {{ farmer.userInfo.surname }}</td>
             <td> {{ farmer.userInfo.NID }}</td>
             <td> {{ farmer.userInfo.phone_number }}</td>
             <td> {{ farmer.userInfo.regNumber | uppercase}}</td>
             <td>
               <button class="btn btn-default btn-margin btn-sm pull-right details-button" (click)="viewDetails(farmer)">...</button>
-              <button class="btn btn-default btn-margin pull-right btn-sm" style="margin-left: 10px;">
-                Lands</button>
-              <button class="btn btn-success btn-margin pull-right btn-sm" style="margin-left: 10px;">
-                Edit</button>
+              <!-- <a class="btn btn-success btn-margin pull-right btn-sm" routerLink="/admin/farmers/edit/{{farmer._id}}">
+              Edit</a>-->
             </td>
           </tr>
           </tbody>

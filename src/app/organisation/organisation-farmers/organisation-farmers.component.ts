@@ -24,6 +24,7 @@ export class OrganisationFarmersComponent implements OnInit, OnDestroy {
   dtOptions: any = {};
   // @ts-ignore
   dtTrigger: Subject = new Subject();
+  loading = false;
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -41,10 +42,12 @@ export class OrganisationFarmersComponent implements OnInit, OnDestroy {
   }
 
   getFarmers(orgId: string): void {
+    this.loading = true;
     this.organisationService.getOrgFarmers(orgId).subscribe(data => {
       if (data) {
         this.farmers = data.content;
         this.dtTrigger.next();
+        this.loading = false;
       }
     });
   }

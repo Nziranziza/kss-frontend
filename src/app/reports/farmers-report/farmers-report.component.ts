@@ -19,6 +19,7 @@ export class FarmersReportComponent implements OnInit {
   districts: any;
   sectors: any;
   cells: any;
+  loading = false;
   villages: any;
   byFarmers = true;
   distId = false;
@@ -64,6 +65,7 @@ export class FarmersReportComponent implements OnInit {
 
   onSubmit(searchBy: string) {
     if (this.filterForm.valid) {
+      this.loading = true;
       const filters = this.filterForm.value;
       if (filters.location.prov_id === '' && searchBy === 'province') {
         delete filters.location;
@@ -75,6 +77,7 @@ export class FarmersReportComponent implements OnInit {
         this.helper.cleanObject(filters.location);
       }
       this.farmerService.report(filters).subscribe((data) => {
+        this.loading = false;
         if (data.content.length !== 0) {
           this.reportData = [];
           if (filters.reportBy === 'farmers') {

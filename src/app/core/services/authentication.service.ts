@@ -51,4 +51,8 @@ export class AuthenticationService {
   validateResetToken(token: string) {
     return this.apiService.get('/users/confirmation/' + token);
   }
+
+  unlock(body, options?): Observable<any> {
+    return this.http.post(`${environment.api_url}${'/api/users/account/unlock'}`, body, options);
+  }
 }

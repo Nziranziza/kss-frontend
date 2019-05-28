@@ -14,18 +14,20 @@ export class UserCreateComponent implements OnInit {
 
   organisationId: string;
   createForm: FormGroup;
-  errors: string[];
+  errors = [];
   userTypes: any[];
   orgPossibleRoles: any[];
   provinces: any;
   districts: any;
   sectors: any;
   cells: any;
+  loading = false;
   villages: any;
   needLocation = false;
   possibleRoles: any[];
   isFromSuperOrg = false;
   userNIDInfo = {};
+  invalidId = false;
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute, private router: Router,
@@ -90,15 +92,26 @@ export class UserCreateComponent implements OnInit {
     }
   }
 
-  onBlurNID(nid: string) {
-    if (nid !== '') {
+  onInputNID(nid: string) {
+    if (nid.length >= 16) {
+      this.loading = true;
+      this.deleteErrors();
       this.userService.verifyNID(nid).subscribe(data => {
         this.userNIDInfo['foreName'.toString()] = data.content.foreName;
         this.userNIDInfo['surname'.toString()] = data.content.surname;
         this.userNIDInfo['sex'.toString()] = data.content.sex.toLowerCase();
         this.createForm.patchValue(this.userNIDInfo);
+        this.loading = false;
+        this.invalidId = false;
+      }, (err) => {
+        this.invalidId = true;
+        this.loading = false;
       });
     }
+  }
+
+  deleteErrors() {
+    this.errors = [];
   }
 
   onSubmit() {
@@ -150,7 +163,7 @@ export class UserCreateComponent implements OnInit {
       if (!(selectedRoles.includes(6) || selectedRoles.includes(7))) {
         delete user.location;
       }
-      if (this.isFromSuperOrg){
+      if (this.isFromSuperOrg) {
         user['userRoles'.toString()] = [0];
       }
       this.userService.save(user).subscribe(data => {

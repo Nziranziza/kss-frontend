@@ -43,5 +43,4 @@ export class OrganisationTypeEditComponent implements OnInit {
       this.errors = this.helper.getFormValidationErrors(this.editForm);
     }
   }
-
 }

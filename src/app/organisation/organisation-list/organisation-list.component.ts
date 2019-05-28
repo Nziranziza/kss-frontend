@@ -4,6 +4,7 @@ import {Organisation} from '../../core/models';
 import {Router} from '@angular/router';
 import {ConfirmDialogService} from '../../core/services';
 import {Subject} from 'rxjs';
+import {MessageService} from '../../core/services/message.service';
 
 declare var $;
 
@@ -16,7 +17,7 @@ export class OrganisationListComponent implements OnInit, OnDestroy {
 
   constructor(private organisationService: OrganisationService,
               private router: Router, private  confirmDialogService: ConfirmDialogService,
-              private authenticationService: AuthenticationService
+              private authenticationService: AuthenticationService, private messageService: MessageService
   ) {
 
   }
@@ -39,6 +40,7 @@ export class OrganisationListComponent implements OnInit, OnDestroy {
       responsive: true
     };
     this.isSuperAdmin = this.authenticationService.getCurrentUser().parameters.role.includes(0);
+    this.message = this.messageService.getMessage();
   }
 
   isOrgCWS(org: any) {
@@ -47,6 +49,7 @@ export class OrganisationListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
+    this.messageService.setMessage('');
   }
 
   isNotSuperOrganisation(organisation: any) {

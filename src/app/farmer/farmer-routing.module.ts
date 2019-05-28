@@ -3,7 +3,8 @@ import {RouterModule, Routes} from '@angular/router';
 import {AdminComponent} from '../admin/admin/admin.component';
 import {FarmerListComponent} from './farmer-list/farmer-list.component';
 import {FarmerCreateComponent} from './farmer-create/farmer-create.component';
-import {FarmerEditProfileComponent} from './farmer-edit-profile/farmer-edit-profile.component';
+import {FarmerEditComponent} from './farmer-edit/farmer-edit.component';
+import {FarmerLandsComponent} from './farmer-lands/farmer-lands.component';
 
 const routes: Routes = [
   {
@@ -15,10 +16,13 @@ const routes: Routes = [
         component: FarmerListComponent
       }, {
         path: 'farmers/edit/:id',
-        component: FarmerEditProfileComponent,
+        component: FarmerEditComponent,
       }, {
         path: 'farmers/create',
         component: FarmerCreateComponent,
+      }, {
+        path: 'farmers/:farmerId/lands',
+        component: FarmerLandsComponent
       }
     ]
   }

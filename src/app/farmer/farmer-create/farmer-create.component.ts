@@ -1,20 +1,22 @@
-import {Component, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup} from '@angular/forms';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {FarmerService, OrganisationService} from '../../core/services';
+import {ConfirmDialogService, FarmerService, OrganisationService} from '../../core/services';
 import {LocationService} from '../../core/services/location.service';
 import {UserService} from '../../core/services/user.service';
 import {MessageService} from '../../core/services/message.service';
+import {HelperService} from '../../core/helpers';
+import {isArray} from 'util';
 
 @Component({
   selector: 'app-farmer-create',
   templateUrl: './farmer-create.component.html',
   styleUrls: ['./farmer-create.component.css']
 })
-export class FarmerCreateComponent implements OnInit {
+export class FarmerCreateComponent implements OnInit, OnDestroy {
 
   createForm: FormGroup;
-  errors: string[];
+  errors = [];
   provinces = [];
   districts = [];
   sectors = [];
@@ -24,7 +26,12 @@ export class FarmerCreateComponent implements OnInit {
   userNIDInfo = {};
   farmer: any;
   createFromPending = false;
+  isGroup = false;
   id: string;
+  message: string;
+  submit = false;
+  loading = false;
+  invalidId = false;
 
   public requestList: FormArray;
 
@@ -33,18 +40,26 @@ export class FarmerCreateComponent implements OnInit {
               private farmerService: FarmerService,
               private userService: UserService,
               private organisationService: OrganisationService,
-              private locationService: LocationService, private messageService: MessageService) {
+              private confirmDialogService: ConfirmDialogService,
+              private locationService: LocationService, private messageService: MessageService,
+              private helperService: HelperService) {
   }
 
   ngOnInit() {
     this.createForm = this.formBuilder.group({
       foreName: [''],
       surname: [''],
-      email: [''],
+      groupName: [''],
+     /* email: [''],*/
       phone_number: [''],
       sex: [''],
       NID: [''],
-      type: [''],
+      type: ['', Validators.required],
+      groupContactPerson: this.formBuilder.group({
+        firstName: [''],
+        lastName: [''],
+        phone: ['']
+      }),
       requests: new FormArray([])
     });
 
@@ -59,7 +74,8 @@ export class FarmerCreateComponent implements OnInit {
               const temp = {
                 foreName: this.farmer.foreName,
                 surname: this.farmer.surname,
-                email: this.farmer.email,
+                groupName: this.farmer.surname,
+               /* email: this.farmer.email,*/
                 phone_number: this.farmer.phone_number,
                 NID: this.farmer.NID,
                 requests: [{
@@ -69,75 +85,266 @@ export class FarmerCreateComponent implements OnInit {
                 }]
               };
               if (this.farmer.NID !== '') {
+                this.loading = true;
                 this.userService.verifyNID(this.farmer.NID).subscribe(NIDInformation => {
                     temp['foreName'.toString()] = NIDInformation.content.foreName;
                     temp['surname'.toString()] = NIDInformation.content.surname;
                     temp['sex'.toString()] = NIDInformation.content.sex.toLowerCase();
+                    this.submit = true;
+                    this.errors = [];
+                    this.loading = false;
+                    this.invalidId = false;
                   },
                   (err) => {
+                    this.invalidId = true;
+                    this.submit = false;
+                    this.loading = false;
                   });
               }
-
               this.createForm.patchValue(temp);
             },
             (err) => {
               this.createFromPending = true;
-              this.errors = ['Record does not exist!'];
+              this.errors = ['something went wrong!'];
             });
         }
       });
     this.initial();
+    this.message = this.messageService.getMessage();
+    this.onChangeType();
   }
 
   onSubmit() {
     if (this.createForm.valid) {
-      console.log('test');
       if (this.createFromPending) {
-        console.log('test 2');
-        const farmer = this.createForm.value;
-        farmer['fertilizer_need'.toString()] = farmer.requests[0].fertilizer_need;
-        farmer['fertilizer_allocate'.toString()] = farmer.requests[0].fertilizer_allocate;
-        farmer['location'.toString()] = farmer.requests[0].location;
-        farmer['numberOfTrees'.toString()] = farmer.requests[0].numberOfTrees;
+        const temp = this.createForm.value;
+        const farmer = {};
+        farmer['fertilizer_need'.toString()] = temp.requests[0].fertilizer_need;
+        farmer['fertilizer_allocate'.toString()] = temp.requests[0].fertilizer_allocate;
+        farmer['location'.toString()] = temp.requests[0].location;
+        farmer['numberOfTrees'.toString()] = temp.requests[0].numberOfTrees;
         farmer['_id'.toString()] = this.id;
-        delete farmer.requests;
-        this.farmerService.saveFromPending(farmer).subscribe((data) => {
-            console.log('test 3');
-            console.log(data);
-            this.messageService.setMessage('Record successful moved to approved list!');
-            this.router.navigateByUrl('admin/pending-farmers');
-          },
-          (err) => {
-            this.errors = err.errors;
+        farmer['type'.toString()] = temp.type;
+        farmer['phone_number'.toString()] = temp.phone_number;
+       /* farmer['email'.toString()] = temp.email;*/
+        if (!this.isGroup) {
+          farmer['surname'.toString()] = temp.surname;
+          farmer['foreName'.toString()] = temp.foreName;
+          farmer['sex'.toString()] = temp.sex;
+          farmer['NID'.toString()] = temp.NID;
+        } else {
+          farmer['groupName'.toString()] = temp.groupName;
+          farmer['groupContactPerson'.toString()] = temp.groupContactPerson;
+        }
+        if (this.isGroup) {
+          this.farmerService.checkFarmerGroupName(temp.groupName).subscribe(data => {
+            if (data.exists) {
+              const message = 'Farmer with this name ('
+                + temp.groupName + ') already exists would you like to add land to the farmer?';
+              this.confirmTempoAndSave(farmer, message);
+
+            } else {
+
+              this.farmerService.createFromPending(farmer).subscribe((response) => {
+                  this.messageService.setMessage('Record successful moved to approved list!');
+                  this.router.navigateByUrl('admin/farmers');
+                },
+                (err) => {
+                  this.errors = err.errors;
+                });
+
+            }
           });
+        } else {
+          this.farmerService.checkFarmerNID(temp.NID).subscribe(data => {
+            if (data.exists) {
+              const message = 'Farmer with this NID ('
+                + temp.NID + ') already exists would you like to add land to the farmer?';
+              this.confirmTempoAndSave(farmer, message);
+
+            } else {
+
+              this.farmerService.createFromPending(farmer).subscribe((response) => {
+                  this.messageService.setMessage('Record successful moved to approved list!');
+                  this.router.navigateByUrl('admin/farmers');
+                },
+                (err) => {
+                  this.errors = err.errors;
+                });
+
+            }
+          });
+        }
+      } else {
+
+        const temp = this.createForm.value;
+        const farmer = {
+          requestInfo: []
+        };
+        farmer['_id'.toString()] = this.id;
+        farmer['type'.toString()] = temp.type;
+        farmer['phone_number'.toString()] = temp.phone_number;
+       /* farmer['email'.toString()] = temp.email;*/
+        if (!this.isGroup) {
+          farmer['surname'.toString()] = temp.surname;
+          farmer['foreName'.toString()] = temp.foreName;
+          farmer['sex'.toString()] = temp.sex;
+          farmer['NID'.toString()] = temp.NID;
+        } else {
+          farmer['groupName'.toString()] = temp.groupName;
+          farmer['groupContactPerson'.toString()] = temp.groupContactPerson;
+        }
+        farmer['requestInfo'.toString()] = temp.requests;
+        this.helperService.cleanObject(farmer);
+        farmer.requestInfo.map((item) => {
+          item['fertilizer_need'.toString()] = +item['numberOfTrees'.toString()];
+          return this.helperService.cleanObject(item);
+        });
+
+        if (this.isGroup) {
+          this.farmerService.checkFarmerGroupName(temp.groupName).subscribe(data => {
+
+            if (data.exists) {
+              const message = 'Farmer with this name ('
+                + temp.groupName + ') already exists would you like to add land(s) to the farmer?';
+              this.confirmFarmerAndSave(farmer, message);
+            } else {
+
+              this.farmerService.save(farmer).subscribe((response) => {
+                  this.messageService.setMessage('Farmer successfully created!');
+                  this.router.navigateByUrl('admin/farmers');
+                },
+                (err) => {
+                  this.errors = err.errors;
+                });
+
+            }
+          });
+        } else {
+          this.farmerService.checkFarmerNID(temp.NID).subscribe(data => {
+
+            if (data.exists) {
+              const message = 'Farmer with this NID ('
+                + temp.NID + ') already exists would you like to add land(s) to the farmer?';
+              this.confirmFarmerAndSave(farmer, message);
+            } else {
+
+              this.farmerService.save(farmer).subscribe((response) => {
+                  this.messageService.setMessage('Farmer successfully created!');
+                  this.router.navigateByUrl('admin/farmers');
+                },
+                (err) => {
+                  if (isArray(err.errors)) {
+                    this.errors = err.errors;
+                  } else {
+                    this.errors = [err.errors];
+                  }
+                });
+            }
+          });
+        }
       }
     } else {
+      if (this.helperService.getFormValidationErrors(this.createForm).length > 0) {
+        this.errors = this.helperService.getFormValidationErrors(this.createForm);
+        console.log(this.errors);
+      }
+      if (this.createForm.get('requests').invalid) {
+        this.errors.push('Missing required land(s) information');
+      }
     }
   }
 
-  onBlurNID(nid: string) {
-    if (nid !== '') {
-      this.userService.verifyNID(nid).subscribe(data => {
-        this.userNIDInfo['foreName'.toString()] = data.content.foreName;
-        this.userNIDInfo['surname'.toString()] = data.content.surname;
-        this.userNIDInfo['sex'.toString()] = data.content.sex.toLowerCase();
-        this.createForm.patchValue(this.userNIDInfo);
+  confirmTempoAndSave(farmer: any, message: string) {
+    this.confirmDialogService.openConfirmDialog(message).afterClosed().subscribe(
+      res => {
+        if (res) {
+          this.farmerService.createFromPending(farmer).subscribe((response) => {
+              this.messageService.setMessage('Record successful moved to approved list!');
+              this.router.navigateByUrl('admin/farmers');
+            },
+            (err) => {
+              if (isArray(err.errors)) {
+                this.errors = err.errors;
+              } else {
+                this.errors = [err.errors];
+              }
+              return;
+            });
+
+        }
       });
+  }
+
+  confirmFarmerAndSave(farmer: any, message: string) {
+    this.confirmDialogService.openConfirmDialog(message).afterClosed().subscribe(
+      res => {
+        if (res) {
+          this.farmerService.save(farmer).subscribe((response) => {
+              this.messageService.setMessage('Farmer successfully created!');
+              this.router.navigateByUrl('admin/farmers');
+            },
+            (err) => {
+              this.errors = err.errors;
+            });
+        }
+      });
+  }
+
+  getLocationInput(i: number, field: string) {
+    return this.getRequestsFormGroup(i).controls.location.get(field);
+  }
+
+  onInputNID(nid: string) {
+    this.verifyNID(nid);
+  }
+
+  verifyNID(nid: string) {
+    if (nid.length >= 16) {
+      this.errors = [];
+      this.loading = true;
+      this.userService.verifyNID(nid).subscribe(data => {
+          this.userNIDInfo['foreName'.toString()] = data.content.foreName;
+          this.userNIDInfo['surname'.toString()] = data.content.surname;
+          this.userNIDInfo['sex'.toString()] = data.content.sex.toLowerCase();
+          this.createForm.patchValue(this.userNIDInfo);
+          this.submit = true;
+          this.errors = [];
+          this.loading = false;
+          this.invalidId = false;
+        },
+        (err) => {
+          this.submit = false;
+          this.loading = false;
+          if (!this.isGroup) {
+            this.invalidId = true;
+          }
+          /*this.resetNIDInfo();*/
+        });
+    } else {
+      this.submit = false;
+      /*this.resetNIDInfo();*/
     }
+  }
+
+  resetNIDInfo() {
+    this.createForm.get('foreName'.toString()).reset();
+    this.createForm.get('surname'.toString()).reset();
+    this.createForm.get('sex'.toString()).reset();
   }
 
   createRequest(): FormGroup {
     return this.formBuilder.group({
-      season: ['19B'],
-      numberOfTrees: [''],
+      numberOfTrees: ['', [Validators.required,
+        Validators.min(1), Validators.pattern('[0-9]*')]],
       fertilizer_need: [''],
-      fertilizer_allocate: [''],
+      fertilizer_allocate: [0],
       location: this.formBuilder.group({
-        prov_id: [''],
-        dist_id: [''],
-        sect_id: [''],
-        cell_id: [''],
-        village_id: ['']
+        prov_id: ['', Validators.required],
+        dist_id: ['', Validators.required],
+        sect_id: ['', Validators.required],
+        cell_id: ['', Validators.required],
+        village_id: ['', Validators.required]
       })
     });
   }
@@ -147,7 +354,6 @@ export class FarmerCreateComponent implements OnInit {
   }
 
   onCancel() {
-    console.log('test');
     if (this.createFromPending) {
       this.router.navigateByUrl('/admin/pending-farmers');
     } else {
@@ -169,6 +375,20 @@ export class FarmerCreateComponent implements OnInit {
   getRequestsFormGroup(index): FormGroup {
     this.requestList = this.createForm.get('requests') as FormArray;
     return this.requestList.controls[index] as FormGroup;
+  }
+
+  onChangeType() {
+    this.createForm.get('type'.toString()).valueChanges.subscribe(
+      (value) => {
+        if (+value === 2) {
+          this.isGroup = true;
+          this.submit = true;
+          this.loading = false;
+        } else {
+          this.isGroup = false;
+        }
+      }
+    );
   }
 
   onChangeProvince(index: number) {
@@ -217,5 +437,8 @@ export class FarmerCreateComponent implements OnInit {
     this.locationService.getProvinces().subscribe((data) => {
       this.provinces.push(data);
     });
+  }
+
+  ngOnDestroy() {
   }
 }

@@ -27,8 +27,8 @@ export class FarmerService {
     return this.apiService.delete('/farmers/' + id);
   }
 
-  save(farmer: Farmer): Observable<any> {
-    return this.apiService.post('/farmers/', farmer);
+  save(farmer: any): Observable<any> {
+    return this.apiService.post('/coffeefarmers/createfarmer', farmer);
   }
 
   update(farmer: Farmer): Observable<any> {
@@ -48,9 +48,25 @@ export class FarmerService {
   }
 
   updateFarmerRequest(data: any): Observable<any> {
-    return this.apiService.post('/stats/farmer.data?subRegions=true', data);
+    return;
   }
-  saveFromPending(farmer: any): Observable<any> {
+
+  checkFarmerNID(nid: string): Observable<any> {
+    return this.apiService.get('/users/check/nidexists/' + nid);
+  }
+
+  checkFarmerGroupName(groupName: string): Observable<any> {
+    return this.apiService.get('/users/check/group.exists/' + groupName);
+  }
+  createFromPending(farmer: any): Observable<any> {
     return this.apiService.post('/pendingfarmers/createfarmerfromtempo/', farmer);
+  }
+
+  getFarmerLands(id: string) {
+    return this.apiService.get('/coffeefarmers/requests_by_farmer/' + id);
+  }
+
+  updateFarmerProfile(data: any): Observable<any> {
+    return;
   }
 }

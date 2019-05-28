@@ -5,6 +5,7 @@ import {Farmer} from '../../core/models';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {FarmerDetailsComponent} from '../farmer-details/farmer-details.component';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {MessageService} from '../../core/services/message.service';
 
 @Component({
   selector: 'app-farmer-list',
@@ -15,7 +16,7 @@ export class FarmerListComponent implements OnInit, OnDestroy {
 
   constructor(private farmerService: FarmerService,
               private router: Router, private  confirmDialogService: ConfirmDialogService,
-              private modal: NgbModal, private formBuilder: FormBuilder) {
+              private modal: NgbModal, private formBuilder: FormBuilder, private messageService: MessageService) {
     this.parameters = {
       length: 25,
       start: 0,
@@ -43,12 +44,15 @@ export class FarmerListComponent implements OnInit, OnDestroy {
     screenReaderPageLabel: 'page',
     screenReaderCurrentLabel: `You're on page`
   };
+  loading = false;
   searchFields = [
     {value: 'phone_number', name: 'phone number'},
     {value: 'reg_number', name: 'registration number'},
     {value: 'nid', name: 'NID'},
-    {value: 'names', name: 'names'},
+    {value: 'forename', name: 'first name'},
+    {value: 'surname', name: 'last name'},
     {value: 'location', name: 'location'},
+    {value: 'groupname', name: 'group name'}
   ];
 
   ngOnInit(): void {
@@ -63,9 +67,11 @@ export class FarmerListComponent implements OnInit, OnDestroy {
 
       });
     this.filterForm = this.formBuilder.group({
-      term: ['', Validators.minLength(4)],
-      searchBy: ['names']
+      term: ['', Validators.minLength(3)],
+      searchBy: ['forename']
     });
+
+    this.message = this.messageService.getMessage();
   }
 
   onPageChange(event) {
@@ -89,6 +95,7 @@ export class FarmerListComponent implements OnInit, OnDestroy {
 
   onFilter() {
     if (this.filterForm.valid) {
+      this.loading = true;
       this.parameters['search'.toString()] = this.filterForm.value;
       this.farmerService.getFarmers(this.parameters)
         .subscribe(data => {
@@ -98,6 +105,7 @@ export class FarmerListComponent implements OnInit, OnDestroy {
             currentPage: this.parameters.start + 1,
             totalItems: data.recordsTotal
           };
+          this.loading = false;
         });
     }
   }
@@ -108,10 +116,16 @@ export class FarmerListComponent implements OnInit, OnDestroy {
     this.farmerService.getFarmers(this.parameters)
       .subscribe(data => {
         this.farmers = data.data;
+        this.config = {
+          itemsPerPage: this.parameters.length,
+          currentPage: this.parameters.start + 1,
+          totalItems: data.recordsTotal
+        };
       });
   }
 
   ngOnDestroy(): void {
+    this.messageService.setMessage('');
   }
 
   deleteFarmer(farmer: Farmer): void {
@@ -129,5 +143,17 @@ export class FarmerListComponent implements OnInit, OnDestroy {
   viewDetails(farmer: Farmer) {
     const modalRef = this.modal.open(FarmerDetailsComponent, {size: 'lg'});
     modalRef.componentInstance.farmer = farmer;
+  }
+
+  editFarmerProfile() {
+  }
+
+  editFarmerRequest() {
+  }
+
+  addFarmerRequest() {
+  }
+
+  cancelFarmerRequest() {
   }
 }

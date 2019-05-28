@@ -6,9 +6,10 @@ import {isArray} from 'util';
   templateUrl: './list-errors.component.html',
   styleUrls: ['./list-errors.component.css']
 })
-export class ListErrorsComponent implements OnInit{
+export class ListErrorsComponent implements OnInit {
   @Input() errorList: any;
   isArray = false;
+
   ngOnInit() {
     this.isArray = isArray(this.errorList);
   }

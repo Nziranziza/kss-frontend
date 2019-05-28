@@ -115,7 +115,7 @@
                 <p>
                 <span style="color: #f2a73c; font-size: 12px;"> [ {{ coveredVillages.join(', ') }} ]</span>
                 </p>
-                <select multiple="multiple" class="form-control covered-villages" formControlName="coveredVillages" size="8">
+                <select multiple="multiple" class="form-control covered-villages" formControlName="coveredVillages">
                   <option *ngFor="let village of villagesOfSector" value="{{village._id}}" (mousedown)="onMouseDown($event, village)" (mousemove)="$event.preventDefault()">{{village.name}}</option>
                 </select>
               </div>

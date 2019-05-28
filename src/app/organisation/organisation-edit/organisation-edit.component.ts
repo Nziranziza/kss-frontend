@@ -4,6 +4,9 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {OrganisationService, OrganisationTypeService} from '../../core/services';
 import {HelperService} from '../../core/helpers';
 import {LocationService} from '../../core/services/location.service';
+import {MessageService} from '../../core/services/message.service';
+
+declare var $;
 
 @Component({
   selector: 'app-organisation-edit',
@@ -15,7 +18,7 @@ export class OrganisationEditComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute, private router: Router, private helper: HelperService,
               private organisationService: OrganisationService, private locationService: LocationService,
-              private organisationTypeService: OrganisationTypeService) {
+              private organisationTypeService: OrganisationTypeService, private messageService: MessageService) {
   }
 
   editForm: FormGroup;
@@ -54,7 +57,6 @@ export class OrganisationEditComponent implements OnInit {
       coveredVillages: [[]]
       /* usersNIDRequired: ['']*/
     });
-
     this.organisationTypeService.all().subscribe(types => {
       this.genres = types.content;
     });
@@ -186,7 +188,9 @@ export class OrganisationEditComponent implements OnInit {
         org.coveredVillages = temp;
       }
       this.organisationService.update(org, this.id).subscribe(data => {
+          this.messageService.setMessage('Organisation successfully updated!');
           this.router.navigateByUrl('admin/organisations');
+
         },
         (err) => {
           this.errors = err.errors;

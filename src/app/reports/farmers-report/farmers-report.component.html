@@ -6,10 +6,11 @@
     <div class="box">
       <div class="box-body">
         <div class="col-xs-12">
-          <button class="btn btn-success pull-right btn-margin" type="button" (click)="onExport()">Export
-          </button>
+         <!-- <button class="btn btn-success pull-right btn-margin" type="button" (click)="onExport()">Export
+          </button>-->
         </div>
         <app-list-errors [errorList]="errors"></app-list-errors>
+
         <form [formGroup]="filterForm">
           <div class="row">
             <div class="col-xs-12">
@@ -21,6 +22,7 @@
                   </select>
                 </div>
               </div>
+              <!--
               <div class="col-xs-2" *ngIf="byFarmers">
                 <div class="form-group">
                   <span class="">Option</span>
@@ -30,6 +32,7 @@
                   </select>
                 </div>
               </div>
+              -->
             </div>
           </div>
           <div class="row">
@@ -106,6 +109,7 @@
             <div class="col-sm-12">
               <div style="margin: 15px">
               <app-list-message [message]="message"></app-list-message>
+              <app-loader *ngIf="loading"></app-loader>
               </div>
               <div style="margin: 0 auto; width: fit-content; float: left" *ngIf="showReport">
                 <google-chart #chart

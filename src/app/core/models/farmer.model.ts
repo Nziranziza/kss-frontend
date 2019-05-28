@@ -1,5 +1,7 @@
 export interface Farmer {
   _id: string;
-  request: any;
+  requestInfo: any[];
   userInfo: any;
+  NID: string;
+  groupName: string;
 }

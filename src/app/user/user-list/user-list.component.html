@@ -30,8 +30,7 @@
             <td> {{ user.NID }}</td>
             <td> {{ user.sex }}</td>
             <td class="actions no-wrap text-right">
-              <!--<button class="btn btn-danger" (click)="deleteUser(user)"> Delete</button>-->
-              <a class="btn btn-success btn-margin" routerLink="/admin/organisations/{{organisationId}}/users/edit/{{user._id}}" style="margin-left: 10px;">
+                <a class="btn btn-success btn-margin" routerLink="/admin/organisations/{{organisationId}}/users/edit/{{user._id}}" style="margin-left: 10px;">
                 Edit</a>
             </td>
           </tr>

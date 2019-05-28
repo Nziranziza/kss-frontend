@@ -1,11 +1,14 @@
 <h3>
   Farmers
+  <!-- <a class="btn btn-success btn-margin pull-right" routerLink="/admin/farmers/create"><i class="fa fa-plus"></i> New Farmer
+  </a>-->
 </h3>
 <app-list-message [message]="message"></app-list-message>
 <div class="row">
   <div class="col-xs-12">
     <div class="box">
       <div class="box-body">
+        <app-loader *ngIf="loading"></app-loader>
         <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover"
                class="table table-condensed">
           <thead>
@@ -26,7 +29,11 @@
             <td> {{ farmer.userInfo.phone_number }}</td>
             <td> {{ farmer.userInfo.regNumber | uppercase}}</td>
             <td>
-              <button class="btn btn-default btn-margin pull-right details-button" (click)="viewDetails(farmer)">...</button>
+              <button class="btn btn-default btn-sm btn-margin pull-right details-button" (click)="viewDetails(farmer)">...</button>
+              <!--<button class="btn btn-default btn-margin pull-right btn-sm" style="margin-left: 10px;">
+                Lands</button>
+              <button class="btn btn-success btn-margin pull-right btn-sm" style="margin-left: 10px;">
+                Edit</button>-->
             </td>
           </tr>
         </table>

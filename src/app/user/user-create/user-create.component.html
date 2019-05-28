@@ -1,17 +1,21 @@
 <h3>
   Create user
 </h3>
-<app-list-errors [errorList]="errors"></app-list-errors>
+<app-list-errors [errorList]="errors" *ngIf="errors.length > 0"></app-list-errors>
 <form [formGroup]="createForm" (ngSubmit)="onSubmit()">
   <div class="row">
     <div class="col-xs-12">
       <div class="box">
         <div class="box-body">
+          <app-loader *ngIf="loading"></app-loader>
           <div class="row">
             <div class="col-xs-6">
               <div class="form-group">
                 <label class="control-label">NID</label>
-                <input type="text" formControlName="NID" class="form-control" (blur) = onBlurNID($event.target.value)>
+                <input type="text" formControlName="NID" class="form-control" (input) = onInputNID($event.target.value)>
+                <span class="input-error" *ngIf="invalidId">
+                  invalid nid
+                </span>
               </div>
             </div>
             <div class="col-xs-6">
@@ -43,13 +47,13 @@
                 <label class="control-label label-required">Gender</label>
                 <div class="radio">
                   <label>
-                    <input type="radio" formControlName="sex" value="m" checked="">
+                    <input type="radio" formControlName="sex" value="m">
                     Male
                   </label>
                 </div>
                 <div class="radio">
                   <label>
-                    <input type="radio" formControlName="sex" value="f" checked="">
+                    <input type="radio" formControlName="sex" value="f">
                     Female
                   </label>
                 </div>

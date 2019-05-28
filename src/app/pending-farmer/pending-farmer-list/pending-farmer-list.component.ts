@@ -42,13 +42,13 @@ export class PendingFarmerListComponent implements OnInit, OnDestroy {
     screenReaderPageLabel: 'page',
     screenReaderCurrentLabel: `You're on page`
   };
+  loading = false;
   searchFields = [
     {value: 'phone_number', name: 'phone number'},
-    {value: 'reg_number', name: 'registration number'},
     {value: 'nid', name: 'NID'},
-    {value: 'names', name: 'names'}
+    {value: 'forename', name: 'first name'},
+    {value: 'surname', name: 'last name'},
   ];
-
 
   ngOnInit() {
     this.farmerService.getPendingFarmers(this.parameters)
@@ -62,8 +62,8 @@ export class PendingFarmerListComponent implements OnInit, OnDestroy {
 
       });
     this.filterForm = this.formBuilder.group({
-      term: ['', Validators.minLength(4)],
-      searchBy: ['names']
+      term: ['', Validators.minLength(3)],
+      searchBy: ['forename']
     });
     this.message = this.messageService.getMessage();
   }
@@ -89,10 +89,12 @@ export class PendingFarmerListComponent implements OnInit, OnDestroy {
 
   onFilter() {
     if (this.filterForm.valid) {
+      this.loading = true;
       this.parameters['search'.toString()] = this.filterForm.value;
       this.farmerService.getPendingFarmers(this.parameters)
         .subscribe(data => {
           this.farmers = data.data;
+          this.loading = false;
         });
     }
   }

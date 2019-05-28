@@ -4,7 +4,6 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from '../../core/services/user.service';
 import {AuthenticationService, OrganisationService} from '../../core/services';
 import {LocationService} from '../../core/services/location.service';
-import {AuthorisationService} from '../../core/services/authorisation.service';
 
 @Component({
   selector: 'app-user-edit',
@@ -15,7 +14,7 @@ export class UserEditComponent implements OnInit {
 
   organisationId: string;
   editForm: FormGroup;
-  errors: string[];
+  errors = [];
   userTypes: any[];
   orgPossibleRoles: any[];
   possibleRoles: any[];
@@ -28,12 +27,14 @@ export class UserEditComponent implements OnInit {
   villages: any;
   isFromSuperOrg = false;
   userNIDInfo = {};
+  loading = false;
   possibleStatuses = [
     {name: 'Pending', value: 2},
     {name: 'Approved', value: 3},
     {name: 'Locked', value: 4},
     {name: 'Expired', value: 5},
   ];
+  invalidId = false;
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute, private router: Router,
@@ -113,15 +114,25 @@ export class UserEditComponent implements OnInit {
     }
   }
 
-  onBlurNID(nid: string) {
-    if (nid !== '') {
+  onInputNID(nid: string) {
+    if (nid.length >= 16) {
+      this.loading = true;
+      this.deleteErrors();
       this.userService.verifyNID(nid).subscribe(data => {
         this.userNIDInfo['foreName'.toString()] = data.content.foreName;
         this.userNIDInfo['surname'.toString()] = data.content.fatherName;
         this.userNIDInfo['sex'.toString()] = data.content.sex;
         this.editForm.patchValue(this.userNIDInfo);
+        this.invalidId = false;
+      }, (err) => {
+        this.invalidId = true;
+        this.loading = false;
       });
     }
+  }
+
+  deleteErrors() {
+    this.errors = [];
   }
 
   onChanges() {

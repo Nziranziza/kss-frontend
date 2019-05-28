@@ -1,6 +1,5 @@
-<div class="alert alert-success alert-dismissable" *ngIf="message" role="alert" data-auto-dismiss="1000">
-<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-  <p>
+<div class="alert alert-success alert-dismissible alert-message fade show" *ngIf="message" role="alert" data-auto-dismiss="5000">
+  <div>
     {{ message }}
-  </p>
+  </div>
 </div>
