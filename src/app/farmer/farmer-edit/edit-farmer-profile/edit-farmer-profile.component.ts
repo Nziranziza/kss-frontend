@@ -97,7 +97,6 @@ export class EditFarmerProfileComponent implements OnInit {
   onSubmit() {
     if (this.editFarmerProfileForm.valid) {
       this.farmerService.updateFarmerProfile(this.editFarmerProfileForm.value).subscribe(data => {
-
         },
         (err) => {
           this.errors = err.errors;

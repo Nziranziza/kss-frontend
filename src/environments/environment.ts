@@ -5,7 +5,8 @@
 export const environment = {
   production: false,
    api_url: 'http://105.179.10.30:9078/api'
-  /*api_url: 'http://192.168.0.38:9078/api'*/
+   /*api_url: 'http://192.168.0.38:9078/api'*/
+   /*api_url: 'http://192.168.0.55:9078/api'*/
 };
 
 /*

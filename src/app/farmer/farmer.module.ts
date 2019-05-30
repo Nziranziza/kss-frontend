@@ -23,7 +23,7 @@ import { AddFarmerRequestComponent } from './farmer-edit/add-farmer-request/add-
     SharedModule, NgbModule, NgxPaginationModule, OrderModule
   ],
   exports: [FarmerDetailsComponent],
-  entryComponents: [FarmerDetailsComponent]
+  entryComponents: [FarmerDetailsComponent, AddFarmerRequestComponent, EditFarmerRequestComponent, EditFarmerProfileComponent]
 })
 export class FarmerModule {
 }

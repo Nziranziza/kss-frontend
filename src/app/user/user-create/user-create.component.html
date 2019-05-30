@@ -62,7 +62,7 @@
             <div class="col-xs-6">
               <div class="form-group">
                 <label class="control-label label-required">User type</label>
-                <select class="form-control" formControlName="userType" disabled>
+                <select class="form-control" formControlName="userType">
                   <option *ngFor="let type of userTypes"  value="{{type.value}}">{{type.name}}</option>
                 </select>
               </div>

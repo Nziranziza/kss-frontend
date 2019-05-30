@@ -1,16 +1,13 @@
-<h3>
-  Edit farmer
-</h3>
 <div class="row">
   <div class="col-xs-12">
-    <h3 class="page-header">
-      <i class="fa fa-user"></i> Farmer profile
-    </h3>
+    <h5 class="page-header">
+      Profile
+    </h5>
   </div>
 </div>
 <div class="row">
   <div class="col-sm-4 invoice-col">
-    <div class="row" *ngIf="farmer.type!==2">
+    <div class="row" *ngIf="farmerType!==2">
       <div class="col-sm-6">
         First name
       </div>
@@ -42,12 +39,12 @@
         {{ farmer.userInfo.regNumber }}<br>
       </div>
     </div>
-    <div class="row" *ngIf="farmer.type===2">
+    <div class="row" *ngIf="farmerType===2">
       <div class="col-sm-6">
         Group name
       </div>
       <div class="col-sm-6">
-        <strong>{{ farmer.groupName }}</strong><br>
+        <strong>{{ farmer.userInfo.groupName }}</strong><br>
       </div>
       <div class="col-sm-6">
         REG number
@@ -55,37 +52,22 @@
       <div class="col-sm-6">
         {{ farmer.userInfo.regNumber }}<br>
       </div>
-      <div class="col-sm-12">
-        <hr>
-        <span>
-              <i>Contact person</i>
-            </span>
-      </div>
-      <div class="col-sm-6">
-        First name
-      </div>
-      <div class="col-sm-6">
-        <strong>{{ farmer.groupContactPerson.firstName }}</strong><br>
-      </div>
-      <div class="col-sm-6">
-        Last name
-      </div>
-      <div class="col-sm-6">
-        <strong>{{ farmer.groupContactPerson.lastName }}</strong><br>
-      </div>
       <div class="col-sm-6">
         Phone number
       </div>
       <div class="col-sm-6">
-        <strong>{{ farmer.groupContactPerson.phone }}</strong><br>
+        {{ farmer.userInfo.phone_number }}<br>
       </div>
     </div>
   </div>
 </div>
 <br/> <br/>
-<h6 class="page-header">
+<h5 class="page-header">
   Lands
-</h6>
+</h5>
+<app-list-message [message]="message"></app-list-message>
+<button class="btn btn-success btn-circle btn-lg pull-right" (click)="addRequest(farmer.request._id)" type="button"><i
+  class="fa fa-plus"></i></button>
 <div class="row">
   <div class="col-xs-12 table-responsive">
     <table class="table table-striped">
@@ -96,6 +78,7 @@
         <th>Number of trees</th>
         <th>Fertilizer needed</th>
         <th>Fertilizer allocated</th>
+        <th></th>
       </tr>
       </thead>
       <tbody>
@@ -105,17 +88,18 @@
           <span class="details-row-title-sm" style="margin-left: 0px">Province </span> : <span
           class="details-row-data-sm" *ngIf="request.location.prov_id">{{ request.location.prov_id.namek }}</span>
           <span class="details-row-title-sm">District </span> : <span class="details-row-data-sm"
-                                                                      *ngIf="request.location.dist_id">{{ request.location.dist_id.name }}</span>
-          <span class="details-row-title-sm">Sector </span> : <span class="details-row-data-sm"
-                                                                    *ngIf="request.location.sect_id">{{ request.location.sect_id.name }}</span>
-          <span class="details-row-title-sm">Cell </span> : <span class="details-row-data-sm"
-                                                                  *ngIf="request.location.cell_id">{{ request.location.cell_id.name }}</span>
-          <span class="details-row-title-sm">Village </span> : <span class="details-row-data-sm"
-                                                                     *ngIf="request.location.village_id">{{ request.location.village_id.name }}</span>
+                                                                      >{{ request.location.dist_id.name }}</span>
+          <span class="details-row-title-sm">Sector </span> : <span class="details-row-data-sm">{{ request.location.sect_id.name }}</span>
+          <span class="details-row-title-sm">Cell </span> : <span class="details-row-data-sm">{{ request.location.cell_id.name }}</span>
+          <span class="details-row-title-sm">Village </span> : <span class="details-row-data-sm">{{ request.location.village_id.name }}</span>
         </td>
         <td>{{ request.numberOfTrees }}</td>
         <td>{{ request.fertilizer_need }} Kg</td>
         <td>{{ request.fertilizer_allocate }} Kg</td>
+        <td>
+          <button class="btn btn-warning btn-margin btn-sm pull-right" (click)="cancelRequest(request)">Delete</button>
+          <button class="btn btn-primary btn-margin btn-sm pull-right" (click)="editRequest(request)">Edit</button>
+        </td>
       </tr>
       </tbody>
     </table>

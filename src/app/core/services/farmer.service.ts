@@ -20,9 +20,11 @@ export class FarmerService {
   }
 
   get(id: string): Observable<any> {
-    return this.apiService.get('/farmers/' + id);
+    return this.apiService.get('/coffeefarmers/' + id);
   }
-
+  destroyRequest(body: any) {
+    return this.apiService.put('/coffeefarmers/request/remove', body);
+  }
   destroy(id: string): Observable<any> {
     return this.apiService.delete('/farmers/' + id);
   }
@@ -48,7 +50,11 @@ export class FarmerService {
   }
 
   updateFarmerRequest(data: any): Observable<any> {
-    return;
+    return this.apiService.put('/coffeefarmers/requestinfo/edit', data);
+  }
+
+  addFarmerRequest(data: any): Observable<any> {
+    return this.apiService.put('/coffeefarmers/request/add', data);
   }
 
   checkFarmerNID(nid: string): Observable<any> {

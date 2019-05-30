@@ -145,15 +145,4 @@ export class FarmerListComponent implements OnInit, OnDestroy {
     modalRef.componentInstance.farmer = farmer;
   }
 
-  editFarmerProfile() {
-  }
-
-  editFarmerRequest() {
-  }
-
-  addFarmerRequest() {
-  }
-
-  cancelFarmerRequest() {
-  }
 }

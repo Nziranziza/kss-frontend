@@ -139,7 +139,7 @@ export class FarmerCreateComponent implements OnInit, OnDestroy {
         if (this.isGroup) {
           this.farmerService.checkFarmerGroupName(temp.groupName).subscribe(data => {
             if (data.exists) {
-              const message = 'Farmer with this name ('
+              const message = 'Farmer with this group name ('
                 + temp.groupName + ') already exists would you like to add land to the farmer?';
               this.confirmTempoAndSave(farmer, message);
 
@@ -205,7 +205,7 @@ export class FarmerCreateComponent implements OnInit, OnDestroy {
           this.farmerService.checkFarmerGroupName(temp.groupName).subscribe(data => {
 
             if (data.exists) {
-              const message = 'Farmer with this name ('
+              const message = 'Farmer with this group name ('
                 + temp.groupName + ') already exists would you like to add land(s) to the farmer?';
               this.confirmFarmerAndSave(farmer, message);
             } else {
@@ -247,7 +247,6 @@ export class FarmerCreateComponent implements OnInit, OnDestroy {
     } else {
       if (this.helperService.getFormValidationErrors(this.createForm).length > 0) {
         this.errors = this.helperService.getFormValidationErrors(this.createForm);
-        console.log(this.errors);
       }
       if (this.createForm.get('requests').invalid) {
         this.errors.push('Missing required land(s) information');
