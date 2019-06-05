@@ -1,0 +1,40 @@
+
+<app-list-errors [errorList]="errors"></app-list-errors>
+<form [formGroup]="recordCherryDeliveryForm" (ngSubmit)="onSubmit()">
+  <div class="row">
+    <div class="col-xs-6">
+      <div class="form-group">
+        <label class="control-label label-required">Cherries Qty</label>
+        <input type="text" formControlName="cherriesQty" class="form-control">
+      </div>
+    </div>
+    <div class="col-xs-6">
+      <div class="form-group">
+        <label class="control-label label-required">Unit price per Kg</label>
+        <input type="text" formControlName="unitPerKg" class="form-control">
+      </div>
+    </div>
+  </div>
+  <div class="row" style="margin-bottom: 15px;">
+    <div class="col-xs-12">
+      <button class="btn btn-warning btn-margin pull-right" (click)="recordCherryDeliveryForm.reset()">Clear</button>
+      <button class="btn btn-success pull-right">Save</button>
+    </div>
+  </div>
+</form>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-body">
+        <div class="row">
+          <div class="col-xs-12">
+            List
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

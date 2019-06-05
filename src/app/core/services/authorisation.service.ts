@@ -25,6 +25,7 @@ export class AuthorisationService {
     this.hasAccess = false;
   }
 
-  isNaebUser() {
+  isCWSUser() {
+    return !!this.userRoles.includes(1);
   }
 }

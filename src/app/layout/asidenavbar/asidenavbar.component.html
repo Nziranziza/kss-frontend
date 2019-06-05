@@ -56,6 +56,29 @@
       </li>
       <li class="header">WET PROCESSING</li>
       <li routerLinkActive="active">
+        <a routerLink="/admin/cherries/supply">
+          <i class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></i>
+          <span>Cherry supply</span>
+        </a>
+      </li>
+      <li class="header">GENERAL</li>
+      <li class="treeview" routerLinkActive="active">
+        <a href="#">
+          <i class="fa fa-users"></i> <span>Settings</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
+        </a>
+        <ul class="treeview-menu">
+          <li routerLinkActive="active">
+            <a routerLink="#">
+              <i class="fa fa-circle-o"></i>
+              <span>Season parameters</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      <li routerLinkActive="active">
         <a routerLink="/logout">
           <i class="fa fa-fw fa-lock" aria-hidden="true"></i>
           <span>Sign out</span>

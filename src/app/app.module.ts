@@ -21,6 +21,7 @@ import {UserModule} from './user/user.module';
 import {DataTablesModule} from 'angular-datatables';
 import {PendingFarmerModule} from './pending-farmer/pending-farmer.module';
 import {OrganisationTypeModule} from './organisation-type/organisation-type.module';
+import {CherrySupplyModule} from './cherry-supply/cherry-supply.module';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import {OrganisationTypeModule} from './organisation-type/organisation-type.modu
     RouterModule,
     UserModule,
     OrganisationTypeModule,
+    CherrySupplyModule,
     DataTablesModule,
     PendingFarmerModule,
     /*HttpClientInMemoryWebApiModule.forRoot(DataService)*/

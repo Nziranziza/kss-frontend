@@ -86,5 +86,4 @@ export class FarmerEditComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.messageService.setMessage('');
   }
-
 }

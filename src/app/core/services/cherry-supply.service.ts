@@ -5,14 +5,11 @@ import {ApiService} from './api.service';
 @Injectable({
   providedIn: 'root'
 })
-export class CherryDeliveryService {
+export class CherrySupplyService {
 
-  constructor(
-    private apiService: ApiService
-  ) { }
+  constructor(private apiService: ApiService) { }
 
-  saveDelivery(id: string): Observable<any> {
-    return this.apiService.get('/users/id/' + id);
+  saveDelivery(data: any): Observable<any> {
+    return this.apiService.get('/cherrysupply/record_deliver/' + data);
   }
-
 }

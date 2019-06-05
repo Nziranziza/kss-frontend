@@ -6,3 +6,20 @@
   color: #ffffff;
   font-size: small;
 }
+
+
+/*.navbar-custom-menu>.navbar-nav>li>.dropdown-menu {
+  position: absolute;
+  right: 0;
+  left: 0;
+}*/
+
+.dropdown-menu {
+  min-width: 140px;
+  border-radius: 0px;
+}
+
+.dropdown-menu .dropdown-item {
+  display: block;
+  padding: 5px 14px;
+}
