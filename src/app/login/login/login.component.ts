@@ -72,7 +72,6 @@ export class LoginComponent implements OnInit, OnDestroy {
           const orgId = this.authenticationService.getCurrentUser().info.org_id;
           this.seasonService.all().subscribe((dt) => {
             const seasons = dt.content;
-            console.log(this.authenticationService.getCurrentSeason());
             if (this.authenticationService.getCurrentSeason() === null) {
               seasons.forEach((item) => {
                 if (item.isCurrent) {

@@ -1,8 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthenticationService} from '../../core/services';
 import {SeasonService} from '../../core/services/season.service';
-import {AuthorisationService} from '../../core/services/authorisation.service';
-import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-topnavbar',
@@ -14,7 +12,7 @@ export class TopnavbarComponent implements OnInit {
   surname: string;
   orgName: string;
   seasons: any [];
-  currentSeason = {};
+  currentSeason: any;
 
   constructor(private authenticationService: AuthenticationService,
               private seasonService: SeasonService) {

@@ -4,6 +4,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from '../../core/services/user.service';
 import {AuthenticationService, OrganisationService} from '../../core/services';
 import {LocationService} from '../../core/services/location.service';
+import {HelperService} from '../../core/helpers';
 
 @Component({
   selector: 'app-user-edit',
@@ -38,7 +39,7 @@ export class UserEditComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute, private router: Router,
-              private userService: UserService,
+              private userService: UserService, private helper: HelperService,
               private organisationService: OrganisationService,
               private locationService: LocationService, private authenticationService: AuthenticationService) {
   }
@@ -216,6 +217,7 @@ export class UserEditComponent implements OnInit {
       };
       delete user.email;
       delete user.userType;
+      this.helper.cleanObject(user);
       this.userService.update(user).subscribe(data => {
           this.router.navigateByUrl('admin/organisations/' + this.organisationId + '/users');
         },

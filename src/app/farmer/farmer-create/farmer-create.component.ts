@@ -6,7 +6,7 @@ import {LocationService} from '../../core/services/location.service';
 import {UserService} from '../../core/services/user.service';
 import {MessageService} from '../../core/services/message.service';
 import {HelperService} from '../../core/helpers';
-import {isArray} from 'util';
+import {isArray, isUndefined} from 'util';
 
 @Component({
   selector: 'app-farmer-create',
@@ -50,7 +50,7 @@ export class FarmerCreateComponent implements OnInit, OnDestroy {
       foreName: [''],
       surname: [''],
       groupName: [''],
-     /* email: [''],*/
+      /* email: [''],*/
       phone_number: [''],
       sex: [''],
       NID: [''],
@@ -63,7 +63,6 @@ export class FarmerCreateComponent implements OnInit, OnDestroy {
       requests: new FormArray([])
     });
 
-    (this.createForm.controls.requests as FormArray).push(this.createRequest());
     this.route.params
       .subscribe(params => {
         if (params.id !== undefined) {
@@ -75,7 +74,7 @@ export class FarmerCreateComponent implements OnInit, OnDestroy {
                 foreName: this.farmer.foreName,
                 surname: this.farmer.surname,
                 groupName: this.farmer.surname,
-               /* email: this.farmer.email,*/
+                /* email: this.farmer.email,*/
                 phone_number: this.farmer.phone_number,
                 NID: this.farmer.NID,
                 requests: [{
@@ -84,6 +83,9 @@ export class FarmerCreateComponent implements OnInit, OnDestroy {
                   fertilizer_allocate: this.farmer.fertilizer_allocate
                 }]
               };
+              if (!isUndefined(this.farmer.location)) {
+                temp.requests[0]['location'.toString()] = this.farmer.location;
+              }
               if (this.farmer.NID !== '') {
                 this.loading = true;
                 this.userService.verifyNID(this.farmer.NID).subscribe(NIDInformation => {
@@ -102,6 +104,10 @@ export class FarmerCreateComponent implements OnInit, OnDestroy {
                   });
               }
               this.createForm.patchValue(temp);
+              this.onChangeProvince(0);
+              this.onChangeDistrict(0);
+              this.onChangeSector(0);
+              this.onChangeCell(0);
             },
             (err) => {
               this.createFromPending = true;
@@ -109,6 +115,7 @@ export class FarmerCreateComponent implements OnInit, OnDestroy {
             });
         }
       });
+    (this.createForm.controls.requests as FormArray).push(this.createRequest());
     this.initial();
     this.message = this.messageService.getMessage();
     this.onChangeType();
@@ -126,7 +133,7 @@ export class FarmerCreateComponent implements OnInit, OnDestroy {
         farmer['_id'.toString()] = this.id;
         farmer['type'.toString()] = temp.type;
         farmer['phone_number'.toString()] = temp.phone_number;
-       /* farmer['email'.toString()] = temp.email;*/
+        /* farmer['email'.toString()] = temp.email;*/
         if (!this.isGroup) {
           farmer['surname'.toString()] = temp.surname;
           farmer['foreName'.toString()] = temp.foreName;
@@ -184,7 +191,7 @@ export class FarmerCreateComponent implements OnInit, OnDestroy {
         farmer['_id'.toString()] = this.id;
         farmer['type'.toString()] = temp.type;
         farmer['phone_number'.toString()] = temp.phone_number;
-       /* farmer['email'.toString()] = temp.email;*/
+        /* farmer['email'.toString()] = temp.email;*/
         if (!this.isGroup) {
           farmer['surname'.toString()] = temp.surname;
           farmer['foreName'.toString()] = temp.foreName;

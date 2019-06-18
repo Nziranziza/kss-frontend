@@ -4,6 +4,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from '../../core/services/user.service';
 import {OrganisationService} from '../../core/services';
 import {LocationService} from '../../core/services/location.service';
+import {HelperService} from '../../core/helpers';
 
 @Component({
   selector: 'app-user-create',
@@ -32,6 +33,7 @@ export class UserCreateComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute, private router: Router,
               private userService: UserService,
+              private helper: HelperService,
               private organisationService: OrganisationService,
               private locationService: LocationService) {
   }
@@ -166,6 +168,7 @@ export class UserCreateComponent implements OnInit {
       if (this.isFromSuperOrg) {
         user['userRoles'.toString()] = [0];
       }
+      this.helper.cleanObject(user);
       this.userService.save(user).subscribe(data => {
           this.router.navigateByUrl('admin/organisations/' + this.organisationId + '/users');
         },
