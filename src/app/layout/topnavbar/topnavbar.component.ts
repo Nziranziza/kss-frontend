@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthenticationService} from '../../core/services';
 import {SeasonService} from '../../core/services/season.service';
+import {AuthorisationService} from '../../core/services/authorisation.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-topnavbar',
@@ -12,9 +14,10 @@ export class TopnavbarComponent implements OnInit {
   surname: string;
   orgName: string;
   seasons: any [];
-  currentSeason: any;
+  currentSeason = {};
 
-  constructor(private authenticationService: AuthenticationService, private seasonService: SeasonService) {
+  constructor(private authenticationService: AuthenticationService,
+              private seasonService: SeasonService) {
   }
 
   ngOnInit() {
@@ -22,11 +25,7 @@ export class TopnavbarComponent implements OnInit {
     this.orgName = this.authenticationService.getCurrentUser().orgInfo.orgName;
     this.seasonService.all().subscribe((data) => {
       this.seasons = data.content;
-      this.seasons.map((item) => {
-        if (item.isCurrent) {
-          this.currentSeason = item;
-        }
-      });
+      this.currentSeason = this.authenticationService.getCurrentSeason();
     });
   }
 
@@ -36,6 +35,7 @@ export class TopnavbarComponent implements OnInit {
     };
     this.seasonService.changeSeason(body).subscribe((data) => {
       this.currentSeason = data.content;
+      this.authenticationService.setCurrentSeason(this.currentSeason);
       location.reload();
     });
   }

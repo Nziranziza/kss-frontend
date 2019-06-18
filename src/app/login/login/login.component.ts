@@ -5,6 +5,7 @@ import {AuthenticationService} from '../../core';
 import {MessageService} from '../../core/services/message.service';
 import {HttpHeaders} from '@angular/common/http';
 import {AuthorisationService} from '../../core/services/authorisation.service';
+import {SeasonService} from '../../core/services/season.service';
 
 declare var $;
 
@@ -25,7 +26,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     private authenticationService: AuthenticationService,
     private formBuilder: FormBuilder,
     private messageService: MessageService,
-    private authorisationService: AuthorisationService
+    private authorisationService: AuthorisationService,
+    private seasonService: SeasonService
   ) {
     // use FormBuilder to create a form group
     this.authForm = this.formBuilder.group({
@@ -68,11 +70,23 @@ export class LoginComponent implements OnInit, OnDestroy {
       const credentials = this.authForm.value;
       this.authenticationService.attemptAuth(credentials).subscribe(data => {
           const orgId = this.authenticationService.getCurrentUser().info.org_id;
-          if (this.authorisationService.isCWSUser()) {
-            this.router.navigateByUrl('/admin/cws-farmers/' + orgId);
-          } else {
-            this.router.navigateByUrl('admin/organisations');
-          }
+          this.seasonService.all().subscribe((dt) => {
+            const seasons = dt.content;
+            console.log(this.authenticationService.getCurrentSeason());
+            if (this.authenticationService.getCurrentSeason() === null) {
+              seasons.forEach((item) => {
+                if (item.isCurrent) {
+                 this.authenticationService.setCurrentSeason(item);
+                }
+              });
+            }
+            if (this.authorisationService.isCWSUser()) {
+              this.router.navigateByUrl('/admin/cws-farmers/' + orgId);
+            } else {
+              this.router.navigateByUrl('admin/organisations');
+            }
+          });
+
         },
         err => {
           this.errors = err.errors;

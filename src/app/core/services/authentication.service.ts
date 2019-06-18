@@ -37,6 +37,14 @@ export class AuthenticationService {
       ));
   }
 
+  setCurrentSeason(season: any) {
+    window.localStorage.setItem('current-season', JSON.stringify(season));
+  }
+
+  getCurrentSeason() {
+    return JSON.parse(window.localStorage.getItem('current-season'));
+  }
+
   getCurrentUser(): AuthUser {
     return JSON.parse(window.localStorage.getItem('user'));
   }
