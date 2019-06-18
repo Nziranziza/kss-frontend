@@ -2,7 +2,6 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ConfirmDialogService, OrganisationTypeService} from '../../core/services';
 import {ActivatedRoute, Router} from '@angular/router';
 import {OrganisationType} from '../../core/models';
-import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-organisation-type-list',
@@ -18,20 +17,14 @@ export class OrganisationTypeListComponent implements OnInit, OnDestroy {
 
   message: string;
   organisationTypes: any;
-  dtOptions: DataTables.Settings = {};
-  // @ts-ignore
-  dtTrigger: Subject = new Subject();
 
   ngOnInit() {
     this.getAllOrganisationTypes();
-    this.dtOptions = {
-      pagingType: 'full_numbers',
-      pageLength: 25
-    };
+
   }
 
   ngOnDestroy(): void {
-   this.dtTrigger.unsubscribe();
+
   }
 
 
@@ -53,7 +46,6 @@ export class OrganisationTypeListComponent implements OnInit, OnDestroy {
     this.organisationTypeService.all().subscribe(data => {
       if (data) {
         this.organisationTypes = data.content;
-        this.dtTrigger.next();
       }
     });
   }

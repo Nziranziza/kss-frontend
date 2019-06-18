@@ -2,6 +2,8 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {AdminComponent} from '../admin/admin/admin.component';
 import {SeasonParametersComponent} from './season-parameters/season-parameters.component';
+import {CoffeeTypeComponent} from './coffee-type/coffee-type.component';
+import {CoffeeTypeCreateComponent} from './coffee-type/coffee-type-create/coffee-type-create.component';
 
 const routes: Routes = [
   {
@@ -9,8 +11,16 @@ const routes: Routes = [
     component: AdminComponent,
     children: [
       {
-        path: 'admin/season-parameters',
+        path: 'season-parameters',
         component: SeasonParametersComponent
+      },
+      {
+        path: 'coffee-type/create',
+        component: CoffeeTypeCreateComponent
+      },
+      {
+        path: 'coffee-type/list',
+        component: CoffeeTypeComponent
       }
     ]
   }
@@ -20,4 +30,5 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class SettingsRoutingModule { }
+export class SettingsRoutingModule {
+}

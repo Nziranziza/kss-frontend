@@ -3,8 +3,8 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthenticationService} from '../../core';
 import {MessageService} from '../../core/services/message.service';
-import {UserService} from '../../core/services/user.service';
 import {HttpHeaders} from '@angular/common/http';
+import {AuthorisationService} from '../../core/services/authorisation.service';
 
 declare var $;
 
@@ -25,7 +25,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private authenticationService: AuthenticationService,
     private formBuilder: FormBuilder,
     private messageService: MessageService,
-    private userService: UserService
+    private authorisationService: AuthorisationService
   ) {
     // use FormBuilder to create a form group
     this.authForm = this.formBuilder.group({
@@ -49,8 +49,9 @@ export class LoginComponent implements OnInit, OnDestroy {
         if (params.token !== undefined) {
           const headers = new HttpHeaders({
             'Content-Type': 'application/json',
-            'x-auth-token': params.token });
-          const options = { headers };
+            'x-auth-token': params.token
+          });
+          const options = {headers};
           const body = {};
           this.authenticationService.unlock(body, options).subscribe(data => {
             if (data) {
@@ -66,7 +67,12 @@ export class LoginComponent implements OnInit, OnDestroy {
     if (!this.authForm.invalid) {
       const credentials = this.authForm.value;
       this.authenticationService.attemptAuth(credentials).subscribe(data => {
-          this.router.navigateByUrl('admin/organisations');
+          const orgId = this.authenticationService.getCurrentUser().info.org_id;
+          if (this.authorisationService.isCWSUser()) {
+            this.router.navigateByUrl('/admin/cws-farmers/' + orgId);
+          } else {
+            this.router.navigateByUrl('admin/organisations');
+          }
         },
         err => {
           this.errors = err.errors;

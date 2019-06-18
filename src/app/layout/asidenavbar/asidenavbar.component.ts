@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthorisationService} from '../../core/services/authorisation.service';
+import {AuthenticationService} from '../../core/services';
 
 declare var $;
 
@@ -11,13 +12,19 @@ declare var $;
 })
 export class AsidenavbarComponent implements OnInit {
 
-  constructor() {
+  constructor(private authenticationService: AuthenticationService) {
   }
+
+  parameters: any;
+  user: any;
 
   ngOnInit() {
     $(document).ready(() => {
       const trees: any = $('[data-widget="tree"]');
       trees.tree();
     });
+
+    this.parameters = this.authenticationService.getCurrentUser().parameters;
+    this.user = this.authenticationService.getCurrentUser().info;
   }
 }

@@ -11,4 +11,6 @@
 @import url("assets/bower_components/select2/dist/css/select2.min.css");
 @import url("assets/dist/css/AdminLTE.min.css");
 @import url("assets/dist/css/skins/_all-skins.min.css");
+@import "~ng-pick-datetime/assets/style/picker.min.css";
 @import url("assets/dist/css/_base.css");
+

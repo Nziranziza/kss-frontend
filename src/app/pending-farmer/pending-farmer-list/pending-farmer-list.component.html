@@ -26,6 +26,7 @@
             <th (click)="setOrder('phone_number')">Phone number <i class="fa fa-sort sorting"></i></th>
             <th (click)="setOrder('numberOfTrees')">Number of trees <i class="fa fa-sort sorting"></i></th>
             <th (click)="setOrder('fertilizer_need')">Needed Fertilizer <i class="fa fa-sort sorting"></i></th>
+            <th (click)="setOrder('reason')">Missing info <i class="fa fa-sort sorting"></i></th>
             <th></th>
           </tr>
           </thead>
@@ -37,6 +38,7 @@
             <td> {{ farmer.phone_number }}</td>
             <td> {{ farmer.numberOfTrees }}</td>
             <td> {{ farmer.fertilizer_need }}</td>
+            <td> <span *ngIf="farmer.reason !== undefined && farmer.reason.length > 0">{{ farmer.reason.join(', ') }}</span></td>
             <td>
               <a class="btn btn-success btn-sm pull-right" [routerLink]="['/admin/farmers/create', {id: farmer._id}]">Approve
               </a>

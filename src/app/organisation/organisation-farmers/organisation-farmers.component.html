@@ -1,7 +1,5 @@
 <h3>
   Farmers
-  <!-- <a class="btn btn-success btn-margin pull-right" routerLink="/admin/farmers/create"><i class="fa fa-plus"></i> New Farmer
-  </a>-->
 </h3>
 <app-list-message [message]="message"></app-list-message>
 <div class="row">
@@ -29,11 +27,9 @@
             <td> {{ farmer.userInfo.phone_number }}</td>
             <td> {{ farmer.userInfo.regNumber | uppercase}}</td>
             <td>
+              <a routerLink="/admin/cherries/supply/select/{{farmer.userInfo.regNumber}}" *ngIf="isUserCWSOfficer" class="btn btn-success btn-margin pull-right btn-sm" style="margin-left: 10px;">
+                <i class="fa fa-cart-plus"></i> supply </a>
               <button class="btn btn-default btn-sm btn-margin pull-right details-button" (click)="viewDetails(farmer)">...</button>
-              <!--<button class="btn btn-default btn-margin pull-right btn-sm" style="margin-left: 10px;">
-                Lands</button>
-              <button class="btn btn-success btn-margin pull-right btn-sm" style="margin-left: 10px;">
-                Edit</button>-->
             </td>
           </tr>
         </table>

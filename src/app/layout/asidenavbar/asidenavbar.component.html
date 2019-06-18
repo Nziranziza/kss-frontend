@@ -3,25 +3,19 @@
   <section class="sidebar" style="height: auto;">
     <!-- sidebar menu: : style can be found in sidebar.less -->
     <ul class="sidebar-menu tree" data-widget="tree">
-      <li class="header">REGISTRATION</li>
+      <li class="header" [appRequiredRoles]="[4,0]">REGISTRATION</li>
       <li routerLinkActive="active" [appRequiredRoles]="[4,0]">
         <a routerLink="/admin/organisations">
           <i class="fa fa-university" aria-hidden="true"></i>
           <span>Organisations</span>
         </a>
       </li>
-      <li routerLinkActive="active" [appRequiredRoles]="[0]">
-        <a routerLink="/admin/organisation-types">
-          <i class="fa fa-list" aria-hidden="true"></i>
-          <span>Organisation types</span>
-        </a>
-      </li>
-      <li class="treeview" routerLinkActive="active">
+      <li class="treeview" routerLinkActive="active" [appRequiredRoles]="[4,0]">
         <a href="#">
           <i class="fa fa-users"></i> <span>Farmers</span>
           <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
         </a>
         <ul class="treeview-menu">
           <li routerLinkActive="active">
@@ -38,7 +32,7 @@
           </li>
         </ul>
       </li>
-      <li class="treeview" routerLinkActive="active">
+      <li class="treeview" routerLinkActive="active" [appRequiredRoles]="[4,0]">
         <a href="#">
           <i class="fa fa-bar-chart"></i> <span>Reports</span>
           <span class="pull-right-container">
@@ -54,26 +48,44 @@
           </li>
         </ul>
       </li>
-      <li class="header">WET PROCESSING</li>
-      <li routerLinkActive="active">
-        <a routerLink="/admin/cherries/supply">
-          <i class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></i>
-          <span>Cherry supply</span>
+      <li class="header" [appRequiredRoles]="[1]">WET PROCESSING</li>
+      <li routerLinkActive="active" [appRequiredRoles]="[1]">
+        <a routerLink="/admin/cws-farmers/{{user.org_id}}">
+          <i class="fa fa-users" aria-hidden="true"></i>
+          <span>Farmers</span>
+        </a>
+      </li>
+      <li routerLinkActive="active" [appRequiredRoles]="[1]">
+        <a routerLink="/admin/cws/parchments/list">
+          <i class="fa fa-archive" aria-hidden="true"></i>
+          <span>Parchments</span>
         </a>
       </li>
       <li class="header">GENERAL</li>
-      <li class="treeview" routerLinkActive="active">
+      <li class="treeview" routerLinkActive="active" [appRequiredRoles]="[4,0]">
         <a href="#">
-          <i class="fa fa-users"></i> <span>Settings</span>
+          <i class="fa fa-cogs"></i> <span>Settings</span>
           <span class="pull-right-container">
             <i class="fa fa-angle-left pull-right"></i>
           </span>
         </a>
         <ul class="treeview-menu">
-          <li routerLinkActive="active">
-            <a routerLink="#">
+          <li routerLinkActive="active" [appRequiredRoles]="[0]">
+            <a routerLink="/admin/season-parameters">
               <i class="fa fa-circle-o"></i>
               <span>Season parameters</span>
+            </a>
+          </li>
+          <li routerLinkActive="active" [appRequiredRoles]="[0]">
+            <a routerLink="/admin/organisation-types">
+              <i class="fa fa-circle-o"></i>
+              <span>Organisation types</span>
+            </a>
+          </li>
+          <li routerLinkActive="active">
+            <a routerLink="/admin/coffee-type/list">
+              <i class="fa fa-circle-o"></i>
+              <span>Coffee types</span>
             </a>
           </li>
         </ul>

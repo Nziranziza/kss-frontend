@@ -41,6 +41,7 @@ export class FarmersReportComponent implements OnInit {
 
   options = [{name: 'Gender', value: 'gender'}];
   reportBy = [{name: 'Trees', value: 'trees'}, {name: 'Farmers', value: 'farmers'}];
+  total = 0;
 
   constructor(private formBuilder: FormBuilder,
               private router: Router, private organisationService: OrganisationService,
@@ -78,11 +79,13 @@ export class FarmersReportComponent implements OnInit {
       }
       this.farmerService.report(filters).subscribe((data) => {
         this.loading = false;
+        this.total = 0;
         if (data.content.length !== 0) {
           this.reportData = [];
           if (filters.reportBy === 'farmers') {
             data.content.map((item) => {
               const temp = [item.name, item.uniqueFarmersCount];
+              this.total = this.total + item.uniqueFarmersCount;
               this.reportData.push(temp);
             });
             this.graph.data = this.reportData;
@@ -91,6 +94,7 @@ export class FarmersReportComponent implements OnInit {
           } else {
             data.content.map((item) => {
               const temp = [item.name, item.totalTrees];
+              this.total = this.total + item.totalTrees;
               this.reportData.push(temp);
             });
             this.graph.data = this.reportData;

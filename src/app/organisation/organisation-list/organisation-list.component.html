@@ -8,8 +8,7 @@
   <div class="col-xs-12">
     <div class="box">
       <div class="box-body table-responsive">
-        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover"
-               class="table table-condensed">
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-condensed">
           <thead>
           <tr>
             <th>Name</th>
@@ -32,9 +31,9 @@
                   <span class="details-row-data">{{ organisation.streetNumber }}</span>
               </td>
               <td class="actions no-wrap text-right">
-                <a routerLink="/admin/organisations/{{organisation._id}}/users" class="btn btn-info"><i
-                  class="fa fa-users"></i>Users</a>
-                <a class="btn btn-success btn-margin" [routerLink]="['edit/', organisation._id]"
+                <a routerLink="/admin/organisations/{{organisation._id}}/users" class="btn btn-info btn-sm"><i
+                  class="fa fa-users"></i> Users</a>
+                <a class="btn btn-success btn-margin btn-sm" [routerLink]="['edit/', organisation._id]"
                    style="margin-left: 10px;"> Edit</a>
               </td>
             </tr>
@@ -50,12 +49,12 @@
                 <span class="details-row-data">{{ organisation.streetNumber }}</span>
               </td>
               <td class="actions no-wrap text-right">
-                <a routerLink="/admin/organisations/{{organisation._id}}/farmers" class="btn btn-info" *ngIf="isOrgCWS(organisation)"><i
-                  class="fa fa-users"></i>Farmers</a>
-                <a routerLink="/admin/organisations/{{organisation._id}}/users" class="btn btn-info" style="margin-left: 10px"><i
-                  class="fa fa-users"></i>Users</a>
-                <a class="btn btn-success btn-margin" [routerLink]="['edit/', organisation._id]"
-                   style="margin-left: 10px;"> Edit</a>
+                <a routerLink="/admin/organisations/{{organisation._id}}/farmers" class="btn btn-info btn-sm" *ngIf="isOrgCWS(organisation)"><i
+                  class="fa fa-users"></i> Farmers</a>
+                <a routerLink="/admin/organisations/{{organisation._id}}/users" class="btn btn-info btn-sm" style="margin-left: 10px"><i
+                  class="fa fa-users"></i> Users</a>
+                <a class="btn btn-success btn-margin btn-sm" [routerLink]="['edit/', organisation._id]"
+                   style="margin-left: 10px;">Edit</a>
               </td>
             </tr>
           </ng-container>

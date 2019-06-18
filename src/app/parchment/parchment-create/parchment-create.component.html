@@ -1,0 +1,76 @@
+<h3>
+  Record parchments
+</h3>
+<app-list-errors [errorList]="errors"></app-list-errors>
+<form [formGroup]="recordParchmentForm" (ngSubmit)="onSubmit()">
+  <div class="box">
+    <div class="box-body">
+      <div class="row">
+        <div class="col-xs-6">
+          <div class="form-group">
+            <label class="control-label label-required">Coffee type</label>
+            <select class="form-control" formControlName="coffeeType">
+              <option *ngFor="let type of coffeeTypes" value="{{type._id}}"> {{ type.name }} </option>
+            </select>
+          </div>
+        </div>
+        <div class="col-xs-6">
+          <div class="form-group">
+            <label class="control-label label-required">Delivery date</label>
+            <input [owlDateTimeTrigger]="dt3" [owlDateTime]="dt3" formControlName="date" class="form-control">
+            <owl-date-time [pickerType]="'calendar'" #dt3></owl-date-time>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12">
+          <button class="btn btn-success btn-sm pull-right" (click)="addLotInfo()" type="button"><i
+            class="fa fa-plus"></i> New lot
+          </button>
+        </div>
+      </div>
+      <div *ngFor="let lot of formLotInfo.controls; let i=index" formArrayName="lotInfo">
+        <div class="row" [formGroupName]="i">
+          <div class="col-xs-6">
+            <div class="form-group">
+              <span class="control-label label-required">Lot kgs</span>
+              <input type="text" formControlName="totalKgs" class="form-control">
+              <div
+                *ngIf="getLotInfoFormGroup(i).controls.totalKgs.invalid && (getLotInfoFormGroup(i).controls.totalKgs.dirty || getLotInfoFormGroup(i).controls.totalKgs.touched)"
+                class="input-error">
+                <div *ngIf="getLotInfoFormGroup(i).controls.totalKgs.errors.required">
+                  Lot kgs are required
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-5">
+            <div class="form-group">
+              <span class="control-label label-required">Lot production date</span>
+              <input [owlDateTimeTrigger]="dt3" [owlDateTime]="dt3" formControlName="producedDate" class="form-control">
+              <owl-date-time [pickerType]="'calendar'" #dt3></owl-date-time>
+              <div
+                *ngIf="getLotInfoFormGroup(i).controls.producedDate.invalid && (getLotInfoFormGroup(i).controls.producedDate.dirty || getLotInfoFormGroup(i).controls.producedDate.touched)"
+                class="input-error">
+                <div *ngIf="getLotInfoFormGroup(i).controls.producedDate.errors.required">
+                  Production date is required
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group col-xs-1">
+            <button class="btn btn-danger btn-sm pull-right btn-custom-margin-top" type="button" (click)="removeLotInfo(i)"> Remove
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <a class="btn btn-warning btn-margin pull-right" routerLink="/admin/cws/parchments/list">Cancel</a>
+      <button class="btn btn-success pull-right">Save</button>
+    </div>
+  </div>
+</form>
+

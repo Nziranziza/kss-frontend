@@ -8,9 +8,6 @@ import {AdminModule} from './admin/admin.module';
 import {HomeModule} from './home/home.module';
 import {CoreModule} from './core';
 import {SharedModule} from './shared';
-
-import {DataService} from './data.service';
-import {HttpClientInMemoryWebApiModule} from 'angular-in-memory-web-api';
 import {OrganisationModule} from './organisation/organisation.module';
 import {ProfileModule} from './profile/profile.module';
 
@@ -22,6 +19,12 @@ import {DataTablesModule} from 'angular-datatables';
 import {PendingFarmerModule} from './pending-farmer/pending-farmer.module';
 import {OrganisationTypeModule} from './organisation-type/organisation-type.module';
 import {CherrySupplyModule} from './cherry-supply/cherry-supply.module';
+import {SettingsModule} from './settings/settings.module';
+import {ParchmentModule} from './parchment/parchment.module';
+import {OwlDateTimeModule, OwlNativeDateTimeModule} from 'ng-pick-datetime';
+import {ErrorPagesModule} from './error-pages/error-pages.module';
+/*import {DataService} from './data.service';
+import {HttpClientInMemoryWebApiModule} from 'angular-in-memory-web-api';*/
 
 @NgModule({
   declarations: [
@@ -43,8 +46,13 @@ import {CherrySupplyModule} from './cherry-supply/cherry-supply.module';
     UserModule,
     OrganisationTypeModule,
     CherrySupplyModule,
-    DataTablesModule,
     PendingFarmerModule,
+    SettingsModule,
+    DataTablesModule,
+    ParchmentModule,
+    OwlDateTimeModule,
+    OwlNativeDateTimeModule,
+    ErrorPagesModule
     /*HttpClientInMemoryWebApiModule.forRoot(DataService)*/
   ],
   providers: [Title],

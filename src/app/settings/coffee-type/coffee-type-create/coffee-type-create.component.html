@@ -1,0 +1,62 @@
+<h3>
+  Create coffee type
+</h3>
+<app-list-errors [errorList]="errors"></app-list-errors>
+<form [formGroup]="createForm" (ngSubmit)="onSubmit()">
+  <div class="box">
+    <div class="box-body">
+      <div class="row">
+        <div class="col-xs-6">
+          <div class="form-group">
+            <label class="control-label label-required">Name</label>
+            <input type="text" formControlName="name" class="form-control">
+          </div>
+        </div>
+        <div class="col-xs-6">
+          <div class="form-group">
+            <label class="control-label label-required">Level</label>
+            <select class="form-control" formControlName="level">
+              <option value="cws">CWS</option>
+              <option value="dry_mill">Dry mill</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12">
+          <button class="btn btn-success btn-sm pull-right" (click)="addCategory()" type="button"><i
+            class="fa fa-plus"></i> Category
+          </button>
+        </div>
+      </div>
+      <div *ngFor="let control of formCategory.controls; let i=index" formArrayName="category">
+        <div class="row" [formGroupName]="i">
+          <div class="col-xs-6">
+           <div class="form-group">
+              <label class="control-label label-required">Category name</label>
+              <input type="text" formControlName="name" class="form-control">
+              <div
+                *ngIf="getCategoryFormGroup(i).controls.name.invalid && (getCategoryFormGroup(i).controls.name.dirty || getCategoryFormGroup(i).controls.name.touched)"
+                class="input-error">
+                <div *ngIf="getCategoryFormGroup(i).controls.name.errors.required">
+                  Name of category is required.
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group col-xs-1">
+            <button class="btn btn-danger btn-sm pull-left btn-custom-margin-top" type="button"
+                    (click)="removeCategory(i)"> Remove
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <a class="btn btn-warning btn-margin pull-right" routerLink="/admin/coffee-type/list">Cancel</a>
+      <button class="btn btn-success pull-right">Save</button>
+    </div>
+  </div>
+</form>

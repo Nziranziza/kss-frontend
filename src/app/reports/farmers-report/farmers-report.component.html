@@ -112,6 +112,14 @@
               <app-loader *ngIf="loading"></app-loader>
               </div>
               <div style="margin: 0 auto; width: fit-content; float: left" *ngIf="showReport">
+                <div class="row">
+                  <div class="col-xs-12">
+                    <div class="pull-left" style="margin-left: 15px; font-size: 14px">
+                      <span style="font-weight: bolder">Total : </span>
+                      <span  [ngStyle]="{color: graph.options.colors[0]}">{{ total }} {{ graph.columnNames[1] }}</span>
+                    </div>
+                  </div>
+                </div>
                 <google-chart #chart
                               [type]="graph.type"
                               [data]="graph.data"

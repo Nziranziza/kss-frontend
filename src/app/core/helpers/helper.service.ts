@@ -17,7 +17,7 @@ export class HelperService {
       const controlErrors: ValidationErrors = form.get(key).errors;
       if (controlErrors != null) {
         Object.keys(controlErrors).forEach(keyError => {
-          errors.push('The ' + key + ' field is ' + keyError);
+          errors.push(key + ' field is ' + keyError);
         });
       }
     });

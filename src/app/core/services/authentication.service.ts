@@ -23,9 +23,11 @@ export class AuthenticationService {
 
   purgeAuth() {
     this.jwtService.destroyToken();
+    window.localStorage.removeItem('user');
   }
 
   attemptAuth(credentials): Observable<any> {
+    this.purgeAuth();
     return this.apiService.post('/users/sign.in', credentials)
       .pipe(map(
         data => {

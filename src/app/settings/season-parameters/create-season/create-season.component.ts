@@ -1,11 +1,7 @@
 import {Component, Inject, Injector, Input, OnInit, PLATFORM_ID} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Router} from '@angular/router';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {HelperService} from '../../../core/helpers';
-import {FarmerService} from '../../../core/services';
-import {MessageService} from '../../../core/services/message.service';
-import {LocationService} from '../../../core/services/location.service';
 import {isPlatformBrowser} from '@angular/common';
 import {SeasonService} from '../../../core/services/season.service';
 
@@ -17,12 +13,10 @@ import {SeasonService} from '../../../core/services/season.service';
 export class CreateSeasonComponent implements OnInit {
 
   modal: NgbActiveModal;
-  @Input() land;
+  @Input() season;
   createSeasonForm: FormGroup;
   errors: string [];
   message: string;
-  submit = false;
-  seasonId: string;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
@@ -39,10 +33,9 @@ export class CreateSeasonComponent implements OnInit {
       year: ['', Validators.required],
       season: ['', Validators.required],
       seasonParams: this.formBuilder.group({
-        cherriesUnitPrice: ['', Validators.required],
-        parchmentUnitPrice: ['', Validators.required],
-        greenCoffeeUnitPrice: ['', Validators.required],
-        fertilizerKgPerTree: ['', Validators.required],
+        cherriesUnitPrice: [''],
+        fertilizerName: [''],
+        fertilizerKgPerTree: [''],
       }),
     });
   }
@@ -50,8 +43,9 @@ export class CreateSeasonComponent implements OnInit {
   onSubmit() {
     if (this.createSeasonForm.valid) {
       const season = this.createSeasonForm.value;
-      this.seasonService.updateSeason(season).subscribe((data) => {
-          this.message = 'Season successfully updated!';
+      this.seasonService.addSeason(season).subscribe((data) => {
+          this.message = 'Season successfully created!';
+          this.modal.dismiss();
         },
         (err) => {
           this.errors = err.errors;

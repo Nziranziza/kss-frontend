@@ -11,15 +11,19 @@ export class SeasonService {
   }
 
   all(): Observable<any> {
-    return this.apiService.get('/');
+    return this.apiService.get('/season/settings');
   }
 
   updateSeason(data: any): Observable<any> {
     return this.apiService.put('/', data);
   }
 
+  changeSeason(data: any): Observable<any> {
+    return this.apiService.post('/season/set/cache', data);
+  }
+
   addSeason(data: any): Observable<any> {
-    return this.apiService.post('/', data);
+    return this.apiService.post('/season/settings', data);
   }
 
 }

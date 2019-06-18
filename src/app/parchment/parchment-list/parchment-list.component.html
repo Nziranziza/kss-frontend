@@ -1,0 +1,53 @@
+<div class="row">
+  <div class="col-xs-12">
+    <h3>
+      {{ title }}
+      <a class="btn btn-success btn-margin pull-right" routerLink="/admin/cws/parchments/create"><i class="fa fa-plus"></i> Record parchment
+      </a>
+    </h3>
+  </div>
+</div>
+<app-list-message [message]="message"></app-list-message>
+<div class="row">
+  <div class="col-xs-12">
+    <div></div>
+    <div class="box">
+      <div class="box-body table-responsive">
+        <app-loader *ngIf="loading"></app-loader>
+        <table class="row-border hover table table-condensed">
+          <thead>
+          <tr>
+            <th (click)="setOrder('coffeeType.name')">Coffee type <i class="fa fa-sort sorting"></i></th>
+            <th (click)="setOrder('totalKgPerType')"> Qty <i class="fa fa-sort sorting"></i></th>
+            <th (click)="setOrder('created_at')"> Recorded <i class="fa fa-sort sorting"></i></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let parchment of (parchments | orderBy : order:reverse:'case-insensitive') | paginate: config">
+            <td> {{ parchment.coffeeType.name }}</td>
+            <td> {{ parchment.totalKgPerType }}</td>
+            <td> {{ parchment.created_at | date }}</td>
+          </tr>
+          </tbody>
+        </table>
+        <div style="width: 100%;  border-top: 1px solid #0a0a0a;">
+          <div style=" clear: both; float: left; padding-top: 0.755em;">Showing {{(config.currentPage - 1)*
+            config.itemsPerPage + 1}} to {{config.currentPage* config.itemsPerPage}} of {{config.totalItems}} entries
+          </div>
+          <pagination-controls class="custom-pagination"
+                               [maxSize]="maxSize"
+                               [directionLinks]="directionLinks"
+                               [autoHide]="autoHide"
+                               [responsive]="responsive"
+                               [previousLabel]="labels.previousLabel"
+                               [nextLabel]="labels.nextLabel"
+                               [screenReaderPaginationLabel]="labels.screenReaderPaginationLabel"
+                               [screenReaderPageLabel]="labels.screenReaderPageLabel"
+                               [screenReaderCurrentLabel]="labels.screenReaderCurrentLabel"
+                               (pageChange)="onPageChange($event)">
+          </pagination-controls>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

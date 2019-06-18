@@ -48,5 +48,4 @@ export class UserService {
     return this.apiService.get('/users/verifyNID/' + nid);
   }
 
-
 }

@@ -32,7 +32,7 @@ export class FarmerListComponent implements OnInit, OnDestroy {
   message: string;
   farmers: any;
   title = 'Farmers';
-  id = 'farmers_list';
+  id = 'farmers-list';
   parameters: any;
   config: any;
   autoHide = false;

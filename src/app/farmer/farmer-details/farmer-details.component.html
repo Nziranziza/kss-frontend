@@ -84,7 +84,7 @@
         </thead>
         <tbody>
         <tr *ngFor="let request of requests;">
-          <td>{{farmer.request.season}}</td>
+          <td>{{farmer.request.season.name}}</td>
           <td>
             <span class="details-row-title-sm" style="margin-left: 0px">Province </span> : <span
             class="details-row-data-sm" *ngIf="request.location.prov_id">{{ request.location.prov_id.namek }}</span>

@@ -9,7 +9,7 @@ const routes: Routes = [
     component: AdminComponent,
     children: [
       {
-        path: 'cherries/supply',
+        path: 'cherries/supply/select/:regNumber',
         component: CherrySupplyComponent
       }
     ]

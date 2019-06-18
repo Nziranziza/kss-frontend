@@ -1,0 +1,12 @@
+.not-found{
+  font-weight: bold;
+  font-size: 20px;
+  text-align: center;
+  padding-top: 150px;
+}
+.return-home-error {
+  text-align: center;
+}
+.return-home-error a {
+  text-decoration: none;
+}

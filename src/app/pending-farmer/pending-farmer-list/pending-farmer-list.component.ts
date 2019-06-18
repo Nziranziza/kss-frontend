@@ -94,6 +94,11 @@ export class PendingFarmerListComponent implements OnInit, OnDestroy {
       this.farmerService.getPendingFarmers(this.parameters)
         .subscribe(data => {
           this.farmers = data.data;
+          this.config = {
+            itemsPerPage: this.parameters.length,
+            currentPage: this.parameters.start + 1,
+            totalItems: data.recordsTotal
+          };
           this.loading = false;
         });
     }
@@ -109,6 +114,11 @@ export class PendingFarmerListComponent implements OnInit, OnDestroy {
     this.farmerService.getPendingFarmers(this.parameters)
       .subscribe(data => {
         this.farmers = data.data;
+        this.config = {
+          itemsPerPage: this.parameters.length,
+          currentPage: this.parameters.start + 1,
+          totalItems: data.recordsTotal
+        };
       });
   }
 }

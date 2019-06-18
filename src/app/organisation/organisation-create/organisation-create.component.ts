@@ -91,6 +91,7 @@ export class OrganisationCreateComponent implements OnInit {
         });
         org.coveredVillages = temp;
       }
+      this.helper.cleanObject(org);
       this.organisationService.save(org)
         .subscribe(data => {
             this.router.navigateByUrl('admin/organisations');

@@ -4,32 +4,18 @@
 </div>
 <div class="modal-body">
   <app-list-errors [errorList]="errors" *ngIf="errors"></app-list-errors>
-  <form [formGroup]="editSeasonForm" (ngSubmit)="onSubmit()">
+  <form [formGroup]="createSeasonForm" (ngSubmit)="onSubmit()">
     <div class="row">
       <div class="col-xs-6">
         <div class="form-group">
           <label class="control-label">Year</label>
           <input type="text" formControlName="year" class="form-control">
-          <div
-            *ngIf="editSeasonForm.controls.year.invalid && (editSeasonForm.controls.year.dirty || editSeasonForm.controls.year.touched)"
-            class="input-error">
-            <div *ngIf="editSeasonForm.controls.year.errors.required">
-              Year is required.
-            </div>
-          </div>
         </div>
       </div>
       <div class="col-xs-6">
         <div class="form-group">
           <label class="control-label">Season</label>
           <input type="text" formControlName="season" class="form-control">
-          <div
-            *ngIf="editSeasonForm.controls.season.invalid && (editSeasonForm.controls.season.dirty || editSeasonForm.controls.season.touched)"
-            class="input-error">
-            <div *ngIf="editSeasonForm.controls.season.errors.required">
-              Season name is required.
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -39,57 +25,18 @@
           <div class="form-group">
             <span class="">Cherries unit price</span>
             <input class="form-control" formControlName="cherriesUnitPrice">
-            <div
-              *ngIf="editSeasonForm.controls.seasonParams.cherriesUnitPrice.invalid && (editSeasonForm.controls.seasonParams.cherriesUnitPrice.dirty
-              || editSeasonForm.controls.seasonParams.cherriesUnitPrice.touched)"
-              class="input-error">
-              <div *ngIf="editSeasonForm.controls.seasonParams.cherriesUnitPrice.errors.required">
-                Cherries unit price
-              </div>
-            </div>
           </div>
         </div>
         <div class="col-xs-2">
           <div class="form-group">
-            <span class="">Parchment unit price</span>
-            <input class="form-control" formControlName="parchmentUnitPrice">
-            <div
-              *ngIf="editSeasonForm.controls.seasonParams.parchmentUnitPrice.invalid && (editSeasonForm.controls.seasonParams.parchmentUnitPrice.dirty
-              || editSeasonForm.controls.seasonParams.parchmentUnitPrice.touched)"
-              class="input-error">
-              <div *ngIf="editSeasonForm.controls.seasonParams.parchmentUnitPrice.errors.required">
-                Parchment unit price
-              </div>
-            </div>
+            <span class="">Fertilizer name</span>
+            <input class="form-control" formControlName="fertilizerName">
           </div>
         </div>
-        <div class="col-xs-2">
-          <div class="form-group">
-            <span class="">Green coffee unit price</span>
-            <input class="form-control" formControlName="greenCoffeeUnitPrice">
-            <div
-              *ngIf="editSeasonForm.controls.seasonParams.greenCoffeeUnitPrice.invalid && (editSeasonForm.controls.seasonParams.greenCoffeeUnitPrice.dirty
-              || editSeasonForm.controls.seasonParams.greenCoffeeUnitPrice.touched)"
-              class="input-error">
-              <div *ngIf="editSeasonForm.controls.seasonParams.greenCoffeeUnitPrice.errors.required">
-                Parchment unit price
-              </div>
-            </div>
-          </div>
-        </div>
-
         <div class="col-xs-2">
           <div class="form-group">
             <span class="">Fertilizer kg per tree</span>
             <input class="form-control" formControlName="fertilizerKgPerTree">
-            <div
-              *ngIf="editSeasonForm.controls.seasonParams.fertilizerKgPerTree.invalid && (editSeasonForm.controls.seasonParams.fertilizerKgPerTree.dirty
-              || editSeasonForm.controls.seasonParams.fertilizerKgPerTree.touched)"
-              class="input-error">
-              <div *ngIf="editSeasonForm.controls.seasonParams.fertilizerKgPerTree.errors.required">
-                Parchment unit price
-              </div>
-            </div>
           </div>
         </div>
       </div>

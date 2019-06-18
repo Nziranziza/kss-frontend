@@ -5,6 +5,7 @@ import {Subject} from 'rxjs';
 import {Farmer} from '../../core/models';
 import {FarmerDetailsComponent} from '../../farmer/farmer-details/farmer-details.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {AuthorisationService} from '../../core/services/authorisation.service';
 
 @Component({
   selector: 'app-organisation-farmers',
@@ -15,7 +16,7 @@ export class OrganisationFarmersComponent implements OnInit, OnDestroy {
 
   constructor(private organisationService: OrganisationService,
               private route: ActivatedRoute, private  confirmDialogService: ConfirmDialogService,
-              private modal: NgbModal) {
+              private modal: NgbModal, private authorisationService: AuthorisationService) {
   }
 
   message: string;
@@ -25,6 +26,7 @@ export class OrganisationFarmersComponent implements OnInit, OnDestroy {
   // @ts-ignore
   dtTrigger: Subject = new Subject();
   loading = false;
+  isUserCWSOfficer = true;
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -35,6 +37,7 @@ export class OrganisationFarmersComponent implements OnInit, OnDestroy {
       pageLength: 25
     };
     this.getFarmers(this.organisationId);
+    this.isUserCWSOfficer = this.authorisationService.isCWSUser();
   }
 
   ngOnDestroy(): void {

@@ -6,6 +6,16 @@
   margin-left: 10px;
 }
 
+.btn-success {
+  background-color: #94c17d;
+  border-color:  #94c17d;
+}
+
+.btn-warning {
+  background-color: #dca956;
+  border-color: #dca956;
+}
+
 .big-modal-dialog {
   width: 80% !important;
   height: auto;
@@ -13,6 +23,7 @@
 
 html, body {
   height: 100% !important;
+  color: #535658;
 }
 
 .home {
@@ -28,13 +39,13 @@ html, body {
 }
 
 .box {
-  border-top: 3px solid #3c8dbc;
+  border-top: 3px solid #7499b9;
 }
 
 .list-sub-header {
   font-style: italic;
   font-size: 6px;
-  color: #99a4ac;
+  color: #dedede;
 }
 
 input.ng-invalid.ng-touched {
@@ -47,6 +58,10 @@ div .wrapper {
 
 .skin-blue .wrapper {
   background-color: #367fa9;
+}
+
+.skin-blue .sidebar-menu>li.active>a {
+  background: #49565b;
 }
 
 @media (min-width: 992px) {
@@ -172,3 +187,4 @@ table.dataTable > tbody > tr.child:hover{
   color: #f25729;
   font-size: 12px;
 }
+

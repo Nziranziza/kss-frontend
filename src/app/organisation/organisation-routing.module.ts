@@ -8,21 +8,25 @@ import {OrganisationFarmersComponent} from './organisation-farmers/organisation-
 
 const routes: Routes = [
   {
-    path: 'admin/organisations',
+    path: 'admin',
     component: AdminComponent,
     children: [
       {
-        path: '',
+        path: 'organisations',
         component: OrganisationListComponent
       }, {
-        path: 'create',
+        path: 'organisations/create',
         component: OrganisationCreateComponent
       }, {
-        path: 'edit/:id',
+        path: 'organisations/edit/:id',
         component: OrganisationEditComponent,
       }
       , {
-        path: ':organisationId/farmers',
+        path: 'cws-farmers/:organisationId',
+        component: OrganisationFarmersComponent,
+      }
+      , {
+        path: 'organisations/:organisationId/farmers',
         component: OrganisationFarmersComponent,
       }
     ]
