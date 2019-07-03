@@ -121,7 +121,7 @@ export class UserCreateComponent implements OnInit {
       const selectedRoles = this.createForm.value.userRoles
         .map((checked, index) => checked ? this.orgPossibleRoles[index].value : null)
         .filter(value => value !== null);
-      const user = this.createForm.value;
+      const user = JSON.parse(JSON.stringify(this.createForm.value));
       user['userRoles'.toString()] = selectedRoles;
       user['org_id'.toString()] = this.organisationId;
 
@@ -144,36 +144,40 @@ export class UserCreateComponent implements OnInit {
           if (response.existsInSns) {
             user['action'.toString()] = 'import';
           }
+
           if (!(response.existsInCas || response.existsInSns)) {
-            this.userService.checkNID(checkNIDBody).subscribe(result => {
-                const res = result.content;
-                if (res.existsInCas) {
-                  this.errors = ['User with this NID already exists'];
-                  return;
-                }
-                if (res.existsInSns) {
-                  user['action'.toString()] = 'import';
-                }
-              },
-              () => {
-              });
+            if (checkNIDBody.nid !== '') {
+              this.userService.checkNID(checkNIDBody).subscribe(result => {
+                  const res = result.content;
+                  if (res.existsInCas) {
+                    this.errors = ['User with this NID already exists'];
+                    return;
+                  }
+                  if (res.existsInSns) {
+                    user['action'.toString()] = 'import';
+                  }
+                },
+                () => {
+                });
+            }
           }
         },
         () => {
-        });
-
-      if (!(selectedRoles.includes(6) || selectedRoles.includes(7))) {
-        delete user.location;
-      }
-      if (this.isFromSuperOrg) {
-        user['userRoles'.toString()] = [0];
-      }
-      this.helper.cleanObject(user);
-      this.userService.save(user).subscribe(data => {
-          this.router.navigateByUrl('admin/organisations/' + this.organisationId + '/users');
         },
-        (err) => {
-          this.errors = err.errors;
+        () => {
+          if (!(selectedRoles.includes(6) || selectedRoles.includes(7))) {
+            delete user.location;
+          }
+          if (this.isFromSuperOrg) {
+            user['userRoles'.toString()] = [0];
+          }
+          this.helper.cleanObject(user);
+          this.userService.save(user).subscribe((data) => {
+              this.router.navigateByUrl('admin/organisations/' + this.organisationId + '/users');
+            },
+            (err) => {
+              this.errors = err.errors;
+            });
         });
     }
   }
@@ -243,5 +247,4 @@ export class UserCreateComponent implements OnInit {
       this.provinces = data;
     });
   }
-
 }

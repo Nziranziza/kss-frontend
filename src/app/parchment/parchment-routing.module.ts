@@ -3,6 +3,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {AdminComponent} from '../admin/admin/admin.component';
 import {ParchmentCreateComponent} from './parchment-create/parchment-create.component';
 import {ParchmentListComponent} from './parchment-list/parchment-list.component';
+import {ParchmentTransferComponent} from './parchment-transfer/parchment-transfer.component';
 
 const routes: Routes = [
   {
@@ -15,7 +16,11 @@ const routes: Routes = [
       }, {
         path: 'cws/parchments/create',
         component: ParchmentCreateComponent
-      }
+      },
+      {
+        path: 'cws/parchments/transfer/:id',
+        component: ParchmentTransferComponent
+      },
     ]
   }
 ];

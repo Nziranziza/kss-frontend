@@ -28,7 +28,8 @@ export class ParchmentCreateComponent implements OnInit {
     this.recordParchmentForm = this.formBuilder.group({
       coffeeType: ['', Validators.required],
       date: ['', Validators.required],
-      lotInfo: new FormArray([])
+      totalKgs:  ['', Validators.required],
+      producedDate:  ['', Validators.required]
     });
     this.coffeeTypeService.all().subscribe((data) => {
       data.content.map((item) => {
@@ -38,9 +39,7 @@ export class ParchmentCreateComponent implements OnInit {
           });
         }
       });
-      console.log(this.coffeeTypes);
     });
-    this.addLotInfo();
   }
 
   createLotInfo(): FormGroup {

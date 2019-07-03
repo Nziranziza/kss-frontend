@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {ConfirmDialogService, FarmerService, OrganisationService} from '../../core/services';
+import {AuthenticationService, ConfirmDialogService, FarmerService, OrganisationService} from '../../core/services';
 import {LocationService} from '../../core/services/location.service';
 import {UserService} from '../../core/services/user.service';
 import {MessageService} from '../../core/services/message.service';
@@ -17,11 +17,11 @@ export class FarmerCreateComponent implements OnInit, OnDestroy {
 
   createForm: FormGroup;
   errors = [];
-  provinces = [];
-  districts = [];
-  sectors = [];
-  cells = [];
-  villages = [];
+  provinces: any = [];
+  districts: any = [];
+  sectors: any = [];
+  cells: any = [];
+  villages: any = [];
   requestIndex = 0;
   userNIDInfo = {};
   farmer: any;
@@ -32,6 +32,7 @@ export class FarmerCreateComponent implements OnInit, OnDestroy {
   submit = false;
   loading = false;
   invalidId = false;
+  currentSeason: any;
 
   public requestList: FormArray;
 
@@ -41,6 +42,7 @@ export class FarmerCreateComponent implements OnInit, OnDestroy {
               private userService: UserService,
               private organisationService: OrganisationService,
               private confirmDialogService: ConfirmDialogService,
+              private authenticationService: AuthenticationService,
               private locationService: LocationService, private messageService: MessageService,
               private helperService: HelperService) {
   }
@@ -62,7 +64,7 @@ export class FarmerCreateComponent implements OnInit, OnDestroy {
       }),
       requests: new FormArray([])
     });
-
+    this.currentSeason = this.authenticationService.getCurrentSeason();
     this.route.params
       .subscribe(params => {
         if (params.id !== undefined) {
@@ -83,9 +85,7 @@ export class FarmerCreateComponent implements OnInit, OnDestroy {
                   fertilizer_allocate: this.farmer.fertilizer_allocate
                 }]
               };
-              if (!isUndefined(this.farmer.location)) {
-                temp.requests[0]['location'.toString()] = this.farmer.location;
-              }
+
               if (this.farmer.NID !== '') {
                 this.loading = true;
                 this.userService.verifyNID(this.farmer.NID).subscribe(NIDInformation => {
@@ -104,10 +104,13 @@ export class FarmerCreateComponent implements OnInit, OnDestroy {
                   });
               }
               this.createForm.patchValue(temp);
-              this.onChangeProvince(0);
-              this.onChangeDistrict(0);
-              this.onChangeSector(0);
-              this.onChangeCell(0);
+              if (!isUndefined(this.farmer.location)) {
+                if (this.createFromPending) {
+                  this.getLocationInput(0, 'prov_id').patchValue(this.farmer.location.prov_id);
+                  this.onChangeProvince(0);
+                }
+              }
+
             },
             (err) => {
               this.createFromPending = true;
@@ -133,7 +136,7 @@ export class FarmerCreateComponent implements OnInit, OnDestroy {
         farmer['_id'.toString()] = this.id;
         farmer['type'.toString()] = temp.type;
         farmer['phone_number'.toString()] = temp.phone_number;
-        /* farmer['email'.toString()] = temp.email;*/
+        /* farmer['email'.toString()] = temp.email; */
         if (!this.isGroup) {
           farmer['surname'.toString()] = temp.surname;
           farmer['foreName'.toString()] = temp.foreName;
@@ -204,13 +207,13 @@ export class FarmerCreateComponent implements OnInit, OnDestroy {
         farmer['requestInfo'.toString()] = temp.requests;
         this.helperService.cleanObject(farmer);
         farmer.requestInfo.map((item) => {
-          item['fertilizer_need'.toString()] = +item['numberOfTrees'.toString()];
+          item['fertilizer_need'.toString()] =
+            ((+item['numberOfTrees'.toString()]) * this.currentSeason.seasonParams.fertilizerKgPerTree.$numberDouble);
           return this.helperService.cleanObject(item);
         });
 
         if (this.isGroup) {
           this.farmerService.checkFarmerGroupName(temp.groupName).subscribe(data => {
-
             if (data.exists) {
               const message = 'Farmer with this group name ('
                 + temp.groupName + ') already exists would you like to add land(s) to the farmer?';
@@ -400,11 +403,15 @@ export class FarmerCreateComponent implements OnInit, OnDestroy {
   onChangeProvince(index: number) {
     const value = this.getRequestsFormGroup(index).controls.location.get('prov_id'.toString()).value;
     if (value !== '') {
-      this.locationService.getDistricts(value).subscribe((data) => {
+      this.locationService.getDistricts(value).toPromise().then(data => {
         this.districts[index] = data;
         this.sectors[index] = [];
         this.cells[index] = [];
         this.villages[index] = [];
+        if (this.createFromPending) {
+          this.getLocationInput(index, 'dist_id').setValue(this.farmer.location.dist_id);
+          this.onChangeDistrict(0);
+        }
       });
     }
   }
@@ -412,10 +419,14 @@ export class FarmerCreateComponent implements OnInit, OnDestroy {
   onChangeDistrict(index: number) {
     const value = this.getRequestsFormGroup(index).controls.location.get('dist_id'.toString()).value;
     if (value !== '') {
-      this.locationService.getSectors(value).subscribe((data) => {
+      this.locationService.getSectors(value).toPromise().then(data => {
         this.sectors[index] = data;
         this.cells[index] = [];
         this.villages[index] = [];
+        if (this.createFromPending) {
+          this.getLocationInput(index, 'sect_id').setValue(this.farmer.location.sect_id);
+          this.onChangeSector(0);
+        }
       });
     }
   }
@@ -423,9 +434,13 @@ export class FarmerCreateComponent implements OnInit, OnDestroy {
   onChangeSector(index: number) {
     const value = this.getRequestsFormGroup(index).controls.location.get('sect_id'.toString()).value;
     if (value !== '') {
-      this.locationService.getCells(value).subscribe((data) => {
+      this.locationService.getCells(value).toPromise().then(data => {
         this.cells[index] = data;
         this.villages[index] = [];
+        if (this.createFromPending) {
+          this.getLocationInput(index, 'cell_id').setValue(this.farmer.location.cell_id);
+          this.onChangeCell(0);
+        }
       });
     }
   }
@@ -433,14 +448,17 @@ export class FarmerCreateComponent implements OnInit, OnDestroy {
   onChangeCell(index: number) {
     const value = this.getRequestsFormGroup(index).controls.location.get('cell_id'.toString()).value;
     if (value !== '') {
-      this.locationService.getVillages(value).subscribe((data) => {
+      this.locationService.getVillages(value).toPromise().then(data => {
         this.villages[index] = data;
+        if (this.createFromPending) {
+          this.getLocationInput(index, 'village_id').setValue(this.farmer.location.village_id);
+        }
       });
     }
   }
 
   initial() {
-    this.locationService.getProvinces().subscribe((data) => {
+    this.locationService.getProvinces().toPromise().then(data => {
       this.provinces.push(data);
     });
   }

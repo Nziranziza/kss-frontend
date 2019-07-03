@@ -31,4 +31,8 @@ export class AuthorisationService {
     this.userRoles = this.authenticationService.getCurrentUser().parameters.role;
     return !!this.userRoles.includes(1);
   }
+  isDryMillUser() {
+    this.userRoles = this.authenticationService.getCurrentUser().parameters.role;
+    return !!this.userRoles.includes(2);
+  }
 }

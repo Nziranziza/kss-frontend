@@ -26,7 +26,7 @@ export class HelperService {
 
   cleanObject(obj) {
     for (const propName in obj) {
-      if (obj[propName] === '' || obj[propName] === undefined) {
+      if (obj[propName] === '' || obj[propName] === undefined || obj[propName] === null) {
         delete obj[propName];
       }
     }

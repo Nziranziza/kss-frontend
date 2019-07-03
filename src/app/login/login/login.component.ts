@@ -49,6 +49,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.route.params
       .subscribe(params => {
         if (params.token !== undefined) {
+          console.log('test');
           const headers = new HttpHeaders({
             'Content-Type': 'application/json',
             'x-auth-token': params.token
@@ -75,12 +76,14 @@ export class LoginComponent implements OnInit, OnDestroy {
             if (this.authenticationService.getCurrentSeason() === null) {
               seasons.forEach((item) => {
                 if (item.isCurrent) {
-                 this.authenticationService.setCurrentSeason(item);
+                  this.authenticationService.setCurrentSeason(item);
                 }
               });
             }
             if (this.authorisationService.isCWSUser()) {
-              this.router.navigateByUrl('/admin/cws-farmers/' + orgId);
+              this.router.navigateByUrl('admin/cws-farmers/' + orgId);
+            } else if (this.authorisationService.isDryMillUser()) {
+              this.router.navigateByUrl('admin/drymill/batch/create');
             } else {
               this.router.navigateByUrl('admin/organisations');
             }

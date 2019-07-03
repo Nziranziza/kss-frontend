@@ -2,7 +2,7 @@ import {Component, Inject, Injector, Input, OnInit, PLATFORM_ID} from '@angular/
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {HelperService} from '../../../core/helpers';
-import {FarmerService} from '../../../core/services';
+import {AuthenticationService, FarmerService} from '../../../core/services';
 import {isPlatformBrowser} from '@angular/common';
 import {LocationService} from '../../../core/services/location.service';
 import {MessageService} from '../../../core/services/message.service';
@@ -31,7 +31,7 @@ export class AddFarmerRequestComponent implements OnInit {
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object, private  router: Router,
-    private injector: Injector, private formBuilder: FormBuilder,
+    private injector: Injector, private formBuilder: FormBuilder, private authenticationService: AuthenticationService,
     private helper: HelperService, private farmerService: FarmerService, private messageService: MessageService,
     private locationService: LocationService) {
 
@@ -157,7 +157,6 @@ export class AddFarmerRequestComponent implements OnInit {
           console.log(err.errors);
           this.errors = err.errors;
         });
-
 
     } else {
       if (this.helper.getFormValidationErrors(this.addFarmerRequestForm).length > 0) {

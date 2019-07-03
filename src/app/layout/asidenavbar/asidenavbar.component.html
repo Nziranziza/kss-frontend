@@ -61,6 +61,13 @@
           <span>Parchments</span>
         </a>
       </li>
+      <li class="header" [appRequiredRoles]="[2]">DRY PROCESSING</li>
+      <li routerLinkActive="active" [appRequiredRoles]="[2]">
+        <a routerLink="/admin/drymill/batch/create">
+          <i class="fa fa-archive" aria-hidden="true"></i>
+          <span>Received parchments</span>
+        </a>
+      </li>
       <li class="header">GENERAL</li>
       <li class="treeview" routerLinkActive="active" [appRequiredRoles]="[4,0]">
         <a href="#">

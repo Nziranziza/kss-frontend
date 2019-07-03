@@ -62,6 +62,6 @@ export class AuthenticationService {
   }
 
   unlock(body, options?): Observable<any> {
-    return this.http.post(`${environment.api_url}${'/api/users/account/unlock'}`, body, options);
+    return this.http.post(`${environment.api_url}${'/users/account/unlock'}`, body, options);
   }
 }

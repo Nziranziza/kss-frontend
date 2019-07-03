@@ -1,6 +1,8 @@
 .carousel-caption {
   font-size: 60px;
   font-weight: bolder;
+  top: 45%;
+  text-align: center;
 }
 .home {
   height: 100%;
@@ -8,8 +10,9 @@
   overflow: hidden;
 }
 .carousel {
-  height: 95%;
+  height: 100%;
   bottom: 40px;
+  top: -60px;
 }
 .carousel .carousel-inner{
   height:100%;

@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {ConfirmDialogService, FarmerService, OrganisationService} from '../../core/services';
+import {AuthenticationService, ConfirmDialogService, FarmerService, OrganisationService} from '../../core/services';
 import {LocationService} from '../../core/services/location.service';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {EditFarmerRequestComponent} from './edit-farmer-request/edit-farmer-request.component';
@@ -22,6 +22,7 @@ export class FarmerEditComponent implements OnInit, OnDestroy {
   message: string;
 
   constructor(private route: ActivatedRoute, private router: Router,
+              private authenticationService: AuthenticationService,
               private farmerService: FarmerService,
               private organisationService: OrganisationService,
               private confirmDialogService: ConfirmDialogService,
@@ -55,7 +56,6 @@ export class FarmerEditComponent implements OnInit, OnDestroy {
             documentId: this.id,
             subDocumentId: request._id
           };
-
           this.farmerService.destroyRequest(body)
             .subscribe(data => {
               this.getFarmer(this.id);
@@ -85,5 +85,9 @@ export class FarmerEditComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.messageService.setMessage('');
+  }
+
+  onCancel() {
+    this.router.navigateByUrl('/admin/farmers');
   }
 }

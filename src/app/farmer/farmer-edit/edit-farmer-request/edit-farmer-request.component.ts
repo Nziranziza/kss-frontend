@@ -2,7 +2,7 @@ import {Component, Inject, Injector, Input, OnInit, PLATFORM_ID} from '@angular/
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {HelperService} from '../../../core/helpers';
-import {FarmerService} from '../../../core/services';
+import {AuthenticationService, FarmerService} from '../../../core/services';
 import {isPlatformBrowser} from '@angular/common';
 import {LocationService} from '../../../core/services/location.service';
 
@@ -29,7 +29,8 @@ export class EditFarmerRequestComponent implements OnInit {
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
     private injector: Injector, private formBuilder: FormBuilder, private locationService: LocationService,
-    private helper: HelperService, private farmerService: FarmerService) {
+    private helper: HelperService, private farmerService: FarmerService,
+    private authenticationService: AuthenticationService) {
 
     if (isPlatformBrowser(this.platformId)) {
       this.modal = this.injector.get(NgbActiveModal);

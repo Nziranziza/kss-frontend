@@ -4,7 +4,7 @@ import {isPlatformBrowser} from '@angular/common';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {UserService} from '../../../core/services/user.service';
 import {HelperService} from '../../../core/helpers';
-import {FarmerService} from '../../../core/services';
+import {AuthenticationService, FarmerService} from '../../../core/services';
 
 @Component({
   selector: 'app-edit-farmer-profile',
@@ -23,7 +23,7 @@ export class EditFarmerProfileComponent implements OnInit {
   submit = false;
 
   constructor(
-    @Inject(PLATFORM_ID) private platformId: object,
+    @Inject(PLATFORM_ID) private platformId: object, private authenticationService: AuthenticationService,
     private injector: Injector, private formBuilder: FormBuilder, private userService: UserService,
     private helper: HelperService, private farmerService: FarmerService) {
 

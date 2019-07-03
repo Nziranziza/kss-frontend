@@ -9,9 +9,10 @@ import {NgxPaginationModule} from 'ngx-pagination';
 import {OrderModule} from 'ngx-order-pipe';
 import {OwlDateTimeModule, OwlNativeDateTimeModule} from 'ng-pick-datetime';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { ParchmentTransferComponent } from './parchment-transfer/parchment-transfer.component';
 
 @NgModule({
-  declarations: [ParchmentListComponent, ParchmentCreateComponent],
+  declarations: [ParchmentListComponent, ParchmentCreateComponent, ParchmentTransferComponent],
   imports: [
     CommonModule,
     ParchmentRoutingModule, NgbModule, NgxPaginationModule, OrderModule,

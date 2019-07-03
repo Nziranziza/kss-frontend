@@ -201,7 +201,7 @@ export class UserEditComponent implements OnInit {
       const selectedRoles = this.editForm.value.userRoles
         .map((checked, index) => checked ? this.orgPossibleRoles[index].value : null)
         .filter(value => value !== null);
-      const user = this.editForm.value;
+      const user = JSON.parse(JSON.stringify(this.editForm.value));
       user['userRoles'.toString()] = selectedRoles;
       user['org_id'.toString()] = this.organisationId;
       user['id'.toString()] = this.id;

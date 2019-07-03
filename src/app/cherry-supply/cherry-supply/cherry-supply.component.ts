@@ -33,7 +33,7 @@ export class CherrySupplyComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.recordCherryDeliveryForm = this.formBuilder.group({
       cherriesQty: ['', Validators.required],
-      unitPerKg: ['', Validators.required]
+      unitPerKg: [this.authenticationService.getCurrentSeason().seasonParams.cherriesUnitPrice, Validators.required]
     });
     this.filterSuppliesForm = this.formBuilder.group({
       suppliesFilter: ['all', Validators.required],
@@ -68,7 +68,7 @@ export class CherrySupplyComponent implements OnInit, OnDestroy {
       record['regNumber'.toString()] = this.regNumber;
       this.cherrySupplyService.saveDelivery(record)
         .subscribe(data => {
-
+            this.getFarmerSupplies(record['org_id'.toString()], record['regNumber'.toString()]);
           },
           (err) => {
             this.errors = err.errors;
@@ -126,7 +126,7 @@ export class CherrySupplyComponent implements OnInit, OnDestroy {
             break;
           }
           default: {
-            this.getFarmerSupplies(this.regNumber, this.organisationId);
+            this.getFarmerSupplies(this.organisationId, this.regNumber);
           }
         }
       }

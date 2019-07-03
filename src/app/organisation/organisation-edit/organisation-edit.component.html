@@ -45,7 +45,7 @@
               <label class="control-label label-required">Roles</label>
               <div class="checkbox" formArrayName="organizationRole" *ngFor="let role of editForm.get('organizationRole')['controls']; let i = index">
                 <label  *ngIf="possibleRoles[i].name != 'FARMER'">
-                  <input type="checkbox" formControlName="{{i}}" (change)="onChanges()">
+                  <input type="checkbox" formControlName="{{i}}">
                   {{possibleRoles[i].name}}
                 </label>
               </div>
@@ -109,17 +109,70 @@
                 </div>
               </div>
             </fieldset>
-            <div class="col-xs-6" *ngIf="coverVillages">
-              <div class="form-group">
-                <label class="label-required">Covered villages</label>
-                <p>
-                  <span style="color: #f2a73c; font-size: 12px;"> [ {{ coveredVillages.join(', ') }} ]</span>
-                </p>
-                <select multiple="multiple" class="form-control covered-villages" formControlName="coveredVillages" [size]="villagesOfSector?.length">
-                  <option *ngFor="let village of villagesOfSector" value="{{village._id}}" (mousedown)="onMouseDown($event, village)" (mousemove)="$event.preventDefault()">{{village.name}}</option>
-                </select>
-              </div>
+            <div class="col-xs-12" *ngIf="coverVillages">
+              <button class="btn btn-success btn-circle btn-lg pull-right" (click)="addCoveredSector()" type="button"><i
+                class="fa fa-plus"></i></button>
             </div>
+            <section *ngIf="coverVillages">
+              <div class="col-xs-12" *ngFor="let sector of formCoveredSectors.controls; let i=index"
+                   formArrayName="coveredSectors" style="padding-left: 0px; padding-right: 0px;">
+                <fieldset class="request" [formGroupName]="i">
+                  <legend><label class="control-label label-required">&nbsp;Covered Sector</label></legend>
+                  <div class="row">
+                    <div class="col-xs-4">
+                      <div class="form-group">
+                        <label class="control-label">Sector</label>
+                        <select class="form-control" formControlName="sectorId" (change)="onChangeSector(i)">
+                          <option value=""></option>
+                          <option *ngFor="let sector of sectors" value="{{sector._id}}">{{sector.name}}</option>
+                        </select>
+                        <div
+                          *ngIf="getCoveredSectorsFormGroup(i).controls.sectorId.invalid && (getCoveredSectorsFormGroup(i).controls.sectorId.dirty || getCoveredSectorsFormGroup(i).controls.sectorId.touched)"
+                          class="input-error">
+                          <div *ngIf="getCoveredSectorsFormGroup(i).controls.sectorId.errors.required">
+                            Sector is required.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xs-4">
+                      <div class="form-group">
+                        <label class="label-required">Covered cells</label>
+                        <p>
+                          <span style="color: #f2a73c; font-size: 12px;"> [ {{ selectedCoveredCells[i].join(', ') }} ]</span>
+                        </p>
+                        <select multiple="multiple" class="form-control"  formControlName="coveredCells"
+                                [size]="coveredCellsSet[i]?.length">
+                          <option *ngFor="let cell of coveredCellsSet[i]" value="{{cell._id}}"
+                                  (mousedown)="onMouseDownCell(i, $event, cell)" (mousemove)="$event.preventDefault()">
+                            {{cell.name}}
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-xs-4">
+                      <div class="form-group">
+                        <label class="label-required">Covered villages</label>
+                        <p>
+                          <span style="color: #f2a73c; font-size: 12px;"> [ {{ selectedCoveredVillages[i].join(', ') }} ]</span>
+                        </p>
+                        <select multiple="multiple" class="form-control"
+                                formControlName="coveredVillages" [size]="coveredVillagesSet[i]?.length">
+                          <option *ngFor="let village of coveredVillagesSet[i]" value="{{village._id}}"
+                                  (mousedown)="onMouseDownVillage(i, $event, village)" (mousemove)="$event.preventDefault()">
+                            {{village.name}}
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="form-group col-xs-12">
+                      <button class="btn btn-danger pull-right" type="button" (click)="removeCoveredSector(i)"> Remove
+                      </button>
+                    </div>
+                  </div>
+                </fieldset>
+              </div>
+            </section>
           </div>
         </div>
       </div>

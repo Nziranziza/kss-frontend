@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {OrganisationService, OrganisationTypeService} from '../../core/services';
 import {HelperService} from '../../core/helpers';
@@ -29,9 +29,12 @@ export class OrganisationCreateComponent implements OnInit {
   villages: any;
   needLocation = false;
   coverVillages = false;
-  coveredVillages = [];
+  coveredVillagesSet = [];
+  coveredCellsSet = [];
+  selectedCoveredVillages = [];
+  selectedCoveredCells = [];
   selectedRoles: any;
-  villagesOfSector = [];
+  coveredSectorsList: FormArray;
 
   ngOnInit() {
     this.createForm = this.formBuilder.group({
@@ -48,7 +51,7 @@ export class OrganisationCreateComponent implements OnInit {
         village_id: [''],
       }),
       organizationRole: new FormArray([]),
-      coveredVillages: [[]]
+      coveredSectors: new FormArray([]),
       /*usersNIDRequired: ['']*/
     });
 
@@ -64,7 +67,6 @@ export class OrganisationCreateComponent implements OnInit {
         (this.createForm.controls.organizationRole as FormArray).push(control);
       });
     });
-
     this.initial();
     this.onChanges();
   }
@@ -74,22 +76,42 @@ export class OrganisationCreateComponent implements OnInit {
       const selectedRoles = this.createForm.value.organizationRole
         .map((checked, index) => checked ? this.possibleRoles[index].value : null)
         .filter(value => value !== null);
-      const org = this.createForm.value;
+      const val = this.createForm.value;
+      const org = JSON.parse(JSON.stringify(val));
       org['organizationRole'.toString()] = selectedRoles;
       if (!(selectedRoles.includes(1) || selectedRoles.includes(2))) {
         delete org.location;
       }
+      if (!(selectedRoles.includes(1))) {
+        delete org.coveredVillages;
+        delete org.coveredSectors;
+      }
       // is organisation a cws ?
       if (selectedRoles.includes(1)) {
+        const tempo = [];
         const temp = [];
-        org.coveredVillages.map((id) => {
-          const village = this.villagesOfSector.find(obj => obj._id === id);
-          temp.push({
-            village_id: id,
-            name: village.name
+        org.coveredSectors.map((sectors, index) => {
+          sectors.coveredVillages.map((id) => {
+            const village = this.coveredVillagesSet[index].find(obj => obj._id === id);
+            if (village) {
+              tempo.push({
+                village_id: id,
+                name: village.name
+              });
+            }
+            org.coveredSectors[index].coveredVillages = tempo;
+          });
+          sectors.coveredCells.map((id) => {
+            const cell = this.coveredCellsSet[index].find(obj => obj._id === id);
+            if (cell) {
+              temp.push({
+                cell_id: id,
+                name: cell.name
+              });
+            }
+            org.coveredSectors[index].coveredCells = temp;
           });
         });
-        org.coveredVillages = temp;
       }
       this.helper.cleanObject(org);
       this.organisationService.save(org)
@@ -104,18 +126,104 @@ export class OrganisationCreateComponent implements OnInit {
     }
   }
 
-  public onMouseDown(event: MouseEvent, item) {
+  newCoveredSector(): FormGroup {
+    return this.formBuilder.group({
+      coveredCells: [[]],
+      coveredVillages: [[]],
+      sectorId: ['']
+    });
+  }
+
+  get formCoveredSectors() {
+    return this.createForm.get('coveredSectors') as FormArray;
+  }
+
+  addCoveredSector() {
+    (this.createForm.controls.coveredSectors as FormArray).push(this.newCoveredSector());
+    this.coveredCellsSet.push([]);
+    this.selectedCoveredCells.push([]);
+    this.coveredVillagesSet.push([]);
+    this.selectedCoveredVillages.push([]);
+  }
+
+  removeCoveredSector(index: number) {
+    (this.createForm.controls.coveredSectors as FormArray).removeAt(index);
+  }
+
+  getCoveredSectorsFormGroup(index): FormGroup {
+    this.coveredSectorsList = this.createForm.get('coveredSectors') as FormArray;
+    return this.coveredSectorsList.controls[index] as FormGroup;
+  }
+
+  onChangeSector(index: number) {
+    this.selectedCoveredVillages[index] = [];
+    this.selectedCoveredCells[index] = [];
+    this.getCoveredSectorsFormGroup(index).controls['coveredCells'.toString()].setValue([]);
+    this.getCoveredSectorsFormGroup(index).controls['coveredVillages'.toString()].setValue([]);
+
+    this.locationService.getCoveredVillages(this.getCoveredSectorsFormGroup(index)
+      .controls['sectorId'.toString()].value).subscribe((items) => {
+      this.coveredVillagesSet[index] = items;
+    });
+
+    this.locationService.getCells(this.getCoveredSectorsFormGroup(index)
+      .controls['sectorId'.toString()].value).subscribe((items) => {
+      this.coveredCellsSet[index] = items;
+    });
+  }
+
+  public onMouseDownVillage(index, event: MouseEvent, item) {
     event.preventDefault();
     event.target['selected'.toString()] = !event.target['selected'.toString()];
     if (event.target['selected'.toString()]) {
-      this.createForm.controls['coveredVillages'.toString()].value.push(item._id);
-      this.coveredVillages.push(item.name);
+      this.getCoveredSectorsFormGroup(index).controls['coveredVillages'.toString()].value.push(item._id);
+      this.selectedCoveredVillages[index].push(item.name);
     } else {
-      let index: number;
-      index = this.createForm.value.coveredVillages.indexOf(item._id);
-      if (index > -1) {
-        this.createForm.controls['coveredVillages'.toString()].value.splice(index, 1);
-        this.coveredVillages.splice(index, 1);
+      let i: number;
+      i = this.createForm.value.coveredSectors[index].coveredVillages.indexOf(item._id);
+      if (i > -1) {
+        this.getCoveredSectorsFormGroup(index).controls['coveredVillages'.toString()].value.splice(i, 1);
+        this.selectedCoveredVillages[index].splice(i, 1);
+      }
+    }
+  }
+
+  public onMouseDownCell(index, event: MouseEvent, item) {
+    event.preventDefault();
+    event.target['selected'.toString()] = !event.target['selected'.toString()];
+    if (event.target['selected'.toString()]) {
+      this.getCoveredSectorsFormGroup(index).controls['coveredCells'.toString()].value.push(item._id);
+      this.selectedCoveredCells[index].push(item.name);
+      const ids = this.getCoveredSectorsFormGroup(index).controls['coveredVillages'.toString()].value;
+      this.locationService.getVillages(item._id).subscribe((villages) => {
+        villages.map((village) => {
+          if (!(ids.indexOf(village._id) > -1)) {
+            ids.push(village._id);
+          }
+          if (!(this.selectedCoveredVillages[index].indexOf(village.name) > -1)) {
+            this.selectedCoveredVillages[index].push(village.name);
+          }
+        });
+        this.getCoveredSectorsFormGroup(index).controls['coveredVillages'.toString()].setValue(ids);
+      });
+    } else {
+      let i: number;
+      i = this.createForm.value.coveredSectors[index].coveredCells.indexOf(item._id);
+      if (i > -1) {
+        this.getCoveredSectorsFormGroup(index).controls['coveredCells'.toString()].value.splice(i, 1);
+        this.selectedCoveredCells[index].splice(i, 1);
+        const ids = this.getCoveredSectorsFormGroup(index).controls['coveredVillages'.toString()].value;
+        this.locationService.getVillages(item._id).subscribe((villages) => {
+          villages.map((village) => {
+            if (ids.indexOf(village._id) > -1) {
+              ids.splice(ids.indexOf(village._id), 1);
+            }
+            if (this.selectedCoveredVillages[index].indexOf(village.name) > -1) {
+              this.selectedCoveredVillages[index].splice(this.selectedCoveredVillages[index].indexOf(village.name), 1);
+            }
+          });
+          this.getCoveredSectorsFormGroup(index).controls['coveredVillages'.toString()].setValue(ids);
+        });
       }
     }
   }
@@ -136,10 +244,11 @@ export class OrganisationCreateComponent implements OnInit {
         if (
           this.selectedRoles.includes(1)) {
           this.coverVillages = true;
+          this.addCoveredSector();
         } else {
           this.coverVillages = false;
-          this.coveredVillages = [];
-          this.createForm.controls.coveredVillages.reset([]);
+          this.coveredVillagesSet = [];
+          this.createForm.controls.coveredSectors.reset();
         }
       });
     this.createForm.controls.location.get('prov_id'.toString()).valueChanges.subscribe(
@@ -147,7 +256,6 @@ export class OrganisationCreateComponent implements OnInit {
         if (value !== '') {
           this.locationService.getDistricts(value).subscribe((data) => {
             this.districts = data;
-            this.createForm.controls.location.get('dist_id'.toString()).setValue('');
             this.sectors = null;
             this.cells = null;
             this.villages = null;
@@ -162,6 +270,7 @@ export class OrganisationCreateComponent implements OnInit {
             this.sectors = data;
             this.cells = null;
             this.villages = null;
+            this.coveredVillagesSet = [];
           });
         }
       }
@@ -171,11 +280,7 @@ export class OrganisationCreateComponent implements OnInit {
         if (value !== '') {
           this.locationService.getCells(value).subscribe((data) => {
             this.cells = data;
-            this.coveredVillages = [];
             this.villages = null;
-          });
-          this.locationService.getCoveredVillages(value).subscribe((data) => {
-            this.villagesOfSector = data;
           });
         }
       }

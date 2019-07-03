@@ -20,6 +20,7 @@
             <th (click)="setOrder('coffeeType.name')">Coffee type <i class="fa fa-sort sorting"></i></th>
             <th (click)="setOrder('totalKgPerType')"> Qty <i class="fa fa-sort sorting"></i></th>
             <th (click)="setOrder('created_at')"> Recorded <i class="fa fa-sort sorting"></i></th>
+            <th> </th>
           </tr>
           </thead>
           <tbody>
@@ -27,6 +28,11 @@
             <td> {{ parchment.coffeeType.name }}</td>
             <td> {{ parchment.totalKgPerType }}</td>
             <td> {{ parchment.created_at | date }}</td>
+            <td>
+              <a routerLink="/admin/cws/parchments/transfer/{{parchment._id}}" class="btn btn-success btn-margin pull-right btn-sm" style="margin-left: 10px;">
+                <i class="fa fa-truck"></i> transfer
+              </a>
+            </td>
           </tr>
           </tbody>
         </table>

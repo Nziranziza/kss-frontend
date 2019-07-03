@@ -17,7 +17,7 @@
       <ul class="nav navbar-nav">
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Season {{ currentSeason.season }}
+            <i class="fa fa-angle-down" aria-hidden="true"></i> Season  {{ currentSeason.season }}
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
             <section *ngFor="let season of seasons">
@@ -40,7 +40,6 @@
               <p style="font-weight: bold;">
                 <i class="fa fa-university"></i>
                 <small> {{ orgName }}</small>
-                <!-- <small> NAEB </small>-->
               </p>
             </li>
             <!-- Menu Footer-->
