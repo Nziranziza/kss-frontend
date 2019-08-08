@@ -25,7 +25,6 @@ export class ProfileComponent implements OnInit {
   message: string;
 
   ngOnInit() {
-
     this.changePasswordForm = this.formBuilder.group({
       password: ['', Validators.required],
       confirmPassword: ['', Validators.required]

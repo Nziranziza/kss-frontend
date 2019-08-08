@@ -5,6 +5,7 @@ import {HelperService} from '../../core/helpers';
 import {CherrySupplyService} from '../../core/services/cherry-supply.service';
 import {Subject} from 'rxjs';
 import {AuthenticationService} from '../../core/services';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'app-cherry-supply',
@@ -13,14 +14,16 @@ import {AuthenticationService} from '../../core/services';
 })
 export class CherrySupplyComponent implements OnInit, OnDestroy {
 
-  constructor(private formBuilder: FormBuilder, private cherrySupplyService: CherrySupplyService, private route: ActivatedRoute,
-              private router: Router, private helper: HelperService, private authenticationService: AuthenticationService) {
+  constructor(private formBuilder: FormBuilder, private cherrySupplyService: CherrySupplyService,
+              private route: ActivatedRoute,
+              private router: Router, private helper: HelperService,
+              private location: Location, private authenticationService: AuthenticationService) {
   }
 
   recordCherryDeliveryForm: FormGroup;
   filterSuppliesForm: FormGroup;
   paySuppliesForm: FormGroup;
-  errors: string[];
+  errors: any;
   dtOptions: any = {};
   // @ts-ignore
   dtTrigger: Subject = new Subject();
@@ -28,12 +31,13 @@ export class CherrySupplyComponent implements OnInit, OnDestroy {
   totalAmountToPay = 0;
   paymentDeliveryIds = [];
   regNumber: string;
+  message: string;
   organisationId: string;
 
   ngOnInit() {
     this.recordCherryDeliveryForm = this.formBuilder.group({
       cherriesQty: ['', Validators.required],
-      unitPerKg: [this.authenticationService.getCurrentSeason().seasonParams.cherriesUnitPrice, Validators.required]
+      unitPerKg: ['']
     });
     this.filterSuppliesForm = this.formBuilder.group({
       suppliesFilter: ['all', Validators.required],
@@ -67,13 +71,17 @@ export class CherrySupplyComponent implements OnInit, OnDestroy {
       record['org_id'.toString()] = this.organisationId;
       record['regNumber'.toString()] = this.regNumber;
       this.cherrySupplyService.saveDelivery(record)
-        .subscribe(data => {
+        .subscribe(() => {
             this.getFarmerSupplies(record['org_id'.toString()], record['regNumber'.toString()]);
+            this.message = 'Parchment recorded successfully!';
+            this.errors = '';
           },
           (err) => {
+            this.message = '';
             this.errors = err.errors;
           });
     } else {
+      this.message = '';
       this.errors = this.helper.getFormValidationErrors(this.recordCherryDeliveryForm);
     }
   }
@@ -84,18 +92,21 @@ export class CherrySupplyComponent implements OnInit, OnDestroy {
         this.errors = ['Please select at least one record'];
         return;
       }
-      const record = this.paySuppliesForm.value;
+      const record = JSON.parse(JSON.stringify(this.paySuppliesForm.value));
       record['deliveryIds'.toString()] = this.paymentDeliveryIds;
       record['regNumber'.toString()] = this.regNumber;
       this.cherrySupplyService.paySupplies(record)
-        .subscribe(data => {
+        .subscribe(() => {
             this.getFarmerSupplies(this.organisationId, this.regNumber);
-            this.errors = [];
+            this.errors = '';
+            this.message = 'Successful payment!';
           },
           (err) => {
+            this.message = '';
             this.errors = err.errors;
           });
     } else {
+      this.message = '';
       this.errors = this.helper.getFormValidationErrors(this.paySuppliesForm);
     }
   }
@@ -147,5 +158,9 @@ export class CherrySupplyComponent implements OnInit, OnDestroy {
       this.totalAmountToPay = this.totalAmountToPay - supply.owedAmount;
       this.paymentDeliveryIds.splice(this.paymentDeliveryIds.indexOf(supply._id), 1);
     }
+  }
+
+  onCancel() {
+    this.location.back();
   }
 }

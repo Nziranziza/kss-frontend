@@ -1,9 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {Router} from '@angular/router';
 import {OrganisationService, OrganisationTypeService} from '../../core/services';
 import {HelperService} from '../../core/helpers';
 import {LocationService} from '../../core/services/location.service';
+import {MessageService} from '../../core/services/message.service';
 
 @Component({
   selector: 'app-organisation-create',
@@ -14,6 +15,7 @@ export class OrganisationCreateComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
               private router: Router, private organisationService: OrganisationService,
+              private messageService: MessageService,
               private helper: HelperService, private organisationTypeService: OrganisationTypeService,
               private locationService: LocationService) {
   }
@@ -27,6 +29,7 @@ export class OrganisationCreateComponent implements OnInit {
   sectors: any;
   cells: any;
   villages: any;
+  hasExpiration = false;
   needLocation = false;
   coverVillages = false;
   coveredVillagesSet = [];
@@ -52,7 +55,8 @@ export class OrganisationCreateComponent implements OnInit {
       }),
       organizationRole: new FormArray([]),
       coveredSectors: new FormArray([]),
-      /*usersNIDRequired: ['']*/
+      contractStartingDate: [''],
+      contractEndingDate: [''],
     });
 
     this.organisationTypeService.all().subscribe(data => {
@@ -86,11 +90,15 @@ export class OrganisationCreateComponent implements OnInit {
         delete org.coveredVillages;
         delete org.coveredSectors;
       }
+      if (!(selectedRoles.includes(8))) {
+        delete org.startingDate;
+        delete org.expirationDate;
+      }
       // is organisation a cws ?
       if (selectedRoles.includes(1)) {
-        const tempo = [];
-        const temp = [];
         org.coveredSectors.map((sectors, index) => {
+          const tempo = [];
+          const temp = [];
           sectors.coveredVillages.map((id) => {
             const village = this.coveredVillagesSet[index].find(obj => obj._id === id);
             if (village) {
@@ -116,6 +124,7 @@ export class OrganisationCreateComponent implements OnInit {
       this.helper.cleanObject(org);
       this.organisationService.save(org)
         .subscribe(data => {
+            this.messageService.setMessage('Organisation successfully updated!');
             this.router.navigateByUrl('admin/organisations');
           },
           (err) => {
@@ -234,8 +243,7 @@ export class OrganisationCreateComponent implements OnInit {
         this.selectedRoles = data
           .map((checked, index) => checked ? this.possibleRoles[index].value : null)
           .filter(value => value !== null);
-        if (
-          this.selectedRoles.includes(1) ||
+        if (this.selectedRoles.includes(1) ||
           this.selectedRoles.includes(2)) {
           this.needLocation = true;
         } else {
@@ -249,6 +257,11 @@ export class OrganisationCreateComponent implements OnInit {
           this.coverVillages = false;
           this.coveredVillagesSet = [];
           this.createForm.controls.coveredSectors.reset();
+        }
+        if (this.selectedRoles.includes(8)) {
+          this.hasExpiration = true;
+        } else {
+          this.hasExpiration = false;
         }
       });
     this.createForm.controls.location.get('prov_id'.toString()).valueChanges.subscribe(
@@ -271,6 +284,7 @@ export class OrganisationCreateComponent implements OnInit {
             this.cells = null;
             this.villages = null;
             this.coveredVillagesSet = [];
+            this.coveredCellsSet = [];
           });
         }
       }

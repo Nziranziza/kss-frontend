@@ -1,0 +1,143 @@
+<h3>
+  {{ title }}
+</h3>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-body">
+        <div class="col-xs-12">
+          <app-list-errors [errorList]="errors"></app-list-errors>
+        </div>
+        <form [formGroup]="filterForm">
+          <div class="row">
+            <div class="col-sm-12">
+              <div formGroupName="location">
+                <div class="col-xs-2">
+                  <div class="form-group">
+                    <span class="">Province</span>
+                    <div class="input-group input-group-sm">
+                      <select class="form-control" formControlName="prov_id">
+                        <option value="" selected="selected">ALL PROVINCES</option>
+                        <option *ngFor="let province of provinces" value="{{province._id}}">{{province.namee}}</option>
+                      </select>
+                      <span class="input-group-btn">
+                      <button type="button" class="btn btn-default btn-flat" (click)="onSubmit('province')">
+                        <i class="fa fa-search"></i>
+                      </button>
+                    </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xs-2">
+                  <div class="form-group">
+                    <span class="">District</span>
+                    <div class="input-group input-group-sm">
+                      <select class="form-control" formControlName="dist_id">
+                        <option value=""></option>
+                        <option *ngFor="let district of districts" value="{{district._id}}">{{district.name}}</option>
+                      </select>
+                      <span class="input-group-btn">
+                      <button type="button" class="btn btn-default btn-flat" (click)="onSubmit('district')"
+                              [disabled]="!distId">
+                        <i class="fa fa-search"></i>
+                      </button>
+                    </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-2">
+                <div class="form-group">
+                  <span class="">Zone</span>
+                  <div class="input-group input-group-sm">
+                    <select class="form-control" formControlName="zoneId">
+                      <option value=""></option>
+                      <ng-container *ngFor="let cws of organisations">
+                        <option *ngIf="cws.organizationRole.includes(1)" value="{{cws._id}}">{{cws.organizationName}}
+                        </option>
+                      </ng-container>
+                    </select>
+                    <span class="input-group-btn">
+                      <button type="button" class="btn btn-default btn-flat" (click)="onSubmit('site')"
+                              [disabled]="!zoneId">
+                        <i class="fa fa-search"></i>
+                      </button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="box box-default" style="border-top: 1px solid #d2d6de;">
+      <div class="box-header with-border">
+        <app-loader *ngIf="loading"></app-loader>
+        <div class="row">
+          <div class="col-sm-3 col-xs-6">
+            <div class="description-block border-right">
+              <h5 class="description-header text-green">{{ totalTrees }}</h5>
+              <span class="description-text">TREES</span>
+            </div>
+            <!-- /.description-block -->
+          </div>
+          <!-- /.col -->
+          <div class="col-sm-3 col-xs-6">
+            <div class="description-block border-right">
+              <h5 class="description-header text-blue">{{ totalFertilizerNeeded }}</h5>
+              <span class="description-text">FERTILIZER</span>
+            </div>
+            <!-- /.description-block -->
+          </div>
+          <!-- /.col -->
+          <div class="col-sm-3 col-xs-6">
+            <div class="description-block">
+              <h5 class="description-header text-blue">{{ totalFarmers }}</h5>
+              <span class="description-text">FARMERS</span>
+            </div>
+            <!-- /.description-block -->
+          </div>
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body" id="box-body">
+        <div class="row" *ngIf="subRegion">
+          <div class="col-sm-12 col-xs-12">
+            <table class="table table-striped">
+              <thead>
+              <tr>
+                <th>Location</th>
+                <th>Number of trees</th>
+                <th>Number of farmers</th>
+                <th>Fertilizer needed</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let plan of plans;">
+                <td>{{plan.location}}</td>
+                <td>{{plan.numberOfTrees }}</td>
+                <td>{{plan.numberOfFarmers }}</td>
+                <td>{{plan.fertilizerNeed }} Kg</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- ./box-body -->
+      <div class="box-footer">
+      </div>
+      <!-- /.box-footer -->
+    </div>
+    <!-- /.box -->
+  </div>
+  <!-- /.col -->
+</div>
+

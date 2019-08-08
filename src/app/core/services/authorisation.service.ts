@@ -35,4 +35,8 @@ export class AuthorisationService {
     this.userRoles = this.authenticationService.getCurrentUser().parameters.role;
     return !!this.userRoles.includes(2);
   }
+  isDistrictCashCropOfficer() {
+    this.userRoles = this.authenticationService.getCurrentUser().parameters.role;
+    return !!this.userRoles.includes(6);
+  }
 }

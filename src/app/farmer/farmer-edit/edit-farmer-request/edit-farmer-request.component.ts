@@ -5,6 +5,7 @@ import {HelperService} from '../../../core/helpers';
 import {AuthenticationService, FarmerService} from '../../../core/services';
 import {isPlatformBrowser} from '@angular/common';
 import {LocationService} from '../../../core/services/location.service';
+import {AuthorisationService} from '../../../core/services/authorisation.service';
 
 @Component({
   selector: 'app-edit-farmer-request',
@@ -25,12 +26,14 @@ export class EditFarmerRequestComponent implements OnInit {
   sectors: any;
   cells: any;
   villages: any;
+  currentSeason: any;
+  isUserCWSOfficer = false;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
     private injector: Injector, private formBuilder: FormBuilder, private locationService: LocationService,
     private helper: HelperService, private farmerService: FarmerService,
-    private authenticationService: AuthenticationService) {
+    private authenticationService: AuthenticationService, private authorisationService: AuthorisationService) {
 
     if (isPlatformBrowser(this.platformId)) {
       this.modal = this.injector.get(NgbActiveModal);
@@ -57,6 +60,8 @@ export class EditFarmerRequestComponent implements OnInit {
       fertilizer_allocate: this.land.fertilizer_allocate,
       location: {}
     };
+    this.currentSeason = this.authenticationService.getCurrentSeason();
+    this.isUserCWSOfficer = this.authorisationService.isCWSUser();
 
     temp.location['prov_id'.toString()] = this.land.location.prov_id._id;
     temp.location['dist_id'.toString()] = this.land.location.dist_id._id;
@@ -138,7 +143,8 @@ export class EditFarmerRequestComponent implements OnInit {
   onSubmit() {
     if (this.editFarmerRequestForm.valid) {
       const request = this.editFarmerRequestForm.value;
-      request['fertilizer_need'.toString()] = request['numberOfTrees'.toString()];
+      request['fertilizer_need'.toString()] =
+        +request['numberOfTrees'.toString()] * this.currentSeason.seasonParams.fertilizerKgPerTree.$numberDouble;
       request['documentId'.toString()] = this.farmerId;
       request['subDocumentId'.toString()] = this.land._id;
       this.farmerService.updateFarmerRequest(request).subscribe((data) => {

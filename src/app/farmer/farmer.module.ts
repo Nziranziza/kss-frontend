@@ -7,16 +7,21 @@ import {FarmerDetailsComponent} from './farmer-details/farmer-details.component'
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {NgxPaginationModule} from 'ngx-pagination';
 import {OrderModule} from 'ngx-order-pipe';
-import {FarmerCreateComponent } from './farmer-create/farmer-create.component';
-import {FarmerEditComponent } from './farmer-edit/farmer-edit.component';
-import { FarmerLandsComponent } from './farmer-lands/farmer-lands.component';
-import { EditFarmerProfileComponent } from './farmer-edit/edit-farmer-profile/edit-farmer-profile.component';
-import { EditFarmerRequestComponent } from './farmer-edit/edit-farmer-request/edit-farmer-request.component';
-import { AddFarmerRequestComponent } from './farmer-edit/add-farmer-request/add-farmer-request.component';
+import {FarmerCreateComponent} from './farmer-create/farmer-create.component';
+import {FarmerEditComponent} from './farmer-edit/farmer-edit.component';
+import {FarmerLandsComponent} from './farmer-lands/farmer-lands.component';
+import {EditFarmerProfileComponent} from './farmer-edit/edit-farmer-profile/edit-farmer-profile.component';
+import {EditFarmerRequestComponent} from './farmer-edit/edit-farmer-request/edit-farmer-request.component';
+import {AddFarmerRequestComponent} from './farmer-edit/add-farmer-request/add-farmer-request.component';
+import {FarmerAdministrativeListComponent} from './farmer-administrative-list/farmer-administrative-list.component';
+import {FarmerNeedApprovalListComponent} from './farmer-need-approval-list/farmer-need-approval-list.component';
 
 
 @NgModule({
-  declarations: [FarmerListComponent, FarmerDetailsComponent, FarmerCreateComponent, FarmerEditComponent, FarmerLandsComponent, EditFarmerProfileComponent, EditFarmerRequestComponent, AddFarmerRequestComponent],
+  declarations: [FarmerListComponent, FarmerDetailsComponent, FarmerCreateComponent,
+    FarmerEditComponent, FarmerLandsComponent,
+    EditFarmerProfileComponent, EditFarmerRequestComponent,
+    AddFarmerRequestComponent, FarmerAdministrativeListComponent, FarmerNeedApprovalListComponent],
   imports: [
     CommonModule,
     FarmerRoutingModule,

@@ -1,11 +1,12 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ConfirmDialogService, FarmerService} from '../../core/services';
+import {AuthenticationService, ConfirmDialogService, FarmerService} from '../../core/services';
 import {Router} from '@angular/router';
 import {Farmer} from '../../core/models';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {FarmerDetailsComponent} from '../farmer-details/farmer-details.component';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MessageService} from '../../core/services/message.service';
+import {AuthorisationService} from '../../core/services/authorisation.service';
 
 @Component({
   selector: 'app-farmer-list',
@@ -15,7 +16,9 @@ import {MessageService} from '../../core/services/message.service';
 export class FarmerListComponent implements OnInit, OnDestroy {
 
   constructor(private farmerService: FarmerService,
+              private authenticationService: AuthenticationService,
               private router: Router, private  confirmDialogService: ConfirmDialogService,
+              private authorisationService: AuthorisationService,
               private modal: NgbModal, private formBuilder: FormBuilder, private messageService: MessageService) {
     this.parameters = {
       length: 25,
@@ -24,8 +27,10 @@ export class FarmerListComponent implements OnInit, OnDestroy {
     };
   }
 
+  isDistrictCashCrop = false;
   filterForm: FormGroup;
   maxSize = 9;
+
   order = 'userInfo.foreName';
   reverse = true;
   directionLinks = true;
@@ -56,21 +61,12 @@ export class FarmerListComponent implements OnInit, OnDestroy {
   ];
 
   ngOnInit(): void {
-    this.farmerService.getFarmers(this.parameters)
-      .subscribe(data => {
-        this.farmers = data.data;
-        this.config = {
-          itemsPerPage: this.parameters.length,
-          currentPage: this.parameters.start + 1,
-          totalItems: data.recordsTotal
-        };
-
-      });
+    this.isDistrictCashCrop = this.authorisationService.isDistrictCashCropOfficer();
+    this.getFarmers();
     this.filterForm = this.formBuilder.group({
       term: ['', Validators.minLength(3)],
       searchBy: ['forename']
     });
-
     this.message = this.messageService.getMessage();
   }
 
@@ -143,6 +139,23 @@ export class FarmerListComponent implements OnInit, OnDestroy {
   viewDetails(farmer: Farmer) {
     const modalRef = this.modal.open(FarmerDetailsComponent, {size: 'lg'});
     modalRef.componentInstance.farmer = farmer;
+  }
+
+  getFarmers() {
+    if (this.isDistrictCashCrop) {
+      this.parameters['dist_id'.toString()] = this.authenticationService.getCurrentUser().info.location.dist_id;
+    }
+    this.loading = true;
+    this.farmerService.getFarmers(this.parameters)
+      .subscribe(data => {
+        this.farmers = data.data;
+        this.config = {
+          itemsPerPage: this.parameters.length,
+          currentPage: this.parameters.start + 1,
+          totalItems: data.recordsTotal
+        };
+        this.loading = false;
+      });
   }
 
 }

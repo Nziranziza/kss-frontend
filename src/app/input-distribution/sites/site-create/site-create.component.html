@@ -1,0 +1,91 @@
+<h3>
+  Create site
+</h3>
+<app-list-errors [errorList]="errors"></app-list-errors>
+<form [formGroup]="createForm" (ngSubmit)="onSubmit()">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-body">
+          <fieldset class="location" style="margin: 15px 0px 15px !important; ">
+            <legend>
+              <label class="control-label label-required">&nbsp; Location</label></legend>
+            <div formGroupName="location">
+              <div class="col-xs-2" id="location-province">
+                <div class="form-group">
+                  <span class="">Province</span>
+                  <select class="form-control" formControlName="prov_id">
+                    <option value=""></option>
+                    <option *ngFor="let province of provinces" value="{{province._id}}">{{province.namee}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xs-2" id="location-district">
+                <div class="form-group">
+                  <span class="">District</span>
+                  <select class="form-control" formControlName="dist_id">
+                    <option value=""></option>
+                    <option *ngFor="let district of districts" value="{{district._id}}">{{district.name}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xs-2" id="location-sector">
+                <div class="form-group">
+                  <span class="">Sector</span>
+                  <select class="form-control" formControlName="sect_id">
+                    <option value=""></option>
+                    <option *ngFor="let sector of sectors" value="{{sector._id}}">{{sector.name}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xs-2" id="location-cell">
+                <div class="form-group">
+                  <span class="">Cell</span>
+                  <select class="form-control" formControlName="cell_id">
+                    <option value=""></option>
+                    <option *ngFor="let cell of cells" value="{{cell._id}}">{{cell.name}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xs-2" id="location-village">
+                <div class="form-group">
+                  <span class="">Village</span>
+                  <select class="form-control" formControlName="village_id">
+                    <option value=""></option>
+                    <option *ngFor="let village of villages" value="{{village._id}}">{{village.name}}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+          <div class="row">
+            <div class="col-xs-6">
+              <div class="form-group">
+                <label class="control-label label-required">Name</label>
+                <input type="text" formControlName="siteName" class="form-control">
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <div class="form-group">
+                <label class="control-label label-required">Zone</label>
+                <select class="form-control" formControlName="belongingZone">
+                  <option value=""></option>
+                  <ng-container *ngFor="let cws of organisations">
+                    <option *ngIf="cws.organizationRole.includes(1)" value="{{cws._id}}">{{cws.organizationName}}
+                    </option>
+                  </ng-container>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <a class="btn btn-warning btn-margin pull-right" routerLink="/admin/sites">Cancel</a>
+      <button class="btn btn-success pull-right">Save</button>
+    </div>
+  </div>
+</form>

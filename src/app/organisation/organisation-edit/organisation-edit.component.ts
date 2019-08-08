@@ -33,12 +33,13 @@ export class OrganisationEditComponent implements OnInit {
   id: string;
   coverVillages = false;
   isSuperOrg = false;
-  coveredVillagesSet = [];
-  coveredCellsSet = [];
-  selectedCoveredVillages = [];
-  selectedCoveredCells = [];
+  coveredVillagesSet = [[]];
+  coveredCellsSet = [[]];
+  selectedCoveredVillages = [[]];
+  selectedCoveredCells = [[]];
   coveredSectorsList: FormArray;
   onInitial = true;
+  hasExpiration = false;
 
   ngOnInit() {
     this.editForm = this.formBuilder.group({
@@ -56,7 +57,8 @@ export class OrganisationEditComponent implements OnInit {
       }),
       organizationRole: new FormArray([]),
       coveredSectors: new FormArray([]),
-      /* usersNIDRequired: ['']*/
+      contractStartingDate: [''],
+      contractEndingDate: [''],
     });
     this.organisationTypeService.all().subscribe(types => {
       this.genres = types.content;
@@ -97,6 +99,11 @@ export class OrganisationEditComponent implements OnInit {
         } else {
           this.needLocation = false;
         }
+        if (org.organizationRole.includes(8)) {
+          this.hasExpiration = true;
+        } else {
+          this.hasExpiration = false;
+        }
         this.locationService.getProvinces().subscribe((provinces) => {
           this.provinces = provinces;
         });
@@ -110,7 +117,6 @@ export class OrganisationEditComponent implements OnInit {
               restoreCoveredVillages.push(obj.village_id);
               this.selectedCoveredVillages[index].push(obj.name);
             });
-            console.log(this.selectedCoveredVillages[index]);
             sector.coveredCells.map((obj) => {
               restoreCoveredCells.push(obj.cell_id);
               this.selectedCoveredCells[index].push(obj.name);
@@ -284,11 +290,15 @@ export class OrganisationEditComponent implements OnInit {
         delete org.coveredVillages;
         delete org.coveredSectors;
       }
+      if (!(selectedRoles.includes(8))) {
+        delete org.startingDate;
+        delete org.expirationDate;
+      }
       // is organisation a cws ?
       if (selectedRoles.includes(1)) {
-        const tempo = [];
-        const temp = [];
         org.coveredSectors.map((sectors, index) => {
+          const tempo = [];
+          const temp = [];
           sectors.coveredVillages.map((id) => {
             const village = this.coveredVillagesSet[index].find(obj => obj._id === id);
             if (village) {
@@ -348,6 +358,11 @@ export class OrganisationEditComponent implements OnInit {
           this.coveredVillagesSet = [];
           this.editForm.controls.coveredSectors.reset();
         }
+        if (this.selectedRoles.includes(8)) {
+          this.hasExpiration = false;
+        } else {
+          this.hasExpiration = true;
+        }
       });
     this.editForm.controls.location.get('prov_id'.toString()).valueChanges.subscribe(
       (value) => {
@@ -369,6 +384,7 @@ export class OrganisationEditComponent implements OnInit {
             this.cells = null;
             this.villages = null;
             this.coveredVillagesSet = [];
+            this.coveredCellsSet = [];
           });
         }
       }

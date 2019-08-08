@@ -7,9 +7,7 @@ import {catchError} from 'rxjs/operators';
 
 @Injectable()
 export class ApiService {
-  constructor(private http: HttpClient
-  ) {
-  }
+  constructor(private http: HttpClient) {}
 
   private formatErrors(error: any) {
     return throwError(error);

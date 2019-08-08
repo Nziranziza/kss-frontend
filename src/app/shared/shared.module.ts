@@ -16,6 +16,7 @@ import {ConfirmDialogComponent} from './layout';
 import {DataTablesModule} from 'angular-datatables';
 import {RequiredRolesDirective} from './directives/required-roles';
 import {LoaderComponent} from './layout';
+import {RequiredSeasonDirective} from './directives/required-season.directive';
 
 @NgModule({
   imports: [
@@ -27,7 +28,8 @@ import {LoaderComponent} from './layout';
 
   ],
   declarations: [ListErrorsComponent, LoaderComponent,
-    HomeHeaderComponent, HomeFooterComponent, ListMessageComponent, ConfirmDialogComponent, RequiredRolesDirective, LoaderComponent],
+    HomeHeaderComponent, HomeFooterComponent, ListMessageComponent,
+    ConfirmDialogComponent, RequiredRolesDirective, LoaderComponent, RequiredSeasonDirective],
   exports: [
     CommonModule,
     FormsModule,
@@ -40,7 +42,8 @@ import {LoaderComponent} from './layout';
     LoaderComponent,
     HomeFooterComponent,
     ConfirmDialogComponent,
-    MatIconModule, MatDialogModule, DataTablesModule, RequiredRolesDirective,
+    MatIconModule, MatDialogModule,
+    DataTablesModule, RequiredRolesDirective, RequiredSeasonDirective
   ],
   entryComponents: [ConfirmDialogComponent]
 })

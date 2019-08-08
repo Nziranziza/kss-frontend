@@ -15,14 +15,9 @@ export class ListMessageComponent implements OnInit {
   }
 
   ngOnInit() {
-    /*$(() => {
-      $('.alert-message').fadeTo(2000, 500).slideUp(500, () => {
-        $('.alert-message').slideUp(2000);
-      });
-    });
-    */
+
     $(() => {
-      $('.alert[data-auto-dismiss]').each((index, element) => {
+      $('.custom-message').each((index, element) => {
         const $element = $(element);
         const timeout = $element.data('auto-dismiss') || 5000;
         setTimeout(() => {

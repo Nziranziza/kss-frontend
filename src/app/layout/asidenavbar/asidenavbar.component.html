@@ -3,14 +3,14 @@
   <section class="sidebar" style="height: auto;">
     <!-- sidebar menu: : style can be found in sidebar.less -->
     <ul class="sidebar-menu tree" data-widget="tree">
-      <li class="header" [appRequiredRoles]="[4,0]">REGISTRATION</li>
-      <li routerLinkActive="active" [appRequiredRoles]="[4,0]">
+      <li class="header" [appRequiredRoles]="[4,0,6]">REGISTRATION</li>
+      <li routerLinkActive="active" [appRequiredRoles]="[4,0,6]">
         <a routerLink="/admin/organisations">
           <i class="fa fa-university" aria-hidden="true"></i>
           <span>Organisations</span>
         </a>
       </li>
-      <li class="treeview" routerLinkActive="active" [appRequiredRoles]="[4,0]">
+      <li class="treeview" routerLinkActive="active" [appRequiredRoles]="[4,0,6]">
         <a href="#">
           <i class="fa fa-users"></i> <span>Farmers</span>
           <span class="pull-right-container">
@@ -19,9 +19,15 @@
         </a>
         <ul class="treeview-menu">
           <li routerLinkActive="active">
-            <a routerLink="/admin/farmers">
+            <a routerLink="/admin/farmers/list">
               <i class="fa fa-circle-o"></i>
               <span>Farmers</span>
+            </a>
+          </li>
+          <li routerLinkActive="active" [appRequiredRoles]="[5]">
+            <a routerLink="/admin/farmers/administrative/list">
+              <i class="fa fa-circle-o"></i>
+              <span>Administrative list</span>
             </a>
           </li>
           <li routerLinkActive="active">
@@ -32,28 +38,28 @@
           </li>
         </ul>
       </li>
-      <li class="treeview" routerLinkActive="active" [appRequiredRoles]="[4,0]">
+      <li class="header" [appRequiredRoles]="[1]">WET PROCESSING</li>
+      <li class="treeview" routerLinkActive="active" [appRequiredRoles]="[1]">
         <a href="#">
-          <i class="fa fa-bar-chart"></i> <span>Reports</span>
+          <i class="fa fa-users"></i> <span>Farmers</span>
           <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
         </a>
         <ul class="treeview-menu">
-          <li routerLinkActive="active">
-            <a routerLink="/admin/report/farmers">
+          <li routerLinkActive="active" [appRequiredRoles]="[1]">
+            <a routerLink="/admin/cws-farmers/{{user.org_id}}">
               <i class="fa fa-circle-o"></i>
               <span>Farmers</span>
             </a>
           </li>
+          <li routerLinkActive="active" [appRequiredRoles]="[1]">
+            <a routerLink="/admin/cws-pending-farmers/{{user.org_id}}">
+              <i class="fa fa-circle-o"></i>
+              <span>Temporary farmers</span>
+            </a>
+          </li>
         </ul>
-      </li>
-      <li class="header" [appRequiredRoles]="[1]">WET PROCESSING</li>
-      <li routerLinkActive="active" [appRequiredRoles]="[1]">
-        <a routerLink="/admin/cws-farmers/{{user.org_id}}">
-          <i class="fa fa-users" aria-hidden="true"></i>
-          <span>Farmers</span>
-        </a>
       </li>
       <li routerLinkActive="active" [appRequiredRoles]="[1]">
         <a routerLink="/admin/cws/parchments/list">
@@ -68,10 +74,63 @@
           <span>Received parchments</span>
         </a>
       </li>
+      <li class="header" [appRequiredRoles]="[4,0]">INPUT DISTRIBUTION</li>
+      <li routerLinkActive="active" [appRequiredRoles]="[4,0]">
+        <a routerLink="/admin/sites">
+          <i class="fa fa-square" aria-hidden="true"></i>
+          <span>Sites</span>
+        </a>
+      </li>
+      <li routerLinkActive="active" [appRequiredRoles]="[4,0]">
+        <a routerLink="/admin/input/distribution/plan">
+          <i class="fa fa-history" aria-hidden="true"></i>
+          <span>Distribution plan</span>
+        </a>
+      </li>
+      <li routerLinkActive="active" [appRequiredRoles]="[5]">
+        <a routerLink="/admin/input/record/dispatch">
+          <i class="fa fa-sticky-note-o" aria-hidden="true"></i>
+          <span>Input dispatch</span>
+        </a>
+      </li>
+      <li routerLinkActive="active" [appRequiredRoles]="[5]">
+        <a routerLink="/admin/input/site/distribution">
+          <i class="fa fa-universal-access" aria-hidden="true"></i>
+          <span>Site distribution</span>
+        </a>
+      </li>
       <li class="header">GENERAL</li>
+      <li class="treeview" routerLinkActive="active">
+        <a href="#">
+          <i class="fa fa-bar-chart"></i><span>Reports</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
+        </a>
+        <ul class="treeview-menu">
+          <li routerLinkActive="active" [appRequiredRoles]="[4,0,6]">
+            <a routerLink="/admin/report/farmers">
+              <i class="fa fa-circle-o"></i>
+              <span>Farmers</span>
+            </a>
+          </li>
+          <li routerLinkActive="active" [appRequiredRoles]="[4.0,6]">
+            <a routerLink="/admin/cherries/supply/reports">
+              <i class="fa fa-circle-o"></i>
+              <span>Cherry supply</span>
+            </a>
+          </li>
+          <li routerLinkActive="active" [appRequiredRoles]="[4.0,6]">
+            <a routerLink="/admin/cherries/parchments/report">
+              <i class="fa fa-circle-o"></i>
+              <span>Parchment production</span>
+            </a>
+          </li>
+        </ul>
+      </li>
       <li class="treeview" routerLinkActive="active" [appRequiredRoles]="[4,0]">
         <a href="#">
-          <i class="fa fa-cogs"></i> <span>Settings</span>
+          <i class="fa fa-cogs"></i><span>Settings</span>
           <span class="pull-right-container">
             <i class="fa fa-angle-left pull-right"></i>
           </span>

@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {UserService} from '../../core/services/user.service';
 import {User} from '../../core/models';
-import {ConfirmDialogService} from '../../core/services';
+import {ConfirmDialogService, OrganisationService} from '../../core/services';
 import {Subject} from 'rxjs';
 
 @Component({
@@ -18,26 +18,28 @@ export class UserListComponent implements OnInit, OnDestroy {
   dtOptions: DataTables.Settings = {};
   // @ts-ignore
   dtTrigger: Subject = new Subject();
+  org: any;
 
   constructor(private route: ActivatedRoute, private userService: UserService,
-              private confirmDialogService: ConfirmDialogService) {
+              private confirmDialogService: ConfirmDialogService, private organisationService: OrganisationService) {
 
   }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.organisationId = params['organisationId'.toString()];
-
     });
     this.getAllUsers();
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 10
     };
+    this.organisationService.get(this.organisationId).subscribe(data => {
+      this.org = data.content;
+    });
   }
 
   ngOnDestroy(): void {
-    // Do not forget to unsubscribe the event
     this.dtTrigger.unsubscribe();
   }
 

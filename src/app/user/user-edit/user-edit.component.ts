@@ -1,10 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from '../../core/services/user.service';
 import {AuthenticationService, OrganisationService} from '../../core/services';
 import {LocationService} from '../../core/services/location.service';
 import {HelperService} from '../../core/helpers';
+import {SiteService} from '../../core/services/site.service';
 
 @Component({
   selector: 'app-user-edit',
@@ -36,11 +37,22 @@ export class UserEditComponent implements OnInit {
     {name: 'Expired', value: 5},
   ];
   invalidId = false;
+  org: any;
+  sites = [];
+  showLocation = {
+    province: true,
+    district: true,
+    sector: true,
+    cell: true,
+    village: true,
+  };
+  hasSite = false;
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute, private router: Router,
               private userService: UserService, private helper: HelperService,
               private organisationService: OrganisationService,
+              private siteService: SiteService,
               private locationService: LocationService, private authenticationService: AuthenticationService) {
   }
 
@@ -50,7 +62,7 @@ export class UserEditComponent implements OnInit {
       surname: [''],
       email: [''],
       phone_number: [''],
-      sex: [''],
+      sex: ['', Validators.required],
       NID: [''],
       org_id: [''],
       userType: [''],
@@ -62,6 +74,7 @@ export class UserEditComponent implements OnInit {
         cell_id: [''],
         village_id: [''],
       }),
+      site: [''],
       status: ['']
     });
     this.userService.userTypes().subscribe(data => {
@@ -83,6 +96,7 @@ export class UserEditComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.userService.get(params['id'.toString()]).subscribe(user => {
         this.organisationService.get(this.organisationId).subscribe(data => {
+          this.org = data.content;
           this.isSuperOrganisation(data.content);
           this.orgPossibleRoles = this.possibleRoles.filter(roles => data.content.organizationRole.includes(roles.value));
           this.orgPossibleRoles.map(role => {
@@ -101,10 +115,15 @@ export class UserEditComponent implements OnInit {
             usr['userType'.toString()] = access.userType;
           }
         });
-        usr.sex = usr.sex.toLowerCase();
+        if (usr.sex !== undefined) {
+          usr['sex'.toString()] = usr['sex'.toString()].toLowerCase();
+        }
+
         this.editForm.patchValue(usr);
       });
     });
+    this.initial();
+    this.onChanges();
   }
 
   isSuperOrganisation(organisation: any) {
@@ -130,6 +149,7 @@ export class UserEditComponent implements OnInit {
         this.loading = false;
       });
     }
+
   }
 
   deleteErrors() {
@@ -141,43 +161,63 @@ export class UserEditComponent implements OnInit {
       (data) => {
         const selectedRoles = data
           .map((checked, index) => checked ? this.orgPossibleRoles[index].value : null)
-          .filter(value => value !== null);
-        if (
-          selectedRoles.includes(6) ||
-          selectedRoles.includes(7)
-        ) {
+          .filter(value => value !== '');
+        if (selectedRoles.includes(6)) {
           this.needLocation = true;
         } else {
           this.needLocation = false;
+        }
+        if (selectedRoles.includes(8)) {
+          this.hasSite = true;
+        } else {
+          this.hasSite = false;
         }
       });
 
     this.editForm.controls.location.get('prov_id'.toString()).valueChanges.subscribe(
       (value) => {
-        if (value !== null) {
+        if (value !== '') {
           this.locationService.getDistricts(value).subscribe((data) => {
             this.districts = data;
             this.sectors = null;
             this.cells = null;
             this.villages = null;
           });
+          if (this.hasSite) {
+            const body = {
+              searchBy: 'province',
+              prov_id: value
+            };
+            this.siteService.all(body).subscribe((data) => {
+              this.sites = data.content;
+            });
+          }
         }
       }
     );
     this.editForm.controls.location.get('dist_id'.toString()).valueChanges.subscribe(
       (value) => {
-        if (value !== null) {
+        if (value !== '') {
           this.locationService.getSectors(value).subscribe((data) => {
             this.sectors = data;
             this.cells = null;
             this.villages = null;
           });
+          if (this.hasSite) {
+            const body = {
+              searchBy: 'district',
+              dist_id: value
+            };
+            this.siteService.all(body).subscribe((data) => {
+              this.sites = data.content;
+            });
+          }
         }
       }
     );
     this.editForm.controls.location.get('sect_id'.toString()).valueChanges.subscribe(
       (value) => {
-        if (value !== null) {
+        if (value !== '') {
           this.locationService.getCells(value).subscribe((data) => {
             this.cells = data;
             this.villages = null;
@@ -187,7 +227,7 @@ export class UserEditComponent implements OnInit {
     );
     this.editForm.controls.location.get('cell_id'.toString()).valueChanges.subscribe(
       (value) => {
-        if (value !== null) {
+        if (value !== '') {
           this.locationService.getVillages(value).subscribe((data) => {
             this.villages = data;
           });
@@ -208,8 +248,11 @@ export class UserEditComponent implements OnInit {
       if (this.isFromSuperOrg) {
         user['userRoles'.toString()] = [0];
       }
-      if (!(selectedRoles.includes(6) || selectedRoles.includes(7))) {
+      if (!(selectedRoles.includes(6))) {
         delete user.location;
+      }
+      if (!selectedRoles.includes(8)) {
+        delete user.site;
       }
       user['lastModifiedBy'.toString()] = {
         _id: this.authenticationService.getCurrentUser().info._id,
@@ -218,6 +261,7 @@ export class UserEditComponent implements OnInit {
       delete user.email;
       delete user.userType;
       this.helper.cleanObject(user);
+      this.helper.cleanObject(user.location);
       this.userService.update(user).subscribe(data => {
           this.router.navigateByUrl('admin/organisations/' + this.organisationId + '/users');
         },
@@ -225,5 +269,11 @@ export class UserEditComponent implements OnInit {
           this.errors = err.errors;
         });
     }
+  }
+
+  initial() {
+    this.locationService.getProvinces().subscribe((data) => {
+      this.provinces = data;
+    });
   }
 }

@@ -1,10 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from '../../core/services/user.service';
 import {OrganisationService} from '../../core/services';
 import {LocationService} from '../../core/services/location.service';
 import {HelperService} from '../../core/helpers';
+import {SiteService} from '../../core/services/site.service';
 
 @Component({
   selector: 'app-user-create',
@@ -25,14 +26,25 @@ export class UserCreateComponent implements OnInit {
   loading = false;
   villages: any;
   needLocation = false;
+  hasSite = false;
   possibleRoles: any[];
   isFromSuperOrg = false;
   userNIDInfo = {};
   invalidId = false;
+  org: any;
+  sites = [];
+  showLocation = {
+    province: true,
+    district: true,
+    sector: true,
+    cell: true,
+    village: true,
+  };
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute, private router: Router,
               private userService: UserService,
+              private siteService: SiteService,
               private helper: HelperService,
               private organisationService: OrganisationService,
               private locationService: LocationService) {
@@ -44,7 +56,7 @@ export class UserCreateComponent implements OnInit {
       surname: [''],
       email: [''],
       phone_number: [''],
-      sex: [''],
+      sex: ['', Validators.required],
       NID: [''],
       password: [''],
       org_id: [''],
@@ -56,6 +68,7 @@ export class UserCreateComponent implements OnInit {
         cell_id: [''],
         village_id: [''],
       }),
+      site: [''],
       userRoles: new FormArray([])
     });
     this.userService.userTypes().subscribe(data => {
@@ -63,25 +76,16 @@ export class UserCreateComponent implements OnInit {
         return {name: key, value: data.content[key]};
       });
     });
-
     this.organisationService.possibleRoles().subscribe(data => {
       this.possibleRoles = Object.keys(data.content).map(key => {
         return {name: key, value: data.content[key]};
       });
     });
-
     this.route.params.subscribe(params => {
       this.organisationId = params['organisationId'.toString()];
     });
 
-    this.organisationService.get(this.organisationId).subscribe(data => {
-      this.isSuperOrganisation(data.content);
-      this.orgPossibleRoles = this.possibleRoles.filter(roles => data.content.organizationRole.includes(roles.value));
-      this.orgPossibleRoles.map(role => {
-        const control = new FormControl(false);
-        (this.createForm.controls.userRoles as FormArray).push(control);
-      });
-    });
+    this.getRoles();
     this.initial();
     this.onChanges();
   }
@@ -165,13 +169,17 @@ export class UserCreateComponent implements OnInit {
         () => {
         },
         () => {
-          if (!(selectedRoles.includes(6) || selectedRoles.includes(7))) {
-            delete user.location;
-          }
           if (this.isFromSuperOrg) {
             user['userRoles'.toString()] = [0];
           }
+          if (!(selectedRoles.includes(6))) {
+            delete user.location;
+          }
+          if (!selectedRoles.includes(8)) {
+            delete user.site;
+          }
           this.helper.cleanObject(user);
+          this.helper.cleanObject(user.location);
           this.userService.save(user).subscribe((data) => {
               this.router.navigateByUrl('admin/organisations/' + this.organisationId + '/users');
             },
@@ -188,42 +196,63 @@ export class UserCreateComponent implements OnInit {
         const selectedRoles = data
           .map((checked, index) => checked ? this.orgPossibleRoles[index].value : null)
           .filter(value => value !== null);
-        if (
-          selectedRoles.includes(6) ||
-          selectedRoles.includes(7)
-        ) {
+        if (selectedRoles.includes(6)) {
           this.needLocation = true;
         } else {
           this.needLocation = false;
         }
-      });
+        if (selectedRoles.includes(8)) {
+          this.hasSite = true;
+        } else {
+          this.hasSite = false;
+        }
+      }
+    );
 
     this.createForm.controls.location.get('prov_id'.toString()).valueChanges.subscribe(
       (value) => {
-        if (value !== null) {
+        if (value !== '') {
           this.locationService.getDistricts(value).subscribe((data) => {
             this.districts = data;
             this.sectors = null;
             this.cells = null;
             this.villages = null;
           });
+          if (this.hasSite) {
+            const body = {
+              searchBy: 'province',
+              prov_id: value
+            };
+            this.siteService.all(body).subscribe((data) => {
+              this.sites = data.content;
+            });
+          }
         }
       }
     );
     this.createForm.controls.location.get('dist_id'.toString()).valueChanges.subscribe(
       (value) => {
-        if (value !== null) {
+        if (value !== '') {
           this.locationService.getSectors(value).subscribe((data) => {
             this.sectors = data;
             this.cells = null;
             this.villages = null;
           });
+          if (this.hasSite) {
+            const body = {
+              searchBy: 'district',
+              dist_id: value
+            };
+            this.siteService.all(body).subscribe((data) => {
+              this.sites = data.content;
+            });
+          }
         }
       }
     );
     this.createForm.controls.location.get('sect_id'.toString()).valueChanges.subscribe(
       (value) => {
-        if (value !== null) {
+        if (value !== '') {
           this.locationService.getCells(value).subscribe((data) => {
             this.cells = data;
             this.villages = null;
@@ -233,7 +262,7 @@ export class UserCreateComponent implements OnInit {
     );
     this.createForm.controls.location.get('cell_id'.toString()).valueChanges.subscribe(
       (value) => {
-        if (value !== null) {
+        if (value !== '') {
           this.locationService.getVillages(value).subscribe((data) => {
             this.villages = data;
           });
@@ -245,6 +274,18 @@ export class UserCreateComponent implements OnInit {
   initial() {
     this.locationService.getProvinces().subscribe((data) => {
       this.provinces = data;
+    });
+  }
+
+  getRoles() {
+    this.organisationService.get(this.organisationId).subscribe(data => {
+      this.org = data.content;
+      this.isSuperOrganisation(data.content);
+      this.orgPossibleRoles = this.possibleRoles.filter(roles => data.content.organizationRole.includes(roles.value));
+      this.orgPossibleRoles.map(() => {
+        const control = new FormControl(false);
+        (this.createForm.controls.userRoles as FormArray).push(control);
+      });
     });
   }
 }

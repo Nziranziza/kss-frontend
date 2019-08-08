@@ -5,6 +5,8 @@ import {Router} from '@angular/router';
 import {ConfirmDialogService} from '../../core/services';
 import {Subject} from 'rxjs';
 import {MessageService} from '../../core/services/message.service';
+import {AuthorisationService} from '../../core/services/authorisation.service';
+import {SiteService} from '../../core/services/site.service';
 
 declare var $;
 
@@ -15,8 +17,9 @@ declare var $;
 })
 export class OrganisationListComponent implements OnInit, OnDestroy {
 
-  constructor(private organisationService: OrganisationService,
+  constructor(private organisationService: OrganisationService, private siteService: SiteService,
               private router: Router, private  confirmDialogService: ConfirmDialogService,
+              private authorisationService: AuthorisationService,
               private authenticationService: AuthenticationService, private messageService: MessageService
   ) {
 
@@ -25,9 +28,11 @@ export class OrganisationListComponent implements OnInit, OnDestroy {
   message: string;
   organisations: any;
   dtOptions: any = {};
+  loading = false;
   // @ts-ignore
   dtTrigger: Subject = new Subject();
   isSuperAdmin = false;
+
 
   ngOnInit() {
     this.getAllOrganisations();
@@ -75,11 +80,27 @@ export class OrganisationListComponent implements OnInit, OnDestroy {
   }
 
   getAllOrganisations(): void {
-    this.organisationService.all().subscribe(data => {
-      if (data) {
-        this.organisations = data.content;
-        this.dtTrigger.next();
-      }
-    });
+    this.loading = true;
+    if (!this.authorisationService.isDistrictCashCropOfficer()) {
+      this.organisationService.all().subscribe(data => {
+        if (data) {
+          this.organisations = data.content;
+          this.dtTrigger.next();
+          this.loading = false;
+        }
+      });
+    } else {
+      const body = {
+        searchBy: 'district',
+        dist_id: this.authenticationService.getCurrentUser().info.location.dist_id
+      };
+      this.siteService.getZone(body).subscribe(data => {
+        if (data) {
+          this.organisations = data.content;
+          this.dtTrigger.next();
+          this.loading = false;
+        }
+      });
+    }
   }
 }

@@ -24,8 +24,13 @@ import {ParchmentModule} from './parchment/parchment.module';
 import {OwlDateTimeModule, OwlNativeDateTimeModule} from 'ng-pick-datetime';
 import {ErrorPagesModule} from './error-pages/error-pages.module';
 import {DryProcessingModule} from './dry-processing/dry-processing.module';
-/*import {DataService} from './data.service';
-import {HttpClientInMemoryWebApiModule} from 'angular-in-memory-web-api';*/
+import {InputDistributionModule} from './input-distribution/input-distribution.module';
+import {SitesModule} from './input-distribution/sites/sites.module';
+
+/*
+  import {DataService} from './data.service';
+  import {HttpClientInMemoryWebApiModule} from 'angular-in-memory-web-api';
+*/
 
 @NgModule({
   declarations: [
@@ -49,13 +54,15 @@ import {HttpClientInMemoryWebApiModule} from 'angular-in-memory-web-api';*/
     CherrySupplyModule,
     PendingFarmerModule,
     SettingsModule,
-    DataTablesModule,
     ParchmentModule,
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
     DryProcessingModule,
-    ErrorPagesModule
-    /*HttpClientInMemoryWebApiModule.forRoot(DataService)*/
+    InputDistributionModule,
+    SitesModule,
+    ErrorPagesModule,
+    DataTablesModule
+    /* HttpClientInMemoryWebApiModule.forRoot(DataService) */
   ],
   providers: [Title],
   bootstrap: [AppComponent]

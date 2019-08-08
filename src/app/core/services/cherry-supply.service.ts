@@ -27,5 +27,8 @@ export class CherrySupplyService {
   getFarmerDeliveries(orgId: string, regNumber: string) {
     return this.apiService.get( '/cherrysupply/farmer_supply/list/' + orgId + '/' + regNumber);
   }
+  report(data: any) {
+    return this.apiService.post('/cwsstats/cherrysupply/', data);
+  }
 
 }

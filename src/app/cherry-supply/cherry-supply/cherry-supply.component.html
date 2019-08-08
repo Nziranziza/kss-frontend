@@ -14,6 +14,7 @@
 </div>
 <br/> <br/>
 <app-list-errors [errorList]="errors"></app-list-errors>
+<app-list-message [message]="message"></app-list-message>
 <form [formGroup]="recordCherryDeliveryForm" (ngSubmit)="onSaveSupply()">
   <div class="row">
     <div class="col-xs-6">
@@ -31,7 +32,7 @@
   </div>
   <div class="row" style="margin-bottom: 15px;">
     <div class="col-xs-12">
-      <button class="btn btn-success pull-right"><i class="fa fa-shopping-cart"></i> add</button>
+      <button appRequiredSeason class="btn btn-success pull-right"><i class="fa fa-shopping-cart"></i> add</button>
     </div>
   </div>
 </form>
@@ -50,7 +51,7 @@
       </div>
     </form>
     <form [formGroup]="paySuppliesForm"  (ngSubmit)="onSavePay()">
-      <button class="btn btn-success pull-right btn-margin"><i class="fa fa-money"></i> Pay</button>
+      <button appRequiredSeason class="btn btn-success pull-right btn-margin"><i class="fa fa-money"></i> Pay</button>
       <div class="form-inline pull-right">
         <label class="control-label">Paid amount</label> &nbsp; &nbsp;
         <input type="text" formControlName="paidAmount" class="form-control">
@@ -102,6 +103,11 @@
         </table>
       </div>
     </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12">
+    <a class="btn btn-warning btn-margin pull-right" (click)="onCancel()">Back</a>
   </div>
 </div>
 

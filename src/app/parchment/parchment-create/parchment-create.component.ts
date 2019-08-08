@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {CoffeeTypeService} from '../../core/services/coffee-type.service';
 import {HelperService} from '../../core/helpers';
@@ -22,18 +22,17 @@ export class ParchmentCreateComponent implements OnInit {
   recordParchmentForm: FormGroup;
   errors: string[];
   coffeeTypes = [];
-  lotInfo: any;
 
   ngOnInit() {
     this.recordParchmentForm = this.formBuilder.group({
       coffeeType: ['', Validators.required],
       date: ['', Validators.required],
-      totalKgs:  ['', Validators.required],
-      producedDate:  ['', Validators.required]
+      totalKgs: ['', Validators.required],
+      producedDate: ['', Validators.required]
     });
     this.coffeeTypeService.all().subscribe((data) => {
       data.content.map((item) => {
-        if (item.level === 'cws') {
+        if (item.level === 'CWS') {
           item.category.map((el) => {
             this.coffeeTypes.push(el);
           });
@@ -42,36 +41,13 @@ export class ParchmentCreateComponent implements OnInit {
     });
   }
 
-  createLotInfo(): FormGroup {
-    return this.formBuilder.group({
-      totalKgs: ['63'],
-      producedDate: ['']
-    });
-  }
-
-  get formLotInfo() {
-    return this.recordParchmentForm.get('lotInfo') as FormArray;
-  }
-
-  addLotInfo() {
-    (this.recordParchmentForm.controls.lotInfo as FormArray).push(this.createLotInfo());
-  }
-
-  removeLotInfo(index: number) {
-    (this.recordParchmentForm.controls.lotInfo as FormArray).removeAt(index);
-  }
-
-  getLotInfoFormGroup(index): FormGroup {
-    this.lotInfo = this.recordParchmentForm.get('lotInfo') as FormArray;
-    return this.lotInfo.controls[index] as FormGroup;
-  }
-
   onSubmit() {
     if (this.recordParchmentForm.valid) {
-      const parchment = this.recordParchmentForm.value;
+      const parchment = JSON.parse(JSON.stringify(this.recordParchmentForm.value));
       parchment['org_id'.toString()] = this.authenticationService.getCurrentUser().info.org_id;
       this.parchmentService.save(parchment)
         .subscribe(data => {
+            this.errors = [];
             this.router.navigateByUrl('admin/cws/parchments/list');
           },
           (err) => {

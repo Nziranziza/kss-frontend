@@ -10,8 +10,7 @@ export class OrganisationTypeService {
 
   constructor(
     private apiService: ApiService
-  ) {
-  }
+  ) { }
 
   all(): Observable<any> {
     return this.apiService.get('/orgtypes');

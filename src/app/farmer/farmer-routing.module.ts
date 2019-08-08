@@ -5,6 +5,8 @@ import {FarmerListComponent} from './farmer-list/farmer-list.component';
 import {FarmerCreateComponent} from './farmer-create/farmer-create.component';
 import {FarmerEditComponent} from './farmer-edit/farmer-edit.component';
 import {FarmerLandsComponent} from './farmer-lands/farmer-lands.component';
+import {FarmerAdministrativeListComponent} from './farmer-administrative-list/farmer-administrative-list.component';
+import {FarmerNeedApprovalListComponent} from './farmer-need-approval-list/farmer-need-approval-list.component';
 
 const routes: Routes = [
   {
@@ -12,9 +14,18 @@ const routes: Routes = [
     component: AdminComponent,
     children: [
       {
-        path: 'farmers',
+        path: 'farmers/list',
         component: FarmerListComponent
-      }, {
+      },
+      {
+        path: 'farmers/administrative/list',
+        component: FarmerAdministrativeListComponent
+      },
+      {
+        path: 'farmers/need-approval/list',
+        component: FarmerNeedApprovalListComponent
+      },
+      {
         path: 'farmers/edit/:id',
         component: FarmerEditComponent,
       }, {

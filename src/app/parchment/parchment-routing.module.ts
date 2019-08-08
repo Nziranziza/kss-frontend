@@ -4,6 +4,7 @@ import {AdminComponent} from '../admin/admin/admin.component';
 import {ParchmentCreateComponent} from './parchment-create/parchment-create.component';
 import {ParchmentListComponent} from './parchment-list/parchment-list.component';
 import {ParchmentTransferComponent} from './parchment-transfer/parchment-transfer.component';
+import {ParchmentReportComponent} from './parchment-report/parchment-report.component';
 
 const routes: Routes = [
   {
@@ -21,6 +22,10 @@ const routes: Routes = [
         path: 'cws/parchments/transfer/:id',
         component: ParchmentTransferComponent
       },
+      {
+        path: 'cherries/parchments/report',
+        component: ParchmentReportComponent
+      }
     ]
   }
 ];

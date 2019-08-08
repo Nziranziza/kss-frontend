@@ -2,8 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {LocationService} from '../../core/services/location.service';
 import {Router} from '@angular/router';
-import {FarmerService, OrganisationService, OrganisationTypeService} from '../../core/services';
+import {AuthenticationService, FarmerService, OrganisationService, OrganisationTypeService} from '../../core/services';
 import {HelperService} from '../../core/helpers';
+import {AuthorisationService} from '../../core/services/authorisation.service';
 
 @Component({
   selector: 'app-farmers-report',
@@ -42,14 +43,18 @@ export class FarmersReportComponent implements OnInit {
   options = [{name: 'Gender', value: 'gender'}];
   reportBy = [{name: 'Trees', value: 'trees'}, {name: 'Farmers', value: 'farmers'}];
   total = 0;
+  isCurrentUserDCC = false;
 
   constructor(private formBuilder: FormBuilder,
               private router: Router, private organisationService: OrganisationService,
+              private authorisationService: AuthorisationService,
+              private authenticationService: AuthenticationService,
               private helper: HelperService, private organisationTypeService: OrganisationTypeService,
               private locationService: LocationService, private farmerService: FarmerService) {
   }
 
   ngOnInit() {
+    this.isCurrentUserDCC = this.authorisationService.isDistrictCashCropOfficer();
     this.filterForm = this.formBuilder.group({
       reportBy: ['farmers'],
       option: ['status'],
@@ -67,7 +72,7 @@ export class FarmersReportComponent implements OnInit {
   onSubmit(searchBy: string) {
     if (this.filterForm.valid) {
       this.loading = true;
-      const filters = this.filterForm.value;
+      const filters = JSON.parse(JSON.stringify(this.filterForm.value));
       if (filters.location.prov_id === '' && searchBy === 'province') {
         delete filters.location;
         filters['location'.toString()] = {
@@ -114,7 +119,6 @@ export class FarmersReportComponent implements OnInit {
   }
 
   onExport() {
-
   }
 
   onChanges() {
@@ -183,6 +187,12 @@ export class FarmersReportComponent implements OnInit {
   initial() {
     this.locationService.getProvinces().subscribe((data) => {
       this.provinces = data;
+      if (this.isCurrentUserDCC) {
+        this.filterForm.controls.location.get('prov_id'.toString())
+          .patchValue(this.authenticationService.getCurrentUser().info.location.prov_id);
+        this.filterForm.controls.location.get('dist_id'.toString())
+          .patchValue(this.authenticationService.getCurrentUser().info.location.dist_id);
+      }
     });
   }
 }

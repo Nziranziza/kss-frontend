@@ -2,7 +2,7 @@
   <div class="col-xs-12">
     <h3>
       {{ title }}
-      <a class="btn btn-success btn-margin pull-right" routerLink="/admin/farmers/create"><i class="fa fa-plus"></i> New Farmer
+      <a appRequiredSeason class="btn btn-success btn-margin pull-right" routerLink="/admin/farmers/create"><i class="fa fa-plus"></i> New Farmer
       </a>
       <div class="filter-form pull-right">
         <form [formGroup]="filterForm" (ngSubmit)="onFilter()">
@@ -48,7 +48,7 @@
             <td> {{ farmer.userInfo.phone_number }}</td>
             <td> {{ farmer.userInfo.regNumber | uppercase}}</td>
             <td>
-              <a class="btn btn-success btn-margin pull-right btn-sm" routerLink="/admin/farmers/edit/{{farmer.request._id}}">
+              <a appRequiredSeason class="btn btn-success btn-margin pull-right btn-sm" routerLink="/admin/farmers/edit/{{farmer.request._id}}">
                 Edit</a>
               <button class="btn btn-default btn-margin btn-sm pull-right details-button" (click)="viewDetails(farmer)">...</button>
               </td>

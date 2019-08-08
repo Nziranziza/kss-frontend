@@ -38,4 +38,9 @@ export class OrganisationService {
     return this.apiService.get('/coffeefarmers/farmer_by_cws/' + id);
   }
 
+  getOrgPendingFarmers(id: string, body: any): Observable<any> {
+    return this.apiService.post('/pendingfarmers/tempofarmer_by_cws/' + id, body);
+  }
+
+
 }

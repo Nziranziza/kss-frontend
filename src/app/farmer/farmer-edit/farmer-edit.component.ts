@@ -6,6 +6,9 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {EditFarmerRequestComponent} from './edit-farmer-request/edit-farmer-request.component';
 import {AddFarmerRequestComponent} from './add-farmer-request/add-farmer-request.component';
 import {MessageService} from '../../core/services/message.service';
+import {Location} from '@angular/common';
+import {EditFarmerProfileComponent} from './edit-farmer-profile/edit-farmer-profile.component';
+import {EditRequestComponent} from '../../input-distribution/edit-request/edit-request.component';
 
 @Component({
   selector: 'app-farmer-edit',
@@ -27,7 +30,7 @@ export class FarmerEditComponent implements OnInit, OnDestroy {
               private organisationService: OrganisationService,
               private confirmDialogService: ConfirmDialogService,
               private messageService: MessageService,
-              private locationService: LocationService, private modal: NgbModal) {
+              private locationService: LocationService, private modal: NgbModal, private location: Location) {
   }
 
   ngOnInit() {
@@ -41,6 +44,24 @@ export class FarmerEditComponent implements OnInit, OnDestroy {
   editRequest(request: any) {
     const modalRef = this.modal.open(EditFarmerRequestComponent, {size: 'lg'});
     modalRef.componentInstance.land = request;
+    modalRef.componentInstance.farmerId = this.id;
+    modalRef.result.finally(() => {
+      this.getFarmer(this.id);
+    });
+  }
+
+  editRequestAtDistribution(request: any) {
+    const modalRef = this.modal.open(EditRequestComponent, {size: 'lg'});
+    modalRef.componentInstance.land = request;
+    modalRef.componentInstance.farmerId = this.id;
+    modalRef.result.finally(() => {
+      this.getFarmer(this.id);
+    });
+  }
+
+  editProfile(farmer: any) {
+    const modalRef = this.modal.open(EditFarmerProfileComponent, {size: 'lg'});
+    modalRef.componentInstance.farmer = farmer;
     modalRef.componentInstance.farmerId = this.id;
     modalRef.result.finally(() => {
       this.getFarmer(this.id);
@@ -88,6 +109,6 @@ export class FarmerEditComponent implements OnInit, OnDestroy {
   }
 
   onCancel() {
-    this.router.navigateByUrl('/admin/farmers');
+    this.location.back();
   }
 }

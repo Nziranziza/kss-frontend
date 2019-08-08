@@ -1,9 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FarmerService} from '../../core/services';
+import {AuthenticationService, FarmerService} from '../../core/services';
 import {Router} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MessageService} from '../../core/services/message.service';
+import {AuthorisationService} from '../../core/services/authorisation.service';
 
 @Component({
   selector: 'app-pending-farmer-list',
@@ -13,7 +14,8 @@ import {MessageService} from '../../core/services/message.service';
 export class PendingFarmerListComponent implements OnInit, OnDestroy {
 
   constructor(private farmerService: FarmerService,
-              private router: Router,
+              private router: Router, private authorisationService: AuthorisationService,
+              private authenticationService: AuthenticationService,
               private modal: NgbModal, private formBuilder: FormBuilder, private messageService: MessageService) {
     this.parameters = {
       length: 25,
@@ -22,6 +24,7 @@ export class PendingFarmerListComponent implements OnInit, OnDestroy {
     };
   }
 
+  isDistrictCashCrop = false;
   message: string;
   farmers: any;
   maxSize = 9;
@@ -51,16 +54,8 @@ export class PendingFarmerListComponent implements OnInit, OnDestroy {
   ];
 
   ngOnInit() {
-    this.farmerService.getPendingFarmers(this.parameters)
-      .subscribe(data => {
-        this.farmers = data.data;
-        this.config = {
-          itemsPerPage: this.parameters.length,
-          currentPage: this.parameters.start + 1,
-          totalItems: data.recordsTotal
-        };
-
-      });
+    this.isDistrictCashCrop = this.authorisationService.isDistrictCashCropOfficer();
+    this.getFarmers();
     this.filterForm = this.formBuilder.group({
       term: ['', Validators.minLength(3)],
       searchBy: ['forename']
@@ -120,5 +115,23 @@ export class PendingFarmerListComponent implements OnInit, OnDestroy {
           totalItems: data.recordsTotal
         };
       });
+  }
+
+  getFarmers() {
+    if (this.isDistrictCashCrop) {
+      this.parameters['dist_id'.toString()] = this.authenticationService.getCurrentUser().info.location.dist_id;
+    }
+    this.loading = true;
+    this.farmerService.getPendingFarmers(this.parameters)
+      .subscribe(data => {
+        this.farmers = data.data;
+        this.config = {
+          itemsPerPage: this.parameters.length,
+          currentPage: this.parameters.start + 1,
+          totalItems: data.recordsTotal
+        };
+        this.loading = false;
+      });
+
   }
 }

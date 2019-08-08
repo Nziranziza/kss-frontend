@@ -41,22 +41,36 @@
           </div>
           <div class="col-xs-6">
             <label class="control-label label-required">Roles</label>
-            <div class="checkbox" formArrayName="organizationRole"
-                 *ngFor="let role of createForm.get('organizationRole')['controls']; let i = index">
-              <label *ngIf="possibleRoles[i].name != 'FARMER'">
-                <input type="checkbox" formControlName="{{i}}">
-                {{possibleRoles[i].name}}
-              </label>
-            </div>
+            <ng-container *ngIf="createForm.get('organizationRole')['controls'].length">
+              <div class="checkbox" formArrayName="organizationRole"
+                   *ngFor="let role of createForm.get('organizationRole')['controls']; let i = index">
+                <label *ngIf="possibleRoles[i].name != 'FARMER'">
+                  <input type="checkbox" formControlName="{{i}}">
+                  {{possibleRoles[i].name}}
+                </label>
+              </div>
+            </ng-container>
           </div>
-          <!--<div class="col-xs-6">
-            <div class="checkbox">
-              <label class="control-label">
-                <input type="checkbox" formControlName="usersNIDRequired">
-                Users NID required
-              </label>
+          <ng-container *ngIf="hasExpiration">
+            <div class="row">
+              <div class="col-xs-6">
+                <div class="form-group">
+                  <label class="control-label label-required">starting date</label>
+                  <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="contractStartingDate"
+                         class="form-control">
+                  <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+                </div>
+              </div>
+              <div class="col-xs-6">
+                <div class="form-group">
+                  <label class="control-label label-required">expiration date</label>
+                  <input [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" formControlName="contractEndingDate"
+                         class="form-control">
+                  <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
+                </div>
+              </div>
             </div>
-          </div>-->
+          </ng-container>
           <fieldset class="location" *ngIf="needLocation">
             <legend>
               <label class="control-label label-required">&nbsp; Location</label></legend>
@@ -138,10 +152,11 @@
                     <div class="form-group">
                       <label class="label-required">Covered cells</label>
                       <p>
-                        <span style="color: #f2a73c; font-size: 12px;"> [ {{ selectedCoveredCells[i].join(', ') }} ]</span>
+                        <span
+                          style="color: #f2a73c; font-size: 12px;"> [ {{ selectedCoveredCells[i].join(', ') }} ]</span>
                       </p>
                       <select multiple="multiple" class="form-control"
-                                [size]="coveredCellsSet[i]?.length" formControlName="coveredCells">
+                              [size]="coveredCellsSet[i]?.length" formControlName="coveredCells">
                         <option *ngFor="let cell of coveredCellsSet[i]" value="{{cell._id}}"
                                 (mousedown)="onMouseDownCell(i, $event, cell)" (mousemove)="$event.preventDefault()">
                           {{cell.name}}
@@ -153,12 +168,14 @@
                     <div class="form-group">
                       <label class="label-required">Covered villages</label>
                       <p>
-                        <span style="color: #f2a73c; font-size: 12px;"> [ {{ selectedCoveredVillages[i].join(', ') }} ]</span>
+                        <span
+                          style="color: #f2a73c; font-size: 12px;"> [ {{ selectedCoveredVillages[i].join(', ') }} ]</span>
                       </p>
                       <select multiple="multiple" class="form-control"
                               formControlName="coveredVillages" [size]="coveredVillagesSet[i]?.length">
                         <option *ngFor="let village of coveredVillagesSet[i]" value="{{village._id}}"
-                                (mousedown)="onMouseDownVillage(i, $event, village)" (mousemove)="$event.preventDefault()">
+                                (mousedown)="onMouseDownVillage(i, $event, village)"
+                                (mousemove)="$event.preventDefault()">
                           {{village.name}}
                         </option>
                       </select>

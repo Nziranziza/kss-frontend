@@ -1,4 +1,4 @@
-import {NgModule} from '@angular/core';
+import {ErrorHandler, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
@@ -16,6 +16,7 @@ import {MatDialogModule} from '@angular/material';
 import {SharedModule} from '../shared';
 import {CookieService} from 'ngx-cookie-service';
 import {MessageService} from './services/message.service';
+import {ErrorCustomHandler} from './handlers/ErrorCustomHandler';
 
 @NgModule({
   imports: [
@@ -31,7 +32,8 @@ import {MessageService} from './services/message.service';
     ConfirmDialogService,
     OrganisationTypeService,
     CookieService,
-    MessageService
+    MessageService,
+    {provide: ErrorHandler, useClass: ErrorCustomHandler}
   ],
   declarations: []
 })

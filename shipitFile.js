@@ -15,7 +15,7 @@ module.exports = shipit => {
       shallowClone: false
     },
     staging: {
-      servers: 'jrukundo@192.168.0.38:2202',
+      servers: 'jrukundo@105.179.10.30:2202',
       build : 'ng build --prod --aot'
     }
   });

@@ -29,15 +29,71 @@
         </div>
         <div class="col-xs-2">
           <div class="form-group">
+            <span class="">Fertilizer kg per tree</span>
+            <input class="form-control" formControlName="fertilizerKgPerTree">
+          </div>
+        </div>
+        <div class="col-xs-2">
+          <div class="form-group">
+            <span class="">Pesticide Qty per tree</span>
+            <input class="form-control" formControlName="pesticideQtyPerTree">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <button class="btn btn-success btn-sm pull-right" (click)="addDistribution()" type="button"><i
+          class="fa fa-plus"></i> Distribution
+        </button>
+      </div>
+    </div>
+    <div *ngFor="let control of inputDistributionParams.controls; let i=index" formArrayName="inputDistributionParams">
+      <div class="row" [formGroupName]="i">
+        <div class="col-xs-2">
+          <div class="form-group">
+            <span class="">Distribution period</span>
+            <input class="form-control" formControlName="distributionPeriod">
+          </div>
+        </div>
+        <div class="col-xs-2">
+          <div class="form-group">
             <span class="">Fertilizer name</span>
             <input class="form-control" formControlName="fertilizerName">
           </div>
         </div>
         <div class="col-xs-2">
           <div class="form-group">
-            <span class="">Fertilizer kg per tree</span>
-            <input class="form-control" formControlName="fertilizerKgPerTree">
+            <span class="">Available fertilizer</span>
+            <input class="form-control" formControlName="availableFertilizer">
           </div>
+        </div>
+        <div class="col-xs-2">
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" formControlName="includePesticide">
+              Include pesticide
+            </label>
+          </div>
+        </div>
+        <div class="col-xs-2">
+          <div class="form-group">
+            <span class="">Pesticide name</span>
+            <input class="form-control" formControlName="pesticideName">
+          </div>
+        </div>
+        <div class="col-xs-2">
+          <div class="form-group">
+            <span class="">Available pesticide</span>
+            <input class="form-control" formControlName="availablePesticide">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-xs-1">
+          <button class="btn btn-danger btn-sm pull-left btn-custom-margin-top" type="button"
+                  (click)="removeDistribution(i)"> Remove
+          </button>
         </div>
       </div>
     </div>

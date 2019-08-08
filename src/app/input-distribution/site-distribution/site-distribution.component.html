@@ -1,0 +1,60 @@
+<h3>
+  Farmer requests
+</h3>
+<app-list-errors [errorList]="errors"></app-list-errors>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-body">
+        <form [formGroup]="getFarmerRequestsForm" (ngSubmit)="onSubmit()">
+          <div class="row" style="margin-top: 15px">
+            <div class="col-xs-6">
+              <div class="form-inline">
+                <label class="control-label">Farmer reg number</label>
+                <input type="text" formControlName="farmerRegNumber" class="form-control btn-margin">
+                <button class="btn btn-default btn-margin"><i class="fa fa-search"></i> Search</button>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div class="row" style="margin-top: 30px">
+          <div class="col-xs-12 table-responsive">
+            <table class="table table-striped">
+              <thead>
+              <tr>
+                <th>Season</th>
+                <th>Location</th>
+                <th>Number of trees</th>
+                <th>Fertilizer needed</th>
+                <th>Fertilizer allocated</th>
+                <th></th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let request of requests;">
+                <td>{{farmer.request.season.name}}</td>
+                <td>
+                  <span class="details-row-title-sm" style="margin-left: 0px">Province </span> : <span
+                  class="details-row-data-sm"
+                  *ngIf="request.location.prov_id">{{ request.location.prov_id.namek }}</span>
+                  <span class="details-row-title-sm">District </span> : <span class="details-row-data-sm"
+                >{{ request.location.dist_id.name }}</span>
+                  <span class="details-row-title-sm">Sector </span> : <span class="details-row-data-sm">{{ request.location.sect_id.name }}</span>
+                  <span class="details-row-title-sm">Cell </span> : <span class="details-row-data-sm">{{ request.location.cell_id.name }}</span>
+                  <span class="details-row-title-sm">Village </span> : <span class="details-row-data-sm">{{ request.location.village_id.name }}</span>
+                </td>
+                <td>{{ request.numberOfTrees }}</td>
+                <td>{{ request.fertilizer_need }} Kg</td>
+                <td>{{ request.fertilizer_allocate }} Kg</td>
+                <td>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

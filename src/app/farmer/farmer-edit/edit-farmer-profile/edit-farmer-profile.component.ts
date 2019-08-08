@@ -48,6 +48,9 @@ export class EditFarmerProfileComponent implements OnInit {
         phone: ['']
       })
     });
+    console.log(this.farmer);
+    this.onChangeType();
+    this.editFarmerProfileForm.patchValue(this.farmer);
   }
 
   onInputNID(nid: string) {

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import {Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MessageService} from '../../core/services/message.service';
@@ -11,7 +11,7 @@ import {AuthenticationService} from '../../core/services';
   styleUrls: ['./parchment-list.component.css']
 })
 
-export class ParchmentListComponent implements OnInit {
+export class ParchmentListComponent implements OnInit, OnDestroy {
 
   constructor(private parchmentService: ParchmentService,
               private router: Router,
@@ -30,7 +30,7 @@ export class ParchmentListComponent implements OnInit {
   reverse = true;
   directionLinks = true;
   message: string;
-  parchments: [];
+  parchments = [];
   title = 'Parchment';
   id = 'parchments-list';
   parameters: any;
@@ -124,5 +124,8 @@ export class ParchmentListComponent implements OnInit {
           totalItems: data.recordsTotal
         };
       });
+  }
+  ngOnDestroy(): void {
+    this.messageService.setMessage('');
   }
 }

@@ -1,6 +1,6 @@
 <h3>
   Organisations
-  <a class="btn btn-success pull-right" routerLink="/admin/organisations/create"><i class="fa fa-plus"></i> New
+  <a class="btn btn-success pull-right" routerLink="/admin/organisations/create" [appRequiredRoles]="[4,0]"><i class="fa fa-plus"></i> New
     organisation</a>
 </h3>
 <app-list-message [message]="message"></app-list-message>
@@ -8,6 +8,7 @@
   <div class="col-xs-12">
     <div class="box">
       <div class="box-body table-responsive">
+        <app-loader *ngIf="loading"></app-loader>
         <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-condensed">
           <thead>
           <tr>
@@ -31,9 +32,9 @@
                   <span class="details-row-data">{{ organisation.streetNumber }}</span>
               </td>
               <td class="actions no-wrap text-right">
-                <a routerLink="/admin/organisations/{{organisation._id}}/users" class="btn btn-info btn-sm"><i
+                <a routerLink="/admin/organisations/{{organisation._id}}/users" [appRequiredRoles]="[4,0]" class="btn btn-info btn-sm"><i
                   class="fa fa-users"></i> Users</a>
-                <a class="btn btn-success btn-margin btn-sm" [routerLink]="['edit/', organisation._id]"
+                <a class="btn btn-success btn-margin btn-sm" [appRequiredRoles]="[4,0]" [routerLink]="['edit/', organisation._id]"
                    style="margin-left: 10px;"> Edit</a>
               </td>
             </tr>
@@ -51,9 +52,9 @@
               <td class="actions no-wrap text-right">
                 <a routerLink="/admin/organisations/{{organisation._id}}/farmers" class="btn btn-info btn-sm" *ngIf="isOrgCWS(organisation)"><i
                   class="fa fa-users"></i> Farmers</a>
-                <a routerLink="/admin/organisations/{{organisation._id}}/users" class="btn btn-info btn-sm" style="margin-left: 10px"><i
+                <a routerLink="/admin/organisations/{{organisation._id}}/users" [appRequiredRoles]="[4,0]" class="btn btn-info btn-sm" style="margin-left: 10px"><i
                   class="fa fa-users"></i> Users</a>
-                <a class="btn btn-success btn-margin btn-sm" [routerLink]="['edit/', organisation._id]"
+                <a class="btn btn-success btn-margin btn-sm" [appRequiredRoles]="[4,0]" [routerLink]="['edit/', organisation._id]"
                    style="margin-left: 10px;">Edit</a>
               </td>
             </tr>

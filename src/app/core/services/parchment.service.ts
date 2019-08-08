@@ -25,4 +25,7 @@ export class ParchmentService {
   transfer(body: any) {
     return this.apiService.post('/parchment/transfer_parchment', body);
   }
+  report(data: any) {
+    return this.apiService.post('/cwsstats/parchment', data);
+  }
 }

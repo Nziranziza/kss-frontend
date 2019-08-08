@@ -1,0 +1,44 @@
+<div class="modal-header">
+  <i class="fa fa-times-circle close" style="font-size: 24px;" aria-label="Close" (click)="modal.dismiss()">
+  </i>
+</div>
+<div class="modal-body">
+  <app-list-errors [errorList]="errors" *ngIf="errors"></app-list-errors>
+  <form [formGroup]="editFarmerRequestForm" (ngSubmit)="onSubmit()">
+    <div class="row">
+      <div class="col-xs-6">
+        <div class="form-group">
+          <label class="control-label">Number of trees at distribution</label>
+          <input type="text" formControlName="treesAtDistribution" class="form-control">
+          <div
+            *ngIf="editFarmerRequestForm.controls.treesAtDistribution.invalid && (editFarmerRequestForm.controls.treesAtDistribution.dirty || editFarmerRequestForm.controls.treesAtDistribution.touched)"
+            class="input-error">
+            <div *ngIf="editFarmerRequestForm.controls.treesAtDistribution.errors.required">
+              Number of trees is required.
+            </div>
+            <div *ngIf="editFarmerRequestForm.controls.treesAtDistribution.errors.min">
+              Number of trees must be greater than zero.
+            </div>
+            <div *ngIf="editFarmerRequestForm.controls.treesAtDistribution.errors.pattern">
+              Number of trees must be an integer.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-6">
+        <div class="form-group">
+          <label class="control-label">Comment</label>
+          <textarea type="text" formControlName="comment" class="form-control" placeholder="Leave a comment"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <button class="btn btn-warning btn-margin pull-right" (click)="modal.dismiss()" type="button">Cancel</button>
+        <button class="btn btn-success pull-right">Save</button>
+      </div>
+    </div>
+  </form>
+</div>

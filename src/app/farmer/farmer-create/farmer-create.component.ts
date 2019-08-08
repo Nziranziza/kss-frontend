@@ -7,6 +7,8 @@ import {UserService} from '../../core/services/user.service';
 import {MessageService} from '../../core/services/message.service';
 import {HelperService} from '../../core/helpers';
 import {isArray, isUndefined} from 'util';
+import {AuthorisationService} from '../../core/services/authorisation.service';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'app-farmer-create',
@@ -33,6 +35,7 @@ export class FarmerCreateComponent implements OnInit, OnDestroy {
   loading = false;
   invalidId = false;
   currentSeason: any;
+  isUserCWSOfficer = false;
 
   public requestList: FormArray;
 
@@ -43,8 +46,9 @@ export class FarmerCreateComponent implements OnInit, OnDestroy {
               private organisationService: OrganisationService,
               private confirmDialogService: ConfirmDialogService,
               private authenticationService: AuthenticationService,
+              private authorisationService: AuthorisationService,
               private locationService: LocationService, private messageService: MessageService,
-              private helperService: HelperService) {
+              private helperService: HelperService, private location: Location) {
   }
 
   ngOnInit() {
@@ -65,6 +69,7 @@ export class FarmerCreateComponent implements OnInit, OnDestroy {
       requests: new FormArray([])
     });
     this.currentSeason = this.authenticationService.getCurrentSeason();
+    this.isUserCWSOfficer = this.authorisationService.isCWSUser();
     this.route.params
       .subscribe(params => {
         if (params.id !== undefined) {
@@ -110,7 +115,6 @@ export class FarmerCreateComponent implements OnInit, OnDestroy {
                   this.onChangeProvince(0);
                 }
               }
-
             },
             (err) => {
               this.createFromPending = true;
@@ -186,7 +190,6 @@ export class FarmerCreateComponent implements OnInit, OnDestroy {
           });
         }
       } else {
-
         const temp = this.createForm.value;
         const farmer = {
           requestInfo: []
@@ -363,11 +366,7 @@ export class FarmerCreateComponent implements OnInit, OnDestroy {
   }
 
   onCancel() {
-    if (this.createFromPending) {
-      this.router.navigateByUrl('/admin/pending-farmers');
-    } else {
-      this.router.navigateByUrl('/admin/farmers');
-    }
+    this.location.back();
   }
 
   addRequest() {

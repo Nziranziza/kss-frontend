@@ -11,5 +11,4 @@ export class HomeFooterComponent implements OnInit {
 
   ngOnInit() {
   }
-
 }

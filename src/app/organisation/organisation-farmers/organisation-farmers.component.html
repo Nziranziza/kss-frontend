@@ -1,6 +1,109 @@
-<h3>
-  Farmers
-</h3>
+<div class="row">
+  <div class="col-md-12">
+    <div class="box box-default" style="border-top: 1px solid #d2d6de;">
+      <div class="box-header with-border">
+        <h3 class="box-title">{{ org?.organizationName | uppercase }} > FARMERS</h3>
+        <div class="box-tools pull-right">
+          <button type="button" class="btn btn-box-tool" data-target="#box-body" data-toggle="collapse"> <i class="fa fa-expand"></i>
+          </button>
+        </div>
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body collapse" id="box-body" >
+        <div class="row">
+          <div class="col-sm-2 col-xs-6">
+            <p class="text-left">
+              <strong>SEASON: <span class="text-light-blue"> {{ currentSeason.season }} </span></strong>
+            </p>
+          </div>
+          <!-- /.col -->
+          <div class="col-sm-6 col-xs-12">
+            <div class="row">
+              <div class="col-sm-8">
+                <div class="row">
+                  <div class="col-sm-6">
+                    Organisation
+                  </div>
+                  <div class="col-sm-6">
+                    <strong>{{ org?.organizationName }}</strong><br>
+                  </div>
+                  <div class="col-sm-6">
+                    Email
+                  </div>
+                  <div class="col-sm-6">
+                    <strong>{{ org?.email }}</strong><br>
+                  </div>
+                  <div class="col-sm-6">
+                    Telephone
+                  </div>
+                  <div class="col-sm-6">
+                    {{ org?.phone_number }}<br>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                Location
+              </div>
+              <div class="col-sm-12">
+                <span class="details-row-title-sm" style="margin-left: 0px">Province </span> : <span
+                class="details-row-data-sm" *ngIf="org?.location.prov_id">{{ org?.location.prov_id.namek }}</span>
+                <span class="details-row-title-sm">District </span> : <span class="details-row-data-sm"
+                                                                            *ngIf="org?.location.dist_id">{{ org?.location.dist_id.name }}</span>
+                <span class="details-row-title-sm">Sector </span> : <span class="details-row-data-sm"
+                                                                          *ngIf="org?.location.sect_id">{{ org?.location.sect_id.name }}</span>
+                <span class="details-row-title-sm">Cell </span> : <span class="details-row-data-sm"
+                                                                        *ngIf="org?.location.cell_id">{{ org?.location.cell_id.name }}</span>
+                <span class="details-row-title-sm">Village </span> : <span class="details-row-data-sm"
+                                                                           *ngIf="org?.location.village_id">{{ org?.location.village_id.name }}</span>
+              </div>
+            </div>
+
+          </div>
+          <div class="col-sm-4">
+            <p>
+              Covered sectors
+            </p>
+            <div *ngFor="let area of orgCoveredArea">
+              <span class="details-row-title-sm" style="margin-left: 0px"> {{ area?.name }}</span>
+              <p *ngFor="let cell of area?.covCells" style="margin-left: 20px">
+                <span class="details-row-title-sm">{{ cell?.name }} : </span>
+                <span *ngFor="let village of cell?.covVillages" class="details-row-data-sm"> {{ village?.name }}, </span>
+              </p>
+            </div>
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- ./box-body -->
+      <div class="box-footer">
+        <div class="row">
+          <div class="col-sm-3 col-xs-6">
+            <div class="description-block border-right">
+              <h5 class="description-header text-green">{{ numberOfTrees }}</h5>
+              <span class="description-text">TREES</span>
+            </div>
+            <!-- /.description-block -->
+          </div>
+          <!-- /.col -->
+          <div class="col-sm-3 col-xs-6">
+            <div class="description-block">
+              <h5 class="description-header text-blue">{{ numberOfFarmers }}</h5>
+              <span class="description-text">FARMERS</span>
+            </div>
+            <!-- /.description-block -->
+          </div>
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.box-footer -->
+    </div>
+    <!-- /.box -->
+  </div>
+  <!-- /.col -->
+</div>
 <app-list-message [message]="message"></app-list-message>
 <div class="row">
   <div class="col-xs-12">
@@ -27,9 +130,16 @@
             <td> {{ farmer.userInfo.phone_number }}</td>
             <td> {{ farmer.userInfo.regNumber | uppercase}}</td>
             <td>
-              <a routerLink="/admin/cherries/supply/select/{{farmer.userInfo.regNumber}}" *ngIf="isUserCWSOfficer" class="btn btn-success btn-margin pull-right btn-sm" style="margin-left: 10px;">
+              <a appRequiredSeason class="btn btn-success btn-margin pull-right btn-sm"
+                 routerLink="/admin/farmers/edit/{{farmer.request._id}}">
+                Edit</a>
+              <a appRequiredSeason routerLink="/admin/cherries/supply/select/{{farmer.userInfo.regNumber}}"
+                 *ngIf="isUserCWSOfficer" class="btn btn-success btn-margin pull-right btn-sm"
+                 style="margin-left: 10px;">
                 <i class="fa fa-cart-plus"></i> supply </a>
-              <button class="btn btn-default btn-sm btn-margin pull-right details-button" *ngIf="!isUserCWSOfficer" (click)="viewDetails(farmer)">...</button>
+              <button class="btn btn-default btn-sm btn-margin pull-right details-button" *ngIf="!isUserCWSOfficer"
+                      (click)="viewDetails(farmer)">...
+              </button>
             </td>
           </tr>
         </table>

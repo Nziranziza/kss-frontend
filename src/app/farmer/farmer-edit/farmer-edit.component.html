@@ -61,6 +61,11 @@
     </div>
   </div>
 </div>
+<div class="row">
+  <div class="col-sm-12">
+    <button class="btn btn-default btn-margin btn-sm pull-right" (click)="editProfile(farmer.userInfo)">Edit profile</button>
+  </div>
+</div>
 <br/> <br/>
 <h5 class="page-header">
   Lands
@@ -99,6 +104,7 @@
         <td>
           <button class="btn btn-warning btn-margin btn-sm pull-right" (click)="cancelRequest(request)">Delete</button>
           <button class="btn btn-primary btn-margin btn-sm pull-right" (click)="editRequest(request)">Edit</button>
+          <!--<button class="btn btn-primary btn-margin btn-sm pull-right" (click)="editRequestAtDistribution(request)">Edit on distribution</button>-->
         </td>
       </tr>
       </tbody>
@@ -107,6 +113,6 @@
 </div>
 <div class="row">
   <div class="col-xs-12">
-    <a class="btn btn-warning btn-margin pull-right" (click)="onCancel()">Cancel</a>
+    <a class="btn btn-warning btn-margin btn-sm pull-right" (click)="onCancel()" style="margin-right: 10px">Cancel</a>
   </div>
 </div>
