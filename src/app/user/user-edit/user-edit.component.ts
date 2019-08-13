@@ -12,6 +12,7 @@ import {SiteService} from '../../core/services/site.service';
   templateUrl: './user-edit.component.html',
   styleUrls: ['./user-edit.component.css']
 })
+
 export class UserEditComponent implements OnInit {
 
   organisationId: string;
@@ -74,7 +75,8 @@ export class UserEditComponent implements OnInit {
         cell_id: [''],
         village_id: [''],
       }),
-      site: [''],
+      accountExpirationDate: [''],
+      distributionSite: [''],
       status: ['']
     });
     this.userService.userTypes().subscribe(data => {

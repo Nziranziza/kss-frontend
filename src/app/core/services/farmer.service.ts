@@ -60,7 +60,6 @@ export class FarmerService {
   getPendingFarmer(id: string): Observable<any> {
     return this.apiService.get('/pendingfarmers/pendingbyid/' + id);
   }
-
   report(data: any): Observable<any> {
     return this.apiService.post('/stats/farmer.data?subRegions=true', data);
   }
@@ -90,6 +89,6 @@ export class FarmerService {
   }
 
   updateFarmerProfile(data: any): Observable<any> {
-    return this.apiService.post('/', data);
+    return this.apiService.put('/coffeefarmers/profileinfo/edit/', data);
   }
 }

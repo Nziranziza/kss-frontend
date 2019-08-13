@@ -12,16 +12,16 @@
           <tr>
             <th>Year</th>
             <th>Season</th>
-            <!--<th></th>-->
+            <th></th>
           </tr>
           </thead>
           <tbody>
           <tr *ngFor="let season of seasons">
             <td> {{ season.year }}</td>
             <td> {{ season.season }}</td>
-            <!--<td class="actions no-wrap text-right">
+            <td class="actions no-wrap text-right">
               <button class="btn btn-success btn-margin btn-sm" (click)="editSeason(season)"> Edit</button>
-            </td>-->
+            </td>
           </tr>
           </tbody>
         </table>

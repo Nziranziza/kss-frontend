@@ -79,7 +79,7 @@
             </div>
           </div>
           <ng-container *ngIf="hasSite">
-            <fieldset class="location" style="margin: 15px 0px 15px !important; ">
+            <fieldset class="location" style="margin: 15px 0px 15px !important;">
               <legend>
                 <label class="control-label"> &nbsp; Site location </label>
               </legend>
@@ -116,9 +116,17 @@
                 <div class="col-xs-4">
                   <div class="form-group">
                     <span class="">Site</span>
-                    <select class="form-control" formControlName="site">
+                    <select class="form-control" formControlName="distributionSite">
                       <option *ngFor="let site of sites" value="{{site._id}}">{{site.siteName}}</option>
                     </select>
+                  </div>
+                </div>
+                <div class="col-xs-4">
+                  <div class="form-group">
+                    <label class="control-label label-required">Account expiration date</label>
+                    <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="accountExpirationDate"
+                           class="form-control">
+                    <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
                   </div>
                 </div>
               </div>

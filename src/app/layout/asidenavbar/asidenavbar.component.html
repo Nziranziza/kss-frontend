@@ -12,7 +12,7 @@
       </li>
       <li class="treeview" routerLinkActive="active" [appRequiredRoles]="[4,0,6]">
         <a href="#">
-          <i class="fa fa-users"></i> <span>Farmers</span>
+          <i class="fa fa-users"></i><span>Farmers</span>
           <span class="pull-right-container">
             <i class="fa fa-angle-left pull-right"></i>
           </span>
@@ -74,14 +74,14 @@
           <span>Received parchments</span>
         </a>
       </li>
-      <li class="header" [appRequiredRoles]="[4,0]">INPUT DISTRIBUTION</li>
+      <li class="header" [appRequiredRoles]="[4,0,6]">INPUT DISTRIBUTION</li>
       <li routerLinkActive="active" [appRequiredRoles]="[4,0]">
         <a routerLink="/admin/sites">
           <i class="fa fa-square" aria-hidden="true"></i>
           <span>Sites</span>
         </a>
       </li>
-      <li routerLinkActive="active" [appRequiredRoles]="[4,0]">
+      <li routerLinkActive="active" [appRequiredRoles]="[4,0,6]">
         <a routerLink="/admin/input/distribution/plan">
           <i class="fa fa-history" aria-hidden="true"></i>
           <span>Distribution plan</span>

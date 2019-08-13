@@ -117,10 +117,6 @@ export class FarmersReportComponent implements OnInit {
       this.errors = this.helper.getFormValidationErrors(this.filterForm);
     }
   }
-
-  onExport() {
-  }
-
   onChanges() {
     this.filterForm.controls.location.get('prov_id'.toString()).valueChanges.subscribe(
       (value) => {

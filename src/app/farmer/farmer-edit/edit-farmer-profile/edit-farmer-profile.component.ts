@@ -16,11 +16,9 @@ export class EditFarmerProfileComponent implements OnInit {
   modal: NgbActiveModal;
   @Input() farmer;
   editFarmerProfileForm: FormGroup;
-  userNIDInfo = {};
   isGroup = false;
   errors: string[];
   message: string;
-  submit = false;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object, private authenticationService: AuthenticationService,
@@ -34,13 +32,8 @@ export class EditFarmerProfileComponent implements OnInit {
 
   ngOnInit() {
     this.editFarmerProfileForm = this.formBuilder.group({
-      foreName: [''],
-      surname: [''],
+      phone_number: [''],
       groupName: [''],
-      email: [''],
-      phone_number: ['', Validators.required],
-      sex: [''],
-      NID: ['', [Validators.required, Validators.minLength(16)]],
       type: ['', Validators.required],
       groupContactPerson: this.formBuilder.group({
         firstName: [''],
@@ -48,40 +41,8 @@ export class EditFarmerProfileComponent implements OnInit {
         phone: ['']
       })
     });
-    console.log(this.farmer);
     this.onChangeType();
     this.editFarmerProfileForm.patchValue(this.farmer);
-  }
-
-  onInputNID(nid: string) {
-    this.verifyNID(nid);
-  }
-
-  verifyNID(nid: string) {
-    if (nid.length >= 16) {
-      this.userService.verifyNID(nid).subscribe(data => {
-          this.userNIDInfo['foreName'.toString()] = data.content.foreName;
-          this.userNIDInfo['surname'.toString()] = data.content.surname;
-          this.userNIDInfo['sex'.toString()] = data.content.sex.toLowerCase();
-          this.editFarmerProfileForm.patchValue(this.userNIDInfo);
-          this.submit = true;
-          this.errors = [];
-        },
-        (err) => {
-          this.submit = false;
-          this.errors = ['Invalid NID'];
-          this.resetNIDInfo();
-        });
-    } else {
-      this.submit = false;
-      this.resetNIDInfo();
-    }
-  }
-
-  resetNIDInfo() {
-    this.editFarmerProfileForm.get('foreName'.toString()).reset();
-    this.editFarmerProfileForm.get('surname'.toString()).reset();
-    this.editFarmerProfileForm.get('sex'.toString()).reset();
   }
 
   onChangeType() {
@@ -89,17 +50,24 @@ export class EditFarmerProfileComponent implements OnInit {
       (value) => {
         if (+value === 2) {
           this.isGroup = true;
-          this.submit = true;
         } else {
           this.isGroup = false;
-          this.verifyNID(this.editFarmerProfileForm.get('NID'.toString()).value);
         }
       }
     );
   }
+
   onSubmit() {
     if (this.editFarmerProfileForm.valid) {
-      this.farmerService.updateFarmerProfile(this.editFarmerProfileForm.value).subscribe(data => {
+      const body = JSON.parse(JSON.stringify(this.editFarmerProfileForm.value));
+      body['userId'.toString()] = this.farmer._id;
+      if (+body.type === 1) {
+        delete body.groupName;
+        delete body.groupContactPerson;
+      }
+      delete body.type;
+      this.farmerService.updateFarmerProfile(body).subscribe(() => {
+          location.reload();
         },
         (err) => {
           this.errors = err.errors;

@@ -9,6 +9,8 @@
               <option *ngFor="let field of searchFields" value="{{field.value}}">{{field.name}}</option>
             </select>
             <input type="text" formControlName="term" class="form-control" placeholder="search..">
+            <button class="btn btn-success pull-right btn-margin" type="button" (click)="exportAsXLSX()"><i class="fa fa-search"></i> Export
+            </button>
             <button class="btn btn-warning pull-right btn-margin" type="button" (click)="onClearFilter()">Clear</button>
             <button class="btn btn-success pull-right btn-margin" type="submit"><i class="fa fa-search"></i> Search
             </button>

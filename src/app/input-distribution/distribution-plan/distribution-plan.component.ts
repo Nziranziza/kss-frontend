@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {Router} from '@angular/router';
-import {OrganisationService, OrganisationTypeService} from '../../core/services';
+import {AuthenticationService, OrganisationService, OrganisationTypeService} from '../../core/services';
 import {HelperService} from '../../core/helpers';
 import {LocationService} from '../../core/services/location.service';
-import {CherrySupplyService} from '../../core/services/cherry-supply.service';
 import {InputDistributionService} from '../../core/services/input-distribution.service';
 import {SiteService} from '../../core/services/site.service';
+import {AuthorisationService} from '../../core/services/authorisation.service';
 
 @Component({
   selector: 'app-distribution-plan',
@@ -31,14 +31,18 @@ export class DistributionPlanComponent implements OnInit {
   plans: any;
   organisations: any;
   subRegion: boolean;
+  isCurrentUserDCC = false;
 
   constructor(private formBuilder: FormBuilder, private siteService: SiteService,
+              private authorisationService: AuthorisationService,
+              private authenticationService: AuthenticationService,
               private router: Router, private organisationService: OrganisationService,
               private helper: HelperService, private organisationTypeService: OrganisationTypeService,
               private locationService: LocationService, private inputDistributionService: InputDistributionService) {
   }
 
   ngOnInit() {
+    this.isCurrentUserDCC = this.authorisationService.isDistrictCashCropOfficer();
     this.filterForm = this.formBuilder.group({
       location: this.formBuilder.group({
         prov_id: [''],
@@ -150,6 +154,12 @@ export class DistributionPlanComponent implements OnInit {
   initial() {
     this.locationService.getProvinces().subscribe((data) => {
       this.provinces = data;
+      if (this.isCurrentUserDCC) {
+        this.filterForm.controls.location.get('prov_id'.toString())
+          .patchValue(this.authenticationService.getCurrentUser().info.location.prov_id);
+        this.filterForm.controls.location.get('dist_id'.toString())
+          .patchValue(this.authenticationService.getCurrentUser().info.location.dist_id);
+      }
     });
   }
 }

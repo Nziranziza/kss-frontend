@@ -68,7 +68,8 @@ export class UserCreateComponent implements OnInit {
         cell_id: [''],
         village_id: [''],
       }),
-      site: [''],
+      accountExpirationDate: [''],
+      distributionSite: [''],
       userRoles: new FormArray([])
     });
     this.userService.userTypes().subscribe(data => {

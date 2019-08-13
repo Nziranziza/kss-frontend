@@ -56,7 +56,7 @@ export class FarmerCreateComponent implements OnInit, OnDestroy {
       foreName: [''],
       surname: [''],
       groupName: [''],
-      /* email: [''],*/
+      /* email: [''], */
       phone_number: [''],
       sex: [''],
       NID: [''],

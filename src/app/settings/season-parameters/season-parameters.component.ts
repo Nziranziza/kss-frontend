@@ -5,7 +5,6 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {SeasonService} from '../../core/services/season.service';
 import {EditSeasonComponent} from './edit-season/edit-season.component';
 import {CreateSeasonComponent} from './create-season/create-season.component';
-import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-season-parameters',

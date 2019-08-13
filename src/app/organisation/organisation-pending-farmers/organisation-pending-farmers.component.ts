@@ -3,6 +3,8 @@ import {AuthenticationService, OrganisationService} from '../../core/services';
 import {ActivatedRoute, Router} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ExcelServicesService} from '../../core/services/excel-services.service';
+import {HttpClient} from '@angular/common/http';
 import {MessageService} from '../../core/services/message.service';
 
 @Component({
@@ -14,6 +16,7 @@ export class OrganisationPendingFarmersComponent implements OnInit, OnDestroy {
 
   constructor(private organisationService: OrganisationService, private route: ActivatedRoute,
               private router: Router, private authenticationService: AuthenticationService,
+              private excelService: ExcelServicesService, private http: HttpClient,
               private modal: NgbModal, private formBuilder: FormBuilder, private messageService: MessageService) {
     this.parameters = {
       length: 25,
@@ -45,12 +48,17 @@ export class OrganisationPendingFarmersComponent implements OnInit, OnDestroy {
   };
   orgId: string;
   loading = false;
+  allPendingFarmers = [];
   searchFields = [
     {value: 'phone_number', name: 'phone number'},
     {value: 'nid', name: 'NID'},
     {value: 'forename', name: 'first name'},
     {value: 'surname', name: 'last name'},
   ];
+
+  exportAsXLSX() {
+    this.excelService.exportAsExcelFile(this.allPendingFarmers, 'farmers');
+  }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -72,6 +80,7 @@ export class OrganisationPendingFarmersComponent implements OnInit, OnDestroy {
       term: ['', Validators.minLength(3)],
       searchBy: ['forename']
     });
+    this.getAllPendingFarmers();
     this.message = this.messageService.getMessage();
   }
 
@@ -129,4 +138,25 @@ export class OrganisationPendingFarmersComponent implements OnInit, OnDestroy {
       });
   }
 
+  getAllPendingFarmers() {
+    this.organisationService.getAllOrgPendingFarmers(this.orgId)
+      .subscribe(data => {
+        data.content.map((item) => {
+          const temp = {
+            NAMES: item.surname + '  ' + item.foreName,
+            SEX: item.sex,
+            NID: item.NID,
+            PROVINCE: item.location.prov_id.namek,
+            DISTRICT: item.location.dist_id.name,
+            SECTOR: item.location.sect_id.name,
+            CELL: item.location.cell_id.name,
+            VILLAGE: item.location.village_id.name,
+            SEASON: item.season.name,
+            TREES: item.numberOfTrees,
+            MISSING: item.reason.join(', ')
+          };
+          this.allPendingFarmers.push(temp);
+        });
+      });
+  }
 }

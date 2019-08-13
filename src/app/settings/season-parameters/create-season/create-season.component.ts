@@ -17,7 +17,7 @@ export class CreateSeasonComponent implements OnInit {
   createSeasonForm: FormGroup;
   errors: string [];
   message: string;
-  distributionParams: any;
+  inputDistributionParams: any;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
@@ -35,40 +35,44 @@ export class CreateSeasonComponent implements OnInit {
       season: ['', Validators.required],
       seasonParams: this.formBuilder.group({
         cherriesUnitPrice: [''],
+        fertilizerName: [''],
+        fertilizerType: [''],
         fertilizerKgPerTree: [''],
-        pesticideQtyPerTree: ['']
-      }),
-      inputDistributionParams: new FormArray([])
+        pesticideName: [''],
+        pesticideType: [''],
+        pesticideMlPerTree: [''],
+        targetedFertilizerQty: [''],
+        targetedPesticideQty: [''],
+        distribution: new FormArray([])
+      })
     });
     this.addDistribution();
+    console.log(this.createSeasonForm.value);
   }
 
   createDistribution(): FormGroup {
     return this.formBuilder.group({
       distributionPeriod: ['', Validators.required],
-      fertilizerName: ['', Validators.required],
-      availableFertilizer: ['', Validators.required],
-      includePesticide: ['', Validators.required],
-      pesticideName: ['', Validators.required],
-      availablePesticide: ['', Validators.required]
+      totalAvailableFertilizer: ['', Validators.required],
+      totalAvailablePesticide: ['', Validators.required]
     });
   }
 
-  get inputDistributionParams() {
-    return this.createSeasonForm.get('inputDistributionParams') as FormArray;
+  get distributionParams() {
+    return this.createSeasonForm.controls.seasonParams.get('distribution'.toString()) as FormArray;
   }
 
   addDistribution() {
-    (this.createSeasonForm.controls.inputDistributionParams as FormArray).push(this.createDistribution());
+    (this.createSeasonForm.controls.seasonParams.get('distribution'.toString()) as FormArray).push(this.createDistribution());
   }
 
   removeDistribution(index: number) {
-    (this.createSeasonForm.controls.inputDistributionParams as FormArray).removeAt(index);
+    (this.createSeasonForm.controls.seasonParams.get('distribution'.toString()) as FormArray).removeAt(index);
   }
 
   getDistributionFormGroup(index): FormGroup {
-    this.distributionParams = this.createSeasonForm.get('inputDistributionParams') as FormArray;
-    return this.distributionParams.controls[index] as FormGroup;
+    this.inputDistributionParams = this.createSeasonForm.controls.seasonParams.get('distribution'.toString()) as FormArray;
+    return this.inputDistributionParams.controls[index] as FormGroup;
   }
 
   onSubmit() {
