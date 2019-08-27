@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {HelperService} from '../../core/helpers';
-import {CherrySupplyService} from '../../core/services/cherry-supply.service';
+import {CherrySupplyService} from '../../core/services';
 import {Subject} from 'rxjs';
 import {AuthenticationService} from '../../core/services';
 import {Location} from '@angular/common';

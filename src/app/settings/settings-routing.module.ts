@@ -4,11 +4,13 @@ import {AdminComponent} from '../admin/admin/admin.component';
 import {SeasonParametersComponent} from './season-parameters/season-parameters.component';
 import {CoffeeTypeComponent} from './coffee-type/coffee-type.component';
 import {CoffeeTypeCreateComponent} from './coffee-type/coffee-type-create/coffee-type-create.component';
+import {AdminGuard} from '../core/services/guards/admin.guard';
 
 const routes: Routes = [
   {
     path: 'admin',
     component: AdminComponent,
+    canActivateChild: [AdminGuard],
     children: [
       {
         path: 'season-parameters',

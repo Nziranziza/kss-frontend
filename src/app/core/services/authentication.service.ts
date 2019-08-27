@@ -45,6 +45,14 @@ export class AuthenticationService {
     return JSON.parse(window.localStorage.getItem('current-season'));
   }
 
+  isLoggedIn() {
+    if (window.localStorage.getItem('loggedIn') === 'true') {
+      console.log('test');
+      return true;
+    }
+    return false;
+  }
+
   getCurrentUser(): AuthUser {
     return JSON.parse(window.localStorage.getItem('user'));
   }

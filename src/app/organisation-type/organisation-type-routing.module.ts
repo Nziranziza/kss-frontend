@@ -5,11 +5,13 @@ import {OrganisationTypeListComponent} from './organisation-type-list/organisati
 import {OrganisationTypeCreateComponent} from './organisation-type-create/organisation-type-create.component';
 import {OrganisationTypeEditComponent} from './organisation-type-edit/organisation-type-edit.component';
 import {OrganisationListComponent} from '../organisation/organisation-list/organisation-list.component';
+import {AdminGuard} from '../core/services/guards/admin.guard';
 
 const routes: Routes = [
   {
     path: 'admin/organisation-types',
     component: AdminComponent,
+    canActivateChild: [AdminGuard],
     children: [
       {
         path: '',

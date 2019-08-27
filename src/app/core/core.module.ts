@@ -15,10 +15,11 @@ import {HelperService} from './helpers';
 import {MatDialogModule} from '@angular/material';
 import {SharedModule} from '../shared';
 import {CookieService} from 'ngx-cookie-service';
-import {MessageService} from './services/message.service';
+import {MessageService} from './services';
 import {ErrorCustomHandler} from './handlers/ErrorCustomHandler';
-import {InputDistributionService} from './services/input-distribution.service';
-import {WarehouseService} from './services/warehouse.service';
+import {InputDistributionService} from './services';
+import {WarehouseService} from './services';
+import {AdminGuard} from './services/guards/admin.guard';
 
 @NgModule({
   imports: [
@@ -37,6 +38,7 @@ import {WarehouseService} from './services/warehouse.service';
     MessageService,
     InputDistributionService,
     WarehouseService,
+    AdminGuard,
     {provide: ErrorHandler, useClass: ErrorCustomHandler}
   ],
   declarations: []

@@ -6,11 +6,13 @@ import {OrganisationCreateComponent} from './organisation-create/organisation-cr
 import {OrganisationEditComponent} from './organisation-edit/organisation-edit.component';
 import {OrganisationFarmersComponent} from './organisation-farmers/organisation-farmers.component';
 import {OrganisationPendingFarmersComponent} from './organisation-pending-farmers/organisation-pending-farmers.component';
+import {AdminGuard} from '../core/services/guards/admin.guard';
 
 const routes: Routes = [
   {
     path: 'admin',
     component: AdminComponent,
+    canActivateChild: [AdminGuard],
     children: [
       {
         path: 'organisations',

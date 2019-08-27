@@ -64,13 +64,13 @@ export class OrganisationFarmersComponent implements OnInit, OnDestroy {
       });
       this.locationService.getSectors(this.org.location.dist_id._id).subscribe((secs) => {
         const sectorIds = [];
-        const cellIds = [];
         secs.map((sec) => {
           if (orgSectors.includes(sec._id)) {
             sectorIds.push(sec._id);
             this.orgCoveredArea.push(sec);
             this.locationService.getCells(sec._id).subscribe((cells) => {
               this.orgCoveredArea[sectorIds.indexOf(sec._id)]['covCells'.toString()] = [];
+              const cellIds = [];
               cells.map((cell) => {
                 if (orgCells.includes(cell._id)) {
                   cellIds.push(cell._id);
@@ -135,8 +135,14 @@ export class OrganisationFarmersComponent implements OnInit, OnDestroy {
             SEX: item.userInfo.sex,
             NID: item.userInfo.NID,
             PHONE: item.userInfo.phone_number,
-            REGNUMBER: item.userInfo.regNumber
+            REGNUMBER: item.userInfo.regNumber,
+            PROVINCE: item.request.requestInfo[0].location.prov_id.namek,
+            DISTRICT: item.request.requestInfo[0].location.dist_id.name,
+            SECTOR: item.request.requestInfo[0].location.sect_id.name,
+            CELL: item.request.requestInfo[0].location.cell_id.name,
+            VILLAGE: item.request.requestInfo[0].location.village_id.name
           };
+
           this.allFarmers.push(temp);
         });
       });

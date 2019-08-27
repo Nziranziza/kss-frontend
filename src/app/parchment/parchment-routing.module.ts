@@ -5,11 +5,13 @@ import {ParchmentCreateComponent} from './parchment-create/parchment-create.comp
 import {ParchmentListComponent} from './parchment-list/parchment-list.component';
 import {ParchmentTransferComponent} from './parchment-transfer/parchment-transfer.component';
 import {ParchmentReportComponent} from './parchment-report/parchment-report.component';
+import {AdminGuard} from '../core/services/guards/admin.guard';
 
 const routes: Routes = [
   {
     path: 'admin',
     component: AdminComponent,
+    canActivateChild: [AdminGuard],
     children: [
       {
         path: 'cws/parchments/list',

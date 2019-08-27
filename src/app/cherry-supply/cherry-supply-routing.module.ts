@@ -3,11 +3,13 @@ import {RouterModule, Routes} from '@angular/router';
 import {AdminComponent} from '../admin/admin/admin.component';
 import {CherrySupplyComponent} from './cherry-supply/cherry-supply.component';
 import {CherrySupplyReportsComponent} from './cherry-supply-reports/cherry-supply-reports.component';
+import {AdminGuard} from '../core/services/guards/admin.guard';
 
 const routes: Routes = [
   {
     path: 'admin',
     component: AdminComponent,
+    canActivateChild: [AdminGuard],
     children: [
       {
         path: 'cherries/supply/select/:regNumber',

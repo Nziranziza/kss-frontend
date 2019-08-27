@@ -7,11 +7,13 @@ import {FarmerEditComponent} from './farmer-edit/farmer-edit.component';
 import {FarmerLandsComponent} from './farmer-lands/farmer-lands.component';
 import {FarmerAdministrativeListComponent} from './farmer-administrative-list/farmer-administrative-list.component';
 import {FarmerNeedApprovalListComponent} from './farmer-need-approval-list/farmer-need-approval-list.component';
+import {AdminGuard} from '../core/services/guards/admin.guard';
 
 const routes: Routes = [
   {
     path: 'admin',
     component: AdminComponent,
+    canActivateChild: [AdminGuard],
     children: [
       {
         path: 'farmers/list',
