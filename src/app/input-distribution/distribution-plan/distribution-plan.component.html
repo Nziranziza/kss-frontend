@@ -1,14 +1,14 @@
 <h3>
   {{ title }}
 </h3>
-<div class="row">
-  <div class="col-xs-12">
-    <div class="box">
-      <div class="box-body">
-        <div class="col-xs-12">
-          <app-list-errors [errorList]="errors"></app-list-errors>
-        </div>
-        <form [formGroup]="filterForm">
+<form [formGroup]="filterForm">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-body">
+          <div class="col-xs-12">
+            <app-list-errors [errorList]="errors"></app-list-errors>
+          </div>
           <div class="row">
             <div class="col-sm-12">
               <div formGroupName="location">
@@ -32,10 +32,17 @@
                   <div class="form-group">
                     <span class="">District</span>
                     <div class="input-group input-group-sm">
-                      <select class="form-control" formControlName="dist_id" disabled="!isCurrentUserDCC">
+                      <select class="form-control" formControlName="dist_id" disabled="true"
+                              *ngIf="isCurrentUserDCC; else enabled">
                         <option value=""></option>
                         <option *ngFor="let district of districts" value="{{district._id}}">{{district.name}}</option>
                       </select>
+                      <ng-template #enabled>
+                        <select class="form-control" formControlName="dist_id">
+                          <option value=""></option>
+                          <option *ngFor="let district of districts" value="{{district._id}}">{{district.name}}</option>
+                        </select>
+                      </ng-template>
                       <span class="input-group-btn">
                       <button type="button" class="btn btn-default btn-flat" (click)="onSubmit('district')"
                               [disabled]="!distId">
@@ -68,11 +75,11 @@
               </div>
             </div>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   </div>
-</div>
+</form>
 <div class="row">
   <div class="col-md-12">
     <div class="box box-default" style="border-top: 1px solid #d2d6de;">
@@ -90,15 +97,23 @@
           <div class="col-sm-3 col-xs-6">
             <div class="description-block border-right">
               <h5 class="description-header text-blue">{{ totalFertilizerNeeded }}</h5>
-              <span class="description-text">FERTILIZER</span>
+              <span class="description-text">FERTILIZER (KG)</span>
+            </div>
+            <!-- /.description-block -->
+          </div>
+          <!-- /.col -->
+          <div class="col-sm-3 col-xs-6">
+            <div class="description-block border-right">
+              <h5 class="description-header text-blue">{{ totalFarmers }}</h5>
+              <span class="description-text">FARMERS</span>
             </div>
             <!-- /.description-block -->
           </div>
           <!-- /.col -->
           <div class="col-sm-3 col-xs-6">
             <div class="description-block">
-              <h5 class="description-header text-blue">{{ totalFarmers }}</h5>
-              <span class="description-text">FARMERS</span>
+              <h5 class="description-header text-blue">{{ totalNumberOfLands }}</h5>
+              <span class="description-text">LANDS</span>
             </div>
             <!-- /.description-block -->
           </div>
@@ -106,7 +121,7 @@
         <!-- /.row -->
       </div>
       <!-- /.box-header -->
-      <div class="box-body" id="box-body">
+      <div class="box-body">
         <div class="row" *ngIf="subRegion">
           <div class="col-sm-12 col-xs-12">
             <table class="table table-striped">
@@ -132,12 +147,77 @@
         <!-- /.row -->
       </div>
       <!-- ./box-body -->
-      <div class="box-footer">
-      </div>
-      <!-- /.box-footer -->
     </div>
     <!-- /.box -->
   </div>
   <!-- /.col -->
 </div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="box box-default" style="border-top: 1px solid #d2d6de;">
+      <div class="box-body">
+        <form [formGroup]="checkProgressForm">
+          <div class="row">
+            <div class="col-sm-12">
+              <div formGroupName="date">
+                <div class="col-xs-2">
+                  <div class="form-group">
+                    <label class="control-label label-required">From date</label>
+                    <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="from" class="form-control">
+                    <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+                  </div>
+                </div>
+                <div class="col-xs-2">
+                  <div class="form-group">
+                    <label class="control-label label-required">to</label>
+                    <input [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" formControlName="to" class="form-control">
+                    <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
+                  </div>
+                </div>
+                <div class="col-xs-2">
+                  <button class="btn btn-outline-info btn-margin pull-right" style="margin-top: 25px"
+                          (click)="onGetProgress()" type="button">Check progress
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+        <fieldset class="location" style="margin: 15px !important; border: none ">
+          <legend>
+            <label class="control-label"> &nbsp; Distribution progress </label>
+          </legend>
+          <div class="row">
+            <div class="col-xs-12">
+              <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover"
+                     class="table table-condensed">
+                <thead>
+                <tr>
+                  <th>Site name</th>
+                  <th>Distributed (kg)</th>
+                  <th>Lands</th>
+                  <th>Approved</th>
+                </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of distributionProgress">
+                    <td>{{ item.siteName }}</td>
+                    <td>{{ item.distributed }}</td>
+                    <td>{{ item.lands }}</td>
+                    <td>{{ item.approved }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+      <!-- ./box-body -->
+    </div>
+    <!-- /.box -->
+  </div>
+  <!-- /.col -->
+</div>
+
 

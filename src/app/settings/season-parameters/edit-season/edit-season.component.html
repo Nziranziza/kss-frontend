@@ -19,8 +19,8 @@
         </div>
       </div>
     </div>
-    <div class="row">
-      <div formGroupName="seasonParams">
+    <ng-container formGroupName="seasonParams">
+      <div class="row" *ngIf="isCurrentUserNaebOfficer">
         <div class="col-xs-2">
           <div class="form-group">
             <span class="">Cherries unit price</span>
@@ -35,7 +35,13 @@
         </div>
         <div class="col-xs-2">
           <div class="form-group">
-            <span class="">Fertilizer kg per tree</span>
+            <span class="">Fertilizer type</span>
+            <input class="form-control" formControlName="fertilizerType">
+          </div>
+        </div>
+        <div class="col-xs-2">
+          <div class="form-group">
+            <span class="">Fertilizer Qt per tree (Kg)</span>
             <input class="form-control" formControlName="fertilizerKgPerTree">
           </div>
         </div>
@@ -47,12 +53,70 @@
         </div>
         <div class="col-xs-2">
           <div class="form-group">
-            <span class="">Pesticide Qty per tree</span>
-            <input class="form-control" formControlName="pesticideQtyPerTree">
+            <span class="">Pesticide type</span>
+            <input class="form-control" formControlName="pesticideType">
+          </div>
+        </div>
+        <div class="col-xs-2">
+          <div class="form-group">
+            <span class="">Pesticide Qty per tree (ml)</span>
+            <input class="form-control" formControlName="pesticideMlPerTree">
           </div>
         </div>
       </div>
-    </div>
+      <div class="row" *ngIf="isCurrentUserNaebOfficer">
+        <div class="col-sm-12">
+          <fieldset class="" style="margin: 15px 0px 15px !important; ">
+            <legend>
+              <label class="control-label"> &nbsp; Targets </label>
+            </legend>
+            <div class="col-xs-2">
+              <div class="form-group">
+                <span class="">Fertilizer (kg)</span>
+                <input class="form-control" formControlName="targetedFertilizerQty">
+              </div>
+            </div>
+            <div class="col-xs-2">
+              <div class="form-group">
+                <span class="">Pesticide (ml)</span>
+                <input class="form-control" formControlName="targetedPesticideQty">
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+      <div class="row" *ngIf="isCurrentUserCeparOfficer">
+        <div class="col-xs-12">
+          <fieldset class="location" style="margin: 15px 0px 15px !important;">
+            <legend>
+              <label class="control-label"> &nbsp; Distribution </label>
+            </legend>
+            <div *ngFor="let control of distributionParams.controls; let i=index" formArrayName="distribution">
+              <div class="row" [formGroupName]="i">
+                <div class="col-xs-2">
+                  <div class="form-group">
+                    <span class="">Distribution</span>
+                    <input class="form-control" formControlName="distribution">
+                  </div>
+                </div>
+                <div class="col-xs-2">
+                  <div class="form-group">
+                    <span class="">Available fertilizer (kg)</span>
+                    <input class="form-control" formControlName="totalFertilizerAvailable">
+                  </div>
+                </div>
+                <div class="col-xs-2">
+                  <div class="form-group">
+                    <span class="">Available pesticide (ml)</span>
+                    <input class="form-control" formControlName="totalPesticideAvailable">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+    </ng-container>
     <div class="row">
       <div class="col-xs-12">
         <button class="btn btn-warning btn-margin pull-right" (click)="modal.dismiss()" type="button">Cancel</button>

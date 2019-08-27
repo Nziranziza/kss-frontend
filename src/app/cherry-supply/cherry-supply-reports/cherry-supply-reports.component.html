@@ -52,10 +52,16 @@
                   <div class="form-group">
                     <span class="">District</span>
                     <div class="input-group input-group-sm">
-                      <select class="form-control" formControlName="dist_id" disabled = "isCurrentUserDCC">
+                      <select class="form-control" formControlName="dist_id" disabled="true"  *ngIf="isCurrentUserDCC; else enabled">
                         <option value=""></option>
                         <option *ngFor="let district of districts" value="{{district._id}}">{{district.name}}</option>
                       </select>
+                      <ng-template #enabled>
+                        <select class="form-control" formControlName="dist_id">
+                          <option value=""></option>
+                          <option *ngFor="let district of districts" value="{{district._id}}">{{district.name}}</option>
+                        </select>
+                      </ng-template>
                       <span class="input-group-btn">
                       <button type="button" class="btn btn-default btn-flat" (click)="onSubmit('district')"
                               [disabled]="!distId">

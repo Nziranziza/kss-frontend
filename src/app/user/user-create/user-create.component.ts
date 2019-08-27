@@ -173,15 +173,18 @@ export class UserCreateComponent implements OnInit {
           if (this.isFromSuperOrg) {
             user['userRoles'.toString()] = [0];
           }
-          if (!(selectedRoles.includes(6))) {
+          if ((!(selectedRoles.includes(6)) && (!(selectedRoles.includes(8))))) {
             delete user.location;
           }
           if (!selectedRoles.includes(8)) {
-            delete user.site;
+            console.log('test')
+            delete user.distributionSite;
+            delete user.accountExpirationDate;
           }
           this.helper.cleanObject(user);
           this.helper.cleanObject(user.location);
-          this.userService.save(user).subscribe((data) => {
+          console.log(user);
+          this.userService.save(user).subscribe(() => {
               this.router.navigateByUrl('admin/organisations/' + this.organisationId + '/users');
             },
             (err) => {

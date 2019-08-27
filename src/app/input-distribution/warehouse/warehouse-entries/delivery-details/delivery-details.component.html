@@ -1,0 +1,27 @@
+<div class="modal-header">
+  <i class="fa fa-times-circle close" style="font-size: 24px;" aria-label="Close" (click)="modal.dismiss()">
+  </i>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="col-sm-12">
+      <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover"
+             class="table table-condensed">
+        <thead>
+        <tr>
+          <th>Quantity (kg)</th>
+          <th>Bags</th>
+          <th>Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let entry of deliveries">
+          <td>{{ entry.totalQty }}</td>
+          <td>{{ entry.numberOfBags }}</td>
+          <td>{{ entry.date|date }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

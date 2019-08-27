@@ -17,6 +17,8 @@ import {SharedModule} from '../shared';
 import {CookieService} from 'ngx-cookie-service';
 import {MessageService} from './services/message.service';
 import {ErrorCustomHandler} from './handlers/ErrorCustomHandler';
+import {InputDistributionService} from './services/input-distribution.service';
+import {WarehouseService} from './services/warehouse.service';
 
 @NgModule({
   imports: [
@@ -33,6 +35,8 @@ import {ErrorCustomHandler} from './handlers/ErrorCustomHandler';
     OrganisationTypeService,
     CookieService,
     MessageService,
+    InputDistributionService,
+    WarehouseService,
     {provide: ErrorHandler, useClass: ErrorCustomHandler}
   ],
   declarations: []

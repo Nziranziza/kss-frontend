@@ -1,3 +1,55 @@
-<p>
-  site-view-dispatch works!
-</p>
+<h3>
+  Entries
+</h3>
+<app-list-errors [errorList]="errors"></app-list-errors>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-body">
+        <app-loader *ngIf="loading"></app-loader>
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover"
+               class="table table-condensed">
+          <thead>
+          <tr>
+            <th>Driver</th>
+            <th>Vehicle</th>
+            <th>Quantity (Kg)</th>
+            <th>ReceivedQty (Kg)</th>
+            <th>Date</th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <ng-container *ngFor="let dispatch of dispatches">
+            <tr>
+              <td></td>
+              <td></td>
+              <td>Total Quantity : &nbsp; <span style="font-weight: bold;"> {{ dispatch.totalQuantity }} (kg)</span></td>
+              <td>Remaining Quantity : &nbsp; <span style="font-weight: bold;"> {{ dispatch.remainingQty }} (kg)</span></td>
+              <td>
+                <button class="btn btn-success btn-margin btn-sm" (click)="stockOut(dispatch._id)"> Stock out</button>
+              </td>
+            </tr>
+            <tr *ngFor="let entry of dispatch.entries">
+              <td>{{ entry.driver }}</td>
+              <td>{{ entry.vehiclePlate }}</td>
+              <td>{{ entry.totalQty }}</td>
+              <td>{{ entry.receivedQty }}</td>
+              <td>{{ entry.date|date }}</td>
+              <td>
+                <span *ngIf="!entry.isDelivered">
+                  <button class="btn btn-success btn-margin btn-sm" (click)="confirmDispatch(dispatch._id, entry._id)"> confirm </button>
+                </span>
+                <span *ngIf="entry.isDelivered">
+                  <i class="fa fa-check-square"> &nbsp;</i>
+                </span>
+              </td>
+            </tr>
+          </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+

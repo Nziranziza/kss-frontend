@@ -26,6 +26,7 @@ import {ErrorPagesModule} from './error-pages/error-pages.module';
 import {DryProcessingModule} from './dry-processing/dry-processing.module';
 import {InputDistributionModule} from './input-distribution/input-distribution.module';
 import {SitesModule} from './input-distribution/sites/sites.module';
+import {WarehouseModule} from './input-distribution/warehouse/warehouse.module';
 
 /*
   import {DataService} from './data.service';
@@ -61,7 +62,8 @@ import {SitesModule} from './input-distribution/sites/sites.module';
     InputDistributionModule,
     SitesModule,
     ErrorPagesModule,
-    DataTablesModule
+    DataTablesModule,
+    WarehouseModule
     /* HttpClientInMemoryWebApiModule.forRoot(DataService) */
   ],
   providers: [Title],

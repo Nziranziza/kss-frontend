@@ -26,7 +26,7 @@ export class PendingFarmerListComponent implements OnInit, OnDestroy {
 
   isDistrictCashCrop = false;
   message: string;
-  farmers: any;
+  farmers = [];
   maxSize = 9;
   order = 'foreName';
   reverse = true;
@@ -45,7 +45,7 @@ export class PendingFarmerListComponent implements OnInit, OnDestroy {
     screenReaderPageLabel: 'page',
     screenReaderCurrentLabel: `You're on page`
   };
-  loading = false;
+  loading = true;
   searchFields = [
     {value: 'phone_number', name: 'phone number'},
     {value: 'nid', name: 'NID'},
@@ -118,11 +118,13 @@ export class PendingFarmerListComponent implements OnInit, OnDestroy {
   }
 
   getFarmers() {
+    let asDcc;
     if (this.isDistrictCashCrop) {
+      asDcc = 'dcc';
       this.parameters['dist_id'.toString()] = this.authenticationService.getCurrentUser().info.location.dist_id;
     }
     this.loading = true;
-    this.farmerService.getPendingFarmers(this.parameters)
+    this.farmerService.getPendingFarmers(this.parameters, asDcc)
       .subscribe(data => {
         this.farmers = data.data;
         this.config = {

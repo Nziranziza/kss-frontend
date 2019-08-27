@@ -4,8 +4,8 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {HelperService} from '../../../core/helpers';
 import {AuthenticationService, FarmerService} from '../../../core/services';
 import {isPlatformBrowser} from '@angular/common';
-import {LocationService} from '../../../core/services/location.service';
-import {AuthorisationService} from '../../../core/services/authorisation.service';
+import {LocationService} from '../../../core/services';
+import {AuthorisationService} from '../../../core/services';
 
 @Component({
   selector: 'app-edit-farmer-request',
@@ -147,7 +147,8 @@ export class EditFarmerRequestComponent implements OnInit {
         +request['numberOfTrees'.toString()] * this.currentSeason.seasonParams.fertilizerKgPerTree.$numberDouble;
       request['documentId'.toString()] = this.farmerId;
       request['subDocumentId'.toString()] = this.land._id;
-      this.farmerService.updateFarmerRequest(request).subscribe((data) => {
+      request['userId'.toString()] = this.authenticationService.getCurrentUser().info._id;
+      this.farmerService.updateFarmerRequest(request).subscribe(() => {
           this.message = 'request successfully updated!';
         },
         (err) => {

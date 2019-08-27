@@ -37,7 +37,7 @@
               <tr *ngFor="let request of requests;">
                 <td>
                 <td>
-                  <input type="checkbox" (click)="selectRequest($event.target.checked)">
+                  <input type="checkbox" (click)="selectRequest($event.target.checked, request)">
                 </td>
                 <td></td>
                 <td></td>

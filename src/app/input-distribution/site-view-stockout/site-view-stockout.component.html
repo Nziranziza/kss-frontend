@@ -1,0 +1,42 @@
+<h3>
+  Stock-outs
+</h3>
+<app-list-errors [errorList]="errors"></app-list-errors>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-body">
+        <app-loader *ngIf="loading"></app-loader>
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover"
+               class="table table-condensed">
+          <thead>
+          <tr>
+            <th>Type</th>
+            <th>Quantity (kg)</th>
+            <th>Distributed Qty (kg)</th>
+            <th>Returned Qty (kg)</th>
+            <th>Bags</th>
+            <th>Date</th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let stockOut of stockOuts">
+              <td>{{ stockOut.dispatchId.inputType }}</td>
+              <td>{{ stockOut.totalQuantity }}</td>
+              <td>{{ stockOut.distributedQty }}</td>
+              <td>{{ stockOut.returnedQty }}</td>
+              <td>{{ stockOut.numberOfBags }}</td>
+              <td>{{ stockOut.date|date }}</td>
+              <td>
+                <button class="btn btn-success btn-margin btn-sm" (click)="returnStockOut(stockOut._id)">
+                  Return
+                </button>
+              </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

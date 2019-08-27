@@ -3,9 +3,10 @@ import {AuthenticationService, OrganisationService} from '../../core/services';
 import {ActivatedRoute, Router} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ExcelServicesService} from '../../core/services/excel-services.service';
+import {ExcelServicesService} from '../../core/services';
 import {HttpClient} from '@angular/common/http';
-import {MessageService} from '../../core/services/message.service';
+import {MessageService} from '../../core/services';
+import {AuthorisationService} from '../../core/services';
 
 @Component({
   selector: 'app-organisation-pending-farmers',
@@ -16,6 +17,7 @@ export class OrganisationPendingFarmersComponent implements OnInit, OnDestroy {
 
   constructor(private organisationService: OrganisationService, private route: ActivatedRoute,
               private router: Router, private authenticationService: AuthenticationService,
+              private authorisationService: AuthorisationService,
               private excelService: ExcelServicesService, private http: HttpClient,
               private modal: NgbModal, private formBuilder: FormBuilder, private messageService: MessageService) {
     this.parameters = {
@@ -55,6 +57,7 @@ export class OrganisationPendingFarmersComponent implements OnInit, OnDestroy {
     {value: 'forename', name: 'first name'},
     {value: 'surname', name: 'last name'},
   ];
+  isCwsOfficer = false;
 
   exportAsXLSX() {
     this.excelService.exportAsExcelFile(this.allPendingFarmers, 'farmers');
@@ -64,6 +67,7 @@ export class OrganisationPendingFarmersComponent implements OnInit, OnDestroy {
     this.route.params.subscribe(params => {
       this.orgId = params['organisationId'.toString()];
     });
+    this.isCwsOfficer = this.authorisationService.isCWSUser();
     this.organisationService.get(this.orgId).subscribe(data => {
       this.org = data.content;
     });
@@ -86,7 +90,7 @@ export class OrganisationPendingFarmersComponent implements OnInit, OnDestroy {
 
   onPageChange(event) {
     this.config.currentPage = event;
-    if (event > 1) {
+    if (event >= 1) {
       this.parameters.start = (event - 1) * this.config.itemsPerPage;
     }
 
@@ -101,6 +105,14 @@ export class OrganisationPendingFarmersComponent implements OnInit, OnDestroy {
       this.reverse = !this.reverse;
     }
     this.order = value;
+  }
+
+  canApprove(missingInfo: any) {
+    if (this.isCwsOfficer && missingInfo.includes('Trees')) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   onFilter() {

@@ -49,7 +49,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.route.params
       .subscribe(params => {
         if (params.token !== undefined) {
-          console.log('test');
           const headers = new HttpHeaders({
             'Content-Type': 'application/json',
             'x-auth-token': params.token
@@ -64,6 +63,11 @@ export class LoginComponent implements OnInit, OnDestroy {
           });
         }
       });
+    this.authenticationService.purgeAuth();
+    if ((window.localStorage.getItem('loggedIn')).toString() === 'true') {
+      window.localStorage.setItem('loggedIn', 'false');
+      location.reload();
+    }
   }
 
   onSubmit() {
@@ -84,6 +88,10 @@ export class LoginComponent implements OnInit, OnDestroy {
               this.router.navigateByUrl('admin/cws-farmers/' + orgId);
             } else if (this.authorisationService.isDryMillUser()) {
               this.router.navigateByUrl('admin/drymill/batch/create');
+            } else if (this.authorisationService.isCeparUser()) {
+              this.router.navigateByUrl('admin/warehouse/dispatches');
+            } else if (this.authorisationService.isInputDistributorUser()) {
+              this.router.navigateByUrl('admin/input/site/distribution');
             } else {
               this.router.navigateByUrl('admin/organisations');
             }

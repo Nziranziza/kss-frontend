@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {SiteService} from '../../core/services/site.service';
-import {AuthenticationService, OrganisationService} from '../../core/services';
+import {AuthenticationService} from '../../core/services';
 
 @Component({
   selector: 'app-farmer-need-approval-list',
@@ -11,15 +11,14 @@ import {AuthenticationService, OrganisationService} from '../../core/services';
 export class FarmerNeedApprovalListComponent implements OnInit {
 
   requestIds = [];
-  title = 'Farmer to be approved';
+  title = 'Farmer info to be approved';
   filterForm: FormGroup;
   sites: any;
   requests: any;
   site: any;
 
   constructor(private formBuilder: FormBuilder, private siteService: SiteService,
-              private authenticationService: AuthenticationService,
-              private organisationService: OrganisationService) {
+              private authenticationService: AuthenticationService) {
   }
 
   ngOnInit() {
@@ -37,12 +36,20 @@ export class FarmerNeedApprovalListComponent implements OnInit {
 
   }
 
-  selectRequest(isChecked: boolean) {
+  selectRequest(isChecked: boolean, request) {
     if (isChecked) {
-      const temp = {};
-      this.requestIds.push(temp);
+      this.requestIds.push(request._id);
     } else {
+      this.requestIds.splice(this.requestIds.indexOf(request._id), 1);
     }
   }
-  onFilter() {}
+
+  onFilter() {
+  }
+
+  onApprove() {
+  }
+
+  getWaitingUpdates() {
+  }
 }

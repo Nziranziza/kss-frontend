@@ -78,7 +78,7 @@ export class ParchmentListComponent implements OnInit, OnDestroy {
 
   onPageChange(event) {
     this.config.currentPage = event;
-    if (event > 1) {
+    if (event >= 1) {
       this.parameters.start = (event - 1) * this.config.itemsPerPage;
     }
 

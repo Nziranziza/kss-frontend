@@ -7,7 +7,6 @@ import {AuthUser} from '../models';
 import {map} from 'rxjs/operators';
 import {environment} from '../../../environments/environment';
 
-
 @Injectable()
 export class AuthenticationService {
   constructor(
@@ -19,6 +18,7 @@ export class AuthenticationService {
   setAuth(user: AuthUser) {
     this.jwtService.saveToken(user.token);
     window.localStorage.setItem('user', JSON.stringify(user));
+    window.localStorage.setItem('loggedIn', 'true');
   }
 
   purgeAuth() {

@@ -2,9 +2,10 @@ import {Component, Inject, Injector, Input, OnInit, PLATFORM_ID} from '@angular/
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {isPlatformBrowser} from '@angular/common';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {UserService} from '../../../core/services/user.service';
+import {UserService} from '../../../core/services';
 import {HelperService} from '../../../core/helpers';
 import {AuthenticationService, FarmerService} from '../../../core/services';
+import {isUndefined} from 'util';
 
 @Component({
   selector: 'app-edit-farmer-profile',
@@ -17,8 +18,11 @@ export class EditFarmerProfileComponent implements OnInit {
   @Input() farmer;
   editFarmerProfileForm: FormGroup;
   isGroup = false;
-  errors: string[];
+  errors: any;
   message: string;
+  loading = false;
+  submit = true;
+  invalidId = false;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object, private authenticationService: AuthenticationService,
@@ -34,6 +38,10 @@ export class EditFarmerProfileComponent implements OnInit {
     this.editFarmerProfileForm = this.formBuilder.group({
       phone_number: [''],
       groupName: [''],
+      NID: [''],
+      foreName: [''],
+      surname: [''],
+      sex: [''],
       type: ['', Validators.required],
       groupContactPerson: this.formBuilder.group({
         firstName: [''],
@@ -42,6 +50,10 @@ export class EditFarmerProfileComponent implements OnInit {
       })
     });
     this.onChangeType();
+    this.farmer.sex = this.farmer.sex.toLowerCase();
+    if (!isUndefined(this.farmer.type)) {
+      this.farmer.type = this.farmer.type.toString();
+    }
     this.editFarmerProfileForm.patchValue(this.farmer);
   }
 
@@ -50,6 +62,7 @@ export class EditFarmerProfileComponent implements OnInit {
       (value) => {
         if (+value === 2) {
           this.isGroup = true;
+          this.submit = true;
         } else {
           this.isGroup = false;
         }
@@ -65,15 +78,57 @@ export class EditFarmerProfileComponent implements OnInit {
         delete body.groupName;
         delete body.groupContactPerson;
       }
-      delete body.type;
+      if (+body.type === 2) {
+        delete body.phone_number;
+        delete body.NID;
+        delete body.foreName;
+        delete body.surname;
+        delete body.sex;
+      }
+      console.log(+this.farmer.type);
+      if ((+body.type === 1 && +this.farmer.type === 1) || isUndefined(this.farmer.type)) {
+        delete body.NID;
+      }
       this.farmerService.updateFarmerProfile(body).subscribe(() => {
-          location.reload();
+          this.modal.dismiss();
         },
         (err) => {
           this.errors = err.errors;
         });
     } else {
       this.errors = this.helper.getFormValidationErrors(this.editFarmerProfileForm);
+
+    }
+  }
+
+  verifyNid(nid: string) {
+    if (nid !== this.farmer.NID) {
+      if (nid.length >= 16) {
+        this.loading = true;
+        this.submit = false;
+        this.userService.verifyNID(nid).subscribe(data => {
+            const info = {
+              foreName: data.content.foreName,
+              surname: data.content.surname,
+              sex: data.content.sex.toLowerCase()
+            };
+            this.editFarmerProfileForm.patchValue(info);
+            this.submit = true;
+            this.loading = false;
+            this.invalidId = false;
+          },
+          () => {
+            this.submit = false;
+            this.loading = false;
+            if (!this.isGroup) {
+              this.invalidId = true;
+            }
+          });
+      } else {
+        this.submit = false;
+      }
+    } else {
+      this.submit = true;
     }
   }
 }

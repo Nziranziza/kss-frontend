@@ -4,8 +4,8 @@ import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {HelperService} from '../../../core/helpers';
 import {AuthenticationService, FarmerService} from '../../../core/services';
 import {isPlatformBrowser} from '@angular/common';
-import {LocationService} from '../../../core/services/location.service';
-import {MessageService} from '../../../core/services/message.service';
+import {LocationService} from '../../../core/services';
+import {MessageService} from '../../../core/services';
 import {Router} from '@angular/router';
 
 @Component({

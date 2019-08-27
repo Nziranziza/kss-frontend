@@ -3,6 +3,7 @@ import {Observable} from 'rxjs';
 import {ApiService} from './api.service';
 import {Farmer} from '../models';
 import {AuthenticationService} from './authentication.service';
+import {observableToBeFn} from 'rxjs/internal/testing/TestScheduler';
 
 
 @Injectable()
@@ -10,19 +11,15 @@ export class FarmerService {
   isDistrictCashCrop = false;
 
   constructor(
-    private apiService: ApiService,
-    private authenticationService: AuthenticationService
-  ) {
-
-    this.isDistrictCashCrop = this.authenticationService.getCurrentUser().parameters.role.includes(6);
+    private apiService: ApiService) {
   }
 
   all(): Observable<any> {
     return this.apiService.get('/coffeefarmers');
   }
 
-  getFarmers(parameters: any): Observable<any> {
-    if (this.isDistrictCashCrop) {
+  getFarmers(parameters: any, as?: any): Observable<any> {
+    if (as === 'dcc') {
       return this.apiService.post('/coffeefarmers/district/farmers/', parameters);
     } else {
       return this.apiService.post('/coffeefarmers/getfarmers/', parameters);
@@ -49,8 +46,8 @@ export class FarmerService {
     return this.apiService.put('/farmers/', farmer);
   }
 
-  getPendingFarmers(parameters: any): Observable<any> {
-    if (this.isDistrictCashCrop) {
+  getPendingFarmers(parameters: any, as?: any): Observable<any> {
+    if (as === 'dcc') {
       return this.apiService.post('/pendingfarmers/district/pendingfarmers/', parameters);
     } else {
       return this.apiService.post('/pendingfarmers/gettempofarmers/', parameters);
@@ -60,6 +57,7 @@ export class FarmerService {
   getPendingFarmer(id: string): Observable<any> {
     return this.apiService.get('/pendingfarmers/pendingbyid/' + id);
   }
+
   report(data: any): Observable<any> {
     return this.apiService.post('/stats/farmer.data?subRegions=true', data);
   }
@@ -90,5 +88,9 @@ export class FarmerService {
 
   updateFarmerProfile(data: any): Observable<any> {
     return this.apiService.put('/coffeefarmers/profileinfo/edit/', data);
+  }
+
+  approveLandsUpdate(data: any): Observable<any> {
+    return this.apiService.put('/coffeefarmers/requestinfo/approve_update', data);
   }
 }

@@ -68,52 +68,54 @@
   </div>
 </div>
 <br/> <br/>
-<h5 class="page-header">
-  Lands
-</h5>
-<app-list-message [message]="message"></app-list-message>
-<button class="btn btn-success btn-circle btn-lg pull-right" (click)="addRequest(farmer.request._id)" type="button"><i
-  class="fa fa-plus"></i></button>
-<div class="row">
-  <div class="col-xs-12 table-responsive">
-    <table class="table table-striped">
-      <thead>
-      <tr>
-        <th>Season</th>
-        <th>Location</th>
-        <th>Number of trees</th>
-        <th>Fertilizer needed</th>
-        <th>Fertilizer allocated</th>
-        <th></th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let request of requests;">
-        <td>{{farmer.request.season.name}}</td>
-        <td>
-          <span class="details-row-title-sm" style="margin-left: 0px">Province </span> : <span
-          class="details-row-data-sm" *ngIf="request.location.prov_id">{{ request.location.prov_id.namek }}</span>
-          <span class="details-row-title-sm">District </span> : <span class="details-row-data-sm"
-                                                                      >{{ request.location.dist_id.name }}</span>
-          <span class="details-row-title-sm">Sector </span> : <span class="details-row-data-sm">{{ request.location.sect_id.name }}</span>
-          <span class="details-row-title-sm">Cell </span> : <span class="details-row-data-sm">{{ request.location.cell_id.name }}</span>
-          <span class="details-row-title-sm">Village </span> : <span class="details-row-data-sm">{{ request.location.village_id.name }}</span>
-        </td>
-        <td>{{ request.numberOfTrees }}</td>
-        <td>{{ request.fertilizer_need }} Kg</td>
-        <td>{{ request.fertilizer_allocate }} Kg</td>
-        <td>
-          <button class="btn btn-warning btn-margin btn-sm pull-right" (click)="cancelRequest(request)">Delete</button>
-          <button class="btn btn-primary btn-margin btn-sm pull-right" (click)="editRequest(request)">Edit</button>
-          <!--<button class="btn btn-primary btn-margin btn-sm pull-right" (click)="editRequestAtDistribution(request)">Edit on distribution</button>-->
-        </td>
-      </tr>
-      </tbody>
-    </table>
+<ng-container *ngIf="canEditLands">
+  <h5 class="page-header">
+    Lands
+  </h5>
+  <app-list-message [message]="message"></app-list-message>
+  <button class="btn btn-success btn-circle btn-lg pull-right" (click)="addRequest(farmer.request._id)" type="button"><i
+    class="fa fa-plus"></i></button>
+  <div class="row">
+    <div class="col-xs-12 table-responsive">
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th>Season</th>
+          <th>Location</th>
+          <th>Number of trees</th>
+          <th>Fertilizer needed</th>
+          <th>Fertilizer allocated</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let request of requests;">
+          <td>{{farmer.request.season.name}}</td>
+          <td>
+            <span class="details-row-title-sm" style="margin-left: 0px">Province </span> : <span
+            class="details-row-data-sm" *ngIf="request.location.prov_id">{{ request.location.prov_id.namek }}</span>
+            <span class="details-row-title-sm">District </span> : <span class="details-row-data-sm"
+                                                                        >{{ request.location.dist_id.name }}</span>
+            <span class="details-row-title-sm">Sector </span> : <span class="details-row-data-sm">{{ request.location.sect_id.name }}</span>
+            <span class="details-row-title-sm">Cell </span> : <span class="details-row-data-sm">{{ request.location.cell_id.name }}</span>
+            <span class="details-row-title-sm">Village </span> : <span class="details-row-data-sm">{{ request.location.village_id.name }}</span>
+          </td>
+          <td>{{ request.numberOfTrees }}</td>
+          <td>{{ request.fertilizer_need }} Kg</td>
+          <td>{{ request.fertilizer_allocate }} Kg</td>
+          <td>
+            <button class="btn btn-warning btn-margin btn-sm pull-right" (click)="cancelRequest(request)">Delete</button>
+            <button class="btn btn-primary btn-margin btn-sm pull-right" (click)="editRequest(request)">Edit</button>
+            <!--<button class="btn btn-primary btn-margin btn-sm pull-right" (click)="editRequestAtDistribution(request)">Edit on distribution</button>-->
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
-</div>
+</ng-container>
 <div class="row">
   <div class="col-xs-12">
-    <a class="pull-right" (click)="onCancel()" style="margin-right: 10px">Cancel</a>
+    <a class="pull-right btn btn-margin btn-warning" (click)="onCancel()">Cancel</a>
   </div>
 </div>

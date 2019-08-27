@@ -14,10 +14,14 @@ export class SeasonService {
     return this.apiService.get('/season/settings');
   }
 
-  updateSeason(data: any): Observable<any> {
-    return this.apiService.put('/', data);
+  updateDistribution(data: any): Observable<any> {
+    console.log(data);
+    return this.apiService.put('/season/update_distribution', data);
   }
-
+  updateParameter(data: any): Observable<any> {
+    console.log(data);
+    return this.apiService.put('/season/update_agroinput', data);
+  }
   changeSeason(data: any): Observable<any> {
     return this.apiService.post('/season/set/cache', data);
   }

@@ -21,6 +21,7 @@
   </div>
   <br>
   <app-list-errors [errorList]="errors"></app-list-errors>
+  <app-loader *ngIf="loading"></app-loader>
   <form [formGroup]="editFarmerProfileForm" (ngSubmit)="onSubmit()">
     <div class="row">
       <div class="col-xs-12">
@@ -28,6 +29,45 @@
           <div class="box-body">
             <div class="row">
               <section id="personal" *ngIf="!isGroup">
+                <div class="col-xs-6">
+                  <div class="form-group">
+                    <label class="control-label label-required">NID</label>
+                    <input type="text" formControlName="NID" class="form-control" id="NID"
+                           (input)="verifyNid($event.target.value)">
+                    <span class="input-error" *ngIf="invalidId">
+                  invalid nid
+                </span>
+                  </div>
+                </div>
+                <div class="col-xs-6">
+                  <div class="form-group">
+                    <label class="control-label label-required">First name</label>
+                    <input type="text" formControlName="foreName" class="form-control" readonly="readonly">
+                  </div>
+                </div>
+                <div class="col-xs-6">
+                  <div class="form-group">
+                    <label class="control-label label-required">Last name</label>
+                    <input type="text" formControlName="surname" class="form-control" readonly="readonly">
+                  </div>
+                </div>
+                <div class="col-xs-6">
+                  <div class="form-group">
+                    <label class="control-label label-required">Gender</label>
+                    <div class="radio">
+                      <label>
+                        <input type="radio" formControlName="sex" value="m" checked="" disabled>
+                        Male
+                      </label>
+                    </div>
+                    <div class="radio">
+                      <label>
+                        <input type="radio" formControlName="sex" value="f" checked="" disabled>
+                        Female
+                      </label>
+                    </div>
+                  </div>
+                </div>
                 <div class="col-xs-6">
                   <div class="form-group">
                     <label class="control-label label-required">Phone number</label>
@@ -94,7 +134,7 @@
     <div class="row">
       <div class="col-xs-12">
         <button class="btn btn-warning btn-margin pull-right" (click)="modal.dismiss()" type="button">Cancel</button>
-        <button class="btn btn-success pull-right">Save</button>
+        <button class="btn btn-success pull-right" [disabled]="!submit" type="submit">Save</button>
       </div>
     </div>
   </form>

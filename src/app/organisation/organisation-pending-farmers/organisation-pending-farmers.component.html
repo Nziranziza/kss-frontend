@@ -9,7 +9,7 @@
               <option *ngFor="let field of searchFields" value="{{field.value}}">{{field.name}}</option>
             </select>
             <input type="text" formControlName="term" class="form-control" placeholder="search..">
-            <button class="btn btn-success pull-right btn-margin" type="button" (click)="exportAsXLSX()"><i class="fa fa-search"></i> Export
+            <button class="btn btn-success pull-right btn-margin" type="button" (click)="exportAsXLSX()"><i class="fa fa-download"></i> Export
             </button>
             <button class="btn btn-warning pull-right btn-margin" type="button" (click)="onClearFilter()">Clear</button>
             <button class="btn btn-success pull-right btn-margin" type="submit"><i class="fa fa-search"></i> Search
@@ -48,7 +48,7 @@
             <td><span
               *ngIf="farmer.reason !== undefined && farmer.reason.length > 0">{{ farmer.reason.join(', ') }}</span></td>
             <td>
-              <a appRequiredSeason class="btn btn-success btn-sm pull-right"
+              <a appRequiredSeason class="btn btn-success btn-sm pull-right" *ngIf="canApprove(farmer.reason)"
                  [routerLink]="['/admin/farmers/create', {id: farmer._id}]">Approve
               </a>
             </td>

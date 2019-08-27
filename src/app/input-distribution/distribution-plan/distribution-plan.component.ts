@@ -7,6 +7,7 @@ import {LocationService} from '../../core/services/location.service';
 import {InputDistributionService} from '../../core/services/input-distribution.service';
 import {SiteService} from '../../core/services/site.service';
 import {AuthorisationService} from '../../core/services/authorisation.service';
+import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-distribution-plan',
@@ -17,7 +18,9 @@ export class DistributionPlanComponent implements OnInit {
 
   title = 'Distribution plan';
   filterForm: FormGroup;
+  checkProgressForm: FormGroup;
   errors: any;
+  canCheckProgress: boolean;
   provinces: any;
   districts: any;
   loading = false;
@@ -28,10 +31,18 @@ export class DistributionPlanComponent implements OnInit {
   totalFarmers = 0;
   totalTrees = 0;
   totalFertilizerNeeded = 0;
+  totalNumberOfLands = 0;
   plans: any;
   organisations: any;
   subRegion: boolean;
   isCurrentUserDCC = false;
+  distributionProgress: any;
+  dtOptions: any = {};
+  // @ts-ignore
+  dtTrigger: Subject = new Subject();
+  priorRequest: any;
+  showDistributionProgress = true;
+  showDispatchProgress = true;
 
   constructor(private formBuilder: FormBuilder, private siteService: SiteService,
               private authorisationService: AuthorisationService,
@@ -50,6 +61,17 @@ export class DistributionPlanComponent implements OnInit {
       }),
       zoneId: ['']
     });
+    this.checkProgressForm = this.formBuilder.group({
+      date: this.formBuilder.group({
+        from: [''],
+        to: ['']
+      })
+    });
+    this.dtOptions = {
+      pagingType: 'full_numbers',
+      pageLength: 25
+    };
+    this.canCheckProgress = false;
     this.initial();
     this.onChanges();
   }
@@ -75,17 +97,21 @@ export class DistributionPlanComponent implements OnInit {
       }
       this.helper.cleanObject(filters.location);
       this.helper.cleanObject(filters);
+      delete filters.date;
+      this.priorRequest = filters;
       this.inputDistributionService.report(filters, this.subRegion).subscribe((data) => {
         this.loading = false;
         this.totalFarmers = 0;
         this.totalFertilizerNeeded = 0;
         this.totalTrees = 0;
+        this.totalNumberOfLands = 0;
         if ((data.content.length !== 0) && (data.content)) {
           data.content.map((item) => {
             const temp = {};
             this.totalFarmers = this.totalFarmers + item.uniqueFarmersCount;
             this.totalFertilizerNeeded = this.totalFertilizerNeeded + item.totalFertilizerNeeded;
             this.totalTrees = this.totalTrees + item.totalNumberOfTrees;
+            this.totalNumberOfLands = this.totalNumberOfLands + item.totalNumberOfLands;
             if (filters.location.searchBy === 'all provinces') {
               temp['location'.toString()] = item.provName;
             }
@@ -95,6 +121,7 @@ export class DistributionPlanComponent implements OnInit {
             temp['numberOfTrees'.toString()] = item.totalNumberOfTrees;
             temp['numberOfFarmers'.toString()] = item.uniqueFarmersCount;
             temp['fertilizerNeed'.toString()] = item.totalFertilizerNeeded;
+            temp['totalNumberOfLands'.toString()] = item.totalNumberOfLands;
             this.plans.push(temp);
           });
           this.showPlan = true;
@@ -120,6 +147,52 @@ export class DistributionPlanComponent implements OnInit {
     } else {
       this.errors = this.helper.getFormValidationErrors(this.filterForm);
     }
+  }
+
+  onGetProgress() {
+    this.loading = true;
+    this.inputDistributionService.getDispatchProgress(this.priorRequest, this.subRegion).subscribe((data) => {
+      this.loading = false;
+      if ((data.content.length !== 0) && (data.content)) {
+        this.message = '';
+        this.errors = '';
+      } else {
+        this.message = 'Sorry no data found to this location!';
+        this.errors = '';
+        this.loading = false;
+      }
+    }, (err) => {
+      if (err.status === 404) {
+        this.message = err.errors[0];
+        this.errors = '';
+        this.loading = false;
+      } else {
+        this.message = '';
+        this.errors = err.errors;
+      }
+    });
+    this.inputDistributionService.getDistributionProgress(this.priorRequest, this.subRegion).subscribe((data) => {
+      this.loading = false;
+      if ((data.content.length !== 0) && (data.content)) {
+        this.message = '';
+        this.errors = '';
+        this.distributionProgress = data.content;
+        this.dtTrigger.next();
+      } else {
+        this.message = 'Sorry no data found to this location!';
+        this.errors = '';
+        this.loading = false;
+      }
+    }, (err) => {
+      if (err.status === 404) {
+        this.message = err.errors[0];
+        this.errors = '';
+        this.loading = false;
+      } else {
+        this.message = '';
+        this.errors = err.errors;
+      }
+    });
   }
 
   onChanges() {

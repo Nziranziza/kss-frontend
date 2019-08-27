@@ -35,7 +35,7 @@ export class FarmerListComponent implements OnInit, OnDestroy {
   reverse = true;
   directionLinks = true;
   message: string;
-  farmers: any;
+  farmers = [];
   title = 'Farmers';
   id = 'farmers-list';
   parameters: any;
@@ -49,7 +49,7 @@ export class FarmerListComponent implements OnInit, OnDestroy {
     screenReaderPageLabel: 'page',
     screenReaderCurrentLabel: `You're on page`
   };
-  loading = false;
+  loading = true;
   searchFields = [
     {value: 'phone_number', name: 'phone number'},
     {value: 'reg_number', name: 'registration number'},
@@ -62,17 +62,17 @@ export class FarmerListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.isDistrictCashCrop = this.authorisationService.isDistrictCashCropOfficer();
-    this.getFarmers();
     this.filterForm = this.formBuilder.group({
       term: ['', Validators.minLength(3)],
       searchBy: ['forename']
     });
+    this.getFarmers();
     this.message = this.messageService.getMessage();
   }
 
   onPageChange(event) {
     this.config.currentPage = event;
-    if (event > 1) {
+    if (event >= 1) {
       this.parameters.start = (event - 1) * this.config.itemsPerPage;
     }
 
@@ -142,11 +142,13 @@ export class FarmerListComponent implements OnInit, OnDestroy {
   }
 
   getFarmers() {
+    this.loading = true;
+    let asDcc;
     if (this.isDistrictCashCrop) {
+      asDcc = 'dcc';
       this.parameters['dist_id'.toString()] = this.authenticationService.getCurrentUser().info.location.dist_id;
     }
-    this.loading = true;
-    this.farmerService.getFarmers(this.parameters)
+    this.farmerService.getFarmers(this.parameters, asDcc)
       .subscribe(data => {
         this.farmers = data.data;
         this.config = {
@@ -157,5 +159,4 @@ export class FarmerListComponent implements OnInit, OnDestroy {
         this.loading = false;
       });
   }
-
 }

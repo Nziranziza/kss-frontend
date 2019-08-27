@@ -3,8 +3,10 @@ import {Routes, RouterModule} from '@angular/router';
 import {AdminComponent} from '../admin/admin/admin.component';
 import {DistributionPlanComponent} from './distribution-plan/distribution-plan.component';
 import {SiteDistributionComponent} from './site-distribution/site-distribution.component';
-import {RecordSiteStockOutComponent} from './record-site-stock-out/record-site-stock-out.component';
-import {RecordDispatchComponent} from './record-dispatch/record-dispatch.component';
+import {RecordSiteStockOutComponent} from './site-view-dispatch/site-stock-out/record-site-stock-out.component';
+import {WarehouseDispatchComponent} from './warehouse/warehouse-dispatch/warehouse-dispatch.component';
+import {SiteViewDispatchComponent} from './site-view-dispatch/site-view-dispatch.component';
+import {SiteViewStockoutComponent} from './site-view-stockout/site-view-stockout.component';
 
 const routes: Routes = [
   {
@@ -24,9 +26,13 @@ const routes: Routes = [
         component: SiteDistributionComponent
       },
       {
-        path: 'input/record/dispatch',
-        component: RecordDispatchComponent
+        path: 'input/site/dispatches',
+        component: SiteViewDispatchComponent
       },
+      {
+        path: 'input/site/stock-outs',
+        component: SiteViewStockoutComponent
+      }
     ]
   }
 ];

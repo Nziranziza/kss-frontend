@@ -1,0 +1,129 @@
+<h3>
+  Record dispatch
+</h3>
+<app-list-errors [errorList]="errors"></app-list-errors>
+<form [formGroup]="recordDispatchForm" (ngSubmit)="onSubmit()">
+  <div class="box">
+    <div class="box-body">
+      <div class="row">
+        <ng-container formGroupName="location">
+          <div class="col-xs-2">
+            <div class="form-group">
+              <span class="">Province</span>
+              <select class="form-control" formControlName="prov_id">
+                <option value=""></option>
+                <option *ngFor="let province of provinces" value="{{province._id}}">{{province.namee}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-xs-2">
+            <div class="form-group">
+              <span class="">District</span>
+              <select class="form-control" formControlName="dist_id">
+                <option value=""></option>
+                <option *ngFor="let district of districts" value="{{district._id}}">{{district.name}}</option>
+              </select>
+            </div>
+          </div>
+        </ng-container>
+        <div class="col-xs-2">
+          <div class="form-group">
+            <label class="control-label label-required">Site</label>
+            <select class="form-control" formControlName="siteId">
+              <option *ngFor="let site of sites" value="{{site._id}}">{{site.siteName}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <ng-container formGroupName="entries">
+      <div class="row">
+        <div class="col-xs-2">
+          <div class="form-group">
+            <label class="control-label label-required">Driver</label>
+            <input type="text" formControlName="driver" class="form-control">
+          </div>
+        </div>
+        <div class="col-xs-2">
+          <div class="form-group">
+            <label class="control-label label-required">Vehicle plate</label>
+            <input type="text" formControlName="vehiclePlate" class="form-control">
+          </div>
+        </div>
+        <div class="col-xs-2">
+          <div class="form-group">
+            <label class="control-label label-required">Vehicle model</label>
+            <input type="text" formControlName="vehicleModel" class="form-control">
+          </div>
+        </div>
+        <div class="col-xs-2">
+          <div class="form-group">
+            <label class="control-label label-required">Number of bags</label>
+            <input type="text" formControlName="numberOfBags" class="form-control">
+          </div>
+        </div>
+        <div class="col-xs-2">
+          <div class="form-group">
+            <label class="control-label label-required">Total Qty</label>
+            <input type="text" formControlName="totalQty" class="form-control">
+          </div>
+        </div>
+        <div class="col-xs-2">
+          <div class="form-group">
+            <label class="control-label label-required">Stock</label>
+            <select class="form-control" formControlName="warehouseId">
+              <option *ngFor="let store of stores" value="{{store._id}}">{{store.inputType}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-xs-2">
+          <div class="form-group">
+            <label class="control-label label-required">Date</label>
+            <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="date" class="form-control">
+            <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+          </div>
+        </div>
+      </div>
+      </ng-container>
+      <div class="row">
+        <div class="col-xs-12">
+          <button class="btn btn-success pull-right">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-body">
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover"
+               class="table table-condensed">
+          <thead>
+          <tr>
+            <th>Destination</th>
+            <th>Driver</th>
+            <th>Vehicle</th>
+            <th>Quantity</th>
+            <th>Date</th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <ng-container *ngFor="let dispatch of inputDispatches">
+            <tr *ngFor="let entry of dispatch.entries">
+              <td>{{ dispatch.destinationSite.siteId.siteName }}</td>
+              <td>{{ entry.driver }}</td>
+              <td>{{ entry.vehiclePlate }}</td>
+              <td>{{ entry.totalQty }}</td>
+              <td>{{ entry.date|date }}</td>
+              <td>
+                <button class="btn btn-success btn-margin btn-sm" (click)="printNote(dispatch._id, entry._id)">Print note</button>
+              </td>
+            </tr>
+          </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

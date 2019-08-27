@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {UserService} from '../../core/services/user.service';
+import {UserService} from '../../core/services';
 import {AuthenticationService, OrganisationService} from '../../core/services';
-import {LocationService} from '../../core/services/location.service';
+import {LocationService} from '../../core/services';
 import {HelperService} from '../../core/helpers';
-import {SiteService} from '../../core/services/site.service';
+import {SiteService} from '../../core/services';
 
 @Component({
   selector: 'app-user-edit',
@@ -120,7 +120,9 @@ export class UserEditComponent implements OnInit {
         if (usr.sex !== undefined) {
           usr['sex'.toString()] = usr['sex'.toString()].toLowerCase();
         }
-
+        if (usr.accountExpirationDate !== undefined) {
+          usr['accountExpirationDate'.toString()] = usr['accountExpirationDate'.toString()];
+        }
         this.editForm.patchValue(usr);
       });
     });
@@ -250,11 +252,15 @@ export class UserEditComponent implements OnInit {
       if (this.isFromSuperOrg) {
         user['userRoles'.toString()] = [0];
       }
-      if (!(selectedRoles.includes(6))) {
+      if ((!(selectedRoles.includes(6)) && (!(selectedRoles.includes(8))))) {
         delete user.location;
       }
       if (!selectedRoles.includes(8)) {
-        delete user.site;
+        delete user.distributionSite;
+        delete user.accountExpirationDate;
+      } else {
+        const myDate = user.accountExpirationDate;
+        user.accountExpirationDate = new Date(myDate).getTime();
       }
       user['lastModifiedBy'.toString()] = {
         _id: this.authenticationService.getCurrentUser().info._id,

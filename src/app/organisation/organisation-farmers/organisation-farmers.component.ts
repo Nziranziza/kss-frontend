@@ -1,12 +1,12 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {AuthenticationService, ConfirmDialogService, OrganisationService} from '../../core/services';
+import {AuthenticationService, ConfirmDialogService, ExcelServicesService, OrganisationService} from '../../core/services';
 import {ActivatedRoute} from '@angular/router';
 import {Subject} from 'rxjs';
 import {Farmer} from '../../core/models';
 import {FarmerDetailsComponent} from '../../farmer/farmer-details/farmer-details.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {AuthorisationService} from '../../core/services/authorisation.service';
-import {LocationService} from '../../core/services/location.service';
+import {AuthorisationService} from '../../core/services';
+import {LocationService} from '../../core/services';
 
 @Component({
   selector: 'app-organisation-farmers',
@@ -15,9 +15,12 @@ import {LocationService} from '../../core/services/location.service';
 })
 export class OrganisationFarmersComponent implements OnInit, OnDestroy {
 
-  constructor(private organisationService: OrganisationService, private authenticationService: AuthenticationService,
+  constructor(private organisationService: OrganisationService,
+              private authenticationService: AuthenticationService,
+              private excelService: ExcelServicesService,
               private route: ActivatedRoute, private  confirmDialogService: ConfirmDialogService,
-              private modal: NgbModal, private authorisationService: AuthorisationService, private locationService: LocationService) {
+              private modal: NgbModal, private authorisationService: AuthorisationService,
+              private locationService: LocationService) {
   }
 
   message: string;
@@ -33,6 +36,7 @@ export class OrganisationFarmersComponent implements OnInit, OnDestroy {
   numberOfFarmers = 0;
   currentSeason: any;
   orgCoveredArea = [];
+  allFarmers = [];
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -59,39 +63,41 @@ export class OrganisationFarmersComponent implements OnInit, OnDestroy {
         });
       });
       this.locationService.getSectors(this.org.location.dist_id._id).subscribe((secs) => {
-        let secIndex = 0;
-        const temp = [];
+        const sectorIds = [];
+        const cellIds = [];
         secs.map((sec) => {
           if (orgSectors.includes(sec._id)) {
-            temp.push(sec._id);
+            sectorIds.push(sec._id);
             this.orgCoveredArea.push(sec);
             this.locationService.getCells(sec._id).subscribe((cells) => {
-              this.orgCoveredArea[secIndex]['covCells'.toString()] = [];
-              let cellIndex = 0;
+              this.orgCoveredArea[sectorIds.indexOf(sec._id)]['covCells'.toString()] = [];
               cells.map((cell) => {
                 if (orgCells.includes(cell._id)) {
-                  this.orgCoveredArea[temp.indexOf(sec._id)]['covCells'.toString()].push(cell);
+                  cellIds.push(cell._id);
+                  this.orgCoveredArea[sectorIds.indexOf(sec._id)]['covCells'.toString()].push(cell);
                   this.locationService.getVillages(cell._id).subscribe((villages) => {
-                    this.orgCoveredArea[temp.indexOf(sec._id)]['covCells'.toString()][cellIndex]['covVillages'.toString()] = [];
+                    this.orgCoveredArea[sectorIds.indexOf(sec._id)]['covCells'.toString()][cellIds.indexOf(cell._id)]
+                      ['covVillages'.toString()] = [];
                     villages.map((village) => {
                       if (orgVillages.includes(village._id)) {
-                        this.orgCoveredArea[temp.indexOf(sec._id)]['covCells'.toString()][cellIndex]
+                        this.orgCoveredArea[sectorIds.indexOf(sec._id)]['covCells'.toString()][cellIds.indexOf(cell._id)]
                           ['covVillages'.toString()].push(village);
                       }
                     });
-                    cellIndex = cellIndex + 1;
                   });
                 }
               });
-              secIndex = secIndex + 1;
             });
           }
-
         });
-
       });
     });
     this.currentSeason = this.authenticationService.getCurrentSeason();
+    this.getAllFarmers();
+  }
+
+  exportAsXLSX() {
+    this.excelService.exportAsExcelFile(this.allFarmers, 'farmers');
   }
 
   ngOnDestroy(): void {
@@ -118,5 +124,21 @@ export class OrganisationFarmersComponent implements OnInit, OnDestroy {
   viewDetails(farmer: Farmer) {
     const modalRef = this.modal.open(FarmerDetailsComponent, {size: 'lg'});
     modalRef.componentInstance.farmer = farmer;
+  }
+
+  getAllFarmers() {
+    this.organisationService.getAllFarmers(this.organisationId)
+      .subscribe(data => {
+        data.content.map((item) => {
+          const temp = {
+            NAMES: item.userInfo.surname + '  ' + item.userInfo.foreName,
+            SEX: item.userInfo.sex,
+            NID: item.userInfo.NID,
+            PHONE: item.userInfo.phone_number,
+            REGNUMBER: item.userInfo.regNumber
+          };
+          this.allFarmers.push(temp);
+        });
+      });
   }
 }

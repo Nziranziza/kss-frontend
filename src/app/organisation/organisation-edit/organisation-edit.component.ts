@@ -152,9 +152,8 @@ export class OrganisationEditComponent implements OnInit {
             this.addCoveredSector();
             this.getCoveredSectorsFormGroup(index).patchValue(sector);
           });
-
         } else {
-          if (org.location == null) {
+          if (org.location === null) {
             delete org.location;
           }
           this.isSuperOrganisation(org);

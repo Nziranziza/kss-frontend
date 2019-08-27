@@ -1,14 +1,15 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AuthenticationService, ConfirmDialogService, FarmerService, OrganisationService} from '../../core/services';
-import {LocationService} from '../../core/services/location.service';
+import {LocationService} from '../../core/services';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {EditFarmerRequestComponent} from './edit-farmer-request/edit-farmer-request.component';
 import {AddFarmerRequestComponent} from './add-farmer-request/add-farmer-request.component';
-import {MessageService} from '../../core/services/message.service';
+import {MessageService} from '../../core/services';
 import {Location} from '@angular/common';
 import {EditFarmerProfileComponent} from './edit-farmer-profile/edit-farmer-profile.component';
 import {EditRequestComponent} from '../../input-distribution/edit-request/edit-request.component';
+import {AuthorisationService} from '../../core/services';
 
 @Component({
   selector: 'app-farmer-edit',
@@ -23,9 +24,11 @@ export class FarmerEditComponent implements OnInit, OnDestroy {
   errors = [];
   farmerType = 1;
   message: string;
+  canEditLands = true;
 
   constructor(private route: ActivatedRoute, private router: Router,
               private authenticationService: AuthenticationService,
+              private authorisationService: AuthorisationService,
               private farmerService: FarmerService,
               private organisationService: OrganisationService,
               private confirmDialogService: ConfirmDialogService,
@@ -39,6 +42,9 @@ export class FarmerEditComponent implements OnInit, OnDestroy {
       this.getFarmer(this.id);
     });
     this.message = this.messageService.getMessage();
+    if (this.authorisationService.isCWSUser()) {
+      this.canEditLands = false;
+    }
   }
 
   editRequest(request: any) {
