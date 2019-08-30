@@ -1,11 +1,13 @@
 import {Injectable} from '@angular/core';
 import {HttpEvent, HttpInterceptor, HttpHandler, HttpRequest} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {JwtService} from '../services';
+import {AuthenticationService, JwtService} from '../services';
+import {Router} from '@angular/router';
 
 @Injectable()
 export class HttpTokenInterceptor implements HttpInterceptor {
-  constructor(private jwtService: JwtService) {
+  constructor(private jwtService: JwtService, private router: Router,
+              private authenticationService: AuthenticationService) {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -16,6 +18,9 @@ export class HttpTokenInterceptor implements HttpInterceptor {
     const token = this.jwtService.getToken();
     if (req.url.indexOf('/api/users/sign.in') !== -1) {
       return next.handle(req);
+    }
+    if (!this.authenticationService.isLoggedIn()) {
+      this.router.navigateByUrl('login');
     }
     if (token) {
       headersConfig['x-auth-token'.toString()] = token;

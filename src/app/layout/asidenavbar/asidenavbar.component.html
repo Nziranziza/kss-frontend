@@ -32,6 +32,14 @@
           </li>
         </ul>
       </li>
+      <ng-container *ngIf="parameters.type == 2">
+      <li routerLinkActive="active" [appRequiredRoles]="[8]">
+        <a routerLink="/admin/organisations/{{user.org_id}}/users">
+          <i class="fa fa-archive" aria-hidden="true"></i>
+          <span>Users</span>
+        </a>
+      </li>
+      </ng-container>
       <li class="header" [appRequiredRoles]="[1]">WET PROCESSING</li>
       <li class="treeview" routerLinkActive="active" [appRequiredRoles]="[1]">
         <a href="#">
@@ -110,14 +118,36 @@
           </li>
         </ul>
       </li>
-      <li class="header" [appRequiredRoles]="[5]">WAREHOUSE</li>
-      <li routerLinkActive="active" [appRequiredRoles]="[5]">
+      <li class="treeview" routerLinkActive="active" [appRequiredRoles]="[8,4,0]">
+        <a href="#">
+          <i class="fa fa-flag-checkered"></i> <span>Progress report</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
+        </a>
+        <ul class="treeview-menu">
+          <li routerLinkActive="active" [appRequiredRoles]="[8,4,0]">
+            <a routerLink="input/site/dispatches">
+              <i class="fa fa-circle-o"></i>
+              <span>Application</span>
+            </a>
+          </li>
+          <li routerLinkActive="active" [appRequiredRoles]="[8,4,0]">
+            <a routerLink="input/site/stock-outs">
+              <i class="fa fa-circle-o"></i>
+              <span>Distribution</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      <li class="header" [appRequiredRoles]="[5,4,0]">WAREHOUSE</li>
+      <li routerLinkActive="active" [appRequiredRoles]="[5,4,0]">
         <a routerLink="/admin/warehouse/entries">
           <i class="fa fa-tags" aria-hidden="true"></i>
           <span>Entries</span>
         </a>
       </li>
-      <li routerLinkActive="active" [appRequiredRoles]="[5]">
+      <li routerLinkActive="active" [appRequiredRoles]="[5,0]">
         <a routerLink="/admin/warehouse/dispatches">
           <i class="fa fa-code-fork" aria-hidden="true"></i>
           <span>Dispatch</span>
@@ -181,7 +211,7 @@
         </ul>
       </li>
       <li routerLinkActive="active">
-        <a routerLink="/logout">
+        <a (click) = "onLogOut()" style="cursor:pointer">
           <i class="fa fa-fw fa-lock" aria-hidden="true"></i>
           <span>Sign out</span>
         </a>

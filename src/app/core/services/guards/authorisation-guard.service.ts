@@ -21,6 +21,5 @@ export class AuthorisationGuardService implements CanActivate {
     } else {
       return this.authorisationService.hasRoles(null);
     }
-
   }
 }

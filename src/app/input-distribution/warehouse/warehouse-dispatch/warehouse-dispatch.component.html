@@ -30,6 +30,7 @@
           <div class="form-group">
             <label class="control-label label-required">Site</label>
             <select class="form-control" formControlName="siteId">
+              <option value=""></option>
               <option *ngFor="let site of sites" value="{{site._id}}">{{site.siteName}}</option>
             </select>
           </div>

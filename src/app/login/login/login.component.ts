@@ -2,10 +2,10 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthenticationService} from '../../core';
-import {MessageService} from '../../core/services/message.service';
+import {MessageService} from '../../core/services';
 import {HttpHeaders} from '@angular/common/http';
-import {AuthorisationService} from '../../core/services/authorisation.service';
-import {SeasonService} from '../../core/services/season.service';
+import {AuthorisationService} from '../../core/services';
+import {SeasonService} from '../../core/services';
 
 declare var $;
 
@@ -29,7 +29,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     private authorisationService: AuthorisationService,
     private seasonService: SeasonService
   ) {
-    // use FormBuilder to create a form group
     this.authForm = this.formBuilder.group({
       email: ['', Validators.required],
       password: ['', Validators.minLength(8)]
@@ -63,10 +62,8 @@ export class LoginComponent implements OnInit, OnDestroy {
           });
         }
       });
-    this.authenticationService.purgeAuth();
-    if ((window.localStorage.getItem('loggedIn')).toString() === 'true') {
-      window.localStorage.setItem('loggedIn', 'false');
-      location.reload();
+    if (this.authenticationService.isLoggedIn()) {
+      this.afterLogInRedirect();
     }
   }
 
@@ -74,29 +71,17 @@ export class LoginComponent implements OnInit, OnDestroy {
     if (!this.authForm.invalid) {
       const credentials = this.authForm.value;
       this.authenticationService.attemptAuth(credentials).subscribe(data => {
-          const orgId = this.authenticationService.getCurrentUser().info.org_id;
           this.seasonService.all().subscribe((dt) => {
             const seasons = dt.content;
-            if (this.authenticationService.getCurrentSeason() === null) {
+            if (!this.authenticationService.isSeasonSet()) {
               seasons.forEach((item) => {
                 if (item.isCurrent) {
                   this.authenticationService.setCurrentSeason(item);
                 }
               });
             }
-            if (this.authorisationService.isCWSUser()) {
-              this.router.navigateByUrl('admin/cws-farmers/' + orgId);
-            } else if (this.authorisationService.isDryMillUser()) {
-              this.router.navigateByUrl('admin/drymill/batch/create');
-            } else if (this.authorisationService.isCeparUser()) {
-              this.router.navigateByUrl('admin/warehouse/dispatches');
-            } else if (this.authorisationService.isInputDistributorUser()) {
-              this.router.navigateByUrl('admin/input/site/distribution');
-            } else {
-              this.router.navigateByUrl('admin/organisations');
-            }
+            this.afterLogInRedirect();
           });
-
         },
         err => {
           this.errors = err.errors;
@@ -110,5 +95,19 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.messageService.setMessage('');
+  }
+  afterLogInRedirect() {
+    const orgId = this.authenticationService.getCurrentUser().info.org_id;
+    if (this.authorisationService.isCWSUser()) {
+      this.router.navigateByUrl('admin/cws-farmers/' + orgId);
+    } else if (this.authorisationService.isDryMillUser()) {
+      this.router.navigateByUrl('admin/drymill/batch/create');
+    } else if (this.authorisationService.isCeparUser()) {
+      this.router.navigateByUrl('admin/warehouse/dispatches');
+    } else if (this.authorisationService.isInputDistributorUser()) {
+      this.router.navigateByUrl('admin/input/site/distribution');
+    } else {
+      this.router.navigateByUrl('admin/organisations');
+    }
   }
 }

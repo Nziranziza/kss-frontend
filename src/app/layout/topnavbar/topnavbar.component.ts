@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthenticationService} from '../../core/services';
-import {SeasonService} from '../../core/services/season.service';
+import {SeasonService} from '../../core/services';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-topnavbar',
@@ -14,7 +15,7 @@ export class TopnavbarComponent implements OnInit {
   seasons: any [];
   currentSeason: any;
 
-  constructor(private authenticationService: AuthenticationService,
+  constructor(private authenticationService: AuthenticationService, private router: Router,
               private seasonService: SeasonService) {
   }
 
@@ -36,5 +37,10 @@ export class TopnavbarComponent implements OnInit {
       this.authenticationService.setCurrentSeason(this.currentSeason);
       location.reload();
     });
+  }
+
+  onLogOut() {
+    this.authenticationService.purgeAuth();
+    this.router.navigateByUrl('login');
   }
 }

@@ -37,6 +37,7 @@ export class InputDistributionService {
   recordStockOut(body: any): Observable<any> {
     return this.apiService.post('/inputapplication/record_stockout', body);
   }
+
   recordStockOutReturn(body: any): Observable<any> {
     return this.apiService.put('/inputapplication/record_stockreturn', body);
   }
@@ -49,19 +50,7 @@ export class InputDistributionService {
     return this.apiService.put('/inputdispatch/confirm_dispatch', data);
   }
 
-  getDispatchProgress(data: any, subRegions?: boolean) {
-    if (subRegions) {
-      return this.apiService.post('/distributionstats/inputdispatch?subRegions=true', data);
-    } else {
-      return this.apiService.post('/distributionstats/inputdispatch', data);
-    }
-  }
-
-  getDistributionProgress(data: any, subRegions?: boolean) {
-    if (subRegions) {
-      return this.apiService.post('/distributionstats/inputdistribution?subRegions=true', data);
-    } else {
-      return this.apiService.post('/distributionstats/inputdispatch', data);
-    }
+  getDistributionProgress(data: any) {
+    return this.apiService.post('/distributionstats/inputdistribution?subRegions=true', data);
   }
 }

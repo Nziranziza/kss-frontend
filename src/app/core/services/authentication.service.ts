@@ -6,28 +6,30 @@ import {JwtService} from './jwt.service';
 import {AuthUser} from '../models';
 import {map} from 'rxjs/operators';
 import {environment} from '../../../environments/environment';
+import {CookieService} from 'ngx-cookie-service';
+import {Router} from '@angular/router';
 
 @Injectable()
 export class AuthenticationService {
   constructor(
-    private apiService: ApiService,
-    private http: HttpClient,
+    private apiService: ApiService, private router: Router,
+    private http: HttpClient, private cookieService: CookieService,
     private jwtService: JwtService) {
   }
 
   setAuth(user: AuthUser) {
     this.jwtService.saveToken(user.token);
-    window.localStorage.setItem('user', JSON.stringify(user));
-    window.localStorage.setItem('loggedIn', 'true');
+    this.setCurrentUser(user);
+    this.setIsLoggedIn(true);
   }
 
   purgeAuth() {
     this.jwtService.destroyToken();
-    window.localStorage.removeItem('user');
+    this.setIsLoggedIn(false);
+    this.cookieService.delete('user');
   }
 
   attemptAuth(credentials): Observable<any> {
-    this.purgeAuth();
     return this.apiService.post('/users/sign.in', credentials)
       .pipe(map(
         data => {
@@ -38,23 +40,38 @@ export class AuthenticationService {
   }
 
   setCurrentSeason(season: any) {
-    window.localStorage.setItem('current-season', JSON.stringify(season));
+    this.cookieService.set('current-season', JSON.stringify(season));
   }
 
   getCurrentSeason() {
-    return JSON.parse(window.localStorage.getItem('current-season'));
+    return JSON.parse(this.cookieService.get('current-season'));
   }
 
   isLoggedIn() {
-    if (window.localStorage.getItem('loggedIn') === 'true') {
-      console.log('test');
-      return true;
+    return this.cookieService.get('loggedIn') === 'true';
+  }
+
+  setIsLoggedIn(value: boolean) {
+    if (value) {
+      this.cookieService.set('loggedIn', 'true');
+    } else {
+      this.cookieService.set('loggedIn', 'false');
     }
-    return false;
   }
 
   getCurrentUser(): AuthUser {
-    return JSON.parse(window.localStorage.getItem('user'));
+    if (!this.isLoggedIn()) {
+      this.router.navigateByUrl('login');
+    }
+    return JSON.parse(this.cookieService.get('user'));
+  }
+
+  setCurrentUser(user: AuthUser) {
+    this.cookieService.set('user', JSON.stringify(user));
+  }
+
+  isSeasonSet() {
+    return this.cookieService.check('current-season');
   }
 
   requestReset(email): Observable<any> {

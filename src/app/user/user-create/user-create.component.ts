@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {UserService} from '../../core/services/user.service';
+import {UserService} from '../../core/services';
 import {OrganisationService} from '../../core/services';
-import {LocationService} from '../../core/services/location.service';
+import {LocationService} from '../../core/services';
 import {HelperService} from '../../core/helpers';
-import {SiteService} from '../../core/services/site.service';
+import {SiteService} from '../../core/services';
 
 @Component({
   selector: 'app-user-create',
@@ -40,6 +40,8 @@ export class UserCreateComponent implements OnInit {
     cell: true,
     village: true,
   };
+  selectedType: any;
+  selectedRoles: any;
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute, private router: Router,
@@ -110,7 +112,7 @@ export class UserCreateComponent implements OnInit {
         this.createForm.patchValue(this.userNIDInfo);
         this.loading = false;
         this.invalidId = false;
-      }, (err) => {
+      }, () => {
         this.invalidId = true;
         this.loading = false;
       });
@@ -177,7 +179,6 @@ export class UserCreateComponent implements OnInit {
             delete user.location;
           }
           if (!selectedRoles.includes(8)) {
-            console.log('test')
             delete user.distributionSite;
             delete user.accountExpirationDate;
           }
@@ -200,19 +201,27 @@ export class UserCreateComponent implements OnInit {
         const selectedRoles = data
           .map((checked, index) => checked ? this.orgPossibleRoles[index].value : null)
           .filter(value => value !== null);
-        if (selectedRoles.includes(6)) {
-          this.needLocation = true;
-        } else {
-          this.needLocation = false;
-        }
+        this.needLocation = !!selectedRoles.includes(6);
         if (selectedRoles.includes(8)) {
-          this.hasSite = true;
+          if (this.selectedType === 2) {
+            this.hasSite = true;
+          }
+        } else {
+          this.hasSite = false;
+        }
+        this.selectedRoles = selectedRoles;
+      }
+    );
+    this.createForm.controls['userType'.toString()].valueChanges.subscribe(
+      (value) => {
+        if (+value === 2) {
+          this.selectedType = +value;
+          this.hasSite = !!this.selectedRoles.includes(8);
         } else {
           this.hasSite = false;
         }
       }
     );
-
     this.createForm.controls.location.get('prov_id'.toString()).valueChanges.subscribe(
       (value) => {
         if (value !== '') {

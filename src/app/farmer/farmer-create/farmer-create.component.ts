@@ -2,12 +2,12 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AuthenticationService, ConfirmDialogService, FarmerService, OrganisationService} from '../../core/services';
-import {LocationService} from '../../core/services/location.service';
-import {UserService} from '../../core/services/user.service';
-import {MessageService} from '../../core/services/message.service';
+import {LocationService} from '../../core/services';
+import {UserService} from '../../core/services';
+import {MessageService} from '../../core/services';
 import {HelperService} from '../../core/helpers';
 import {isArray, isUndefined} from 'util';
-import {AuthorisationService} from '../../core/services/authorisation.service';
+import {AuthorisationService} from '../../core/services';
 import {Location} from '@angular/common';
 
 @Component({
@@ -101,7 +101,7 @@ export class FarmerCreateComponent implements OnInit, OnDestroy {
                     this.loading = false;
                     this.invalidId = false;
                   },
-                  (err) => {
+                  () => {
                     this.invalidId = true;
                     this.submit = false;
                     this.loading = false;
@@ -115,7 +115,7 @@ export class FarmerCreateComponent implements OnInit, OnDestroy {
                 }
               }
             },
-            (err) => {
+            () => {
               this.createFromPending = true;
               this.errors = ['something went wrong!'];
             });
@@ -324,17 +324,15 @@ export class FarmerCreateComponent implements OnInit, OnDestroy {
           this.loading = false;
           this.invalidId = false;
         },
-        (err) => {
+        () => {
           this.submit = false;
           this.loading = false;
           if (!this.isGroup) {
             this.invalidId = true;
           }
-          /*this.resetNIDInfo();*/
         });
     } else {
       this.submit = false;
-      /*this.resetNIDInfo();*/
     }
   }
 

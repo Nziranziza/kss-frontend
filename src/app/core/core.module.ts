@@ -39,6 +39,7 @@ import {AdminGuard} from './services/guards/admin.guard';
     InputDistributionService,
     WarehouseService,
     AdminGuard,
+    CookieService,
     {provide: ErrorHandler, useClass: ErrorCustomHandler}
   ],
   declarations: []

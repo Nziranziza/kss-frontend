@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {SiteService} from '../../../core/services/site.service';
+import {SiteService} from '../../../core/services';
 import {Router} from '@angular/router';
 import {InputDistributionService} from '../../../core/services';
 import {HelperService} from '../../../core/helpers';
-import {WarehouseService} from '../../../core/services/warehouse.service';
+import {WarehouseService} from '../../../core/services';
 import {Subject} from 'rxjs';
 import {AuthenticationService} from '../../../core/services';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';

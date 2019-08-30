@@ -3,10 +3,10 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {HelperService} from '../../../core/helpers';
 import {InputDistributionService} from '../../../core/services';
-import {SiteService} from '../../../core/services/site.service';
-import {LocationService} from '../../../core/services/location.service';
+import {SiteService} from '../../../core/services';
+import {LocationService} from '../../../core/services';
 import {Subject} from 'rxjs';
-import {WarehouseService} from '../../../core/services/warehouse.service';
+import {WarehouseService} from '../../../core/services';
 
 @Component({
   selector: 'app-warehouse-dispatch',
