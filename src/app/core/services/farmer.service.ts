@@ -2,14 +2,10 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {ApiService} from './api.service';
 import {Farmer} from '../models';
-import {AuthenticationService} from './authentication.service';
-import {observableToBeFn} from 'rxjs/internal/testing/TestScheduler';
 
 
 @Injectable()
 export class FarmerService {
-  isDistrictCashCrop = false;
-
   constructor(
     private apiService: ApiService) {
   }

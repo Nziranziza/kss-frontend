@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {LocationService} from '../../core/services/location.service';
+import {LocationService} from '../../core/services';
 import {Router} from '@angular/router';
 import {AuthenticationService, FarmerService, OrganisationService, OrganisationTypeService} from '../../core/services';
 import {HelperService} from '../../core/helpers';
-import {AuthorisationService} from '../../core/services/authorisation.service';
+import {AuthorisationService} from '../../core/services';
 
 @Component({
   selector: 'app-farmers-report',

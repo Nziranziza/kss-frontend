@@ -3,8 +3,8 @@ import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {HelperService} from '../../../core/helpers';
 import {isPlatformBrowser} from '@angular/common';
-import {SeasonService} from '../../../core/services/season.service';
-import {AuthorisationService} from '../../../core/services/authorisation.service';
+import {SeasonService} from '../../../core/services';
+import {AuthorisationService} from '../../../core/services';
 
 @Component({
   selector: 'app-edit-season',

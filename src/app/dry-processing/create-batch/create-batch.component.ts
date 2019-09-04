@@ -3,8 +3,8 @@ import {ActivatedRoute} from '@angular/router';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {AuthenticationService} from '../../core/services';
 import {HelperService} from '../../core/helpers';
-import {DryProcessingService} from '../../core/services/dry-processing.service';
-import {CoffeeTypeService} from '../../core/services/coffee-type.service';
+import {DryProcessingService} from '../../core/services';
+import {CoffeeTypeService} from '../../core/services';
 
 @Component({
   selector: 'app-create-batch',

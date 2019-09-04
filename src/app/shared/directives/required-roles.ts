@@ -1,5 +1,5 @@
 import {Directive, ElementRef, Input, OnInit, Renderer2} from '@angular/core';
-import {AuthorisationService} from '../../core/services/authorisation.service';
+import {AuthorisationService} from '../../core/services';
 
 @Directive({
   selector: '[appRequiredRoles]'

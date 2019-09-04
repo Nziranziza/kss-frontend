@@ -18,7 +18,7 @@ export class UserCreateComponent implements OnInit {
   createForm: FormGroup;
   errors = [];
   userTypes: any[];
-  orgPossibleRoles: any[];
+  orgPossibleRoles = [];
   provinces: any;
   districts: any;
   sectors: any;
@@ -87,7 +87,6 @@ export class UserCreateComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.organisationId = params['organisationId'.toString()];
     });
-
     this.getRoles();
     this.initial();
     this.onChanges();
@@ -184,7 +183,6 @@ export class UserCreateComponent implements OnInit {
           }
           this.helper.cleanObject(user);
           this.helper.cleanObject(user.location);
-          console.log(user);
           this.userService.save(user).subscribe(() => {
               this.router.navigateByUrl('admin/organisations/' + this.organisationId + '/users');
             },

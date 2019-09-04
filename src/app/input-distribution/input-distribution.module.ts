@@ -6,7 +6,6 @@ import {DistributionPlanComponent} from './distribution-plan/distribution-plan.c
 import {SiteDistributionComponent} from './site-distribution/site-distribution.component';
 import {OwlDateTimeModule, OwlNativeDateTimeModule} from 'ng-pick-datetime';
 import {RecordSiteStockOutComponent} from './site-view-dispatch/site-stock-out/record-site-stock-out.component';
-import {WarehouseDispatchComponent} from './warehouse/warehouse-dispatch/warehouse-dispatch.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {NgxPaginationModule} from 'ngx-pagination';
 import {OrderModule} from 'ngx-order-pipe';
@@ -20,6 +19,7 @@ import {WarehouseModule} from './warehouse/warehouse.module';
 import {ConfirmDispatchComponent} from './site-view-dispatch/confirm-dispatch/confirm-dispatch.component';
 import {SiteViewStockoutComponent} from './site-view-stockout/site-view-stockout.component';
 import {DeliveryDetailsComponent} from './warehouse/warehouse-entries/delivery-details/delivery-details.component';
+import {DistributionReportModule} from './distribution-report/distribution-report.module';
 
 @NgModule({
   declarations: [DistributionPlanComponent,
@@ -34,13 +34,14 @@ import {DeliveryDetailsComponent} from './warehouse/warehouse-entries/delivery-d
   imports: [
     CommonModule,
     NgbModule, NgxPaginationModule, OrderModule,
-    SharedModule, OwlDateTimeModule,
+    SharedModule,
     BrowserAnimationsModule,
     InputDistributionRoutingModule,
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
     SitesModule,
-    WarehouseModule
+    WarehouseModule,
+    DistributionReportModule
   ],
   entryComponents: [RecordDistributionComponent, ConfirmDispatchComponent,
     RecordSiteStockReturnComponent, RecordSiteStockOutComponent, DeliveryDetailsComponent]

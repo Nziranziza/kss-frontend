@@ -1,8 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {MessageService} from '../../core/services/message.service';
+import {MessageService} from '../../core/services';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {SeasonService} from '../../core/services/season.service';
+import {SeasonService} from '../../core/services';
 import {EditSeasonComponent} from './edit-season/edit-season.component';
 import {CreateSeasonComponent} from './create-season/create-season.component';
 

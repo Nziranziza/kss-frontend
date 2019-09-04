@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {ValidationErrors} from '@angular/forms';
-import {LocationService} from '../services/location.service';
+import {LocationService} from '../services';
 
 @Injectable({
   providedIn: 'root'

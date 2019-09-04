@@ -3,8 +3,8 @@ import {AuthenticationService, FarmerService} from '../../core/services';
 import {Router} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {MessageService} from '../../core/services/message.service';
-import {AuthorisationService} from '../../core/services/authorisation.service';
+import {MessageService} from '../../core/services';
+import {AuthorisationService} from '../../core/services';
 
 @Component({
   selector: 'app-pending-farmer-list',

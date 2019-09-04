@@ -8,7 +8,7 @@ import {
   ListErrorsComponent,
   HomeHeaderComponent,
   HomeFooterComponent,
-  ListMessageComponent,
+  ListMessageComponent
 
 } from './layout';
 import {MatDialogModule, MatIconModule} from '@angular/material';
@@ -17,6 +17,7 @@ import {DataTablesModule} from 'angular-datatables';
 import {RequiredRolesDirective} from './directives/required-roles';
 import {LoaderComponent} from './layout';
 import {RequiredSeasonDirective} from './directives/required-season.directive';
+import { HasPermissionDirective } from './directives/has-permission.directive';
 
 @NgModule({
   imports: [
@@ -29,7 +30,8 @@ import {RequiredSeasonDirective} from './directives/required-season.directive';
   ],
   declarations: [ListErrorsComponent, LoaderComponent,
     HomeHeaderComponent, HomeFooterComponent, ListMessageComponent,
-    ConfirmDialogComponent, RequiredRolesDirective, LoaderComponent, RequiredSeasonDirective],
+    ConfirmDialogComponent, RequiredRolesDirective, LoaderComponent,
+    RequiredSeasonDirective, HasPermissionDirective],
   exports: [
     CommonModule,
     FormsModule,
@@ -43,7 +45,7 @@ import {RequiredSeasonDirective} from './directives/required-season.directive';
     HomeFooterComponent,
     ConfirmDialogComponent,
     MatIconModule, MatDialogModule,
-    DataTablesModule, RequiredRolesDirective, RequiredSeasonDirective
+    DataTablesModule, RequiredRolesDirective, RequiredSeasonDirective, HasPermissionDirective
   ],
   entryComponents: [ConfirmDialogComponent]
 })

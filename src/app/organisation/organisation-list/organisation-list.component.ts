@@ -4,11 +4,9 @@ import {Organisation} from '../../core/models';
 import {Router} from '@angular/router';
 import {ConfirmDialogService} from '../../core/services';
 import {Subject} from 'rxjs';
-import {MessageService} from '../../core/services/message.service';
-import {AuthorisationService} from '../../core/services/authorisation.service';
-import {SiteService} from '../../core/services/site.service';
-
-declare var $;
+import {MessageService} from '../../core/services';
+import {AuthorisationService} from '../../core/services';
+import {SiteService} from '../../core/services';
 
 @Component({
   selector: 'app-organisation-list',
@@ -20,9 +18,7 @@ export class OrganisationListComponent implements OnInit, OnDestroy {
   constructor(private organisationService: OrganisationService, private siteService: SiteService,
               private router: Router, private  confirmDialogService: ConfirmDialogService,
               private authorisationService: AuthorisationService,
-              private authenticationService: AuthenticationService, private messageService: MessageService
-  ) {
-
+              private authenticationService: AuthenticationService, private messageService: MessageService) {
   }
 
   message: string;
@@ -32,7 +28,6 @@ export class OrganisationListComponent implements OnInit, OnDestroy {
   // @ts-ignore
   dtTrigger: Subject = new Subject();
   isSuperAdmin = false;
-
 
   ngOnInit() {
     this.getAllOrganisations();
@@ -49,7 +44,7 @@ export class OrganisationListComponent implements OnInit, OnDestroy {
   }
 
   isOrgCWS(org: any) {
-    return org.organizationRole.includes(1) ? true : false;
+    return !!org.organizationRole.includes(1);
   }
 
   ngOnDestroy(): void {
@@ -58,11 +53,7 @@ export class OrganisationListComponent implements OnInit, OnDestroy {
   }
 
   isNotSuperOrganisation(organisation: any) {
-    if (organisation.organizationRole.indexOf(0) === -1 && organisation.organizationName !== 'BK Techouse') {
-      return true;
-    } else {
-      return false;
-    }
+    return organisation.organizationRole.indexOf(0) === -1 && organisation.organizationName !== 'BK Techouse';
   }
 
   deleteOrganisation(organisation: Organisation): void {

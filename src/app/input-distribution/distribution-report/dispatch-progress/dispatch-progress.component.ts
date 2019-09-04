@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {Subject} from 'rxjs';
-
 import {
   AuthenticationService,
   AuthorisationService, InputDistributionService, LocationService,
@@ -9,24 +8,23 @@ import {
   OrganisationTypeService,
   SiteService
 } from '../../../core/services';
-
 import {Router} from '@angular/router';
 import {HelperService} from '../../../core/helpers';
 
 @Component({
-  selector: 'app-distribution-progress',
-  templateUrl: './distribution-progress.component.html',
-  styleUrls: ['./distribution-progress.component.css']
+  selector: 'app-dispatch-progress',
+  templateUrl: './dispatch-progress.component.html',
+  styleUrls: ['./dispatch-progress.component.css']
 })
-export class DistributionProgressComponent implements OnInit {
+export class DispatchProgressComponent implements OnInit {
 
-  title = 'Application progress';
+  title = 'Distribution progress';
   checkProgressForm: FormGroup;
   errors: any;
   loading = false;
   message: string;
   isCurrentUserDCC = false;
-  distributionProgress: any;
+  dispatchProgress: any;
 
   dtOptions: any = {};
   // @ts-ignore
@@ -87,12 +85,12 @@ export class DistributionProgressComponent implements OnInit {
         request.location['searchBy'.toString()] = searchBy;
         this.helper.cleanObject(request.location);
       }
-      this.inputDistributionService.getDistributionProgress(request).subscribe((data) => {
+      this.inputDistributionService.getDispatchProgress(request).subscribe((data) => {
         this.loading = false;
         if ((data.content.length !== 0) && (data.content)) {
           this.message = '';
           this.errors = '';
-          this.distributionProgress = data.content;
+          this.dispatchProgress = data.content;
         } else {
           this.message = 'Sorry no data found to this location!';
           this.errors = '';
@@ -163,8 +161,7 @@ export class DistributionProgressComponent implements OnInit {
         } else {
           this.cellId = false;
         }
-      }
-    );
+      });
 
     this.checkProgressForm.controls.location.get('village_id'.toString()).valueChanges.subscribe(
       (value) => {

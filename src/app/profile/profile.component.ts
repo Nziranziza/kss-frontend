@@ -3,7 +3,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AuthenticationService} from '../core/services';
 import {HelperService} from '../core/helpers';
-import {MessageService} from '../core/services/message.service';
+import {MessageService} from '../core/services';
 
 @Component({
   selector: 'app-profile',

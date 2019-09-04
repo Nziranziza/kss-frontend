@@ -1,10 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {AuthenticationService, ConfirmDialogService} from '../../core/services';
-import {InputDistributionService} from '../../core/services';
+import {ConfirmDialogService, InputDistributionService, MessageService} from '../../core/services';
 import {FormBuilder} from '@angular/forms';
 import {HelperService} from '../../core/helpers';
 import {ConfirmDispatchComponent} from './confirm-dispatch/confirm-dispatch.component';
-import {MessageService} from '../../core/services/message.service';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Subject} from 'rxjs';
 import {RecordSiteStockOutComponent} from './site-stock-out/record-site-stock-out.component';
@@ -21,9 +19,7 @@ export class SiteViewDispatchComponent implements OnInit {
               private helper: HelperService,
               private messageService: MessageService,
               private modal: NgbModal,
-              private inputDistributionService: InputDistributionService,
-  ) {
-  }
+              private inputDistributionService: InputDistributionService) {}
 
   message: string;
   dispatches: any;

@@ -2,9 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthenticationService, OrganisationTypeService} from '../../core/services';
 import {HelperService} from '../../core/helpers';
-import {InputDistributionService} from '../../core/services/input-distribution.service';
+import {InputDistributionService} from '../../core/services';
 import {RecordDistributionComponent} from './record-distribution/record-distribution.component';
-import {MessageService} from '../../core/services/message.service';
+import {MessageService} from '../../core/services';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({

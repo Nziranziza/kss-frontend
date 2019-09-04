@@ -5,6 +5,7 @@ import {UserCreateComponent} from './user-create/user-create.component';
 import {UserEditComponent} from './user-edit/user-edit.component';
 import {UserListComponent} from './user-list/user-list.component';
 import {AdminGuard} from '../core/services/guards/admin.guard';
+import {RoleResolverService} from '../core/services/resolvers/role-resolver.service';
 
 const routes: Routes = [
   {
@@ -12,10 +13,10 @@ const routes: Routes = [
     component: AdminComponent,
     canActivateChild: [AdminGuard],
     children: [
-
       {
         path: 'organisations/:organisationId/users/create',
-        component: UserCreateComponent
+        component: UserCreateComponent,
+        resolve: {orgRoles: RoleResolverService}
       },
       {
         path: 'organisations/:organisationId/users/edit/:id',
@@ -23,7 +24,7 @@ const routes: Routes = [
       },
       {
         path: 'organisations/:organisationId/users',
-        component: UserListComponent
+        component: UserListComponent,
       }
     ]
   }

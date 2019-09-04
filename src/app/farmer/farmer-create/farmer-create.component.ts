@@ -234,14 +234,12 @@ export class FarmerCreateComponent implements OnInit, OnDestroy {
           });
         } else {
           this.farmerService.checkFarmerNID(temp.NID).subscribe(data => {
-
             if (data.exists) {
               const message = 'Farmer with this NID ('
                 + temp.NID + ') already exists would you like to add land(s) to the farmer?';
               this.confirmFarmerAndSave(farmer, message);
             } else {
-
-              this.farmerService.save(farmer).subscribe((response) => {
+              this.farmerService.save(farmer).subscribe(() => {
                   this.messageService.setMessage('Farmer successfully created!');
                   this.router.navigateByUrl('admin/farmers');
                 },
@@ -460,5 +458,6 @@ export class FarmerCreateComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.messageService.setMessage('');
   }
 }

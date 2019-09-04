@@ -7,6 +7,7 @@ import {OrganisationEditComponent} from './organisation-edit/organisation-edit.c
 import {OrganisationFarmersComponent} from './organisation-farmers/organisation-farmers.component';
 import {OrganisationPendingFarmersComponent} from './organisation-pending-farmers/organisation-pending-farmers.component';
 import {AdminGuard} from '../core/services/guards/admin.guard';
+import {CoveredAreaResolverService} from '../core/services/resolvers/covered-area-resolver.service';
 
 const routes: Routes = [
   {
@@ -25,13 +26,14 @@ const routes: Routes = [
         component: OrganisationEditComponent,
       }, {
         path: 'cws-farmers/:organisationId',
-        component: OrganisationFarmersComponent,
+        component: OrganisationFarmersComponent
       }, {
         path: 'cws-pending-farmers/:organisationId',
         component: OrganisationPendingFarmersComponent,
       }, {
         path: 'organisations/:organisationId/farmers',
         component: OrganisationFarmersComponent,
+        resolve: {orgCoveredAreaData: CoveredAreaResolverService}
       }
     ]
   }

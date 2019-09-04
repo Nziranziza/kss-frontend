@@ -148,7 +148,7 @@ export class UserEditComponent implements OnInit {
         this.userNIDInfo['sex'.toString()] = data.content.sex;
         this.editForm.patchValue(this.userNIDInfo);
         this.invalidId = false;
-      }, (err) => {
+      }, () => {
         this.invalidId = true;
         this.loading = false;
       });
@@ -270,7 +270,7 @@ export class UserEditComponent implements OnInit {
       delete user.userType;
       this.helper.cleanObject(user);
       this.helper.cleanObject(user.location);
-      this.userService.update(user).subscribe(data => {
+      this.userService.update(user).subscribe(() => {
           this.router.navigateByUrl('admin/organisations/' + this.organisationId + '/users');
         },
         (err) => {

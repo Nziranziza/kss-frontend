@@ -8,8 +8,7 @@ import {Organisation} from '../models';
 export class OrganisationService {
   constructor(
     private apiService: ApiService
-  ) {
-  }
+  ) {}
 
   all(): Observable<any> {
     return this.apiService.get('/organizations');

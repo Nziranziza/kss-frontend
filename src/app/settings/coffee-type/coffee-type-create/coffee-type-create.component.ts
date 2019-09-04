@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {HelperService} from '../../../core/helpers';
-import {CoffeeTypeService} from '../../../core/services/coffee-type.service';
+import {CoffeeTypeService} from '../../../core/services';
 
 @Component({
   selector: 'app-coffee-type-create',

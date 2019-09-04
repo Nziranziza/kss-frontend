@@ -3,8 +3,8 @@ import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {OrganisationService, OrganisationTypeService} from '../../core/services';
 import {HelperService} from '../../core/helpers';
-import {LocationService} from '../../core/services/location.service';
-import {MessageService} from '../../core/services/message.service';
+import {LocationService} from '../../core/services';
+import {MessageService} from '../../core/services';
 
 @Component({
   selector: 'app-organisation-edit',

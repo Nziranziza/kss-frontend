@@ -20,6 +20,8 @@ import {ErrorCustomHandler} from './handlers/ErrorCustomHandler';
 import {InputDistributionService} from './services';
 import {WarehouseService} from './services';
 import {AdminGuard} from './services/guards/admin.guard';
+import {CoveredAreaResolverService} from './services/resolvers/covered-area-resolver.service';
+import {RoleResolverService} from './services/resolvers/role-resolver.service';
 
 @NgModule({
   imports: [
@@ -40,6 +42,8 @@ import {AdminGuard} from './services/guards/admin.guard';
     WarehouseService,
     AdminGuard,
     CookieService,
+    CoveredAreaResolverService,
+    RoleResolverService,
     {provide: ErrorHandler, useClass: ErrorCustomHandler}
   ],
   declarations: []

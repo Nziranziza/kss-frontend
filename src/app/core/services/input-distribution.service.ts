@@ -51,6 +51,10 @@ export class InputDistributionService {
   }
 
   getDistributionProgress(data: any) {
-    return this.apiService.post('/distributionstats/inputdistribution?subRegions=true', data);
+    return this.apiService.post('/distributionstats/inputdistribution', data);
+  }
+
+  getDispatchProgress(data: any) {
+    return this.apiService.post('/distributionstats/inputdispatch', data);
   }
 }
