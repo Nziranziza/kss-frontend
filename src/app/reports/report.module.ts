@@ -9,11 +9,12 @@ import * as FusionCharts from 'fusioncharts';
 import * as Charts from 'fusioncharts/fusioncharts.charts';
 import {GoogleChartsModule} from 'angular-google-charts';
 import {SharedModule} from '../shared';
+import {FarmersApprovalProgressComponent} from './farmers-approval-progress/farmers-approval-progress.component';
 
 FusionChartsModule.fcRoot(FusionCharts, Charts);
 
 @NgModule({
-  declarations: [FarmersReportComponent],
+  declarations: [FarmersReportComponent, FarmersApprovalProgressComponent],
   imports: [
     CommonModule,
     ReportRoutingModule,

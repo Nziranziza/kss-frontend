@@ -17,8 +17,7 @@ export class OrganisationCreateComponent implements OnInit {
               private router: Router, private organisationService: OrganisationService,
               private messageService: MessageService,
               private helper: HelperService, private organisationTypeService: OrganisationTypeService,
-              private locationService: LocationService) {
-  }
+              private locationService: LocationService) {}
 
   createForm: FormGroup;
   errors: any;

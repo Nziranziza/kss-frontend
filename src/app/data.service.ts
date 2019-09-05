@@ -24,13 +24,11 @@ export class DataService implements InMemoryDbService {
         },
         address: 'address', treesNumber: 300, ownsLand: true, upiNumber: '12345', belongsToCooperative: true
       }
-
     ];
 
     const users = [
       {id: 1, firstName: 'first name', lastName: 'last name', title: 'officer',  phoneNumber: '078880000111',
-        email: 'user@naeb.rw', gender: 'male', organisationId: 1, password: 123456},
-
+        email: 'user@naeb.rw', gender: 'male', organisationId: 1, password: 123456}
     ];
 
     return {organisations, users, farmers};

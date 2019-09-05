@@ -39,14 +39,13 @@ export class EditSeasonComponent implements OnInit {
       season: ['', Validators.required],
       seasonParams: this.formBuilder.group({
         cherriesUnitPrice: [''],
+        flotterUnitPrice: [''],
         fertilizerName: [''],
         fertilizerType: [''],
         fertilizerKgPerTree: [''],
         pesticideName: [''],
         pesticideType: [''],
         pesticideMlPerTree: [''],
-        targetedFertilizerQty: [''],
-        targetedPesticideQty: [''],
         distribution: new FormArray([])
       })
     });
@@ -59,8 +58,8 @@ export class EditSeasonComponent implements OnInit {
   createDistribution(): FormGroup {
     return this.formBuilder.group({
       distribution: ['', Validators.required],
-      totalFertilizerAvailable: ['', Validators.required],
-      totalPesticideAvailable: ['', Validators.required]
+      totalFertilizerAvailable: [0, Validators.required],
+      totalPesticideAvailable: [0, Validators.required]
     });
   }
 
@@ -97,8 +96,7 @@ export class EditSeasonComponent implements OnInit {
         });
     }
     if (this.isCurrentUserNaebOfficer) {
-      payload = season.seasonParams
-      delete payload.distribution;
+      payload = season.seasonParams;
       payload['seasonId'.toString()] = this.season._id;
       this.seasonService.updateParameter(payload).subscribe(() => {
           this.message = 'Season successfully updated!';

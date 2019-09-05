@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   api_url: 'http://105.179.10.30:9078/api'
-  /*api_url: 'http://192.168.0.38:9078/api'*/
+  /*api_url: 'http://192.168.0.55:9078/api'*/
 };
 
 /* For easier debugging in development mode, you can import the following file
@@ -13,4 +13,4 @@ export const environment = {
  * This import should be commented out in production mode because it will have a negative impact
  * on performance if an error is thrown.
  */
- // import 'zone.js/dist/zone-error';  // Included with Angular CLI.
+// import 'zone.js/dist/zone-error';  // Included with Angular CLI.

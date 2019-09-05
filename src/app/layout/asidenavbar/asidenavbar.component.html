@@ -162,6 +162,12 @@
           </span>
         </a>
         <ul class="treeview-menu">
+          <!--<li routerLinkActive="active" *appHasPermission="[0]">
+            <a routerLink="/admin/farmers/approval/progress">
+              <i class="fa fa-circle-o"></i>
+              <span>Farmers approval statistics</span>
+            </a>
+          </li>-->
           <li routerLinkActive="active" *appHasPermission="[4,0,6]">
             <a routerLink="/admin/report/farmers">
               <i class="fa fa-circle-o"></i>
@@ -190,13 +196,13 @@
           </span>
         </a>
         <ul class="treeview-menu">
-          <li routerLinkActive="active" *appHasPermission="[0,5]">
+          <li routerLinkActive="active" *appHasPermission="[0,4,5]">
             <a routerLink="/admin/season-parameters">
               <i class="fa fa-circle-o"></i>
               <span>Season parameters</span>
             </a>
           </li>
-          <li routerLinkActive="active" *appHasPermission="[0]">
+          <li routerLinkActive="active" *appHasPermission="[0,4]">
             <a routerLink="/admin/organisation-types">
               <i class="fa fa-circle-o"></i>
               <span>Organisation types</span>

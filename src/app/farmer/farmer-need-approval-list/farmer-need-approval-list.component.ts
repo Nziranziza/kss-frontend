@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {SiteService} from '../../core/services/site.service';
+import {SiteService} from '../../core/services';
 import {AuthenticationService} from '../../core/services';
 
 @Component({

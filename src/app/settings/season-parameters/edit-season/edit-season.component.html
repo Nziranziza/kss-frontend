@@ -20,77 +20,81 @@
       </div>
     </div>
     <ng-container formGroupName="seasonParams">
-      <div class="row" *ngIf="isCurrentUserNaebOfficer">
-        <div class="col-xs-2">
-          <div class="form-group">
-            <span class="">Cherries unit price</span>
-            <input class="form-control" formControlName="cherriesUnitPrice">
-          </div>
-        </div>
-        <div class="col-xs-2">
-          <div class="form-group">
-            <span class="">Fertilizer name</span>
-            <input class="form-control" formControlName="fertilizerName">
-          </div>
-        </div>
-        <div class="col-xs-2">
-          <div class="form-group">
-            <span class="">Fertilizer type</span>
-            <input class="form-control" formControlName="fertilizerType">
-          </div>
-        </div>
-        <div class="col-xs-2">
-          <div class="form-group">
-            <span class="">Fertilizer Qt per tree (Kg)</span>
-            <input class="form-control" formControlName="fertilizerKgPerTree">
-          </div>
-        </div>
-        <div class="col-xs-2">
-          <div class="form-group">
-            <span class="">Pesticide name</span>
-            <input class="form-control" formControlName="pesticideName">
-          </div>
-        </div>
-        <div class="col-xs-2">
-          <div class="form-group">
-            <span class="">Pesticide type</span>
-            <input class="form-control" formControlName="pesticideType">
-          </div>
-        </div>
-        <div class="col-xs-2">
-          <div class="form-group">
-            <span class="">Pesticide Qty per tree (ml)</span>
-            <input class="form-control" formControlName="pesticideMlPerTree">
-          </div>
-        </div>
-      </div>
-      <div class="row" *ngIf="isCurrentUserNaebOfficer">
-        <div class="col-sm-12">
-          <fieldset class="" style="margin: 15px 0px 15px !important; ">
+      <div class="row">
+        <div class="col-xs-12">
+          <fieldset class="location" style="margin: 15px 0px 15px !important;">
             <legend>
-              <label class="control-label"> &nbsp; Targets </label>
+              <label class="control-label"> &nbsp; Parameters </label>
             </legend>
-            <div class="col-xs-2">
-              <div class="form-group">
-                <span class="">Fertilizer (kg)</span>
-                <input class="form-control" formControlName="targetedFertilizerQty">
+            <ng-container *ngIf="isCurrentUserNaebOfficer">
+              <div class="row">
+                <div class="col-xs-2">
+                  <div class="form-group">
+                    <span class="">Cherries unit price</span>
+                    <input class="form-control" formControlName="cherriesUnitPrice">
+                  </div>
+                </div>
+                <div class="col-xs-2">
+                  <div class="form-group">
+                    <span class="">Flotter unit price</span>
+                    <input class="form-control" formControlName="flotterUnitPrice">
+                  </div>
+                </div>
               </div>
-            </div>
-            <div class="col-xs-2">
-              <div class="form-group">
-                <span class="">Pesticide (ml)</span>
-                <input class="form-control" formControlName="targetedPesticideQty">
+            </ng-container>
+            <div class="row">
+              <div class="col-xs-2">
+                <div class="form-group">
+                  <span class="">Fertilizer name</span>
+                  <input class="form-control" formControlName="fertilizerName">
+                </div>
+              </div>
+              <div class="col-xs-2">
+                <div class="form-group">
+                  <span class="">Fertilizer type</span>
+                  <input class="form-control" formControlName="fertilizerType">
+                </div>
+              </div>
+              <div class="col-xs-2">
+                <div class="form-group">
+                  <span class="">Fertilizer Qt per tree (Kg)</span>
+                  <input class="form-control" formControlName="fertilizerKgPerTree">
+                </div>
+              </div>
+              <div class="col-xs-2">
+                <div class="form-group">
+                  <span class="">Pesticide name</span>
+                  <input class="form-control" formControlName="pesticideName">
+                </div>
+              </div>
+              <div class="col-xs-2">
+                <div class="form-group">
+                  <span class="">Pesticide type</span>
+                  <input class="form-control" formControlName="pesticideType">
+                </div>
+              </div>
+              <div class="col-xs-2">
+                <div class="form-group">
+                  <span class="">Pesticide Qty per tree (ml)</span>
+                  <input class="form-control" formControlName="pesticideMlPerTree">
+                </div>
               </div>
             </div>
           </fieldset>
         </div>
       </div>
-      <div class="row" *ngIf="isCurrentUserCeparOfficer">
+
+      <div class="row">
+        <div class="col-xs-12">
+          <button class="btn btn-success btn-circle btn-lg pull-right" (click)="addDistribution()" type="button"><i
+            class="fa fa-plus"></i></button>
+        </div>
         <div class="col-xs-12">
           <fieldset class="location" style="margin: 15px 0px 15px !important;">
             <legend>
               <label class="control-label"> &nbsp; Distribution </label>
             </legend>
+
             <div *ngFor="let control of distributionParams.controls; let i=index" formArrayName="distribution">
               <div class="row" [formGroupName]="i">
                 <div class="col-xs-2">
@@ -110,6 +114,10 @@
                     <span class="">Available pesticide (ml)</span>
                     <input class="form-control" formControlName="totalPesticideAvailable">
                   </div>
+                </div>
+                <div class="form-group col-xs-2" style="margin-top: 20px">
+                  <button class="btn btn-danger pull-right" type="button" (click)="removeDistribution(i)"> Remove
+                  </button>
                 </div>
               </div>
             </div>

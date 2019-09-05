@@ -23,7 +23,6 @@ export class RequestResetComponent implements OnInit {
     private authenticationService: AuthenticationService,
     private formBuilder: FormBuilder, private helperService: HelperService
   ) {
-    // use FormBuilder to create a form group
     this.requestResetForm = this.formBuilder.group({
       email: ['', Validators.required]
     });

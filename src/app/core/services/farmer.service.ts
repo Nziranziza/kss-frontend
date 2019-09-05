@@ -58,6 +58,14 @@ export class FarmerService {
     return this.apiService.post('/stats/farmer.data?subRegions=true', data);
   }
 
+  approvalStatistics(data: any, subRegions: boolean): Observable<any> {
+    if (subRegions) {
+      return this.apiService.post('/stats/farmers/approvals?subRegions=true', data);
+    } else {
+      return this.apiService.post('/stats/farmers/approvals', data);
+    }
+  }
+
   updateFarmerRequest(data: any): Observable<any> {
     return this.apiService.put('/coffeefarmers/requestinfo/edit', data);
   }

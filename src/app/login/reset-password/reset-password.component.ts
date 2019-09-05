@@ -4,7 +4,7 @@ import {AuthenticationService} from '../../core/services';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {HelperService} from '../../core/helpers';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {MessageService} from '../../core/services/message.service';
+import {MessageService} from '../../core/services';
 
 declare var $;
 
@@ -30,7 +30,6 @@ export class ResetPasswordComponent implements OnInit {
     private formBuilder: FormBuilder, private helperService: HelperService,
     private messageService: MessageService
   ) {
-    // use FormBuilder to create a form group
     this.resetPasswordForm = this.formBuilder.group({
       password: ['', Validators.required],
       confirmPassword: ['', Validators.required]

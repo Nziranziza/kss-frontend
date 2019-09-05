@@ -6,21 +6,9 @@
     <div class="box">
       <div class="box-body">
         <div class="col-xs-12">
+          <app-list-errors [errorList]="errors"></app-list-errors>
         </div>
-        <app-list-errors [errorList]="errors"></app-list-errors>
         <form [formGroup]="filterForm">
-          <div class="row">
-            <div class="col-xs-12">
-              <div class="col-xs-2">
-                <div class="form-group">
-                  <span class="">Report</span>
-                  <select class="form-control" formControlName="reportBy">
-                    <option *ngFor="let report of reportBy" value="{{report.value}}">{{report.name}}</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
           <div class="row">
             <div class="col-sm-12">
               <div formGroupName="location">
@@ -30,7 +18,7 @@
                     <div class="input-group input-group-sm">
                       <select class="form-control" formControlName="prov_id">
                         <option value="" selected="selected">ALL PROVINCES</option>
-                        <option *ngFor="let province of provinces" value="{{province._id}}">{{province.namee}}</option>
+                        <option *ngFor="let prov of provinces" value="{{prov._id}}">{{prov.namee}}</option>
                       </select>
                       <span class="input-group-btn">
                       <button type="button" class="btn btn-default btn-flat" (click)="onSubmit('province')">
@@ -44,14 +32,15 @@
                   <div class="form-group">
                     <span class="">District</span>
                     <div class="input-group input-group-sm">
-                      <select class="form-control" formControlName="dist_id" disabled="true"  *ngIf="isCurrentUserDCC; else enabled">
+                      <select class="form-control" formControlName="dist_id" disabled="true"
+                              *ngIf="isCurrentUserDCC; else enabled">
                         <option value=""></option>
-                        <option *ngFor="let district of districts" value="{{district._id}}">{{district.name}}</option>
+                        <option *ngFor="let dist of districts" value="{{dist._id}}">{{dist.name}}</option>
                       </select>
                       <ng-template #enabled>
                         <select class="form-control" formControlName="dist_id">
                           <option value=""></option>
-                          <option *ngFor="let district of districts" value="{{district._id}}">{{district.name}}</option>
+                          <option *ngFor="let dist of districts" value="{{dist._id}}">{{dist.name}}</option>
                         </select>
                       </ng-template>
                       <span class="input-group-btn">
@@ -63,38 +52,24 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-xs-2">
-                  <div class="form-group">
-                    <span class="">Sector</span>
-                    <div class="input-group input-group-sm">
-                      <select class="form-control" formControlName="sect_id">
-                        <option value=""></option>
-                        <option *ngFor="let sector of sectors" value="{{sector._id}}">{{sector.name}}</option>
-                      </select>
-                      <span class="input-group-btn">
-                      <button type="button" class="btn btn-default btn-flat" (click)="onSubmit('sector')"
-                              [disabled]="!sectorId">
+              </div>
+              <div class="col-xs-2">
+                <div class="form-group">
+                  <span class="">Zone</span>
+                  <div class="input-group input-group-sm">
+                    <select class="form-control" formControlName="zoneId">
+                      <option value=""></option>
+                      <ng-container *ngFor="let cws of organisations">
+                        <option *ngIf="cws.organizationRole.includes(1)" value="{{cws._id}}">{{cws.organizationName}}
+                        </option>
+                      </ng-container>
+                    </select>
+                    <span class="input-group-btn">
+                      <button type="button" class="btn btn-default btn-flat" (click)="onSubmit('zone')"
+                              [disabled]="!zoneId">
                         <i class="fa fa-search"></i>
                       </button>
                     </span>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-xs-2">
-                  <div class="form-group">
-                    <span class="">Cell</span>
-                    <div class="input-group input-group-sm">
-                      <select class="form-control" formControlName="cell_id">
-                        <option value=""></option>
-                        <option *ngFor="let cell of cells" value="{{cell._id}}">{{cell.name}}</option>
-                      </select>
-                      <span class="input-group-btn">
-                      <button type="button" class="btn btn-default btn-flat" (click)="onSubmit('cell')"
-                              [disabled]="!cellId">
-                        <i class="fa fa-search"></i>
-                      </button>
-                    </span>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -111,8 +86,6 @@
               <div class="row">
                 <div class="col-xs-12">
                   <div class="pull-left" style="margin-left: 15px; font-size: 14px">
-                    <span style="font-weight: bolder">Total : </span>
-                    <span [ngStyle]="{color: graph.options.colors[0]}">{{ total }} {{ graph.columnNames[1] }}</span>
                   </div>
                 </div>
               </div>
@@ -131,4 +104,3 @@
     </div>
   </div>
 </div>
-

@@ -266,7 +266,6 @@ export class UserEditComponent implements OnInit {
         _id: this.authenticationService.getCurrentUser().info._id,
         name: this.authenticationService.getCurrentUser().info.surname
       };
-      delete user.email;
       delete user.userType;
       this.helper.cleanObject(user);
       this.helper.cleanObject(user.location);

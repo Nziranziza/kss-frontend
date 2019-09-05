@@ -25,7 +25,6 @@ export class FarmerCreateComponent implements OnInit, OnDestroy {
   cells: any = [];
   villages: any = [];
   requestIndex = 0;
-  userNIDInfo = {};
   farmer: any;
   createFromPending = false;
   isGroup = false;
@@ -80,7 +79,6 @@ export class FarmerCreateComponent implements OnInit, OnDestroy {
                 foreName: this.farmer.foreName,
                 surname: this.farmer.surname,
                 groupName: this.farmer.surname,
-                /* email: this.farmer.email,*/
                 phone_number: this.farmer.phone_number,
                 NID: this.farmer.NID,
                 requests: [{
@@ -89,25 +87,10 @@ export class FarmerCreateComponent implements OnInit, OnDestroy {
                   fertilizer_allocate: this.farmer.fertilizer_allocate
                 }]
               };
-
-              if (this.farmer.NID !== '') {
-                this.loading = true;
-                this.userService.verifyNID(this.farmer.NID).subscribe(NIDInformation => {
-                    temp['foreName'.toString()] = NIDInformation.content.foreName;
-                    temp['surname'.toString()] = NIDInformation.content.surname;
-                    temp['sex'.toString()] = NIDInformation.content.sex.toLowerCase();
-                    this.submit = true;
-                    this.errors = [];
-                    this.loading = false;
-                    this.invalidId = false;
-                  },
-                  () => {
-                    this.invalidId = true;
-                    this.submit = false;
-                    this.loading = false;
-                  });
-              }
               this.createForm.patchValue(temp);
+              if (this.farmer.NID !== '') {
+                this.verifyNID(this.farmer.NID);
+              }
               if (!isUndefined(this.farmer.location)) {
                 if (this.createFromPending) {
                   this.getLocationInput(0, 'prov_id').patchValue(this.farmer.location.prov_id);
@@ -149,6 +132,7 @@ export class FarmerCreateComponent implements OnInit, OnDestroy {
           farmer['groupName'.toString()] = temp.groupName;
           farmer['groupContactPerson'.toString()] = temp.groupContactPerson;
         }
+        this.helperService.cleanObject(farmer);
         if (this.isGroup) {
           this.farmerService.checkFarmerGroupName(temp.groupName).subscribe(data => {
             if (data.exists) {
@@ -160,7 +144,7 @@ export class FarmerCreateComponent implements OnInit, OnDestroy {
 
               this.farmerService.createFromPending(farmer).subscribe((response) => {
                   this.messageService.setMessage('Record successful moved to approved list!');
-                  this.router.navigateByUrl('admin/farmers');
+                  this.router.navigateByUrl('admin/farmers/list');
                 },
                 (err) => {
                   this.errors = err.errors;
@@ -174,12 +158,10 @@ export class FarmerCreateComponent implements OnInit, OnDestroy {
               const message = 'Farmer with this NID ('
                 + temp.NID + ') already exists would you like to add land to the farmer?';
               this.confirmTempoAndSave(farmer, message);
-
             } else {
-
-              this.farmerService.createFromPending(farmer).subscribe((response) => {
+              this.farmerService.createFromPending(farmer).subscribe(() => {
                   this.messageService.setMessage('Record successful moved to approved list!');
-                  this.router.navigateByUrl('admin/farmers');
+                  this.router.navigateByUrl('admin/farmers/list');
                 },
                 (err) => {
                   this.errors = err.errors;
@@ -213,7 +195,6 @@ export class FarmerCreateComponent implements OnInit, OnDestroy {
             ((+item['numberOfTrees'.toString()]) * this.currentSeason.seasonParams.fertilizerKgPerTree.$numberDouble);
           return this.helperService.cleanObject(item);
         });
-
         if (this.isGroup) {
           this.farmerService.checkFarmerGroupName(temp.groupName).subscribe(data => {
             if (data.exists) {
@@ -222,9 +203,9 @@ export class FarmerCreateComponent implements OnInit, OnDestroy {
               this.confirmFarmerAndSave(farmer, message);
             } else {
 
-              this.farmerService.save(farmer).subscribe((response) => {
+              this.farmerService.save(farmer).subscribe(() => {
                   this.messageService.setMessage('Farmer successfully created!');
-                  this.router.navigateByUrl('admin/farmers');
+                  this.router.navigateByUrl('admin/farmers/list');
                 },
                 (err) => {
                   this.errors = err.errors;
@@ -241,7 +222,7 @@ export class FarmerCreateComponent implements OnInit, OnDestroy {
             } else {
               this.farmerService.save(farmer).subscribe(() => {
                   this.messageService.setMessage('Farmer successfully created!');
-                  this.router.navigateByUrl('admin/farmers');
+                  this.router.navigateByUrl('admin/farmers/list');
                 },
                 (err) => {
                   if (isArray(err.errors)) {
@@ -268,9 +249,9 @@ export class FarmerCreateComponent implements OnInit, OnDestroy {
     this.confirmDialogService.openConfirmDialog(message).afterClosed().subscribe(
       res => {
         if (res) {
-          this.farmerService.createFromPending(farmer).subscribe((response) => {
+          this.farmerService.createFromPending(farmer).subscribe(() => {
               this.messageService.setMessage('Record successful moved to approved list!');
-              this.router.navigateByUrl('admin/farmers');
+              this.router.navigateByUrl('admin/farmers/list');
             },
             (err) => {
               if (isArray(err.errors)) {
@@ -289,9 +270,9 @@ export class FarmerCreateComponent implements OnInit, OnDestroy {
     this.confirmDialogService.openConfirmDialog(message).afterClosed().subscribe(
       res => {
         if (res) {
-          this.farmerService.save(farmer).subscribe((response) => {
+          this.farmerService.save(farmer).subscribe(() => {
               this.messageService.setMessage('Farmer successfully created!');
-              this.router.navigateByUrl('admin/farmers');
+              this.router.navigateByUrl('admin/farmers/list');
             },
             (err) => {
               this.errors = err.errors;
@@ -313,10 +294,12 @@ export class FarmerCreateComponent implements OnInit, OnDestroy {
       this.errors = [];
       this.loading = true;
       this.userService.verifyNID(nid).subscribe(data => {
-          this.userNIDInfo['foreName'.toString()] = data.content.foreName;
-          this.userNIDInfo['surname'.toString()] = data.content.surname;
-          this.userNIDInfo['sex'.toString()] = data.content.sex.toLowerCase();
-          this.createForm.patchValue(this.userNIDInfo);
+          const info = {
+            foreName: data.content.foreName,
+            surname: data.content.surname,
+            sex: data.content.sex.toLowerCase()
+          };
+          this.createForm.patchValue(info);
           this.submit = true;
           this.errors = [];
           this.loading = false;
@@ -458,6 +441,5 @@ export class FarmerCreateComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.messageService.setMessage('');
   }
 }

@@ -85,10 +85,10 @@ export class EditFarmerProfileComponent implements OnInit {
         delete body.surname;
         delete body.sex;
       }
-      console.log(+this.farmer.type);
       if ((+body.type === 1 && +this.farmer.type === 1) || isUndefined(this.farmer.type)) {
         delete body.NID;
       }
+      this.helper.cleanObject(body);
       this.farmerService.updateFarmerProfile(body).subscribe(() => {
           this.modal.dismiss();
         },
@@ -97,7 +97,6 @@ export class EditFarmerProfileComponent implements OnInit {
         });
     } else {
       this.errors = this.helper.getFormValidationErrors(this.editFarmerProfileForm);
-
     }
   }
 

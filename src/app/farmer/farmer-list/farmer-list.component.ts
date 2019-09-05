@@ -5,8 +5,8 @@ import {Farmer} from '../../core/models';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {FarmerDetailsComponent} from '../farmer-details/farmer-details.component';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {MessageService} from '../../core/services/message.service';
-import {AuthorisationService} from '../../core/services/authorisation.service';
+import {MessageService} from '../../core/services';
+import {AuthorisationService} from '../../core/services';
 
 @Component({
   selector: 'app-farmer-list',
@@ -30,7 +30,6 @@ export class FarmerListComponent implements OnInit, OnDestroy {
   isDistrictCashCrop = false;
   filterForm: FormGroup;
   maxSize = 9;
-
   order = 'userInfo.foreName';
   reverse = true;
   directionLinks = true;
@@ -61,6 +60,7 @@ export class FarmerListComponent implements OnInit, OnDestroy {
   ];
 
   ngOnInit(): void {
+    this.redirect();
     this.isDistrictCashCrop = this.authorisationService.isDistrictCashCropOfficer();
     this.filterForm = this.formBuilder.group({
       term: ['', Validators.minLength(3)],
@@ -158,5 +158,11 @@ export class FarmerListComponent implements OnInit, OnDestroy {
         };
         this.loading = false;
       });
+  }
+  redirect() {
+    this.messageService.setMessage(this.messageService.getMessage());
+    if (this.authorisationService.isCWSUser()) {
+      this.router.navigateByUrl('/admin/cws-farmers/' + this.authenticationService.getCurrentUser().info.org_id);
+    }
   }
 }
