@@ -1,5 +1,6 @@
 import {Directive, Input, ElementRef, TemplateRef, ViewContainerRef, OnInit} from '@angular/core';
 import {AuthenticationService} from '../../core/services';
+import {concatAll} from 'rxjs/operators';
 
 @Directive({
   selector: '[appHasPermission]'
@@ -34,7 +35,7 @@ export class HasPermissionDirective implements OnInit {
     let hasPermission = false;
     if (this.currentUser && this.currentUser.parameters.role) {
       for (const permission of this.permissions) {
-        hasPermission = this.currentUser.parameters.role.find(role => role === permission);
+        hasPermission = this.currentUser.parameters.role.includes(permission);
         if (hasPermission) {
           return hasPermission;
         }
