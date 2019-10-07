@@ -8,14 +8,14 @@
       <div class="box-body">
         <app-loader *ngIf="loading"></app-loader>
         <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover"
-               class="table table-condensed">
+               class="table table-striped">
           <thead>
           <tr>
             <th>Type</th>
-            <th>Quantity (kg)</th>
-            <th>Distributed Qty (kg)</th>
-            <th>Returned Qty (kg)</th>
-            <th>Bags</th>
+            <th>Quantity</th>
+            <th>Distributed Qty</th>
+            <th>Returned Qty</th>
+            <th>Items</th>
             <th>Date</th>
             <th>Actions</th>
           </tr>
@@ -23,7 +23,9 @@
           <tbody>
           <tr *ngFor="let stockOut of stockOuts">
               <td>{{ stockOut.dispatchId.inputType }}</td>
-              <td>{{ stockOut.totalQuantity }}</td>
+              <td>{{ stockOut.totalQuantity }}
+                <span *ngIf="stockOut.dispatchId.inputType === 'Pesticide'">L</span>
+                <span *ngIf="stockOut.dispatchId.inputType === 'Fertilizer'">kg</span></td>
               <td>{{ stockOut.distributedQty }}</td>
               <td>{{ stockOut.returnedQty }}</td>
               <td>{{ stockOut.numberOfBags }}</td>

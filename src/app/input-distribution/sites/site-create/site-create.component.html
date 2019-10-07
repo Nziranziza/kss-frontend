@@ -2,11 +2,24 @@
   Create site
 </h3>
 <app-list-errors [errorList]="errors"></app-list-errors>
+<app-list-message [message]="message"></app-list-message>
 <form [formGroup]="createForm" (ngSubmit)="onSubmit()">
   <div class="row">
     <div class="col-xs-12">
       <div class="box">
         <div class="box-body">
+          <div class="row">
+            <div class="col-xs-3">
+              <div class="form-group">
+                <label class="control-label label-required">Name</label>
+                <input type="text" formControlName="siteName" class="form-control">
+              </div>
+            </div>
+            <div class="col-xs-3">
+              <label class="control-label">Allocated Qty: </label>
+              <input type="text" formControlName="allocatedQty" class="form-control" readonly="readonly">
+            </div>
+          </div>
           <fieldset class="location" style="margin: 15px 0px 15px !important; ">
             <legend>
               <label class="control-label label-required">&nbsp; Location</label></legend>
@@ -59,91 +72,47 @@
             </div>
           </fieldset>
           <div class="row">
-            <div class="col-xs-6">
-              <div class="form-group">
-                <label class="control-label label-required">Name</label>
-                <input type="text" formControlName="siteName" class="form-control">
-              </div>
-            </div>
-            <div class="col-xs-6">
-              <div class="form-group">
-                <label class="control-label label-required">Zone</label>
-                <select class="form-control" formControlName="belongingZone">
-                  <option value=""></option>
-                  <ng-container *ngFor="let cws of organisations">
-                    <option *ngIf="cws.organizationRole.includes(1)" value="{{cws._id}}">{{cws.organizationName}}
-                    </option>
-                  </ng-container>
-                </select>
-              </div>
-            </div>
-            <div class="col-xs-12">
-              <button class="btn btn-success btn-circle btn-lg pull-right" (click)="addCoveredSector()" type="button"><i
-                class="fa fa-plus"></i></button>
-            </div>
-            <section>
-              <div class="col-xs-12" *ngFor="let sector of formCoveredSectors.controls; let i=index"
-                   formArrayName="coveredSectors" style="padding-left: 0px; padding-right: 0px;">
-                <fieldset class="request" [formGroupName]="i">
-                  <legend><label class="control-label label-required">&nbsp;Covered Sector</label></legend>
-                  <div class="row">
-                    <div class="col-xs-4">
-                      <div class="form-group">
-                        <label class="control-label">Sector</label>
-                        <select class="form-control" formControlName="sectorId" (change)="onChangeSector(i)">
-                          <option value=""></option>
-                          <option *ngFor="let sector of sectors" value="{{sector._id}}">{{sector.name}}</option>
-                        </select>
-                        <div
-                          *ngIf="getCoveredSectorsFormGroup(i).controls.sectorId.invalid && (getCoveredSectorsFormGroup(i).controls.sectorId.dirty || getCoveredSectorsFormGroup(i).controls.sectorId.touched)"
-                          class="input-error">
-                          <div *ngIf="getCoveredSectorsFormGroup(i).controls.sectorId.errors.required">
-                            Sector is required.
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-xs-4">
-                      <div class="form-group">
-                        <label class="label-required">Covered cells</label>
-                        <p>
+            <div class="col-xs-12" style="padding-left: 0px; padding-right: 0px;" formGroupName="coveredAreas">
+              <fieldset class="request">
+                <legend><label class="control-label label-required">&nbsp;Covered area</label></legend>
+                <div class="row">
+                  <div class="col-xs-4">
+                    <div class="form-group">
+                      <label class="label-required">Covered sectors</label>
+                      <p>
                         <span
-                          style="color: #f2a73c; font-size: 12px;"> [ {{ selectedCoveredCells[i].join(', ') }} ]</span>
-                        </p>
-                        <select multiple="multiple" class="form-control"
-                                [size]="coveredCellsSet[i]?.length" formControlName="coveredCells">
-                          <option *ngFor="let cell of coveredCellsSet[i]" value="{{cell._id}}"
-                                  (mousedown)="onMouseDownCell(i, $event, cell)" (mousemove)="$event.preventDefault()">
-                            {{cell.name}}
-                          </option>
-                        </select>
-                      </div>
-                    </div>
-                    <div class="col-xs-4">
-                      <div class="form-group">
-                        <label class="label-required">Covered villages</label>
-                        <p>
-                        <span
-                          style="color: #f2a73c; font-size: 12px;"> [ {{ selectedCoveredVillages[i].join(', ') }} ]</span>
-                        </p>
-                        <select multiple="multiple" class="form-control"
-                                formControlName="coveredVillages" [size]="coveredVillagesSet[i]?.length">
-                          <option *ngFor="let village of coveredVillagesSet[i]" value="{{village._id}}"
-                                  (mousedown)="onMouseDownVillage(i, $event, village)"
-                                  (mousemove)="$event.preventDefault()">
-                            {{village.name}}
-                          </option>
-                        </select>
-                      </div>
-                    </div>
-                    <div class="form-group col-xs-12">
-                      <button class="btn btn-danger pull-right" type="button" (click)="removeCoveredSector(i)"> Remove
-                      </button>
+                          style="color: #f2a73c; font-size: 12px;"> [ {{ selectedCoveredSectors.join(', ') }} ]</span>
+                      </p>
+                      <select multiple="multiple" class="form-control"
+                              [size]="5" formControlName="coveredSectors" [size]="5">
+                        <option *ngFor="let sector of coveredSectorsSet" value="{{sector._id}}"
+                                (mousedown)="onMouseDownSector($event, sector)"
+                                (mousemove)="$event.preventDefault()">
+                          {{sector.name}}
+                        </option>
+                      </select>
                     </div>
                   </div>
-                </fieldset>
-              </div>
-            </section>
+                  <div class="col-xs-4">
+                    <div class="form-group">
+                      <label class="label-required">Covered CWS</label>
+                      <p>
+                        <span
+                          style="color: #f2a73c; font-size: 12px;"> [ {{ selectedCoveredCWS.join(', ') }} ]</span>
+                      </p>
+                      <select multiple="multiple" class="form-control"
+                              formControlName="coveredCWS" [size]="5">
+                        <option *ngFor="let cws of coveredCWSSet" value="{{cws._id}}"
+                                (mousedown)="onMouseDownCWS($event, cws)"
+                                (mousemove)="$event.preventDefault()">
+                          {{cws.organizationName}}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
           </div>
         </div>
       </div>

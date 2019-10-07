@@ -4,3 +4,4 @@ export * from './list-errors/list-errors.component';
 export * from './list-message/list-message.component';
 export * from './loader/loader.component';
 export * from './confirm-dialog/confirm-dialog.component';
+export * from './quantity-unit/quantity-unit.component';

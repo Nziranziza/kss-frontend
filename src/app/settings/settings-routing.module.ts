@@ -5,6 +5,7 @@ import {SeasonParametersComponent} from './season-parameters/season-parameters.c
 import {CoffeeTypeComponent} from './coffee-type/coffee-type.component';
 import {CoffeeTypeCreateComponent} from './coffee-type/coffee-type-create/coffee-type-create.component';
 import {AdminGuard} from '../core/services/guards/admin.guard';
+import {DistributionParametersComponent} from './distribution-parameters/distribution-parameters.component';
 
 const routes: Routes = [
   {
@@ -23,7 +24,12 @@ const routes: Routes = [
       {
         path: 'coffee-type/list',
         component: CoffeeTypeComponent
+      },
+      {
+        path: 'distribution-parameters',
+        component: DistributionParametersComponent
       }
+
     ]
   }
 ];

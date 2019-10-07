@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
-import {CoffeeTypeService} from '../../core/services/coffee-type.service';
+import {CoffeeTypeService} from '../../core/services';
 import {HelperService} from '../../core/helpers';
-import {ParchmentService} from '../../core/services/parchment.service';
+import {ParchmentService} from '../../core/services';
 import {AuthenticationService} from '../../core/services';
 
 @Component({

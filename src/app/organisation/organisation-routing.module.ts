@@ -26,7 +26,8 @@ const routes: Routes = [
         component: OrganisationEditComponent,
       }, {
         path: 'cws-farmers/:organisationId',
-        component: OrganisationFarmersComponent
+        component: OrganisationFarmersComponent,
+        resolve: {orgCoveredAreaData: CoveredAreaResolverService}
       }, {
         path: 'cws-pending-farmers/:organisationId',
         component: OrganisationPendingFarmersComponent,

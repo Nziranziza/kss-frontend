@@ -28,14 +28,13 @@ export class LoginComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private authorisationService: AuthorisationService,
     private seasonService: SeasonService
-  ) {
+  ) {}
+
+  ngOnInit() {
     this.authForm = this.formBuilder.group({
       email: ['', Validators.required],
       password: ['', Validators.minLength(8)]
     });
-  }
-
-  ngOnInit() {
     document.body.className = 'hold-transition login-page';
     $(() => {
       $('input').iCheck({
@@ -57,7 +56,6 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.authenticationService.unlock(body, options).subscribe(data => {
             if (data) {
               this.message = 'Account successfully unlocked!';
-              return;
             }
           });
         }
@@ -89,7 +87,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     } else {
       this.errors = ['Invalid username or email'];
-      return;
     }
   }
 
@@ -104,7 +101,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.router.navigateByUrl('admin/drymill/batch/create');
     } else if (this.authorisationService.isCeparUser()) {
       this.router.navigateByUrl('admin/warehouse/dispatches');
-    } else if (this.authorisationService.isInputDistributorUser()) {
+    } else if (this.authorisationService.isSiteManager()) {
       this.router.navigateByUrl('admin/input/site/distribution');
     } else {
       this.router.navigateByUrl('admin/organisations');

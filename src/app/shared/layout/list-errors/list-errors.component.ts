@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {isArray} from 'util';
 
+
 @Component({
   selector: 'app-list-errors',
   templateUrl: './list-errors.component.html',

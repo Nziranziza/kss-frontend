@@ -5,9 +5,9 @@
   <div class="col-md-12">
     <div class="box box-default" style="border-top: 1px solid #d2d6de;">
       <div class="box-body">
-        <app-loader *ngIf="loading"></app-loader>
         <app-list-errors [errorList]="errors"></app-list-errors>
         <app-list-message [message]="message"></app-list-message>
+        <app-loader *ngIf="loading"></app-loader>
         <form [formGroup]="checkProgressForm">
           <div class="row">
             <div class="col-sm-12">
@@ -133,7 +133,7 @@
           <div class="row">
             <div class="col-xs-12">
               <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover"
-                     class="table table-condensed">
+                     class="table table-striped">
                 <thead>
                 <tr>
                   <th></th>

@@ -154,7 +154,6 @@ export class AddFarmerRequestComponent implements OnInit {
           this.modal.dismiss();
         },
         (err) => {
-          console.log(err.errors);
           this.errors = err.errors;
         });
 

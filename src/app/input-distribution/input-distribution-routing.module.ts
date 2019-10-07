@@ -7,6 +7,7 @@ import {RecordSiteStockOutComponent} from './site-view-dispatch/site-stock-out/r
 import {SiteViewDispatchComponent} from './site-view-dispatch/site-view-dispatch.component';
 import {SiteViewStockoutComponent} from './site-view-stockout/site-view-stockout.component';
 import {AdminGuard} from '../core/services/guards/admin.guard';
+import {SiteDistributionListComponent} from './site-ditributions-list/site-distributions-list.component';
 
 const routes: Routes = [
   {
@@ -25,6 +26,10 @@ const routes: Routes = [
       {
         path: 'input/site/distribution',
         component: SiteDistributionComponent
+      },
+      {
+        path: 'input/list/site/distribution',
+        component: SiteDistributionListComponent
       },
       {
         path: 'input/site/dispatches',

@@ -54,7 +54,7 @@ export class DistributionPlanComponent implements OnInit {
         prov_id: [''],
         dist_id: ['']
       }),
-      zoneId: ['']
+      siteId: ['']
     });
 
     this.dtOptions = {
@@ -134,7 +134,6 @@ export class DistributionPlanComponent implements OnInit {
     }
   }
 
-
   onChanges() {
     this.filterForm.controls.location.get('prov_id'.toString()).valueChanges.subscribe(
       (value) => {
@@ -143,7 +142,7 @@ export class DistributionPlanComponent implements OnInit {
             searchBy: 'province',
             prov_id: value
           };
-          this.siteService.getZone(body).subscribe((data) => {
+          this.siteService.all(body).subscribe((data) => {
             this.organisations = data.content;
             this.zoneId = true;
           });
@@ -163,7 +162,7 @@ export class DistributionPlanComponent implements OnInit {
             searchBy: 'district',
             dist_id: value
           };
-          this.siteService.getZone(body).subscribe((data) => {
+          this.siteService.all(body).subscribe((data) => {
             this.organisations = data.content;
             this.zoneId = true;
           });

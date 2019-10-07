@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {ApiService} from './api.service';
 import {Observable} from 'rxjs';
 
@@ -10,10 +10,14 @@ export class SiteService {
 
   constructor(
     private apiService: ApiService
-  ) { }
+  ) {
+  }
 
   all(body: any): Observable<any> {
     return this.apiService.post('/site/list', body);
+  }
+  getAll(): Observable<any> {
+    return this.apiService.get('/site');
   }
 
   get(id: string): Observable<any> {
@@ -34,6 +38,10 @@ export class SiteService {
 
   getZone(body: any): Observable<any> {
     return this.apiService.post('/site/zone/list', body);
+  }
+
+  getSectorAllocatedFertilizer(sectorId: string) {
+    return this.apiService.get('/site/sector/allocated/' + sectorId);
   }
 
 }

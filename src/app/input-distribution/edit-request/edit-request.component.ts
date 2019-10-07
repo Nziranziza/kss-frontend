@@ -41,7 +41,6 @@ export class EditRequestComponent implements OnInit {
       comment: ['']
     });
     this.currentSeason = this.authenticationService.getCurrentSeason();
-
     this.farmerService.get(this.farmerId).subscribe(data => {
       this.farmer = data.content[0];
     });
@@ -52,7 +51,7 @@ export class EditRequestComponent implements OnInit {
       const request = JSON.parse(JSON.stringify(this.editFarmerRequestForm.value));
       request['documentId'.toString()] = this.farmerId;
       request['subDocumentId'.toString()] = this.land._id;
-      this.farmerService.updateFarmerRequest(request).subscribe((data) => {
+      this.farmerService.updateFarmerRequest(request).subscribe(() => {
           this.message = 'Information successfully updated!';
         },
         (err) => {

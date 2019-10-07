@@ -1,8 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthenticationService, InputDistributionService} from '../../core/services';
 import {Subject} from 'rxjs';
-import {ConfirmDispatchComponent} from '../site-view-dispatch/confirm-dispatch/confirm-dispatch.component';
-import {RecordSiteStockOutComponent} from '../site-view-dispatch/site-stock-out/record-site-stock-out.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {RecordSiteStockReturnComponent} from './site-stock-return/record-site-stock-return.component';
 
@@ -34,8 +32,7 @@ export class SiteViewStockoutComponent implements OnInit {
 
   getSiteStockOuts() {
     this.loading = true;
-    /* const id = this.authenticationService.getCurrentUser().info.distributionSite; */
-    const id = '5d414020075a5550b7de08bb';
+    const id = this.authenticationService.getCurrentUser().orgInfo.distributionSite;
     this.inputDistributionService.getSiteStockOuts(id).subscribe((data) => {
       this.loading = false;
       this.stockOuts = data.content;

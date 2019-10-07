@@ -22,13 +22,12 @@ export class RequestResetComponent implements OnInit {
     private router: Router,
     private authenticationService: AuthenticationService,
     private formBuilder: FormBuilder, private helperService: HelperService
-  ) {
+  ) {}
+
+  ngOnInit() {
     this.requestResetForm = this.formBuilder.group({
       email: ['', Validators.required]
     });
-  }
-
-  ngOnInit() {
     document.body.className = 'hold-transition login-page';
     $(() => {
       $('input').iCheck({

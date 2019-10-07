@@ -1,7 +1,8 @@
 <h3>
   Record dispatch
 </h3>
-<app-list-errors [errorList]="errors"></app-list-errors>
+<app-list-message [message]="message"></app-list-message>
+<app-list-errors [errorList]="errors" *ngIf="errors.length > 0"></app-list-errors>
 <form [formGroup]="recordDispatchForm" (ngSubmit)="onSubmit()">
   <div class="box">
     <div class="box-body">
@@ -37,53 +38,133 @@
         </div>
       </div>
       <ng-container formGroupName="entries">
-      <div class="row">
-        <div class="col-xs-2">
-          <div class="form-group">
-            <label class="control-label label-required">Driver</label>
-            <input type="text" formControlName="driver" class="form-control">
+        <div class="row">
+          <div class="col-xs-2">
+            <div class="form-group">
+              <label class="control-label label-required">Driver</label>
+              <input type="text" formControlName="driver" class="form-control">
+            </div>
+          </div>
+          <div class="col-xs-2">
+            <div class="form-group">
+              <label class="control-label label-required">Vehicle plate</label>
+              <input type="text" formControlName="vehiclePlate" class="form-control">
+            </div>
+          </div>
+          <div class="col-xs-2">
+            <div class="form-group">
+              <label class="control-label label-required">Vehicle model</label>
+              <input type="text" formControlName="vehicleModel" class="form-control">
+            </div>
+          </div>
+          <div class="col-xs-2">
+            <div class="form-group">
+              <label class="control-label label-required">Date</label>
+              <input [owlDateTimeTrigger]="dt0" [owlDateTime]="dt0" formControlName="date" class="form-control">
+              <owl-date-time [pickerType]="'calendar'" #dt0></owl-date-time>
+            </div>
           </div>
         </div>
-        <div class="col-xs-2">
-          <div class="form-group">
-            <label class="control-label label-required">Vehicle plate</label>
-            <input type="text" formControlName="vehiclePlate" class="form-control">
+        <div class="row" style="margin-top: 15px; margin-bottom: 15px">
+          <div class="col-xs-4">
+            <label>
+              <input type="checkbox" [checked]="includeFertilizer" (change)="onIncludeFertilizer()"/> Fertilizer
+            </label>
+          </div>
+          <div class="col-xs-4">
+            <label>
+              <input type="checkbox" [checked]="includePesticide" (change)="onIncludePesticide()"/> Pesticide
+            </label>
           </div>
         </div>
-        <div class="col-xs-2">
-          <div class="form-group">
-            <label class="control-label label-required">Vehicle model</label>
-            <input type="text" formControlName="vehicleModel" class="form-control">
+
+        <ng-container *ngIf="includeFertilizer">
+          <div class="row">
+            <div class="col-xs-6">
+              <button class="btn btn-success btn-sm pull-right" (click)="addPackageFertilizer()" type="button">
+                <i class="fa fa-plus"></i> Fertilizer package
+              </button>
+            </div>
           </div>
-        </div>
-        <div class="col-xs-2">
-          <div class="form-group">
-            <label class="control-label label-required">Number of bags</label>
-            <input type="text" formControlName="numberOfBags" class="form-control">
+          <div *ngFor="let control of formPackageFertilizer.controls; let i=index" formArrayName="packageFertilizer">
+            <div class="row" [formGroupName]="i">
+              <div class="col-xs-2">
+                <div class="form-group">
+                  <span class="control-label label-required">Bag size (kg)</span>
+                  <select class="form-control" formControlName="bagSize" (change)="onChangePackageFertilizer(i)">
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xs-2">
+                <div class="form-group">
+                  <span class="control-label label-required">Number of bags</span>
+                  <input type="text" formControlName="numberOfBags" class="form-control" (input)="onChangePackageFertilizer(i)">
+                </div>
+              </div>
+              <div class="col-xs-2">
+                <div class="form-group">
+                  <span class="control-label label-required"></span>
+                  <input type="text" formControlName="subTotal" class="form-control" readonly="readonly">
+                </div>
+              </div>
+              <div class="form-group col-xs-1">
+                <button class="btn btn-danger btn pull-left" type="button"
+                        (click)="removePackageFertilizer(i)" style="margin-top: 20px"> Remove
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="col-xs-2">
-          <div class="form-group">
-            <label class="control-label label-required">Total Qty</label>
-            <input type="text" formControlName="totalQty" class="form-control">
+          <div class="row">
+            <div class="col-xs-2">
+              <div class="form-group">
+                <span class="control-label label-required">Total qty fertilizer (kg)</span>
+                <input type="text" formControlName="totalQtyFertilizer" class="form-control">
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="col-xs-2">
-          <div class="form-group">
-            <label class="control-label label-required">Stock</label>
-            <select class="form-control" formControlName="warehouseId">
-              <option *ngFor="let store of stores" value="{{store._id}}">{{store.inputType}}</option>
-            </select>
+        </ng-container>
+        <ng-container *ngIf="includePesticide">
+          <div class="row">
+            <div class="col-xs-6">
+              <button class="btn btn-success btn-sm pull-right" (click)="addPackagePesticide()" type="button">
+                <i class="fa fa-plus"></i> Pesticide package
+              </button>
+            </div>
           </div>
-        </div>
-        <div class="col-xs-2">
-          <div class="form-group">
-            <label class="control-label label-required">Date</label>
-            <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="date" class="form-control">
-            <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+          <div *ngFor="let control of formPackagePesticide.controls; let i=index" formArrayName="packagePesticide">
+            <div class="row" [formGroupName]="i">
+              <div class="col-xs-2">
+                <div class="form-group">
+                  <span class="control-label label-required">Pesticide type</span>
+                  <select class="form-control" formControlName="pesticideType">
+                    <option *ngFor="let type of pesticideTypes" value="{{type.inputName._id}}">{{ type.inputName.inputName }}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xs-2">
+                <div class="form-group">
+                  <span class="control-label label-required">Quantity (l)</span>
+                  <input type="text" formControlName="qty" class="form-control">
+                </div>
+              </div>
+              <div class="form-group col-xs-1">
+                <button class="btn btn-danger btn pull-left" type="button"
+                        (click)="removePackagePesticide(i)" style="margin-top: 20px"> Remove
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+          <div class="row">
+            <div class="col-xs-2">
+              <div class="form-group">
+                <span class="control-label label-required">Total qty pesticide (l)</span>
+                <input type="text" formControlName="totalQtyPesticide" class="form-control">
+              </div>
+            </div>
+          </div>
+        </ng-container>
       </ng-container>
       <div class="row">
         <div class="col-xs-12">
@@ -93,33 +174,105 @@
     </div>
   </div>
 </form>
+<div class="row filter-form" style="margin-bottom: 10px; margin-left: -1px">
+  <form [formGroup]="filterForm" (ngSubmit)="onFilter()">
+    <ng-container formGroupName="search">
+      <div class="col-xs-1">
+        <select class="form-control" formControlName="searchBy">
+          <option *ngFor="let field of searchFields" value="{{field.value}}">{{field.name}}</option>
+        </select>
+      </div>
+      <ng-container formGroupName="location" *ngIf="isFilterBySite">
+        <div class="col-xs-1">
+          <select class="form-control" formControlName="prov_id">
+            <option value="">select province</option>
+            <option *ngFor="let province of filterProvinces" value="{{province._id}}">{{province.namee | lowercase}}
+            </option>
+          </select>
+        </div>
+        <div class="col-xs-1">
+          <select class="form-control" formControlName="dist_id">
+            <option value="">select district</option>
+            <option *ngFor="let district of filterDistricts" value="{{district._id}}">{{district.name | lowercase}}
+            </option>
+          </select>
+        </div>
+      </ng-container>
+      <div class="col-xs-1" *ngIf="isFilterBySite">
+        <select class="form-control" formControlName="siteId">
+          <option value="">select site</option>
+          <option *ngFor="let site of filterSites" value="{{site._id}}">{{site.siteName | lowercase}}</option>
+        </select>
+      </div>
+      <div class="col-xs-2" *ngIf="!isFilterByType">
+        <input type="text" formControlName="term" class="form-control" placeholder="term..">
+      </div>
+      <div class="col-xs-2" *ngIf="isFilterByType">
+        <select class="form-control" formControlName="term">
+          <option value="Fertilizer">Fertilizer</option>
+          <option value="Pesticide">Pesticide</option>
+        </select>
+      </div>
+    </ng-container>
+    <ng-container formGroupName="date">
+      <div class="col-xs-1">
+        <div class="form-group">
+          <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="from" class="form-control"
+                 placeholder="from date..">
+          <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+        </div>
+      </div>
+      <div class="col-xs-1">
+        <div class="form-group">
+          <input [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" formControlName="to" class="form-control"
+                 placeholder="to..">
+          <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
+        </div>
+      </div>
+    </ng-container>
+    <div class="col-xs-2">
+      <button class="btn btn-warning pull-right btn-margin" type="button" (click)="onClearFilter()">Clear</button>
+      <button class="btn btn-success pull-right btn-margin" type="submit"><i class="fa fa-search"></i> Search</button>
+    </div>
+  </form>
+  <div class="col-xs-2 pull-right">
+    <button class="btn btn-info btn-margin pull-right" (click)="printNote()" type="button">
+      <i class="fa fa-print" aria-hidden="true"></i> Print note
+    </button>
+  </div>
+</div>
 <div class="row">
   <div class="col-xs-12">
     <div class="box">
       <div class="box-body">
         <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover"
-               class="table table-condensed">
+               class="table table-striped">
           <thead>
           <tr>
+            <th></th>
             <th>Destination</th>
             <th>Driver</th>
             <th>Vehicle</th>
+            <th>Type</th>
             <th>Quantity</th>
             <th>Date</th>
-            <th>Actions</th>
           </tr>
           </thead>
           <tbody>
           <ng-container *ngFor="let dispatch of inputDispatches">
             <tr *ngFor="let entry of dispatch.entries">
+              <td>
+                <input type="checkbox" (click)="selectDispatch($event.target.checked, dispatch._id, entry._id)">
+              </td>
               <td>{{ dispatch.destinationSite.siteId.siteName }}</td>
               <td>{{ entry.driver }}</td>
               <td>{{ entry.vehiclePlate }}</td>
-              <td>{{ entry.totalQty }}</td>
-              <td>{{ entry.date|date }}</td>
-              <td>
-                <button class="btn btn-success btn-margin btn-sm" (click)="printNote(dispatch._id, entry._id)">Print note</button>
+              <td>{{ dispatch.inputType }}</td>
+              <td>{{ entry.totalQty }}
+                <span *ngIf="dispatch.inputType === 'Pesticide'">l</span>
+                <span *ngIf="dispatch.inputType === 'Fertilizer'">kg</span>
               </td>
+              <td>{{ entry.date|date }}</td>
             </tr>
           </ng-container>
           </tbody>

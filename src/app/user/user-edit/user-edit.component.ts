@@ -31,6 +31,7 @@ export class UserEditComponent implements OnInit {
   isFromSuperOrg = false;
   userNIDInfo = {};
   loading = false;
+  editUser: any;
   possibleStatuses = [
     {name: 'Pending', value: 2},
     {name: 'Approved', value: 3},
@@ -40,6 +41,8 @@ export class UserEditComponent implements OnInit {
   invalidId = false;
   org: any;
   sites = [];
+  selectedType: any;
+  selectedRoles: any;
   showLocation = {
     province: true,
     district: true,
@@ -111,6 +114,7 @@ export class UserEditComponent implements OnInit {
             }
           });
         });
+        this.editUser = user.content;
         const usr = user.content;
         usr.hasAccessTo.map(access => {
           if (access.app === 2) {
@@ -131,11 +135,7 @@ export class UserEditComponent implements OnInit {
   }
 
   isSuperOrganisation(organisation: any) {
-    if (organisation.organizationRole.indexOf(0) > -1) {
-      this.isFromSuperOrg = true;
-    } else {
-      this.isFromSuperOrg = false;
-    }
+    this.isFromSuperOrg = organisation.organizationRole.indexOf(0) > -1;
   }
 
   onInputNID(nid: string) {
@@ -153,7 +153,6 @@ export class UserEditComponent implements OnInit {
         this.loading = false;
       });
     }
-
   }
 
   deleteErrors() {
@@ -165,18 +164,28 @@ export class UserEditComponent implements OnInit {
       (data) => {
         const selectedRoles = data
           .map((checked, index) => checked ? this.orgPossibleRoles[index].value : null)
-          .filter(value => value !== '');
-        if (selectedRoles.includes(6)) {
-          this.needLocation = true;
-        } else {
-          this.needLocation = false;
-        }
+          .filter(value => value !== null);
+        this.needLocation = !!selectedRoles.includes(6);
         if (selectedRoles.includes(8)) {
-          this.hasSite = true;
+          if (this.selectedType === 2) {
+            this.hasSite = true;
+          }
         } else {
           this.hasSite = false;
         }
-      });
+        this.selectedRoles = selectedRoles;
+      }
+    );
+    this.editForm.controls['userType'.toString()].valueChanges.subscribe(
+      (value) => {
+        if (+value === 2) {
+          this.selectedType = +value;
+          this.hasSite = !!this.selectedRoles.includes(8);
+        } else {
+          this.hasSite = false;
+        }
+      }
+    );
 
     this.editForm.controls.location.get('prov_id'.toString()).valueChanges.subscribe(
       (value) => {
@@ -269,12 +278,17 @@ export class UserEditComponent implements OnInit {
       delete user.userType;
       this.helper.cleanObject(user);
       this.helper.cleanObject(user.location);
+      if (!this.editUser.fullyEditable) {
+        delete user.email;
+      }
       this.userService.update(user).subscribe(() => {
           this.router.navigateByUrl('admin/organisations/' + this.organisationId + '/users');
         },
         (err) => {
           this.errors = err.errors;
         });
+    } else {
+      this.errors = this.helper.getFormValidationErrors(this.editForm);
     }
   }
 

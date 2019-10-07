@@ -99,11 +99,7 @@ export class OrganisationEditComponent implements OnInit {
         } else {
           this.needLocation = false;
         }
-        if (org.organizationRole.includes(8)) {
-          this.hasExpiration = true;
-        } else {
-          this.hasExpiration = false;
-        }
+        this.hasExpiration = !!org.organizationRole.includes(8);
         this.locationService.getProvinces().subscribe((provinces) => {
           this.provinces = provinces;
         });
@@ -156,20 +152,15 @@ export class OrganisationEditComponent implements OnInit {
           if (org.location === null) {
             delete org.location;
           }
-          this.isSuperOrganisation(org);
+          this.editForm.controls['genreId'.toString()].setValue(org.genreId);
           this.editForm.patchValue(org);
         }
       });
     });
   }
 
-
   isSuperOrganisation(organisation: any) {
-    if (organisation.organizationRole.indexOf(0) > -1) {
-      this.isSuperOrg = true;
-    } else {
-      this.isSuperOrg = false;
-    }
+    this.isSuperOrg = organisation.organizationRole.indexOf(0) > -1;
   }
 
   newCoveredSector(): FormGroup {

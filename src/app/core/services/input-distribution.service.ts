@@ -46,15 +46,40 @@ export class InputDistributionService {
     return this.apiService.post('/inputapplication/record_distribution', data);
   }
 
-  confirmDispatch(data: any) {
+  updateRequestAtDistribution(data: any): Observable<any> {
+    return this.apiService.put('/requestInfo/edit', data);
+  }
+
+  confirmDispatch(data: any): Observable<any> {
     return this.apiService.put('/inputdispatch/confirm_dispatch', data);
   }
 
-  getDistributionProgress(data: any) {
+  getDistributionProgress(data: any): Observable<any> {
     return this.apiService.post('/distributionstats/inputdistribution', data);
   }
 
-  getDispatchProgress(data: any) {
+  getDispatchProgress(data: any): Observable<any> {
     return this.apiService.post('/distributionstats/inputdispatch', data);
   }
+
+  recordInput(data: any): Observable<any> {
+    return this.apiService.post('/inputs', data);
+  }
+
+  getFertilizers(): Observable<any> {
+    return this.apiService.get('/inputs/fertilizer');
+  }
+
+  getPesticides(): Observable<any> {
+    return this.apiService.get('/inputs/pesticide');
+  }
+
+  recordSupplier(data: any): Observable<any> {
+    return this.apiService.post('/supplier/set', data);
+  }
+
+  getSuppliers(): Observable<any> {
+    return this.apiService.get('/supplier');
+  }
+
 }

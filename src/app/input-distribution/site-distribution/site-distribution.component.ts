@@ -62,4 +62,6 @@ export class SiteDistributionComponent implements OnInit {
       this.errors = this.helper.getFormValidationErrors(this.getFarmerRequestsForm);
     }
   }
+
+  applyPesticide() {}
 }

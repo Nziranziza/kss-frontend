@@ -100,7 +100,7 @@ export class DistributionProgressComponent implements OnInit {
         }
       }, (err) => {
         if (err.status === 404) {
-          this.message = err.errors;
+          this.message = 'Sorry no data to this location!';
           this.errors = '';
           this.loading = false;
         } else {

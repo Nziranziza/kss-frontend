@@ -44,7 +44,7 @@ import {RoleResolverService} from './services/resolvers/role-resolver.service';
     CookieService,
     CoveredAreaResolverService,
     RoleResolverService,
-    {provide: ErrorHandler, useClass: ErrorCustomHandler}
+    /*{provide: ErrorHandler, useClass: ErrorCustomHandler}*/
   ],
   declarations: []
 })

@@ -6,8 +6,6 @@ export class ErrorCustomHandler implements ErrorHandler {
   }
 
   handleError(error) {
-    if ((!(error instanceof TypeError)) && (error.status === undefined)) {
-      console.log(error);
-    }
+     if ((!(error instanceof TypeError)) && (error.status === undefined)) {}
   }
 }

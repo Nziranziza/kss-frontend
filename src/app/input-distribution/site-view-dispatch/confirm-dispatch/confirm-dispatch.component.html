@@ -4,20 +4,26 @@
 </div>
 <div class="modal-body">
   <app-list-errors [errorList]="errors" *ngIf="errors"></app-list-errors>
-  <div class="row">
-    <form [formGroup]="confirmForm" (ngSubmit)="onSubmit()">
+  <app-list-message [message]="message"></app-list-message>
+  <form [formGroup]="confirmForm" (ngSubmit)="onSubmit()">
+    <div class="row">
       <div class="col-sm-4">
         <div class="form-inline">
           <label class="control-label">Quantity</label> &nbsp; &nbsp;
           <input type="text" formControlName="receivedQty" class="form-control">
-          <span style="margin-left: 5px">
-          Kg
-        </span>
         </div>
       </div>
-      <div class="col-sm-1">
+      <div class="col-sm-8">
+        <div class="form-inline">
+          <label class="control-label">Comment</label> &nbsp; &nbsp;
+          <textarea type="text" formControlName="comment" class="form-control"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-1 pull-right">
         <button class="btn btn-success pull-right btn-margin">save</button>
       </div>
-    </form>
-  </div>
+    </div>
+  </form>
 </div>

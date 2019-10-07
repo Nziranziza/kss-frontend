@@ -16,16 +16,20 @@ export class HttpTokenInterceptor implements HttpInterceptor {
       Accept: 'application/json'
     };
     const token = this.jwtService.getToken();
-    if (req.url.indexOf('/api/users/sign.in') !== -1) {
+    if ((req.url.indexOf('/api/users/sign.in') !== -1)
+      || (req.url.indexOf('/api/users/confirmation') !== -1)
+      || (req.url.indexOf('/api/users/account/unlock') !== -1)
+      || (req.url.indexOf('/api/users/request/password-reset') !== -1)
+      || (req.url.indexOf('/api/users/password-reset') !== -1)) {
       return next.handle(req);
-    }
-    if (!this.authenticationService.isLoggedIn()) {
+    } else if (!this.authenticationService.isLoggedIn()) {
       this.router.navigateByUrl('login');
+    } else {
+      if (token) {
+        headersConfig['x-auth-token'.toString()] = token;
+      }
+      const request = req.clone({setHeaders: headersConfig});
+      return next.handle(request);
     }
-    if (token) {
-      headersConfig['x-auth-token'.toString()] = token;
-    }
-    const request = req.clone({setHeaders: headersConfig});
-    return next.handle(request);
   }
 }

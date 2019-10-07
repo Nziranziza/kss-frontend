@@ -17,7 +17,8 @@ import {DataTablesModule} from 'angular-datatables';
 import {RequiredRolesDirective} from './directives/required-roles';
 import {LoaderComponent} from './layout';
 import {RequiredSeasonDirective} from './directives/required-season.directive';
-import { HasPermissionDirective } from './directives/has-permission.directive';
+import {HasPermissionDirective} from './directives/has-permission.directive';
+import {QuantityUnitComponent} from './layout';
 
 @NgModule({
   imports: [
@@ -31,7 +32,7 @@ import { HasPermissionDirective } from './directives/has-permission.directive';
   declarations: [ListErrorsComponent, LoaderComponent,
     HomeHeaderComponent, HomeFooterComponent, ListMessageComponent,
     ConfirmDialogComponent, RequiredRolesDirective, LoaderComponent,
-    RequiredSeasonDirective, HasPermissionDirective],
+    RequiredSeasonDirective, HasPermissionDirective, QuantityUnitComponent],
   exports: [
     CommonModule,
     FormsModule,
@@ -44,8 +45,10 @@ import { HasPermissionDirective } from './directives/has-permission.directive';
     LoaderComponent,
     HomeFooterComponent,
     ConfirmDialogComponent,
+    QuantityUnitComponent,
     MatIconModule, MatDialogModule,
-    DataTablesModule, RequiredRolesDirective, RequiredSeasonDirective, HasPermissionDirective
+    DataTablesModule, RequiredRolesDirective,
+    RequiredSeasonDirective, HasPermissionDirective
   ],
   entryComponents: [ConfirmDialogComponent]
 })

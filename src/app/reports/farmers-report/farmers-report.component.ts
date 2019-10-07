@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {LocationService} from '../../core/services';
+import {ExcelServicesService, LocationService} from '../../core/services';
 import {Router} from '@angular/router';
 import {AuthenticationService, FarmerService, OrganisationService, OrganisationTypeService} from '../../core/services';
 import {HelperService} from '../../core/helpers';
@@ -33,7 +33,8 @@ export class FarmersReportComponent implements OnInit {
     type: 'ColumnChart',
     data: [],
     options: {
-      colors: ['#367fa9']
+      colors: ['#367fa9'],
+      onclick: 'selectHandler'
     },
     columnNames: ['Location', 'Farmers'],
     width: 1050,
@@ -49,6 +50,7 @@ export class FarmersReportComponent implements OnInit {
               private router: Router, private organisationService: OrganisationService,
               private authorisationService: AuthorisationService,
               private authenticationService: AuthenticationService,
+              private excelService: ExcelServicesService,
               private helper: HelperService, private organisationTypeService: OrganisationTypeService,
               private locationService: LocationService, private farmerService: FarmerService) {
   }
@@ -117,6 +119,7 @@ export class FarmersReportComponent implements OnInit {
       this.errors = this.helper.getFormValidationErrors(this.filterForm);
     }
   }
+
   onChanges() {
     this.filterForm.controls.location.get('prov_id'.toString()).valueChanges.subscribe(
       (value) => {
@@ -180,6 +183,13 @@ export class FarmersReportComponent implements OnInit {
     );
   }
 
+  selectHandler(event) {
+    console.log(event);
+  }
+
+  exportReport() {
+    this.excelService.exportAsExcelFile(this.reportData, 'report');
+  }
   initial() {
     this.locationService.getProvinces().subscribe((data) => {
       this.provinces = data;

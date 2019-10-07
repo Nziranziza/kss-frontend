@@ -47,9 +47,13 @@ export class AuthorisationService {
     this.userRoles = this.authenticationService.getCurrentUser().parameters.role;
     return !!(this.userRoles.includes(4) || this.userRoles.includes(0));
   }
-  isInputDistributorUser() {
+  isInputDistributorAdmin() {
     this.userRoles = this.authenticationService.getCurrentUser().parameters.role;
-    return !!this.userRoles.includes(8);
+    return !!(this.userRoles.includes(8) && this.authenticationService.getCurrentUser().parameters.type === 1);
+  }
+  isSiteManager() {
+    this.userRoles = this.authenticationService.getCurrentUser().parameters.role;
+    return !!(this.userRoles.includes(8) && +this.authenticationService.getCurrentUser().parameters.type === 2);
   }
   isDistrictCashCropOfficer() {
     this.userRoles = this.authenticationService.getCurrentUser().parameters.role;

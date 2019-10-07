@@ -26,7 +26,7 @@
               <ul class="menu">
                 <li>
                   <a routerLink="/admin/farmers/need-approval/list">
-                    <i class="fa fa-users text-aqua"></i> 0 farmers need to be approved
+                    <i class="fa fa-users text-aqua"></i> 0 updates need to be approved
                   </a>
                 </li>
               </ul>
@@ -41,7 +41,7 @@
             <li>
               <ul class="menu">
                 <li *ngFor="let season of seasons">
-                  <a type="button" (click)="changeSeason(season._id)" *ngIf="season._id !== currentSeason._id">
+                  <a type="button" (click)="changeSeason(season._id)" *ngIf="season._id !== currentSeason._id" style="cursor:pointer">
                     <i class="fa fa-tint text-green" aria-hidden="true"></i> Season {{ season.season }}
                   </a>
                 </li>

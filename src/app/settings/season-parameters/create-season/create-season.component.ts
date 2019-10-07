@@ -37,7 +37,7 @@ export class CreateSeasonComponent implements OnInit {
   onSubmit() {
     if (this.createSeasonForm.valid) {
       const season = this.createSeasonForm.value;
-      this.seasonService.addSeason(season).subscribe((data) => {
+      this.seasonService.addSeason(season).subscribe(() => {
           this.message = 'Season successfully created!';
           this.modal.dismiss();
         },

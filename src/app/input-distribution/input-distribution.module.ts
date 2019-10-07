@@ -20,17 +20,19 @@ import {ConfirmDispatchComponent} from './site-view-dispatch/confirm-dispatch/co
 import {SiteViewStockoutComponent} from './site-view-stockout/site-view-stockout.component';
 import {DeliveryDetailsComponent} from './warehouse/warehouse-entries/delivery-details/delivery-details.component';
 import {DistributionReportModule} from './distribution-report/distribution-report.module';
+import {SiteDistributionListComponent} from './site-ditributions-list/site-distributions-list.component';
 
 @NgModule({
   declarations: [DistributionPlanComponent,
     SiteDistributionComponent,
     RecordSiteStockOutComponent,
     RecordSiteStockReturnComponent,
+    RecordSiteStockReturnComponent,
     RecordDistributionComponent,
     SiteViewDispatchComponent,
     EditRequestComponent,
     ConfirmDispatchComponent,
-    SiteViewStockoutComponent],
+    SiteViewStockoutComponent, SiteDistributionListComponent],
   imports: [
     CommonModule,
     NgbModule, NgxPaginationModule, OrderModule,

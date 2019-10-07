@@ -1,4 +1,4 @@
-<div class="alert alert-danger alert-dismissible alert-message fade show custom-error" *ngIf="errorList" role="alert" data-auto-dismiss="5000">
+<div class="alert alert-danger alert-dismissible custom-error" *ngIf="errorList" role="alert">
   <div *ngIf="isArray">
     <span *ngFor="let error of errorList">
       {{ error | lowercase }} <br/>

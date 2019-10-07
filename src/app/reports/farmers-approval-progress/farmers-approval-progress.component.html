@@ -1,5 +1,6 @@
 <h3>
   {{ title }}
+  <button class="btn btn-success btn-margin pull-right" (click)="exportReport()"><i class="fa fa-download"></i> Export</button>
 </h3>
 <div class="row">
   <div class="col-xs-12">
@@ -52,24 +53,24 @@
                     </div>
                   </div>
                 </div>
-              </div>
-              <div class="col-xs-2">
-                <div class="form-group">
-                  <span class="">Zone</span>
-                  <div class="input-group input-group-sm">
-                    <select class="form-control" formControlName="zoneId">
-                      <option value=""></option>
-                      <ng-container *ngFor="let cws of organisations">
-                        <option *ngIf="cws.organizationRole.includes(1)" value="{{cws._id}}">{{cws.organizationName}}
-                        </option>
-                      </ng-container>
-                    </select>
-                    <span class="input-group-btn">
+                <div class="col-xs-2">
+                  <div class="form-group">
+                    <span class="">Zone</span>
+                    <div class="input-group input-group-sm">
+                      <select class="form-control" formControlName="zoneId">
+                        <option value=""></option>
+                        <ng-container *ngFor="let cws of organisations">
+                          <option *ngIf="cws.organizationRole.includes(1)" value="{{cws._id}}">{{cws.organizationName}}
+                          </option>
+                        </ng-container>
+                      </select>
+                      <span class="input-group-btn">
                       <button type="button" class="btn btn-default btn-flat" (click)="onSubmit('zone')"
                               [disabled]="!zoneId">
                         <i class="fa fa-search"></i>
                       </button>
                     </span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -98,6 +99,25 @@
                             [height]="graph.height">
               </google-chart>
             </div>
+          </div>
+        </div>
+        <div class="row" *ngIf="showData">
+          <div class="col-sm-3 col-xs-6">
+          </div>
+          <div class="col-sm-3 col-xs-6">
+            <div class="description-block border-right">
+              <h5 class="description-header text-green">{{ zoneTotalApproved }}</h5>
+              <span class="description-text">Approved farmers</span>
+            </div>
+            <!-- /.description-block -->
+          </div>
+          <!-- /.col -->
+          <div class="col-sm-3 col-xs-6">
+            <div class="description-block">
+              <h5 class="description-header text-blue">{{ zoneTotalPending }}</h5>
+              <span class="description-text">Pending farmers</span>
+            </div>
+            <!-- /.description-block -->
           </div>
         </div>
       </div>

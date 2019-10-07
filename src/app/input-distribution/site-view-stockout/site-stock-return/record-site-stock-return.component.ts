@@ -2,7 +2,7 @@ import {Component, Inject, Injector, Input, OnInit, PLATFORM_ID} from '@angular/
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthenticationService, InputDistributionService} from '../../../core/services';
-import {MessageService} from '../../../core/services/message.service';
+import {MessageService} from '../../../core/services';
 import {HelperService} from '../../../core/helpers';
 import {isPlatformBrowser} from '@angular/common';
 
@@ -43,8 +43,7 @@ export class RecordSiteStockReturnComponent implements OnInit {
       record['stockOutId'.toString()] = this.stockOutId;
       record['userId'.toString()] = this.authenticationService.getCurrentUser().info._id;
       this.inputDistributionService.recordStockOutReturn(record).subscribe(() => {
-          this.messageService.setMessage('Stock quantity returned!');
-          this.modal.dismiss();
+          this.message = 'Stock quantity returned!';
         },
         (err) => {
           this.errors = err.errors;

@@ -1,11 +1,11 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 
-import { LoginRoutingModule } from './login-routing.module';
-import { LoginComponent } from './login/login.component';
+import {LoginRoutingModule} from './login-routing.module';
+import {LoginComponent} from './login/login.component';
 import {SharedModule} from '../shared';
-import { ResetPasswordComponent } from './reset-password/reset-password.component';
-import { RequestResetComponent } from './request-reset/request-reset.component';
+import {ResetPasswordComponent} from './reset-password/reset-password.component';
+import {RequestResetComponent} from './request-reset/request-reset.component';
 
 @NgModule({
   declarations: [LoginComponent, ResetPasswordComponent, RequestResetComponent],
@@ -15,4 +15,5 @@ import { RequestResetComponent } from './request-reset/request-reset.component';
     SharedModule
   ]
 })
-export class LoginModule { }
+export class LoginModule {
+}

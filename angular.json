@@ -39,7 +39,6 @@
               "src/assets/plugins/input-mask/jquery.inputmask.js",
               "src/assets/plugins/input-mask/jquery.inputmask.date.extensions.js",
               "src/assets/plugins/input-mask/jquery.inputmask.extensions.js",
-              "src/assets/dist/js/pages/dashboard2.js",
               "src/assets/dist/js/demo.js"
             ],
             "es5BrowserSupport": true

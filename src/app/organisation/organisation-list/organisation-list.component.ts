@@ -22,7 +22,7 @@ export class OrganisationListComponent implements OnInit, OnDestroy {
   }
 
   message: string;
-  organisations: any;
+  organisations = [];
   dtOptions: any = {};
   loading = false;
   // @ts-ignore
@@ -72,20 +72,28 @@ export class OrganisationListComponent implements OnInit, OnDestroy {
 
   getAllOrganisations(): void {
     this.loading = true;
-    if (!this.authorisationService.isDistrictCashCropOfficer()) {
-      this.organisationService.all().subscribe(data => {
+    if (this.authorisationService.isDistrictCashCropOfficer()) {
+      const body = {
+        searchBy: 'district',
+        dist_id: this.authenticationService.getCurrentUser().info.location.dist_id
+      };
+      this.siteService.getZone(body).subscribe(data => {
         if (data) {
           this.organisations = data.content;
           this.dtTrigger.next();
           this.loading = false;
         }
       });
+    } else if (this.authorisationService.isInputDistributorAdmin()) {
+      this.organisationService.get(this.authenticationService.getCurrentUser().info.org_id).subscribe(data => {
+        if (data) {
+          this.organisations.push(data.content);
+          this.dtTrigger.next();
+          this.loading = false;
+        }
+      });
     } else {
-      const body = {
-        searchBy: 'district',
-        dist_id: this.authenticationService.getCurrentUser().info.location.dist_id
-      };
-      this.siteService.getZone(body).subscribe(data => {
+      this.organisationService.all().subscribe(data => {
         if (data) {
           this.organisations = data.content;
           this.dtTrigger.next();

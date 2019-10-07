@@ -29,14 +29,13 @@ export class ResetPasswordComponent implements OnInit {
     private http: HttpClient,
     private formBuilder: FormBuilder, private helperService: HelperService,
     private messageService: MessageService
-  ) {
+  ) {}
+
+  ngOnInit() {
     this.resetPasswordForm = this.formBuilder.group({
       password: ['', Validators.required],
       confirmPassword: ['', Validators.required]
     });
-  }
-
-  ngOnInit() {
     document.body.className = 'hold-transition login-page';
     $(() => {
       $('input').iCheck({

@@ -10,7 +10,6 @@ import {CoreModule} from './core';
 import {SharedModule} from './shared';
 import {OrganisationModule} from './organisation/organisation.module';
 import {ProfileModule} from './profile/profile.module';
-
 import {FarmerModule} from './farmer/farmer.module';
 import {ReportModule} from './reports/report.module';
 import {RouterModule} from '@angular/router';
@@ -28,10 +27,8 @@ import {InputDistributionModule} from './input-distribution/input-distribution.m
 import {SitesModule} from './input-distribution/sites/sites.module';
 import {WarehouseModule} from './input-distribution/warehouse/warehouse.module';
 
-/*
-  import {DataService} from './data.service';
-  import {HttpClientInMemoryWebApiModule} from 'angular-in-memory-web-api';
-*/
+/*import {DataService} from './data.service';
+  import {HttpClientInMemoryWebApiModule} from 'angular-in-memory-web-api';*/
 
 @NgModule({
   declarations: [
@@ -64,7 +61,7 @@ import {WarehouseModule} from './input-distribution/warehouse/warehouse.module';
     ErrorPagesModule,
     DataTablesModule,
     WarehouseModule
-    /* HttpClientInMemoryWebApiModule.forRoot(DataService) */
+    /*HttpClientInMemoryWebApiModule.forRoot(DataService)*/
   ],
   providers: [Title],
   bootstrap: [AppComponent]

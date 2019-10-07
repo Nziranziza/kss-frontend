@@ -4,15 +4,13 @@
 </div>
 <div class="modal-body">
   <app-list-errors [errorList]="errors" *ngIf="errors"></app-list-errors>
+  <app-list-message [message]="message"></app-list-message>
   <div class="row">
     <form [formGroup]="siteStockReturnForm" (ngSubmit)="onSubmit()">
       <div class="col-sm-4">
         <div class="form-inline pull-right">
-          <label class="control-label">Quantity (kg)</label> &nbsp; &nbsp;
+          <label class="control-label">Quantity</label> &nbsp; &nbsp;
           <input type="text" formControlName="returnedQty" class="form-control">
-          <span style="margin-left: 5px">
-          Kg
-        </span>
         </div>
       </div>
       <div class="col-sm-1">

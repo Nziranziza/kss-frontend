@@ -7,18 +7,20 @@
   <div class="col-xs-12">
     <div class="box">
       <div class="box-body table-responsive">
-        <table class="hover table">
+        <table class="hover table table-striped">
           <thead>
           <tr>
             <th>Category</th>
             <th>Level</th>
           </tr>
           </thead>
-          <tbody  *ngFor="let type of coffeeTypes" style="border-width: 1px">
-          <tr *ngFor="let category of type.category">
-            <td> {{ category.name }}</td>
-            <td> {{ type.level }}</td>
-          </tr>
+          <tbody style="border-width: 1px">
+          <ng-container *ngFor="let type of coffeeTypes">
+            <tr *ngFor="let category of type.category">
+              <td> {{ category.name }}</td>
+              <td> {{ type.level }}</td>
+            </tr>
+          </ng-container>
           </tbody>
         </table>
       </div>

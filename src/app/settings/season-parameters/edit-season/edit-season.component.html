@@ -3,8 +3,9 @@
   </i>
 </div>
 <div class="modal-body">
-  <app-list-errors [errorList]="errors" *ngIf="errors"></app-list-errors>
-  <form [formGroup]="editSeasonForm" (ngSubmit)="onSubmit()">
+  <app-list-message [message]="message"></app-list-message>
+  <app-list-errors [errorList]="errors" *ngIf="errors.length > 0"></app-list-errors>
+  <form [formGroup]="editSeasonParamsForm">
     <div class="row">
       <div class="col-xs-6">
         <div class="form-group">
@@ -19,117 +20,145 @@
         </div>
       </div>
     </div>
-    <ng-container formGroupName="seasonParams">
-      <div class="row">
-        <div class="col-xs-12">
-          <fieldset class="location" style="margin: 15px 0px 15px !important;">
-            <legend>
-              <label class="control-label"> &nbsp; Parameters </label>
-            </legend>
-            <ng-container *ngIf="isCurrentUserNaebOfficer">
-              <div class="row">
-                <div class="col-xs-2">
-                  <div class="form-group">
-                    <span class="">Cherries unit price</span>
-                    <input class="form-control" formControlName="cherriesUnitPrice">
-                  </div>
-                </div>
-                <div class="col-xs-2">
-                  <div class="form-group">
-                    <span class="">Flotter unit price</span>
-                    <input class="form-control" formControlName="flotterUnitPrice">
-                  </div>
-                </div>
-              </div>
-            </ng-container>
-            <div class="row">
-              <div class="col-xs-2">
-                <div class="form-group">
-                  <span class="">Fertilizer name</span>
-                  <input class="form-control" formControlName="fertilizerName">
-                </div>
-              </div>
-              <div class="col-xs-2">
-                <div class="form-group">
-                  <span class="">Fertilizer type</span>
-                  <input class="form-control" formControlName="fertilizerType">
-                </div>
-              </div>
-              <div class="col-xs-2">
-                <div class="form-group">
-                  <span class="">Fertilizer Qt per tree (Kg)</span>
-                  <input class="form-control" formControlName="fertilizerKgPerTree">
-                </div>
-              </div>
-              <div class="col-xs-2">
-                <div class="form-group">
-                  <span class="">Pesticide name</span>
-                  <input class="form-control" formControlName="pesticideName">
-                </div>
-              </div>
-              <div class="col-xs-2">
-                <div class="form-group">
-                  <span class="">Pesticide type</span>
-                  <input class="form-control" formControlName="pesticideType">
-                </div>
-              </div>
-              <div class="col-xs-2">
-                <div class="form-group">
-                  <span class="">Pesticide Qty per tree (ml)</span>
-                  <input class="form-control" formControlName="pesticideMlPerTree">
-                </div>
-              </div>
-            </div>
-          </fieldset>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-xs-12">
-          <button class="btn btn-success btn-circle btn-lg pull-right" (click)="addDistribution()" type="button"><i
-            class="fa fa-plus"></i></button>
-        </div>
-        <div class="col-xs-12">
-          <fieldset class="location" style="margin: 15px 0px 15px !important;">
-            <legend>
-              <label class="control-label"> &nbsp; Distribution </label>
-            </legend>
-
-            <div *ngFor="let control of distributionParams.controls; let i=index" formArrayName="distribution">
-              <div class="row" [formGroupName]="i">
-                <div class="col-xs-2">
-                  <div class="form-group">
-                    <span class="">Distribution</span>
-                    <input class="form-control" formControlName="distribution">
-                  </div>
-                </div>
-                <div class="col-xs-2">
-                  <div class="form-group">
-                    <span class="">Available fertilizer (kg)</span>
-                    <input class="form-control" formControlName="totalFertilizerAvailable">
-                  </div>
-                </div>
-                <div class="col-xs-2">
-                  <div class="form-group">
-                    <span class="">Available pesticide (ml)</span>
-                    <input class="form-control" formControlName="totalPesticideAvailable">
-                  </div>
-                </div>
-                <div class="form-group col-xs-2" style="margin-top: 20px">
-                  <button class="btn btn-danger pull-right" type="button" (click)="removeDistribution(i)"> Remove
-                  </button>
-                </div>
-              </div>
-            </div>
-          </fieldset>
-        </div>
-      </div>
-    </ng-container>
+  </form>
+  <div class="container custom-tabs">
     <div class="row">
-      <div class="col-xs-12">
-        <button class="btn btn-warning btn-margin pull-right" (click)="modal.dismiss()" type="button">Cancel</button>
-        <button class="btn btn-success pull-right">Save</button>
+      <div class="col-md-12" style="padding-right: 0px; padding-left: 0px;">
+        <div class="card" style="border: none!important;">
+          <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#fertilizer" aria-controls="fertilizer" role="tab"
+                                                      data-toggle="tab"><span>Fertilizer</span></a></li>
+            <li role="presentation"><a href="#pesticide" aria-controls="pesticide" role="tab" data-toggle="tab"><span>Pesticide</span></a>
+            </li>
+            <li role="presentation"><a href="#distribution" aria-controls="distribution" role="tab"
+                                       data-toggle="tab"><span>Distribution</span></a></li>
+            <li role="presentation"><a href="#price" aria-controls="price" role="tab"
+                                       data-toggle="tab"><span>Price</span></a></li>
+          </ul>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="fertilizer">
+              <form [formGroup]="editFertilizerForm" (ngSubmit)="updateFertilizer()">
+                <div class="row">
+                  <div class="col-xs-2">
+                    <div class="form-group">
+                      <span class="label-required">Input name</span>
+                      <select class="form-control" formControlName="inputName">
+                        <option *ngFor="let fertilizer of fertilizers" value="{{fertilizer._id}}">{{ fertilizer.inputName }}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-xs-3">
+                    <div class="form-group">
+                      <span class="label-required">Fertilizer Qt per tree (Kg)</span>
+                      <input class="form-control" formControlName="fertilizerKgPerTree">
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-12">
+                    <button class="btn btn-success pull-right">Save</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="pesticide">
+              <form [formGroup]="editPesticideForm" (ngSubmit)="updatePesticide()">
+                <div class="row">
+                  <div class="col-xs-12">
+                    <button class="btn btn-success btn-sm pull-right" (click)="addPesticide()" type="button"><i
+                      class="fa fa-plus"></i> Pesticide
+                    </button>
+                  </div>
+                </div>
+                <div *ngFor="let control of formPesticide.controls; let i=index" formArrayName="pesticide">
+                  <div class="row" [formGroupName]="i">
+                    <div class="col-xs-2">
+                      <div class="form-group">
+                        <span class="label-required">Input name</span>
+                        <select class="form-control" formControlName="inputName">
+                          <option *ngFor="let pesticide of pesticides" value="{{pesticide._id}}">{{ pesticide.inputName }}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-xs-3">
+                      <div class="form-group">
+                        <span class="">Pesticide Qty per tree (ml)</span>
+                        <input class="form-control" formControlName="pesticideMlPerTree">
+                      </div>
+                    </div>
+                    <div class="form-group col-xs-1">
+                      <button class="btn btn-danger btn pull-left" type="button"
+                              (click)="removePesticide(i)" style="margin-top: 20px"> Remove
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-12">
+                    <button class="btn btn-success pull-right" style="margin-top: 15px">Save</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="distribution">
+              <form [formGroup]="editDistributionForm" (ngSubmit)="updateDistribution()">
+                <div formGroupName="distribution">
+                  <div class="row">
+                    <div class="col-xs-2">
+                      <div class="form-group">
+                        <span class="label-required">Available fertilizer</span>
+                        <input class="form-control" formControlName="totalFertilizerAvailable">
+                      </div>
+                    </div>
+                    <div class="col-xs-2">
+                      <div class="form-group">
+                        <span class="">Available pesticide</span>
+                        <input class="form-control" formControlName="totalPesticideAvailable">
+                      </div>
+                    </div>
+                    <div class="col-xs-2">
+                    <div class="form-group">
+                      <span class="label-required">Supplier</span>
+                      <select class="form-control" formControlName="supplierId">
+                        <option *ngFor="let supplier of suppliers" value="{{supplier._id}}">{{ supplier.name }}</option>
+                      </select>
+                    </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-12">
+                    <button class="btn btn-success pull-right">Save</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="price">
+              <form [formGroup]="editPriceForm" (ngSubmit)="updatePrice()">
+                <div class="row">
+                  <div class="col-xs-2">
+                    <div class="form-group">
+                      <span class="label-required">Cherries unit price</span>
+                      <input class="form-control" formControlName="cherriesUnitPrice">
+                    </div>
+                  </div>
+                  <div class="col-xs-2">
+                    <div class="form-group">
+                      <span class="">Floating unit price</span>
+                      <input class="form-control" formControlName="floatingUnitPrice">
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-12">
+                    <button class="btn btn-success pull-right">Save</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </form>
+  </div>
 </div>

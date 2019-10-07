@@ -131,7 +131,7 @@ table.dataTable > tbody > tr.child:hover{
   border-radius: 25px;
 }
 
-/*----------------------------Custom pagination and sorting farmers --------------------------*/
+/*----------------------------Custom pagination and sorting --------------------------*/
 
 .custom-pagination .ngx-pagination {
   padding: 5px;
@@ -208,4 +208,23 @@ table.dataTable > tbody > tr.child:hover{
   display: flex;
   position: absolute;
   z-index: 9999999 !important;
+}
+
+/*----------------------------Custom tabs --------------------------*/
+
+.custom-tabs .nav-tabs { border-bottom: 1px solid #dbdbdb; }
+.custom-tabs .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover { border-width: 1px; }
+.custom-tabs .nav-tabs > li > a { border: none; color: #535658; background: #dbdbdb; }
+.custom-tabs .nav-tabs > li.active > a, .nav-tabs > li > a:hover { border: none;  color: #535658 !important; background: #fff; }
+.custom-tabs .nav-tabs > li > a::after { content: ""; background: #d2d6de; height: 1px; position: absolute; width: 100%; left: 0px; bottom: -1px; transition: all 250ms ease 0s; transform: scale(0); }
+.custom-tabs .nav-tabs > li.active > a::after, .nav-tabs > li:hover > a::after { transform: scale(1); }
+.custom-tabs .tab-nav > li > a::after { background: #d2d6de none repeat scroll 0% 0%; color: #fff; }
+.custom-tabs .tab-pane { padding: 15px 0; }
+.custom-tabs .tab-content{padding:20px}
+.custom-tabs .nav-tabs > li  {width:20%; text-align:center;}
+.custom-tabs .card {background: #FFF none repeat scroll 0% 0%; margin-bottom: 30px; }
+
+@media all and (max-width:724px){
+  .custom-tabs .nav-tabs > li > a > span {display:none;}
+  .custom-tabs .nav-tabs > li > a {padding: 5px 5px;}
 }

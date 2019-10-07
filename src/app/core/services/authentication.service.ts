@@ -13,7 +13,8 @@ import {Router} from '@angular/router';
 export class AuthenticationService {
   constructor(
     private apiService: ApiService, private router: Router,
-    private http: HttpClient, private cookieService: CookieService,
+    private http: HttpClient,
+    private cookieService: CookieService,
     private jwtService: JwtService) {
   }
 

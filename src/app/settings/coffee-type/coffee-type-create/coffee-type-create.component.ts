@@ -55,7 +55,7 @@ export class CoffeeTypeCreateComponent implements OnInit {
     if (this.createForm.valid) {
       const coffeeType = this.createForm.value;
       this.coffeeTypeService.save(coffeeType)
-        .subscribe(data => {
+        .subscribe(() => {
             this.router.navigateByUrl('admin/coffee-type/list');
           },
           (err) => {

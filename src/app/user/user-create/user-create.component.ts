@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {UserService} from '../../core/services';
+import {AuthorisationService, UserService} from '../../core/services';
 import {OrganisationService} from '../../core/services';
 import {LocationService} from '../../core/services';
 import {HelperService} from '../../core/helpers';
@@ -48,6 +48,7 @@ export class UserCreateComponent implements OnInit {
               private userService: UserService,
               private siteService: SiteService,
               private helper: HelperService,
+              private authorisationService: AuthorisationService,
               private organisationService: OrganisationService,
               private locationService: LocationService) {
   }
@@ -62,7 +63,7 @@ export class UserCreateComponent implements OnInit {
       NID: [''],
       password: [''],
       org_id: [''],
-      userType: [1],
+      userType: [],
       location: this.formBuilder.group({
         prov_id: [''],
         dist_id: [''],

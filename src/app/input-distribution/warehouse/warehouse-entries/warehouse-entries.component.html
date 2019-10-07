@@ -1,23 +1,12 @@
 <h3>
   Record entry
 </h3>
-<app-list-errors [errorList]="errors"></app-list-errors>
+<app-list-message [message]="message"></app-list-message>
+<app-list-errors [errorList]="errors" *ngIf="errors.length > 0"></app-list-errors>
 <form [formGroup]="recordEntriesForm" (ngSubmit)="onSubmit()">
   <div class="box">
     <div class="box-body">
       <div class="row">
-        <div class="col-xs-2">
-          <div class="form-group">
-            <label class="control-label label-required">Supplier name</label>
-            <input type="text" formControlName="supplierName" class="form-control">
-          </div>
-        </div>
-        <div class="col-xs-2">
-          <div class="form-group">
-            <label class="control-label label-required">Supplier email</label>
-            <input type="text" formControlName="supplierEmail" class="form-control">
-          </div>
-        </div>
         <div class="col-xs-2">
           <div class="form-group">
             <label class="control-label label-required">Input type</label>
@@ -47,18 +36,95 @@
               <input type="text" formControlName="vehiclePlate" class="form-control">
             </div>
           </div>
-          <div class="col-xs-2">
-            <div class="form-group">
-              <label class="control-label label-required">Number of bags</label>
-              <input type="text" formControlName="numberOfBags" class="form-control">
+        </div>
+        <ng-container *ngIf="isTypePesticide; else isTypeFertilizer">
+          <div class="row" *ngIf="showAddPackageButton">
+            <div class="col-xs-6">
+              <button class="btn btn-success btn-sm pull-right" (click)="addPackagePesticide()" type="button">
+                <i class="fa fa-plus"></i> Package
+              </button>
             </div>
           </div>
-          <div class="col-xs-2">
-            <div class="form-group">
-              <label class="control-label label-required">Total Qty (kg)</label>
-              <input type="text" formControlName="totalQty" class="form-control">
+          <div *ngFor="let control of formPackage.controls; let i=index" formArrayName="package">
+            <div class="row" [formGroupName]="i">
+              <div class="col-xs-2">
+                <div class="form-group">
+                  <span class="control-label label-required">Pesticide type</span>
+                  <select class="form-control" formControlName="pesticideType">
+                    <option *ngFor="let type of pesticideTypes" value="{{type.inputName._id}}">{{ type.inputName.inputName }}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xs-2">
+                <div class="form-group">
+                  <span class="control-label label-required">Quantity (l)</span>
+                  <input type="text" formControlName="qty" class="form-control">
+                </div>
+              </div>
+              <div class="form-group col-xs-1">
+                <button class="btn btn-danger btn pull-left" type="button"
+                        (click)="removePackage(i)" style="margin-top: 20px"> Remove
+                </button>
+              </div>
             </div>
           </div>
+        </ng-container>
+        <ng-template #isTypeFertilizer>
+          <div class="row" *ngIf="showAddPackageButton">
+            <div class="col-xs-6">
+              <button class="btn btn-success btn-sm pull-right" (click)="addPackageFertilizer()" type="button">
+                <i class="fa fa-plus"></i> Package
+              </button>
+            </div>
+          </div>
+          <div *ngFor="let control of formPackage.controls; let i=index" formArrayName="package">
+            <div class="row" [formGroupName]="i">
+              <div class="col-xs-2">
+                <div class="form-group">
+                  <span class="control-label label-required">Bag size (kg)</span>
+                  <select class="form-control" formControlName="bagSize" (change)="onChangePackage(i)">
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xs-2">
+                <div class="form-group">
+                  <span class="control-label label-required">Number of bags</span>
+                  <input type="text" formControlName="numberOfBags" class="form-control" (input)="onChangePackage(i)">
+                </div>
+              </div>
+              <div class="col-xs-2">
+                <div class="form-group">
+                  <span class="control-label label-required"></span>
+                  <input type="text" formControlName="subTotal" class="form-control" readonly="readonly">
+                </div>
+              </div>
+              <div class="form-group col-xs-1">
+                <button class="btn btn-danger btn pull-left" type="button"
+                        (click)="removePackage(i)" style="margin-top: 20px"> Remove
+                </button>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+        <div class="row">
+          <ng-container *ngIf="isTypePesticide; else isTypeFertilizerQty">
+            <div class="col-xs-2">
+              <div class="form-group">
+                <label class="control-label label-required" *ngIf="isTypePesticide">Total Qty (l)</label>
+                <input type="text" formControlName="totalQty" class="form-control" readonly="readonly">
+              </div>
+            </div>
+          </ng-container>
+          <ng-template #isTypeFertilizerQty>
+            <div class="col-xs-2">
+              <div class="form-group">
+                <label class="control-label label-required" *ngIf="!isTypePesticide">Total Qty (kg)</label>
+                <input type="text" formControlName="totalQty" class="form-control" readonly="readonly">
+              </div>
+            </div>
+          </ng-template>
           <div class="col-xs-2">
             <div class="form-group">
               <label class="control-label label-required">Date</label>
@@ -95,23 +161,32 @@
           </div>
         </div>
         <app-loader *ngIf="loading"></app-loader>
-        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover"
-               class="table table-condensed">
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped">
           <thead>
           <tr>
             <th>Type</th>
-            <th>Quantity (kg)</th>
-            <th>Remaining qty (kg)</th>
+            <th>Quantity</th>
+            <th>Remaining qty</th>
             <th>Actions</th>
           </tr>
           </thead>
           <tbody>
           <tr *ngFor="let entry of entries">
-            <td>{{ entry.inputType }}</td>
-            <td>{{ entry.suppliedQty }}</td>
-            <td>{{ entry.remainingQty }}</td>
             <td>
-              <button class="btn btn-success btn-margin btn-sm" (click)="deliveryDetails(entry.deliveryDetails)">Entries</button>
+              {{ entry.inputType }}
+            </td>
+            <td>
+              {{ entry.suppliedQty }}
+              <app-quantity-unit [inputType]="entry.inputType"></app-quantity-unit>
+            </td>
+            <td>
+              {{ entry.remainingQty }}
+              <app-quantity-unit [inputType]="entry.inputType"></app-quantity-unit>
+            </td>
+            <td>
+              <button class="btn btn-success btn-margin btn-sm"
+                      (click)="deliveryDetails(entry.deliveryDetails, entry.inputType)">Entries
+              </button>
             </td>
           </tr>
           </tbody>

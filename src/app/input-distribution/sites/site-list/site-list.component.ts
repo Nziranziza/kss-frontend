@@ -1,9 +1,9 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ConfirmDialogService} from '../../../core/services';
-import {SiteService} from '../../../core/services/site.service';
+import {SiteService} from '../../../core/services';
 import {Subject} from 'rxjs';
-import {MessageService} from '../../../core/services/message.service';
+import {MessageService} from '../../../core/services';
 
 @Component({
   selector: 'app-site-list',
@@ -14,8 +14,8 @@ export class SiteListComponent implements OnInit, OnDestroy {
 
   constructor(private route: ActivatedRoute,
               private router: Router, private  confirmDialogService: ConfirmDialogService,
-              private siteService: SiteService, private messageService: MessageService) {  }
-
+              private siteService: SiteService, private messageService: MessageService) {
+  }
   message: string;
   sites: any;
   loading = false;
@@ -28,15 +28,13 @@ export class SiteListComponent implements OnInit, OnDestroy {
       pagingType: 'full_numbers',
       pageLength: 25
     };
+    this.message = this.messageService.getMessage();
     this.getAllSites();
   }
+
   getAllSites(): void {
     this.loading = true;
-    const body = {
-      searchBy : 'province',
-      prov_id: '5bf8170953d485a9eae4b41a'
-    };
-    this.siteService.all(body).subscribe(data => {
+    this.siteService.getAll().subscribe(data => {
       if (data) {
         this.sites = data.content;
         this.dtTrigger.next();
@@ -44,8 +42,8 @@ export class SiteListComponent implements OnInit, OnDestroy {
       }
     });
   }
+
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
-    this.messageService.setMessage('');
   }
 }

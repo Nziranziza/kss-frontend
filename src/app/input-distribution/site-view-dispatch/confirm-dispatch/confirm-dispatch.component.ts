@@ -3,9 +3,9 @@ import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthenticationService} from '../../../core/services';
 import {HelperService} from '../../../core/helpers';
-import {InputDistributionService} from '../../../core/services/input-distribution.service';
+import {InputDistributionService} from '../../../core/services';
 import {isPlatformBrowser} from '@angular/common';
-import {MessageService} from '../../../core/services/message.service';
+import {MessageService} from '../../../core/services';
 
 @Component({
   selector: 'app-confirm-dispatch',
@@ -36,6 +36,7 @@ export class ConfirmDispatchComponent implements OnInit {
   ngOnInit(): void {
     this.confirmForm = this.formBuilder.group({
       receivedQty: ['', Validators.required],
+      comment: ['', Validators.required]
     });
   }
 
@@ -47,8 +48,7 @@ export class ConfirmDispatchComponent implements OnInit {
       record['entryId'.toString()] = this.entryId;
       record['receiverId'.toString()] = this.authenticationService.getCurrentUser().info._id;
       this.inputDistributionService.confirmDispatch(record).subscribe(() => {
-          this.messageService.setMessage('Dispatch confirmed!');
-          this.modal.dismiss();
+          this.message = 'Dispatch confirmed!';
         },
         (err) => {
           this.errors = err.errors;

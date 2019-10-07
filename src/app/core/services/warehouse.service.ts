@@ -9,7 +9,8 @@ export class WarehouseService {
 
   constructor(
     private apiService: ApiService
-  ) {}
+  ) {
+  }
 
   allEntries(): Observable<any> {
     return this.apiService.get('/warehouse');
@@ -27,7 +28,14 @@ export class WarehouseService {
     return this.apiService.get('/inputdispatch');
   }
 
+  filterDispatches(body: any) {
+    return this.apiService.post('/inputdispatch', body);
+  }
+
   printDeliveryNote(data: any): Observable<any> {
     return this.apiService.post('/inputdispatch/generate/delivery_note', data);
+  }
+  getPesticideList(): Observable<any> {
+    return this.apiService.get('/season/pesticide/list');
   }
 }

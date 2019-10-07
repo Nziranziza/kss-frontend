@@ -3,7 +3,7 @@ import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {HelperService} from '../../../core/helpers';
 import {isPlatformBrowser} from '@angular/common';
-import {SeasonService} from '../../../core/services';
+import {InputDistributionService, SeasonService} from '../../../core/services';
 import {AuthorisationService} from '../../../core/services';
 
 @Component({
@@ -15,17 +15,25 @@ export class EditSeasonComponent implements OnInit {
 
   modal: NgbActiveModal;
   @Input() season;
-  editSeasonForm: FormGroup;
-  errors: string [];
+  editFertilizerForm: FormGroup;
+  editDistributionForm: FormGroup;
+  editSeasonParamsForm: FormGroup;
+  editPesticideForm: FormGroup;
+  editPriceForm: FormGroup;
+  errors = [];
   message: string;
-  inputDistributionParams: any;
   isCurrentUserNaebOfficer: boolean;
   isCurrentUserCeparOfficer: boolean;
+  pesticide: any;
+  suppliers: any;
+  fertilizers: any;
+  pesticides: any;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
     private injector: Injector, private formBuilder: FormBuilder,
     private authorisationService: AuthorisationService,
+    private inputDistributionService: InputDistributionService,
     private helper: HelperService, private seasonService: SeasonService) {
 
     if (isPlatformBrowser(this.platformId)) {
@@ -34,77 +42,154 @@ export class EditSeasonComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.editSeasonForm = this.formBuilder.group({
+    this.editFertilizerForm = this.formBuilder.group({
+      inputName: [''],
+      fertilizerKgPerTree: ['']
+    });
+    this.editSeasonParamsForm = this.formBuilder.group({
       year: ['', Validators.required],
       season: ['', Validators.required],
-      seasonParams: this.formBuilder.group({
-        cherriesUnitPrice: [''],
-        flotterUnitPrice: [''],
-        fertilizerName: [''],
-        fertilizerType: [''],
-        fertilizerKgPerTree: [''],
-        pesticideName: [''],
-        pesticideType: [''],
-        pesticideMlPerTree: [''],
-        distribution: new FormArray([])
+    });
+    this.editPesticideForm = this.formBuilder.group({
+      pesticide: new FormArray([])
+    });
+    this.editDistributionForm = this.formBuilder.group({
+      distribution: this.formBuilder.group({
+        totalFertilizerAvailable: [''],
+        totalPesticideAvailable: [''],
+        supplierId: ['']
       })
+    });
+    this.editPriceForm = this.formBuilder.group({
+      cherriesUnitPrice: [''],
+      floatingUnitPrice: ['']
+    });
+    this.season.seasonParams.pesticide.forEach(() => {
+      this.addPesticide();
     });
     this.isCurrentUserCeparOfficer = this.authorisationService.isCeparUser();
     this.isCurrentUserNaebOfficer = this.authorisationService.isNaebUser();
-    this.addDistribution();
-    this.editSeasonForm.patchValue(this.season);
+    this.editSeasonParamsForm.patchValue(this.season);
+    this.season.seasonParams.distribution.totalFertilizerAvailable =
+      (this.season.seasonParams.distribution.totalFertilizerAvailable / 1000);
+    this.season.seasonParams.distribution.totalPesticideAvailable =
+      (this.season.seasonParams.distribution.totalPesticideAvailable);
+    this.season.seasonParams.distribution.supplierId =
+      this.season.seasonParams.supplierId[this.season.seasonParams.supplierId.length - 1]._id;
+    if (this.season.seasonParams.inputName) {
+      this.season.seasonParams.inputName = this.season.seasonParams.inputName._id;
+    }
+
+    if (this.season.seasonParams.pesticide) {
+      const pesticides = [];
+      this.season.seasonParams.pesticide.map((pe) => {
+        pesticides.push({
+          inputName: pe.inputName._id,
+          pesticideMlPerTree: pe.pesticideMlPerTree
+        });
+      });
+      this.season.seasonParams.pesticide = pesticides;
+    }
+
+    this.editDistributionForm.patchValue(this.season.seasonParams);
+    this.editPriceForm.patchValue(this.season.seasonParams);
+    this.editPesticideForm.patchValue(this.season.seasonParams);
+    this.editFertilizerForm.patchValue(this.season.seasonParams);
+    this.initial();
   }
 
-  createDistribution(): FormGroup {
+  get formPesticide() {
+    return this.editPesticideForm.controls.pesticide as FormArray;
+  }
+
+  addPesticide() {
+    (this.editPesticideForm.controls.pesticide as FormArray).push(this.createPesticide());
+  }
+
+  removePesticide(index: number) {
+    (this.editPesticideForm.controls.pesticide as FormArray).removeAt(index);
+  }
+
+  getPesticideFormGroup(index): FormGroup {
+    this.pesticide = this.editPesticideForm.controls.pesticide as FormArray;
+    return this.pesticide.controls[index] as FormGroup;
+  }
+
+  createPesticide(): FormGroup {
     return this.formBuilder.group({
-      distribution: ['', Validators.required],
-      totalFertilizerAvailable: [0, Validators.required],
-      totalPesticideAvailable: [0, Validators.required]
+      inputName: ['', Validators.required],
+      pesticideMlPerTree: ['', Validators.required]
     });
   }
 
-  get distributionParams() {
-    return this.editSeasonForm.controls.seasonParams.get('distribution'.toString()) as FormArray;
-  }
-
-  addDistribution() {
-    (this.editSeasonForm.controls.seasonParams.get('distribution'.toString()) as FormArray).push(this.createDistribution());
-  }
-
-  removeDistribution(index: number) {
-    (this.editSeasonForm.controls.seasonParams.get('distribution'.toString()) as FormArray).removeAt(index);
-  }
-
-  getDistributionFormGroup(index): FormGroup {
-    this.inputDistributionParams = this.editSeasonForm.controls.seasonParams.get('distribution'.toString()) as FormArray;
-    return this.inputDistributionParams.controls[index] as FormGroup;
-  }
-
-  onSubmit() {
-    const season = JSON.parse(JSON.stringify(this.editSeasonForm.value));
+  updateDistribution() {
+    const season = JSON.parse(JSON.stringify(this.editDistributionForm.value));
     let payload: any;
-    if (this.isCurrentUserCeparOfficer) {
-      payload = season.seasonParams.distribution[0];
-      payload['seasonId'.toString()] = this.season._id;
-      console.log(payload);
-      this.seasonService.updateDistribution(payload).subscribe(() => {
-          this.message = 'Season successfully updated!';
-          this.modal.dismiss();
+    payload = season.distribution;
+    payload['seasonId'.toString()] = this.season._id;
+    payload['supplierId'.toString()] = [payload.supplierId];
+    this.seasonService.updateDistribution(payload).subscribe(() => {
+        this.message = 'Parameters successfully updated!';
+        this.errors = [];
+      },
+      (err) => {
+        this.message = '';
+        this.errors = err.errors;
+      });
+  }
+
+  updateFertilizer() {
+    const payload = JSON.parse(JSON.stringify(this.editFertilizerForm.value));
+    payload['seasonId'.toString()] = this.season._id;
+    this.seasonService.updateFertilizer(payload).subscribe(() => {
+        this.message = 'Parameters successfully updated!';
+        this.errors = [];
+      },
+      (err) => {
+        this.message = '';
+        this.errors = err.errors;
+      });
+  }
+
+  updatePrice() {
+    const payload = JSON.parse(JSON.stringify(this.editPriceForm.value));
+    payload['seasonId'.toString()] = this.season._id;
+    this.seasonService.updatePrice(payload).subscribe(() => {
+        this.message = 'Parameters successfully updated!';
+        this.errors = [];
+      },
+      (err) => {
+        this.message = '';
+        this.errors = err.errors;
+      });
+  }
+
+  updatePesticide() {
+    const payload = JSON.parse(JSON.stringify(this.editPesticideForm.value));
+    payload['seasonId'.toString()] = this.season._id;
+    if (this.editPesticideForm.controls.pesticide.value.length > 0) {
+      this.seasonService.updatePesticide(payload).subscribe(() => {
+          this.message = 'Parameters successfully updated!';
+          this.errors = [];
         },
         (err) => {
+          this.message = '';
           this.errors = err.errors;
         });
     }
-    if (this.isCurrentUserNaebOfficer) {
-      payload = season.seasonParams;
-      payload['seasonId'.toString()] = this.season._id;
-      this.seasonService.updateParameter(payload).subscribe(() => {
-          this.message = 'Season successfully updated!';
-          this.modal.dismiss();
-        },
-        (err) => {
-          this.errors = err.errors;
-        });
-    }
+  }
+
+  initial() {
+    this.inputDistributionService.getFertilizers().subscribe((data) => {
+      this.fertilizers = data.content;
+    });
+
+    this.inputDistributionService.getPesticides().subscribe((data) => {
+      this.pesticides = data.content;
+    });
+
+    this.inputDistributionService.getSuppliers().subscribe((data) => {
+      this.suppliers = data.content;
+    });
   }
 }

@@ -3,13 +3,15 @@ import {FormBuilder, FormGroup} from '@angular/forms';
 import {Router} from '@angular/router';
 import {
   AuthenticationService,
-  AuthorisationService,
+  AuthorisationService, ExcelServicesService,
   FarmerService,
   LocationService,
   OrganisationService,
-  OrganisationTypeService, SiteService
+  OrganisationTypeService,
+  SiteService
 } from '../../core/services';
 import {HelperService} from '../../core/helpers';
+import {isUndefined} from 'util';
 
 @Component({
   selector: 'app-farmers-approval-progress',
@@ -28,14 +30,16 @@ export class FarmersApprovalProgressComponent implements OnInit {
   zoneId = false;
   organisations: any;
   showReport = false;
-  reportData = [];
+  showData = false;
+  zoneTotalApproved = 0;
+  zoneTotalPending = 0;
   graph = {
     type: 'ColumnChart',
     data: [],
     options: {
       colors: ['#367fa9', '#f0a732']
     },
-    columnNames: ['Farmers', 'approval', 'farmer'],
+    columnNames: ['Farmers', 'approved', 'pending'],
     width: 1050,
     height: 450
   };
@@ -47,6 +51,7 @@ export class FarmersApprovalProgressComponent implements OnInit {
               private router: Router, private organisationService: OrganisationService,
               private authorisationService: AuthorisationService,
               private farmerService: FarmerService,
+              private excelService: ExcelServicesService,
               private authenticationService: AuthenticationService,
               private helper: HelperService, private organisationTypeService: OrganisationTypeService,
               private locationService: LocationService, private siteService: SiteService) {
@@ -57,9 +62,9 @@ export class FarmersApprovalProgressComponent implements OnInit {
     this.filterForm = this.formBuilder.group({
       location: this.formBuilder.group({
         prov_id: [''],
-        dist_id: ['']
+        dist_id: [''],
+        zoneId: ['']
       }),
-      zoneId: ['']
     });
     this.initial();
     this.onChanges();
@@ -69,6 +74,7 @@ export class FarmersApprovalProgressComponent implements OnInit {
     if (this.filterForm.valid) {
       this.loading = true;
       this.subRegion = false;
+      this.showReport = false;
       const filters = JSON.parse(JSON.stringify(this.filterForm.value));
       if (filters.location.prov_id === '' && searchBy === 'province') {
         delete filters.location;
@@ -83,20 +89,70 @@ export class FarmersApprovalProgressComponent implements OnInit {
       this.helper.cleanObject(filters.location);
       this.helper.cleanObject(filters);
       this.farmerService.approvalStatistics(filters, this.subRegion).subscribe((data) => {
-        this.loading = false;
-        if (data.content.length !== 0) {
-          this.reportData = [];
-          this.graph.data = this.reportData;
-          this.message = '';
+        const reports = [];
+        if (filters.location['searchBy'.toString()] === 'all provinces') {
+          this.locationService.getProvinces().subscribe((provinces) => {
+            provinces.map((prov) => {
+              const tempApproved = data.content.farmers.find(obj => obj._id === prov._id);
+              const tempPending = data.content.pending.filter(obj => obj._id === prov._id)[0];
+              const temp = [prov.namek, 0, 0];
+              if (!isUndefined(tempApproved)) {
+                temp[1] = tempApproved.totalConfirmed;
+              }
+              if (!isUndefined(tempPending)) {
+                temp[2] = tempPending.totalPending;
+              }
+              reports.push(temp);
+            });
+            this.loading = false;
+            this.showReport = true;
+            this.showData = false;
+            this.graph.data = reports;
+          });
+        } else if (filters.location['searchBy'.toString()] === 'province') {
+          this.locationService.getDistricts(filters.location.prov_id).subscribe((districts) => {
+            districts.map((dist) => {
+              const tempApproved = data.content.farmers.find(obj => obj._id === dist._id);
+              const tempPending = data.content.pending.filter(obj => obj._id === dist._id)[0];
+              const temp = [dist.name, 0, 0];
+              if (!isUndefined(tempApproved)) {
+                temp[1] = tempApproved.totalConfirmed;
+              }
+              if (!isUndefined(tempPending)) {
+                temp[2] = tempPending.totalPending;
+              }
+              reports.push(temp);
+            });
+            this.loading = false;
+            this.showReport = true;
+            this.showData = false;
+            this.graph.data = reports;
+          });
+
+        } else if (filters.location['searchBy'.toString()] === 'district') {
+          data.content.map((zone) => {
+            const temp = [zone.zone, zone.totalConfirmed, zone.totalPending];
+            reports.push(temp);
+          });
+          this.loading = false;
           this.showReport = true;
+          this.showData = false;
+          this.graph.data = reports;
         } else {
+          this.loading = false;
           this.showReport = false;
-          this.message = 'Sorry no data found to this location !';
+          this.showData = true;
+          this.zoneTotalApproved = data.content.totalConfirmed;
+          this.zoneTotalPending = data.content.totalPending;
         }
       });
     } else {
       this.errors = this.helper.getFormValidationErrors(this.filterForm);
     }
+  }
+
+  exportReport() {
+    this.excelService.exportAsExcelFile(this.graph.data, 'report');
   }
 
   onChanges() {

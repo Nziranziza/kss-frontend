@@ -11,5 +11,4 @@ export class FarmerAdministrativeListComponent implements OnInit {
 
   ngOnInit() {
   }
-
 }

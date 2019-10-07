@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ConfirmDialogService, InputDistributionService, MessageService} from '../../core/services';
+import {AuthenticationService, ConfirmDialogService, InputDistributionService, MessageService} from '../../core/services';
 import {FormBuilder} from '@angular/forms';
 import {HelperService} from '../../core/helpers';
 import {ConfirmDispatchComponent} from './confirm-dispatch/confirm-dispatch.component';
@@ -19,6 +19,7 @@ export class SiteViewDispatchComponent implements OnInit {
               private helper: HelperService,
               private messageService: MessageService,
               private modal: NgbModal,
+              private authenticationService: AuthenticationService,
               private inputDistributionService: InputDistributionService) {}
 
   message: string;
@@ -43,7 +44,7 @@ export class SiteViewDispatchComponent implements OnInit {
     modalRef.componentInstance.dispatchId = dispatchId;
     modalRef.componentInstance.entryId = entryId;
     modalRef.result.finally(() => {
-      const id = '5d414020075a5550b7de08bb';
+      const id = this.authenticationService.getCurrentUser().orgInfo.distributionSite;
       this.inputDistributionService.getSiteDispatches(id).subscribe((data) => {
         this.dispatches = data.content;
       });
@@ -52,10 +53,10 @@ export class SiteViewDispatchComponent implements OnInit {
 
   stockOut(dispatch: string, entryId: string) {
     const modalRef = this.modal.open(RecordSiteStockOutComponent, {size: 'lg'});
-    modalRef.componentInstance.dispatchId = dispatch;
+    modalRef.componentInstance.dispatch = dispatch;
     modalRef.componentInstance.entryId = entryId;
     modalRef.result.finally(() => {
-      const id = '5d414020075a5550b7de08bb';
+      const id = this.authenticationService.getCurrentUser().orgInfo.distributionSite;
       this.inputDistributionService.getSiteDispatches(id).subscribe((data) => {
         this.dispatches = data.content;
       });
@@ -64,8 +65,7 @@ export class SiteViewDispatchComponent implements OnInit {
 
   getSiteDispatches() {
     this.loading = true;
-    /* const id = this.authenticationService.getCurrentUser().info.distributionSite; */
-    const id = '5d414020075a5550b7de08bb';
+    const id = this.authenticationService.getCurrentUser().orgInfo.distributionSite;
     this.inputDistributionService.getSiteDispatches(id).subscribe((data) => {
       this.loading = false;
       this.dtTrigger.next();

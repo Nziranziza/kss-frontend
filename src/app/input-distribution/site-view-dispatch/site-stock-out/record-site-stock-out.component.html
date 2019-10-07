@@ -8,7 +8,13 @@
     <form [formGroup]="siteStockOutForm" (ngSubmit)="onSubmit()">
       <div class="col-sm-6">
         <div class="form-group">
-          <label class="control-label">Total quantity (kg)</label>
+          <label class="control-label label-required">Number of items</label>
+          <input type="text" formControlName="numberOfBags" class="form-control">
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="form-group">
+          <label class="control-label label-required">Total quantity</label>
           <input type="text" formControlName="totalQty" class="form-control">
         </div>
       </div>
@@ -17,12 +23,6 @@
           <label class="control-label label-required">Date</label>
           <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="date" class="form-control">
           <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
-        </div>
-      </div>
-      <div class="col-sm-6">
-        <div class="form-group">
-          <label class="control-label">Number of bags</label>
-          <input type="text" formControlName="numberOfBags" class="form-control">
         </div>
       </div>
       <div class="col-sm-6" style="margin-top: 25px">
