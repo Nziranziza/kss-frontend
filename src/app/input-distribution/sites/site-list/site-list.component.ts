@@ -16,6 +16,7 @@ export class SiteListComponent implements OnInit, OnDestroy {
               private router: Router, private  confirmDialogService: ConfirmDialogService,
               private siteService: SiteService, private messageService: MessageService) {
   }
+
   message: string;
   sites: any;
   loading = false;
@@ -45,5 +46,6 @@ export class SiteListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
+    this.messageService.setMessage('');
   }
 }

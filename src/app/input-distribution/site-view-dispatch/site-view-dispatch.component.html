@@ -5,58 +5,56 @@
 <div class="row">
   <div class="col-xs-12">
     <div class="box">
-      <div class="box-body">
+      <div class="box-body expendable-dataTable">
         <app-loader *ngIf="loading"></app-loader>
-        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover"
-               class="table table-striped">
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped">
           <thead>
           <tr>
             <th>Driver</th>
             <th>Vehicle</th>
-            <th>Quantity</th>
-            <th>ReceivedQty</th>
-            <th>Comments</th>
+            <th>Phone number</th>
+            <th></th>
             <th>Date</th>
-            <th>Actions</th>
+            <th></th>
           </tr>
           </thead>
           <tbody>
-          <ng-container *ngFor="let dispatch of dispatches">
-            <tr style="background-color: #e7e9ed">
-              <td style="color:#367fa9; font-weight: bold">{{ dispatch.inputType | uppercase }}</td>
-              <td></td>
-              <td>Total Quantity : &nbsp; <span style="font-weight: bold;"> {{ dispatch.totalQuantity }} </span>
-                <span *ngIf="dispatch.inputType === 'Pesticide'">L</span>
-                <span *ngIf="dispatch.inputType === 'Fertilizer'">kg</span>
-              </td>
-              <td>Remaining Quantity : &nbsp; <span style="font-weight: bold;"> {{ dispatch.remainingQty }} </span>
-                <span *ngIf="dispatch.inputType === 'Pesticide'">L</span>
-                <span *ngIf="dispatch.inputType === 'Fertilizer'">kg</span>
-              </td>
-              <td>
-                <button class="btn btn-success btn-margin btn-sm" (click)="stockOut(dispatch)"> Stock out</button>
-              </td>
-            </tr>
-            <tr *ngFor="let entry of dispatch.entries" style="text-align: right;">
-              <td>{{ entry.driver }}</td>
-              <td>{{ entry.vehiclePlate }}</td>
-              <td>{{ entry.totalQty }}
-                <span *ngIf="dispatch.inputType === 'Pesticide'">L</span>
-                <span *ngIf="dispatch.inputType === 'Fertilizer'">kg</span>
-              </td>
-              <td>{{ entry.receivedQty }}</td>
-              <td>{{ entry.dispatch_comments }}</td>
-              <td>{{ entry.date|date }}</td>
-              <td>
-                <span *ngIf="!entry.isDelivered">
-                  <button class="btn btn-success btn-margin btn-sm" (click)="confirmDispatch(dispatch._id, entry._id)"> confirm </button>
-                </span>
-                <span *ngIf="entry.isDelivered">
-                  <i class="fa fa-check-square"> &nbsp;</i>
-                </span>
-              </td>
-            </tr>
-          </ng-container>
+          <tr *ngFor="let dispatch of dispatches">
+            <td>{{ dispatch.driverInfo.driver }}</td>
+            <td>{{ dispatch.driverInfo.vehiclePlate }}</td>
+            <td>{{ dispatch.driverInfo.driverPhoneNumber }}</td>
+            <td>
+              <table style="background: transparent; width: 750px;" class="pull-right">
+                <tr style="font-style: oblique; font-size: 12px; background: transparent; font-weight: bold">
+                  <td>Input</td>
+                  <td>Items</td>
+                  <td>Qty</td>
+                  <td>Total</td>
+                </tr>
+                <tr *ngFor="let entry of dispatch.entries"
+                    style="font-style: oblique; font-size: 12px; background: transparent">
+                  <td>{{ entry.inputId.inputName }}</td>
+                  <td>{{ entry.numberOfItems }}</td>
+                  <td>{{ entry.quantityPerItem }}</td>
+                  <td>{{ entry.numberOfItems * entry.quantityPerItem}}
+                    <app-quantity-unit [inputType]="entry.inputId.inputType"></app-quantity-unit>
+                  </td>
+                </tr>
+              </table>
+            </td>
+            <td>{{ dispatch.date|date }}</td>
+            <td>
+              <ng-container *ngIf="dispatch.receivedBy; else confirm">
+                <i class="fa fa-check-square" aria-hidden="true"></i> &nbsp; Confirmed
+              </ng-container>
+              <ng-template  #confirm>
+                <button class="btn btn-success btn-margin btn-sm pull-right" (click)="confirmDispatch(dispatch)"
+                        type="button">
+                  <i class="fa fa-check-circle" aria-hidden="true"></i> Confirm
+                </button>
+              </ng-template>
+            </td>
+          </tr>
           </tbody>
         </table>
       </div>

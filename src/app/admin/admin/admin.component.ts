@@ -16,5 +16,4 @@ export class AdminComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     document.body.className = '';
   }
-
 }

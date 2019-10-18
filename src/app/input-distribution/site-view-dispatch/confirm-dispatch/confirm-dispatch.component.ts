@@ -1,6 +1,6 @@
 import {Component, Inject, Injector, Input, OnInit, PLATFORM_ID} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormArray, FormBuilder, FormGroup} from '@angular/forms';
 import {AuthenticationService} from '../../../core/services';
 import {HelperService} from '../../../core/helpers';
 import {InputDistributionService} from '../../../core/services';
@@ -15,8 +15,7 @@ import {MessageService} from '../../../core/services';
 export class ConfirmDispatchComponent implements OnInit {
 
   modal: NgbActiveModal;
-  @Input() dispatchId;
-  @Input() entryId;
+  @Input() dispatch;
   confirmForm: FormGroup;
   errors: string [];
   message: string;
@@ -35,18 +34,44 @@ export class ConfirmDispatchComponent implements OnInit {
 
   ngOnInit(): void {
     this.confirmForm = this.formBuilder.group({
-      receivedQty: ['', Validators.required],
-      comment: ['', Validators.required]
+      entries: new FormArray([]),
+    });
+    const temp = [];
+    this.dispatch.entries.forEach((entry) => {
+      temp.push({
+        entryId : entry._id,
+        receivedQty: (entry.numberOfItems *  entry.quantityPerItem),
+        comment: ''
+      });
+      this.addEntry();
+    });
+    this.confirmForm.controls.entries.patchValue(temp);
+  }
+
+  get formEntries() {
+    return this.confirmForm.controls.entries as FormArray;
+  }
+
+  addEntry() {
+    (this.formEntries).push(this.createEntry());
+  }
+
+  createEntry(): FormGroup {
+    return this.formBuilder.group({
+      entryId: [''],
+      receivedQty: [''],
+      comment: ['']
     });
   }
 
   onSubmit() {
     if (this.confirmForm.valid) {
       const record = JSON.parse(JSON.stringify(this.confirmForm.value));
-      record['dispatchId'.toString()] = this.dispatchId;
-      console.log(this.entryId);
-      record['entryId'.toString()] = this.entryId;
       record['receiverId'.toString()] = this.authenticationService.getCurrentUser().info._id;
+      record['dispatchId'.toString()] = this.dispatch._id;
+      record.entries.forEach((entry) => {
+        this.helper.cleanObject(entry);
+      })
       this.inputDistributionService.confirmDispatch(record).subscribe(() => {
           this.message = 'Dispatch confirmed!';
         },

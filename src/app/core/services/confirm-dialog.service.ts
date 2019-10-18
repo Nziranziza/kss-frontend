@@ -20,8 +20,7 @@ export class ConfirmDialogService {
       width: size + 'px',
       data: {
         message: msg,
-      },
-      position: {top: '8%'}
+      }
     });
   }
 }

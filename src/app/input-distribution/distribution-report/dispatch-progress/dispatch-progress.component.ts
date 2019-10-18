@@ -10,6 +10,7 @@ import {
 } from '../../../core/services';
 import {Router} from '@angular/router';
 import {HelperService} from '../../../core/helpers';
+import {isUndefined} from "util";
 
 @Component({
   selector: 'app-dispatch-progress',
@@ -24,21 +25,29 @@ export class DispatchProgressComponent implements OnInit {
   loading = false;
   message: string;
   isCurrentUserDCC = false;
-  dispatchProgress: any;
-
   dtOptions: any = {};
   // @ts-ignore
   dtTrigger: Subject = new Subject();
 
   provinces: any;
   districts: any;
-  sectors: any;
-  cells: any;
-  villages: any;
+  sites: any;
   distId = false;
-  sectorId = false;
-  cellId = false;
-  villageId = false;
+  siteId = false;
+  showReport = false;
+  showData = false;
+  siteTotalAllocated = 0;
+  siteTotalDispatched = 0;
+  graph = {
+    type: 'ColumnChart',
+    data: [],
+    options: {
+      colors: ['#367fa9', '#f0a732']
+    },
+    columnNames: ['Farmers', 'allocated', 'dispatched'],
+    width: 1050,
+    height: 450
+  };
 
   constructor(private formBuilder: FormBuilder, private siteService: SiteService,
               private authorisationService: AuthorisationService,
@@ -51,16 +60,10 @@ export class DispatchProgressComponent implements OnInit {
   ngOnInit() {
     this.isCurrentUserDCC = this.authorisationService.isDistrictCashCropOfficer();
     this.checkProgressForm = this.formBuilder.group({
-      date: this.formBuilder.group({
-        from: [''],
-        to: ['']
-      }),
       location: this.formBuilder.group({
         prov_id: [''],
         dist_id: [''],
-        sect_id: [''],
-        cell_id: [''],
-        village_id: [''],
+        siteId: [],
       }),
     });
     this.dtOptions = {
@@ -74,6 +77,7 @@ export class DispatchProgressComponent implements OnInit {
   onGetProgress(searchBy: string) {
     if (this.checkProgressForm.valid) {
       this.loading = true;
+      this.showReport = false;
       const request = JSON.parse(JSON.stringify(this.checkProgressForm.value));
 
       if (request.location.prov_id === '' && searchBy === 'province') {
@@ -85,27 +89,64 @@ export class DispatchProgressComponent implements OnInit {
         request.location['searchBy'.toString()] = searchBy;
         this.helper.cleanObject(request.location);
       }
+      if (searchBy !== 'site') {
+        delete request.siteId;
+      }
       this.inputDistributionService.getDispatchProgress(request).subscribe((data) => {
-        this.loading = false;
-        if ((data.content.length !== 0) && (data.content)) {
-          this.message = '';
-          this.errors = '';
-          this.dispatchProgress = data.content;
-        } else {
-          this.message = 'Sorry no data found to this location!';
-          this.errors = '';
-          this.loading = false;
-        }
-      }, (err) => {
-        if (err.status === 404) {
-          this.message = err.errors;
-          this.errors = '';
-          this.loading = false;
-        } else {
-          this.message = '';
-          this.errors = err.errors;
-        }
-      });
+          const reports = [];
+          if (request.location['searchBy'.toString()] === 'all provinces') {
+            this.locationService.getProvinces().subscribe((provinces) => {
+              provinces.map((prov) => {
+                const location = data.content.find(obj => obj._id === prov._id);
+                const temp = [prov.namek, 0, 0];
+                if (!isUndefined(location)) {
+                  temp[1] = location.totalFertilizerAllocated;
+                  temp[2] = location.totalDispatched;
+                }
+                reports.push(temp);
+              });
+              this.loading = false;
+              this.showReport = true;
+              this.showData = false;
+              this.graph.data = reports;
+            });
+          } else if (request.location['searchBy'.toString()] === 'province') {
+            this.locationService.getDistricts(request.location.prov_id).subscribe((districts) => {
+              districts.map((dist) => {
+                const location = data.content.find(obj => obj._id === dist._id);
+                const temp = [dist.name, 0, 0];
+                if (!isUndefined(location)) {
+                  temp[1] = location.totalFertilizerAllocated;
+                  temp[2] = location.totalDispatched;
+                }
+                reports.push(temp);
+              });
+              this.loading = false;
+              this.showReport = true;
+              this.showData = false;
+              this.graph.data = reports;
+            });
+
+          } else if (request.location['searchBy'.toString()] === 'district') {
+          } else {
+            this.loading = false;
+            this.showReport = false;
+            this.showData = true;
+            this.siteTotalDispatched = data.content.dispatched;
+            this.siteTotalAllocated = data.content.totalFertilizerAllocated;
+          }
+        },
+        (err) => {
+          if (err.status === 404) {
+            this.showReport = false;
+            this.message = err.errors[0];
+            this.errors = '';
+            this.loading = false;
+          } else {
+            this.message = '';
+            this.errors = err.errors;
+          }
+        });
     } else {
       this.errors = this.helper.getFormValidationErrors(this.checkProgressForm);
     }
@@ -117,9 +158,6 @@ export class DispatchProgressComponent implements OnInit {
         if (value !== '') {
           this.locationService.getDistricts(value).subscribe((data) => {
             this.districts = data;
-            this.sectors = null;
-            this.cells = null;
-            this.villages = null;
           });
         }
       }
@@ -127,10 +165,12 @@ export class DispatchProgressComponent implements OnInit {
     this.checkProgressForm.controls.location.get('dist_id'.toString()).valueChanges.subscribe(
       (value) => {
         if (value !== '') {
-          this.locationService.getSectors(value).subscribe((data) => {
-            this.sectors = data;
-            this.cells = null;
-            this.villages = null;
+          const body = {
+            searchBy: 'district',
+            dist_id: value
+          };
+          this.siteService.all(body).subscribe((data) => {
+            this.sites = data.content;
             this.distId = true;
           });
         } else {
@@ -138,40 +178,10 @@ export class DispatchProgressComponent implements OnInit {
         }
       }
     );
-    this.checkProgressForm.controls.location.get('sect_id'.toString()).valueChanges.subscribe(
+    this.checkProgressForm.controls.location.get('siteId').valueChanges.subscribe(
       (value) => {
-        if (value !== '') {
-          this.locationService.getCells(value).subscribe((data) => {
-            this.cells = data;
-            this.villages = null;
-            this.sectorId = true;
-          });
-        } else {
-          this.sectorId = false;
-        }
-      }
-    );
-    this.checkProgressForm.controls.location.get('cell_id'.toString()).valueChanges.subscribe(
-      (value) => {
-        if (value !== '') {
-          this.locationService.getVillages(value).subscribe((data) => {
-            this.villages = data;
-            this.cellId = true;
-          });
-        } else {
-          this.cellId = false;
-        }
+        this.siteId = value !== '';
       });
-
-    this.checkProgressForm.controls.location.get('village_id'.toString()).valueChanges.subscribe(
-      (value) => {
-        if (value !== '') {
-          this.villageId = true;
-        } else {
-          this.villageId = false;
-        }
-      }
-    );
   }
 
   initial() {

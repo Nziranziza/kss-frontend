@@ -19,7 +19,7 @@ export class ListMessageComponent implements OnInit {
     $(() => {
       $('.custom-message').each((index, element) => {
         const $element = $(element);
-        const timeout = $element.data('auto-dismiss') || 5000;
+        const timeout = $element.data('auto-dismiss') || 1500;
         setTimeout(() => {
           $element.alert('close');
         }, timeout);

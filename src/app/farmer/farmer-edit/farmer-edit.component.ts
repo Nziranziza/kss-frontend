@@ -84,7 +84,7 @@ export class FarmerEditComponent implements OnInit, OnDestroy {
             subDocumentId: request._id
           };
           this.farmerService.destroyRequest(body)
-            .subscribe(data => {
+            .subscribe(() => {
               this.getFarmer(this.id);
             });
           this.getFarmer(this.id);

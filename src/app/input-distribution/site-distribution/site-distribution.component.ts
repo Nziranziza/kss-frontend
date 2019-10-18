@@ -6,6 +6,7 @@ import {InputDistributionService} from '../../core/services';
 import {RecordDistributionComponent} from './record-distribution/record-distribution.component';
 import {MessageService} from '../../core/services';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {ApplyPesticideComponent} from './apply-pesticide/apply-pesticide.component';
 
 @Component({
   selector: 'app-site-distribution',
@@ -63,5 +64,15 @@ export class SiteDistributionComponent implements OnInit {
     }
   }
 
-  applyPesticide() {}
+  applyPesticide(requestId: string, documentId: string) {
+    const modalRef = this.modal.open(ApplyPesticideComponent, {size: 'lg'});
+    modalRef.componentInstance.requestId = requestId;
+    modalRef.componentInstance.regNumber = this.regNumber;
+    modalRef.componentInstance.documentId = documentId;
+    modalRef.result.finally(() => {
+      this.inputDistributionService.getFarmerRequests(this.requestsOf).subscribe((data) => {
+        this.requests = data.content;
+      });
+    });
+  }
 }

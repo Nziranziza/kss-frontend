@@ -16,7 +16,6 @@ import {MatDialogModule} from '@angular/material';
 import {SharedModule} from '../shared';
 import {CookieService} from 'ngx-cookie-service';
 import {MessageService} from './services';
-import {ErrorCustomHandler} from './handlers/ErrorCustomHandler';
 import {InputDistributionService} from './services';
 import {WarehouseService} from './services';
 import {AdminGuard} from './services/guards/admin.guard';

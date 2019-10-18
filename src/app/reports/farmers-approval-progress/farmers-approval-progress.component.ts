@@ -89,63 +89,74 @@ export class FarmersApprovalProgressComponent implements OnInit {
       this.helper.cleanObject(filters.location);
       this.helper.cleanObject(filters);
       this.farmerService.approvalStatistics(filters, this.subRegion).subscribe((data) => {
-        const reports = [];
-        if (filters.location['searchBy'.toString()] === 'all provinces') {
-          this.locationService.getProvinces().subscribe((provinces) => {
-            provinces.map((prov) => {
-              const tempApproved = data.content.farmers.find(obj => obj._id === prov._id);
-              const tempPending = data.content.pending.filter(obj => obj._id === prov._id)[0];
-              const temp = [prov.namek, 0, 0];
-              if (!isUndefined(tempApproved)) {
-                temp[1] = tempApproved.totalConfirmed;
-              }
-              if (!isUndefined(tempPending)) {
-                temp[2] = tempPending.totalPending;
-              }
-              reports.push(temp);
+          const reports = [];
+          if (filters.location['searchBy'.toString()] === 'all provinces') {
+            this.locationService.getProvinces().subscribe((provinces) => {
+              provinces.map((prov) => {
+                const tempApproved = data.content.farmers.find(obj => obj._id === prov._id);
+                const tempPending = data.content.pending.filter(obj => obj._id === prov._id)[0];
+                const temp = [prov.namek, 0, 0];
+                if (!isUndefined(tempApproved)) {
+                  temp[1] = tempApproved.totalConfirmed;
+                }
+                if (!isUndefined(tempPending)) {
+                  temp[2] = tempPending.totalPending;
+                }
+                reports.push(temp);
+              });
+              this.loading = false;
+              this.showReport = true;
+              this.showData = false;
+              this.graph.data = reports;
             });
-            this.loading = false;
-            this.showReport = true;
-            this.showData = false;
-            this.graph.data = reports;
-          });
-        } else if (filters.location['searchBy'.toString()] === 'province') {
-          this.locationService.getDistricts(filters.location.prov_id).subscribe((districts) => {
-            districts.map((dist) => {
-              const tempApproved = data.content.farmers.find(obj => obj._id === dist._id);
-              const tempPending = data.content.pending.filter(obj => obj._id === dist._id)[0];
-              const temp = [dist.name, 0, 0];
-              if (!isUndefined(tempApproved)) {
-                temp[1] = tempApproved.totalConfirmed;
-              }
-              if (!isUndefined(tempPending)) {
-                temp[2] = tempPending.totalPending;
-              }
-              reports.push(temp);
+          } else if (filters.location['searchBy'.toString()] === 'province') {
+            this.locationService.getDistricts(filters.location.prov_id).subscribe((districts) => {
+              districts.map((dist) => {
+                const tempApproved = data.content.farmers.find(obj => obj._id === dist._id);
+                const tempPending = data.content.pending.filter(obj => obj._id === dist._id)[0];
+                const temp = [dist.name, 0, 0];
+                if (!isUndefined(tempApproved)) {
+                  temp[1] = tempApproved.totalConfirmed;
+                }
+                if (!isUndefined(tempPending)) {
+                  temp[2] = tempPending.totalPending;
+                }
+                reports.push(temp);
+              });
+              this.loading = false;
+              this.showReport = true;
+              this.showData = false;
+              this.graph.data = reports;
             });
-            this.loading = false;
-            this.showReport = true;
-            this.showData = false;
-            this.graph.data = reports;
-          });
 
-        } else if (filters.location['searchBy'.toString()] === 'district') {
-          data.content.map((zone) => {
-            const temp = [zone.zone, zone.totalConfirmed, zone.totalPending];
-            reports.push(temp);
-          });
-          this.loading = false;
-          this.showReport = true;
-          this.showData = false;
-          this.graph.data = reports;
-        } else {
-          this.loading = false;
-          this.showReport = false;
-          this.showData = true;
-          this.zoneTotalApproved = data.content.totalConfirmed;
-          this.zoneTotalPending = data.content.totalPending;
-        }
-      });
+          } else if (filters.location['searchBy'.toString()] === 'district') {
+            data.content.map((zone) => {
+              const temp = [zone.zone, zone.totalConfirmed, zone.totalPending];
+              reports.push(temp);
+            });
+            this.loading = false;
+            this.showReport = true;
+            this.showData = false;
+            this.graph.data = reports;
+          } else {
+            this.loading = false;
+            this.showReport = false;
+            this.showData = true;
+            this.zoneTotalApproved = data.content.totalConfirmed;
+            this.zoneTotalPending = data.content.totalPending;
+          }
+        },
+        (err) => {
+          if (err.status === 404) {
+            this.showReport = false;
+            this.message = err.errors[0];
+            this.errors = '';
+            this.loading = false;
+          } else {
+            this.message = '';
+            this.errors = err.errors;
+          }
+        });
     } else {
       this.errors = this.helper.getFormValidationErrors(this.filterForm);
     }

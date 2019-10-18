@@ -32,8 +32,8 @@ export class SiteService {
     return this.apiService.post('/site/create_site', site);
   }
 
-  update(id: string, site: any): Observable<any> {
-    return this.apiService.put('/site/update_site/' + id, site);
+  update(site: any): Observable<any> {
+    return this.apiService.put('/site/update_site', site);
   }
 
   getZone(body: any): Observable<any> {

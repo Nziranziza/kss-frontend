@@ -7,6 +7,7 @@
       <div class="box-body">
         <div class="col-xs-12">
           <app-list-errors [errorList]="errors"></app-list-errors>
+          <app-list-message [message]="message"></app-list-message>
         </div>
         <form [formGroup]="filterForm">
           <div class="row">
@@ -50,26 +51,6 @@
                       </button>
                     </span>
                     </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-xs-2">
-                <div class="form-group">
-                  <span class="">Site</span>
-                  <div class="input-group input-group-sm">
-                    <select class="form-control" formControlName="siteId">
-                      <option value=""></option>
-                      <ng-container *ngFor="let site of organisations">
-                        <option value="{{site._id}}">{{site.siteName}}
-                        </option>
-                      </ng-container>
-                    </select>
-                    <span class="input-group-btn">
-                      <button type="button" class="btn btn-default btn-flat" (click)="onSubmit('site')"
-                              [disabled]="!zoneId">
-                        <i class="fa fa-search"></i>
-                      </button>
-                    </span>
                   </div>
                 </div>
               </div>
@@ -122,7 +103,7 @@
       </div>
       <!-- /.box-header -->
       <div class="box-body">
-        <div class="row" *ngIf="subRegion">
+        <div class="row">
           <div class="col-sm-12 col-xs-12">
             <table class="table table-striped">
               <thead>

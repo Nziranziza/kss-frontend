@@ -96,7 +96,6 @@ export class CherrySupplyReportsComponent implements OnInit {
           this.graph.data = this.reportData;
           this.graph.options.colors = ['#367fa9'];
           this.graph.columnNames = ['Location', 'Cherries (Kg)'];
-
           this.showReport = true;
           this.message = '';
           this.errors = '';

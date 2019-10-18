@@ -77,7 +77,6 @@ export class DistributionProgressComponent implements OnInit {
     if (this.checkProgressForm.valid) {
       this.loading = true;
       const request = JSON.parse(JSON.stringify(this.checkProgressForm.value));
-
       if (request.location.prov_id === '' && searchBy === 'province') {
         delete request.location;
         request['location'.toString()] = {

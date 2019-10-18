@@ -94,11 +94,7 @@ export class UserCreateComponent implements OnInit {
   }
 
   isSuperOrganisation(organisation: any) {
-    if (organisation.organizationRole.indexOf(0) > -1) {
-      this.isFromSuperOrg = true;
-    } else {
-      this.isFromSuperOrg = false;
-    }
+    this.isFromSuperOrg = organisation.organizationRole.indexOf(0) > -1;
   }
 
   onInputNID(nid: string) {
@@ -207,6 +203,13 @@ export class UserCreateComponent implements OnInit {
           }
         } else {
           this.hasSite = false;
+        }
+        if (selectedRoles.includes(4)) {
+          this.userService.userPermissions(4).subscribe(dt => {
+            this.userTypes = Object.keys(dt.content).map(key => {
+              return {name: key, value: dt.content[key]};
+            });
+          });
         }
         this.selectedRoles = selectedRoles;
       }

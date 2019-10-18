@@ -3,4 +3,5 @@ export interface AuthUser {
   parameters: any;
   token: string;
   orgInfo: any;
+  siteDetails: any;
 }

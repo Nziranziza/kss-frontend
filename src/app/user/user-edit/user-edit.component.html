@@ -129,6 +129,7 @@
                   <div class="form-group">
                     <span class="">Site</span>
                     <select class="form-control" formControlName="distributionSite">
+                      <option></option>
                       <option *ngFor="let site of sites" value="{{site._id}}">{{site.siteName}}</option>
                     </select>
                   </div>

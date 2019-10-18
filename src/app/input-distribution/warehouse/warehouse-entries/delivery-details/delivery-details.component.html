@@ -3,38 +3,63 @@
   </i>
 </div>
 <div class="modal-body">
+  <app-list-errors [errorList]="errors" *ngIf="errors"></app-list-errors>
+  <app-list-message [message]="message"></app-list-message>
   <div class="row">
     <div class="col-sm-12">
-      <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-condensed">
-      <thead>
-        <tr>
-          <ng-container *ngIf="inputType === 'Fertilizer'">
-          <th>Quantity (kg)</th>
-          <th>Bags</th>
-          </ng-container>
-          <ng-container *ngIf="inputType === 'Pesticide'">
-            <th>Quantity (l)</th>
-            <th>Jerrycans</th>
-          </ng-container>
-          <th>Driver</th>
-          <th>Vehicle plate</th>
-          <th>Date</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let entry of deliveries">
-          <ng-container *ngIf="inputType !== 'Pesticide'">
-          <td>{{ entry.totalQty }}</td>
-          </ng-container>
-          <ng-container *ngIf="inputType === 'Pesticide'">
-            <td>{{ entry.totalQty / 1000 }}</td>
-          </ng-container>
-          <td>{{ entry.numberOfBags }}</td>
-          <td>{{ entry.driver }}</td>
-          <td>{{ entry.vehiclePlate }}</td>
-          <td>{{ entry.date|date }}</td>
-        </tr>
-        </tbody>
+      <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped">
+        <ng-container *ngIf="inputType === 'Fertilizer'; else pesticide">
+          <thead>
+            <tr>
+              <th>Items</th>
+              <th>Qty per item</th>
+              <th>Total Qty (Kg)</th>
+              <th>Driver</th>
+              <th>Vehicle plate</th>
+              <th>Date</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let entry of deliveries">
+              <td>{{ entry.items }}</td>
+              <td>{{ entry.quantityPerItem }}</td>
+              <td>{{ entry.items * entry.quantityPerItem }}</td>
+              <td>{{ entry.driver }}</td>
+              <td>{{ entry.vehiclePlate }}</td>
+              <td>{{ entry.date|date }}</td>
+              <td>
+                <button class="btn btn-default btn-margin btn-sm pull-right" (click)="cancelEntry(entry._id)" type="button">
+                <i class="fa fa-remove" aria-hidden="true"></i> Cancel
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </ng-container>
+        <ng-template #pesticide>
+          <thead>
+          <tr>
+            <th>Quantity (L)</th>
+            <th>Driver</th>
+            <th>Vehicle plate</th>
+            <th>Date</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let entry of deliveries">
+            <td>{{ entry.quantityPerItem }}</td>
+            <td>{{ entry.driver }}</td>
+            <td>{{ entry.vehiclePlate }}</td>
+            <td>{{ entry.date|date }}</td>
+            <td>
+              <button class="btn btn-default btn-margin btn-sm pull-right" (click)="cancelEntry(entry._id)" type="button">
+                <i class="fa fa-remove" aria-hidden="true"></i> Cancel
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </ng-template>
       </table>
     </div>
   </div>

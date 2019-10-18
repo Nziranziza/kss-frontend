@@ -75,18 +75,19 @@
         </a>
       </li>
       <li class="header" *appHasPermission="[4,0,6,5,[8,1]]">INPUT DISTRIBUTION</li>
-      <li routerLinkActive="active" *appHasPermission="[0,5,4,[8,1]]">
+      <li routerLinkActive="active" *appHasPermission="[0,5,[4,10],[4,11],[8,1],[4,1]]">
         <a routerLink="/admin/sites">
           <i class="fa fa-square" aria-hidden="true"></i>
           <span>Sites</span>
         </a>
       </li>
-      <li routerLinkActive="active" *appHasPermission="[4,0,6,5]">
+      <li routerLinkActive="active" *appHasPermission="[[4,10],[4,1],0,6,5]">
         <a routerLink="/admin/input/distribution/plan">
           <i class="fa fa-history" aria-hidden="true"></i>
           <span>Distribution plan</span>
         </a>
       </li>
+      <!--
       <li class="treeview" routerLinkActive="active" *appHasPermission="[0]">
         <a href="#">
           <i class="fa fa-flag-o"></i> <span>Progress report</span>
@@ -109,26 +110,17 @@
           </li>
         </ul>
       </li>
+      -->
       <li class="header" *appHasPermission="[[8,2]]">SITE</li>
-      <li class="treeview" routerLinkActive="active" *appHasPermission="[[8,2]]">
-        <a href="#">
-          <i class="fa fa-share-alt-square" aria-hidden="true"></i><span>Manage distribution</span>
-          <span class="pull-right-container">
-            <i class="fa fa-angle-left pull-right"></i>
-          </span>
+      <li routerLinkActive="active" *appHasPermission="[[8,2]]">
+        <a routerLink="/admin/input/site/distribution">
+          <i class="fa fa-tree" aria-hidden="true"></i>
+          <span>Distribute</span>
         </a>
-        <ul class="treeview-menu">
-          <li routerLinkActive="active" *appHasPermission="[[8,2]]">
-            <a routerLink="/admin/input/site/distribution">
-              <i class="fa fa-circle-o" aria-hidden="true"></i>
-              <span>Distribute</span>
-            </a>
-          </li>
-        </ul>
       </li>
       <li class="treeview" routerLinkActive="active" *appHasPermission="[[8,2]]">
         <a href="#">
-          <i class="fa fa-book"></i> <span>Manage store</span>
+          <i class="fa fa-file-text"></i> <span>Manage store</span>
           <span class="pull-right-container">
             <i class="fa fa-angle-left pull-right"></i>
           </span>
@@ -143,19 +135,19 @@
           <li routerLinkActive="active" *appHasPermission="[[8,2]]">
             <a routerLink="/admin/input/site/stock-outs">
               <i class="fa fa-circle-o"></i>
-              <span>Stock-outs</span>
+              <span>Stock</span>
             </a>
           </li>
         </ul>
       </li>
-      <li class="header" *appHasPermission="[0]">WAREHOUSE</li>
-      <li routerLinkActive="active" *appHasPermission="[0]">
+      <li class="header" *appHasPermission="[0,[4,1],5]">WAREHOUSE</li>
+      <li routerLinkActive="active" *appHasPermission="[0,[4,1],5]">
         <a routerLink="/admin/warehouse/entries">
           <i class="fa fa-tags" aria-hidden="true"></i>
           <span>Entries</span>
         </a>
       </li>
-      <li routerLinkActive="active" *appHasPermission="[0]">
+      <li routerLinkActive="active" *appHasPermission="[0,[4,1],5]">
         <a routerLink="/admin/warehouse/dispatches">
           <i class="fa fa-code-fork" aria-hidden="true"></i>
           <span>Dispatch</span>
@@ -204,13 +196,13 @@
           </span>
         </a>
         <ul class="treeview-menu">
-          <li routerLinkActive="active" *appHasPermission="[0]">
+          <li routerLinkActive="active" *appHasPermission="[0,4,5]">
             <a routerLink="/admin/distribution-parameters">
               <i class="fa fa-circle-o"></i>
               <span>Distribution</span>
             </a>
           </li>
-          <li routerLinkActive="active" *appHasPermission="[0]">
+          <li routerLinkActive="active" *appHasPermission="[0,4,5]">
             <a routerLink="/admin/season-parameters">
               <i class="fa fa-circle-o"></i>
               <span>Season parameters</span>

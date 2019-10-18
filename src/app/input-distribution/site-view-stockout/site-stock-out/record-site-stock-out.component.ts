@@ -1,12 +1,11 @@
 import {Component, Inject, Injector, Input, OnInit, PLATFORM_ID} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {AuthenticationService} from '../../../core/services';
+import {AuthenticationService, LocationService} from '../../../core/services';
 import {MessageService} from '../../../core/services';
 import {HelperService} from '../../../core/helpers';
 import {InputDistributionService} from '../../../core/services';
 import {DatePipe, isPlatformBrowser} from '@angular/common';
-import {constant} from '../../../../environments/constant';
 
 @Component({
   selector: 'app-record-site-stock-out',
@@ -17,12 +16,15 @@ import {constant} from '../../../../environments/constant';
 export class RecordSiteStockOutComponent implements OnInit {
 
   modal: NgbActiveModal;
-  @Input() dispatch;
+  @Input() stock;
   siteStockOutForm: FormGroup;
   errors: string [];
   message: string;
-  kgPerBag: number;
-  lPerJerrycan: number;
+  provinces: any;
+  districts: any;
+  sectors: any;
+  cells: any;
+  villages: any;
   currentDate: any;
 
   constructor(
@@ -30,6 +32,7 @@ export class RecordSiteStockOutComponent implements OnInit {
     private injector: Injector, private formBuilder: FormBuilder,
     private authenticationService: AuthenticationService,
     private messageService: MessageService,
+    private locationService: LocationService,
     private datePipe: DatePipe,
     private helper: HelperService, private inputDistributionService: InputDistributionService) {
 
@@ -40,19 +43,24 @@ export class RecordSiteStockOutComponent implements OnInit {
   ngOnInit(): void {
     this.currentDate = new Date();
     this.siteStockOutForm = this.formBuilder.group({
-      numberOfBags: ['', Validators.required],
+      location: this.formBuilder.group({
+        prov_id: [''],
+        dist_id: [''],
+        sect_id: [''],
+        cell_id: [''],
+        village_id: ['']
+      }),
       totalQty: ['', Validators.required],
-      date: [this.datePipe.transform(this.currentDate, 'yyyy-MM-dd'), Validators.required]
+      date: [this.datePipe.transform(this.currentDate, 'yyyy-MM-dd'), Validators.required],
     });
-    this.kgPerBag = constant.kgPerBag;
-    this.lPerJerrycan = constant.lPerJerrycan;
     this.onChanges();
+    this.initial();
   }
 
   onSubmit() {
     if (this.siteStockOutForm.valid) {
       const record = JSON.parse(JSON.stringify(this.siteStockOutForm.value));
-      record['dispatchId'.toString()] = this.dispatch._id;
+      record['stockId'.toString()] = this.stock._id;
       record['userId'.toString()] = this.authenticationService.getCurrentUser().info._id;
       this.inputDistributionService.recordStockOut(record).subscribe(() => {
           this.messageService.setMessage('Stock out recorded!');
@@ -66,16 +74,53 @@ export class RecordSiteStockOutComponent implements OnInit {
     }
   }
   onChanges() {
-    this.siteStockOutForm.controls.numberOfBags.valueChanges.subscribe(
+    this.siteStockOutForm.controls.location.get('prov_id'.toString()).valueChanges.subscribe(
       (value) => {
         if (value !== '') {
-          if (this.dispatch.inputType === 'Fertilizer') {
-            this.siteStockOutForm.controls.totalQty.setValue(+value * this.kgPerBag);
-          } else {
-            this.siteStockOutForm.controls.totalQty.setValue(+value * this.lPerJerrycan);
-          }
+          this.locationService.getDistricts(value).subscribe((data) => {
+            this.districts = data;
+            this.sectors = null;
+            this.cells = null;
+            this.villages = null;
+          });
         }
       }
     );
+    this.siteStockOutForm.controls.location.get('dist_id'.toString()).valueChanges.subscribe(
+      (value) => {
+        if (value !== '') {
+          this.locationService.getSectors(value).subscribe((data) => {
+            this.sectors = data;
+            this.cells = null;
+            this.villages = null;
+          });
+        }
+      }
+    );
+    this.siteStockOutForm.controls.location.get('sect_id'.toString()).valueChanges.subscribe(
+      (value) => {
+        if (value !== '') {
+          this.locationService.getCells(value).subscribe((data) => {
+            this.cells = data;
+            this.villages = null;
+          });
+        }
+      }
+    );
+    this.siteStockOutForm.controls.location.get('cell_id'.toString()).valueChanges.subscribe(
+      (value) => {
+        if (value !== '') {
+          this.locationService.getVillages(value).subscribe((data) => {
+            this.villages = data;
+          });
+        }
+      }
+    );
+  }
+
+  initial() {
+    this.locationService.getProvinces().subscribe((data) => {
+      this.provinces = data;
+    });
   }
 }

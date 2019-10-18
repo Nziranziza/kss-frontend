@@ -42,6 +42,7 @@ export class FarmerLandsComponent implements OnInit {
         return item;
       });
     }, (err) => {
+      console.log(err.errors);
     });
   }
 }

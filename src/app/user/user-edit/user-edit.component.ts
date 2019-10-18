@@ -98,6 +98,9 @@ export class UserEditComponent implements OnInit {
       this.organisationId = params['organisationId'.toString()];
       this.id = params['id'.toString()];
     });
+
+    this.initial();
+    this.onChanges();
     this.route.params.subscribe(params => {
       this.userService.get(params['id'.toString()]).subscribe(user => {
         this.organisationService.get(this.organisationId).subscribe(data => {
@@ -116,6 +119,13 @@ export class UserEditComponent implements OnInit {
         });
         this.editUser = user.content;
         const usr = user.content;
+        if (usr.userRoles.includes(4)) {
+          this.userService.userPermissions(4).subscribe(dt => {
+            this.userTypes = Object.keys(dt.content).map(key => {
+              return {name: key, value: dt.content[key]};
+            });
+          });
+        }
         usr.hasAccessTo.map(access => {
           if (access.app === 2) {
             usr['userType'.toString()] = access.userType;
@@ -130,8 +140,7 @@ export class UserEditComponent implements OnInit {
         this.editForm.patchValue(usr);
       });
     });
-    this.initial();
-    this.onChanges();
+
   }
 
   isSuperOrganisation(organisation: any) {
@@ -172,6 +181,13 @@ export class UserEditComponent implements OnInit {
           }
         } else {
           this.hasSite = false;
+        }
+        if (selectedRoles.includes(4)) {
+          this.userService.userPermissions(4).subscribe(dt => {
+            this.userTypes = Object.keys(dt.content).map(key => {
+              return {name: key, value: dt.content[key]};
+            });
+          });
         }
         this.selectedRoles = selectedRoles;
       }
@@ -265,7 +281,6 @@ export class UserEditComponent implements OnInit {
         delete user.location;
       }
       if (!selectedRoles.includes(8)) {
-        delete user.distributionSite;
         delete user.accountExpirationDate;
       } else {
         const myDate = user.accountExpirationDate;
@@ -278,7 +293,7 @@ export class UserEditComponent implements OnInit {
       delete user.userType;
       this.helper.cleanObject(user);
       this.helper.cleanObject(user.location);
-      if (!this.editUser.fullyEditable) {
+      if ((!this.editUser.fullyEditable) || (!this.editUser.email !== user.email)) {
         delete user.email;
       }
       this.userService.update(user).subscribe(() => {

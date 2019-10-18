@@ -36,6 +36,10 @@ export class UserService {
     return this.apiService.get('/users/user.types/list');
   }
 
+  userPermissions(role: number): Observable<any> {
+    return this.apiService.get('/users/permissions/' + role);
+  }
+
   checkEmail(body: any): Observable<any> {
     return this.apiService.post('/users/email', body);
   }

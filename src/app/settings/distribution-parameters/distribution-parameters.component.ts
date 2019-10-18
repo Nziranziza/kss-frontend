@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {InputDistributionService} from '../../core/services';
 import {Router} from '@angular/router';
 import {HelperService} from '../../core/helpers';
@@ -44,7 +44,6 @@ export class DistributionParametersComponent implements OnInit {
       phone_number: ['', Validators.required],
       TIN_number: ['', Validators.required]
     });
-
     this.initial();
   }
 

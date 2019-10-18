@@ -65,7 +65,7 @@ export class OrganisationCreateComponent implements OnInit {
       this.possibleRoles = Object.keys(data.content).map(key => {
         return {name: [key], value: data.content[key]};
       });
-      this.possibleRoles.map(role => {
+      this.possibleRoles.map(() => {
         const control = new FormControl(false);
         (this.createForm.controls.organizationRole as FormArray).push(control);
       });
@@ -122,7 +122,7 @@ export class OrganisationCreateComponent implements OnInit {
       }
       this.helper.cleanObject(org);
       this.organisationService.save(org)
-        .subscribe(data => {
+        .subscribe(() => {
             this.messageService.setMessage('Organisation successfully updated!');
             this.router.navigateByUrl('admin/organisations');
           },

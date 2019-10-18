@@ -3,6 +3,8 @@ import {AuthenticationService, InputDistributionService} from '../../core/servic
 import {Subject} from 'rxjs';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {RecordSiteStockReturnComponent} from './site-stock-return/record-site-stock-return.component';
+import {constant} from '../../../environments/constant';
+import {RecordSiteStockOutComponent} from './site-stock-out/record-site-stock-out.component';
 
 @Component({
   selector: 'app-site-view-stockout',
@@ -21,22 +23,25 @@ export class SiteViewStockoutComponent implements OnInit {
   // @ts-ignore
   dtTrigger: Subject = new Subject();
   loading = false;
+  stocks: any;
 
   ngOnInit() {
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 25
     };
-    this.getSiteStockOuts();
+    this.getStocks();
   }
 
-  getSiteStockOuts() {
-    this.loading = true;
+  getStocks() {
     const id = this.authenticationService.getCurrentUser().orgInfo.distributionSite;
     this.inputDistributionService.getSiteStockOuts(id).subscribe((data) => {
-      this.loading = false;
       this.stockOuts = data.content;
       this.dtTrigger.next();
+    });
+
+    this.inputDistributionService.getStock(constant.stocks.SITE, id).subscribe((data) => {
+      this.stocks = data.content;
     });
   }
 
@@ -44,6 +49,21 @@ export class SiteViewStockoutComponent implements OnInit {
     const modalRef = this.modal.open(RecordSiteStockReturnComponent, {size: 'lg'});
     modalRef.componentInstance.stockOutId = stockOutId;
     modalRef.result.finally(() => {
+      const id = this.authenticationService.getCurrentUser().orgInfo.distributionSite;
+      this.inputDistributionService.getStock(constant.stocks.SITE, id).subscribe((data) => {
+        this.stocks = data.content;
+      });
+    });
+  }
+
+  stockOut(stock: any) {
+    const modalRef = this.modal.open(RecordSiteStockOutComponent, {size: 'lg'});
+    modalRef.componentInstance.stock = stock;
+    modalRef.result.finally(() => {
+      const id = this.authenticationService.getCurrentUser().orgInfo.distributionSite;
+      this.inputDistributionService.getStock(constant.stocks.SITE, id).subscribe((data) => {
+        this.stocks = data.content;
+      });
     });
   }
 }

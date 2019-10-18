@@ -5,7 +5,9 @@ import {ApiService} from './api.service';
 @Injectable({
   providedIn: 'root'
 })
+
 export class InputDistributionService {
+
 
   constructor(private apiService: ApiService) {
   }
@@ -18,12 +20,8 @@ export class InputDistributionService {
     return this.apiService.post('/inputdispatch/record_dispatch', body);
   }
 
-  report(data: any, subRegions: boolean): Observable<any> {
-    if (subRegions) {
+  report(data: any): Observable<any> {
       return this.apiService.post('/distributionstats/plan?subRegions=true', data);
-    } else {
-      return this.apiService.post('/distributionstats/plan', data);
-    }
   }
 
   getSiteDispatches(siteId: string) {
@@ -47,7 +45,7 @@ export class InputDistributionService {
   }
 
   updateRequestAtDistribution(data: any): Observable<any> {
-    return this.apiService.put('/requestInfo/edit', data);
+    return this.apiService.put('/coffeefarmers/site/requestinfo/edit', data);
   }
 
   confirmDispatch(data: any): Observable<any> {
@@ -81,5 +79,11 @@ export class InputDistributionService {
   getSuppliers(): Observable<any> {
     return this.apiService.get('/supplier');
   }
-
+  getStock(stock: number, siteId?: string) {
+    if (siteId) {
+      return this.apiService.get('/stock/?' + 'stockType=' + stock + '&' + 'siteId=' + siteId);
+    } else {
+      return this.apiService.get('/stock/?' + 'stockType=' + stock);
+    }
+  }
 }

@@ -3,10 +3,19 @@
 </h3>
 <app-list-message [message]="message"></app-list-message>
 <app-list-errors [errorList]="errors" *ngIf="errors.length > 0"></app-list-errors>
-<form [formGroup]="recordEntriesForm" (ngSubmit)="onSubmit()">
+<form [formGroup]="recordEntriesForm" (ngSubmit)="onSubmit()" autocomplete="on">
   <div class="box">
     <div class="box-body">
       <div class="row">
+        <div class="col-xs-2">
+          <div class="form-group">
+            <label class="control-label label-required">Supplier</label>
+            <select class="form-control" formControlName="supplierId">
+              <option></option>
+              <option *ngFor="let suppl of supplier" value="{{suppl._id}}">{{suppl.name}}</option>
+            </select>
+          </div>
+        </div>
         <div class="col-xs-2">
           <div class="form-group">
             <label class="control-label label-required">Input type</label>
@@ -50,7 +59,7 @@
               <div class="col-xs-2">
                 <div class="form-group">
                   <span class="control-label label-required">Pesticide type</span>
-                  <select class="form-control" formControlName="pesticideType">
+                  <select class="form-control" formControlName="pesticideType" (change)="onChangePackage(i)">
                     <option *ngFor="let type of pesticideTypes" value="{{type.inputName._id}}">{{ type.inputName.inputName }}</option>
                   </select>
                 </div>
@@ -91,7 +100,8 @@
               <div class="col-xs-2">
                 <div class="form-group">
                   <span class="control-label label-required">Number of bags</span>
-                  <input type="text" formControlName="numberOfBags" class="form-control" (input)="onChangePackage(i)">
+                  <input type="text" formControlName="numberOfBags" class="form-control"
+                         (input)="onChangePackageQty(i)">
                 </div>
               </div>
               <div class="col-xs-2">
@@ -144,54 +154,42 @@
 </form>
 <div class="row">
   <div class="col-xs-12">
-    <div class="box">
-      <div class="box-body">
-        <div class="row" style="margin-bottom: 15px;">
-          <div class="col-xs-12">
-            <form [formGroup]="filterEntriesForm">
-              <div class="form-inline pull-left">
-                <label class="control-label">Filter</label> &nbsp;
-                <select class="form-control" formControlName="entriesFilter">
-                  <option value="all">All</option>
-                  <option value="Fertilizer">Fertilizer</option>
-                  <option value="Pesticide">Pesticide</option>
-                </select>
-              </div>
-            </form>
-          </div>
-        </div>
-        <app-loader *ngIf="loading"></app-loader>
-        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped">
-          <thead>
-          <tr>
-            <th>Type</th>
-            <th>Quantity</th>
-            <th>Remaining qty</th>
-            <th>Actions</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr *ngFor="let entry of entries">
-            <td>
-              {{ entry.inputType }}
-            </td>
-            <td>
-              {{ entry.suppliedQty }}
-              <app-quantity-unit [inputType]="entry.inputType"></app-quantity-unit>
-            </td>
-            <td>
-              {{ entry.remainingQty }}
-              <app-quantity-unit [inputType]="entry.inputType"></app-quantity-unit>
-            </td>
-            <td>
-              <button class="btn btn-success btn-margin btn-sm"
-                      (click)="deliveryDetails(entry.deliveryDetails, entry.inputType)">Entries
-              </button>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <table class="row-border hover table table-striped" style="margin-bottom: 15px">
+      <thead>
+      </thead>
+      <tbody>
+      <tr>
+        <td *ngFor="let entry of entries">
+          {{ entry.inputType }}
+          <button class="btn btn-info btn-margin btn-sm"
+                  (click)="deliveryDetails(entry.deliveryDetails, entry.inputType, entry._id)">Entries
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <table class="row-border hover table table-striped" style="margin-top: 15px">
+      <thead>
+      <tr>
+        <th>Stock</th>
+        <th>Name</th>
+        <th>Items</th>
+        <th>Qty</th>
+        <th>Total Qty</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let stock of stocks">
+        <td>{{ stock.inputId.inputType }}</td>
+        <td>{{ stock.inputId.inputName }}</td>
+        <td *ngIf="stock.inputId.inputType === 'Fertilizer'">{{ stock.items }}</td>
+        <td *ngIf="stock.inputId.inputType !== 'Fertilizer'"></td>
+        <td>{{ stock.quantityPerItem }}</td>
+        <td>{{ stock.items * stock.quantityPerItem }}
+          <app-quantity-unit [inputType]="stock.inputId.inputTyPe"></app-quantity-unit>
+        </td>
+      </tr>
+      </tbody>
+    </table>
   </div>
 </div>

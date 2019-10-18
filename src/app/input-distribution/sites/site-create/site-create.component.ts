@@ -88,10 +88,14 @@ export class SiteCreateComponent implements OnInit {
       if (site.coveredAreas.coveredCWS.length === 0) {
         delete site.coveredAreas.coveredCWS;
       }
+      this.helper.cleanObject(site.location);
       this.siteService.save(site).subscribe(() => {
-        this.messageService.setMessage('Site successful created!');
-        this.router.navigateByUrl('admin/sites');
-      });
+          this.messageService.setMessage('Site successfully created!');
+          this.router.navigateByUrl('admin/sites');
+        },
+        (err) => {
+          this.errors = err.errors;
+        });
     } else {
       this.errors = this.helper.getFormValidationErrors(this.createForm);
     }

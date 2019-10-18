@@ -11,17 +11,11 @@ export class WarehouseService {
     private apiService: ApiService
   ) {
   }
-
   allEntries(): Observable<any> {
     return this.apiService.get('/warehouse');
   }
-
   saveEntry(entry: any): Observable<any> {
     return this.apiService.post('/warehouse/record_warehouseentry', entry);
-  }
-
-  getEntries(type: string): Observable<any> {
-    return this.apiService.get('/warehouse/byinputtype/' + type);
   }
 
   getDispatches() {
@@ -32,10 +26,11 @@ export class WarehouseService {
     return this.apiService.post('/inputdispatch', body);
   }
 
-  printDeliveryNote(data: any): Observable<any> {
-    return this.apiService.post('/inputdispatch/generate/delivery_note', data);
+  removeEntry(body: any) {
+    return this.apiService.put('/warehouse/remove/entry', body);
   }
-  getPesticideList(): Observable<any> {
-    return this.apiService.get('/season/pesticide/list');
+
+  printDeliveryNote(id: string): Observable<any> {
+    return this.apiService.get('/inputdispatch/generate/delivery_note/' + id);
   }
 }

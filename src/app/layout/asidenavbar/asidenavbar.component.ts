@@ -24,7 +24,6 @@ export class AsidenavbarComponent implements OnInit {
       const trees: any = $('[data-widget="tree"]');
       trees.tree();
     });
-
     this.parameters = this.authenticationService.getCurrentUser().parameters;
     this.user = this.authenticationService.getCurrentUser().info;
   }

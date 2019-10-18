@@ -1,11 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {SiteService} from '../../../core/services';
+import {SeasonService, SiteService} from '../../../core/services';
 import {Router} from '@angular/router';
 import {InputDistributionService} from '../../../core/services';
 import {HelperService} from '../../../core/helpers';
 import {WarehouseService} from '../../../core/services';
-import {Subject} from 'rxjs';
 import {AuthenticationService} from '../../../core/services';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {DeliveryDetailsComponent} from './delivery-details/delivery-details.component';
@@ -25,10 +24,12 @@ export class WarehouseEntriesComponent implements OnInit {
               private router: Router, private inputDistributionService: InputDistributionService,
               private helper: HelperService,
               private datePipe: DatePipe,
+              private seasonService: SeasonService,
               private warehouseService: WarehouseService) {
   }
 
   recordEntriesForm: FormGroup;
+  season: any;
   filterEntriesForm: FormGroup;
   errors = [];
   message: any;
@@ -44,22 +45,18 @@ export class WarehouseEntriesComponent implements OnInit {
     }
   ];
   entries: any;
-  dtOptions: any = {};
-  // @ts-ignore
-  dtTrigger: Subject = new Subject();
-  loading = false;
   currentDate: any;
-  kgPerBag: number;
-  mlPerJerrycan: number;
   package: any;
   showAddPackageButton = false;
   pesticideTypes: any;
   fertilizer: any;
   supplier: any;
   totalQty = 0;
+  stocks: any;
 
   ngOnInit() {
     this.currentDate = new Date();
+    this.getCurrentSeason();
     this.recordEntriesForm = this.formBuilder.group({
       deliveryDetails: this.formBuilder.group({
         driver: [''],
@@ -72,23 +69,12 @@ export class WarehouseEntriesComponent implements OnInit {
       inputType: [''],
       supplierId: ['']
     });
-    this.kgPerBag = constant.kgPerBag;
-    this.mlPerJerrycan = constant.mlPerJerrycan;
-    this.dtOptions = {
-      pagingType: 'full_numbers',
-      pageLength: 25
-    };
     this.filterEntriesForm = this.formBuilder.group({
       entriesFilter: ['all', Validators.required],
     });
-
-    this.pesticideTypes = this.authenticationService.getCurrentSeason().seasonParams.pesticide;
-
-    this.fertilizer = this.authenticationService.getCurrentSeason().seasonParams.inputName;
-    this.supplier = this.authenticationService.getCurrentSeason().seasonParams.supplier;
-    this.onChangeEntriesFilter();
     this.onChange();
     this.getEntries();
+    this.getStocks(constant.stocks.WAREHOUSE);
   }
 
   onChange() {
@@ -129,41 +115,35 @@ export class WarehouseEntriesComponent implements OnInit {
     });
   }
 
-  onChangePackage(index: number) {
-    let value;
+  onChangePackageQty(index: number) {
     if (!this.isTypePesticide) {
-      value = this.formPackage.value[index];
+      const value = this.formPackage.value[index];
       const subTotal = (+value.bagSize) * (+value.numberOfBags);
       this.getPackageFormGroup(index).controls['subTotal'.toString()].setValue(subTotal);
     }
   }
 
-  onChangeEntriesFilter() {
-    this.filterEntriesForm.get('entriesFilter'.toString()).valueChanges.subscribe(
-      (value) => {
-        switch (value) {
-          case 'Fertilizer': {
-            this.warehouseService.getEntries(value)
-              .subscribe((data) => {
-                this.entries = data.content;
-              });
-            break;
-          }
-          case 'Pesticide': {
-            this.warehouseService.getEntries(value)
-              .subscribe((data) => {
-                this.entries = data.content;
-              });
-            break;
-          }
-          default: {
-            this.warehouseService.allEntries()
-              .subscribe((data) => {
-                this.entries = data.content;
-              });
-          }
+  onChangePackage(index: number) {
+    const value = this.formPackage.value[index];
+    let removed = false;
+    if (!this.isTypePesticide) {
+      this.formPackage.value.forEach((el, i) => {
+        if (((value.bagSize) === el.bagSize) && (this.formPackage.value.length > 1) && (i !== index)) {
+          this.removePackage(index);
+          removed = true;
         }
       });
+      if (!removed) {
+        const subTotal = (+value.bagSize) * (+value.numberOfBags);
+        this.getPackageFormGroup(index).controls['subTotal'.toString()].setValue(subTotal);
+      }
+    } else {
+      this.formPackage.value.forEach((el, i) => {
+        if ((value.pesticideType === el.pesticideType) && (this.formPackage.value.length > 1) && (i !== index)) {
+          this.removePackage(index);
+        }
+      });
+    }
   }
 
   get formPackage() {
@@ -210,21 +190,24 @@ export class WarehouseEntriesComponent implements OnInit {
         packages.push({
           inputId: item.pesticideType,
           items: 1,
-          quantityPerItem: entry.deliveryDetails.totalQty
+          quantityPerItem: +item.qty
         });
       });
     } else {
       entry.deliveryDetails.package.map((item) => {
         packages.push({
           inputId: this.fertilizer._id,
-          items: item.numberOfBags,
-          quantityPerItem: entry.deliveryDetails.totalQty
+          items: +item.numberOfBags,
+          quantityPerItem: +item.bagSize
         });
       });
     }
     entry.deliveryDetails.receivedBy = this.authenticationService.getCurrentUser().info._id;
-    console.log(this.authenticationService.getCurrentSeason().seasonParams);
-    entry.supplierId = this.authenticationService.getCurrentSeason().seasonParams.supplierId[0]._id;
+    if (this.season.seasonParams.supplierId[0]) {
+      entry.supplierId = this.season.seasonParams.supplierId[0]._id;
+    } else {
+      this.errors = ['Please set the season supplier before stock'];
+    }
     entry.deliveryDetails.package = packages;
     delete entry.deliveryDetails.date;
     delete entry.deliveryDetails.totalQty;
@@ -237,6 +220,7 @@ export class WarehouseEntriesComponent implements OnInit {
           });
           this.recordEntriesForm.reset();
           this.recordEntriesForm.controls.deliveryDetails.get('date').setValue(this.datePipe.transform(this.currentDate, 'yyyy-MM-dd'));
+          this.getStocks(constant.stocks.WAREHOUSE);
         },
         (err) => {
           this.message = '';
@@ -245,19 +229,38 @@ export class WarehouseEntriesComponent implements OnInit {
   }
 
   getEntries() {
-    this.loading = true;
     this.warehouseService.allEntries().subscribe((data) => {
-      this.loading = false;
       this.entries = data.content;
-      this.dtTrigger.next();
     });
   }
 
-  deliveryDetails(details, type) {
+  deliveryDetails(details, type, wareHouseId) {
     const modalRef = this.modal.open(DeliveryDetailsComponent, {size: 'lg'});
     modalRef.componentInstance.deliveries = details;
     modalRef.componentInstance.inputType = type;
+    modalRef.componentInstance.wareHouseId = wareHouseId;
     modalRef.result.finally(() => {
+      this.getStocks(constant.stocks.WAREHOUSE);
+    });
+  }
+
+  getStocks(stock: number) {
+    this.inputDistributionService.getStock(stock).subscribe((data) => {
+      this.stocks = data.content;
+    });
+  }
+
+  getCurrentSeason() {
+    this.seasonService.all().subscribe((dt) => {
+      const seasons = dt.content;
+      seasons.forEach((item) => {
+        if (item.isCurrent) {
+          this.season = item;
+          this.fertilizer = this.season.seasonParams.inputName;
+          this.supplier = this.season.seasonParams.supplierId;
+          this.pesticideTypes = this.season.seasonParams.pesticide;
+        }
+      });
     });
   }
 }

@@ -21,18 +21,18 @@ export class DistributionPlanComponent implements OnInit {
   errors: any;
   provinces: any;
   districts: any;
+  sectors: any;
   loading = false;
   distId = false;
-  zoneId = false;
+  sectorId = false;
   showPlan = false;
   message: string;
   totalFarmers = 0;
   totalTrees = 0;
   totalFertilizerNeeded = 0;
   totalNumberOfLands = 0;
-  plans: any;
+  plans = [];
   organisations: any;
-  subRegion: boolean;
   isCurrentUserDCC = false;
   dtOptions: any = {};
   // @ts-ignore
@@ -53,10 +53,8 @@ export class DistributionPlanComponent implements OnInit {
       location: this.formBuilder.group({
         prov_id: [''],
         dist_id: ['']
-      }),
-      siteId: ['']
+      })
     });
-
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 25
@@ -70,21 +68,18 @@ export class DistributionPlanComponent implements OnInit {
     if (this.filterForm.valid) {
       this.plans = [];
       this.loading = true;
-      this.subRegion = false;
       const filters = JSON.parse(JSON.stringify(this.filterForm.value));
       if (filters.location.prov_id === '' && searchBy === 'province') {
         delete filters.location;
         filters['location'.toString()] = {
           searchBy: 'all provinces'
         };
-        this.subRegion = true;
       } else {
-        this.subRegion = !(searchBy === 'site' || searchBy === 'district');
         filters.location['searchBy'.toString()] = searchBy;
       }
       this.helper.cleanObject(filters.location);
       this.helper.cleanObject(filters);
-      this.inputDistributionService.report(filters, this.subRegion).subscribe((data) => {
+      this.inputDistributionService.report(filters).subscribe((data) => {
         this.loading = false;
         this.totalFarmers = 0;
         this.totalFertilizerNeeded = 0;
@@ -103,6 +98,9 @@ export class DistributionPlanComponent implements OnInit {
             if (filters.location.searchBy === 'province') {
               temp['location'.toString()] = item.distName;
             }
+            if (filters.location.searchBy === 'district') {
+              temp['location'.toString()] = item.sectorName;
+            }
             temp['numberOfTrees'.toString()] = item.totalNumberOfTrees;
             temp['numberOfFarmers'.toString()] = item.uniqueFarmersCount;
             temp['fertilizerNeed'.toString()] = item.totalFertilizerNeeded;
@@ -119,6 +117,10 @@ export class DistributionPlanComponent implements OnInit {
           this.loading = false;
         }
       }, (err) => {
+        this.totalFarmers = 0;
+        this.totalFertilizerNeeded = 0;
+        this.totalTrees = 0;
+        this.totalNumberOfLands = 0;
         if (err.status === 404) {
           this.showPlan = false;
           this.message = err.errors[0];
@@ -138,33 +140,19 @@ export class DistributionPlanComponent implements OnInit {
     this.filterForm.controls.location.get('prov_id'.toString()).valueChanges.subscribe(
       (value) => {
         if (value !== '') {
-          const body = {
-            searchBy: 'province',
-            prov_id: value
-          };
-          this.siteService.all(body).subscribe((data) => {
-            this.organisations = data.content;
-            this.zoneId = true;
-          });
           this.locationService.getDistricts(value).subscribe((data) => {
             this.districts = data;
+            this.sectors = null;
           });
-        } else {
-          this.zoneId = false;
         }
       }
     );
     this.filterForm.controls.location.get('dist_id'.toString()).valueChanges.subscribe(
       (value) => {
         if (value !== '') {
-          this.distId = true;
-          const body = {
-            searchBy: 'district',
-            dist_id: value
-          };
-          this.siteService.all(body).subscribe((data) => {
-            this.organisations = data.content;
-            this.zoneId = true;
+          this.locationService.getSectors(value).subscribe((data) => {
+            this.sectors = data;
+            this.distId = true;
           });
         } else {
           this.distId = false;

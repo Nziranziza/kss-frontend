@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {SiteService} from '../../../core/services';
+import {MessageService, SiteService} from '../../../core/services';
 import {LocationService} from '../../../core/services';
 import {HelperService} from '../../../core/helpers';
 
@@ -14,6 +14,7 @@ export class SiteEditComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder, private route: ActivatedRoute,
               private router: Router, private siteService: SiteService,
+              private messageService: MessageService,
               private locationService: LocationService,
               private helper: HelperService) {
   }
@@ -32,6 +33,7 @@ export class SiteEditComponent implements OnInit {
   selectedCoveredSectors = [];
   id: string;
   totalAllocatedQty = 0;
+  afterInitial = false;
 
   ngOnInit() {
     this.editForm = this.formBuilder.group({
@@ -56,41 +58,45 @@ export class SiteEditComponent implements OnInit {
         this.locationService.getProvinces().subscribe((provinces) => {
           this.provinces = provinces;
         });
+        const restoreCoveredCWS = [];
+        this.selectedCoveredCWS = [];
         site.coveredAreas.coveredCWS.map((cws) => {
-          this.selectedCoveredCWS = [];
-          const restoreCoveredCWS = [];
           restoreCoveredCWS.push(cws.org_id);
           this.selectedCoveredCWS.push(cws.name);
-          site.coveredAreas.coveredCWS = restoreCoveredCWS;
         });
+        site.coveredAreas.coveredCWS = restoreCoveredCWS;
+        const restoreCoveredSectors = [];
+        this.selectedCoveredSectors = [];
         site.coveredAreas.coveredSectors.map((sector) => {
-          this.selectedCoveredSectors = [];
-          const restoreCoveredSectors = [];
           restoreCoveredSectors.push(sector.sect_id);
           this.siteService.getSectorAllocatedFertilizer(sector.sect_id).subscribe((qty) => {
             this.totalAllocatedQty = this.totalAllocatedQty + qty.content[0].totalFertilizerAllocated;
             this.editForm.controls.allocatedQty.setValue(this.totalAllocatedQty);
           });
           this.selectedCoveredSectors.push(sector.name);
-          site.coveredAreas.coveredSectors = restoreCoveredSectors;
-          this.locationService.getSectors(site.location.dist_id).subscribe((items) => {
-            this.coveredSectorsSet = items;
-          });
-          const body = {
-            searchBy: 'district',
-            dist_id: site.location.dist_id
-          };
-          this.siteService.getZone(body).subscribe(zone => {
-            if (zone) {
-              this.coveredCWSSet = zone.content;
-            }
-          });
+        });
+        site.coveredAreas.coveredSectors = restoreCoveredSectors;
+        this.locationService.getSectors(site.location.dist_id).subscribe((items) => {
+          this.coveredSectorsSet = items;
+        });
+        const body = {
+          searchBy: 'district',
+          dist_id: site.location.dist_id
+        };
+        this.siteService.getZone(body).subscribe(zone => {
+          if (zone) {
+            this.coveredCWSSet = zone.content;
+          }
         });
         this.locationService.getDistricts(site.location.prov_id).subscribe((districts) => {
           this.districts = districts;
         });
         this.locationService.getSectors(site.location.dist_id).subscribe((sectors) => {
           this.sectors = sectors;
+          this.editForm.patchValue(site);
+          this.editForm.controls.coveredAreas.get('coveredSectors'.toString()).patchValue(site.coveredAreas.coveredSectors);
+          this.editForm.controls.coveredAreas.get('coveredCWS'.toString()).patchValue(site.coveredAreas.coveredCWS);
+          this.afterInitial = true;
         });
         this.locationService.getCells(site.location.sect_id).subscribe((cells) => {
           this.cells = cells;
@@ -98,14 +104,11 @@ export class SiteEditComponent implements OnInit {
         this.locationService.getVillages(site.location.cell_id).subscribe((villages) => {
           this.villages = villages;
         });
-        this.editForm.patchValue(site);
-        this.editForm.controls.coveredAreas.get('coveredSectors'.toString()).patchValue(site.coveredAreas.coveredSectors);
-        this.editForm.controls.coveredAreas.get('coveredCWS'.toString()).patchValue(site.coveredAreas.coveredCWS);
       });
     });
     this.initial();
+    this.onChanges();
   }
-
   onSubmit() {
     if (this.editForm.valid) {
       const val = this.editForm.value;
@@ -134,8 +137,18 @@ export class SiteEditComponent implements OnInit {
         }
         site.coveredAreas.coveredCWS = tempCWS;
       });
-      /* Edit not enabled */
-      this.router.navigateByUrl('admin/sites');
+      if (site.coveredAreas.coveredCWS.length === 0) {
+        delete site.coveredAreas.coveredCWS;
+      }
+      site['siteId'.toString()] = this.id;
+      this.helper.cleanObject(site.location);
+      this.siteService.update(site).subscribe(() => {
+          this.messageService.setMessage('Site successfully updated!');
+          this.router.navigateByUrl('admin/sites');
+        },
+        (err) => {
+          this.errors = err.errors;
+        });
     } else {
       this.errors = this.helper.getFormValidationErrors(this.editForm);
     }

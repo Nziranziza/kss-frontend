@@ -28,7 +28,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private authorisationService: AuthorisationService,
     private seasonService: SeasonService
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this.authForm = this.formBuilder.group({
@@ -71,13 +72,11 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.authenticationService.attemptAuth(credentials).subscribe(data => {
           this.seasonService.all().subscribe((dt) => {
             const seasons = dt.content;
-            if (!this.authenticationService.isSeasonSet()) {
-              seasons.forEach((item) => {
-                if (item.isCurrent) {
-                  this.authenticationService.setCurrentSeason(item);
-                }
-              });
-            }
+            seasons.forEach((item) => {
+              if (item.isCurrent) {
+                this.authenticationService.setCurrentSeason(item);
+              }
+            });
             this.afterLogInRedirect();
           });
         },
@@ -93,6 +92,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.messageService.setMessage('');
   }
+
   afterLogInRedirect() {
     const orgId = this.authenticationService.getCurrentUser().info.org_id;
     if (this.authorisationService.isCWSUser()) {

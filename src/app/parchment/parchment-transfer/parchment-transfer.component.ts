@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {ParchmentService} from '../../core/services/parchment.service';
+import {ParchmentService} from '../../core/services';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {AuthenticationService, OrganisationService} from '../../core/services';
 import {HelperService} from '../../core/helpers';
-import {MessageService} from '../../core/services/message.service';
+import {MessageService} from '../../core/services';
 import {Location} from '@angular/common';
 
 @Component({
@@ -34,19 +34,15 @@ export class ParchmentTransferComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.id = params['id'.toString()];
     });
-
     this.orgId = this.authenticationService.getCurrentUser().info.org_id;
-
     this.transferLotsForm = this.formBuilder.group({
       destOrgId: [''],
       releaseDate: [''],
       totalKgs: [0]
     });
-
     this.parchmentService.get(this.id, this.orgId).subscribe((parchment) => {
       this.parchment = parchment.content;
     });
-
     this.organisationService.all().subscribe(data => {
       if (data) {
         this.organisations = data.content;

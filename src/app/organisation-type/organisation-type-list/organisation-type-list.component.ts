@@ -20,7 +20,6 @@ export class OrganisationTypeListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getAllOrganisationTypes();
-
   }
 
   ngOnDestroy(): void {

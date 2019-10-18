@@ -24,14 +24,17 @@
       <div class="col-sm-4" style="margin-top: 25px">
         <div class="form-inline">
           <span class="label-required">Quantity Fertilizer(Kg)</span> &nbsp; &nbsp;
-          <input type="text" formControlName="quantityFertilizer" class="form-control">
+          <input type="text" formControlName="quantity" class="form-control">
         </div>
       </div>
       <div class="col-sm-4" style="margin-top: 25px">
         <div class="form-inline">
           <span class="label-required">Stock</span> &nbsp; &nbsp;
           <select class="form-control" formControlName="stockOutId">
-            <option *ngFor="let stock of stockOuts" value="{{stock._id}}"></option>
+            <option></option>
+            <ng-container *ngFor="let stock of stockOuts">
+            <option *ngIf="stock.inputId.inputType === 'Fertilizer'" value="{{stock._id}}">{{ stock.totalQuantity }} Kg - {{ stock.created_at|date }}</option>
+            </ng-container>
           </select>
         </div>
       </div>

@@ -6,23 +6,48 @@
   <app-list-errors [errorList]="errors" *ngIf="errors"></app-list-errors>
   <app-list-message [message]="message"></app-list-message>
   <form [formGroup]="confirmForm" (ngSubmit)="onSubmit()">
-    <div class="row">
-      <div class="col-sm-4">
-        <div class="form-inline">
-          <label class="control-label">Quantity</label> &nbsp; &nbsp;
-          <input type="text" formControlName="receivedQty" class="form-control">
+    <div *ngFor="let control of formEntries.controls; let i=index" formArrayName="entries">
+      <div class="row" [formGroupName]="i">
+        <input type="hidden" formControlName="entryId" class="form-control">
+        <div class="col-sm-1">
+          <span>{{ i + 1 }}</span> . &nbsp; &nbsp;
+          <span></span>
         </div>
-      </div>
-      <div class="col-sm-8">
-        <div class="form-inline">
-          <label class="control-label">Comment</label> &nbsp; &nbsp;
-          <textarea type="text" formControlName="comment" class="form-control"></textarea>
+        <div class="col-sm-2">
+          <span>Input</span> &nbsp; &nbsp;<br>
+          <p style="margin-top: 10px">
+            <span style="font-weight: bold"></span>
+          </p>
+        </div>
+        <div class="col-sm-2">
+          <span>Items</span> &nbsp; &nbsp;<br>
+          <p style="margin-top: 10px">
+            <span style="font-weight: bold">{{ dispatch.entries[i].numberOfItems }}</span>
+          </p>
+        </div>
+        <div class="col-sm-2">
+          <span>Qty</span> &nbsp; &nbsp;<br>
+          <p style="margin-top: 10px">
+            <span style="font-weight: bold">{{ dispatch.entries[i].quantityPerItem }}</span>
+          </p>
+        </div>
+        <div class="col-sm-2">
+          <div class="form-group">
+            <span class="label-required">Received Qty</span> &nbsp; &nbsp;<br>
+            <input type="text" formControlName="receivedQty" class="form-control">
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="form-group">
+            <span>Comment</span> &nbsp; &nbsp;<br>
+            <input type="text" formControlName="comment" class="form-control">
+          </div>
         </div>
       </div>
     </div>
     <div class="row">
       <div class="col-sm-1 pull-right">
-        <button class="btn btn-success pull-right btn-margin">save</button>
+        <button class="btn btn-success pull-right btn-margin">Confirm</button>
       </div>
     </div>
   </form>

@@ -52,9 +52,11 @@ export class PendingFarmerListComponent implements OnInit, OnDestroy {
     {value: 'forename', name: 'first name'},
     {value: 'surname', name: 'last name'},
   ];
+  isCwsOfficer = false;
 
   ngOnInit() {
     this.isDistrictCashCrop = this.authorisationService.isDistrictCashCropOfficer();
+    this.isCwsOfficer = this.authorisationService.isCWSUser();
     this.getFarmers();
     this.filterForm = this.formBuilder.group({
       term: ['', Validators.minLength(3)],
@@ -101,6 +103,10 @@ export class PendingFarmerListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.messageService.setMessage('');
+  }
+
+  canApprove() {
+    return (!this.authorisationService.isNaebUser()) && (!this.authorisationService.isCeparUser());
   }
 
   onClearFilter() {

@@ -21,8 +21,6 @@ export class RecordDistributionComponent implements OnInit {
   updateRequestForm: FormGroup;
   errors: string [];
   message: string;
-  currentStockFertilizer: any;
-  remainingQtyFertilizer = 0;
   stockOuts: any;
 
   constructor(
@@ -38,55 +36,44 @@ export class RecordDistributionComponent implements OnInit {
   ngOnInit(): void {
     this.distributionForm = this.formBuilder.group({
       quantity: ['', Validators.required],
-      stockOutId: ['', Validators.required]
+      stockOutId: ['']
     });
     this.updateRequestForm = this.formBuilder.group({
       treesAtDistribution: ['', Validators.required],
       comment: ['', Validators.required]
     });
     const id = this.authenticationService.getCurrentUser().orgInfo.distributionSite;
-    this.inputDistributionService.getSiteStockOuts(id).subscribe((data) => {
-      data.content.map((item) => {
-        if (item.distributedQty < item.totalQuantity) {
-          if (item.dispatchId.inputType === 'Fertilizer') {
-            this.currentStockFertilizer = item;
-            this.remainingQtyFertilizer = this.currentStockFertilizer.totalQuantity - this.currentStockFertilizer.distributedQty;
-          }
-        }
-      });
-    });
-    this.inputDistributionService.getSiteStockOuts(this.authenticationService.getCurrentUser().orgInfo.distributionSite)
+    this.inputDistributionService.getSiteStockOuts(id)
       .subscribe((data) => {
         this.stockOuts = data.content;
       });
   }
 
   updateRequestAtDistribution() {
-    if (this.distributionForm.valid) {
-      const record = JSON.parse(JSON.stringify(this.distributionForm.value));
+    if (this.updateRequestForm.valid) {
+      const record = JSON.parse(JSON.stringify(this.updateRequestForm.value));
       record['documentId'.toString()] = this.documentId;
-      record['farmerRequestId'.toString()] = this.requestId;
+      record['subDocumentId'.toString()] = this.requestId;
       record['siteId'.toString()] = this.authenticationService.getCurrentUser().orgInfo.distributionSite;
       this.inputDistributionService.updateRequestAtDistribution(record).subscribe(() => {
-          this.message = 'Information successfully updated!';
+          this.message = 'successfully updated!';
         },
         (err) => {
           this.errors = err.errors;
         });
     } else {
-      this.errors = this.helper.getFormValidationErrors(this.distributionForm);
+      this.errors = this.helper.getFormValidationErrors(this.updateRequestForm);
     }
   }
 
   onSubmit() {
-    if (this.updateRequestForm.valid) {
-      const record = JSON.parse(JSON.stringify(this.updateRequestForm.value));
+    if (this.distributionForm.valid) {
+      const record = JSON.parse(JSON.stringify(this.distributionForm.value));
       record['documentId'.toString()] = this.documentId;
       record['farmerRequestId'.toString()] = this.requestId;
-      record['stockOutId'.toString()] = this.currentStockFertilizer._id;
       record['regNumber'.toString()] = this.regNumber;
       this.inputDistributionService.recordDistribution(record).subscribe(() => {
-          this.message = 'Information successfully recorded!';
+          this.message = 'successfully distributed!';
         },
         (err) => {
           this.errors = err.errors;

@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {HelperService} from '../../../core/helpers';
-import {AuthenticationService, InputDistributionService} from '../../../core/services';
+import {AuthenticationService, ConfirmDialogService, InputDistributionService, SeasonService} from '../../../core/services';
 import {SiteService} from '../../../core/services';
 import {LocationService} from '../../../core/services';
 import {Subject} from 'rxjs';
@@ -17,8 +17,10 @@ import {DatePipe} from '@angular/common';
 })
 export class WarehouseDispatchComponent implements OnInit {
 
-  constructor(private formBuilder: FormBuilder, private siteService: SiteService, private warehouseService: WarehouseService,
-              private router: Router,
+  constructor(private formBuilder: FormBuilder, private siteService: SiteService,
+              private warehouseService: WarehouseService,
+              private router: Router, private confirmDialogService: ConfirmDialogService,
+              private seasonService: SeasonService,
               private datePipe: DatePipe, private authenticationService: AuthenticationService,
               private inputDistributionService: InputDistributionService,
               private helper: HelperService, private locationService: LocationService) {
@@ -40,9 +42,6 @@ export class WarehouseDispatchComponent implements OnInit {
   // @ts-ignore
   dtTrigger: Subject = new Subject();
   loading = false;
-  stores: any;
-  pesticideWarehouseId: string;
-  fertilizerWarehouseId: string;
   includeFertilizer = true;
   includePesticide = false;
   currentDate: any;
@@ -54,18 +53,21 @@ export class WarehouseDispatchComponent implements OnInit {
     {value: 'driver', name: 'driver'},
     {value: 'vehicle', name: 'vehicle'}
   ];
-  dispatches = [];
-  pesticideTypes: any;
   packagePesticide: any;
   packageFertilizer: any;
   totalQtyFertilizer = 0;
   totalQtyPesticide = 0;
+  stocks: any;
+  fertilizerStocks: any;
+  pesticideStocks: any;
+  season: any;
 
   ngOnInit() {
     this.currentDate = new Date();
     this.recordDispatchForm = this.formBuilder.group({
       entries: this.formBuilder.group({
         driver: [''],
+        driverPhoneNumber: [''],
         vehiclePlate: [''],
         vehicleModel: [''],
         date: [this.datePipe.transform(this.currentDate, 'yyyy-MM-dd'), Validators.required],
@@ -84,7 +86,11 @@ export class WarehouseDispatchComponent implements OnInit {
     });
     this.dtOptions = {
       pagingType: 'full_numbers',
-      pageLength: 25
+      pageLength: 25,
+      columns: [{}, {}, {}, {}, {
+        class: 'none'
+      }, {}, {}],
+      responsive: true
     };
     this.filterForm = this.formBuilder.group({
       search: this.formBuilder.group({
@@ -104,20 +110,9 @@ export class WarehouseDispatchComponent implements OnInit {
     this.initial();
     this.getDispatches();
     this.onChanges();
-    this.warehouseService.allEntries().subscribe((data) => {
-      this.stores = data.content;
-      this.stores.map((stock) => {
-        if (stock.inputType === 'Fertilizer') {
-          this.fertilizerWarehouseId = stock._id;
-        }
-        if (stock.inputType === 'Pesticide') {
-          this.pesticideWarehouseId = stock._id;
-        }
-      });
-    });
-
-    this.pesticideTypes = this.authenticationService.getCurrentSeason().seasonParams.pesticide;
+    this.getStocks(1);
     this.addPackageFertilizer();
+    this.getCurrentSeason();
   }
 
   get formPackageFertilizer() {
@@ -170,11 +165,28 @@ export class WarehouseDispatchComponent implements OnInit {
   }
 
   onChangePackageFertilizer(index: number) {
-    console.log('here !');
     let value: { bagSize: string | number; numberOfBags: string | number; };
     value = this.formPackageFertilizer.value[index];
-    const subTotal = (+value.bagSize) * (+value.numberOfBags);
-    this.getPackageFertilizerFormGroup(index).controls['subTotal'.toString()].setValue(subTotal);
+    let removed = false;
+    this.formPackageFertilizer.value.forEach((el, i) => {
+      if (((value.bagSize) === el.bagSize) && (this.formPackageFertilizer.value.length > 1) && (i !== index)) {
+        this.removePackageFertilizer(index);
+        removed = true;
+      }
+    });
+    if (!removed) {
+      const subTotal = (+value.bagSize) * (+value.numberOfBags);
+      this.getPackageFertilizerFormGroup(index).controls['subTotal'.toString()].setValue(subTotal);
+    }
+  }
+
+  onChangePackagePesticide(index: number) {
+    const value = this.formPackagePesticide.value[index];
+    this.formPackagePesticide.value.forEach((el, i) => {
+      if ((value.pesticideType === el.pesticideType) && (this.formPackagePesticide.value.length > 1) && (i !== index)) {
+        this.removePackagePesticide(index);
+      }
+    });
   }
 
   onChanges() {
@@ -261,6 +273,8 @@ export class WarehouseDispatchComponent implements OnInit {
         this.isFilterByType = value === 'input_type';
         if (this.isFilterByType) {
           this.filterForm.controls.search.get('term'.toString()).setValue('Fertilizer');
+        } else {
+          this.filterForm.controls.search.get('term'.toString()).setValue('');
         }
       });
   }
@@ -305,28 +319,31 @@ export class WarehouseDispatchComponent implements OnInit {
       delete dispatch.location;
       const body = {
         siteId: dispatch.siteId,
+        vehicleModel: dispatch.entries.vehicleModel,
+        vehiclePlate: dispatch.entries.vehiclePlate,
+        date: dispatch.entries.date,
+        driver: dispatch.entries.driver,
+        driverPhoneNumber: dispatch.entries.driverPhoneNumber,
         entries: []
       };
       if (this.includePesticide) {
-        body.entries.push({
-          vehicleModel: dispatch.entries.vehicleModel,
-          vehiclePlate: dispatch.entries.vehiclePlate,
-          date: dispatch.entries.date,
-          driver: dispatch.entries.driver,
-          package: dispatch.entries.packagePesticide,
-          totalQty: dispatch.entries.totalQtyPesticide,
-          warehouseId: this.pesticideWarehouseId
+        dispatch.entries.packagePesticide.forEach((pe) => {
+          const el = {
+            stockId: this.pesticideStocks.find(s => s.inputId._id === pe.pesticideType)._id,
+            numberOfItems: 1,
+            totalQty: +pe.qty
+          };
+          body.entries.push(el);
         });
       }
       if (this.includeFertilizer) {
-        body.entries.push({
-          vehicleModel: dispatch.entries.vehicleModel,
-          vehiclePlate: dispatch.entries.vehiclePlate,
-          date: dispatch.entries.date,
-          driver: dispatch.entries.driver,
-          package: dispatch.entries.packageFertilizer,
-          totalQty: dispatch.entries.totalQtyFertilizer,
-          warehouseId: this.fertilizerWarehouseId
+        dispatch.entries.packageFertilizer.forEach((fe) => {
+          const el = {
+            stockId: this.fertilizerStocks.find(s => s.quantityPerItem === +fe.bagSize)._id,
+            numberOfItems: +fe.numberOfBags,
+            totalQty: +fe.subTotal
+          };
+          body.entries.push(el);
         });
       }
       this.inputDistributionService.recordDispatch(body)
@@ -356,52 +373,63 @@ export class WarehouseDispatchComponent implements OnInit {
     });
   }
 
-  selectDispatch(isChecked: boolean, dispatchId, entryId) {
-    const item = {
-      docId: dispatchId,
-      subDocId: entryId
-    };
-    if (isChecked) {
-      this.dispatches.push(item);
-    } else {
-      this.dispatches.forEach((myObject, index) => {
-        if (myObject.docId === dispatchId) {
-          this.dispatches.splice(index, 1);
-        }
-      });
-    }
-  }
-
-  printNote() {
-    const time = Date.now();
+  printNote(id: string) {
     this.errors = [];
-    if (this.dispatches.length > 0) {
-      this.warehouseService.printDeliveryNote({data: this.dispatches}).subscribe((data) => {
-        const byteArray = new Uint8Array(atob(data.data).split('').map(char => char.charCodeAt(0)));
-        const newBlob = new Blob([byteArray], {type: 'application/pdf'});
-        const linkElement = document.createElement('a');
-        const url = URL.createObjectURL(newBlob);
-        linkElement.setAttribute('href', url);
-        linkElement.setAttribute('download', 'Delivery_note_' + time + '.pdf');
-        const clickEvent = new MouseEvent('click', {
-          view: window,
-          bubbles: true,
-          cancelable: false
-        });
-        linkElement.dispatchEvent(clickEvent);
+    this.warehouseService.printDeliveryNote(id).subscribe((data) => {
+      const byteArray = new Uint8Array(atob(data.data).split('').map(char => char.charCodeAt(0)));
+      const newBlob = new Blob([byteArray], {type: 'application/pdf'});
+      const linkElement = document.createElement('a');
+      const url = URL.createObjectURL(newBlob);
+      linkElement.setAttribute('href', url);
+      linkElement.setAttribute('download', data.fileName + '.pdf');
+      const clickEvent = new MouseEvent('click', {
+        view: window,
+        bubbles: true,
+        cancelable: false
       });
-    } else {
-      this.errors = ['Please select at least one item'];
-    }
+      linkElement.dispatchEvent(clickEvent);
+    });
   }
 
   onIncludeFertilizer() {
     this.includeFertilizer = !this.includeFertilizer;
-    this.addPackageFertilizer();
+    if (this.recordDispatchForm.value.entries.packageFertilizer.length === 0) {
+      this.addPackageFertilizer();
+    }
   }
 
   onIncludePesticide() {
     this.includePesticide = !this.includePesticide;
-    this.addPackagePesticide();
+    if (this.recordDispatchForm.value.entries.packagePesticide.length === 0) {
+      this.addPackagePesticide();
+    }
+  }
+
+  getStocks(stock: number) {
+    this.inputDistributionService.getStock(stock).subscribe((data) => {
+      this.stocks = data.content;
+      this.fertilizerStocks = this.stocks.filter(s => s.inputId.inputType === 'Fertilizer');
+      this.pesticideStocks = this.stocks.filter(s => s.inputId.inputType === 'Pesticide');
+    });
+  }
+
+  getCurrentSeason() {
+    this.seasonService.all().subscribe((dt) => {
+      const seasons = dt.content;
+      seasons.forEach((item) => {
+        if (item.isCurrent) {
+          this.season = item;
+        }
+      });
+    });
+  }
+
+  cancelDispatch(id: string) {
+    this.confirmDialogService.openConfirmDialog('Are you sure you want to cancel dispatch? ' +
+      'action cannot be undone').afterClosed().subscribe(
+      res => {
+        if (res) {
+        }
+      });
   }
 }

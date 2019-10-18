@@ -14,7 +14,6 @@ export class AuthorisationGuardService implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot): Promise<boolean> | boolean {
     return this.hasRequiredPermission(route.data['permissions'.toString()]);
   }
-
   protected hasRequiredPermission(roles: any[]): Promise<boolean> | boolean {
     if (roles) {
       return this.authorisationService.hasRoles(roles);

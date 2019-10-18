@@ -74,5 +74,6 @@ export class CreateBatchComponent implements OnInit {
       this.errors = this.helper.getFormValidationErrors(this.createBatchForm);
     }
   }
-  onTransferLots() {}
+  onTransferLots() {
+  }
 }

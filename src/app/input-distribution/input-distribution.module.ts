@@ -5,7 +5,7 @@ import {InputDistributionRoutingModule} from './input-distribution-routing.modul
 import {DistributionPlanComponent} from './distribution-plan/distribution-plan.component';
 import {SiteDistributionComponent} from './site-distribution/site-distribution.component';
 import {OwlDateTimeModule, OwlNativeDateTimeModule} from 'ng-pick-datetime';
-import {RecordSiteStockOutComponent} from './site-view-dispatch/site-stock-out/record-site-stock-out.component';
+import {RecordSiteStockOutComponent} from './site-view-stockout/site-stock-out/record-site-stock-out.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {NgxPaginationModule} from 'ngx-pagination';
 import {OrderModule} from 'ngx-order-pipe';
@@ -21,6 +21,7 @@ import {SiteViewStockoutComponent} from './site-view-stockout/site-view-stockout
 import {DeliveryDetailsComponent} from './warehouse/warehouse-entries/delivery-details/delivery-details.component';
 import {DistributionReportModule} from './distribution-report/distribution-report.module';
 import {SiteDistributionListComponent} from './site-ditributions-list/site-distributions-list.component';
+import { ApplyPesticideComponent } from './site-distribution/apply-pesticide/apply-pesticide.component';
 
 @NgModule({
   declarations: [DistributionPlanComponent,
@@ -32,7 +33,7 @@ import {SiteDistributionListComponent} from './site-ditributions-list/site-distr
     SiteViewDispatchComponent,
     EditRequestComponent,
     ConfirmDispatchComponent,
-    SiteViewStockoutComponent, SiteDistributionListComponent],
+    SiteViewStockoutComponent, SiteDistributionListComponent, ApplyPesticideComponent],
   imports: [
     CommonModule,
     NgbModule, NgxPaginationModule, OrderModule,
@@ -45,7 +46,7 @@ import {SiteDistributionListComponent} from './site-ditributions-list/site-distr
     WarehouseModule,
     DistributionReportModule
   ],
-  entryComponents: [RecordDistributionComponent, ConfirmDispatchComponent,
+  entryComponents: [RecordDistributionComponent, ConfirmDispatchComponent, ApplyPesticideComponent,
     RecordSiteStockReturnComponent, RecordSiteStockOutComponent, DeliveryDetailsComponent]
 })
 export class InputDistributionModule {

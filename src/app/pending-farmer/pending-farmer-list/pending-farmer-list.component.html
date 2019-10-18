@@ -46,7 +46,7 @@
             <td><span
               *ngIf="farmer.reason !== undefined && farmer.reason.length > 0">{{ farmer.reason.join(', ') }}</span></td>
             <td>
-              <a appRequiredSeason class="btn btn-success btn-sm pull-right"
+              <a appRequiredSeason class="btn btn-success btn-sm pull-right" *ngIf="canApprove()"
                  [routerLink]="['/admin/farmers/create', {id: farmer._id}]">Approve
               </a>
             </td>

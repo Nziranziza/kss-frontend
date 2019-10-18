@@ -47,6 +47,12 @@
           </div>
           <div class="col-xs-2">
             <div class="form-group">
+              <label class="control-label label-required">Driver phone number</label>
+              <input type="text" formControlName="driverPhoneNumber" class="form-control">
+            </div>
+          </div>
+          <div class="col-xs-2">
+            <div class="form-group">
               <label class="control-label label-required">Vehicle plate</label>
               <input type="text" formControlName="vehiclePlate" class="form-control">
             </div>
@@ -92,15 +98,17 @@
                 <div class="form-group">
                   <span class="control-label label-required">Bag size (kg)</span>
                   <select class="form-control" formControlName="bagSize" (change)="onChangePackageFertilizer(i)">
-                    <option value="25">25</option>
-                    <option value="50">50</option>
+                    <option *ngFor="let stock of fertilizerStocks" value="{{ stock.quantityPerItem }}">{{
+                      stock.quantityPerItem }}
+                    </option>
                   </select>
                 </div>
               </div>
               <div class="col-xs-2">
                 <div class="form-group">
                   <span class="control-label label-required">Number of bags</span>
-                  <input type="text" formControlName="numberOfBags" class="form-control" (input)="onChangePackageFertilizer(i)">
+                  <input type="text" formControlName="numberOfBags" class="form-control"
+                         (input)="onChangePackageFertilizer(i)">
                 </div>
               </div>
               <div class="col-xs-2">
@@ -120,7 +128,7 @@
             <div class="col-xs-2">
               <div class="form-group">
                 <span class="control-label label-required">Total qty fertilizer (kg)</span>
-                <input type="text" formControlName="totalQtyFertilizer" class="form-control">
+                <input type="text" formControlName="totalQtyFertilizer" class="form-control" readonly="readonly">
               </div>
             </div>
           </div>
@@ -138,8 +146,10 @@
               <div class="col-xs-2">
                 <div class="form-group">
                   <span class="control-label label-required">Pesticide type</span>
-                  <select class="form-control" formControlName="pesticideType">
-                    <option *ngFor="let type of pesticideTypes" value="{{type.inputName._id}}">{{ type.inputName.inputName }}</option>
+                  <select class="form-control" formControlName="pesticideType" (change)="onChangePackagePesticide(i)">
+                    <option *ngFor="let stock of pesticideStocks" value="{{ stock.inputId._id }}">{{
+                      stock.inputId.inputName }}
+                    </option>
                   </select>
                 </div>
               </div>
@@ -160,7 +170,7 @@
             <div class="col-xs-2">
               <div class="form-group">
                 <span class="control-label label-required">Total qty pesticide (l)</span>
-                <input type="text" formControlName="totalQtyPesticide" class="form-control">
+                <input type="text" formControlName="totalQtyPesticide" class="form-control" readonly="readonly">
               </div>
             </div>
           </div>
@@ -174,7 +184,7 @@
     </div>
   </div>
 </form>
-<div class="row filter-form" style="margin-bottom: 10px; margin-left: -1px">
+<!--<div class="row filter-form" style="margin-bottom: 10px; margin-left: -1px">
   <form [formGroup]="filterForm" (ngSubmit)="onFilter()">
     <ng-container formGroupName="search">
       <div class="col-xs-1">
@@ -186,14 +196,14 @@
         <div class="col-xs-1">
           <select class="form-control" formControlName="prov_id">
             <option value="">select province</option>
-            <option *ngFor="let province of filterProvinces" value="{{province._id}}">{{province.namee | lowercase}}
+            <option *ngFor="let province of filterProvinces" value="{{province._id}}">{{province.namee | titlecase}}
             </option>
           </select>
         </div>
         <div class="col-xs-1">
           <select class="form-control" formControlName="dist_id">
             <option value="">select district</option>
-            <option *ngFor="let district of filterDistricts" value="{{district._id}}">{{district.name | lowercase}}
+            <option *ngFor="let district of filterDistricts" value="{{district._id}}">{{district.name | titlecase}}
             </option>
           </select>
         </div>
@@ -201,7 +211,7 @@
       <div class="col-xs-1" *ngIf="isFilterBySite">
         <select class="form-control" formControlName="siteId">
           <option value="">select site</option>
-          <option *ngFor="let site of filterSites" value="{{site._id}}">{{site.siteName | lowercase}}</option>
+          <option *ngFor="let site of filterSites" value="{{site._id}}">{{site.siteName | titlecase}}</option>
         </select>
       </div>
       <div class="col-xs-2" *ngIf="!isFilterByType">
@@ -235,46 +245,59 @@
       <button class="btn btn-success pull-right btn-margin" type="submit"><i class="fa fa-search"></i> Search</button>
     </div>
   </form>
-  <div class="col-xs-2 pull-right">
-    <button class="btn btn-info btn-margin pull-right" (click)="printNote()" type="button">
-      <i class="fa fa-print" aria-hidden="true"></i> Print note
-    </button>
-  </div>
-</div>
+</div>-->
 <div class="row">
   <div class="col-xs-12">
     <div class="box">
-      <div class="box-body">
-        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover"
-               class="table table-striped">
+      <div class="box-body expendable-dataTable">
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped">
           <thead>
           <tr>
-            <th></th>
             <th>Destination</th>
             <th>Driver</th>
             <th>Vehicle</th>
-            <th>Type</th>
-            <th>Quantity</th>
+            <th>Phone number</th>
+            <th></th>
             <th>Date</th>
+            <th></th>
           </tr>
           </thead>
           <tbody>
-          <ng-container *ngFor="let dispatch of inputDispatches">
-            <tr *ngFor="let entry of dispatch.entries">
-              <td>
-                <input type="checkbox" (click)="selectDispatch($event.target.checked, dispatch._id, entry._id)">
-              </td>
-              <td>{{ dispatch.destinationSite.siteId.siteName }}</td>
-              <td>{{ entry.driver }}</td>
-              <td>{{ entry.vehiclePlate }}</td>
-              <td>{{ dispatch.inputType }}</td>
-              <td>{{ entry.totalQty }}
-                <span *ngIf="dispatch.inputType === 'Pesticide'">l</span>
-                <span *ngIf="dispatch.inputType === 'Fertilizer'">kg</span>
-              </td>
-              <td>{{ entry.date|date }}</td>
-            </tr>
-          </ng-container>
+          <tr *ngFor="let dispatch of inputDispatches">
+            <td>{{ dispatch.destinationSite.siteId.siteName }}</td>
+            <td>{{ dispatch.driverInfo.driver }}</td>
+            <td>{{ dispatch.driverInfo.vehiclePlate }}</td>
+            <td>{{ dispatch.driverInfo.driverPhoneNumber }}</td>
+            <td>
+              <table style="background: transparent; width: 750px;" class="pull-right">
+                <tr style="font-style: oblique; font-size: 12px; background: transparent; font-weight: bold">
+                  <td>Input</td>
+                  <td>Items</td>
+                  <td>Qty</td>
+                  <td>Total</td>
+                </tr>
+                <tr *ngFor="let entry of dispatch.entries"
+                    style="font-style: oblique; font-size: 12px; background: transparent">
+                  <td>{{ entry.inputId.inputName }}</td>
+                  <td>{{ entry.numberOfItems }}</td>
+                  <td>{{ entry.quantityPerItem }}</td>
+                  <td>{{ entry.numberOfItems * entry.quantityPerItem}}
+                    <app-quantity-unit [inputType]="entry.inputId.inputType"></app-quantity-unit>
+                  </td>
+                </tr>
+              </table>
+            </td>
+            <td>{{ dispatch.date|date }}</td>
+            <td>
+              <button class="btn btn-info btn-margin btn-sm pull-right" (click)="printNote(dispatch._id)" type="button">
+                <i class="fa fa-print" aria-hidden="true"></i> Note
+              </button>
+              <button class="btn btn-default btn-margin btn-sm pull-right" (click)="cancelDispatch(dispatch._id)"
+                      type="button">
+                <i class="fa fa-remove" aria-hidden="true"></i> Cancel
+              </button>
+            </td>
+          </tr>
           </tbody>
         </table>
       </div>
