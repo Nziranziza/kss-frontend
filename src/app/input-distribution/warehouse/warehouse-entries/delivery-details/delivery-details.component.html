@@ -1,6 +1,7 @@
 <div class="modal-header">
   <i class="fa fa-times-circle close" style="font-size: 24px;" aria-label="Close" (click)="modal.dismiss()">
   </i>
+  <button class="btn btn-success btn-margin pull-left" (click)="exportAsXLSX()"><i class="fa fa-download"></i> Export</button>
 </div>
 <div class="modal-body">
   <app-list-errors [errorList]="errors" *ngIf="errors"></app-list-errors>
@@ -11,6 +12,7 @@
         <ng-container *ngIf="inputType === 'Fertilizer'; else pesticide">
           <thead>
             <tr>
+              <th></th>
               <th>Items</th>
               <th>Qty per item</th>
               <th>Total Qty (Kg)</th>
@@ -22,6 +24,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let entry of deliveries">
+              <td>{{ entry.inputId.inputName }}</td>
               <td>{{ entry.items }}</td>
               <td>{{ entry.quantityPerItem }}</td>
               <td>{{ entry.items * entry.quantityPerItem }}</td>
@@ -39,6 +42,7 @@
         <ng-template #pesticide>
           <thead>
           <tr>
+            <th></th>
             <th>Quantity (L)</th>
             <th>Driver</th>
             <th>Vehicle plate</th>
@@ -48,6 +52,7 @@
           </thead>
           <tbody>
           <tr *ngFor="let entry of deliveries">
+            <td>{{ entry.inputId.inputName }}</td>
             <td>{{ entry.quantityPerItem }}</td>
             <td>{{ entry.driver }}</td>
             <td>{{ entry.vehiclePlate }}</td>

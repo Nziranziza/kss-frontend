@@ -53,6 +53,9 @@ export class SiteViewStockoutComponent implements OnInit {
       this.inputDistributionService.getStock(constant.stocks.SITE, id).subscribe((data) => {
         this.stocks = data.content;
       });
+      this.inputDistributionService.getSiteStockOuts(id).subscribe((data) => {
+        this.stockOuts = data.content;
+      });
     });
   }
 
@@ -63,6 +66,9 @@ export class SiteViewStockoutComponent implements OnInit {
       const id = this.authenticationService.getCurrentUser().orgInfo.distributionSite;
       this.inputDistributionService.getStock(constant.stocks.SITE, id).subscribe((data) => {
         this.stocks = data.content;
+      });
+      this.inputDistributionService.getSiteStockOuts(id).subscribe((data) => {
+        this.stockOuts = data.content;
       });
     });
   }

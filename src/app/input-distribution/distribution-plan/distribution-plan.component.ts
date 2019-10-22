@@ -59,7 +59,6 @@ export class DistributionPlanComponent implements OnInit {
       pagingType: 'full_numbers',
       pageLength: 25
     };
-
     this.initial();
     this.onChanges();
   }

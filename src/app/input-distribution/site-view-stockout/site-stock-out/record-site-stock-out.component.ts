@@ -1,7 +1,7 @@
 import {Component, Inject, Injector, Input, OnInit, PLATFORM_ID} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {AuthenticationService, LocationService} from '../../../core/services';
+import {AuthenticationService, LocationService, SiteService} from '../../../core/services';
 import {MessageService} from '../../../core/services';
 import {HelperService} from '../../../core/helpers';
 import {InputDistributionService} from '../../../core/services';
@@ -26,6 +26,7 @@ export class RecordSiteStockOutComponent implements OnInit {
   cells: any;
   villages: any;
   currentDate: any;
+  site: any;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
@@ -34,6 +35,7 @@ export class RecordSiteStockOutComponent implements OnInit {
     private messageService: MessageService,
     private locationService: LocationService,
     private datePipe: DatePipe,
+    private siteService: SiteService,
     private helper: HelperService, private inputDistributionService: InputDistributionService) {
 
     if (isPlatformBrowser(this.platformId)) {
@@ -53,6 +55,10 @@ export class RecordSiteStockOutComponent implements OnInit {
       totalQty: ['', Validators.required],
       date: [this.datePipe.transform(this.currentDate, 'yyyy-MM-dd'), Validators.required],
     });
+    this.siteService.get(this.authenticationService.getCurrentUser().orgInfo.distributionSite).subscribe((site) => {
+      this.site = site.content;
+      this.sectors = this.site.coveredAreas.coveredSectors;
+    });
     this.onChanges();
     this.initial();
   }
@@ -60,11 +66,12 @@ export class RecordSiteStockOutComponent implements OnInit {
   onSubmit() {
     if (this.siteStockOutForm.valid) {
       const record = JSON.parse(JSON.stringify(this.siteStockOutForm.value));
+      record.location['prov_id'.toString()] = this.site.location.prov_id;
+      record.location['dist_id'.toString()] = this.site.location.dist_id;
       record['stockId'.toString()] = this.stock._id;
       record['userId'.toString()] = this.authenticationService.getCurrentUser().info._id;
       this.inputDistributionService.recordStockOut(record).subscribe(() => {
-          this.messageService.setMessage('Stock out recorded!');
-          this.modal.dismiss();
+          this.message = 'Stock out recorded!';
         },
         (err) => {
           this.errors = err.errors;

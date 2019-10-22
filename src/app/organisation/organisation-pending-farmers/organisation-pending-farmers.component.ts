@@ -59,10 +59,6 @@ export class OrganisationPendingFarmersComponent implements OnInit, OnDestroy {
   ];
   isCwsOfficer = false;
 
-  exportAsXLSX() {
-    this.excelService.exportAsExcelFile(this.allPendingFarmers, 'farmers');
-  }
-
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.orgId = params['organisationId'.toString()];
@@ -106,6 +102,11 @@ export class OrganisationPendingFarmersComponent implements OnInit, OnDestroy {
     }
     this.order = value;
   }
+
+  exportAsXLSX() {
+    this.excelService.exportAsExcelFile(this.allPendingFarmers, 'farmers');
+  }
+
 
   canApprove(missingInfo: any) {
     return (this.isCwsOfficer && (!missingInfo.includes('Trees')) &&

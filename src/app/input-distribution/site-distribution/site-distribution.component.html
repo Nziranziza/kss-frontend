@@ -26,6 +26,8 @@
                 <th>Number of trees</th>
                 <th>Fertilizer needed</th>
                 <th>Fertilizer allocated</th>
+                <th>Fertilizer given</th>
+                <th>Tree at distribution</th>
                 <th>Action</th>
               </tr>
               </thead>
@@ -44,6 +46,8 @@
                 <td>{{ request.numberOfTrees }}</td>
                 <td>{{ request.fertilizer_need }} Kg</td>
                 <td>{{ request.fertilizer_allocate }} Kg</td>
+                <td>{{ request.fertilizer_atDistribution }} Kg</td>
+                <td>{{ request.treesAtDistribution }}</td>
                 <td>
                   <button class="btn btn-success btn-margin btn-sm" (click)="recordDistribution(request._id, item._id)"> distribute</button>
                   <!--

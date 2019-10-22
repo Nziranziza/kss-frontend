@@ -2,7 +2,7 @@ import {AfterViewInit, Component, Inject, Injector, Input, OnInit, PLATFORM_ID} 
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {isPlatformBrowser} from '@angular/common';
 import {Subject} from 'rxjs';
-import {AuthenticationService, ConfirmDialogService, WarehouseService} from '../../../../core/services';
+import {AuthenticationService, ConfirmDialogService, ExcelServicesService, WarehouseService} from '../../../../core/services';
 
 @Component({
   selector: 'app-delivery-details',
@@ -20,12 +20,13 @@ export class DeliveryDetailsComponent implements OnInit, AfterViewInit {
   dtOptions: DataTables.Settings = {};
   // @ts-ignore
   dtTrigger: Subject = new Subject();
+  printable = [];
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
     private confirmDialogService: ConfirmDialogService,
     private wareHouseService: WarehouseService,
-    private authenticationService: AuthenticationService,
+    private authenticationService: AuthenticationService,  private excelService: ExcelServicesService,
     private injector: Injector) {
     if (isPlatformBrowser(this.platformId)) {
       this.modal = this.injector.get(NgbActiveModal);
@@ -37,6 +38,29 @@ export class DeliveryDetailsComponent implements OnInit, AfterViewInit {
       pagingType: 'full_numbers',
       pageLength: 25
     };
+    if (this.inputType === 'Fertilizer') {
+      this.deliveries.map((entry) => {
+        this.printable.push({
+          Input: entry.inputId.inputName,
+          Quantity: entry.items,
+          QtyPerItem: entry.quantityPerItem,
+          TotalQuantity: (entry.items * entry.quantityPerItem),
+          Driver: entry.driver,
+          Vehicle: entry.vehiclePlate,
+          Date: entry.date
+        });
+      });
+    } else {
+      this.deliveries.map((entry) => {
+        this.printable.push({
+          Input: entry.inputId.inputName,
+          TotalQuantity: (entry.items * entry.quantityPerItem),
+          Driver: entry.driver,
+          Vehicle: entry.vehiclePlate,
+          Date: entry.date
+        });
+      });
+    }
   }
 
   ngAfterViewInit(): void {
@@ -65,4 +89,9 @@ export class DeliveryDetailsComponent implements OnInit, AfterViewInit {
         }
       });
   }
+
+  exportAsXLSX() {
+    this.excelService.exportAsExcelFile(this.printable, 'farmers');
+  }
+
 }

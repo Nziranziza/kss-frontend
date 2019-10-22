@@ -10,7 +10,7 @@ import {
 } from '../../../core/services';
 import {Router} from '@angular/router';
 import {HelperService} from '../../../core/helpers';
-import {isUndefined} from "util";
+import {isUndefined} from 'util';
 
 @Component({
   selector: 'app-dispatch-progress',

@@ -62,7 +62,7 @@ export class CreateBatchComponent implements OnInit {
       const lots = JSON.parse(JSON.stringify(this.createBatchForm.value));
       lots['lots'.toString()] = this.lots;
       this.dryProcessingService.createBatch(lots)
-        .subscribe(data => {
+        .subscribe(() => {
             this.message = 'Batch successfully created!';
             this.errors = '';
           },

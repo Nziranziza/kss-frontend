@@ -184,12 +184,12 @@
     </div>
   </div>
 </form>
-<!--<div class="row filter-form" style="margin-bottom: 10px; margin-left: -1px">
+<div class="row filter-form" style="margin-bottom: 10px; margin-left: -1px">
   <form [formGroup]="filterForm" (ngSubmit)="onFilter()">
     <ng-container formGroupName="search">
       <div class="col-xs-1">
         <select class="form-control" formControlName="searchBy">
-          <option *ngFor="let field of searchFields" value="{{field.value}}">{{field.name}}</option>
+          <option *ngFor="let field of searchFields" value="{{field.value}}">{{field.name | titlecase}}</option>
         </select>
       </div>
       <ng-container formGroupName="location" *ngIf="isFilterBySite">
@@ -214,7 +214,7 @@
           <option *ngFor="let site of filterSites" value="{{site._id}}">{{site.siteName | titlecase}}</option>
         </select>
       </div>
-      <div class="col-xs-2" *ngIf="!isFilterByType">
+      <div class="col-xs-2" *ngIf="!isFilterByType && !isFilterBySite">
         <input type="text" formControlName="term" class="form-control" placeholder="term..">
       </div>
       <div class="col-xs-2" *ngIf="isFilterByType">
@@ -245,7 +245,7 @@
       <button class="btn btn-success pull-right btn-margin" type="submit"><i class="fa fa-search"></i> Search</button>
     </div>
   </form>
-</div>-->
+</div>
 <div class="row">
   <div class="col-xs-12">
     <div class="box">

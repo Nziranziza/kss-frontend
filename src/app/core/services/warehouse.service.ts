@@ -11,9 +11,11 @@ export class WarehouseService {
     private apiService: ApiService
   ) {
   }
+
   allEntries(): Observable<any> {
     return this.apiService.get('/warehouse');
   }
+
   saveEntry(entry: any): Observable<any> {
     return this.apiService.post('/warehouse/record_warehouseentry', entry);
   }

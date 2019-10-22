@@ -8,10 +8,7 @@ import {User} from '../models';
 })
 
 export class UserService {
-  constructor(
-    private apiService: ApiService
-  ) {
-  }
+  constructor(private apiService: ApiService) { }
 
   all(organisationId: string): Observable<any> {
     return this.apiService.get('/users/organization/' + organisationId);

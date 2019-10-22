@@ -8,7 +8,6 @@ import {OrganisationService} from '../organisation.service';
 export class RoleResolverService implements Resolve<any> {
 
   orgRoles = [];
-
   constructor(private organisationService: OrganisationService) {
   }
 

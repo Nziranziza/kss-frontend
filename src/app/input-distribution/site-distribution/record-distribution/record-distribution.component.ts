@@ -3,7 +3,7 @@ import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {HelperService} from '../../../core/helpers';
 import {isPlatformBrowser} from '@angular/common';
-import {InputDistributionService} from '../../../core/services';
+import {InputDistributionService, SiteService} from '../../../core/services';
 import {AuthenticationService} from '../../../core/services';
 
 @Component({

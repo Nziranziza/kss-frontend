@@ -17,7 +17,6 @@ export class AdminGuard implements CanActivateChild {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     if (!this.authenticationService.isLoggedIn()) {
-      console.log('admin guard error');
       this.router.navigateByUrl('/login');
       return false;
     } else {

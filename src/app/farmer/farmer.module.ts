@@ -13,15 +13,13 @@ import {FarmerLandsComponent} from './farmer-lands/farmer-lands.component';
 import {EditFarmerProfileComponent} from './farmer-edit/edit-farmer-profile/edit-farmer-profile.component';
 import {EditFarmerRequestComponent} from './farmer-edit/edit-farmer-request/edit-farmer-request.component';
 import {AddFarmerRequestComponent} from './farmer-edit/add-farmer-request/add-farmer-request.component';
-import {FarmerAdministrativeListComponent} from './farmer-administrative-list/farmer-administrative-list.component';
 import {FarmerNeedApprovalListComponent} from './farmer-need-approval-list/farmer-need-approval-list.component';
-
 
 @NgModule({
   declarations: [FarmerListComponent, FarmerDetailsComponent, FarmerCreateComponent,
     FarmerEditComponent, FarmerLandsComponent,
     EditFarmerProfileComponent, EditFarmerRequestComponent,
-    AddFarmerRequestComponent, FarmerAdministrativeListComponent, FarmerNeedApprovalListComponent],
+    AddFarmerRequestComponent, FarmerNeedApprovalListComponent],
   imports: [
     CommonModule,
     FarmerRoutingModule,

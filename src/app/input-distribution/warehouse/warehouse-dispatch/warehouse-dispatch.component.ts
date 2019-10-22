@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {HelperService} from '../../../core/helpers';
@@ -15,7 +15,7 @@ import {DatePipe} from '@angular/common';
   providers: [DatePipe],
   styleUrls: ['./warehouse-dispatch.component.css']
 })
-export class WarehouseDispatchComponent implements OnInit {
+export class WarehouseDispatchComponent implements OnInit, OnDestroy {
 
   constructor(private formBuilder: FormBuilder, private siteService: SiteService,
               private warehouseService: WarehouseService,
@@ -151,16 +151,16 @@ export class WarehouseDispatchComponent implements OnInit {
 
   createPackageFertilizer(): FormGroup {
     return this.formBuilder.group({
-      bagSize: ['', Validators.required],
-      numberOfBags: ['', Validators.required],
-      subTotal: ['', Validators.required]
+      bagSize: [''],
+      numberOfBags: [''],
+      subTotal: ['']
     });
   }
 
   createPackagePesticide(): FormGroup {
     return this.formBuilder.group({
-      pesticideType: ['', Validators.required],
-      qty: ['', Validators.required]
+      pesticideType: [''],
+      qty: ['']
     });
   }
 
@@ -328,8 +328,10 @@ export class WarehouseDispatchComponent implements OnInit {
       };
       if (this.includePesticide) {
         dispatch.entries.packagePesticide.forEach((pe) => {
+          const id = this.pesticideStocks.find(s => s.inputId._id === pe.pesticideType)
+            ? this.pesticideStocks.find(s => s.inputId._id === pe.pesticideType)._id : '';
           const el = {
-            stockId: this.pesticideStocks.find(s => s.inputId._id === pe.pesticideType)._id,
+            stockId: id,
             numberOfItems: 1,
             totalQty: +pe.qty
           };
@@ -338,8 +340,10 @@ export class WarehouseDispatchComponent implements OnInit {
       }
       if (this.includeFertilizer) {
         dispatch.entries.packageFertilizer.forEach((fe) => {
+          const id = this.fertilizerStocks.find(s => s.quantityPerItem === +fe.bagSize)
+            ? this.fertilizerStocks.find(s => s.quantityPerItem === +fe.bagSize)._id : '';
           const el = {
-            stockId: this.fertilizerStocks.find(s => s.quantityPerItem === +fe.bagSize)._id,
+            stockId: id,
             numberOfItems: +fe.numberOfBags,
             totalQty: +fe.subTotal
           };
@@ -432,4 +436,9 @@ export class WarehouseDispatchComponent implements OnInit {
         }
       });
   }
+
+  ngOnDestroy(): void {
+    this.dtTrigger.unsubscribe();
+  }
+
 }

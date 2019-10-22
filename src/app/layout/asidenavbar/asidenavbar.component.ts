@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {AuthorisationService} from '../../core/services';
 import {AuthenticationService} from '../../core/services';
 import {Router} from '@angular/router';
+import {constant} from '../../../environments/constant';
 
 declare var $;
 
@@ -18,6 +19,7 @@ export class AsidenavbarComponent implements OnInit {
 
   parameters: any;
   user: any;
+  roles: any;
 
   ngOnInit() {
     $(document).ready(() => {
@@ -26,6 +28,7 @@ export class AsidenavbarComponent implements OnInit {
     });
     this.parameters = this.authenticationService.getCurrentUser().parameters;
     this.user = this.authenticationService.getCurrentUser().info;
+    this.roles = constant.roles;
   }
 
   onLogOut() {

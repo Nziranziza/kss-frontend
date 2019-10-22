@@ -4,11 +4,12 @@
 </div>
 <div class="modal-body">
   <app-list-errors [errorList]="errors" *ngIf="errors"></app-list-errors>
+  <app-list-message [message]="message"></app-list-message>
   <form [formGroup]="siteStockOutForm" (ngSubmit)="onSubmit()">
     <div class="row">
       <label class="control-label label-required" style="margin-left: 7px">&nbsp; Destination</label>
       <div formGroupName="location">
-        <div class="col-xs-2" id="location-province">
+        <!--<div class="col-xs-2" id="location-province">
           <div class="form-group">
             <span class="">Province</span>
             <select class="form-control" formControlName="prov_id">
@@ -25,13 +26,13 @@
               <option *ngFor="let district of districts" value="{{district._id}}">{{district.name}}</option>
             </select>
           </div>
-        </div>
+        </div>-->
         <div class="col-xs-2" id="location-sector">
           <div class="form-group">
             <span class="">Sector</span>
             <select class="form-control" formControlName="sect_id">
               <option value=""></option>
-              <option *ngFor="let sector of sectors" value="{{sector._id}}">{{sector.name}}</option>
+              <option *ngFor="let sector of sectors" value="{{sector.sect_id}}">{{sector.name}}</option>
             </select>
           </div>
         </div>
