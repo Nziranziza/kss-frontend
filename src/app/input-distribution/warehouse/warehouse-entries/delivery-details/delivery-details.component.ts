@@ -2,21 +2,21 @@ import {AfterViewInit, Component, Inject, Injector, Input, OnInit, PLATFORM_ID} 
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {isPlatformBrowser} from '@angular/common';
 import {Subject} from 'rxjs';
+import {DatePipe} from '@angular/common';
 import {AuthenticationService, ConfirmDialogService, ExcelServicesService, WarehouseService} from '../../../../core/services';
+import {BasicComponent} from '../../../../core/library';
 
 @Component({
   selector: 'app-delivery-details',
   templateUrl: './delivery-details.component.html',
   styleUrls: ['./delivery-details.component.css']
 })
-export class DeliveryDetailsComponent implements OnInit, AfterViewInit {
+export class DeliveryDetailsComponent extends BasicComponent implements OnInit, AfterViewInit {
 
   modal: NgbActiveModal;
   @Input() deliveries;
   @Input() inputType;
   @Input() wareHouseId;
-  errors: string [];
-  message: string;
   dtOptions: DataTables.Settings = {};
   // @ts-ignore
   dtTrigger: Subject = new Subject();
@@ -26,8 +26,10 @@ export class DeliveryDetailsComponent implements OnInit, AfterViewInit {
     @Inject(PLATFORM_ID) private platformId: object,
     private confirmDialogService: ConfirmDialogService,
     private wareHouseService: WarehouseService,
-    private authenticationService: AuthenticationService,  private excelService: ExcelServicesService,
+    private datePipe: DatePipe,
+    private authenticationService: AuthenticationService, private excelService: ExcelServicesService,
     private injector: Injector) {
+    super();
     if (isPlatformBrowser(this.platformId)) {
       this.modal = this.injector.get(NgbActiveModal);
     }
@@ -44,20 +46,22 @@ export class DeliveryDetailsComponent implements OnInit, AfterViewInit {
           Input: entry.inputId.inputName,
           Quantity: entry.items,
           QtyPerItem: entry.quantityPerItem,
-          TotalQuantity: (entry.items * entry.quantityPerItem),
+          TotalQuantity: (entry.items * entry.quantityPerItem) + ' kg',
           Driver: entry.driver,
+          Supplier: entry.supplier ? entry.supplier.name : '',
           Vehicle: entry.vehiclePlate,
-          Date: entry.date
+          Date: this.datePipe.transform(entry.warehouseEntryDate, 'dd-MM-yyyy', 'GMT+0')
         });
       });
     } else {
       this.deliveries.map((entry) => {
         this.printable.push({
           Input: entry.inputId.inputName,
-          TotalQuantity: (entry.items * entry.quantityPerItem),
+          TotalQuantity: (entry.items * entry.quantityPerItem) + ' l',
           Driver: entry.driver,
+          Supplier: entry.supplier ? entry.supplier.name : '',
           Vehicle: entry.vehiclePlate,
-          Date: entry.date
+          Date: this.datePipe.transform(entry.warehouseEntryDate, 'dd-MM-yyyy', 'GMT+0')
         });
       });
     }
@@ -68,7 +72,7 @@ export class DeliveryDetailsComponent implements OnInit, AfterViewInit {
   }
 
   cancelEntry(id: string) {
-    this.confirmDialogService.openConfirmDialog('Are you sure you want to cancel dispatch? ' +
+    this.confirmDialogService.openConfirmDialog('Are you sure you want to cancel entry? ' +
       'action cannot be undone').afterClosed().subscribe(
       res => {
         if (res) {
@@ -78,20 +82,17 @@ export class DeliveryDetailsComponent implements OnInit, AfterViewInit {
             userId: this.authenticationService.getCurrentUser().info._id
           };
           this.wareHouseService.removeEntry(body).subscribe(() => {
-            this.message = 'Entry successfully cancelled!';
+            this.setMessage('Entry successfully cancelled!');
             this.deliveries = this.deliveries.filter((value) => {
               return value._id !== id;
             });
           }, (err) => {
-            this.message = '';
-            this.errors = err.errors;
+            this.setError(this.errors = err.errors);
           });
         }
       });
   }
-
   exportAsXLSX() {
-    this.excelService.exportAsExcelFile(this.printable, 'farmers');
+    this.excelService.exportAsExcelFile(this.printable, 'entries');
   }
-
 }

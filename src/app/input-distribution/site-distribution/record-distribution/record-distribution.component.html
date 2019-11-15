@@ -20,26 +20,28 @@
     </div>
   </div>
   <form [formGroup]="distributionForm" (ngSubmit)="onSubmit()">
-    <div class="row">
-      <div class="col-sm-4" style="margin-top: 25px">
-        <div class="form-inline">
+    <div class="row" style="margin-top: 25px">
+      <div class="col-sm-3">
+        <div class="form-group">
           <span class="label-required">Quantity Fertilizer(Kg)</span> &nbsp; &nbsp;
           <input type="text" formControlName="quantity" class="form-control">
         </div>
       </div>
-      <div class="col-sm-4" style="margin-top: 25px">
-        <div class="form-inline">
+      <div class="col-sm-3">
+        <div class="form-group">
           <span class="label-required">Stock</span> &nbsp; &nbsp;
           <select class="form-control" formControlName="stockOutId">
             <option></option>
             <ng-container *ngFor="let stock of stockOuts">
-            <option *ngIf="stock.inputId.inputType === 'Fertilizer'" value="{{stock._id}}">{{ stock.totalQuantity }} Kg - {{ stock.created_at|date }}</option>
+              <option *ngIf="stock.inputId.inputType === 'Fertilizer'" value="{{stock._id}}">{{ stock.totalQuantity }}
+                Kg - {{ stock.created_at|date }}
+              </option>
             </ng-container>
           </select>
         </div>
       </div>
-      <div class="col-sm-4" style="margin-top: 25px">
-        <div class="form-inline">
+      <div class="col-sm-1" style="margin-top: 25px">
+        <div class="form-group">
           <button class="btn btn-success btn-sm btn-margin">save</button>
         </div>
       </div>
@@ -53,16 +55,19 @@
             <label class="control-label">&nbsp; Update </label>
           </legend>
           <div class="row">
-            <div class="col-sm-4">
+            <div class="col-sm-3">
               <div class="form-group">
                 <span class="control-label label-required">Trees at distribution</span> &nbsp; &nbsp;
                 <input type="text" formControlName="treesAtDistribution" class="form-control" placeholder="">
               </div>
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-3">
               <div class="form-group">
                 <span class="control-label label-required">Comment</span> &nbsp; &nbsp;
-                <input type="text" formControlName="comment" class="form-control" placeholder="">
+                <select class="form-control" formControlName="comment">
+                  <option></option>
+                  <option *ngFor="let comment of comments" value="{{comment.value}}">{{comment.description}}</option>
+                </select>
               </div>
             </div>
             <div class="col-sm-4" style="margin-top: 25px">

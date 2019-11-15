@@ -12,9 +12,13 @@ import {NgxPaginationModule} from 'ngx-pagination';
 import {OrderModule} from 'ngx-order-pipe';
 import {OwlDateTimeModule, OwlNativeDateTimeModule} from 'ng-pick-datetime';
 import {DataTablesModule} from 'angular-datatables';
+import {SiteFarmersComponent} from './site-farmers/site-farmers.component';
+import {SitePendingFarmersComponent} from './site-pending-farmers/site-pending-farmers.component';
+import {SiteDetailsComponent} from './site-details/site-details.component';
 
 @NgModule({
-  declarations: [SiteListComponent, SiteCreateComponent, SiteEditComponent],
+  declarations: [SiteListComponent, SiteCreateComponent,
+    SiteEditComponent, SiteFarmersComponent, SitePendingFarmersComponent, SiteDetailsComponent],
   imports: [
     CommonModule,
     OrganisationRoutingModule,
@@ -26,7 +30,8 @@ import {DataTablesModule} from 'angular-datatables';
     OwlNativeDateTimeModule,
     SitesRoutingModule,
     DataTablesModule
-  ]
+  ],
+  entryComponents: [SiteDetailsComponent]
 })
 export class SitesModule {
 }

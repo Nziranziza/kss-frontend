@@ -21,6 +21,7 @@
   </div>
   <br>
   <app-list-errors [errorList]="errors"></app-list-errors>
+  <app-list-message [message]="message"></app-list-message>
   <app-loader *ngIf="loading"></app-loader>
   <form [formGroup]="editFarmerProfileForm" (ngSubmit)="onSubmit()">
     <div class="row">

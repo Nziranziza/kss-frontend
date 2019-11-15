@@ -4,7 +4,7 @@ import {Subject} from 'rxjs';
 
 import {
   AuthenticationService,
-  AuthorisationService, InputDistributionService, LocationService,
+  AuthorisationService, ExcelServicesService, InputDistributionService, LocationService,
   OrganisationService,
   OrganisationTypeService,
   SiteService
@@ -20,18 +20,17 @@ import {HelperService} from '../../../core/helpers';
 })
 export class DistributionProgressComponent implements OnInit {
 
-  title = 'Application progress';
+  title = 'Fertilizer application progress';
   checkProgressForm: FormGroup;
   errors: any;
   loading = false;
   message: string;
   isCurrentUserDCC = false;
   distributionProgress: any;
-
+  printable = [];
   dtOptions: any = {};
   // @ts-ignore
   dtTrigger: Subject = new Subject();
-
   provinces: any;
   districts: any;
   sectors: any;
@@ -40,11 +39,14 @@ export class DistributionProgressComponent implements OnInit {
   distId = false;
   sectorId = false;
   cellId = false;
-  villageId = false;
+  downloadEnabled = false;
+  showData = false;
+  request: any;
 
   constructor(private formBuilder: FormBuilder, private siteService: SiteService,
               private authorisationService: AuthorisationService,
               private authenticationService: AuthenticationService,
+              private excelService: ExcelServicesService,
               private router: Router, private organisationService: OrganisationService,
               private helper: HelperService, private organisationTypeService: OrganisationTypeService,
               private locationService: LocationService, private inputDistributionService: InputDistributionService) {
@@ -53,10 +55,6 @@ export class DistributionProgressComponent implements OnInit {
   ngOnInit() {
     this.isCurrentUserDCC = this.authorisationService.isDistrictCashCropOfficer();
     this.checkProgressForm = this.formBuilder.group({
-      date: this.formBuilder.group({
-        from: [''],
-        to: ['']
-      }),
       location: this.formBuilder.group({
         prov_id: [''],
         dist_id: [''],
@@ -73,9 +71,19 @@ export class DistributionProgressComponent implements OnInit {
     this.onFilterProgress();
   }
 
+  exportAsXLSX() {
+    this.excelService.exportAsExcelFile(this.printable, 'application report');
+  }
+  downloadDetails() {
+    console.log(this.request);
+    this.inputDistributionService.getDistributionProgressDetail(this.request).subscribe((data) => {
+      console.log(data);
+    });
+  }
   onGetProgress(searchBy: string) {
     if (this.checkProgressForm.valid) {
       this.loading = true;
+      this.downloadEnabled = false;
       const request = JSON.parse(JSON.stringify(this.checkProgressForm.value));
       if (request.location.prov_id === '' && searchBy === 'province') {
         delete request.location;
@@ -86,29 +94,42 @@ export class DistributionProgressComponent implements OnInit {
         request.location['searchBy'.toString()] = searchBy;
         this.helper.cleanObject(request.location);
       }
+      this.request = request;
       this.inputDistributionService.getDistributionProgress(request).subscribe((data) => {
         this.loading = false;
+        this.distributionProgress = [];
         if ((data.content.length !== 0) && (data.content)) {
-          this.message = '';
-          this.errors = '';
-          this.distributionProgress = data.content;
+          this.clear();
+          this.downloadEnabled = true;
+          this.showData = true;
+          data.content.map((location) => {
+            const temp = {
+              name: location.name,
+              allocated: location.totalFertilizerAllocated ? location.totalFertilizerAllocated : 0,
+              distributed: location.totalDistributed ? location.totalDistributed : 0,
+              approved: location.totalApproved ? location.totalApproved : 0
+            };
+            this.distributionProgress.push(temp);
+            const print = {
+              location: location.name,
+              totalFertilizerAllocated: location.totalFertilizerAllocated ? location.totalFertilizerAllocated : 0,
+              distributed: location.totalDistributed ? location.totalDistributed : 0,
+              approved: location.totalApproved ? location.totalApproved : 0
+            };
+            this.printable.push(print);
+          });
         } else {
-          this.message = 'Sorry no data found to this location!';
-          this.errors = '';
-          this.loading = false;
+          this.setMessage('Sorry no data found to this location');
         }
       }, (err) => {
         if (err.status === 404) {
-          this.message = 'Sorry no data to this location!';
-          this.errors = '';
-          this.loading = false;
+          this.setMessage('Sorry no data found to this location');
         } else {
-          this.message = '';
-          this.errors = err.errors;
+          this.setError(err.errors);
         }
       });
     } else {
-      this.errors = this.helper.getFormValidationErrors(this.checkProgressForm);
+      this.setError(this.helper.getFormValidationErrors(this.checkProgressForm));
     }
   }
 
@@ -164,16 +185,6 @@ export class DistributionProgressComponent implements OnInit {
         }
       }
     );
-
-    this.checkProgressForm.controls.location.get('village_id'.toString()).valueChanges.subscribe(
-      (value) => {
-        if (value !== '') {
-          this.villageId = true;
-        } else {
-          this.villageId = false;
-        }
-      }
-    );
   }
 
   initial() {
@@ -186,5 +197,23 @@ export class DistributionProgressComponent implements OnInit {
           .patchValue(this.authenticationService.getCurrentUser().info.location.dist_id);
       }
     });
+  }
+
+  setError(errors: any) {
+    this.errors = errors;
+    this.message = undefined;
+    this.loading = false;
+  }
+
+  setMessage(message: string) {
+    this.errors = undefined;
+    this.message = message;
+    this.loading = false;
+  }
+
+  clear() {
+    this.errors = undefined;
+    this.message = undefined;
+    this.loading = false;
   }
 }

@@ -10,7 +10,6 @@ import {CoffeeTypeService} from '../../core/services';
 export class CoffeeTypeComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, private coffeeTypeService: CoffeeTypeService) {
-
   }
 
   message: string;
@@ -22,7 +21,7 @@ export class CoffeeTypeComponent implements OnInit {
 
   getAllCoffeeTypes(): void {
     this.coffeeTypeService.all().subscribe(data => {
-      if (data) {
+      if (data && data.content) {
         this.coffeeTypes = data.content;
       }
     });

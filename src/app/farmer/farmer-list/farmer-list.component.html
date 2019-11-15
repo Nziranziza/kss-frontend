@@ -20,6 +20,7 @@
   </div>
 </div>
 <app-list-message [message]="message"></app-list-message>
+<app-list-errors [errorList]="errors" *ngIf="errors.length > 0"></app-list-errors>
 <div class="row">
   <div class="col-xs-12">
     <div></div>
@@ -37,7 +38,7 @@
             <th></th>
           </tr>
           </thead>
-          <tbody>
+          <tbody *ngIf="showData">
           <tr *ngFor="let farmer of (farmers | orderBy : order:reverse:'case-insensitive') | paginate: config">
             <td *ngIf="farmer.userInfo.type===2; else foreName"> {{ farmer.userInfo.groupName }} </td>
             <ng-template #foreName>
@@ -55,7 +56,7 @@
           </tr>
           </tbody>
         </table>
-        <div style="width: 100%;  border-top: 1px solid #0a0a0a;">
+        <div style="width: 100%;  border-top: 1px solid #0a0a0a;" *ngIf="showData">
           <div style=" clear: both; float: left; padding-top: 0.755em;">Showing {{(config.currentPage - 1)*
             config.itemsPerPage + 1}} to {{config.currentPage* config.itemsPerPage}} of {{config.totalItems}} entries
           </div>

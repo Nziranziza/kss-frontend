@@ -14,19 +14,6 @@ import {AuthorisationService} from '../../core/services';
   styleUrls: ['./farmer-list.component.css'],
 })
 export class FarmerListComponent implements OnInit, OnDestroy {
-
-  constructor(private farmerService: FarmerService,
-              private authenticationService: AuthenticationService,
-              private router: Router, private  confirmDialogService: ConfirmDialogService,
-              private authorisationService: AuthorisationService,
-              private modal: NgbModal, private formBuilder: FormBuilder, private messageService: MessageService) {
-    this.parameters = {
-      length: 25,
-      start: 0,
-      draw: 1
-    };
-  }
-
   isDistrictCashCrop = false;
   filterForm: FormGroup;
   maxSize = 9;
@@ -35,12 +22,14 @@ export class FarmerListComponent implements OnInit, OnDestroy {
   directionLinks = true;
   message: string;
   farmers = [];
+  showData = false;
   title = 'Farmers';
   id = 'farmers-list';
   parameters: any;
   config: any;
   autoHide = false;
   responsive = false;
+  errors = [];
   labels: any = {
     previousLabel: 'Previous',
     nextLabel: 'Next',
@@ -58,6 +47,21 @@ export class FarmerListComponent implements OnInit, OnDestroy {
     {value: 'location', name: 'location'},
     {value: 'groupname', name: 'group name'}
   ];
+  as: string;
+
+  constructor(private farmerService: FarmerService,
+              private authenticationService: AuthenticationService,
+              private router: Router, private  confirmDialogService: ConfirmDialogService,
+              private authorisationService: AuthorisationService,
+              private modal: NgbModal, private formBuilder: FormBuilder, private messageService: MessageService) {
+    this.parameters = {
+      length: 25,
+      start: 0,
+      draw: 1
+    };
+  }
+
+
 
   ngOnInit(): void {
     this.redirect();
@@ -66,6 +70,11 @@ export class FarmerListComponent implements OnInit, OnDestroy {
       term: ['', Validators.minLength(3)],
       searchBy: ['forename']
     });
+
+    if (this.isDistrictCashCrop) {
+      this.as = 'dcc';
+      this.parameters['dist_id'.toString()] = this.authenticationService.getCurrentUser().info.location.dist_id;
+    }
     this.getFarmers();
     this.message = this.messageService.getMessage();
   }
@@ -76,7 +85,7 @@ export class FarmerListComponent implements OnInit, OnDestroy {
       this.parameters.start = (event - 1) * this.config.itemsPerPage;
     }
 
-    this.farmerService.getFarmers(this.parameters)
+    this.farmerService.getFarmers(this.parameters, this.as)
       .subscribe(data => {
         this.farmers = data.data;
       });
@@ -93,7 +102,9 @@ export class FarmerListComponent implements OnInit, OnDestroy {
     if (this.filterForm.valid) {
       this.loading = true;
       this.parameters['search'.toString()] = this.filterForm.value;
-      this.farmerService.getFarmers(this.parameters)
+
+
+      this.farmerService.getFarmers(this.parameters, this.as)
         .subscribe(data => {
           this.farmers = data.data;
           this.config = {
@@ -102,6 +113,9 @@ export class FarmerListComponent implements OnInit, OnDestroy {
             totalItems: data.recordsTotal
           };
           this.loading = false;
+        }, (err) => {
+          this.loading = false;
+          this.errors = err.errors;
         });
     }
   }
@@ -109,7 +123,9 @@ export class FarmerListComponent implements OnInit, OnDestroy {
   onClearFilter() {
     this.filterForm.controls.term.reset();
     delete this.parameters.search;
-    this.farmerService.getFarmers(this.parameters)
+    this.errors = [];
+
+    this.farmerService.getFarmers(this.parameters, this.as)
       .subscribe(data => {
         this.farmers = data.data;
         this.config = {
@@ -120,9 +136,7 @@ export class FarmerListComponent implements OnInit, OnDestroy {
       });
   }
 
-  ngOnDestroy(): void {
-    this.messageService.setMessage('');
-  }
+
 
   deleteFarmer(farmer: Farmer): void {
     this.confirmDialogService.openConfirmDialog('Are you sure you want to delete this record?').afterClosed().subscribe(
@@ -143,12 +157,7 @@ export class FarmerListComponent implements OnInit, OnDestroy {
 
   getFarmers() {
     this.loading = true;
-    let asDcc;
-    if (this.isDistrictCashCrop) {
-      asDcc = 'dcc';
-      this.parameters['dist_id'.toString()] = this.authenticationService.getCurrentUser().info.location.dist_id;
-    }
-    this.farmerService.getFarmers(this.parameters, asDcc)
+    this.farmerService.getFarmers(this.parameters, this.as)
       .subscribe(data => {
         this.farmers = data.data;
         this.config = {
@@ -156,13 +165,18 @@ export class FarmerListComponent implements OnInit, OnDestroy {
           currentPage: this.parameters.start + 1,
           totalItems: data.recordsTotal
         };
+        this.showData = true;
         this.loading = false;
       });
   }
+
   redirect() {
     this.messageService.setMessage(this.messageService.getMessage());
     if (this.authorisationService.isCWSUser()) {
       this.router.navigateByUrl('/admin/cws-farmers/' + this.authenticationService.getCurrentUser().info.org_id);
     }
+  }
+  ngOnDestroy(): void {
+    this.messageService.clearMessage();
   }
 }

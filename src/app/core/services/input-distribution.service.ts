@@ -21,11 +21,15 @@ export class InputDistributionService {
   }
 
   report(data: any): Observable<any> {
-      return this.apiService.post('/distributionstats/plan?subRegions=true', data);
+    return this.apiService.post('/distributionstats/plan?subRegions=true', data);
   }
 
   getSiteDispatches(siteId: string) {
     return this.apiService.get('/inputdispatch/site/dispatch/' + siteId);
+  }
+
+  printDispatchEntryNote(dispatchId: string) {
+    return this.apiService.get('/inputdispatch/generate/site/goods_entry_note/' + dispatchId);
   }
 
   getSiteStockOuts(siteId: string) {
@@ -44,6 +48,10 @@ export class InputDistributionService {
     return this.apiService.post('/inputapplication/record_distribution', data);
   }
 
+  applyPesticide(data: any): Observable<any> {
+    return this.apiService.post('/inputapplication/record_pesticide_distribution', data);
+  }
+
   updateRequestAtDistribution(data: any): Observable<any> {
     return this.apiService.put('/coffeefarmers/site/requestinfo/edit', data);
   }
@@ -56,6 +64,18 @@ export class InputDistributionService {
     return this.apiService.post('/distributionstats/inputdistribution', data);
   }
 
+  getDistributionProgressPesticide(data: any): Observable<any> {
+    return this.apiService.post('/distributionstats/pesticide/inputdistribution', data);
+  }
+
+  getDistributionProgressDetail(data: any): Observable<any> {
+    return this.apiService.post('/distributionstats/detailed/inputdistribution', data);
+  }
+
+  getDistributionProgressPesticideDetail(data: any): Observable<any> {
+    return this.apiService.post('/distributionstats/detailed/pesticide/inputdistribution', data);
+  }
+
   getDispatchProgress(data: any): Observable<any> {
     return this.apiService.post('/distributionstats/inputdispatch', data);
   }
@@ -64,6 +84,17 @@ export class InputDistributionService {
     return this.apiService.post('/inputs', data);
   }
 
+  recordSupplier(data: any): Observable<any> {
+    return this.apiService.post('/supplier/set', data);
+  }
+
+  updateInput(data: any): Observable<any> {
+    return this.apiService.put('/inputs/edit', data);
+  }
+
+  updateSupplier(data: any): Observable<any> {
+    return this.apiService.put('/supplier/edit', data);
+  }
   getFertilizers(): Observable<any> {
     return this.apiService.get('/inputs/fertilizer');
   }
@@ -72,13 +103,11 @@ export class InputDistributionService {
     return this.apiService.get('/inputs/pesticide');
   }
 
-  recordSupplier(data: any): Observable<any> {
-    return this.apiService.post('/supplier/set', data);
-  }
 
   getSuppliers(): Observable<any> {
     return this.apiService.get('/supplier');
   }
+
   getStock(stock: number, siteId?: string) {
     if (siteId) {
       return this.apiService.get('/stock/?' + 'stockType=' + stock + '&' + 'siteId=' + siteId);

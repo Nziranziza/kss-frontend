@@ -7,9 +7,10 @@ import {SharedModule} from '../../shared';
 import {OwlDateTimeModule, OwlNativeDateTimeModule} from 'ng-pick-datetime';
 import {FusionChartsModule} from 'angular-fusioncharts';
 import {GoogleChartsModule} from 'angular-google-charts';
+import { PesticideDistributionProgressComponent } from './pesticide-distribution-progress/pesticide-distribution-progress.component';
 
 @NgModule({
-  declarations: [DispatchProgressComponent, DistributionProgressComponent],
+  declarations: [DispatchProgressComponent, DistributionProgressComponent, PesticideDistributionProgressComponent],
   imports: [
     CommonModule,
     SharedModule,

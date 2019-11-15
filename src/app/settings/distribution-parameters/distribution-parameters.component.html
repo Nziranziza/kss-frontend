@@ -2,7 +2,7 @@
   Distribution parameters
 </h3>
 <app-list-message [message]="message"></app-list-message>
-<app-list-errors [errorList]="errors" *ngIf="errors.length > 0"></app-list-errors>
+<app-list-errors [errorList]="errors"></app-list-errors>
 <div class="row">
   <div class="col-xs-12">
     <div class="container custom-tabs">
@@ -47,9 +47,7 @@
                       {{ fertilizer.inputName }}
                     </td>
                     <td class="actions no-wrap text-right">
-                      <!--
-                        <button class="btn btn-success btn-margin btn-sm" (click)="editInput(fertilizer)"> Edit</button>
-                      -->
+                      <button class="btn btn-success btn-margin btn-sm" (click)="editInput(fertilizer)"> Edit</button>
                     </td>
                   </tr>
                   </tbody>
@@ -84,9 +82,7 @@
                       {{ pesticide.inputName }}
                     </td>
                     <td class="actions no-wrap text-right">
-                      <!--
                         <button class="btn btn-success btn-margin btn-sm" (click)="editInput(pesticide)"> Edit</button>
-                      -->
                     </td>
                   </tr>
                   </tbody>
@@ -143,9 +139,7 @@
                     <td> {{ supplier.phone_number }}</td>
                     <td> {{ supplier.TIN_number }}</td>
                     <td class="actions no-wrap text-right">
-                      <!--
-                        <button class="btn btn-success btn-margin btn-sm" (click)="editSupplier(supplier)"> Edit</button>
-                      -->
+                      <button class="btn btn-success btn-margin btn-sm" (click)="editSupplier(supplier)"> Edit</button>
                     </td>
                   </tr>
                   </tbody>

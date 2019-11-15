@@ -45,7 +45,23 @@ export class AuthorisationService {
   }
   isNaebUser() {
     this.userRoles = this.authenticationService.getCurrentUser().parameters.role;
-    return !!(this.userRoles.includes(4) || this.userRoles.includes(0));
+    return !!(this.userRoles.includes(4));
+  }
+  isNaebAdmin() {
+    this.userRoles = this.authenticationService.getCurrentUser().parameters.role;
+    return !!(this.userRoles.includes(4) && this.authenticationService.getCurrentUser().parameters.type === 1);
+  }
+  isNaebWareHouseOfficer() {
+    this.userRoles = this.authenticationService.getCurrentUser().parameters.role;
+    return !!(this.userRoles.includes(4) && this.authenticationService.getCurrentUser().parameters.type === 10);
+  }
+  isNaebCoffeeValueChainOfficer() {
+    this.userRoles = this.authenticationService.getCurrentUser().parameters.role;
+    return !!(this.userRoles.includes(4) && this.authenticationService.getCurrentUser().parameters.type === 11);
+  }
+  isNaebCEO() {
+    this.userRoles = this.authenticationService.getCurrentUser().parameters.role;
+    return !!(this.userRoles.includes(4) && this.authenticationService.getCurrentUser().parameters.type === 12);
   }
   isInputDistributorAdmin() {
     this.userRoles = this.authenticationService.getCurrentUser().parameters.role;

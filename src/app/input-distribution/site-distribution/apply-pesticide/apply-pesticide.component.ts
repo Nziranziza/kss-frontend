@@ -1,6 +1,6 @@
 import {Component, Inject, Injector, Input, OnInit, PLATFORM_ID} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {AuthenticationService, InputDistributionService} from '../../../core/services';
 import {HelperService} from '../../../core/helpers';
 import {isPlatformBrowser} from '@angular/common';
@@ -19,7 +19,7 @@ export class ApplyPesticideComponent implements OnInit {
   distributionForm: FormGroup;
   errors: string [];
   message: string;
-  stockOuts: any;
+  stocks = [];
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
@@ -33,34 +33,56 @@ export class ApplyPesticideComponent implements OnInit {
 
   ngOnInit(): void {
     this.distributionForm = this.formBuilder.group({
-      pesticide: new FormArray([]),
-      stockOutId: ['', Validators.required]
+      pesticides: new FormArray([])
     });
     const id = this.authenticationService.getCurrentUser().orgInfo.distributionSite;
-    this.inputDistributionService.getSiteStockOuts(this.authenticationService.getCurrentUser().orgInfo.distributionSite)
-      .subscribe((data) => {
-        this.stockOuts = data.content;
-        this.stockOuts.map(() => {
+    this.inputDistributionService.getSiteStockOuts(id).subscribe((data) => {
+      console.log(data);
+      data.content.map((stock) => {
+        if (stock.inputId.inputType === 'Pesticide' && stock.returnedQty === 0) {
           const control = new FormControl(false);
-          (this.distributionForm.controls.pesticide as FormArray).push(control);
-        });
+          this.stocks.push(stock);
+          (this.distributionForm.controls.pesticides as FormArray).push(control);
+        }
       });
+    });
   }
 
   onSubmit() {
     if (this.distributionForm.valid) {
+      const selectedPesticide = this.distributionForm.value.pesticides
+        .map((checked, index) => checked ? this.stocks[index]._id : null)
+        .filter(value => value !== null);
       const record = JSON.parse(JSON.stringify(this.distributionForm.value));
       record['documentId'.toString()] = this.documentId;
       record['farmerRequestId'.toString()] = this.requestId;
       record['siteId'.toString()] = this.authenticationService.getCurrentUser().orgInfo.distributionSite;
-      this.inputDistributionService.updateRequestAtDistribution(record).subscribe(() => {
-          this.message = 'Pesticide applied!';
+      record['pesticides'.toString()] = selectedPesticide;
+      record['regNumber'.toString()] = this.regNumber;
+      record.pesticides.map((value, i) => {
+        record.pesticides [i] = {
+          stockId: value
+        };
+      });
+      console.log(record);
+      this.inputDistributionService.applyPesticide(record).subscribe(() => {
+          this.setMessage('Pesticide applied!');
         },
         (err) => {
-          this.errors = err.errors;
+          this.setError(err.errors);
         });
     } else {
-      this.errors = this.helper.getFormValidationErrors(this.distributionForm);
+      this.setError(this.helper.getFormValidationErrors(this.distributionForm));
     }
+  }
+
+  setError(errors: any) {
+    this.errors = errors;
+    this.message = undefined;
+  }
+
+  setMessage(message: string) {
+    this.errors = undefined;
+    this.message = message;
   }
 }

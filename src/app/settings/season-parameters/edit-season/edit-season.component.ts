@@ -5,6 +5,7 @@ import {HelperService} from '../../../core/helpers';
 import {isPlatformBrowser} from '@angular/common';
 import {InputDistributionService, SeasonService} from '../../../core/services';
 import {AuthorisationService} from '../../../core/services';
+import {isUndefined} from 'util';
 
 @Component({
   selector: 'app-edit-season',
@@ -64,9 +65,13 @@ export class EditSeasonComponent implements OnInit {
       cherriesUnitPrice: [''],
       floatingUnitPrice: ['']
     });
-    this.season.seasonParams.pesticide.forEach(() => {
+    if (this.season.seasonParams.pesticide) {
+      this.season.seasonParams.pesticide.forEach(() => {
+        this.addPesticide();
+      });
+    } else {
       this.addPesticide();
-    });
+    }
     this.isCurrentUserCeparOfficer = this.authorisationService.isCeparUser();
     this.isCurrentUserNaebOfficer = this.authorisationService.isNaebUser();
     this.editSeasonParamsForm.patchValue(this.season);
@@ -93,7 +98,9 @@ export class EditSeasonComponent implements OnInit {
       });
       this.season.seasonParams.pesticide = pesticides;
     }
-    delete this.season.seasonParams.distribution.supplierId;
+    if (this.season.seasonParams.distribution) {
+      delete this.season.seasonParams.distribution.supplierId;
+    }
     this.editDistributionForm.patchValue(this.season.seasonParams);
     this.editPriceForm.patchValue(this.season.seasonParams);
     this.editPesticideForm.patchValue(this.season.seasonParams);
@@ -205,7 +212,8 @@ export class EditSeasonComponent implements OnInit {
     this.inputDistributionService.getSuppliers().subscribe((data) => {
       this.suppliers = data.content;
       this.suppliers.map((supplier) => {
-        const temp = this.season.seasonParams.supplierId.find((item => item._id === supplier._id));
+        const temp = this.season.seasonParams.supplierId ?
+          this.season.seasonParams.supplierId.find((item => item._id === supplier._id)) : null;
         if (temp) {
           const control = new FormControl(true);
           (this.editDistributionForm.controls.distribution.get('supplierId') as FormArray).push(control);

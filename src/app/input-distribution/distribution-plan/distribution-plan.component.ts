@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {Router} from '@angular/router';
-import {AuthenticationService, OrganisationService, OrganisationTypeService} from '../../core/services';
+import {AuthenticationService, ExcelServicesService, OrganisationService, OrganisationTypeService} from '../../core/services';
 import {HelperService} from '../../core/helpers';
 import {LocationService} from '../../core/services';
 import {InputDistributionService} from '../../core/services';
@@ -41,6 +41,7 @@ export class DistributionPlanComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder, private siteService: SiteService,
               private authorisationService: AuthorisationService,
+              private excelService: ExcelServicesService,
               private authenticationService: AuthenticationService,
               private router: Router, private organisationService: OrganisationService,
               private helper: HelperService, private organisationTypeService: OrganisationTypeService,
@@ -111,7 +112,7 @@ export class DistributionPlanComponent implements OnInit {
           this.errors = '';
         } else {
           this.showPlan = false;
-          this.message = 'Sorry no data found to this location!';
+          this.message = 'Sorry no data found for this location.';
           this.errors = '';
           this.loading = false;
         }
@@ -122,7 +123,7 @@ export class DistributionPlanComponent implements OnInit {
         this.totalNumberOfLands = 0;
         if (err.status === 404) {
           this.showPlan = false;
-          this.message = err.errors[0];
+          this.message = 'Sorry no data found for this location.';
           this.errors = '';
           this.loading = false;
         } else {
@@ -158,6 +159,10 @@ export class DistributionPlanComponent implements OnInit {
         }
       }
     );
+  }
+
+  exportPlan() {
+    this.excelService.exportAsExcelFile(this.plans, 'application report');
   }
 
   initial() {

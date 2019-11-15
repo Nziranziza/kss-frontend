@@ -1,34 +1,15 @@
 <h3>
   {{ title }}
 </h3>
+<app-list-errors [errorList]="errors"></app-list-errors>
+<app-list-message [message]="message"></app-list-message>
 <div class="row">
   <div class="col-md-12">
     <div class="box box-default" style="border-top: 1px solid #d2d6de;">
       <div class="box-body">
-        <app-loader *ngIf="loading"></app-loader>
-        <app-list-errors [errorList]="errors"></app-list-errors>
-        <app-list-message [message]="message"></app-list-message>
         <form [formGroup]="checkProgressForm">
           <div class="row">
             <div class="col-sm-12">
-              <div class="row">
-                <div formGroupName="date">
-                  <div class="col-xs-2">
-                    <div class="form-group">
-                      <span class="">From</span>
-                      <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="from" class="form-control">
-                      <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
-                    </div>
-                  </div>
-                  <div class="col-xs-2">
-                    <div class="form-group">
-                      <span class="">To</span>
-                      <input [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" formControlName="to" class="form-control">
-                      <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
-                    </div>
-                  </div>
-                </div>
-              </div>
               <div class="row">
                 <div formGroupName="location">
                   <div class="col-xs-2" *ngIf="!isCurrentUserDCC">
@@ -107,47 +88,43 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-xs-2">
-                    <div class="form-group">
-                      <span class="">Village</span>
-                      <div class="input-group input-group-sm">
-                        <select class="form-control" formControlName="village_id">
-                          <option value=""></option>
-                          <option *ngFor="let village of villages" value="{{village._id}}">{{village.name}}</option>
-                        </select>
-                        <span class="input-group-btn">
-                      <button type="button" class="btn btn-default btn-flat" (click)="onGetProgress('village')"
-                              [disabled]="!villageId">
-                        <i class="fa fa-search"></i>
-                      </button>
-                    </span>
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
           </div>
         </form>
-        <fieldset class="location" style="margin: 0px !important; border: none ">
+        <app-loader *ngIf="loading"></app-loader>
+
           <div class="row">
-            <div class="col-xs-12">
+            <div class="col-sm-12">
+              <button class="btn btn-success btn-margin pull-right" [disabled]="!downloadEnabled" (click)="exportAsXLSX()"><i
+                class="fa fa-download"></i> Export
+              </button>
+              <button class="btn btn-default pull-right" (click)="downloadDetails()" [disabled]="!downloadEnabled"> Detailed xls
+              </button>
+            </div>
+            <div class="col-xs-12" *ngIf="showData">
               <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover"
                      class="table table-striped">
                 <thead>
                 <tr>
-                  <th></th>
+                  <th>Location</th>
+                  <th>Allocated</th>
+                  <th>Distributed</th>
+                  <th>Approved</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                  <td></td>
+                <tr *ngFor="let location of distributionProgress">
+                  <td> {{ location.name }}</td>
+                  <td> {{ location.allocated }}</td>
+                  <td> {{ location.distributed }}</td>
+                  <td> {{ location.approved }}</td>
                 </tr>
                 </tbody>
               </table>
             </div>
           </div>
-        </fieldset>
       </div>
       <!-- ./box-body -->
     </div>

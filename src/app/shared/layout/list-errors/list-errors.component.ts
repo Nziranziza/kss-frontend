@@ -1,5 +1,5 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {isArray} from 'util';
+import {Component, Input, OnInit, OnChanges, SimpleChanges} from '@angular/core';
+import {isArray, isUndefined} from 'util';
 
 
 @Component({
@@ -7,11 +7,23 @@ import {isArray} from 'util';
   templateUrl: './list-errors.component.html',
   styleUrls: ['./list-errors.component.css']
 })
-export class ListErrorsComponent implements OnInit {
+export class ListErrorsComponent implements OnInit, OnChanges {
   @Input() errorList: any;
   isArray = false;
+  notEmpty = false;
 
   ngOnInit() {
     this.isArray = isArray(this.errorList);
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    const errors = changes.errorList.currentValue;
+    this.isArray = isArray(errors);
+    if (this.isArray && errors.length > 0) {
+      this.notEmpty = true;
+    } else {
+      this.notEmpty = (errors !== '' && !isUndefined(errors));
+    }
+
   }
 }

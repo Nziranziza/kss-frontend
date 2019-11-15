@@ -4,25 +4,24 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {InputDistributionService} from '../../../core/services';
 import {HelperService} from '../../../core/helpers';
 import {isPlatformBrowser} from '@angular/common';
+import {BasicComponent} from '../../../core/library';
 
 @Component({
   selector: 'app-edit-supplier',
   templateUrl: './edit-supplier.component.html',
   styleUrls: ['./edit-supplier.component.css']
 })
-export class EditSupplierComponent implements OnInit {
+export class EditSupplierComponent extends BasicComponent implements OnInit {
 
   modal: NgbActiveModal;
   editSupplierForm: FormGroup;
   @Input() supplier;
-  errors = [];
-  message: string;
 
   constructor(@Inject(PLATFORM_ID) private platformId: object,
               private injector: Injector, private formBuilder: FormBuilder,
               private inputDistributionService: InputDistributionService,
               private helper: HelperService) {
-
+    super();
     if (isPlatformBrowser(this.platformId)) {
       this.modal = this.injector.get(NgbActiveModal);
     }
@@ -39,5 +38,19 @@ export class EditSupplierComponent implements OnInit {
   }
 
   onSubmit() {
+    if (this.editSupplierForm.valid) {
+      const supplier = this.editSupplierForm.value;
+      supplier.supplierId = this.supplier._id;
+      supplier.phone_number = `${supplier.phone_number}`;
+      this.inputDistributionService.updateSupplier(supplier)
+        .subscribe(() => {
+            this.setMessage('supplier successful updated!');
+          },
+          (err) => {
+            this.setError(err.errors);
+          });
+    } else {
+      this.setError(this.helper.getFormValidationErrors(this.editSupplierForm));
+    }
   }
 }

@@ -8,6 +8,7 @@ import {OrganisationFarmersComponent} from './organisation-farmers/organisation-
 import {OrganisationPendingFarmersComponent} from './organisation-pending-farmers/organisation-pending-farmers.component';
 import {AdminGuard} from '../core/services/guards/admin.guard';
 import {CoveredAreaResolverService} from '../core/services/resolvers/covered-area-resolver.service';
+import {AuthorisationGuardService} from '../core/services';
 
 const routes: Routes = [
   {
@@ -17,7 +18,9 @@ const routes: Routes = [
     children: [
       {
         path: 'organisations',
-        component: OrganisationListComponent
+        component: OrganisationListComponent,
+        data : {permissions: [0, 4, 6, 8, 5]},
+        canActivate: [AuthorisationGuardService]
       }, {
         path: 'organisations/create',
         component: OrganisationCreateComponent

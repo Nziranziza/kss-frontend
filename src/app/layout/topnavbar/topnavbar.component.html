@@ -19,14 +19,14 @@
         <li class="dropdown notifications-menu" [appRequiredRoles]="[6]">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
             <i class="fa fa-bell-o"></i>
-            <span class="label label-warning">0</span>
+            <span class="label label-warning">{{ needOfApproval }}</span>
           </a>
           <ul class="dropdown-menu">
             <li>
               <ul class="menu">
                 <li>
                   <a routerLink="/admin/farmers/need-approval/list">
-                    <i class="fa fa-users text-aqua"></i> 0 updates need to be approved
+                    <i class="fa fa-users text-aqua"></i> {{ needOfApproval }} updates need to be approved
                   </a>
                 </li>
               </ul>

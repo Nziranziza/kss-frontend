@@ -52,13 +52,13 @@ export class EditRequestComponent implements OnInit {
       request['documentId'.toString()] = this.farmerId;
       request['subDocumentId'.toString()] = this.land._id;
       this.farmerService.updateFarmerRequest(request).subscribe(() => {
-          this.message = 'Information successfully updated!';
+          this.message = 'Information successfully updated.';
         },
         (err) => {
           this.errors = err.errors;
         });
     } else {
-      this.errors = ['Missing required information'];
+      this.errors = ['Missing required information.'];
     }
   }
 }

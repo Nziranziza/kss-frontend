@@ -93,10 +93,10 @@ export class EditFarmerProfileComponent implements OnInit {
           this.modal.dismiss();
         },
         (err) => {
-          this.errors = err.errors;
+          this.setError(err.errors);
         });
     } else {
-      this.errors = this.helper.getFormValidationErrors(this.editFarmerProfileForm);
+      this.setError(this.helper.getFormValidationErrors(this.editFarmerProfileForm));
     }
   }
 
@@ -129,5 +129,14 @@ export class EditFarmerProfileComponent implements OnInit {
     } else {
       this.submit = true;
     }
+  }
+  setError(errors: any) {
+    this.errors = errors;
+    this.message = undefined;
+  }
+
+  setMessage(message: string) {
+    this.errors = undefined;
+    this.message = message;
   }
 }

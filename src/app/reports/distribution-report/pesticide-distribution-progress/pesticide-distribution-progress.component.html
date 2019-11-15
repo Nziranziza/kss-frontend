@@ -1,11 +1,12 @@
 <h3>
   {{ title }}
 </h3>
+<app-list-errors [errorList]="errors"></app-list-errors>
+<app-list-message [message]="message"></app-list-message>
 <div class="row">
   <div class="col-md-12">
     <div class="box box-default" style="border-top: 1px solid #d2d6de;">
       <div class="box-body">
-        <app-list-errors [errorList]="errors"></app-list-errors>
         <form [formGroup]="checkProgressForm">
           <div class="row">
             <div class="col-sm-12">
@@ -55,15 +56,32 @@
                   </div>
                   <div class="col-xs-2">
                     <div class="form-group">
-                      <span class="">Site</span>
+                      <span class="">Sector</span>
                       <div class="input-group input-group-sm">
-                        <select class="form-control" formControlName="siteId">
+                        <select class="form-control" formControlName="sect_id">
                           <option value=""></option>
-                          <option *ngFor="let site of sites" value="{{site._id}}">{{site.siteName}}</option>
+                          <option *ngFor="let sector of sectors" value="{{sector._id}}">{{sector.name}}</option>
                         </select>
                         <span class="input-group-btn">
-                      <button type="button" class="btn btn-default btn-flat" (click)="onGetProgress('site')"
-                              [disabled]="!siteId">
+                      <button type="button" class="btn btn-default btn-flat" (click)="onGetProgress('sector')"
+                              [disabled]="!sectorId">
+                        <i class="fa fa-search"></i>
+                      </button>
+                    </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-2">
+                    <div class="form-group">
+                      <span class="">Cell</span>
+                      <div class="input-group input-group-sm">
+                        <select class="form-control" formControlName="cell_id">
+                          <option value=""></option>
+                          <option *ngFor="let cell of cells" value="{{cell._id}}">{{cell.name}}</option>
+                        </select>
+                        <span class="input-group-btn">
+                      <button type="button" class="btn btn-default btn-flat" (click)="onGetProgress('cell')"
+                              [disabled]="!cellId">
                         <i class="fa fa-search"></i>
                       </button>
                     </span>
@@ -75,49 +93,41 @@
             </div>
           </div>
         </form>
-        <div class="row">
-          <div class="col-sm-12">
-            <div style="margin: 15px">
-              <app-list-message [message]="message"></app-list-message>
-              <app-loader *ngIf="loading"></app-loader>
+        <app-loader *ngIf="loading"></app-loader>
+
+          <div class="row">
+            <div class="col-sm-12">
+              <button class="btn btn-success btn-margin pull-right" [disabled]="!downloadEnabled" (click)="exportAsXLSX()"><i
+                class="fa fa-download"></i> Export
+              </button>
+              <button class="btn btn-default pull-right" (click)="downloadDetails()" [disabled]="!downloadEnabled"> Detailed xls
+              </button>
             </div>
-            <div style="margin: 0 auto; width: fit-content; float: left" *ngIf="showReport">
-              <div class="row">
-                <div class="col-xs-12">
-                  <div class="pull-left" style="margin-left: 15px; font-size: 14px">
-                  </div>
-                </div>
-              </div>
-              <google-chart #chart
-                            [type]="graph.type"
-                            [data]="graph.data"
-                            [options]="graph.options"
-                            [width]="graph.width"
-                            [columnNames]="graph.columnNames"
-                            [height]="graph.height">
-              </google-chart>
+            <div class="col-xs-12" *ngIf="showData">
+              <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover"
+                     class="table table-striped">
+                <thead>
+                <tr>
+                  <th>Location</th>
+                  <th>Number of lands</th>
+                  <th>Number of trees</th>
+                  <th>Applied</th>
+                  <th>Approved</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let location of distributionProgress">
+                  <td> {{ location.name }}</td>
+                  <td> {{ location.totalNumberOfLands }}</td>
+                  <td> {{ location.totalNumberOfTrees }}</td>
+                  <td> {{ location.totalApplied }}</td>
+                  <td> {{ location.totalApproved }}</td>
+                </tr>
+                </tbody>
+              </table>
             </div>
           </div>
-        </div>
-        <div class="row" *ngIf="showData">
-          <div class="col-sm-3 col-xs-6">
-          </div>
-          <div class="col-sm-3 col-xs-6">
-            <div class="description-block border-right">
-              <h5 class="description-header text-green">{{ siteTotalDispatched }}</h5>
-              <span class="description-text">Total allocated</span>
-            </div>
-            <!-- /.description-block -->
-          </div>
-          <!-- /.col -->
-          <div class="col-sm-3 col-xs-6">
-            <div class="description-block">
-              <h5 class="description-header text-blue">{{ siteTotalDispatched }}</h5>
-              <span class="description-text">Total Dispatched</span>
-            </div>
-            <!-- /.description-block -->
-          </div>
-        </div>
+
       </div>
       <!-- ./box-body -->
     </div>

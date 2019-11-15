@@ -184,7 +184,6 @@ export class FarmersReportComponent implements OnInit {
   }
 
   selectHandler(event) {
-    console.log(event);
   }
 
   exportReport() {

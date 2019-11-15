@@ -3,7 +3,7 @@ import {FormBuilder, FormGroup} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {
   AuthenticationService,
-  AuthorisationService, InputDistributionService, LocationService,
+  AuthorisationService, ExcelServicesService, InputDistributionService, LocationService,
   OrganisationService,
   OrganisationTypeService,
   SiteService
@@ -28,7 +28,6 @@ export class DispatchProgressComponent implements OnInit {
   dtOptions: any = {};
   // @ts-ignore
   dtTrigger: Subject = new Subject();
-
   provinces: any;
   districts: any;
   sites: any;
@@ -36,6 +35,7 @@ export class DispatchProgressComponent implements OnInit {
   siteId = false;
   showReport = false;
   showData = false;
+  printable = [];
   siteTotalAllocated = 0;
   siteTotalDispatched = 0;
   graph = {
@@ -52,6 +52,7 @@ export class DispatchProgressComponent implements OnInit {
   constructor(private formBuilder: FormBuilder, private siteService: SiteService,
               private authorisationService: AuthorisationService,
               private authenticationService: AuthenticationService,
+              private excelService: ExcelServicesService,
               private router: Router, private organisationService: OrganisationService,
               private helper: HelperService, private organisationTypeService: OrganisationTypeService,
               private locationService: LocationService, private inputDistributionService: InputDistributionService) {
@@ -93,15 +94,14 @@ export class DispatchProgressComponent implements OnInit {
         delete request.siteId;
       }
       this.inputDistributionService.getDispatchProgress(request).subscribe((data) => {
-          const reports = [];
-          if (request.location['searchBy'.toString()] === 'all provinces') {
-            this.locationService.getProvinces().subscribe((provinces) => {
-              provinces.map((prov) => {
-                const location = data.content.find(obj => obj._id === prov._id);
-                const temp = [prov.namek, 0, 0];
+          if ((data.content.length !== 0) && (data.content)) {
+            const reports = [];
+            if (request.location['searchBy'.toString()] === 'all provinces') {
+              data.content.map((prov) => {
+                const temp = [prov.name, 0, 0];
                 if (!isUndefined(location)) {
-                  temp[1] = location.totalFertilizerAllocated;
-                  temp[2] = location.totalDispatched;
+                  temp[1] = prov.totalFertilizerAllocated ? prov.totalFertilizerAllocated : 0;
+                  temp[2] = prov.totalDispatched ? prov.totalDispatched : 0;
                 }
                 reports.push(temp);
               });
@@ -109,46 +109,62 @@ export class DispatchProgressComponent implements OnInit {
               this.showReport = true;
               this.showData = false;
               this.graph.data = reports;
-            });
-          } else if (request.location['searchBy'.toString()] === 'province') {
-            this.locationService.getDistricts(request.location.prov_id).subscribe((districts) => {
-              districts.map((dist) => {
-                const location = data.content.find(obj => obj._id === dist._id);
-                const temp = [dist.name, 0, 0];
-                if (!isUndefined(location)) {
-                  temp[1] = location.totalFertilizerAllocated;
-                  temp[2] = location.totalDispatched;
-                }
-                reports.push(temp);
-              });
-              this.loading = false;
-              this.showReport = true;
-              this.showData = false;
-              this.graph.data = reports;
-            });
 
-          } else if (request.location['searchBy'.toString()] === 'district') {
+            } else if (request.location['searchBy'.toString()] === 'province') {
+              this.locationService.getDistricts(request.location.prov_id).subscribe((districts) => {
+                districts.map((dist) => {
+                  const location = data.content.find(obj => obj._id === dist._id);
+                  const temp = [dist.name, 0, 0];
+                  if (!isUndefined(location)) {
+                    temp[1] = location.totalFertilizerAllocated ? location.totalFertilizerAllocated : 0;
+                    temp[2] = location.totalDispatched ? location.totalDispatched : 0;
+                  }
+                  reports.push(temp);
+                });
+                this.loading = false;
+                this.showReport = true;
+                this.showData = false;
+                this.graph.data = reports;
+              });
+
+            } else if (request.location['searchBy'.toString()] === 'district') {
+              data.content.map((site) => {
+                const temp = [site.name, 0, 0];
+                if (!isUndefined(location)) {
+                  temp[1] = site.totalFertilizerAllocated ? site.totalFertilizerAllocated : 0;
+                  temp[2] = site.totalDispatched ? site.totalDispatched : 0;
+                }
+                reports.push(temp);
+              });
+              this.loading = false;
+              this.showReport = true;
+              this.showData = false;
+              this.graph.data = reports;
+            } else {
+              this.loading = false;
+              this.showReport = false;
+              this.showData = true;
+              this.siteTotalDispatched = data.content.dispatched;
+              this.siteTotalAllocated = data.content.totalFertilizerAllocated;
+            }
+            this.clear();
+            this.printable = reports;
           } else {
+            this.setMessage('Sorry no data found for this location');
             this.loading = false;
-            this.showReport = false;
-            this.showData = true;
-            this.siteTotalDispatched = data.content.dispatched;
-            this.siteTotalAllocated = data.content.totalFertilizerAllocated;
           }
         },
         (err) => {
           if (err.status === 404) {
             this.showReport = false;
-            this.message = err.errors[0];
-            this.errors = '';
+            this.setMessage(err.errors[0]);
             this.loading = false;
           } else {
-            this.message = '';
-            this.errors = err.errors;
+            this.setError(err.errors);
           }
         });
     } else {
-      this.errors = this.helper.getFormValidationErrors(this.checkProgressForm);
+      this.setError(this.helper.getFormValidationErrors(this.checkProgressForm));
     }
   }
 
@@ -194,5 +210,27 @@ export class DispatchProgressComponent implements OnInit {
           .patchValue(this.authenticationService.getCurrentUser().info.location.dist_id);
       }
     });
+  }
+
+  exportReport() {
+    this.excelService.exportAsExcelFile(this.printable, 'report');
+  }
+
+  setError(errors: any) {
+    this.errors = errors;
+    this.message = undefined;
+    this.loading = false;
+  }
+
+  setMessage(message: string) {
+    this.errors = undefined;
+    this.message = message;
+    this.loading = false;
+  }
+
+  clear() {
+    this.errors = undefined;
+    this.message = undefined;
+    this.loading = false;
   }
 }

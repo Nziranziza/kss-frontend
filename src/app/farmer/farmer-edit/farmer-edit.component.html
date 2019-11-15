@@ -104,9 +104,8 @@
           <td>{{ request.fertilizer_need }} Kg</td>
           <td>{{ request.fertilizer_allocate }} Kg</td>
           <td>
-            <button class="btn btn-warning btn-margin btn-sm pull-right" (click)="cancelRequest(request)">Delete</button>
+            <button class="btn btn-warning btn-margin btn-sm pull-right" (click)="cancelRequest(request)" *ngIf="!isUserSiteManager ">Delete</button>
             <button class="btn btn-primary btn-margin btn-sm pull-right" (click)="editRequest(request)">Edit</button>
-            <!--<button class="btn btn-primary btn-margin btn-sm pull-right" (click)="editRequestAtDistribution(request)">Edit on distribution</button>-->
           </td>
         </tr>
         </tbody>

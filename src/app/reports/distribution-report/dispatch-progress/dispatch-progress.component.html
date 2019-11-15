@@ -1,0 +1,130 @@
+<h3>
+  {{ title }}
+  <button class="btn btn-success btn-margin pull-right" (click)="exportReport()"><i class="fa fa-download"></i> Export</button>
+</h3>
+<app-list-errors [errorList]="errors"></app-list-errors>
+<app-list-message [message]="message"></app-list-message>
+<div class="row">
+  <div class="col-md-12">
+    <div class="box box-default" style="border-top: 1px solid #d2d6de;">
+      <div class="box-body">
+        <form [formGroup]="checkProgressForm">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="row">
+                <div formGroupName="location">
+                  <div class="col-xs-2" *ngIf="!isCurrentUserDCC">
+                    <div class="form-group">
+                      <span class="">Province</span>
+                      <div class="input-group input-group-sm">
+                        <select class="form-control" formControlName="prov_id">
+                          <option value="" selected="selected">ALL PROVINCES</option>
+                          <option *ngFor="let province of provinces" value="{{province._id}}">{{province.namee}}
+                          </option>
+                        </select>
+                        <span class="input-group-btn">
+                      <button type="button" class="btn btn-default btn-flat" (click)="onGetProgress('province')">
+                        <i class="fa fa-search"></i>
+                      </button>
+                    </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-2">
+                    <div class="form-group">
+                      <span class="">District</span>
+                      <div class="input-group input-group-sm">
+                        <select class="form-control" formControlName="dist_id" disabled="true"
+                                *ngIf="isCurrentUserDCC; else enabled">
+                          <option value=""></option>
+                          <option *ngFor="let district of districts" value="{{district._id}}">{{district.name}}</option>
+                        </select>
+                        <ng-template #enabled>
+                          <select class="form-control" formControlName="dist_id">
+                            <option value=""></option>
+                            <option *ngFor="let district of districts" value="{{district._id}}">{{district.name}}
+                            </option>
+                          </select>
+                        </ng-template>
+                        <span class="input-group-btn">
+                      <button type="button" class="btn btn-default btn-flat" (click)="onGetProgress('district')"
+                              [disabled]="!distId">
+                        <i class="fa fa-search"></i>
+                      </button>
+                    </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-2">
+                    <div class="form-group">
+                      <span class="">Site</span>
+                      <div class="input-group input-group-sm">
+                        <select class="form-control" formControlName="siteId">
+                          <option value=""></option>
+                          <option *ngFor="let site of sites" value="{{site._id}}">{{site.siteName}}</option>
+                        </select>
+                        <span class="input-group-btn">
+                      <button type="button" class="btn btn-default btn-flat" (click)="onGetProgress('site')"
+                              [disabled]="!siteId">
+                        <i class="fa fa-search"></i>
+                      </button>
+                    </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div class="row">
+          <div class="col-sm-12">
+            <div style="margin: 15px">
+              <app-loader *ngIf="loading"></app-loader>
+            </div>
+            <div style="margin: 0 auto; width: fit-content; float: left" *ngIf="showReport">
+              <div class="row">
+                <div class="col-xs-12">
+                  <div class="pull-left" style="margin-left: 15px; font-size: 14px">
+                    <google-chart #chart
+                                  [type]="graph.type"
+                                  [data]="graph.data"
+                                  [options]="graph.options"
+                                  [width]="graph.width"
+                                  [columnNames]="graph.columnNames"
+                                  [height]="graph.height">
+                    </google-chart>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row" *ngIf="showData">
+          <div class="col-sm-3 col-xs-6">
+          </div>
+          <div class="col-sm-3 col-xs-6">
+            <div class="description-block border-right">
+              <h5 class="description-header text-green">{{ siteTotalAllocated }}</h5>
+              <span class="description-text">Total allocated (KG)</span>
+            </div>
+            <!-- /.description-block -->
+          </div>
+          <!-- /.col -->
+          <div class="col-sm-3 col-xs-6">
+            <div class="description-block">
+              <h5 class="description-header text-blue">{{ siteTotalDispatched }}</h5>
+              <span class="description-text">Total Dispatched (KG)</span>
+            </div>
+            <!-- /.description-block -->
+          </div>
+        </div>
+      </div>
+      <!-- ./box-body -->
+    </div>
+    <!-- /.box -->
+  </div>
+  <!-- /.col -->
+</div>
+
+

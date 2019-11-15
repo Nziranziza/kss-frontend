@@ -4,6 +4,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {MessageService, SiteService} from '../../../core/services';
 import {LocationService} from '../../../core/services';
 import {HelperService} from '../../../core/helpers';
+import {isUndefined} from 'util';
 
 @Component({
   selector: 'app-site-edit',
@@ -69,10 +70,14 @@ export class SiteEditComponent implements OnInit {
         this.selectedCoveredSectors = [];
         site.coveredAreas.coveredSectors.map((sector) => {
           restoreCoveredSectors.push(sector.sect_id);
-          this.siteService.getSectorAllocatedFertilizer(sector.sect_id).subscribe((qty) => {
-            this.totalAllocatedQty = this.totalAllocatedQty + qty.content[0].totalFertilizerAllocated;
-            this.editForm.controls.allocatedQty.setValue(this.totalAllocatedQty);
-          });
+          if (isUndefined(site.allocatedQty)) {
+            this.siteService.getSectorAllocatedFertilizer(sector.sect_id).subscribe((qty) => {
+              this.totalAllocatedQty = this.totalAllocatedQty + qty.content[0].totalFertilizerAllocated;
+              this.editForm.controls.allocatedQty.setValue(this.totalAllocatedQty);
+            });
+          } else {
+            this.totalAllocatedQty = site.allocatedQty;
+          }
           this.selectedCoveredSectors.push(sector.name);
         });
         site.coveredAreas.coveredSectors = restoreCoveredSectors;
@@ -109,11 +114,11 @@ export class SiteEditComponent implements OnInit {
     this.initial();
     this.onChanges();
   }
+
   onSubmit() {
     if (this.editForm.valid) {
       const val = this.editForm.value;
       const site = JSON.parse(JSON.stringify(val));
-      delete site.allocatedQty;
       this.helper.cleanObject(site);
       const tempSectors = [];
       const tempCWS = [];

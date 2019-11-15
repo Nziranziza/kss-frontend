@@ -3,6 +3,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {AdminComponent} from '../../admin/admin/admin.component';
 import {DispatchProgressComponent} from './dispatch-progress/dispatch-progress.component';
 import {DistributionProgressComponent} from './distribution-progress/distribution-progress.component';
+import {PesticideDistributionProgressComponent} from './pesticide-distribution-progress/pesticide-distribution-progress.component';
 
 const routes: Routes = [
   {
@@ -12,6 +13,10 @@ const routes: Routes = [
       {
         path: 'input/application/progress',
         component: DistributionProgressComponent
+      },
+      {
+        path: 'input/pesticide/application/progress',
+        component: PesticideDistributionProgressComponent
       },
       {
         path: 'input/distribution/progress',

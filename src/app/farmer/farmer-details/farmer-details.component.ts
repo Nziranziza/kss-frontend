@@ -1,6 +1,7 @@
 import {Component, Inject, Injector, Input, OnInit, PLATFORM_ID} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {isPlatformBrowser} from '@angular/common';
+import {isArray} from 'util';
 
 @Component({
   selector: 'app-farmer-details',
@@ -12,6 +13,7 @@ export class FarmerDetailsComponent implements OnInit {
   modal: NgbActiveModal;
   @Input() farmer;
   requests: any;
+
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
     private injector: Injector) {
@@ -22,6 +24,18 @@ export class FarmerDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.requests = this.farmer.request.requestInfo;
+    if (this.farmer.request) {
+      if (isArray(this.farmer.request.requestInfo)) {
+        this.requests = this.farmer.request.requestInfo;
+      } else {
+        this.requests = [this.farmer.request.requestInfo];
+      }
+    } else if (this.farmer.requests) {
+      if (isArray(this.farmer.requests.requestInfo)) {
+        this.requests = this.farmer.requests.requestInfo;
+      } else {
+        this.requests = [this.farmer.requests.requestInfo];
+      }
+    }
   }
 }

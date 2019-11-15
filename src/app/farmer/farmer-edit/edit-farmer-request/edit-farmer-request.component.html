@@ -3,9 +3,9 @@
   </i>
 </div>
 <div class="modal-body">
-  <app-list-errors [errorList]="errors" *ngIf="errors"></app-list-errors>
+  <app-list-errors [errorList]="errors"></app-list-errors>
+  <app-list-message [message]="message"></app-list-message>
   <form [formGroup]="editFarmerRequestForm" (ngSubmit)="onSubmit()">
-    <input type="hidden" formControlName="fertilizer_need" class="form-control">
     <input type="hidden" formControlName="fertilizer_allocate" class="form-control">
     <div class="row">
       <div class="col-xs-6">

@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {AuthenticationService, ConfirmDialogService, ExcelServicesService, OrganisationService} from '../../core/services';
+import {AuthenticationService, ExcelServicesService, OrganisationService} from '../../core/services';
 import {ActivatedRoute} from '@angular/router';
 import {Subject} from 'rxjs';
 import {Farmer} from '../../core/models';
@@ -17,7 +17,7 @@ export class OrganisationFarmersComponent implements OnInit, OnDestroy {
   constructor(private organisationService: OrganisationService,
               private authenticationService: AuthenticationService,
               private excelService: ExcelServicesService,
-              private route: ActivatedRoute, private  confirmDialogService: ConfirmDialogService,
+              private route: ActivatedRoute,
               private modal: NgbModal, private authorisationService: AuthorisationService) {}
 
   message: string;

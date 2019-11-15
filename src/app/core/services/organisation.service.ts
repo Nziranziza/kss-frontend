@@ -8,7 +8,8 @@ import {Organisation} from '../models';
 export class OrganisationService {
   constructor(
     private apiService: ApiService
-  ) {}
+  ) {
+  }
 
   all(): Observable<any> {
     return this.apiService.get('/organizations');
@@ -32,6 +33,10 @@ export class OrganisationService {
 
   possibleRoles(): Observable<any> {
     return this.apiService.get('/organizations/organization.roles/list');
+  }
+
+  orgRoles(id: string) {
+    return this.apiService.get('/organizations/organization.roles/list' + id);
   }
 
   getOrgFarmers(id: string): Observable<any> {

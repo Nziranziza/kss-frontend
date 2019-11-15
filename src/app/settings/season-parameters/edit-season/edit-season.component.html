@@ -108,21 +108,21 @@
               <form [formGroup]="editDistributionForm" (ngSubmit)="updateDistribution()">
                 <div formGroupName="distribution">
                   <div class="row">
-                    <div class="col-xs-2">
+                    <div class="col-xs-3">
                       <div class="form-group">
-                        <span class="label-required">Available fertilizer</span>
+                        <span class="label-required">Available fertilizer (Tones)</span>
                         <input class="form-control" formControlName="totalFertilizerAvailable">
                       </div>
                     </div>
-                    <div class="col-xs-2">
+                    <div class="col-xs-3">
                       <div class="form-group">
-                        <span class="">Available pesticide</span>
+                        <span class="">Available pesticide (Litres)</span>
                         <input class="form-control" formControlName="totalPesticideAvailable">
                       </div>
                     </div>
                   </div>
                   <div class="row">
-                    <div class="col-xs-2">
+                    <div class="col-xs-3">
                       <div class="checkbox" formArrayName="supplierId"
                            *ngFor="let supplier of editDistributionForm.controls.distribution.get('supplierId')['controls']; let i = index">
                         <label>

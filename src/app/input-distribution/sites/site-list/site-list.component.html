@@ -1,6 +1,6 @@
 <h3>
   Sites
-  <a class="btn btn-success pull-right" routerLink="/admin/sites/create"><i class="fa fa-plus"></i> New site</a>
+  <a class="btn btn-success pull-right" routerLink="/admin/sites/create" *appHasPermission="[0,5]"><i class="fa fa-plus"></i> New site</a>
 </h3>
 <app-list-message [message]="message"></app-list-message>
 <div class="row">
@@ -20,7 +20,10 @@
             <td> {{ site.siteName }}</td>
             <td>
               <a class="btn btn-success btn-margin btn-sm pull-right" [routerLink]="['edit/', site._id]"
-                 style="margin-left: 10px;"> Edit</a>
+                 style="margin-left: 10px;"  *appHasPermission="[0,6,5]"> Edit</a>
+              <a routerLink="/admin/sites/{{site._id}}/farmers" class="btn btn-margin btn-info btn-sm pull-right" *appHasPermission="[0,6,5,8]"><i
+                class="fa fa-users"></i> Farmers</a>
+              <button class="btn btn-default btn-sm pull-right details-button" (click)="viewDetails(site)">...</button>
             </td>
           </tr>
           </tbody>

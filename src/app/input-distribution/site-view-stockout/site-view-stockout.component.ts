@@ -28,7 +28,7 @@ export class SiteViewStockoutComponent implements OnInit {
   ngOnInit() {
     this.dtOptions = {
       pagingType: 'full_numbers',
-      pageLength: 25
+      pageLength: 10
     };
     this.getStocks();
   }

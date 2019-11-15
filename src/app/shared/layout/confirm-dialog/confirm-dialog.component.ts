@@ -1,4 +1,4 @@
-import {Component, OnInit, Inject} from '@angular/core';
+import {Component, OnInit, Inject, OnDestroy} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material';
 import {MatDialogRef} from '@angular/material';
 
@@ -7,7 +7,7 @@ import {MatDialogRef} from '@angular/material';
   templateUrl: './confirm-dialog.component.html',
   styleUrls: ['./confirm-dialog.component.css']
 })
-export class ConfirmDialogComponent implements OnInit {
+export class ConfirmDialogComponent implements OnInit, OnDestroy {
 
   constructor(@Inject(MAT_DIALOG_DATA) public data, public dialogRef: MatDialogRef<ConfirmDialogComponent>) {
   }
@@ -17,5 +17,7 @@ export class ConfirmDialogComponent implements OnInit {
 
   closeDialog() {
     this.dialogRef.close();
+  }
+  ngOnDestroy(): void {
   }
 }

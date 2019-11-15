@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AuthenticationService, OrganisationService} from '../../core/services';
 import {Organisation} from '../../core/models';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {ConfirmDialogService} from '../../core/services';
 import {Subject} from 'rxjs';
 import {MessageService} from '../../core/services';
@@ -18,6 +18,7 @@ export class OrganisationListComponent implements OnInit, OnDestroy {
   constructor(private organisationService: OrganisationService, private siteService: SiteService,
               private router: Router, private  confirmDialogService: ConfirmDialogService,
               private authorisationService: AuthorisationService,
+              private route: ActivatedRoute,
               private authenticationService: AuthenticationService, private messageService: MessageService) {
   }
 

@@ -8,6 +8,7 @@ import {LocationService} from '../../../core/services';
 import {Subject} from 'rxjs';
 import {WarehouseService} from '../../../core/services';
 import {DatePipe} from '@angular/common';
+import {BasicComponent} from '../../../core/library';
 
 @Component({
   selector: 'app-warehouse-dispatch',
@@ -15,21 +16,21 @@ import {DatePipe} from '@angular/common';
   providers: [DatePipe],
   styleUrls: ['./warehouse-dispatch.component.css']
 })
-export class WarehouseDispatchComponent implements OnInit, OnDestroy {
+export class WarehouseDispatchComponent extends BasicComponent implements OnInit, OnDestroy {
 
   constructor(private formBuilder: FormBuilder, private siteService: SiteService,
               private warehouseService: WarehouseService,
               private router: Router, private confirmDialogService: ConfirmDialogService,
               private seasonService: SeasonService,
+              private wareHouseService: WarehouseService,
               private datePipe: DatePipe, private authenticationService: AuthenticationService,
               private inputDistributionService: InputDistributionService,
               private helper: HelperService, private locationService: LocationService) {
+    super();
   }
 
   recordDispatchForm: FormGroup;
   filterForm: FormGroup;
-  errors = [];
-  message: any;
   sites: any;
   provinces: any;
   districts: any;
@@ -53,6 +54,7 @@ export class WarehouseDispatchComponent implements OnInit, OnDestroy {
     {value: 'driver', name: 'driver'},
     {value: 'vehicle', name: 'vehicle'}
   ];
+
   packagePesticide: any;
   packageFertilizer: any;
   totalQtyFertilizer = 0;
@@ -70,7 +72,7 @@ export class WarehouseDispatchComponent implements OnInit, OnDestroy {
         driverPhoneNumber: [''],
         vehiclePlate: [''],
         vehicleModel: [''],
-        date: [this.datePipe.transform(this.currentDate, 'yyyy-MM-dd'), Validators.required],
+        date: [this.datePipe.transform(this.currentDate, 'yyyy-MM-dd', 'GMT+2'), Validators.required],
         packageFertilizer: new FormArray([]),
         packagePesticide: new FormArray([]),
         warehouseIdFertilizer: [''],
@@ -86,7 +88,7 @@ export class WarehouseDispatchComponent implements OnInit, OnDestroy {
     });
     this.dtOptions = {
       pagingType: 'full_numbers',
-      pageLength: 25,
+      pageLength: 10,
       columns: [{}, {}, {}, {}, {
         class: 'none'
       }, {}, {}],
@@ -284,6 +286,9 @@ export class WarehouseDispatchComponent implements OnInit, OnDestroy {
       const filter = JSON.parse(JSON.stringify(this.filterForm.value));
       if ((!filter.date.from) || (!filter.date.to)) {
         delete filter.date;
+      } else {
+        filter.date.from = this.helper.getDate(this.filterForm.value.date.from);
+        filter.date.to = this.helper.getDate(this.filterForm.value.date.to);
       }
       this.helper.cleanObject(filter.search);
       this.helper.cleanObject(filter);
@@ -292,6 +297,7 @@ export class WarehouseDispatchComponent implements OnInit, OnDestroy {
         this.inputDispatches = data.content;
       }, (err) => {
         if (err.status === 404) {
+          this.setWarning('Sorry no matching data');
           this.inputDispatches = [];
         }
       });
@@ -316,12 +322,13 @@ export class WarehouseDispatchComponent implements OnInit, OnDestroy {
   onSubmit() {
     if (this.recordDispatchForm.valid) {
       const dispatch = JSON.parse(JSON.stringify(this.recordDispatchForm.value));
+      this.helper.getDate(this.recordDispatchForm.value.entries.date);
       delete dispatch.location;
       const body = {
         siteId: dispatch.siteId,
         vehicleModel: dispatch.entries.vehicleModel,
         vehiclePlate: dispatch.entries.vehiclePlate,
-        date: dispatch.entries.date,
+        date: this.helper.getDate(this.recordDispatchForm.value.entries.date),
         driver: dispatch.entries.driver,
         driverPhoneNumber: dispatch.entries.driverPhoneNumber,
         entries: []
@@ -352,19 +359,18 @@ export class WarehouseDispatchComponent implements OnInit, OnDestroy {
       }
       this.inputDistributionService.recordDispatch(body)
         .subscribe(() => {
-            this.message = 'Recorded successfully!';
-            this.errors = [];
+            this.setMessage('Dispatch recorded successfully!');
             this.warehouseService.getDispatches().subscribe((data) => {
               this.inputDispatches = data.content;
             });
-            this.recordDispatchForm.controls.entries.get('date').setValue(this.datePipe.transform(this.currentDate, 'yyyy-MM-dd'));
+            this.recordDispatchForm.reset();
+            this.recordDispatchForm.controls.entries.get('date').setValue(this.datePipe.transform(this.currentDate, 'yyyy-MM-dd', 'GMT+2'));
           },
           (err) => {
-            this.message = '';
-            this.errors = err.errors;
+            this.setError(err.errors);
           });
     } else {
-      this.errors = this.helper.getFormValidationErrors(this.recordDispatchForm);
+      this.setError(this.helper.getFormValidationErrors(this.recordDispatchForm));
     }
   }
 
@@ -378,7 +384,7 @@ export class WarehouseDispatchComponent implements OnInit, OnDestroy {
   }
 
   printNote(id: string) {
-    this.errors = [];
+    this.clear();
     this.warehouseService.printDeliveryNote(id).subscribe((data) => {
       const byteArray = new Uint8Array(atob(data.data).split('').map(char => char.charCodeAt(0)));
       const newBlob = new Blob([byteArray], {type: 'application/pdf'});
@@ -429,10 +435,22 @@ export class WarehouseDispatchComponent implements OnInit, OnDestroy {
   }
 
   cancelDispatch(id: string) {
-    this.confirmDialogService.openConfirmDialog('Are you sure you want to cancel dispatch? ' +
+    this.confirmDialogService.openConfirmDialog('Are you sure you want to cancel the dispatch? ' +
       'action cannot be undone').afterClosed().subscribe(
       res => {
         if (res) {
+          const body = {
+            id
+          };
+          this.wareHouseService.removeDispatch(body).subscribe(() => {
+            this.setMessage('Dispatch successfully cancelled!');
+            this.inputDispatches = this.inputDispatches.filter((value) => {
+              return value._id !== id;
+            });
+          }, (err) => {
+            this.setError(this.errors = err.errors);
+            window.scroll(0, 0);
+          });
         }
       });
   }
@@ -440,5 +458,4 @@ export class WarehouseDispatchComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
   }
-
 }

@@ -13,13 +13,13 @@ declare var $;
   providers: [AuthorisationService]
 })
 export class AsidenavbarComponent implements OnInit {
-
-  constructor(private router: Router, private authenticationService: AuthenticationService) {
-  }
-
+  private siteId: string;
   parameters: any;
   user: any;
   roles: any;
+
+  constructor(private router: Router, private authenticationService: AuthenticationService) {
+  }
 
   ngOnInit() {
     $(document).ready(() => {
@@ -28,6 +28,7 @@ export class AsidenavbarComponent implements OnInit {
     });
     this.parameters = this.authenticationService.getCurrentUser().parameters;
     this.user = this.authenticationService.getCurrentUser().info;
+    this.siteId = this.authenticationService.getCurrentUser().orgInfo.distributionSite;
     this.roles = constant.roles;
   }
 

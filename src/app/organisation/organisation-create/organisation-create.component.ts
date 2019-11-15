@@ -242,12 +242,8 @@ export class OrganisationCreateComponent implements OnInit {
         this.selectedRoles = data
           .map((checked, index) => checked ? this.possibleRoles[index].value : null)
           .filter(value => value !== null);
-        if (this.selectedRoles.includes(1) ||
-          this.selectedRoles.includes(2)) {
-          this.needLocation = true;
-        } else {
-          this.needLocation = false;
-        }
+        this.needLocation = !!(this.selectedRoles.includes(1) ||
+          this.selectedRoles.includes(2));
         if (
           this.selectedRoles.includes(1)) {
           this.coverVillages = true;
@@ -257,11 +253,7 @@ export class OrganisationCreateComponent implements OnInit {
           this.coveredVillagesSet = [];
           this.createForm.controls.coveredSectors.reset();
         }
-        if (this.selectedRoles.includes(8)) {
-          this.hasExpiration = true;
-        } else {
-          this.hasExpiration = false;
-        }
+        this.hasExpiration = !!this.selectedRoles.includes(8);
       });
     this.createForm.controls.location.get('prov_id'.toString()).valueChanges.subscribe(
       (value) => {

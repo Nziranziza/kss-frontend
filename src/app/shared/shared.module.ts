@@ -19,6 +19,7 @@ import {LoaderComponent} from './layout';
 import {RequiredSeasonDirective} from './directives/required-season.directive';
 import {HasPermissionDirective} from './directives/has-permission.directive';
 import {QuantityUnitComponent} from './layout';
+import {ListWarningsComponent} from './layout';
 
 @NgModule({
   imports: [
@@ -32,7 +33,7 @@ import {QuantityUnitComponent} from './layout';
   declarations: [ListErrorsComponent, LoaderComponent,
     HomeHeaderComponent, HomeFooterComponent, ListMessageComponent,
     ConfirmDialogComponent, RequiredRolesDirective, LoaderComponent,
-    RequiredSeasonDirective, HasPermissionDirective, QuantityUnitComponent],
+    RequiredSeasonDirective, HasPermissionDirective, QuantityUnitComponent, ListWarningsComponent],
   exports: [
     CommonModule,
     FormsModule,
@@ -41,6 +42,7 @@ import {QuantityUnitComponent} from './layout';
     RouterModule,
     ListErrorsComponent,
     ListMessageComponent,
+    ListWarningsComponent,
     HomeHeaderComponent,
     LoaderComponent,
     HomeFooterComponent,

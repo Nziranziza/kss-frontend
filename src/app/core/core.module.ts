@@ -1,4 +1,4 @@
-import {ErrorHandler, NgModule} from '@angular/core';
+import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
@@ -20,7 +20,6 @@ import {InputDistributionService} from './services';
 import {WarehouseService} from './services';
 import {AdminGuard} from './services/guards/admin.guard';
 import {CoveredAreaResolverService} from './services/resolvers/covered-area-resolver.service';
-import {RoleResolverService} from './services/resolvers/role-resolver.service';
 
 @NgModule({
   imports: [
@@ -42,7 +41,6 @@ import {RoleResolverService} from './services/resolvers/role-resolver.service';
     AdminGuard,
     CookieService,
     CoveredAreaResolverService,
-    RoleResolverService,
     /*{provide: ErrorHandler, useClass: ErrorCustomHandler}*/
   ],
   declarations: []

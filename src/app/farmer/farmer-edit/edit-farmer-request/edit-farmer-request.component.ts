@@ -2,7 +2,7 @@ import {Component, Inject, Injector, Input, OnInit, PLATFORM_ID} from '@angular/
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {HelperService} from '../../../core/helpers';
-import {AuthenticationService, FarmerService} from '../../../core/services';
+import {AuthenticationService, FarmerService, SiteService} from '../../../core/services';
 import {isPlatformBrowser} from '@angular/common';
 import {LocationService} from '../../../core/services';
 import {AuthorisationService} from '../../../core/services';
@@ -17,22 +17,28 @@ export class EditFarmerRequestComponent implements OnInit {
   modal: NgbActiveModal;
   @Input() land;
   editFarmerRequestForm: FormGroup;
-  errors: string [];
+  errors: any;
   message: string;
   submit = false;
   farmerId: string;
   provinces: any;
+  disableProvId = false;
+  disableDistId = false;
   districts: any;
-  sectors: any;
+  sectors = [];
   cells: any;
   villages: any;
   currentSeason: any;
   isUserCWSOfficer = false;
+  isUserSiteManager = false;
+  isUserDistrictCashCrop = false;
+  site: any;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
     private injector: Injector, private formBuilder: FormBuilder, private locationService: LocationService,
     private helper: HelperService, private farmerService: FarmerService,
+    private siteService: SiteService,
     private authenticationService: AuthenticationService, private authorisationService: AuthorisationService) {
 
     if (isPlatformBrowser(this.platformId)) {
@@ -41,14 +47,19 @@ export class EditFarmerRequestComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.isUserSiteManager = this.authorisationService.isSiteManager();
+    this.isUserDistrictCashCrop = this.authorisationService.isDistrictCashCropOfficer();
+    if (this.isUserDistrictCashCrop || this.isUserSiteManager) {
+      this.disableDistId = true;
+      this.disableProvId = true;
+    }
     this.editFarmerRequestForm = this.formBuilder.group({
       numberOfTrees: ['', [Validators.required,
         Validators.min(1), Validators.pattern('[0-9]*')]],
-      fertilizer_need: [''],
       fertilizer_allocate: [0],
       location: this.formBuilder.group({
-        prov_id: ['', Validators.required],
-        dist_id: ['', Validators.required],
+        prov_id: [{value: '', disabled: this.disableProvId}, Validators.required],
+        dist_id: [{value: '', disabled: this.disableDistId}, Validators.required],
         sect_id: ['', Validators.required],
         cell_id: ['', Validators.required],
         village_id: ['', Validators.required]
@@ -56,12 +67,17 @@ export class EditFarmerRequestComponent implements OnInit {
     });
     const temp = {
       numberOfTrees: this.land.numberOfTrees,
-      fertilizer_need: this.land.fertilizer_need,
       fertilizer_allocate: this.land.fertilizer_allocate,
       location: {}
     };
+    if (this.isUserDistrictCashCrop || this.isUserSiteManager) {
+      this.disableDistId = true;
+      this.disableProvId = true;
+    }
     this.currentSeason = this.authenticationService.getCurrentSeason();
     this.isUserCWSOfficer = this.authorisationService.isCWSUser();
+    this.isUserSiteManager = this.authorisationService.isSiteManager();
+    this.isUserDistrictCashCrop = this.authorisationService.isDistrictCashCropOfficer();
 
     temp.location['prov_id'.toString()] = this.land.location.prov_id._id;
     temp.location['dist_id'.toString()] = this.land.location.dist_id._id;
@@ -72,9 +88,22 @@ export class EditFarmerRequestComponent implements OnInit {
     this.locationService.getDistricts(this.land.location.prov_id._id).subscribe((districts) => {
       this.districts = districts;
     });
-    this.locationService.getSectors(this.land.location.dist_id._id).subscribe((sectors) => {
-      this.sectors = sectors;
-    });
+    if (!this.isUserSiteManager) {
+      this.locationService.getSectors(this.land.location.dist_id._id).subscribe((sectors) => {
+        this.sectors = sectors;
+      });
+
+    } else {
+      this.siteService.get(this.authenticationService.getCurrentUser().orgInfo.distributionSite).subscribe((site) => {
+        this.site = site.content;
+        this.site.coveredAreas.coveredSectors.map((sector) => {
+          this.sectors.push({
+            _id: sector.sect_id,
+            name: sector.name
+          });
+        });
+      });
+    }
     this.locationService.getCells(this.land.location.sect_id._id).subscribe((cells) => {
       this.cells = cells;
     });
@@ -142,20 +171,30 @@ export class EditFarmerRequestComponent implements OnInit {
 
   onSubmit() {
     if (this.editFarmerRequestForm.valid) {
-      const request = this.editFarmerRequestForm.value;
+      const request = this.editFarmerRequestForm.getRawValue();
       request['fertilizer_need'.toString()] =
-        +request['numberOfTrees'.toString()] * this.currentSeason.seasonParams.fertilizerKgPerTree.$numberDouble;
+        +request['numberOfTrees'.toString()] * this.currentSeason.seasonParams.fertilizerKgPerTree;
       request['documentId'.toString()] = this.farmerId;
       request['subDocumentId'.toString()] = this.land._id;
       request['userId'.toString()] = this.authenticationService.getCurrentUser().info._id;
       this.farmerService.updateFarmerRequest(request).subscribe(() => {
-          this.message = 'request successfully updated!';
+          this.setMessage('request successfully updated!');
         },
         (err) => {
-          this.errors = err.errors;
+          this.setError(err.errors);
         });
     } else {
-      this.errors = ['Missing required land(s) information'];
+      this.setError('Missing required land(s) information');
     }
+  }
+
+  setError(errors: any) {
+    this.errors = errors;
+    this.message = undefined;
+  }
+
+  setMessage(message: string) {
+    this.errors = undefined;
+    this.message = message;
   }
 }

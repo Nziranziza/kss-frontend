@@ -1,5 +1,5 @@
-<div class="alert alert-success alert-dismissible custom-message" *ngIf="message" role="alert" data-auto-dismiss="1500">
+<div class="alert alert-success alert-dismissible custom-message" *ngIf="notEmpty" role="alert" data-auto-dismiss="1500">
   <div>
-    {{ message }}
+    {{ message | lowercase }}
   </div>
 </div>

@@ -61,7 +61,6 @@ export class SiteCreateComponent implements OnInit {
     if (this.createForm.valid) {
       const val = this.createForm.value;
       const site = JSON.parse(JSON.stringify(val));
-      delete site.allocatedQty;
       this.helper.cleanObject(site);
       const tempSectors = [];
       const tempCWS = [];

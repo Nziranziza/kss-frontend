@@ -40,8 +40,19 @@ export class SiteService {
     return this.apiService.post('/site/zone/list', body);
   }
 
+  getSite(body: any): Observable<any> {
+    return this.apiService.post('/site/list', body);
+  }
+
   getSectorAllocatedFertilizer(sectorId: string) {
     return this.apiService.get('/site/sector/allocated/' + sectorId);
   }
 
+  getSiteFarmers(body: any): Observable<any> {
+    return this.apiService.post('/coffeefarmers/farmer_by_site', body);
+  }
+
+  getSitePendingFarmers(body: any): Observable<any> {
+    return this.apiService.post('/pendingfarmers/tempofarmer_by_site', body);
+  }
 }

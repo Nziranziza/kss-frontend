@@ -7,6 +7,8 @@ import {FarmerEditComponent} from './farmer-edit/farmer-edit.component';
 import {FarmerLandsComponent} from './farmer-lands/farmer-lands.component';
 import {FarmerNeedApprovalListComponent} from './farmer-need-approval-list/farmer-need-approval-list.component';
 import {AdminGuard} from '../core/services/guards/admin.guard';
+import {PendingFarmerListComponent} from './pending-farmer/pending-farmer-list/pending-farmer-list.component';
+import {FarmerAdministrativeListComponent} from './farmer-administrative-list/farmer-administrative-list.component';
 
 const routes: Routes = [
   {
@@ -17,6 +19,14 @@ const routes: Routes = [
       {
         path: 'farmers/list',
         component: FarmerListComponent
+      },
+      {
+        path: 'pending-farmers',
+        component: PendingFarmerListComponent
+      },
+      {
+        path: 'farmers/administrative/list',
+        component: FarmerAdministrativeListComponent
       },
       {
         path: 'farmers/need-approval/list',

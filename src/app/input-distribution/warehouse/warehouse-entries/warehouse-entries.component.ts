@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {SeasonService, SiteService} from '../../../core/services';
+import {AuthorisationService, SeasonService, SiteService} from '../../../core/services';
 import {Router} from '@angular/router';
 import {InputDistributionService} from '../../../core/services';
 import {HelperService} from '../../../core/helpers';
@@ -10,6 +10,7 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {DeliveryDetailsComponent} from './delivery-details/delivery-details.component';
 import {DatePipe} from '@angular/common';
 import {constant} from '../../../../environments/constant';
+import {BasicComponent} from '../../../core/library';
 
 @Component({
   selector: 'app-warehouse-entries',
@@ -17,21 +18,23 @@ import {constant} from '../../../../environments/constant';
   providers: [DatePipe],
   styleUrls: ['./warehouse-entries.component.css']
 })
-export class WarehouseEntriesComponent implements OnInit {
+export class WarehouseEntriesComponent extends BasicComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder, private siteService: SiteService, private modal: NgbModal,
               private authenticationService: AuthenticationService,
+              private authorizationService: AuthorisationService,
               private router: Router, private inputDistributionService: InputDistributionService,
               private helper: HelperService,
               private datePipe: DatePipe,
               private seasonService: SeasonService,
               private warehouseService: WarehouseService) {
+    super();
   }
 
   recordEntriesForm: FormGroup;
   season: any;
   filterEntriesForm: FormGroup;
-  errors = [];
+  errors: any;
   message: any;
   isTypePesticide = false;
   types = [
@@ -53,6 +56,7 @@ export class WarehouseEntriesComponent implements OnInit {
   supplier: any;
   totalQty = 0;
   stocks: any;
+  canAddEntry = false;
 
   ngOnInit() {
     this.currentDate = new Date();
@@ -64,11 +68,13 @@ export class WarehouseEntriesComponent implements OnInit {
         vehiclePlate: [''],
         package: new FormArray([]),
         totalQty: [''],
-        date: [this.datePipe.transform(this.currentDate, 'yyyy-MM-dd'), Validators.required],
+        date: [this.datePipe.transform(this.currentDate, 'yyyy-MM-dd', 'GMT+2'), Validators.required],
       }),
       inputType: [''],
       supplierId: ['']
     });
+    this.canAddEntry = this.authorizationService.isTechouseUser() ||
+      this.authorizationService.isNaebWareHouseOfficer() || this.authorizationService.isCeparUser();
     this.filterEntriesForm = this.formBuilder.group({
       entriesFilter: ['all', Validators.required],
     });
@@ -184,6 +190,7 @@ export class WarehouseEntriesComponent implements OnInit {
 
   onSubmit() {
     const entry = JSON.parse(JSON.stringify(this.recordEntriesForm.value));
+    const date = this.datePipe.transform(this.recordEntriesForm.value.deliveryDetails.date, 'yyyy-MM-dd', 'GMT+2');
     const packages = [];
     if (entry.inputType === 'Pesticide') {
       entry.deliveryDetails.package.map((item) => {
@@ -203,28 +210,25 @@ export class WarehouseEntriesComponent implements OnInit {
       });
     }
     entry.deliveryDetails.receivedBy = this.authenticationService.getCurrentUser().info._id;
-    if (this.season.seasonParams.supplierId[0]) {
-      entry.supplierId = this.season.seasonParams.supplierId[0]._id;
-    } else {
-      this.errors = ['Please set the season supplier before stock'];
+    if (!this.season.seasonParams.supplierId[0]) {
+      this.setError('Please set the season supplier before record any entry');
     }
     entry.deliveryDetails.package = packages;
-    delete entry.deliveryDetails.date;
+    entry.deliveryDetails.date = date;
     delete entry.deliveryDetails.totalQty;
     this.warehouseService.saveEntry(entry)
       .subscribe(() => {
-          this.message = 'Entry successfully recorded!';
-          this.errors = [];
+          this.setMessage('Entry successfully recorded!');
           this.warehouseService.allEntries().subscribe((data) => {
             this.entries = data.content;
           });
           this.recordEntriesForm.reset();
-          this.recordEntriesForm.controls.deliveryDetails.get('date').setValue(this.datePipe.transform(this.currentDate, 'yyyy-MM-dd'));
+          this.recordEntriesForm.controls.deliveryDetails.get('date')
+            .setValue(this.datePipe.transform(this.currentDate, 'yyyy-MM-dd', 'GMT+2'));
           this.getStocks(constant.stocks.WAREHOUSE);
         },
         (err) => {
-          this.message = '';
-          this.errors = err.errors;
+          this.setError(err.errors);
         });
   }
 

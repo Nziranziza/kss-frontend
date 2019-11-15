@@ -5,7 +5,6 @@ import {HelperService} from '../../core/helpers';
 import {ConfirmDispatchComponent} from './confirm-dispatch/confirm-dispatch.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Subject} from 'rxjs';
-import {RecordSiteStockOutComponent} from '../site-view-stockout/site-stock-out/record-site-stock-out.component';
 
 @Component({
   selector: 'app-site-view-dispatch',
@@ -50,6 +49,23 @@ export class SiteViewDispatchComponent implements OnInit {
       this.inputDistributionService.getSiteDispatches(id).subscribe((data) => {
         this.dispatches = data.content;
       });
+    });
+  }
+
+  printEntryNote(id: string) {
+    this.inputDistributionService.printDispatchEntryNote(id).subscribe((data) => {
+      const byteArray = new Uint8Array(atob(data.data).split('').map(char => char.charCodeAt(0)));
+      const newBlob = new Blob([byteArray], {type: 'application/pdf'});
+      const linkElement = document.createElement('a');
+      const url = URL.createObjectURL(newBlob);
+      linkElement.setAttribute('href', url);
+      linkElement.setAttribute('download', data.fileName + '.pdf');
+      const clickEvent = new MouseEvent('click', {
+        view: window,
+        bubbles: true,
+        cancelable: false
+      });
+      linkElement.dispatchEvent(clickEvent);
     });
   }
 

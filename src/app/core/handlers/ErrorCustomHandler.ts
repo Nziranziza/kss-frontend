@@ -4,7 +4,8 @@ import {ErrorHandler, Injectable} from '@angular/core';
 export class ErrorCustomHandler implements ErrorHandler {
   constructor() {
   }
+
   handleError(error) {
-     if ((!(error instanceof TypeError)) && (error.status === undefined)) {}
+    console.log(error);
   }
 }

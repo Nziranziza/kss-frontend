@@ -31,25 +31,23 @@ export class HasPermissionDirective implements OnInit {
   }
 
   private checkPermission() {
-    let hasPermission = false;
     let isType = false;
     let hasRole = false;
+    let hasPermission = false;
     if (this.currentUser && this.currentUser.parameters.role) {
-      for (const permission of this.permissions) {
+      this.permissions.forEach((permission) => {
         if (!Array.isArray(permission)) {
-          hasPermission = this.currentUser.parameters.role.includes(permission);
-          if (hasPermission) {
-            return hasPermission;
+          if (this.currentUser.parameters.role.includes(permission)) {
+            hasPermission = true;
           }
         } else {
           hasRole = this.currentUser.parameters.role.includes(permission[0]);
-          isType = + this.currentUser.parameters.type === permission[1];
+          isType = +this.currentUser.parameters.type === permission[1];
           if (hasRole && isType) {
             hasPermission = true;
-            return hasPermission;
           }
         }
-      }
+      });
     }
     return hasPermission;
   }

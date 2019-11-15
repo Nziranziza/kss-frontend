@@ -19,24 +19,26 @@
       </div>
     </div>
   </div>
-  <div class="row">
-    <form [formGroup]="distributionForm" (ngSubmit)="onSubmit()">
-      <ng-container *ngIf="distributionForm.get('pesticide')['controls'].length">
+  <form [formGroup]="distributionForm" (ngSubmit)="onSubmit()">
+    <div class="row">
+      <ng-container *ngIf="distributionForm.get('pesticides')['controls'].length">
         <div class="col-xs-6" style="margin-top: 25px">
           <label class="control-label label-required">Applied pesticides</label>
-          <div class="checkbox" formArrayName="pesticide"
-               *ngFor="let pesticide of createForm.get('pesticide')['controls']; let i = index">
+          <div class="checkbox" formArrayName="pesticides"
+               *ngFor="let pesticide of  distributionForm.get('pesticides')['controls']; let i = index">
             <label>
-              <input type="checkbox" formControlName="{{i}}"> {{ 'Pesticide name' }}
+              <input type="checkbox" formControlName="{{i}}"> {{ stocks[i].inputId.inputName }}
             </label>
           </div>
         </div>
-        <div class="col-sm-4" style="margin-top: 25px">
-          <div class="form-group">
-            <button class="btn btn-success btn-sm btn-margin">save</button>
-          </div>
-        </div>
       </ng-container>
-    </form>
-  </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4" style="margin-top: 25px">
+        <div class="form-group">
+          <button class="btn btn-success btn-sm btn-margin">Apply</button>
+        </div>
+      </div>
+    </div>
+  </form>
 </div>

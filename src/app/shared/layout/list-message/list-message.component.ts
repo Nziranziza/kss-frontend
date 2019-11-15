@@ -1,4 +1,5 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {isUndefined} from 'util';
 
 declare var $;
 
@@ -7,9 +8,10 @@ declare var $;
   templateUrl: './list-message.component.html',
   styleUrls: ['./list-message.component.css']
 })
-export class ListMessageComponent implements OnInit {
+export class ListMessageComponent implements OnInit, OnChanges {
 
   @Input() message: string;
+  notEmpty = false;
 
   constructor() {
   }
@@ -19,11 +21,16 @@ export class ListMessageComponent implements OnInit {
     $(() => {
       $('.custom-message').each((index, element) => {
         const $element = $(element);
-        const timeout = $element.data('auto-dismiss') || 1500;
+        const timeout = $element.data('auto-dismiss') || 3000;
         setTimeout(() => {
           $element.alert('close');
         }, timeout);
       });
     });
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    const msg = changes.message.currentValue;
+    this.notEmpty = (msg !== '' && !isUndefined(msg));
   }
 }

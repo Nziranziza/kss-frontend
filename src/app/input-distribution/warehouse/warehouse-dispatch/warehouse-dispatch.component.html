@@ -1,11 +1,15 @@
-<h3>
-  Record dispatch
-</h3>
 <app-list-message [message]="message"></app-list-message>
-<app-list-errors [errorList]="errors" *ngIf="errors.length > 0"></app-list-errors>
+<app-list-errors [errorList]="errors"></app-list-errors>
 <form [formGroup]="recordDispatchForm" (ngSubmit)="onSubmit()">
   <div class="box">
-    <div class="box-body">
+    <div class="box-header with-border">
+      <h3 class="box-title">Record Dispatch</h3>
+      <div class="box-tools pull-right">
+        <button type="button" class="btn btn-box-tool" data-target="#box-body" data-toggle="collapse"> <i class="fa fa-expand"></i>
+        </button>
+      </div>
+    </div>
+    <div class="box-body collapse" id="box-body">
       <div class="row">
         <ng-container formGroupName="location">
           <div class="col-xs-2">
@@ -246,6 +250,7 @@
     </div>
   </form>
 </div>
+<app-list-warnings [warning]="warning"></app-list-warnings>
 <div class="row">
   <div class="col-xs-12">
     <div class="box">

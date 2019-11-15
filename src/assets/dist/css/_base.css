@@ -8,7 +8,7 @@
 
 .btn-success {
   background-color: #94c17d;
-  border-color:  #94c17d;
+  border-color: #94c17d;
 }
 
 .btn-warning {
@@ -24,11 +24,12 @@
 html, body {
   height: 100% !important;
   color: #535658;
+  top: 0 !important;
 }
 
 .home {
   min-height: 100%;
-  background: linear-gradient(rgba(41, 41, 41, 0.5), rgba(41, 41, 41, 0.5)), url("../img/naeb/tea-plantation.jpg") no-repeat center center;
+  background: linear-gradient(rgba(41, 41, 41, 0.5), rgba(41, 41, 41, 0.5)), url("../img/sks/tea-plantation.jpg") no-repeat center center;
   background-size: cover;
 }
 
@@ -40,6 +41,7 @@ html, body {
 
 .box {
   border-top: 3px solid #7499b9;
+  margin-top: 10px;
 }
 
 .list-sub-header {
@@ -49,7 +51,9 @@ html, body {
 }
 
 input.ng-invalid.ng-touched {
-  /*border: 1px solid indianred;*/
+  /*
+    border: 1px solid indianred;
+  */
 }
 
 div .wrapper {
@@ -60,7 +64,7 @@ div .wrapper {
   background-color: #367fa9;
 }
 
-.skin-blue .sidebar-menu>li.active>a {
+.skin-blue .sidebar-menu > li.active > a {
   background: #49565b;
 }
 
@@ -80,14 +84,17 @@ div .wrapper {
 .modal {
   background: rgba(0, 0, 0, 0.0);
 }
+
 .spinner-container {
   text-align: center;
   vertical-align: middle;
   display: table-cell;
 }
-.navbar-default .navbar-toggle{
+
+.navbar-default .navbar-toggle {
   color: #333333 !important;
 }
+
 .form-control {
   border-radius: 3px;
 }
@@ -100,10 +107,19 @@ fieldset {
   border-radius: 3px;
 
 }
+
 fieldset legend {
   font-size: 14px;
 }
 
+h3 {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.box {
+  border-top: 1px solid #d2d6de;
+}
 /*------------------------------------ expanded row organisation -----------------------------*/
 
 .details-row-title {
@@ -111,14 +127,16 @@ fieldset legend {
   font-weight: bolder;
   margin-left: 25px;
 }
+
 .details-row-data {
   font-size: 12px !important;
 }
 
-table.dataTable > tbody > tr.child{
+table.dataTable > tbody > tr.child {
   background-color: #faf9f8;
 }
-table.dataTable > tbody > tr.child:hover{
+
+table.dataTable > tbody > tr.child:hover {
   background-color: #fffeee !important;
 }
 
@@ -160,7 +178,7 @@ table.dataTable > tbody > tr.child:hover{
   padding: 0.5em 1em
 }
 
-.custom-pagination .ngx-pagination .current{
+.custom-pagination .ngx-pagination .current {
   color: #333333 !important;
   border: 1px solid #979797;
   padding: 0.5em 1em;
@@ -168,18 +186,18 @@ table.dataTable > tbody > tr.child:hover{
   background: linear-gradient(to bottom, white 0%, gainsboro 100%);
 }
 
-.custom-pagination .ngx-pagination li:hover a, .custom-pagination .ngx-pagination li:hover button{
+.custom-pagination .ngx-pagination li:hover a, .custom-pagination .ngx-pagination li:hover button {
   color: white !important;
   background-color: #2d2d2d;
   display: block;
 }
 
-.custom-pagination .ngx-pagination li:hover{
+.custom-pagination .ngx-pagination li:hover {
   color: white !important;
   background-color: #2d2d2d;
 }
 
-.custom-pagination .ngx-pagination .small-screen{
+.custom-pagination .ngx-pagination .small-screen {
   display: none;
 }
 
@@ -189,7 +207,6 @@ table.dataTable > tbody > tr.child:hover{
 }
 
 .cdk-overlay-container {
-  position: fixed;
   pointer-events: none;
   top: 0;
   left: 0;
@@ -199,6 +216,7 @@ table.dataTable > tbody > tr.child:hover{
   position: absolute;
   z-index: 9999999 !important;
 }
+
 .cdk-global-overlay-wrapper, .cdk-overlay-container {
   pointer-events: none;
   top: 0;
@@ -212,21 +230,73 @@ table.dataTable > tbody > tr.child:hover{
 
 /*---------------------------- custom tabs --------------------------*/
 
-.custom-tabs .nav-tabs { border-bottom: 1px solid #dbdbdb; }
-.custom-tabs .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover { border-width: 1px; }
-.custom-tabs .nav-tabs > li > a { border: none; color: #535658; background: #dbdbdb; }
-.custom-tabs .nav-tabs > li.active > a, .nav-tabs > li > a:hover { border: none;  color: #535658 !important; background: #fff; }
-.custom-tabs .nav-tabs > li > a::after { content: ""; background: #d2d6de; height: 1px; position: absolute; width: 100%; left: 0px; bottom: -1px; transition: all 250ms ease 0s; transform: scale(0); }
-.custom-tabs .nav-tabs > li.active > a::after, .nav-tabs > li:hover > a::after { transform: scale(1); }
-.custom-tabs .tab-nav > li > a::after { background: #d2d6de none repeat scroll 0% 0%; color: #fff; }
-.custom-tabs .tab-pane { padding: 15px 0; }
-.custom-tabs .tab-content{padding:20px}
-.custom-tabs .nav-tabs > li  {width:20%; text-align:center;}
-.custom-tabs .card {background: #FFF none repeat scroll 0% 0%; margin-bottom: 30px; }
+.custom-tabs .nav-tabs {
+  border-bottom: 1px solid #dbdbdb;
+}
 
-@media all and (max-width:724px){
-  .custom-tabs .nav-tabs > li > a > span {display:none;}
-  .custom-tabs .nav-tabs > li > a {padding: 5px 5px;}
+.custom-tabs .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover {
+  border-width: 1px;
+}
+
+.custom-tabs .nav-tabs > li > a {
+  border: none;
+  color: #535658;
+  background: #dbdbdb;
+}
+
+.custom-tabs .nav-tabs > li.active > a, .nav-tabs > li > a:hover {
+  border: none;
+  color: #535658 !important;
+  background: #fff;
+}
+
+.custom-tabs .nav-tabs > li > a::after {
+  content: "";
+  background: #d2d6de;
+  height: 1px;
+  position: absolute;
+  width: 100%;
+  left: 0px;
+  bottom: -1px;
+  transition: all 250ms ease 0s;
+  transform: scale(0);
+}
+
+.custom-tabs .nav-tabs > li.active > a::after, .nav-tabs > li:hover > a::after {
+  transform: scale(1);
+}
+
+.custom-tabs .tab-nav > li > a::after {
+  background: #d2d6de none repeat scroll 0% 0%;
+  color: #fff;
+}
+
+.custom-tabs .tab-pane {
+  padding: 15px 0;
+}
+
+.custom-tabs .tab-content {
+  padding: 20px
+}
+
+.custom-tabs .nav-tabs > li {
+  width: 20%;
+  text-align: center;
+}
+
+.custom-tabs .card {
+  background: #FFF none repeat scroll 0% 0%;
+  margin-bottom: 30px;
+}
+
+@media all and (max-width: 724px) {
+  .custom-tabs .nav-tabs > li > a > span {
+    display: none;
+  }
+
+  .custom-tabs .nav-tabs > li > a {
+    padding: 5px 5px;
+  }
 }
 
 /*--------------------------- expendable dataTable ------------------*/
@@ -240,14 +310,23 @@ table.dataTable > tbody > tr.child:hover{
   background-color: white;
   color: #333333;
 }
+
 .expendable-dataTable table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > td:first-child:before, table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > th:first-child:before {
   color: #333333 !important;
   background-color: white;
 }
+
 .expendable-dataTable .details-row-title {
   font-size: 12px !important;
   font-weight: bolder;
 }
+
 .expendable-dataTable .details-row-data {
   font-size: 12px !important;
+}
+
+/*----------------------------------------Alerts---------------------------------------------*/
+.alert {
+  margin-top: 5px;
+  margin-bottom: 5px;
 }

@@ -6,6 +6,7 @@ import {MessageService} from '../../../core/services';
 import {HelperService} from '../../../core/helpers';
 import {InputDistributionService} from '../../../core/services';
 import {DatePipe, isPlatformBrowser} from '@angular/common';
+import {BasicComponent} from '../../../core/library';
 
 @Component({
   selector: 'app-record-site-stock-out',
@@ -13,13 +14,11 @@ import {DatePipe, isPlatformBrowser} from '@angular/common';
   providers: [DatePipe],
   styleUrls: ['./record-site-stock-out.component.css']
 })
-export class RecordSiteStockOutComponent implements OnInit {
+export class RecordSiteStockOutComponent extends BasicComponent implements OnInit {
 
   modal: NgbActiveModal;
   @Input() stock;
   siteStockOutForm: FormGroup;
-  errors: string [];
-  message: string;
   provinces: any;
   districts: any;
   sectors: any;
@@ -37,6 +36,7 @@ export class RecordSiteStockOutComponent implements OnInit {
     private datePipe: DatePipe,
     private siteService: SiteService,
     private helper: HelperService, private inputDistributionService: InputDistributionService) {
+    super();
 
     if (isPlatformBrowser(this.platformId)) {
       this.modal = this.injector.get(NgbActiveModal);
@@ -68,16 +68,18 @@ export class RecordSiteStockOutComponent implements OnInit {
       const record = JSON.parse(JSON.stringify(this.siteStockOutForm.value));
       record.location['prov_id'.toString()] = this.site.location.prov_id;
       record.location['dist_id'.toString()] = this.site.location.dist_id;
+      record.date = this.helper.getDate(this.siteStockOutForm.value.date);
       record['stockId'.toString()] = this.stock._id;
       record['userId'.toString()] = this.authenticationService.getCurrentUser().info._id;
+      this.helper.cleanObject(record.location);
       this.inputDistributionService.recordStockOut(record).subscribe(() => {
-          this.message = 'Stock out recorded!';
+          this.setMessage('Stock out recorded!');
         },
         (err) => {
-          this.errors = err.errors;
+          this.setError(err.errors);
         });
     } else {
-      this.errors = this.helper.getFormValidationErrors(this.siteStockOutForm);
+      this.setError(this.helper.getFormValidationErrors(this.siteStockOutForm));
     }
   }
   onChanges() {

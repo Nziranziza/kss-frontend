@@ -1,6 +1,5 @@
 import {BrowserModule, Title} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
-
 import {AppComponent} from './app.component';
 import {LoginModule} from './login/login.module';
 import {AppRoutingModule} from './app-routing.module';
@@ -15,7 +14,6 @@ import {ReportModule} from './reports/report.module';
 import {RouterModule} from '@angular/router';
 import {UserModule} from './user/user.module';
 import {DataTablesModule} from 'angular-datatables';
-import {PendingFarmerModule} from './pending-farmer/pending-farmer.module';
 import {OrganisationTypeModule} from './organisation-type/organisation-type.module';
 import {CherrySupplyModule} from './cherry-supply/cherry-supply.module';
 import {SettingsModule} from './settings/settings.module';
@@ -26,6 +24,7 @@ import {DryProcessingModule} from './dry-processing/dry-processing.module';
 import {InputDistributionModule} from './input-distribution/input-distribution.module';
 import {SitesModule} from './input-distribution/sites/sites.module';
 import {WarehouseModule} from './input-distribution/warehouse/warehouse.module';
+import {DatePipe} from '@angular/common';
 
 /*import {DataService} from './data.service';
   import {HttpClientInMemoryWebApiModule} from 'angular-in-memory-web-api';*/
@@ -50,7 +49,6 @@ import {WarehouseModule} from './input-distribution/warehouse/warehouse.module';
     UserModule,
     OrganisationTypeModule,
     CherrySupplyModule,
-    PendingFarmerModule,
     SettingsModule,
     ParchmentModule,
     OwlDateTimeModule,
@@ -63,7 +61,7 @@ import {WarehouseModule} from './input-distribution/warehouse/warehouse.module';
     WarehouseModule
     /*HttpClientInMemoryWebApiModule.forRoot(DataService)*/
   ],
-  providers: [Title],
+  providers: [Title, DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule {

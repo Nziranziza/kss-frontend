@@ -1,8 +1,8 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {MessageService} from '../../core/services/message.service';
-import {ParchmentService} from '../../core/services/parchment.service';
+import {MessageService} from '../../core/services';
+import {ParchmentService} from '../../core/services';
 import {AuthenticationService} from '../../core/services';
 
 @Component({
@@ -12,17 +12,6 @@ import {AuthenticationService} from '../../core/services';
 })
 
 export class ParchmentListComponent implements OnInit, OnDestroy {
-
-  constructor(private parchmentService: ParchmentService,
-              private router: Router,
-              private formBuilder: FormBuilder, private messageService: MessageService,
-              private authenticationService: AuthenticationService) {
-    this.parameters = {
-      length: 25,
-      start: 0,
-      draw: 1
-    };
-  }
 
   filterForm: FormGroup;
   maxSize = 9;
@@ -49,6 +38,17 @@ export class ParchmentListComponent implements OnInit, OnDestroy {
     {value: 'date', name: 'date'},
     {value: 'type', name: 'type'}
   ];
+
+  constructor(private parchmentService: ParchmentService,
+              private router: Router,
+              private formBuilder: FormBuilder, private messageService: MessageService,
+              private authenticationService: AuthenticationService) {
+    this.parameters = {
+      length: 25,
+      start: 0,
+      draw: 1
+    };
+  }
 
   ngOnInit(): void {
     this.parameters['org_id'.toString()] = this.authenticationService.getCurrentUser().info.org_id;

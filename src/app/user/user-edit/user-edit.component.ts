@@ -57,7 +57,8 @@ export class UserEditComponent implements OnInit {
               private userService: UserService, private helper: HelperService,
               private organisationService: OrganisationService,
               private siteService: SiteService,
-              private locationService: LocationService, private authenticationService: AuthenticationService) {
+              private locationService: LocationService,
+              private authenticationService: AuthenticationService) {
   }
 
   ngOnInit() {
@@ -283,7 +284,7 @@ export class UserEditComponent implements OnInit {
       if (!selectedRoles.includes(8)) {
         delete user.accountExpirationDate;
       } else {
-        const myDate = user.accountExpirationDate;
+        const myDate = this.helper.getDate(this.editForm.value.accountExpirationDate);
         user.accountExpirationDate = new Date(myDate).getTime();
       }
       user['lastModifiedBy'.toString()] = {

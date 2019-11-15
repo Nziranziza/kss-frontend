@@ -93,8 +93,16 @@ export class FarmerService {
   updateFarmerProfile(data: any): Observable<any> {
     return this.apiService.put('/coffeefarmers/profileinfo/edit/', data);
   }
-
+  calculateNeedForApprovals(districtId: string): Observable<any> {
+    return this.apiService.get('/stats/unapproved/district/' + districtId);
+  }
+  getUpdatesWaitingForApproval(data: any): Observable<any> {
+    return this.apiService.post('/coffeefarmers/unapproved/farmers', data);
+  }
   approveLandsUpdate(data: any): Observable<any> {
     return this.apiService.put('/coffeefarmers/requestinfo/approve_update', data);
+  }
+  administrativeList(parameters: any) {
+    return this.apiService.post('/coffeefarmers/farmers/input_list', parameters);
   }
 }

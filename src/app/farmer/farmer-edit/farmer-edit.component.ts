@@ -25,6 +25,8 @@ export class FarmerEditComponent implements OnInit, OnDestroy {
   farmerType = 1;
   message: string;
   canEditLands = true;
+  isUserSiteManager = false;
+
 
   constructor(private route: ActivatedRoute, private router: Router,
               private authenticationService: AuthenticationService,
@@ -45,6 +47,7 @@ export class FarmerEditComponent implements OnInit, OnDestroy {
     if (this.authorisationService.isCWSUser()) {
       this.canEditLands = false;
     }
+    this.isUserSiteManager = this.authorisationService.isSiteManager();
   }
 
   editRequest(request: any) {

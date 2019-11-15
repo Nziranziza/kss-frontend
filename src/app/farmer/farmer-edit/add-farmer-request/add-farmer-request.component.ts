@@ -2,7 +2,7 @@ import {Component, Inject, Injector, Input, OnInit, PLATFORM_ID} from '@angular/
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {HelperService} from '../../../core/helpers';
-import {AuthenticationService, FarmerService} from '../../../core/services';
+import {AuthenticationService, AuthorisationService, FarmerService, SiteService} from '../../../core/services';
 import {isPlatformBrowser} from '@angular/common';
 import {LocationService} from '../../../core/services';
 import {MessageService} from '../../../core/services';
@@ -18,7 +18,7 @@ export class AddFarmerRequestComponent implements OnInit {
   modal: NgbActiveModal;
   @Input() farmerId;
   addFarmerRequestForm: FormGroup;
-  errors = [];
+  errors: any;
   provinces = [];
   districts = [];
   sectors = [];
@@ -26,15 +26,25 @@ export class AddFarmerRequestComponent implements OnInit {
   villages = [];
   requestIndex = 0;
   message: string;
+  currentSeason: any;
+  isUserSiteManager = false;
+  isUserDistrictCashCrop = false;
+  site: any;
+  disableProvId = false;
+  disableDistId = false;
+  provinceValue = '';
+  districtValue = '';
 
   public requestList: FormArray;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object, private  router: Router,
-    private injector: Injector, private formBuilder: FormBuilder, private authenticationService: AuthenticationService,
-    private helper: HelperService, private farmerService: FarmerService, private messageService: MessageService,
+    private injector: Injector, private formBuilder: FormBuilder,
+    private authenticationService: AuthenticationService,
+    private siteService: SiteService,
+    private helper: HelperService, private farmerService: FarmerService,
+    private messageService: MessageService, private authorisationService: AuthorisationService,
     private locationService: LocationService) {
-
     if (isPlatformBrowser(this.platformId)) {
       this.modal = this.injector.get(NgbActiveModal);
     }
@@ -44,8 +54,45 @@ export class AddFarmerRequestComponent implements OnInit {
     this.addFarmerRequestForm = this.formBuilder.group({
       requests: new FormArray([])
     });
+    this.currentSeason = this.authenticationService.getCurrentSeason();
+    this.isUserDistrictCashCrop = this.authorisationService.isDistrictCashCropOfficer();
+    this.isUserSiteManager = this.authorisationService.isSiteManager();
     this.initial();
-    (this.addFarmerRequestForm.controls.requests as FormArray).push(this.createRequest());
+    if (!(this.isUserSiteManager || this.isUserDistrictCashCrop)) {
+      (this.addFarmerRequestForm.controls.requests as FormArray).push(this.createRequest());
+    } else {
+      this.disableDistId = true;
+      this.disableProvId = true;
+    }
+    if (this.isUserDistrictCashCrop) {
+      this.provinceValue = this.authenticationService.getCurrentUser().info.location.prov_id;
+      this.districtValue = this.authenticationService.getCurrentUser().info.location.dist_id;
+      (this.addFarmerRequestForm.controls.requests as FormArray).push(this.createRequest());
+      this.locationService.getDistricts(this.authenticationService.getCurrentUser().info.location.prov_id).subscribe((districts) => {
+        this.districts.push(districts);
+      });
+      this.locationService.getSectors(this.authenticationService.getCurrentUser().info.location.dist_id).subscribe((sectors) => {
+        this.sectors.push(sectors);
+      });
+    } else if (this.isUserSiteManager) {
+      this.siteService.get(this.authenticationService.getCurrentUser().orgInfo.distributionSite).subscribe((site) => {
+        this.site = site.content;
+        this.provinceValue = this.site.location.prov_id;
+        this.districtValue = this.site.location.dist_id;
+        (this.addFarmerRequestForm.controls.requests as FormArray).push(this.createRequest());
+        this.locationService.getDistricts(this.site.location.prov_id).subscribe((districts) => {
+          this.districts.push(districts);
+        });
+        const temp = [];
+        this.site.coveredAreas.coveredSectors.map((sector) => {
+          temp.push({
+            _id: sector.sect_id,
+            name: sector.name
+          });
+        });
+        this.sectors.push(temp);
+      });
+    }
   }
 
   getLocationInput(i: number, field: string) {
@@ -59,8 +106,8 @@ export class AddFarmerRequestComponent implements OnInit {
       fertilizer_need: [''],
       fertilizer_allocate: [0],
       location: this.formBuilder.group({
-        prov_id: ['', Validators.required],
-        dist_id: ['', Validators.required],
+        prov_id: [{value: this.provinceValue, disabled: this.disableProvId}, Validators.required],
+        dist_id: [{value: this.districtValue, disabled: this.disableDistId}, Validators.required],
         sect_id: ['', Validators.required],
         cell_id: ['', Validators.required],
         village_id: ['', Validators.required]
@@ -77,6 +124,26 @@ export class AddFarmerRequestComponent implements OnInit {
     this.locationService.getProvinces().subscribe((data) => {
       this.provinces.push(data);
     });
+    if (this.isUserDistrictCashCrop) {
+      this.locationService.getDistricts(this.authenticationService.getCurrentUser().info.location.prov_id).subscribe((districts) => {
+        this.districts.push(districts);
+      });
+      this.locationService.getSectors(this.authenticationService.getCurrentUser().info.location.dist_id).subscribe((sectors) => {
+        this.sectors.push(sectors);
+      });
+    } else if (this.isUserSiteManager) {
+      this.locationService.getDistricts(this.site.location.prov_id).subscribe((districts) => {
+        this.districts.push(districts);
+      });
+      const temp = [];
+      this.site.coveredAreas.coveredSectors.map((sector) => {
+        temp.push({
+          _id: sector.sect_id,
+          name: sector.name
+        });
+      });
+      this.sectors.push(temp);
+    }
   }
 
   removeRequest(index: number) {
@@ -138,32 +205,41 @@ export class AddFarmerRequestComponent implements OnInit {
 
   onSubmit() {
     if (this.addFarmerRequestForm.valid) {
-      const temp = this.addFarmerRequestForm.value;
+      const temp = this.addFarmerRequestForm.getRawValue();
       const farmer = {
         requestInfo: []
       };
       farmer['requestInfo'.toString()] = temp.requests;
       this.helper.cleanObject(farmer);
       farmer.requestInfo.map((item) => {
-        item['fertilizer_need'.toString()] = +item['numberOfTrees'.toString()];
+        item['fertilizer_need'.toString()] = +item['numberOfTrees'.toString()] * this.currentSeason.seasonParams.fertilizerKgPerTree;
         return this.helper.cleanObject(item);
       });
       farmer['id'.toString()] = this.farmerId;
-      this.farmerService.addFarmerRequest(farmer).subscribe((data) => {
-          this.messageService.setMessage('request successfully added!');
-          this.modal.dismiss();
+      this.farmerService.addFarmerRequest(farmer).subscribe(() => {
+          this.setMessage('request successfully added!');
         },
         (err) => {
-          this.errors = err.errors;
+          this.setError(err.errors);
         });
 
     } else {
       if (this.helper.getFormValidationErrors(this.addFarmerRequestForm).length > 0) {
-        this.errors = this.helper.getFormValidationErrors(this.addFarmerRequestForm);
+        this.setError(this.helper.getFormValidationErrors(this.addFarmerRequestForm));
       }
       if (this.addFarmerRequestForm.get('requests').invalid) {
-        this.errors.push('Missing required land(s) information');
+        this.setError('Missing required land(s) information');
       }
     }
+  }
+
+  setError(errors: any) {
+    this.errors = errors;
+    this.message = undefined;
+  }
+
+  setMessage(message: string) {
+    this.errors = undefined;
+    this.message = message;
   }
 }

@@ -54,7 +54,7 @@ export class OrganisationPendingFarmersComponent implements OnInit, OnDestroy {
   searchFields = [
     {value: 'phone_number', name: 'phone number'},
     {value: 'nid', name: 'NID'},
-    {value: 'forename', name: 'first name'},
+    {value: 'foreName', name: 'first name'},
     {value: 'surname', name: 'last name'},
   ];
   isCwsOfficer = false;
@@ -78,7 +78,7 @@ export class OrganisationPendingFarmersComponent implements OnInit, OnDestroy {
       });
     this.filterForm = this.formBuilder.group({
       term: ['', Validators.minLength(3)],
-      searchBy: ['forename']
+      searchBy: ['foreName']
     });
     this.getAllPendingFarmers();
     this.message = this.messageService.getMessage();

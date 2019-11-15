@@ -5,13 +5,14 @@ import {AuthenticationService, InputDistributionService} from '../../../core/ser
 import {MessageService} from '../../../core/services';
 import {HelperService} from '../../../core/helpers';
 import {isPlatformBrowser} from '@angular/common';
+import {BasicComponent} from '../../../core/library';
 
 @Component({
   selector: 'app-record-site-stock-return',
   templateUrl: './record-site-stock-return.component.html',
   styleUrls: ['./record-site-stock-return.component.css']
 })
-export class RecordSiteStockReturnComponent implements OnInit {
+export class RecordSiteStockReturnComponent extends BasicComponent implements OnInit {
 
   modal: NgbActiveModal;
   @Input() stockOutId;
@@ -25,7 +26,7 @@ export class RecordSiteStockReturnComponent implements OnInit {
     private authenticationService: AuthenticationService,
     private messageService: MessageService,
     private helper: HelperService, private inputDistributionService: InputDistributionService) {
-
+    super();
     if (isPlatformBrowser(this.platformId)) {
       this.modal = this.injector.get(NgbActiveModal);
     }
@@ -43,13 +44,13 @@ export class RecordSiteStockReturnComponent implements OnInit {
       record['stockOutId'.toString()] = this.stockOutId;
       record['userId'.toString()] = this.authenticationService.getCurrentUser().info._id;
       this.inputDistributionService.recordStockOutReturn(record).subscribe(() => {
-          this.message = 'Stock quantity returned!';
+          this.setMessage('Stock quantity returned');
         },
         (err) => {
-          this.errors = err.errors;
+          this.setError(err.errors);
         });
     } else {
-      this.errors = this.helper.getFormValidationErrors(this.siteStockReturnForm);
+      this.setError(this.helper.getFormValidationErrors(this.siteStockReturnForm));
     }
   }
 }

@@ -84,11 +84,11 @@ export class UserCreateComponent implements OnInit {
       this.possibleRoles = Object.keys(data.content).map(key => {
         return {name: key, value: data.content[key]};
       });
+      this.getRoles();
     });
     this.route.params.subscribe(params => {
       this.organisationId = params['organisationId'.toString()];
     });
-    this.getRoles();
     this.initial();
     this.onChanges();
   }
@@ -160,12 +160,14 @@ export class UserCreateComponent implements OnInit {
                     user['action'.toString()] = 'import';
                   }
                 },
-                () => {
+                (err) => {
+                  this.errors = err.errors;
                 });
             }
           }
         },
-        () => {
+        (err) => {
+          this.errors = err.errors;
         },
         () => {
           if (this.isFromSuperOrg) {
@@ -177,7 +179,10 @@ export class UserCreateComponent implements OnInit {
           if (!selectedRoles.includes(8)) {
             delete user.distributionSite;
             delete user.accountExpirationDate;
+          } else {
+            user.accountExpirationDate = this.helper.getDate(this.createForm.value.accountExpirationDate);
           }
+
           this.helper.cleanObject(user);
           this.helper.cleanObject(user.location);
           this.userService.save(user).subscribe(() => {
@@ -187,6 +192,8 @@ export class UserCreateComponent implements OnInit {
               this.errors = err.errors;
             });
         });
+    } else {
+      this.errors = this.helper.getFormValidationErrors(this.createForm);
     }
   }
 

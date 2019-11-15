@@ -6,25 +6,25 @@ import {HelperService} from '../../core/helpers';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {EditInputComponent} from './edit-input/edit-input.component';
 import {EditSupplierComponent} from './edit-supplier/edit-supplier.component';
+import {BasicComponent} from '../../core/library';
 
 @Component({
   selector: 'app-distribution-parameters',
   templateUrl: './distribution-parameters.component.html',
   styleUrls: ['./distribution-parameters.component.css']
 })
-export class DistributionParametersComponent implements OnInit {
+export class DistributionParametersComponent extends BasicComponent implements OnInit {
 
   createFertilizerForm: FormGroup;
   createPesticideForm: FormGroup;
   createSupplierForm: FormGroup;
-  errors = [];
-  message: string;
   suppliers: any;
   fertilizers: any;
   pesticides: any;
 
   constructor(private formBuilder: FormBuilder, private helper: HelperService, private modal: NgbModal,
               private router: Router, private inputDistributionService: InputDistributionService) {
+    super();
   }
 
   ngOnInit() {
@@ -52,16 +52,14 @@ export class DistributionParametersComponent implements OnInit {
       const fertilizer = this.createFertilizerForm.value;
       this.inputDistributionService.recordInput(fertilizer)
         .subscribe(() => {
-            this.message = 'Fertilizer successful recorded!';
+            this.setMessage('successful recorded!');
             this.initial();
-            this.errors = [];
           },
           (err) => {
-            this.message = '';
-            this.errors = err.errors;
+            this.setError(err.errors);
           });
     } else {
-      this.errors = this.helper.getFormValidationErrors(this.createFertilizerForm);
+      this.setError(this.helper.getFormValidationErrors(this.createFertilizerForm));
     }
   }
 
@@ -70,16 +68,14 @@ export class DistributionParametersComponent implements OnInit {
       const pesticide = this.createPesticideForm.value;
       this.inputDistributionService.recordInput(pesticide)
         .subscribe(() => {
-            this.message = 'Pesticide successful recorded!';
+            this.setMessage('Pesticide successful recorded!');
             this.initial();
-            this.errors = [];
           },
           (err) => {
-            this.message = '';
-            this.errors = err.errors;
+            this.setError(err.errors);
           });
     } else {
-      this.errors = this.helper.getFormValidationErrors(this.createPesticideForm);
+      this.setError(this.helper.getFormValidationErrors(this.createPesticideForm));
     }
   }
 
@@ -88,16 +84,14 @@ export class DistributionParametersComponent implements OnInit {
       const supplier = this.createSupplierForm.value;
       this.inputDistributionService.recordSupplier(supplier)
         .subscribe(() => {
-            this.message = 'Supplier successful recorded!';
+            this.setMessage('Supplier successful recorded!');
             this.initial();
-            this.errors = [];
           },
           (err) => {
-            this.message = '';
-            this.errors = err.errors;
+            this.setError(err.errors);
           });
     } else {
-      this.errors = this.helper.getFormValidationErrors(this.createSupplierForm);
+      this.setError(this.helper.getFormValidationErrors(this.createSupplierForm));
     }
   }
 

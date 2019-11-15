@@ -22,6 +22,14 @@ export class RecordDistributionComponent implements OnInit {
   errors: string [];
   message: string;
   stockOuts: any;
+  comments = [
+    { value: 1, description: 'Kudakorera kawa'},
+    { value: 2, description: 'Kutagira ibiti bya kawa'},
+    { value: 3, description: 'Kawa zitaragira ibitumbwe'},
+    { value: 4, description: 'Umubare w ikawa wanditse uratandukanye'},
+    { value: 5, description: 'Yongerewe ifumbire iyo yahawe ntihagije'},
+    { value: 6, description: 'Akora ubuhinzi bwa kawa bw umwimerere'}
+  ];
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
@@ -56,13 +64,13 @@ export class RecordDistributionComponent implements OnInit {
       record['subDocumentId'.toString()] = this.requestId;
       record['siteId'.toString()] = this.authenticationService.getCurrentUser().orgInfo.distributionSite;
       this.inputDistributionService.updateRequestAtDistribution(record).subscribe(() => {
-          this.message = 'successfully updated!';
+          this.setMessage('Successfully updated.');
         },
         (err) => {
-          this.errors = err.errors;
+          this.setError(err.errors);
         });
     } else {
-      this.errors = this.helper.getFormValidationErrors(this.updateRequestForm);
+      this.setError(this.helper.getFormValidationErrors(this.updateRequestForm));
     }
   }
 
@@ -73,13 +81,23 @@ export class RecordDistributionComponent implements OnInit {
       record['farmerRequestId'.toString()] = this.requestId;
       record['regNumber'.toString()] = this.regNumber;
       this.inputDistributionService.recordDistribution(record).subscribe(() => {
-          this.message = 'successfully distributed!';
+          this.setMessage('Fertilizer distributed.');
         },
         (err) => {
-          this.errors = err.errors;
+          this.setError(err.errors);
         });
     } else {
-      this.errors = this.helper.getFormValidationErrors(this.distributionForm);
+      this.setError(this.helper.getFormValidationErrors(this.distributionForm));
     }
+  }
+
+  setError(errors: any) {
+    this.errors = errors;
+    this.message = undefined;
+  }
+
+  setMessage(message: string) {
+    this.errors = undefined;
+    this.message = message;
   }
 }

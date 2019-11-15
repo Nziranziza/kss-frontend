@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {AuthenticationService} from '../../core/services';
+import {AuthenticationService, AuthorisationService, FarmerService} from '../../core/services';
 import {SeasonService} from '../../core/services';
 import {Router} from '@angular/router';
 
@@ -14,8 +14,11 @@ export class TopnavbarComponent implements OnInit {
   orgName: string;
   seasons: any [];
   currentSeason: any;
+  needOfApproval = 0;
 
-  constructor(private authenticationService: AuthenticationService, private router: Router,
+  constructor(private authenticationService: AuthenticationService,
+              private authorisationService: AuthorisationService,
+              private router: Router, private farmerService: FarmerService,
               private seasonService: SeasonService) {
   }
 
@@ -26,6 +29,11 @@ export class TopnavbarComponent implements OnInit {
       this.seasons = data.content;
       this.currentSeason = this.authenticationService.getCurrentSeason();
     });
+    if (this.authorisationService.isDistrictCashCropOfficer()) {
+      this.farmerService.calculateNeedForApprovals(this.authenticationService.getCurrentUser().info.location.dist_id).subscribe((data) => {
+        this.needOfApproval = data.content[0].totalUnapproved;
+      });
+    }
   }
 
   changeSeason(season: string) {

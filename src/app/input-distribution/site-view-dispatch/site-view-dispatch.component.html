@@ -45,9 +45,13 @@
             <td>{{ dispatch.date|date }}</td>
             <td>
               <ng-container *ngIf="dispatch.receivedBy; else confirm">
-                <i class="fa fa-check-square" aria-hidden="true"></i> &nbsp; Confirmed
+                <button class="btn btn-info btn-margin btn-sm pull-right" (click)="printEntryNote(dispatch._id)"
+                        type="button">
+                  <i class="fa fa-print" aria-hidden="true"></i> Note
+                </button>
+                <span class="pull-right"><i class="fa fa-check-square" aria-hidden="true"></i> &nbsp; Confirmed</span>
               </ng-container>
-              <ng-template  #confirm>
+              <ng-template #confirm>
                 <button class="btn btn-success btn-margin btn-sm pull-right" (click)="confirmDispatch(dispatch)"
                         type="button">
                   <i class="fa fa-check-circle" aria-hidden="true"></i> Confirm

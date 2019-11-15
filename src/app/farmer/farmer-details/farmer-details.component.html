@@ -80,11 +80,13 @@
           <th>Number of trees</th>
           <th>Fertilizer needed</th>
           <th>Fertilizer allocated</th>
+          <th>Trees at distribution</th>
+          <th>Comment</th>
         </tr>
         </thead>
         <tbody>
         <tr *ngFor="let request of requests;">
-          <td>{{farmer.request.season.name}}</td>
+          <td>{{farmer.request?.season.name}} {{farmer.requests?.season.name}}</td>
           <td>
             <span class="details-row-title-sm" style="margin-left: 0px">Province </span> : <span
             class="details-row-data-sm" *ngIf="request.location.prov_id">{{ request.location.prov_id.namek }}</span>
@@ -100,6 +102,8 @@
           <td>{{ request.numberOfTrees }}</td>
           <td>{{ request.fertilizer_need }} Kg</td>
           <td>{{ request.fertilizer_allocate }} Kg</td>
+          <td style="color: #F3A700">{{ request?.treesAtDistribution }} &nbsp; &nbsp;</td>
+          <td>{{ request.update_comments }}</td>
         </tr>
         </tbody>
       </table>

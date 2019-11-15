@@ -6,45 +6,67 @@
   <app-list-errors [errorList]="errors" *ngIf="errors"></app-list-errors>
   <app-list-message [message]="message"></app-list-message>
   <form [formGroup]="confirmForm" (ngSubmit)="onSubmit()">
-    <div *ngFor="let control of formEntries.controls; let i=index" formArrayName="entries">
-      <div class="row" [formGroupName]="i">
-        <input type="hidden" formControlName="entryId" class="form-control">
-        <div class="col-sm-1">
-          <span>{{ i + 1 }}</span> . &nbsp; &nbsp;
-          <span></span>
-        </div>
-        <div class="col-sm-2">
-          <span>Input</span> &nbsp; &nbsp;<br>
-          <p style="margin-top: 10px">
-            <span style="font-weight: bold"></span>
-          </p>
-        </div>
-        <div class="col-sm-2">
-          <span>Items</span> &nbsp; &nbsp;<br>
-          <p style="margin-top: 10px">
-            <span style="font-weight: bold">{{ dispatch.entries[i].numberOfItems }}</span>
-          </p>
-        </div>
-        <div class="col-sm-2">
-          <span>Qty</span> &nbsp; &nbsp;<br>
-          <p style="margin-top: 10px">
-            <span style="font-weight: bold">{{ dispatch.entries[i].quantityPerItem }}</span>
-          </p>
-        </div>
-        <div class="col-sm-2">
-          <div class="form-group">
-            <span class="label-required">Received Qty</span> &nbsp; &nbsp;<br>
-            <input type="text" formControlName="receivedQty" class="form-control">
-          </div>
-        </div>
-        <div class="col-sm-3">
-          <div class="form-group">
-            <span>Comment</span> &nbsp; &nbsp;<br>
-            <input type="text" formControlName="comment" class="form-control">
-          </div>
-        </div>
-      </div>
-    </div>
+    <table class="row-border hover table table-striped">
+      <thead>
+      <tr style="font-style: oblique; font-size: 12px; background: transparent; font-weight: bold">
+        <td>
+          <input type="hidden" formControlName="entryId" class="form-control">
+        </td>
+        <td>
+          <span>Input</span>
+        </td>
+        <td>
+          <span>Items</span>
+        </td>
+        <td>
+          <span>Qty</span>
+        </td>
+        <td>
+          <span class="label-required">Received Qty</span>
+        </td>
+        <td>
+          <span>Comment</span>
+        </td>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let control of formEntries.controls; let i=index" formArrayName="entries" style="font-style: oblique; font-size: 12px; background: transparent">
+        <ng-container class="row" [formGroupName]="i">
+          <input type="hidden" formControlName="entryId" class="form-control">
+          <td>
+            <p style="margin-top: 10px">
+              <span>{{ i + 1 }}</span>
+            </p>&nbsp;
+          </td>
+          <td>
+            <p style="margin-top: 10px">
+              <span> {{ dispatch.entries[i].inputId.inputName }} </span>
+            </p>
+          </td>
+          <td>
+            <p style="margin-top: 10px">
+              <span>{{ dispatch.entries[i].numberOfItems }}</span>
+            </p>
+          </td>
+          <td>
+            <p style="margin-top: 10px">
+              <span>{{ dispatch.entries[i].quantityPerItem }}</span>
+            </p>
+          </td>
+          <td>
+            <div class="form-group">
+              <input type="text" formControlName="receivedQty" class="form-control">
+            </div>
+          </td>
+          <td>
+            <div class="form-group">
+              <input type="text" formControlName="comment" class="form-control">
+            </div>
+          </td>
+        </ng-container>
+      </tr>
+      </tbody>
+    </table>
     <div class="row">
       <div class="col-sm-1 pull-right">
         <button class="btn btn-success pull-right btn-margin">Confirm</button>

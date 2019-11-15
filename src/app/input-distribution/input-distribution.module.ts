@@ -19,7 +19,7 @@ import {WarehouseModule} from './warehouse/warehouse.module';
 import {ConfirmDispatchComponent} from './site-view-dispatch/confirm-dispatch/confirm-dispatch.component';
 import {SiteViewStockoutComponent} from './site-view-stockout/site-view-stockout.component';
 import {DeliveryDetailsComponent} from './warehouse/warehouse-entries/delivery-details/delivery-details.component';
-import {DistributionReportModule} from './distribution-report/distribution-report.module';
+import {DistributionReportModule} from '../reports/distribution-report/distribution-report.module';
 import {SiteDistributionListComponent} from './site-ditributions-list/site-distributions-list.component';
 import { ApplyPesticideComponent } from './site-distribution/apply-pesticide/apply-pesticide.component';
 

@@ -1,8 +1,9 @@
+<ng-container *ngIf="canAddEntry">
 <h3>
   Record entry
 </h3>
 <app-list-message [message]="message"></app-list-message>
-<app-list-errors [errorList]="errors" *ngIf="errors.length > 0"></app-list-errors>
+<app-list-errors [errorList]="errors"></app-list-errors>
 <form [formGroup]="recordEntriesForm" (ngSubmit)="onSubmit()" autocomplete="on">
   <div class="box">
     <div class="box-body">
@@ -152,6 +153,7 @@
     </div>
   </div>
 </form>
+</ng-container>
 <div class="row">
   <div class="col-xs-12">
     <table class="row-border hover table table-striped" style="margin-bottom: 15px">
@@ -186,7 +188,7 @@
         <td *ngIf="stock.inputId.inputType !== 'Fertilizer'"></td>
         <td>{{ stock.quantityPerItem }}</td>
         <td>{{ stock.items * stock.quantityPerItem }}
-          <app-quantity-unit [inputType]="stock.inputId.inputTyPe"></app-quantity-unit>
+          <app-quantity-unit [inputType]="stock.inputId.inputType"></app-quantity-unit>
         </td>
       </tr>
       </tbody>
