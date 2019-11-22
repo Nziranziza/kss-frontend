@@ -12,7 +12,7 @@
             <div class="col-sm-12">
               <div class="row">
                 <div formGroupName="location">
-                  <div class="col-xs-2" *ngIf="!isCurrentUserDCC">
+                  <div class="col-xs-2" *ngIf="!(isCurrentUserDCC || isSiteManager)">
                     <div class="form-group">
                       <span class="">Province</span>
                       <div class="input-group input-group-sm">
@@ -29,7 +29,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-xs-2">
+                  <div class="col-xs-2" *ngIf="!isSiteManager">
                     <div class="form-group">
                       <span class="">District</span>
                       <div class="input-group input-group-sm">
@@ -94,40 +94,40 @@
           </div>
         </form>
         <app-loader *ngIf="loading"></app-loader>
-
-          <div class="row">
-            <div class="col-sm-12">
-              <button class="btn btn-success btn-margin pull-right" [disabled]="!downloadEnabled" (click)="exportAsXLSX()"><i
-                class="fa fa-download"></i> Export
-              </button>
-              <button class="btn btn-default pull-right" (click)="downloadDetails()" [disabled]="!downloadEnabled"> Detailed xls
-              </button>
-            </div>
-            <div class="col-xs-12" *ngIf="showData">
-              <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover"
-                     class="table table-striped">
-                <thead>
-                <tr>
-                  <th>Location</th>
-                  <th>Number of lands</th>
-                  <th>Number of trees</th>
-                  <th>Applied</th>
-                  <th>Approved</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let location of distributionProgress">
-                  <td> {{ location.name }}</td>
-                  <td> {{ location.totalNumberOfLands }}</td>
-                  <td> {{ location.totalNumberOfTrees }}</td>
-                  <td> {{ location.totalApplied }}</td>
-                  <td> {{ location.totalApproved }}</td>
-                </tr>
-                </tbody>
-              </table>
-            </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <button type="button" class="btn btn-success btn-margin pull-right" [disabled]="!downloadSummaryEnabled"
+                    (click)="exportAsXLSX()"><i
+              class="fa fa-download"></i> Summary
+            </button>
+            <button *appHasPermission="[0]" type="button" class="btn btn-default pull-right" (click)="downloadDetails()" [disabled]="!downloadDetailedEnabled">
+              Detailed xls
+            </button>
           </div>
-
+          <div class="col-xs-12" *ngIf="showData">
+            <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover"
+                   class="table table-striped">
+              <thead>
+              <tr>
+                <th>Location</th>
+                <th>Number of lands</th>
+                <th>Number of trees</th>
+                <th>Applied</th>
+                <th>Approved</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let location of distributionProgress">
+                <td> {{ location.name }}</td>
+                <td> {{ location.totalNumberOfLands }}</td>
+                <td> {{ location.totalNumberOfTrees }}</td>
+                <td> {{ location.totalApplied }}</td>
+                <td> {{ location.totalApproved }}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
       <!-- ./box-body -->
     </div>

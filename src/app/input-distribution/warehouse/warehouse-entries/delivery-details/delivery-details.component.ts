@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Inject, Injector, Input, OnInit, PLATFORM_ID} from '@angular/core';
+import {AfterViewInit, Component, Inject, Injector, Input, OnDestroy, OnInit, PLATFORM_ID} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {isPlatformBrowser} from '@angular/common';
 import {Subject} from 'rxjs';
@@ -11,7 +11,7 @@ import {BasicComponent} from '../../../../core/library';
   templateUrl: './delivery-details.component.html',
   styleUrls: ['./delivery-details.component.css']
 })
-export class DeliveryDetailsComponent extends BasicComponent implements OnInit, AfterViewInit {
+export class DeliveryDetailsComponent extends BasicComponent implements OnInit, AfterViewInit, OnDestroy {
 
   modal: NgbActiveModal;
   @Input() deliveries;
@@ -94,5 +94,9 @@ export class DeliveryDetailsComponent extends BasicComponent implements OnInit, 
   }
   exportAsXLSX() {
     this.excelService.exportAsExcelFile(this.printable, 'entries');
+  }
+
+  ngOnDestroy(): void {
+    this.dtTrigger.unsubscribe();
   }
 }

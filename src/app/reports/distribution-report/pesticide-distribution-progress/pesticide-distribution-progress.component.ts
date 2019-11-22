@@ -11,13 +11,14 @@ import {
 } from '../../../core/services';
 import {Router} from '@angular/router';
 import {HelperService} from '../../../core/helpers';
+import {BasicComponent} from '../../../core/library';
 
 @Component({
   selector: 'app-pesticide-distribution-progress',
   templateUrl: './pesticide-distribution-progress.component.html',
   styleUrls: ['./pesticide-distribution-progress.component.css']
 })
-export class PesticideDistributionProgressComponent implements OnInit {
+export class PesticideDistributionProgressComponent extends BasicComponent implements OnInit {
 
   title = 'Pesticide application progress';
   checkProgressForm: FormGroup;
@@ -25,6 +26,7 @@ export class PesticideDistributionProgressComponent implements OnInit {
   loading = false;
   message: string;
   isCurrentUserDCC = false;
+  isSiteManager = false;
   distributionProgress: any;
   printable = [];
   dtOptions: any = {};
@@ -38,9 +40,12 @@ export class PesticideDistributionProgressComponent implements OnInit {
   distId = false;
   sectorId = false;
   cellId = false;
-  downloadEnabled = false;
+  downloadSummaryEnabled = false;
+  downloadDetailedEnabled = false;
   showData = false;
   request: any;
+  site: any;
+  private printableDetails = [];
 
   constructor(private formBuilder: FormBuilder, private siteService: SiteService,
               private authorisationService: AuthorisationService,
@@ -49,10 +54,12 @@ export class PesticideDistributionProgressComponent implements OnInit {
               private router: Router, private organisationService: OrganisationService,
               private helper: HelperService, private organisationTypeService: OrganisationTypeService,
               private locationService: LocationService, private inputDistributionService: InputDistributionService) {
+    super();
   }
 
   ngOnInit() {
     this.isCurrentUserDCC = this.authorisationService.isDistrictCashCropOfficer();
+    this.isSiteManager = this.authorisationService.isSiteManager();
     this.checkProgressForm = this.formBuilder.group({
       location: this.formBuilder.group({
         prov_id: [''],
@@ -66,6 +73,21 @@ export class PesticideDistributionProgressComponent implements OnInit {
       pagingType: 'full_numbers',
       pageLength: 25
     };
+    if (this.isSiteManager) {
+      this.siteService.get(this.authenticationService.getCurrentUser().orgInfo.distributionSite).subscribe((site) => {
+        this.site = site.content;
+        const temp = [];
+        this.site.coveredAreas.coveredSectors.map((sector) => {
+          temp.push(
+            {
+              _id: sector.sect_id,
+              name: sector.name
+            }
+          );
+        });
+        this.sectors = temp;
+      });
+    }
     this.initial();
     this.onFilterProgress();
   }
@@ -77,7 +99,7 @@ export class PesticideDistributionProgressComponent implements OnInit {
   onGetProgress(searchBy: string) {
     if (this.checkProgressForm.valid) {
       this.loading = true;
-      this.downloadEnabled = false;
+      this.downloadSummaryEnabled = true;
       const request = JSON.parse(JSON.stringify(this.checkProgressForm.value));
       if (request.location.prov_id === '' && searchBy === 'province') {
         delete request.location;
@@ -88,6 +110,7 @@ export class PesticideDistributionProgressComponent implements OnInit {
         request.location['searchBy'.toString()] = searchBy;
         this.helper.cleanObject(request.location);
       }
+      this.downloadDetailedEnabled = searchBy !== 'province';
       this.request = request;
       this.inputDistributionService.getDistributionProgressPesticide(request).subscribe((data) => {
         this.loading = false;
@@ -105,7 +128,6 @@ export class PesticideDistributionProgressComponent implements OnInit {
             };
             this.printable.push(print);
           });
-          this.downloadEnabled = true;
           this.showData = true;
         } else {
           this.setMessage('Sorry no data found to this location!');
@@ -126,6 +148,7 @@ export class PesticideDistributionProgressComponent implements OnInit {
     this.checkProgressForm.controls.location.get('prov_id'.toString()).valueChanges.subscribe(
       (value) => {
         if (value !== '') {
+          this.downloadDetailedEnabled = false;
           this.locationService.getDistricts(value).subscribe((data) => {
             this.districts = data;
             this.sectors = null;
@@ -177,8 +200,37 @@ export class PesticideDistributionProgressComponent implements OnInit {
   }
 
   downloadDetails() {
-    this.inputDistributionService.getDistributionProgressPesticideDetail(this.request).subscribe((data) => {
+    const body = {
+      location: {}
+    };
+    if (this.request.location.searchBy === 'district') {
+      body.location['searchBy'.toString()] = 'district';
+      body.location['dist_id'.toString()] = this.request.location.dist_id;
+    }
 
+    if (this.request.location.searchBy === 'sector') {
+      body.location['searchBy'.toString()] = 'sector';
+      body.location['sect_id'.toString()] = this.request.location.sect_id;
+    }
+
+    if (this.request.location.searchBy === 'cell') {
+      body.location['searchBy'.toString()] = 'cell';
+      body.location['cell_id'.toString()] = this.request.location.cell_id;
+    }
+    this.inputDistributionService.getDistributionProgressPesticideDetail(body).subscribe((data) => {
+      data.content.map((farmer) => {
+        const temp = {
+          sector: farmer.requests.requestInfo.location.sect_id.name,
+          cell: farmer.requests.requestInfo.location.cell_id.name,
+          village: farmer.requests.requestInfo.location.village_id.name,
+          names: farmer.userInfo.foreName + ' ' + farmer.userInfo.surname,
+          nid: farmer.userInfo.NID,
+          trees: farmer.requests.requestInfo.numberOfTrees,
+          treesAtDistribution: farmer.requests.requestInfo.treesAtDistribution,
+        };
+        this.printableDetails.push(temp);
+      });
+      this.excelService.exportAsExcelFile(this.printableDetails, 'Pe detailed application report');
     });
   }
 
@@ -193,26 +245,4 @@ export class PesticideDistributionProgressComponent implements OnInit {
       }
     });
   }
-
-  setError(errors: any) {
-    this.errors = errors;
-    this.message = undefined;
-    this.loading = false;
-    this.showData = false;
-  }
-
-  setMessage(message: string) {
-    this.errors = undefined;
-    this.message = message;
-    this.loading = false;
-    this.showData = false;
-  }
-
-  clear() {
-    this.errors = undefined;
-    this.message = undefined;
-    this.loading = false;
-    this.showData = false;
-  }
-
 }

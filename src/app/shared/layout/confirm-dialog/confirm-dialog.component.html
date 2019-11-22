@@ -1,5 +1,5 @@
 <mat-icon id="close-icon" (click)="closeDialog()" class="pull-right"></mat-icon>
-<div mat-dialog-content>{{ data.message | lowercase }}</div>
+<div mat-dialog-content>{{ data.message }}</div>
 <div mat-dialog-actions>
   <button class="btn btn-sm btn-success" [mat-dialog-close]="true">Confirm</button>
   <button class="btn btn-sm btn-warning btn-margin" [mat-dialog-close]="false">Cancel</button>

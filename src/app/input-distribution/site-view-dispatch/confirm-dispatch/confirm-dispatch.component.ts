@@ -73,7 +73,7 @@ export class ConfirmDispatchComponent implements OnInit {
         this.helper.cleanObject(entry);
       })
       this.inputDistributionService.confirmDispatch(record).subscribe(() => {
-          this.message = 'Dispatch confirmed!';
+          this.modal.close('Dispatch confirmed!');
         },
         (err) => {
           this.errors = err.errors;

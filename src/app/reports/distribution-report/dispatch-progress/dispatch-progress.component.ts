@@ -11,13 +11,14 @@ import {
 import {Router} from '@angular/router';
 import {HelperService} from '../../../core/helpers';
 import {isUndefined} from 'util';
+import {BasicComponent} from '../../../core/library';
 
 @Component({
   selector: 'app-dispatch-progress',
   templateUrl: './dispatch-progress.component.html',
   styleUrls: ['./dispatch-progress.component.css']
 })
-export class DispatchProgressComponent implements OnInit {
+export class DispatchProgressComponent extends BasicComponent implements OnInit {
 
   title = 'Distribution progress';
   checkProgressForm: FormGroup;
@@ -56,6 +57,7 @@ export class DispatchProgressComponent implements OnInit {
               private router: Router, private organisationService: OrganisationService,
               private helper: HelperService, private organisationTypeService: OrganisationTypeService,
               private locationService: LocationService, private inputDistributionService: InputDistributionService) {
+    super();
   }
 
   ngOnInit() {
@@ -211,26 +213,7 @@ export class DispatchProgressComponent implements OnInit {
       }
     });
   }
-
   exportReport() {
     this.excelService.exportAsExcelFile(this.printable, 'report');
-  }
-
-  setError(errors: any) {
-    this.errors = errors;
-    this.message = undefined;
-    this.loading = false;
-  }
-
-  setMessage(message: string) {
-    this.errors = undefined;
-    this.message = message;
-    this.loading = false;
-  }
-
-  clear() {
-    this.errors = undefined;
-    this.message = undefined;
-    this.loading = false;
   }
 }

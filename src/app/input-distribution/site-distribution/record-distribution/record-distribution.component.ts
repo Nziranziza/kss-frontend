@@ -3,39 +3,44 @@ import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {HelperService} from '../../../core/helpers';
 import {isPlatformBrowser} from '@angular/common';
-import {InputDistributionService, SiteService} from '../../../core/services';
+import {ConfirmDialogService, InputDistributionService, MessageService} from '../../../core/services';
 import {AuthenticationService} from '../../../core/services';
+import {BasicComponent} from '../../../core/library';
 
 @Component({
   selector: 'app-record-distribution',
   templateUrl: './record-distribution.component.html',
   styleUrls: ['./record-distribution.component.css']
 })
-export class RecordDistributionComponent implements OnInit {
+export class RecordDistributionComponent extends BasicComponent implements OnInit {
 
   modal: NgbActiveModal;
   @Input() requestId;
   @Input() regNumber;
   @Input() documentId;
+  @Input() inputApplicationId;
   distributionForm: FormGroup;
   updateRequestForm: FormGroup;
   errors: string [];
   message: string;
-  stockOuts: any;
+  stockOuts = [];
   comments = [
-    { value: 1, description: 'Kudakorera kawa'},
-    { value: 2, description: 'Kutagira ibiti bya kawa'},
-    { value: 3, description: 'Kawa zitaragira ibitumbwe'},
-    { value: 4, description: 'Umubare w ikawa wanditse uratandukanye'},
-    { value: 5, description: 'Yongerewe ifumbire iyo yahawe ntihagije'},
-    { value: 6, description: 'Akora ubuhinzi bwa kawa bw umwimerere'}
+    {value: 1, description: 'Kudakorera kawa'},
+    {value: 2, description: 'Kutagira ibiti bya kawa'},
+    {value: 3, description: 'Kawa zitaragira ibitumbwe'},
+    {value: 4, description: 'Umubare w ikawa wanditse uratandukanye'},
+    {value: 5, description: 'Yongerewe ifumbire iyo yahawe ntihagije'},
+    {value: 6, description: 'Akora ubuhinzi bwa kawa bw umwimerere'}
   ];
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
     private injector: Injector, private formBuilder: FormBuilder,
     private authenticationService: AuthenticationService,
+    private messageService: MessageService,
+    private confirmDialogService: ConfirmDialogService,
     private helper: HelperService, private inputDistributionService: InputDistributionService) {
+    super();
     if (isPlatformBrowser(this.platformId)) {
       this.modal = this.injector.get(NgbActiveModal);
     }
@@ -53,7 +58,11 @@ export class RecordDistributionComponent implements OnInit {
     const id = this.authenticationService.getCurrentUser().orgInfo.distributionSite;
     this.inputDistributionService.getSiteStockOuts(id)
       .subscribe((data) => {
-        this.stockOuts = data.content;
+        data.content.map((stock) => {
+          if (stock.inputId.inputType === 'Fertilizer' && stock.returnedQty === 0) {
+            this.stockOuts.push(stock);
+          }
+        });
       });
   }
 
@@ -64,7 +73,8 @@ export class RecordDistributionComponent implements OnInit {
       record['subDocumentId'.toString()] = this.requestId;
       record['siteId'.toString()] = this.authenticationService.getCurrentUser().orgInfo.distributionSite;
       this.inputDistributionService.updateRequestAtDistribution(record).subscribe(() => {
-          this.setMessage('Successfully updated.');
+          this.modal.close('Successfully updated.');
+          this.updateRequestForm.reset();
         },
         (err) => {
           this.setError(err.errors);
@@ -76,28 +86,40 @@ export class RecordDistributionComponent implements OnInit {
 
   onSubmit() {
     if (this.distributionForm.valid) {
+
       const record = JSON.parse(JSON.stringify(this.distributionForm.value));
       record['documentId'.toString()] = this.documentId;
       record['farmerRequestId'.toString()] = this.requestId;
       record['regNumber'.toString()] = this.regNumber;
-      this.inputDistributionService.recordDistribution(record).subscribe(() => {
-          this.setMessage('Fertilizer distributed.');
-        },
-        (err) => {
-          this.setError(err.errors);
-        });
+
+      if (this.inputApplicationId) {
+        this.confirmDialogService.openConfirmDialog('Farmer has already received fertilizer. ' +
+          'do you want to give more.').afterClosed().subscribe(
+          res => {
+            if (res) {
+              this.inputDistributionService.recordDistribution(record).subscribe(() => {
+                  this.modal.close('Fertilizer distributed.');
+                  this.distributionForm.reset();
+                },
+                (err) => {
+                  this.setError(err.errors);
+                });
+
+            }
+          });
+      } else {
+        this.inputDistributionService.recordDistribution(record).subscribe(() => {
+            this.modal.close('Fertilizer distributed.');
+            this.distributionForm.reset();
+          },
+          (err) => {
+            this.setError(err.errors);
+          });
+
+      }
+
     } else {
       this.setError(this.helper.getFormValidationErrors(this.distributionForm));
     }
-  }
-
-  setError(errors: any) {
-    this.errors = errors;
-    this.message = undefined;
-  }
-
-  setMessage(message: string) {
-    this.errors = undefined;
-    this.message = message;
   }
 }

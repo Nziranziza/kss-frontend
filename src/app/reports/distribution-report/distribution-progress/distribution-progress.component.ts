@@ -12,13 +12,14 @@ import {
 
 import {Router} from '@angular/router';
 import {HelperService} from '../../../core/helpers';
+import {BasicComponent} from '../../../core/library';
 
 @Component({
   selector: 'app-distribution-progress',
   templateUrl: './distribution-progress.component.html',
   styleUrls: ['./distribution-progress.component.css']
 })
-export class DistributionProgressComponent implements OnInit {
+export class DistributionProgressComponent extends BasicComponent implements OnInit {
 
   title = 'Fertilizer application progress';
   checkProgressForm: FormGroup;
@@ -26,6 +27,7 @@ export class DistributionProgressComponent implements OnInit {
   loading = false;
   message: string;
   isCurrentUserDCC = false;
+  isSiteManager = false;
   distributionProgress: any;
   printable = [];
   dtOptions: any = {};
@@ -39,9 +41,12 @@ export class DistributionProgressComponent implements OnInit {
   distId = false;
   sectorId = false;
   cellId = false;
-  downloadEnabled = false;
+  downloadSummaryEnabled = false;
+  downloadDetailedEnabled = false;
   showData = false;
   request: any;
+  site: any;
+  printableDetails = [];
 
   constructor(private formBuilder: FormBuilder, private siteService: SiteService,
               private authorisationService: AuthorisationService,
@@ -50,10 +55,12 @@ export class DistributionProgressComponent implements OnInit {
               private router: Router, private organisationService: OrganisationService,
               private helper: HelperService, private organisationTypeService: OrganisationTypeService,
               private locationService: LocationService, private inputDistributionService: InputDistributionService) {
+    super();
   }
 
   ngOnInit() {
     this.isCurrentUserDCC = this.authorisationService.isDistrictCashCropOfficer();
+    this.isSiteManager = this.authorisationService.isSiteManager();
     this.checkProgressForm = this.formBuilder.group({
       location: this.formBuilder.group({
         prov_id: [''],
@@ -67,6 +74,21 @@ export class DistributionProgressComponent implements OnInit {
       pagingType: 'full_numbers',
       pageLength: 25
     };
+    if (this.isSiteManager) {
+      this.siteService.get(this.authenticationService.getCurrentUser().orgInfo.distributionSite).subscribe((site) => {
+        this.site = site.content;
+        const temp = [];
+        this.site.coveredAreas.coveredSectors.map((sector) => {
+          temp.push(
+            {
+              _id: sector.sect_id,
+              name: sector.name
+            }
+          );
+        });
+        this.sectors = temp;
+      });
+    }
     this.initial();
     this.onFilterProgress();
   }
@@ -74,16 +96,47 @@ export class DistributionProgressComponent implements OnInit {
   exportAsXLSX() {
     this.excelService.exportAsExcelFile(this.printable, 'application report');
   }
+
   downloadDetails() {
-    console.log(this.request);
-    this.inputDistributionService.getDistributionProgressDetail(this.request).subscribe((data) => {
-      console.log(data);
+    const body = {
+      location: {}
+    };
+    if (this.request.location.searchBy === 'district') {
+      body.location['searchBy'.toString()] = 'district';
+      body.location['dist_id'.toString()] = this.request.location.dist_id;
+    }
+
+    if (this.request.location.searchBy === 'sector') {
+      body.location['searchBy'.toString()] = 'sector';
+      body.location['sect_id'.toString()] = this.request.location.sect_id;
+    }
+
+    if (this.request.location.searchBy === 'cell') {
+      body.location['searchBy'.toString()] = 'cell';
+      body.location['cell_id'.toString()] = this.request.location.cell_id;
+    }
+    this.inputDistributionService.getDistributionProgressDetail(body).subscribe((data) => {
+      data.content.map((farmer) => {
+        const temp = {
+          sector: farmer.requests.requestInfo.location.sect_id.name,
+          cell: farmer.requests.requestInfo.location.cell_id.name,
+          village: farmer.requests.requestInfo.location.village_id.name,
+          names: farmer.userInfo.foreName + ' ' + farmer.userInfo.surname,
+          nid: farmer.userInfo.NID,
+          trees: farmer.requests.requestInfo.numberOfTrees,
+          treesAtDistribution: farmer.requests.requestInfo.treesAtDistribution,
+          allocatedQty: farmer.requests.requestInfo.fertilizer_allocate,
+        };
+        this.printableDetails.push(temp);
+      });
+      this.excelService.exportAsExcelFile([this.printableDetails[0]], 'Fe detailed application report');
     });
   }
+
   onGetProgress(searchBy: string) {
     if (this.checkProgressForm.valid) {
       this.loading = true;
-      this.downloadEnabled = false;
+      this.downloadSummaryEnabled = true;
       const request = JSON.parse(JSON.stringify(this.checkProgressForm.value));
       if (request.location.prov_id === '' && searchBy === 'province') {
         delete request.location;
@@ -94,13 +147,15 @@ export class DistributionProgressComponent implements OnInit {
         request.location['searchBy'.toString()] = searchBy;
         this.helper.cleanObject(request.location);
       }
+
+      this.downloadDetailedEnabled = searchBy !== 'province';
+
       this.request = request;
       this.inputDistributionService.getDistributionProgress(request).subscribe((data) => {
         this.loading = false;
         this.distributionProgress = [];
         if ((data.content.length !== 0) && (data.content)) {
           this.clear();
-          this.downloadEnabled = true;
           this.showData = true;
           data.content.map((location) => {
             const temp = {
@@ -143,6 +198,7 @@ export class DistributionProgressComponent implements OnInit {
             this.cells = null;
             this.villages = null;
           });
+          this.downloadDetailedEnabled = false;
         }
       }
     );
@@ -197,23 +253,5 @@ export class DistributionProgressComponent implements OnInit {
           .patchValue(this.authenticationService.getCurrentUser().info.location.dist_id);
       }
     });
-  }
-
-  setError(errors: any) {
-    this.errors = errors;
-    this.message = undefined;
-    this.loading = false;
-  }
-
-  setMessage(message: string) {
-    this.errors = undefined;
-    this.message = message;
-    this.loading = false;
-  }
-
-  clear() {
-    this.errors = undefined;
-    this.message = undefined;
-    this.loading = false;
   }
 }

@@ -16,7 +16,7 @@ declare var $;
 })
 export class LoginComponent implements OnInit, OnDestroy {
 
-  errors: string[];
+  errors: any;
   authForm: FormGroup;
   message: string;
 

@@ -2,7 +2,7 @@
   <div class="col-xs-12">
     <h3>
       {{ site?.siteName }} >> {{ title }}
-      <div class="filter-form pull-right">
+      <div class="filter-form pull-right" *appHasPermission="[0]">
         <form [formGroup]="filterForm" (ngSubmit)="onFilter()">
           <div class="form-inline">
             <select class="form-control" formControlName="searchBy" style="margin-right: 10px">

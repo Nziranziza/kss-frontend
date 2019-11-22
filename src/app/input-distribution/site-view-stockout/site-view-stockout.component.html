@@ -1,3 +1,5 @@
+<app-list-message [message]="message"></app-list-message>
+<app-list-errors [errorList]="errors"></app-list-errors>
 <div class="box box-default" style="margin-top: 25px">
   <div class="box-header with-border">
     <h3 class="box-title">Stocks</h3>
@@ -43,7 +45,7 @@
 </div>
 <div class="box" style="margin-top: 25px">
   <div class="box-body">
-    <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped" style="margin-top: 15px">
+    <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped">
       <thead>
       <tr>
         <th>Type</th>

@@ -5,13 +5,14 @@ import {HelperService} from '../../core/helpers';
 import {ConfirmDispatchComponent} from './confirm-dispatch/confirm-dispatch.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Subject} from 'rxjs';
+import {BasicComponent} from '../../core/library';
 
 @Component({
   selector: 'app-site-view-dispatch',
   templateUrl: './site-view-dispatch.component.html',
   styleUrls: ['./site-view-dispatch.component.css']
 })
-export class SiteViewDispatchComponent implements OnInit {
+export class SiteViewDispatchComponent extends BasicComponent implements OnInit {
 
   constructor(private confirmDialogService: ConfirmDialogService,
               private formBuilder: FormBuilder,
@@ -19,9 +20,9 @@ export class SiteViewDispatchComponent implements OnInit {
               private messageService: MessageService,
               private modal: NgbModal,
               private authenticationService: AuthenticationService,
-              private inputDistributionService: InputDistributionService) {}
-
-  message: string;
+              private inputDistributionService: InputDistributionService) {
+    super();
+  }
   dispatches: any;
   errors: any;
   dtOptions: any = {};
@@ -44,11 +45,12 @@ export class SiteViewDispatchComponent implements OnInit {
   confirmDispatch(dispatch): void {
     const modalRef = this.modal.open(ConfirmDispatchComponent, {size: 'lg'});
     modalRef.componentInstance.dispatch = dispatch;
-    modalRef.result.finally(() => {
+    modalRef.result.then((message) => {
       const id = this.authenticationService.getCurrentUser().orgInfo.distributionSite;
       this.inputDistributionService.getSiteDispatches(id).subscribe((data) => {
         this.dispatches = data.content;
       });
+      this.setMessage(message);
     });
   }
 

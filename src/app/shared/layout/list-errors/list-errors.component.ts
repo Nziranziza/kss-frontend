@@ -19,11 +19,15 @@ export class ListErrorsComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     const errors = changes.errorList.currentValue;
     this.isArray = isArray(errors);
+    if (this.isArray) {
+      while (isArray(this.errorList[0])) {
+        this.errorList = this.errorList[0];
+      }
+    }
     if (this.isArray && errors.length > 0) {
       this.notEmpty = true;
     } else {
       this.notEmpty = (errors !== '' && !isUndefined(errors));
     }
-
   }
 }

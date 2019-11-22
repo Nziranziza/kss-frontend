@@ -81,32 +81,39 @@ export class SiteEditComponent implements OnInit {
           this.selectedCoveredSectors.push(sector.name);
         });
         site.coveredAreas.coveredSectors = restoreCoveredSectors;
-        this.locationService.getSectors(site.location.dist_id).subscribe((items) => {
+        this.locationService.getSectors(site.location.dist_id._id).subscribe((items) => {
           this.coveredSectorsSet = items;
         });
         const body = {
           searchBy: 'district',
-          dist_id: site.location.dist_id
+          dist_id: site.location.dist_id._id
         };
         this.siteService.getZone(body).subscribe(zone => {
           if (zone) {
             this.coveredCWSSet = zone.content;
           }
         });
-        this.locationService.getDistricts(site.location.prov_id).subscribe((districts) => {
+        this.locationService.getDistricts(site.location.prov_id._id).subscribe((districts) => {
           this.districts = districts;
         });
-        this.locationService.getSectors(site.location.dist_id).subscribe((sectors) => {
+        this.locationService.getSectors(site.location.dist_id._id).subscribe((sectors) => {
           this.sectors = sectors;
+          if (site.location) {
+            site['location'.toString()]['prov_id'.toString()] = site.location.prov_id._id;
+            site['location'.toString()]['dist_id'.toString()] = site.location.dist_id._id;
+            site['location'.toString()]['sect_id'.toString()] = site.location.sect_id._id;
+            site['location'.toString()]['cell_id'.toString()] = site.location.cell_id._id;
+            site['location'.toString()]['village_id'.toString()] = site.location.village_id._id;
+          }
           this.editForm.patchValue(site);
           this.editForm.controls.coveredAreas.get('coveredSectors'.toString()).patchValue(site.coveredAreas.coveredSectors);
           this.editForm.controls.coveredAreas.get('coveredCWS'.toString()).patchValue(site.coveredAreas.coveredCWS);
           this.afterInitial = true;
         });
-        this.locationService.getCells(site.location.sect_id).subscribe((cells) => {
+        this.locationService.getCells(site.location.sect_id._id).subscribe((cells) => {
           this.cells = cells;
         });
-        this.locationService.getVillages(site.location.cell_id).subscribe((villages) => {
+        this.locationService.getVillages(site.location.cell_id._id).subscribe((villages) => {
           this.villages = villages;
         });
       });

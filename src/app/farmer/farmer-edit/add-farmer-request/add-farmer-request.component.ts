@@ -77,10 +77,10 @@ export class AddFarmerRequestComponent implements OnInit {
     } else if (this.isUserSiteManager) {
       this.siteService.get(this.authenticationService.getCurrentUser().orgInfo.distributionSite).subscribe((site) => {
         this.site = site.content;
-        this.provinceValue = this.site.location.prov_id;
-        this.districtValue = this.site.location.dist_id;
+        this.provinceValue = this.site.location.prov_id._id;
+        this.districtValue = this.site.location.dist_id._id;
         (this.addFarmerRequestForm.controls.requests as FormArray).push(this.createRequest());
-        this.locationService.getDistricts(this.site.location.prov_id).subscribe((districts) => {
+        this.locationService.getDistricts(this.site.location.prov_id._id).subscribe((districts) => {
           this.districts.push(districts);
         });
         const temp = [];

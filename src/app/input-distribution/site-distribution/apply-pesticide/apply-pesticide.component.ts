@@ -1,16 +1,17 @@
 import {Component, Inject, Injector, Input, OnInit, PLATFORM_ID} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
-import {AuthenticationService, InputDistributionService} from '../../../core/services';
+import {AuthenticationService, InputDistributionService, MessageService} from '../../../core/services';
 import {HelperService} from '../../../core/helpers';
 import {isPlatformBrowser} from '@angular/common';
+import {BasicComponent} from '../../../core/library';
 
 @Component({
   selector: 'app-apply-pesticide',
   templateUrl: './apply-pesticide.component.html',
   styleUrls: ['./apply-pesticide.component.css']
 })
-export class ApplyPesticideComponent implements OnInit {
+export class ApplyPesticideComponent extends BasicComponent implements OnInit {
 
   modal: NgbActiveModal;
   @Input() requestId;
@@ -25,7 +26,9 @@ export class ApplyPesticideComponent implements OnInit {
     @Inject(PLATFORM_ID) private platformId: object,
     private injector: Injector, private formBuilder: FormBuilder,
     private authenticationService: AuthenticationService,
+    private messageService: MessageService,
     private helper: HelperService, private inputDistributionService: InputDistributionService) {
+    super();
     if (isPlatformBrowser(this.platformId)) {
       this.modal = this.injector.get(NgbActiveModal);
     }
@@ -37,7 +40,6 @@ export class ApplyPesticideComponent implements OnInit {
     });
     const id = this.authenticationService.getCurrentUser().orgInfo.distributionSite;
     this.inputDistributionService.getSiteStockOuts(id).subscribe((data) => {
-      console.log(data);
       data.content.map((stock) => {
         if (stock.inputId.inputType === 'Pesticide' && stock.returnedQty === 0) {
           const control = new FormControl(false);
@@ -64,9 +66,9 @@ export class ApplyPesticideComponent implements OnInit {
           stockId: value
         };
       });
-      console.log(record);
       this.inputDistributionService.applyPesticide(record).subscribe(() => {
-          this.setMessage('Pesticide applied!');
+          this.modal.close('Pesticide applied!');
+          this.distributionForm.reset();
         },
         (err) => {
           this.setError(err.errors);
@@ -74,15 +76,5 @@ export class ApplyPesticideComponent implements OnInit {
     } else {
       this.setError(this.helper.getFormValidationErrors(this.distributionForm));
     }
-  }
-
-  setError(errors: any) {
-    this.errors = errors;
-    this.message = undefined;
-  }
-
-  setMessage(message: string) {
-    this.errors = undefined;
-    this.message = message;
   }
 }

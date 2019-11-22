@@ -45,6 +45,14 @@ export class UserService {
     return this.apiService.post('/users/nid', body);
   }
 
+  isSetPinAllowed(regNumber: string): Observable<any> {
+    return this.apiService.get('/users/is_set_pin_allowed/' + regNumber);
+  }
+
+  allowSetPin(body: any): Observable<any> {
+    return  this.apiService.post('/users/enable/set_pin', body);
+  }
+
   verifyNID(nid: string): Observable<any> {
     return this.apiService.get('/users/verifyNID/' + nid);
   }

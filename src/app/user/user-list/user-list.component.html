@@ -30,7 +30,7 @@
             <td> {{ user.NID }}</td>
             <td> {{ user.sex }}</td>
             <td class="actions no-wrap text-right">
-                <a class="btn btn-success btn-sm btn-margin" routerLink="/admin/organisations/{{organisationId}}/users/edit/{{user._id}}" style="margin-left: 10px;">
+                <a class="btn btn-success btn-sm btn-margin" routerLink="/admin/organisations/{{organisationId}}/users/edit/{{user._id}}" *appHasPermission="[[4,1],0,[8,1]]"style="margin-left: 10px;" >
                 Edit</a>
             </td>
           </tr>

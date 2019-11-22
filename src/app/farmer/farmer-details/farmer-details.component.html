@@ -65,6 +65,12 @@
         </div>
       </div>
     </div>
+    <div class="col-sm-8">
+      <a class="btn btn-success btn-margin pull-right" *ngIf="!resetPin" (click)="enableResetPin(true)"><i class="fa fa-check"></i>&nbsp; Enable pin reset
+      </a>
+      <a class="btn btn-warning btn-margin pull-right" *ngIf="resetPin" (click)="enableResetPin(false)"><i class="fa fa-close"></i>&nbsp; Disable pin reset
+      </a>
+    </div>
   </div>
   <br/> <br/>
   <h6 class="page-header">

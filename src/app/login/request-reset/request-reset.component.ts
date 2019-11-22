@@ -13,7 +13,7 @@ declare var $;
 })
 export class RequestResetComponent implements OnInit {
 
-  errors: string[];
+  errors: any;
   message: string;
   requestResetForm: FormGroup;
 

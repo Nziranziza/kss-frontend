@@ -73,7 +73,7 @@ export class InputDistributionService {
   }
 
   getDistributionProgressPesticideDetail(data: any): Observable<any> {
-    return this.apiService.post('/distributionstats/detailed/pesticide/inputdistribution', data);
+    return this.apiService.post('/distributionstats/detailed/pesticide_inputdistribution', data);
   }
 
   getDispatchProgress(data: any): Observable<any> {

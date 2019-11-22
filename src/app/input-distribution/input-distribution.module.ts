@@ -20,7 +20,6 @@ import {ConfirmDispatchComponent} from './site-view-dispatch/confirm-dispatch/co
 import {SiteViewStockoutComponent} from './site-view-stockout/site-view-stockout.component';
 import {DeliveryDetailsComponent} from './warehouse/warehouse-entries/delivery-details/delivery-details.component';
 import {DistributionReportModule} from '../reports/distribution-report/distribution-report.module';
-import {SiteDistributionListComponent} from './site-ditributions-list/site-distributions-list.component';
 import { ApplyPesticideComponent } from './site-distribution/apply-pesticide/apply-pesticide.component';
 
 @NgModule({
@@ -33,7 +32,7 @@ import { ApplyPesticideComponent } from './site-distribution/apply-pesticide/app
     SiteViewDispatchComponent,
     EditRequestComponent,
     ConfirmDispatchComponent,
-    SiteViewStockoutComponent, SiteDistributionListComponent, ApplyPesticideComponent],
+    SiteViewStockoutComponent, ApplyPesticideComponent],
   imports: [
     CommonModule,
     NgbModule, NgxPaginationModule, OrderModule,

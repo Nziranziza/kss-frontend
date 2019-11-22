@@ -2,6 +2,7 @@ import {Component, Inject, Injector, Input, OnInit, PLATFORM_ID} from '@angular/
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {isPlatformBrowser} from '@angular/common';
 import {isArray} from 'util';
+import {UserService} from '../../core/services';
 
 @Component({
   selector: 'app-farmer-details',
@@ -13,9 +14,10 @@ export class FarmerDetailsComponent implements OnInit {
   modal: NgbActiveModal;
   @Input() farmer;
   requests: any;
+  resetPin = true;
 
   constructor(
-    @Inject(PLATFORM_ID) private platformId: object,
+    @Inject(PLATFORM_ID) private platformId: object, private userService: UserService,
     private injector: Injector) {
 
     if (isPlatformBrowser(this.platformId)) {
@@ -37,5 +39,21 @@ export class FarmerDetailsComponent implements OnInit {
         this.requests = [this.farmer.requests.requestInfo];
       }
     }
+    this.getSetPinStatus();
+  }
+
+  enableResetPin(status: boolean) {
+    this.userService.allowSetPin({
+      regNumber: this.farmer.userInfo.regNumber,
+      status
+    }).subscribe(() => {
+      this.getSetPinStatus();
+    });
+  }
+
+  getSetPinStatus() {
+    this.userService.isSetPinAllowed(this.farmer.userInfo.regNumber).subscribe((data) => {
+      this.resetPin = data.content.allowedToSetPin;
+    });
   }
 }

@@ -15,7 +15,7 @@ declare var $;
 })
 export class ResetPasswordComponent implements OnInit {
 
-  errors: string[];
+  errors: any;
   message: string;
   resetPasswordForm: FormGroup;
   userId: string;

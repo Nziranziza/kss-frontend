@@ -29,6 +29,7 @@ export class OrganisationListComponent implements OnInit, OnDestroy {
   // @ts-ignore
   dtTrigger: Subject = new Subject();
   isSuperAdmin = false;
+  isNaebCoffeeValueChainOfficer = false;
 
   ngOnInit() {
     this.getAllOrganisations();
@@ -41,6 +42,7 @@ export class OrganisationListComponent implements OnInit, OnDestroy {
       responsive: true
     };
     this.isSuperAdmin = this.authenticationService.getCurrentUser().parameters.role.includes(0);
+    this.isNaebCoffeeValueChainOfficer = this.authorisationService.isNaebCoffeeValueChainOfficer();
     this.message = this.messageService.getMessage();
   }
 
@@ -62,7 +64,7 @@ export class OrganisationListComponent implements OnInit, OnDestroy {
       res => {
         if (res) {
           this.organisationService.destroy(organisation._id)
-            .subscribe(data => {
+            .subscribe(() => {
               this.getAllOrganisations();
               this.message = 'Record successful deleted!';
             });
@@ -97,6 +99,17 @@ export class OrganisationListComponent implements OnInit, OnDestroy {
       this.organisationService.all().subscribe(data => {
         if (data) {
           this.organisations = data.content;
+          if (this.authorisationService.isNaebCoffeeValueChainOfficer()) {
+            this.organisations = this.organisations.filter((org) => {
+              return (
+                org.organizationRole.indexOf(1) > -1 ||
+                org.organizationRole.indexOf(2) > -1 ||
+                org.organizationRole.indexOf(7) > -1 ||
+                org.organizationRole.indexOf(9) > -1 ||
+                org.organizationRole.indexOf(10) > -1
+              );
+            });
+          }
           this.dtTrigger.next();
           this.loading = false;
         }

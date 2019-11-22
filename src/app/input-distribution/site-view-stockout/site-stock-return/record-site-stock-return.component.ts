@@ -44,7 +44,9 @@ export class RecordSiteStockReturnComponent extends BasicComponent implements On
       record['stockOutId'.toString()] = this.stockOutId;
       record['userId'.toString()] = this.authenticationService.getCurrentUser().info._id;
       this.inputDistributionService.recordStockOutReturn(record).subscribe(() => {
-          this.setMessage('Stock quantity returned');
+          this.messageService.setMessage('Stock quantity returned');
+          this.siteStockReturnForm.reset();
+          this.modal.dismiss();
         },
         (err) => {
           this.setError(err.errors);

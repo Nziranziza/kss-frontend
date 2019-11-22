@@ -17,20 +17,21 @@ export class ListMessageComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-
-    $(() => {
-      $('.custom-message').each((index, element) => {
-        const $element = $(element);
-        const timeout = $element.data('auto-dismiss') || 3000;
-        setTimeout(() => {
-          $element.alert('close');
-        }, timeout);
-      });
-    });
   }
 
   ngOnChanges(changes: SimpleChanges) {
     const msg = changes.message.currentValue;
     this.notEmpty = (msg !== '' && !isUndefined(msg));
+    if (this.notEmpty) {
+      $(() => {
+        $('.custom-message').each((index, element) => {
+          const $element = $(element);
+          const timeout = $element.data('auto-dismiss') || 4500;
+          setTimeout(() => {
+            $element.hide();
+          }, timeout);
+        });
+      });
+    }
   }
 }

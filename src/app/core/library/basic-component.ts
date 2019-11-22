@@ -10,6 +10,7 @@ export abstract class BasicComponent {
     this.loading = false;
     this.warning = undefined;
   }
+
   setWarning(warning: any) {
     this.errors = undefined;
     this.message = undefined;
@@ -22,6 +23,22 @@ export abstract class BasicComponent {
     this.message = message;
     this.loading = false;
     this.warning = undefined;
+    $(() => {
+      $('.custom-message').each((index, element) => {
+        const $element = $(element);
+        $element.show();
+      });
+    });
+    $(() => {
+      $('.custom-message').each((index, element) => {
+        const $element = $(element);
+        const timeout = $element.data('auto-dismiss') || 3000;
+        setTimeout(() => {
+          $element.hide();
+        }, timeout);
+      });
+    });
+
   }
 
   clear() {

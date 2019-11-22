@@ -66,14 +66,18 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
   onSubmit() {
     if (this.siteStockOutForm.valid) {
       const record = JSON.parse(JSON.stringify(this.siteStockOutForm.value));
-      record.location['prov_id'.toString()] = this.site.location.prov_id;
-      record.location['dist_id'.toString()] = this.site.location.dist_id;
+      record.location['prov_id'.toString()] = this.site.location.prov_id._id;
+      record.location['dist_id'.toString()] = this.site.location.dist_id._id;
       record.date = this.helper.getDate(this.siteStockOutForm.value.date);
       record['stockId'.toString()] = this.stock._id;
       record['userId'.toString()] = this.authenticationService.getCurrentUser().info._id;
       this.helper.cleanObject(record.location);
       this.inputDistributionService.recordStockOut(record).subscribe(() => {
-          this.setMessage('Stock out recorded!');
+          this.messageService.setMessage('Stock out recorded!');
+          this.siteStockOutForm.reset();
+          this.siteStockOutForm.controls.date.
+            setValue(this.datePipe.transform(this.currentDate, 'yyyy-MM-dd', 'GMT+2'));
+          this.modal.dismiss();
         },
         (err) => {
           this.setError(err.errors);
@@ -83,29 +87,6 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
     }
   }
   onChanges() {
-    this.siteStockOutForm.controls.location.get('prov_id'.toString()).valueChanges.subscribe(
-      (value) => {
-        if (value !== '') {
-          this.locationService.getDistricts(value).subscribe((data) => {
-            this.districts = data;
-            this.sectors = null;
-            this.cells = null;
-            this.villages = null;
-          });
-        }
-      }
-    );
-    this.siteStockOutForm.controls.location.get('dist_id'.toString()).valueChanges.subscribe(
-      (value) => {
-        if (value !== '') {
-          this.locationService.getSectors(value).subscribe((data) => {
-            this.sectors = data;
-            this.cells = null;
-            this.villages = null;
-          });
-        }
-      }
-    );
     this.siteStockOutForm.controls.location.get('sect_id'.toString()).valueChanges.subscribe(
       (value) => {
         if (value !== '') {

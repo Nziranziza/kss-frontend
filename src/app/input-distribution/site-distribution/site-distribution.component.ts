@@ -7,6 +7,7 @@ import {RecordDistributionComponent} from './record-distribution/record-distribu
 import {MessageService} from '../../core/services';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ApplyPesticideComponent} from './apply-pesticide/apply-pesticide.component';
+import {BasicComponent} from '../../core/library';
 
 @Component({
   selector: 'app-site-distribution',
@@ -14,7 +15,7 @@ import {ApplyPesticideComponent} from './apply-pesticide/apply-pesticide.compone
   styleUrls: ['./site-distribution.component.css']
 })
 
-export class SiteDistributionComponent implements OnInit {
+export class SiteDistributionComponent extends BasicComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder, private authenticationService: AuthenticationService,
               private organisationTypeService: OrganisationTypeService,
@@ -22,13 +23,14 @@ export class SiteDistributionComponent implements OnInit {
               private helper: HelperService,
               private messageService: MessageService,
               private modal: NgbModal) {
+    super();
   }
 
   getFarmerRequestsForm: FormGroup;
-  errors: string[];
   requests: any;
   regNumber: string;
   requestsOf: any;
+  documentId: string;
 
   ngOnInit() {
     this.getFarmerRequestsForm = this.formBuilder.group({
@@ -36,14 +38,16 @@ export class SiteDistributionComponent implements OnInit {
     });
   }
 
-  recordDistribution(requestId: string, documentId: string) {
+  recordDistribution(requestId: string, documentId: string, inputApplicationId?: string) {
     const modalRef = this.modal.open(RecordDistributionComponent, {size: 'lg'});
     modalRef.componentInstance.requestId = requestId;
     modalRef.componentInstance.regNumber = this.regNumber;
     modalRef.componentInstance.documentId = documentId;
-    modalRef.result.finally(() => {
+    modalRef.componentInstance.inputApplicationId = inputApplicationId;
+    modalRef.result.then((message) => {
+      this.setMessage(message);
       this.inputDistributionService.getFarmerRequests(this.requestsOf).subscribe((data) => {
-        this.requests = data.content;
+        this.requests = data.content[0].requestInfo;
       });
     });
   }
@@ -54,13 +58,14 @@ export class SiteDistributionComponent implements OnInit {
       requestsOf['managerUserId'.toString()] = this.authenticationService.getCurrentUser().info._id;
       this.requestsOf = requestsOf;
       this.inputDistributionService.getFarmerRequests(requestsOf).subscribe((data) => {
-        this.requests = data.content;
+        this.requests = data.content[0].requestInfo;
+        this.documentId = data.content[0]._id;
         this.regNumber = requestsOf.farmerRegNumber;
       }, (err) => {
-        this.errors = err.errors;
+        this.setError(err.errors);
       });
     } else {
-      this.errors = this.helper.getFormValidationErrors(this.getFarmerRequestsForm);
+      this.setError(this.helper.getFormValidationErrors(this.getFarmerRequestsForm));
     }
   }
 
@@ -69,9 +74,10 @@ export class SiteDistributionComponent implements OnInit {
     modalRef.componentInstance.requestId = requestId;
     modalRef.componentInstance.regNumber = this.regNumber;
     modalRef.componentInstance.documentId = documentId;
-    modalRef.result.finally(() => {
+    modalRef.result.then((message) => {
+      this.setMessage(message);
       this.inputDistributionService.getFarmerRequests(this.requestsOf).subscribe((data) => {
-        this.requests = data.content;
+        this.requests = data.content[0].requestInfo;
       });
     });
   }
