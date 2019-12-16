@@ -177,7 +177,8 @@
         <th>Name</th>
         <th>Items</th>
         <th>Qty</th>
-        <th>Total Qty</th>
+        <th>Total supplied Qty</th>
+        <th>Total available Qty</th>
       </tr>
       </thead>
       <tbody>
@@ -187,6 +188,9 @@
         <td *ngIf="stock.inputId.inputType === 'Fertilizer'">{{ stock.items }}</td>
         <td *ngIf="stock.inputId.inputType !== 'Fertilizer'"></td>
         <td>{{ stock.quantityPerItem }}</td>
+        <td>{{  stock.suppliedQty }}
+          <app-quantity-unit [inputType]="stock.inputId.inputType"></app-quantity-unit>
+        </td>
         <td>{{ stock.items * stock.quantityPerItem }}
           <app-quantity-unit [inputType]="stock.inputId.inputType"></app-quantity-unit>
         </td>

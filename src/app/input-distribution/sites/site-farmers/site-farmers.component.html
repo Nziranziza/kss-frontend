@@ -5,7 +5,7 @@
       <a *appHasPermission="[0,[8,2],6]" class="btn btn-success btn-margin pull-right" routerLink="/admin/farmers/create"><i
         class="fa fa-plus"></i> New Farmer
       </a>
-      <div class="filter-form pull-right" *appHasPermission="[0]">
+      <div class="filter-form pull-right">
         <form [formGroup]="filterForm" (ngSubmit)="onFilter()">
           <div class="form-inline">
             <select class="form-control" formControlName="searchBy" style="margin-right: 10px">

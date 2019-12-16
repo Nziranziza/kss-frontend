@@ -21,7 +21,15 @@ export class HttpTokenInterceptor implements HttpInterceptor {
       || (req.url.indexOf('/api/users/account/unlock') !== -1)
       || (req.url.indexOf('/api/users/request/password-reset') !== -1)
       || (req.url.indexOf('/api/users/password-reset') !== -1)) {
-      return next.handle(req);
+      if (this.authenticationService.isLoggedIn()) {
+        if (token) {
+          headersConfig['x-auth-token'.toString()] = token;
+        }
+        const request = req.clone({setHeaders: headersConfig});
+        return next.handle(request);
+      } else {
+        return next.handle(req);
+      }
     } else if (!this.authenticationService.isLoggedIn()) {
       this.router.navigateByUrl('login');
     } else {

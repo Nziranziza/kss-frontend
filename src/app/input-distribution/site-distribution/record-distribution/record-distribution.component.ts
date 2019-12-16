@@ -49,7 +49,9 @@ export class RecordDistributionComponent extends BasicComponent implements OnIni
   ngOnInit(): void {
     this.distributionForm = this.formBuilder.group({
       quantity: ['', Validators.required],
-      stockOutId: ['']
+      stockOutId: [''],
+      treesAtDistribution: ['', Validators.required],
+      comment: ['', Validators.required]
     });
     this.updateRequestForm = this.formBuilder.group({
       treesAtDistribution: ['', Validators.required],
@@ -86,18 +88,16 @@ export class RecordDistributionComponent extends BasicComponent implements OnIni
 
   onSubmit() {
     if (this.distributionForm.valid) {
-
       const record = JSON.parse(JSON.stringify(this.distributionForm.value));
       record['documentId'.toString()] = this.documentId;
       record['farmerRequestId'.toString()] = this.requestId;
       record['regNumber'.toString()] = this.regNumber;
-
       if (this.inputApplicationId) {
         this.confirmDialogService.openConfirmDialog('Farmer has already received fertilizer. ' +
           'do you want to give more.').afterClosed().subscribe(
           res => {
             if (res) {
-              this.inputDistributionService.recordDistribution(record).subscribe(() => {
+              this.inputDistributionService.recordDistributionAndUpdate(record).subscribe(() => {
                   this.modal.close('Fertilizer distributed.');
                   this.distributionForm.reset();
                 },
@@ -108,7 +108,7 @@ export class RecordDistributionComponent extends BasicComponent implements OnIni
             }
           });
       } else {
-        this.inputDistributionService.recordDistribution(record).subscribe(() => {
+        this.inputDistributionService.recordDistributionAndUpdate(record).subscribe(() => {
             this.modal.close('Fertilizer distributed.');
             this.distributionForm.reset();
           },

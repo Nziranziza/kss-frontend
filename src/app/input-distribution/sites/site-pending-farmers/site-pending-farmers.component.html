@@ -2,7 +2,7 @@
   <div class="col-xs-12">
     <h3>
       {{ site?.siteName }} >> {{ title }}
-      <div class="filter-form pull-right" *appHasPermission="[0]">
+      <div class="filter-form pull-right">
         <form [formGroup]="filterForm" (ngSubmit)="onFilter()">
           <div class="form-inline">
             <select class="form-control" formControlName="searchBy" style="margin-right: 10px">
@@ -47,7 +47,7 @@
             <td><span
               *ngIf="farmer.reason !== undefined && farmer.reason.length > 0">{{ farmer.reason.join(', ') }}</span></td>
             <td>
-              <a appRequiredSeason class="btn btn-success btn-sm pull-right"
+              <a appRequiredSeason class="btn btn-success btn-sm pull-right" *appHasPermission = "[0,[8,2]]"
                  [routerLink]="['/admin/farmers/create', {id: farmer._id}]">Approve
               </a>
             </td>

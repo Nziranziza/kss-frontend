@@ -26,7 +26,7 @@ export class ListMessageComponent implements OnInit, OnChanges {
       $(() => {
         $('.custom-message').each((index, element) => {
           const $element = $(element);
-          const timeout = $element.data('auto-dismiss') || 4500;
+          const timeout = $element.data('auto-dismiss') || 7500;
           setTimeout(() => {
             $element.hide();
           }, timeout);

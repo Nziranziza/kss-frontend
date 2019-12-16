@@ -45,11 +45,7 @@ export class SiteFarmersComponent extends BasicComponent implements OnInit, OnDe
   searchFields = [
     {value: 'phone_number', name: 'phone number'},
     {value: 'reg_number', name: 'registration number'},
-    {value: 'nid', name: 'NID'},
-    {value: 'foreName', name: 'first name'},
-    {value: 'surname', name: 'last name'},
-    {value: 'location', name: 'location'},
-    {value: 'groupname', name: 'group name'}
+    {value: 'nid', name: 'NID'}
   ];
 
   constructor(private siteService: SiteService,
@@ -65,6 +61,7 @@ export class SiteFarmersComponent extends BasicComponent implements OnInit, OnDe
       draw: 1
     };
   }
+
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.siteId = params['siteId'.toString()];

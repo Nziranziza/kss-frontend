@@ -68,7 +68,7 @@ export class FarmerCreateComponent extends BasicComponent implements OnInit, OnD
       surname: [''],
       groupName: [''],
       phone_number: [''],
-      sex: [''],
+      sex: ['m'],
       NID: [''],
       type: ['', Validators.required],
       groupContactPerson: this.formBuilder.group({
@@ -249,7 +249,8 @@ export class FarmerCreateComponent extends BasicComponent implements OnInit, OnD
         this.helperService.cleanObject(farmer);
         farmer.requestInfo.map((item) => {
           item['fertilizer_need'.toString()] =
-            ((+item['numberOfTrees'.toString()]) * this.currentSeason.seasonParams.fertilizerKgPerTree.$numberDouble);
+            ((+item['numberOfTrees'.toString()]) * this.currentSeason.seasonParams.fertilizerKgPerTree);
+          console.log(((+item['numberOfTrees'.toString()]) * this.currentSeason.seasonParams.fertilizerKgPerTree));
           return this.helperService.cleanObject(item);
         });
         if (this.isGroup) {

@@ -71,7 +71,7 @@ export class ConfirmDispatchComponent implements OnInit {
       record['dispatchId'.toString()] = this.dispatch._id;
       record.entries.forEach((entry) => {
         this.helper.cleanObject(entry);
-      })
+      });
       this.inputDistributionService.confirmDispatch(record).subscribe(() => {
           this.modal.close('Dispatch confirmed!');
         },

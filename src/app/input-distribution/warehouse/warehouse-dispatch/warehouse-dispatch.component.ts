@@ -91,7 +91,7 @@ export class WarehouseDispatchComponent extends BasicComponent implements OnInit
       pageLength: 10,
       columns: [{}, {}, {}, {}, {
         class: 'none'
-      }, {}, {}],
+      }, {}, {}, {}],
       responsive: true
     };
     this.filterForm = this.formBuilder.group({

@@ -5,16 +5,16 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MessageService} from '../../../core/services';
 import {AuthorisationService} from '../../../core/services';
+import {BasicComponent} from '../../../core/library';
 
 @Component({
   selector: 'app-pending-farmer-list',
   templateUrl: './pending-farmer-list.component.html',
   styleUrls: ['./pending-farmer-list.component.css']
 })
-export class PendingFarmerListComponent implements OnInit, OnDestroy {
+export class PendingFarmerListComponent extends BasicComponent implements OnInit, OnDestroy {
 
   isDistrictCashCrop = false;
-  message: string;
   farmers = [];
   maxSize = 9;
   showData = false;
@@ -25,7 +25,6 @@ export class PendingFarmerListComponent implements OnInit, OnDestroy {
   title = 'Temporary Farmers';
   i: number;
   parameters: any;
-  errors: any;
   config: any;
   autoHide = false;
   responsive = true;
@@ -49,6 +48,7 @@ export class PendingFarmerListComponent implements OnInit, OnDestroy {
               private router: Router, private authorisationService: AuthorisationService,
               private authenticationService: AuthenticationService,
               private modal: NgbModal, private formBuilder: FormBuilder, private messageService: MessageService) {
+    super();
     this.parameters = {
       length: 25,
       start: 0,
@@ -107,10 +107,9 @@ export class PendingFarmerListComponent implements OnInit, OnDestroy {
             currentPage: this.parameters.start + 1,
             totalItems: data.recordsTotal
           };
-          this.loading = false;
+          this.clear();
         }, (err) => {
-          this.loading = false;
-          this.errors = err.errors;
+          this.setError(err.errors);
         });
     }
   }

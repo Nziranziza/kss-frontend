@@ -48,6 +48,10 @@ export class InputDistributionService {
     return this.apiService.post('/inputapplication/record_distribution', data);
   }
 
+  recordDistributionAndUpdate(data: any): Observable<any> {
+    return this.apiService.post('/inputapplication/record_distribution_and_update', data);
+  }
+
   applyPesticide(data: any): Observable<any> {
     return this.apiService.post('/inputapplication/record_pesticide_distribution', data);
   }

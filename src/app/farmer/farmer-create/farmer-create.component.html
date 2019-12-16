@@ -266,7 +266,8 @@
                       <div class="col-xs-2">
                         <div class="form-group">
                           <span class="">Province</span>
-                          <select class="form-control" formControlName="prov_id" (change)="onChangeProvince(i)" disabled="disabled">
+                          <select class="form-control" formControlName="prov_id" (change)="onChangeProvince(i)"
+                                  disabled="disabled">
                             <option value=""></option>
                             <option *ngFor="let province of provinces[i]" value="{{province._id}}">{{province.namee}}
                             </option>
@@ -283,7 +284,8 @@
                       <div class="col-xs-2">
                         <div class="form-group">
                           <span class="">District</span>
-                          <select class="form-control" formControlName="dist_id" (change)="onChangeDistrict(i)" disabled="disabled">
+                          <select class="form-control" formControlName="dist_id" (change)="onChangeDistrict(i)"
+                                  disabled="disabled">
                             <option value=""></option>
                             <option *ngFor="let district of districts[i]" value="{{district._id}}">{{district.name}}
                             </option>
@@ -300,7 +302,8 @@
                       <div class="col-xs-2">
                         <div class="form-group">
                           <span class="">Sector</span>
-                          <select class="form-control" formControlName="sect_id" (change)="onChangeSector(i)" disabled="disabled">
+                          <select class="form-control" formControlName="sect_id" (change)="onChangeSector(i)"
+                                  disabled="disabled">
                             <option value=""></option>
                             <option *ngFor="let sector of sectors[i]" value="{{sector._id}}">{{sector.name}}</option>
                           </select>
@@ -316,7 +319,8 @@
                       <div class="col-xs-2">
                         <div class="form-group">
                           <span class="">Cell</span>
-                          <select class="form-control" formControlName="cell_id" (change)="onChangeCell(i)" disabled="disabled">
+                          <select class="form-control" formControlName="cell_id" (change)="onChangeCell(i)"
+                                  disabled="disabled">
                             <option value=""></option>
                             <option *ngFor="let cell of cells[i]" value="{{cell._id}}">{{cell.name}}</option>
                           </select>
@@ -363,7 +367,7 @@
   <div class="row">
     <div class="col-xs-12">
       <a class="btn btn-warning btn-margin pull-right" (click)="onCancel()">Cancel</a>
-      <button class="btn btn-success pull-right">Save</button>
+      <button class="btn btn-success pull-right" [disabled]="!submit">Save</button>
     </div>
   </div>
 </form>

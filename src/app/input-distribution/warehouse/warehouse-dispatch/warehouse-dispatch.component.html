@@ -264,6 +264,7 @@
             <th>Phone number</th>
             <th></th>
             <th>Date</th>
+            <th>Received</th>
             <th></th>
           </tr>
           </thead>
@@ -280,6 +281,8 @@
                   <td>Items</td>
                   <td>Qty</td>
                   <td>Total</td>
+                  <td>ReceivedQty</td>
+                  <td>Comment</td>
                 </tr>
                 <tr *ngFor="let entry of dispatch.entries"
                     style="font-style: oblique; font-size: 12px; background: transparent">
@@ -289,10 +292,22 @@
                   <td>{{ entry.numberOfItems * entry.quantityPerItem}}
                     <app-quantity-unit [inputType]="entry.inputId.inputType"></app-quantity-unit>
                   </td>
+                  <td>{{ entry.receivedQty }}
+                    <app-quantity-unit [inputType]="entry.inputId.inputType"></app-quantity-unit>
+                  </td>
+                  <td>{{ entry.dispatch_comments | lowercase }}</td>
                 </tr>
               </table>
             </td>
             <td>{{ dispatch.date|date }}</td>
+            <td>
+              <ng-container *ngIf="dispatch.receivedBy; else confirm">
+                <span>&#10003;</span>
+                <span style="font-style: oblique; font-size: 11px;">&nbsp; by: &nbsp; {{ dispatch.receivedBy.foreName|lowercase }} &nbsp; {{ dispatch.receivedBy.surname|lowercase }}  </span>
+              </ng-container>
+              <ng-template #confirm>
+              </ng-template>
+            </td>
             <td>
               <button class="btn btn-info btn-margin btn-sm pull-right" (click)="printNote(dispatch._id)" type="button">
                 <i class="fa fa-print" aria-hidden="true"></i> Note

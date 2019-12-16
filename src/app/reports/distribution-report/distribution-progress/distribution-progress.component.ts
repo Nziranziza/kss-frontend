@@ -123,13 +123,14 @@ export class DistributionProgressComponent extends BasicComponent implements OnI
           village: farmer.requests.requestInfo.location.village_id.name,
           names: farmer.userInfo.foreName + ' ' + farmer.userInfo.surname,
           nid: farmer.userInfo.NID,
+          telephone: farmer.userInfo.phone_number,
           trees: farmer.requests.requestInfo.numberOfTrees,
           treesAtDistribution: farmer.requests.requestInfo.treesAtDistribution,
           allocatedQty: farmer.requests.requestInfo.fertilizer_allocate,
         };
         this.printableDetails.push(temp);
       });
-      this.excelService.exportAsExcelFile([this.printableDetails[0]], 'Fe detailed application report');
+      this.excelService.exportAsExcelFile(this.printableDetails, 'Fe detailed application report');
     });
   }
 
@@ -149,7 +150,6 @@ export class DistributionProgressComponent extends BasicComponent implements OnI
       }
 
       this.downloadDetailedEnabled = searchBy !== 'province';
-
       this.request = request;
       this.inputDistributionService.getDistributionProgress(request).subscribe((data) => {
         this.loading = false;

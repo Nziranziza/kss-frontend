@@ -7,25 +7,24 @@ import {isPlatformBrowser} from '@angular/common';
 import {LocationService} from '../../../core/services';
 import {MessageService} from '../../../core/services';
 import {Router} from '@angular/router';
+import {BasicComponent} from '../../../core/library';
 
 @Component({
   selector: 'app-add-farmer-request',
   templateUrl: './add-farmer-request.component.html',
   styleUrls: ['./add-farmer-request.component.css']
 })
-export class AddFarmerRequestComponent implements OnInit {
+export class AddFarmerRequestComponent extends BasicComponent implements OnInit {
 
   modal: NgbActiveModal;
   @Input() farmerId;
   addFarmerRequestForm: FormGroup;
-  errors: any;
   provinces = [];
   districts = [];
   sectors = [];
   cells = [];
   villages = [];
   requestIndex = 0;
-  message: string;
   currentSeason: any;
   isUserSiteManager = false;
   isUserDistrictCashCrop = false;
@@ -45,6 +44,7 @@ export class AddFarmerRequestComponent implements OnInit {
     private helper: HelperService, private farmerService: FarmerService,
     private messageService: MessageService, private authorisationService: AuthorisationService,
     private locationService: LocationService) {
+    super();
     if (isPlatformBrowser(this.platformId)) {
       this.modal = this.injector.get(NgbActiveModal);
     }
@@ -217,7 +217,8 @@ export class AddFarmerRequestComponent implements OnInit {
       });
       farmer['id'.toString()] = this.farmerId;
       this.farmerService.addFarmerRequest(farmer).subscribe(() => {
-          this.setMessage('request successfully added!');
+          this.modal.close('request successfully added!');
+          this.addFarmerRequestForm.reset();
         },
         (err) => {
           this.setError(err.errors);
@@ -231,15 +232,5 @@ export class AddFarmerRequestComponent implements OnInit {
         this.setError('Missing required land(s) information');
       }
     }
-  }
-
-  setError(errors: any) {
-    this.errors = errors;
-    this.message = undefined;
-  }
-
-  setMessage(message: string) {
-    this.errors = undefined;
-    this.message = message;
   }
 }

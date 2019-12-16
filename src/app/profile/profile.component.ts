@@ -45,8 +45,9 @@ export class ProfileComponent implements OnInit {
       const resets = {};
       resets['isLoggedIn'.toString()] = true;
       resets['password'.toString()] = password;
-      this.authenticationService.resetPassword(resets).subscribe(data => {
+      this.authenticationService.resetPassword(resets).subscribe(() => {
           this.messageService.setMessage('Password successfully reset');
+          this.authenticationService.purgeAuth();
           this.router.navigate(['login']);
         },
         (err) => {

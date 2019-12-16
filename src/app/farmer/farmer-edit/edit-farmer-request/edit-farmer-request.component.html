@@ -33,7 +33,7 @@
         <div class="col-xs-2">
           <div class="form-group">
             <span class="">Province</span>
-            <select class="form-control" formControlName="prov_id">
+            <select class="form-control" formControlName="prov_id" disabled="disabled">
               <option value=""></option>
               <option *ngFor="let province of provinces" value="{{province._id}}">{{province.namee}}
               </option>
@@ -50,7 +50,7 @@
         <div class="col-xs-2">
           <div class="form-group">
             <span class="">District</span>
-            <select class="form-control" formControlName="dist_id">
+            <select class="form-control" formControlName="dist_id" disabled="disabled">
               <option value=""></option>
               <option *ngFor="let district of districts" value="{{district._id}}">{{district.name}}
               </option>
@@ -67,7 +67,7 @@
         <div class="col-xs-2">
           <div class="form-group">
             <span class="">Sector</span>
-            <select class="form-control" formControlName="sect_id">
+            <select class="form-control" formControlName="sect_id" disabled="disabled">
               <option value=""></option>
               <option *ngFor="let sector of sectors" value="{{sector._id}}">{{sector.name}}</option>
             </select>
@@ -83,7 +83,7 @@
         <div class="col-xs-2">
           <div class="form-group">
             <span class="">Cell</span>
-            <select class="form-control" formControlName="cell_id">
+            <select class="form-control" formControlName="cell_id" disabled="disabled">
               <option value=""></option>
               <option *ngFor="let cell of cells" value="{{cell._id}}">{{cell.name}}</option>
             </select>
@@ -99,7 +99,7 @@
         <div class="col-xs-2">
           <div class="form-group">
             <span class="">village</span>
-            <select class="form-control" formControlName="village_id">
+            <select class="form-control" formControlName="village_id" disabled="disabled">
               <option value=""></option>
               <option *ngFor="let village of villages" value="{{village._id}}">{{village.name}}</option>
             </select>

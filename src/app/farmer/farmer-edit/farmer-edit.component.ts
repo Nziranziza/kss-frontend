@@ -10,13 +10,14 @@ import {Location} from '@angular/common';
 import {EditFarmerProfileComponent} from './edit-farmer-profile/edit-farmer-profile.component';
 import {EditRequestComponent} from '../../input-distribution/edit-request/edit-request.component';
 import {AuthorisationService} from '../../core/services';
+import {BasicComponent} from '../../core/library';
 
 @Component({
   selector: 'app-farmer-edit',
   templateUrl: './farmer-edit.component.html',
   styleUrls: ['./farmer-edit.component.css']
 })
-export class FarmerEditComponent implements OnInit, OnDestroy {
+export class FarmerEditComponent extends BasicComponent implements OnInit, OnDestroy {
 
   farmer: any;
   requests: any [];
@@ -27,7 +28,6 @@ export class FarmerEditComponent implements OnInit, OnDestroy {
   canEditLands = true;
   isUserSiteManager = false;
 
-
   constructor(private route: ActivatedRoute, private router: Router,
               private authenticationService: AuthenticationService,
               private authorisationService: AuthorisationService,
@@ -36,6 +36,7 @@ export class FarmerEditComponent implements OnInit, OnDestroy {
               private confirmDialogService: ConfirmDialogService,
               private messageService: MessageService,
               private locationService: LocationService, private modal: NgbModal, private location: Location) {
+    super();
   }
 
   ngOnInit() {
@@ -98,7 +99,8 @@ export class FarmerEditComponent implements OnInit, OnDestroy {
   addRequest(id: string) {
     const modalRef = this.modal.open(AddFarmerRequestComponent, {size: 'lg'});
     modalRef.componentInstance.farmerId = id;
-    modalRef.result.finally(() => {
+    modalRef.result.then((message) => {
+      this.setMessage(message);
       this.getFarmer(this.id);
     });
   }
