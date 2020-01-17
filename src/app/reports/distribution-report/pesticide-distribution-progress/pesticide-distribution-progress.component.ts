@@ -45,7 +45,9 @@ export class PesticideDistributionProgressComponent extends BasicComponent imple
   showData = false;
   request: any;
   site: any;
+  downloading = false;
   private printableDetails = [];
+  reportIsReady = false;
 
   constructor(private formBuilder: FormBuilder, private siteService: SiteService,
               private authorisationService: AuthorisationService,
@@ -60,6 +62,9 @@ export class PesticideDistributionProgressComponent extends BasicComponent imple
   ngOnInit() {
     this.isCurrentUserDCC = this.authorisationService.isDistrictCashCropOfficer();
     this.isSiteManager = this.authorisationService.isSiteManager();
+    if (this.authorisationService.isTechouseUser()) {
+      this.reportIsReady = true;
+    }
     this.checkProgressForm = this.formBuilder.group({
       location: this.formBuilder.group({
         prov_id: [''],
@@ -98,7 +103,9 @@ export class PesticideDistributionProgressComponent extends BasicComponent imple
 
   onGetProgress(searchBy: string) {
     if (this.checkProgressForm.valid) {
+      console.log('test');
       this.loading = true;
+      this.printable = [];
       this.downloadSummaryEnabled = true;
       const request = JSON.parse(JSON.stringify(this.checkProgressForm.value));
       if (request.location.prov_id === '' && searchBy === 'province') {
@@ -200,6 +207,7 @@ export class PesticideDistributionProgressComponent extends BasicComponent imple
   }
 
   downloadDetails() {
+    this.downloading = true;
     const body = {
       location: {}
     };
@@ -218,19 +226,9 @@ export class PesticideDistributionProgressComponent extends BasicComponent imple
       body.location['cell_id'.toString()] = this.request.location.cell_id;
     }
     this.inputDistributionService.getDistributionProgressPesticideDetail(body).subscribe((data) => {
-      data.content.map((farmer) => {
-        const temp = {
-          sector: farmer.requests.requestInfo.location.sect_id.name,
-          cell: farmer.requests.requestInfo.location.cell_id.name,
-          village: farmer.requests.requestInfo.location.village_id.name,
-          names: farmer.userInfo.foreName + ' ' + farmer.userInfo.surname,
-          nid: farmer.userInfo.NID,
-          trees: farmer.requests.requestInfo.numberOfTrees,
-          treesAtDistribution: farmer.requests.requestInfo.treesAtDistribution,
-        };
-        this.printableDetails.push(temp);
-      });
+      this.printableDetails = data.content;
       this.excelService.exportAsExcelFile(this.printableDetails, 'Pe detailed application report');
+      this.downloading = false;
     });
   }
 

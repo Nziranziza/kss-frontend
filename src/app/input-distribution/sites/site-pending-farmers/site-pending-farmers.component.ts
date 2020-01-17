@@ -12,6 +12,19 @@ import {BasicComponent} from '../../../core/library';
 })
 export class SitePendingFarmersComponent extends BasicComponent implements OnInit, OnDestroy {
 
+  constructor(private siteService: SiteService,
+              private router: Router, private authorisationService: AuthorisationService,
+              private authenticationService: AuthenticationService,
+              private route: ActivatedRoute,
+              private modal: NgbModal, private formBuilder: FormBuilder, private messageService: MessageService) {
+    super();
+    this.parameters = {
+      length: 25,
+      start: 0,
+      draw: 1
+    };
+  }
+
   farmers = [];
   maxSize = 9;
   showData = false;
@@ -42,17 +55,10 @@ export class SitePendingFarmersComponent extends BasicComponent implements OnIni
     {value: 'surname', name: 'last name'},
   ];
 
-  constructor(private siteService: SiteService,
-              private router: Router, private authorisationService: AuthorisationService,
-              private authenticationService: AuthenticationService,
-              private route: ActivatedRoute,
-              private modal: NgbModal, private formBuilder: FormBuilder, private messageService: MessageService) {
-    super();
-    this.parameters = {
-      length: 25,
-      start: 0,
-      draw: 1
-    };
+  static initializePaginationParameters(parameters: any) {
+    parameters.length = 25;
+    parameters.start = 0;
+    parameters.draw = 1;
   }
 
   ngOnInit() {
@@ -93,6 +99,7 @@ export class SitePendingFarmersComponent extends BasicComponent implements OnIni
     if (this.filterForm.valid) {
       this.loading = true;
       this.parameters['search'.toString()] = this.filterForm.value;
+      SitePendingFarmersComponent.initializePaginationParameters(this.parameters);
       this.siteService.getSitePendingFarmers(this.parameters)
         .subscribe(data => {
           this.farmers = data.data;

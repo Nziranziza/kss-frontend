@@ -19,6 +19,7 @@ export class RecordDistributionComponent extends BasicComponent implements OnIni
   @Input() regNumber;
   @Input() documentId;
   @Input() inputApplicationId;
+  @Input() numberOfTrees;
   distributionForm: FormGroup;
   updateRequestForm: FormGroup;
   errors: string [];
@@ -50,12 +51,12 @@ export class RecordDistributionComponent extends BasicComponent implements OnIni
     this.distributionForm = this.formBuilder.group({
       quantity: ['', Validators.required],
       stockOutId: [''],
-      treesAtDistribution: ['', Validators.required],
-      comment: ['', Validators.required]
+      treesAtDistribution: [this.numberOfTrees, Validators.required],
+      comment: ['7']
     });
     this.updateRequestForm = this.formBuilder.group({
       treesAtDistribution: ['', Validators.required],
-      comment: ['', Validators.required]
+      comment: ['7']
     });
     const id = this.authenticationService.getCurrentUser().orgInfo.distributionSite;
     this.inputDistributionService.getSiteStockOuts(id)
@@ -74,6 +75,7 @@ export class RecordDistributionComponent extends BasicComponent implements OnIni
       record['documentId'.toString()] = this.documentId;
       record['subDocumentId'.toString()] = this.requestId;
       record['siteId'.toString()] = this.authenticationService.getCurrentUser().orgInfo.distributionSite;
+      record['comment'.toString()] = +record['comment'.toString()];
       this.inputDistributionService.updateRequestAtDistribution(record).subscribe(() => {
           this.modal.close('Successfully updated.');
           this.updateRequestForm.reset();
@@ -92,6 +94,7 @@ export class RecordDistributionComponent extends BasicComponent implements OnIni
       record['documentId'.toString()] = this.documentId;
       record['farmerRequestId'.toString()] = this.requestId;
       record['regNumber'.toString()] = this.regNumber;
+      record['comment'.toString()] = +record['comment'.toString()];
       if (this.inputApplicationId) {
         this.confirmDialogService.openConfirmDialog('Farmer has already received fertilizer. ' +
           'do you want to give more.').afterClosed().subscribe(

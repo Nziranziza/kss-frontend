@@ -54,7 +54,7 @@
               <a *appHasPermission="[0,[8,2],6]" class="btn btn-success btn-margin pull-right btn-sm"
                  routerLink="/admin/farmers/edit/{{farmer.request._id}}">
                 Edit</a>
-              <button class="btn btn-default btn-margin btn-sm pull-right details-button" (click)="viewDetails(farmer)">
+              <button *ngIf="hasRequest(farmer)" class="btn btn-default btn-margin btn-sm pull-right details-button" (click)="viewDetails(farmer)">
                 ...
               </button>
             </td>

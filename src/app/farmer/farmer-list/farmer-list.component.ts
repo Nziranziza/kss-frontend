@@ -7,6 +7,7 @@ import {FarmerDetailsComponent} from '../farmer-details/farmer-details.component
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MessageService} from '../../core/services';
 import {AuthorisationService} from '../../core/services';
+import {isArray, isObject} from 'util';
 
 @Component({
   selector: 'app-farmer-list',
@@ -60,7 +61,6 @@ export class FarmerListComponent implements OnInit, OnDestroy {
       draw: 1
     };
   }
-
 
 
   ngOnInit(): void {
@@ -137,7 +137,6 @@ export class FarmerListComponent implements OnInit, OnDestroy {
   }
 
 
-
   deleteFarmer(farmer: Farmer): void {
     this.confirmDialogService.openConfirmDialog('Are you sure you want to delete this record?').afterClosed().subscribe(
       res => {
@@ -176,6 +175,17 @@ export class FarmerListComponent implements OnInit, OnDestroy {
       this.router.navigateByUrl('/admin/cws-farmers/' + this.authenticationService.getCurrentUser().info.org_id);
     }
   }
+
+  hasRequest(farmer: any) {
+    if (isArray(farmer.request)) {
+      if (farmer.request.length < 0) {
+        return false;
+      }
+    } else {
+      return isObject(farmer.request);
+    }
+  }
+
   ngOnDestroy(): void {
     this.messageService.clearMessage();
   }

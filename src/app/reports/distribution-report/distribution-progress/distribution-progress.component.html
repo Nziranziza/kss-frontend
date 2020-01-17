@@ -3,7 +3,12 @@
 </h3>
 <app-list-errors [errorList]="errors"></app-list-errors>
 <app-list-message [message]="message"></app-list-message>
-<div class="row">
+<div *ngIf="!reportIsReady">
+  <div class="callout callout-info" style="background-color:#f9f9f9 !important">
+    <p style="color: #535658;">Will be available soon!</p>
+  </div>
+</div>
+<div *ngIf="reportIsReady" class="row">
   <div class="col-md-12">
     <div class="box box-default" style="border-top: 1px solid #d2d6de;">
       <div class="box-body">
@@ -100,8 +105,8 @@
                     (click)="exportAsXLSX()"><i
               class="fa fa-download"></i> Summary
             </button>
-            <button *appHasPermission="[0]" type="button" class="btn btn-default pull-right" (click)="downloadDetails()" [disabled]="!downloadDetailedEnabled">
-              Detailed xls
+            <button type="button" class="btn btn-default pull-right" (click)="downloadDetails()" [disabled]="!downloadDetailedEnabled">
+              <app-downloader *ngIf="downloading"></app-downloader> Detailed xls
             </button>
           </div>
           <div class="col-xs-12" *ngIf="showData">

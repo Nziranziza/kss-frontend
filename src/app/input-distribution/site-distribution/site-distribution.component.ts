@@ -38,12 +38,13 @@ export class SiteDistributionComponent extends BasicComponent implements OnInit 
     });
   }
 
-  recordDistribution(requestId: string, documentId: string, inputApplicationId?: string) {
+  recordDistribution(requestId: string, documentId: string, inputApplicationId?: string, numberOfTrees?: string) {
     const modalRef = this.modal.open(RecordDistributionComponent, {size: 'lg'});
     modalRef.componentInstance.requestId = requestId;
     modalRef.componentInstance.regNumber = this.regNumber;
     modalRef.componentInstance.documentId = documentId;
     modalRef.componentInstance.inputApplicationId = inputApplicationId;
+    modalRef.componentInstance.numberOfTrees = numberOfTrees;
     modalRef.result.then((message) => {
       this.setMessage(message);
       this.inputDistributionService.getFarmerRequests(this.requestsOf).subscribe((data) => {

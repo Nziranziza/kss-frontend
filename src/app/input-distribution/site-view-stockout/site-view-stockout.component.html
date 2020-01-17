@@ -2,14 +2,14 @@
 <app-list-errors [errorList]="errors"></app-list-errors>
 <div class="box box-default" style="margin-top: 25px">
   <div class="box-header with-border">
-    <h3 class="box-title">Stocks</h3>
+    <h3 class="box-title">Available stocks</h3>
     <div class="box-tools pull-right">
       <button type="button" class="btn btn-box-tool" data-target="#box-body" data-toggle="collapse"><i
         class="fa fa-expand"></i>
       </button>
     </div>
   </div>
-  <div class="box-body collapse" id="box-body">
+  <div class="box-body collapse in" id="box-body" aria-expanded="true">
     <table class="row-border hover table table-striped" style="margin-top: 15px">
       <thead>
       <tr>
@@ -44,6 +44,7 @@
   </div>
 </div>
 <div class="box" style="margin-top: 25px">
+  <h3 class="box-title">List stock-outs</h3>
   <div class="box-body">
     <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped">
       <thead>

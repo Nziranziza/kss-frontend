@@ -5,7 +5,6 @@ import {HelperService} from '../../../core/helpers';
 import {isPlatformBrowser} from '@angular/common';
 import {InputDistributionService, SeasonService} from '../../../core/services';
 import {AuthorisationService} from '../../../core/services';
-import {isUndefined} from 'util';
 
 @Component({
   selector: 'app-edit-season',

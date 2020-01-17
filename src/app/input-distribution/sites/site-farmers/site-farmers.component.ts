@@ -12,6 +12,7 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Farmer} from '../../../core/models';
 import {FarmerDetailsComponent} from '../../../farmer/farmer-details/farmer-details.component';
 import {BasicComponent} from '../../../core/library';
+import {isArray, isObject} from 'util';
 
 @Component({
   selector: 'app-site-farmers',
@@ -19,6 +20,20 @@ import {BasicComponent} from '../../../core/library';
   styleUrls: ['./site-farmers.component.css']
 })
 export class SiteFarmersComponent extends BasicComponent implements OnInit, OnDestroy {
+
+  constructor(private siteService: SiteService,
+              private authenticationService: AuthenticationService,
+              private router: Router, private  confirmDialogService: ConfirmDialogService,
+              private authorisationService: AuthorisationService,
+              private route: ActivatedRoute,
+              private modal: NgbModal, private formBuilder: FormBuilder, private messageService: MessageService) {
+    super();
+    this.parameters = {
+      length: 25,
+      start: 0,
+      draw: 1
+    };
+  }
   filterForm: FormGroup;
   maxSize = 9;
   order = 'userInfo.foreName';
@@ -48,18 +63,10 @@ export class SiteFarmersComponent extends BasicComponent implements OnInit, OnDe
     {value: 'nid', name: 'NID'}
   ];
 
-  constructor(private siteService: SiteService,
-              private authenticationService: AuthenticationService,
-              private router: Router, private  confirmDialogService: ConfirmDialogService,
-              private authorisationService: AuthorisationService,
-              private route: ActivatedRoute,
-              private modal: NgbModal, private formBuilder: FormBuilder, private messageService: MessageService) {
-    super();
-    this.parameters = {
-      length: 25,
-      start: 0,
-      draw: 1
-    };
+  static initializePaginationParameters(parameters: any) {
+    parameters.length = 25;
+    parameters.start = 0;
+    parameters.draw = 1;
   }
 
   ngOnInit(): void {
@@ -100,6 +107,7 @@ export class SiteFarmersComponent extends BasicComponent implements OnInit, OnDe
     if (this.filterForm.valid) {
       this.loading = true;
       this.parameters['search'.toString()] = this.filterForm.value;
+      SiteFarmersComponent.initializePaginationParameters(this.parameters);
       this.siteService.getSiteFarmers(this.parameters)
         .subscribe(data => {
           this.farmers = data.data;
@@ -131,6 +139,7 @@ export class SiteFarmersComponent extends BasicComponent implements OnInit, OnDe
           currentPage: this.parameters.start + 1,
           totalItems: data.recordsTotal
         };
+        this.clear();
       }, (err) => {
         if (err.status === 404) {
           this.setWarning(err.errors[0]);
@@ -157,6 +166,7 @@ export class SiteFarmersComponent extends BasicComponent implements OnInit, OnDe
         };
         this.showData = true;
         this.loading = false;
+        this.clear();
       }, (err) => {
         if (err.status === 404) {
           this.setWarning(err.errors[0]);
@@ -164,6 +174,16 @@ export class SiteFarmersComponent extends BasicComponent implements OnInit, OnDe
           this.setError(err.errors);
         }
       });
+  }
+
+  hasRequest(farmer: any) {
+    if (isArray(farmer.request)) {
+      if (farmer.request.length < 0) {
+        return false;
+      }
+    } else {
+      return isObject(farmer.request);
+    }
   }
 
   ngOnDestroy(): void {

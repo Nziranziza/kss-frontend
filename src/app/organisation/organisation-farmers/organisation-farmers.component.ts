@@ -6,6 +6,7 @@ import {Farmer} from '../../core/models';
 import {FarmerDetailsComponent} from '../../farmer/farmer-details/farmer-details.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {AuthorisationService} from '../../core/services';
+import {isArray, isObject} from 'util';
 
 @Component({
   selector: 'app-organisation-farmers',
@@ -18,7 +19,8 @@ export class OrganisationFarmersComponent implements OnInit, OnDestroy {
               private authenticationService: AuthenticationService,
               private excelService: ExcelServicesService,
               private route: ActivatedRoute,
-              private modal: NgbModal, private authorisationService: AuthorisationService) {}
+              private modal: NgbModal, private authorisationService: AuthorisationService) {
+  }
 
   message: string;
   farmers: any;
@@ -77,6 +79,17 @@ export class OrganisationFarmersComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+  hasRequest(farmer: any) {
+    if (isArray(farmer.request)) {
+      if (farmer.request.length < 0) {
+        return false;
+      }
+    } else {
+      return isObject(farmer.request);
+    }
+  }
+
 
   viewDetails(farmer: Farmer) {
     const modalRef = this.modal.open(FarmerDetailsComponent, {size: 'lg'});

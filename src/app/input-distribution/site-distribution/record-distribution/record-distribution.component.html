@@ -98,9 +98,9 @@
                       </div>
                       <div class="col-sm-3">
                         <div class="form-group">
-                          <span class="control-label label-required">Comment</span> &nbsp; &nbsp;
+                          <span class="control-label">Comment</span> &nbsp; &nbsp;
                           <select class="form-control" formControlName="comment">
-                            <option></option>
+                            <option value="7">No comment</option>
                             <option *ngFor="let comment of comments" value="{{comment.value}}">
                               {{comment.description}}
                             </option>

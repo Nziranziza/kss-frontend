@@ -147,9 +147,11 @@
                  *ngIf="isUserCWSOfficer" class="btn btn-success btn-margin pull-right btn-sm"
                  style="margin-left: 10px;">
                 <i class="fa fa-cart-plus"></i> supply </a>
-              <button class="btn btn-default btn-sm btn-margin pull-right details-button" *ngIf="!isUserCWSOfficer"
-                      (click)="viewDetails(farmer)">...
-              </button>
+              <ng-template *ngIf="hasRequest(farmer)">
+                <button class="btn btn-default btn-sm btn-margin pull-right details-button" *ngIf="!isUserCWSOfficer"
+                        (click)="viewDetails(farmer)">...
+                </button>
+              </ng-template>
             </td>
           </tr>
         </table>

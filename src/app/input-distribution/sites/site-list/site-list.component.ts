@@ -6,13 +6,15 @@ import {Subject} from 'rxjs';
 import {MessageService} from '../../../core/services';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {SiteDetailsComponent} from '../site-details/site-details.component';
+import {BasicComponent} from '../../../core/library';
+import {isArray, isObject} from 'util';
 
 @Component({
   selector: 'app-site-list',
   templateUrl: './site-list.component.html',
   styleUrls: ['./site-list.component.css']
 })
-export class SiteListComponent implements OnInit, OnDestroy {
+export class SiteListComponent extends BasicComponent implements OnInit, OnDestroy {
 
   constructor(private route: ActivatedRoute,
               private modal: NgbModal,
@@ -20,6 +22,7 @@ export class SiteListComponent implements OnInit, OnDestroy {
               private authenticationService: AuthenticationService,
               private router: Router, private  confirmDialogService: ConfirmDialogService,
               private siteService: SiteService, private messageService: MessageService) {
+    super();
   }
 
   message: string;
@@ -40,6 +43,7 @@ export class SiteListComponent implements OnInit, OnDestroy {
 
   getAllSites(): void {
     this.loading = true;
+    this.clear();
     if (!this.authorisationService.isDistrictCashCropOfficer()) {
       this.siteService.getAll().subscribe(data => {
         if (data) {
