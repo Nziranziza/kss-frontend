@@ -211,6 +211,8 @@ export class UserCreateComponent implements OnInit {
         } else {
           this.hasSite = false;
         }
+
+        /*If selected roles include NAEB, get corresponding user permissions*/
         if (selectedRoles.includes(4)) {
           this.userService.userPermissions(4).subscribe(dt => {
             this.userTypes = Object.keys(dt.content).map(key => {

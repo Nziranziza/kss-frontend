@@ -23,7 +23,10 @@ import {GoogleChartsModule} from 'angular-google-charts';
     FusionChartsModule, GoogleChartsModule,
     OwlNativeDateTimeModule,
     OwlNativeDateTimeModule, BrowserAnimationsModule
-  ]
+  ],
+  exports: [ParchmentCreateComponent],
+  entryComponents: [ParchmentCreateComponent]
+
 })
 export class ParchmentModule {
 }

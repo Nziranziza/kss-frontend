@@ -117,6 +117,7 @@ export class SiteFarmersComponent extends BasicComponent implements OnInit, OnDe
             totalItems: data.recordsTotal
           };
           this.loading = false;
+          this.clear();
         }, (err) => {
           if (err.status === 404) {
             this.setWarning(err.errors[0]);

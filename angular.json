@@ -67,6 +67,30 @@
                   "maximumError": "10mb"
                 }
               ]
+            },
+            "staging" : {
+              "fileReplacements": [
+                {
+                  "replace": "projects/variable/src/environments/environment.ts",
+                  "with": "projects/variable/src/environments/environment.staging.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "10mb",
+                  "maximumError": "10mb"
+                }
+              ]
             }
           }
         },

@@ -47,7 +47,7 @@ export class PesticideDistributionProgressComponent extends BasicComponent imple
   site: any;
   downloading = false;
   private printableDetails = [];
-  reportIsReady = false;
+  reportIsReady: boolean;
 
   constructor(private formBuilder: FormBuilder, private siteService: SiteService,
               private authorisationService: AuthorisationService,
@@ -62,9 +62,6 @@ export class PesticideDistributionProgressComponent extends BasicComponent imple
   ngOnInit() {
     this.isCurrentUserDCC = this.authorisationService.isDistrictCashCropOfficer();
     this.isSiteManager = this.authorisationService.isSiteManager();
-    if (this.authorisationService.isTechouseUser()) {
-      this.reportIsReady = true;
-    }
     this.checkProgressForm = this.formBuilder.group({
       location: this.formBuilder.group({
         prov_id: [''],
@@ -74,6 +71,7 @@ export class PesticideDistributionProgressComponent extends BasicComponent imple
         village_id: [''],
       }),
     });
+    this.reportIsReady = true;
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 25
@@ -103,7 +101,7 @@ export class PesticideDistributionProgressComponent extends BasicComponent imple
 
   onGetProgress(searchBy: string) {
     if (this.checkProgressForm.valid) {
-      console.log('test');
+      this.downloading = false;
       this.loading = true;
       this.printable = [];
       this.downloadSummaryEnabled = true;
@@ -208,6 +206,7 @@ export class PesticideDistributionProgressComponent extends BasicComponent imple
 
   downloadDetails() {
     this.downloading = true;
+    this.downloadDetailedEnabled = false;
     const body = {
       location: {}
     };
@@ -229,6 +228,7 @@ export class PesticideDistributionProgressComponent extends BasicComponent imple
       this.printableDetails = data.content;
       this.excelService.exportAsExcelFile(this.printableDetails, 'Pe detailed application report');
       this.downloading = false;
+      this.downloadDetailedEnabled = true;
     });
   }
 

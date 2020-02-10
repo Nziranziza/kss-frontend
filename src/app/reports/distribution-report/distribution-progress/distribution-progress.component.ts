@@ -48,7 +48,7 @@ export class DistributionProgressComponent extends BasicComponent implements OnI
   site: any;
   printableDetails = [];
   downloading = false;
-  reportIsReady = false;
+  reportIsReady: boolean;
 
   constructor(private formBuilder: FormBuilder, private siteService: SiteService,
               private authorisationService: AuthorisationService,
@@ -63,9 +63,7 @@ export class DistributionProgressComponent extends BasicComponent implements OnI
   ngOnInit() {
     this.isCurrentUserDCC = this.authorisationService.isDistrictCashCropOfficer();
     this.isSiteManager = this.authorisationService.isSiteManager();
-    if (this.authorisationService.isTechouseUser()) {
-      this.reportIsReady = true;
-    }
+    this.reportIsReady = true;
     this.checkProgressForm = this.formBuilder.group({
       location: this.formBuilder.group({
         prov_id: [''],
@@ -104,6 +102,7 @@ export class DistributionProgressComponent extends BasicComponent implements OnI
 
   downloadDetails() {
     this.downloading = true;
+    this.downloadDetailedEnabled = false;
     const body = {
       location: {}
     };
@@ -125,12 +124,14 @@ export class DistributionProgressComponent extends BasicComponent implements OnI
       this.printableDetails = data.content;
       this.excelService.exportAsExcelFile(this.printableDetails, 'Fe detailed application report');
       this.downloading = false;
+      this.downloadDetailedEnabled = true;
     });
   }
 
   onGetProgress(searchBy: string) {
     if (this.checkProgressForm.valid) {
       this.loading = true;
+      this.downloading = false;
       this.printable = [];
       this.downloadSummaryEnabled = true;
       const request = JSON.parse(JSON.stringify(this.checkProgressForm.value));
@@ -143,7 +144,6 @@ export class DistributionProgressComponent extends BasicComponent implements OnI
         request.location['searchBy'.toString()] = searchBy;
         this.helper.cleanObject(request.location);
       }
-
       this.downloadDetailedEnabled = searchBy !== 'province';
       this.request = request;
       this.inputDistributionService.getDistributionProgress(request).subscribe((data) => {

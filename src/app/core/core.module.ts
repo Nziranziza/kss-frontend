@@ -20,6 +20,7 @@ import {InputDistributionService} from './services';
 import {WarehouseService} from './services';
 import {AdminGuard} from './services/guards/admin.guard';
 import {CoveredAreaResolverService} from './services/resolvers/covered-area-resolver.service';
+import {SharedDataService} from './services/shared-data.service';
 
 @NgModule({
   imports: [
@@ -38,6 +39,7 @@ import {CoveredAreaResolverService} from './services/resolvers/covered-area-reso
     MessageService,
     InputDistributionService,
     WarehouseService,
+    SharedDataService,
     AdminGuard,
     CookieService,
     CoveredAreaResolverService,

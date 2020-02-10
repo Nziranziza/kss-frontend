@@ -4,6 +4,9 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MessageService} from '../../core/services';
 import {ParchmentService} from '../../core/services';
 import {AuthenticationService} from '../../core/services';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {ParchmentCreateComponent} from '../parchment-create/parchment-create.component';
+import {BasicComponent} from '../../core/library';
 
 @Component({
   selector: 'app-parchment-list',
@@ -11,14 +14,13 @@ import {AuthenticationService} from '../../core/services';
   styleUrls: ['./parchment-list.component.css']
 })
 
-export class ParchmentListComponent implements OnInit, OnDestroy {
+export class ParchmentListComponent extends BasicComponent implements OnInit, OnDestroy {
 
   filterForm: FormGroup;
   maxSize = 9;
   order = 'coffeeType.name';
   reverse = true;
   directionLinks = true;
-  message: string;
   parchments = [];
   title = 'Parchment';
   id = 'parchments-list';
@@ -41,10 +43,13 @@ export class ParchmentListComponent implements OnInit, OnDestroy {
 
   constructor(private parchmentService: ParchmentService,
               private router: Router,
-              private formBuilder: FormBuilder, private messageService: MessageService,
+              private formBuilder: FormBuilder,
+              private messageService: MessageService,
+              private modal: NgbModal,
               private authenticationService: AuthenticationService) {
+    super();
     this.parameters = {
-      length: 25,
+      length: 10,
       start: 0,
       draw: 1
     };
@@ -74,6 +79,24 @@ export class ParchmentListComponent implements OnInit, OnDestroy {
     });
 
     this.message = this.messageService.getMessage();
+  }
+
+  createParchment() {
+    const modalRef = this.modal.open(ParchmentCreateComponent, {size: 'lg'});
+    modalRef.result.then((message) => {
+      this.setMessage(message);
+      this.parchmentService.all(this.parameters)
+        .subscribe(data => {
+          this.parchments = data.data;
+          if (this.parchments.length > 0) {
+            this.config = {
+              itemsPerPage: this.parameters.length,
+              currentPage: this.parameters.start + 1,
+              totalItems: data.recordsTotal
+            };
+          }
+        });
+    });
   }
 
   onPageChange(event) {

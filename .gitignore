@@ -8,6 +8,10 @@
 /node_modules
 /dist
 
+# files
+/shipitFile.js
+
+
 # IDEs and editors
 .vscode/
 /.idea

@@ -1,17 +1,19 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {FarmerService, MessageService, SiteService} from '../../core/services';
+import {AuthorisationService, FarmerService, MessageService, SiteService} from '../../core/services';
 import {AuthenticationService} from '../../core/services';
 import {BasicComponent} from '../../core/library';
 import {Farmer} from '../../core/models';
 import {FarmerDetailsComponent} from '../farmer-details/farmer-details.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {SharedDataService} from '../../core/services/shared-data.service';
 
 @Component({
   selector: 'app-farmer-need-approval-list',
   templateUrl: './farmer-need-approval-list.component.html',
   styleUrls: ['./farmer-need-approval-list.component.css']
 })
+
 export class FarmerNeedApprovalListComponent extends BasicComponent implements OnInit {
 
   requestIds = [];
@@ -19,7 +21,7 @@ export class FarmerNeedApprovalListComponent extends BasicComponent implements O
   filterForm: FormGroup;
   sites: any;
   requests = [];
-  /*----------------------------DataTable variables--------------------*/
+  /*---------------------------- DataTable variables --------------------*/
   config: any;
   maxSize = 9;
   order = 'userInfo.foreName';
@@ -38,11 +40,15 @@ export class FarmerNeedApprovalListComponent extends BasicComponent implements O
   siteId: any;
   showData = false;
 
-  /*-------------------------End dataTable variables--------------------*/
+  @Output() needOfApprovalEvent = new EventEmitter<number>();
+
+  /*------------------------- End dataTable variables --------------------*/
 
   constructor(private formBuilder: FormBuilder,
               private modal: NgbModal,
               private messageService: MessageService,
+              private authorisationService: AuthorisationService,
+              private sharedDataService: SharedDataService,
               private siteService: SiteService, private farmerService: FarmerService,
               private authenticationService: AuthenticationService) {
     super();
@@ -65,7 +71,7 @@ export class FarmerNeedApprovalListComponent extends BasicComponent implements O
     this.siteService.getSite(body).subscribe((data) => {
       this.sites = data.content;
     });
-
+    this.sharedDataService.changeApprovalFlag();
     this.message = this.messageService.getMessage();
     this.messageService.clearMessage();
 
@@ -94,7 +100,7 @@ export class FarmerNeedApprovalListComponent extends BasicComponent implements O
     if (isChecked) {
       this.requestIds.push({documentId: farmer.requests._id, subDocumentId: farmer.requests.requestInfo._id});
     } else {
-      this.requestIds.filter((value) => {
+      this.requestIds = this.requestIds.filter((value) => {
         return value.documentId !== farmer.requests._id;
       });
     }
@@ -115,7 +121,7 @@ export class FarmerNeedApprovalListComponent extends BasicComponent implements O
           this.requests = data.data;
           this.showData = true;
           this.config = {
-            itemsPerPage: this.parameters.length,
+            itemsPerPage: data.recordsTotal < this.parameters.length ? data.recordsTotal : this.parameters.length,
             currentPage: this.parameters.start + 1,
             totalItems: data.recordsTotal
           };
@@ -136,6 +142,18 @@ export class FarmerNeedApprovalListComponent extends BasicComponent implements O
       .subscribe(() => {
         this.setMessage('changes successful approved.');
         this.messageService.setMessage('changes successful approved.');
+        this.sharedDataService.changeApprovalFlag();
+        this.farmerService.getUpdatesWaitingForApproval(this.parameters)
+          .subscribe(data => {
+            this.requests = data.data;
+            this.showData = true;
+            this.config = {
+              itemsPerPage: data.recordsTotal < this.parameters.length ? data.recordsTotal : this.parameters.length,
+              currentPage: this.parameters.start + 1,
+              totalItems: data.recordsTotal
+            };
+            this.isFilterDone = true;
+          });
       }, (err) => {
         this.setError(err.errors);
       });

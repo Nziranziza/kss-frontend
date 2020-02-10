@@ -109,6 +109,7 @@ export class SitePendingFarmersComponent extends BasicComponent implements OnIni
             totalItems: data.recordsTotal
           };
           this.loading = false;
+          this.clear();
         }, (err) => {
           this.loading = false;
           this.setError(err.errors);
@@ -147,6 +148,7 @@ export class SitePendingFarmersComponent extends BasicComponent implements OnIni
           currentPage: this.parameters.start + 1,
           totalItems: data.recordsTotal
         };
+        this.clear();
         this.showData = true;
         this.loading = false;
       });

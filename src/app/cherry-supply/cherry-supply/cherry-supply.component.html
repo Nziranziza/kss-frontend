@@ -41,7 +41,7 @@
   <div class="col-xs-12">
     <form [formGroup]="filterSuppliesForm">
       <div class="form-inline pull-left">
-        <label class="control-label">Select</label> &nbsp;
+        <label class="control-label">Filter</label> &nbsp;
         <select class="form-control"  formControlName="suppliesFilter">
           <option value="all">All</option>
           <option value="unapproved_delivery">Unapproved delivery</option>
@@ -84,6 +84,7 @@
             <th>Unit per Kg</th>
             <th>Paid amount</th>
             <th>Payment status</th>
+            <th>Owed amount</th>
             <th>Date</th>
           </tr>
           </thead>
@@ -97,6 +98,7 @@
             <td> {{ supply.unitPerKg }}</td>
             <td> {{ supply.paidAmount }}</td>
             <td> <span style="color: #dca956">{{ (supply.paymentStatus.split("_")).join(" ") | lowercase }} </span></td>
+            <td> {{ supply.owedAmount }}</td>
             <td> {{ supply.updatedAt | date }}</td>
           </tr>
           </tbody>
