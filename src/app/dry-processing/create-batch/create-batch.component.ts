@@ -1,17 +1,18 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {AuthenticationService} from '../../core/services';
 import {HelperService} from '../../core/helpers';
 import {DryProcessingService} from '../../core/services';
 import {CoffeeTypeService} from '../../core/services';
+import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-create-batch',
   templateUrl: './create-batch.component.html',
   styleUrls: ['./create-batch.component.css']
 })
-export class CreateBatchComponent implements OnInit {
+export class CreateBatchComponent implements OnInit, OnDestroy {
 
   constructor(private dryProcessingService: DryProcessingService, private route: ActivatedRoute,
               private formBuilder: FormBuilder,
@@ -20,24 +21,22 @@ export class CreateBatchComponent implements OnInit {
   }
   id: string;
   selectedLots = [];
-  createBatchForm: FormGroup;
-  transferLotsForm: FormGroup;
   errors: any;
   coffeeTypes = [];
   message: any;
   orgId: string;
   totalKgs = 0;
+  dtOptions: any = {};
+  // @ts-ignore
+  dtTrigger: Subject = new Subject();
   lots = [];
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.id = params['id'.toString()];
     });
+    this.dtTrigger.next();
     this.orgId = this.authenticationService.getCurrentUser().info.org_id;
-
-    this.createBatchForm = this.formBuilder.group({
-      coffeeType: ['']
-    });
     this.coffeeTypeService.all().subscribe((data) => {
       data.content.map((item) => {
         if (item.level === 'cws') {
@@ -57,23 +56,9 @@ export class CreateBatchComponent implements OnInit {
       this.totalKgs = this.totalKgs - lot.totalKgs;
     }
   }
-  createBatch() {
-    if (this.createBatchForm.valid) {
-      const lots = JSON.parse(JSON.stringify(this.createBatchForm.value));
-      lots['lots'.toString()] = this.lots;
-      this.dryProcessingService.createBatch(lots)
-        .subscribe(() => {
-            this.message = 'Batch successfully created!';
-            this.errors = '';
-          },
-          (err) => {
-            this.message = '';
-            this.errors = err.errors;
-          });
-    } else {
-      this.errors = this.helper.getFormValidationErrors(this.createBatchForm);
-    }
+
+  ngOnDestroy() {
+    this.dtTrigger.unsubscribe();
   }
-  onTransferLots() {
-  }
+
 }

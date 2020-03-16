@@ -4,6 +4,8 @@ import {UserService} from '../../core/services';
 import {User} from '../../core/models';
 import {ConfirmDialogService, OrganisationService} from '../../core/services';
 import {Subject} from 'rxjs';
+import {UserDetailsComponent} from '../user-details/user-details.component';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-user',
@@ -20,8 +22,11 @@ export class UserListComponent implements OnInit, OnDestroy {
   dtTrigger: Subject = new Subject();
   org: any;
 
-  constructor(private route: ActivatedRoute, private userService: UserService,
-              private confirmDialogService: ConfirmDialogService, private organisationService: OrganisationService) {
+  constructor(private route: ActivatedRoute,
+              private modal: NgbModal,
+              private userService: UserService,
+              private confirmDialogService: ConfirmDialogService,
+              private organisationService: OrganisationService) {
 
   }
 
@@ -50,5 +55,10 @@ export class UserListComponent implements OnInit, OnDestroy {
         this.dtTrigger.next();
       }
     });
+  }
+
+  viewDetails(user: any) {
+    const modalRef = this.modal.open(UserDetailsComponent, {size: 'lg'});
+    modalRef.componentInstance.user = user;
   }
 }

@@ -64,8 +64,17 @@
 </div>
 <div class="row">
   <div class="col-sm-12">
-    <button class="btn btn-default btn-margin btn-sm pull-right" (click)="editProfile(farmer.userInfo)">
-      <i class="fa fa-pencil"></i> Profile</button>
+    <button class="btn btn-default btn-margin pull-right" (click)="editProfile(farmer.userInfo)">
+      <i class="fa fa-pencil"></i> Profile
+    </button>
+    <ng-container *appHasPermission="[0,[8,1],[1,1]]">
+      <a class="btn btn-success btn-margin pull-right" *ngIf="!resetPin" (click)="enableResetPin(true)"><i
+        class="fa fa-check"></i>&nbsp; Enable pin reset
+      </a>
+      <a class="btn btn-warning btn-margin pull-right" *ngIf="resetPin" (click)="enableResetPin(false)"><i
+        class="fa fa-close"></i>&nbsp; Disable pin reset
+      </a>
+    </ng-container>
   </div>
 </div>
 <br/> <br/>
@@ -95,7 +104,7 @@
             <span class="details-row-title-sm" style="margin-left: 0px">Province </span> : <span
             class="details-row-data-sm" *ngIf="request.location.prov_id">{{ request.location.prov_id.namek }}</span>
             <span class="details-row-title-sm">District </span> : <span class="details-row-data-sm"
-                                                                        >{{ request.location.dist_id.name }}</span>
+          >{{ request.location.dist_id.name }}</span>
             <span class="details-row-title-sm">Sector </span> : <span class="details-row-data-sm">{{ request.location.sect_id.name }}</span>
             <span class="details-row-title-sm">Cell </span> : <span class="details-row-data-sm">{{ request.location.cell_id.name }}</span>
             <span class="details-row-title-sm">Village </span> : <span class="details-row-data-sm">{{ request.location.village_id.name }}</span>
@@ -104,7 +113,9 @@
           <td>{{ request.fertilizer_need }} Kg</td>
           <td>{{ request.fertilizer_allocate }} Kg</td>
           <td>
-            <button class="btn btn-warning btn-margin btn-sm pull-right" (click)="cancelRequest(request)" *ngIf="!isUserSiteManager ">Delete</button>
+            <button class="btn btn-warning btn-margin btn-sm pull-right" (click)="cancelRequest(request)"
+                    *ngIf="!isUserSiteManager ">Delete
+            </button>
             <button class="btn btn-primary btn-margin btn-sm pull-right" (click)="editRequest(request)">Edit</button>
           </td>
         </tr>

@@ -21,7 +21,7 @@ export class ListWarningsComponent implements OnInit, OnChanges {
     $(() => {
       $('.custom-message').each((index, element) => {
         const $element = $(element);
-        const timeout = $element.data('auto-dismiss') || 3000;
+        const timeout = $element.data('auto-dismiss') || 7500;
         setTimeout(() => {
           $element.alert('close');
         }, timeout);

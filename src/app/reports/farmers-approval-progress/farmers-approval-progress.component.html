@@ -8,6 +8,8 @@
       <div class="box-body">
         <div class="col-xs-12">
           <app-list-errors [errorList]="errors"></app-list-errors>
+          <app-list-message [message]="message"></app-list-message>
+          <app-list-warnings [warning]="warning"></app-list-warnings>
         </div>
         <form [formGroup]="filterForm">
           <div class="row">

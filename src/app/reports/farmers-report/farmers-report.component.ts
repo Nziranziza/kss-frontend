@@ -174,11 +174,7 @@ export class FarmersReportComponent implements OnInit {
     );
     this.filterForm.get('reportBy'.toString()).valueChanges.subscribe(
       (value) => {
-        if (value === 'farmers') {
-          this.byFarmers = true;
-        } else {
-          this.byFarmers = false;
-        }
+        this.byFarmers = value === 'farmers';
       }
     );
   }

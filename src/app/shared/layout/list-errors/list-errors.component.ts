@@ -1,6 +1,7 @@
 import {Component, Input, OnInit, OnChanges, SimpleChanges} from '@angular/core';
 import {isArray, isUndefined} from 'util';
 
+declare var $;
 
 @Component({
   selector: 'app-list-errors',
@@ -28,6 +29,24 @@ export class ListErrorsComponent implements OnInit, OnChanges {
       this.notEmpty = true;
     } else {
       this.notEmpty = (errors !== '' && !isUndefined(errors));
+    }
+
+    if (this.notEmpty) {
+      $(() => {
+        $('.custom-error').each((index, element) => {
+          const $element = $(element);
+          $element.show();
+        });
+      });
+      $(() => {
+        $('.custom-error').each((index, element) => {
+          const $element = $(element);
+          const timeout = $element.data('auto-dismiss') || 7500;
+          setTimeout(() => {
+            $element.hide();
+          }, timeout);
+        });
+      });
     }
   }
 }

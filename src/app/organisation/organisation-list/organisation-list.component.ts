@@ -87,7 +87,7 @@ export class OrganisationListComponent implements OnInit, OnDestroy {
           this.loading = false;
         }
       });
-    } else if (this.authorisationService.isInputDistributorAdmin()) {
+    } else if (this.authorisationService.isInputDistributorAdmin() || this.authorisationService.isCWSAdmin()) {
       this.organisationService.get(this.authenticationService.getCurrentUser().info.org_id).subscribe(data => {
         if (data) {
           this.organisations.push(data.content);

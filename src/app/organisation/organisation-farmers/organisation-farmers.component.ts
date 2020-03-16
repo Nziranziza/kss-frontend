@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {AuthenticationService, ExcelServicesService, OrganisationService} from '../../core/services';
+import {AuthenticationService, ExcelServicesService, MessageService, OrganisationService, UserService} from '../../core/services';
 import {ActivatedRoute} from '@angular/router';
 import {Subject} from 'rxjs';
 import {Farmer} from '../../core/models';
@@ -7,22 +7,24 @@ import {FarmerDetailsComponent} from '../../farmer/farmer-details/farmer-details
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {AuthorisationService} from '../../core/services';
 import {isArray, isObject} from 'util';
+import {BasicComponent} from '../../core/library';
 
 @Component({
   selector: 'app-organisation-farmers',
   templateUrl: './organisation-farmers.component.html',
   styleUrls: ['./organisation-farmers.component.css']
 })
-export class OrganisationFarmersComponent implements OnInit, OnDestroy {
+export class OrganisationFarmersComponent extends BasicComponent implements OnInit, OnDestroy {
 
-  constructor(private organisationService: OrganisationService,
+  constructor(private organisationService: OrganisationService, private userService: UserService,
               private authenticationService: AuthenticationService,
               private excelService: ExcelServicesService,
               private route: ActivatedRoute,
+              private messageService: MessageService,
               private modal: NgbModal, private authorisationService: AuthorisationService) {
+    super();
   }
 
-  message: string;
   farmers: any;
   organisationId: string;
   dtOptions: any = {};
@@ -36,6 +38,11 @@ export class OrganisationFarmersComponent implements OnInit, OnDestroy {
   currentSeason: any;
   orgCoveredArea = [];
   allFarmers = [];
+  cwsSummary = {
+    totalCherries: 0,
+    totalParchments: 0,
+    expectedParchments: 0,
+  };
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -50,6 +57,13 @@ export class OrganisationFarmersComponent implements OnInit, OnDestroy {
     this.organisationService.get(this.organisationId).subscribe(data => {
       this.org = data.content;
     });
+
+    this.organisationService.getCwsSummary(this.organisationId).subscribe(data => {
+      if (data.content.length) {
+        this.cwsSummary = data.content[0];
+      }
+    });
+    this.message = this.messageService.getMessage();
     this.orgCoveredArea = this.route.snapshot.data.orgCoveredAreaData;
     this.currentSeason = this.authenticationService.getCurrentSeason();
     this.getAllFarmers();

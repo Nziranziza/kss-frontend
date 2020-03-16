@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {AuthenticationService, ConfirmDialogService, FarmerService, OrganisationService} from '../../core/services';
+import {AuthenticationService, ConfirmDialogService, FarmerService, OrganisationService, UserService} from '../../core/services';
 import {LocationService} from '../../core/services';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {EditFarmerRequestComponent} from './edit-farmer-request/edit-farmer-request.component';
@@ -27,6 +27,7 @@ export class FarmerEditComponent extends BasicComponent implements OnInit, OnDes
   message: string;
   canEditLands = true;
   isUserSiteManager = false;
+  resetPin = true;
 
   constructor(private route: ActivatedRoute, private router: Router,
               private authenticationService: AuthenticationService,
@@ -34,6 +35,7 @@ export class FarmerEditComponent extends BasicComponent implements OnInit, OnDes
               private farmerService: FarmerService,
               private organisationService: OrganisationService,
               private confirmDialogService: ConfirmDialogService,
+              private userService: UserService,
               private messageService: MessageService,
               private locationService: LocationService, private modal: NgbModal, private location: Location) {
     super();
@@ -115,6 +117,20 @@ export class FarmerEditComponent extends BasicComponent implements OnInit, OnDes
     });
   }
 
+  enableResetPin(status: boolean) {
+    this.userService.allowSetPin({
+      regNumber: this.farmer.userInfo.regNumber,
+      status
+    }).subscribe(() => {
+      this.getSetPinStatus();
+    });
+  }
+
+  getSetPinStatus() {
+    this.userService.isSetPinAllowed(this.farmer.userInfo.regNumber).subscribe((data) => {
+      this.resetPin = data.content.allowedToSetPin;
+    });
+  }
   ngOnDestroy(): void {
     this.messageService.setMessage('');
   }

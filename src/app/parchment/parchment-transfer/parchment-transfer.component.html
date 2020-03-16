@@ -34,28 +34,6 @@
 </section>
 <app-list-message [message]="message"></app-list-message>
 <app-list-errors [errorList]="errors"></app-list-errors>
-<div class="row">
-  <div class="col-xs-12">
-    <table class="row-border hover table table-condensed">
-      <thead>
-      <tr>
-        <th> Destination</th>
-        <th> Qty</th>
-        <th> Date</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let org of parchment.destinationOrg">
-        <ng-container>
-          <td> {{ org.destinationOrg.name }}</td>
-          <td> {{ org.transferredKgs }}</td>
-          <td> {{ org.releaseDate | date }}</td>
-        </ng-container>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
 <form [formGroup]="transferLotsForm" (ngSubmit)="onTransferLots()">
   <div class="box">
     <div class="box-body">
@@ -96,5 +74,25 @@
     </div>
   </div>
 </form>
-
-
+<div class="row">
+  <div class="col-xs-12">
+    <table class="row-border hover table table-condensed">
+      <thead>
+      <tr>
+        <th> Destination</th>
+        <th> Qty</th>
+        <th> Date</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let org of parchment.destinationOrg">
+        <ng-container>
+          <td> {{ org.destinationOrg.name }}</td>
+          <td> {{ org.transferredKgs }}</td>
+          <td> {{ org.releaseDate | date }}</td>
+        </ng-container>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

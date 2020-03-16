@@ -7,19 +7,21 @@
       <div class="box-body">
         <div class="col-xs-12">
           <app-list-errors [errorList]="errors"></app-list-errors>
+          <app-list-message [message]="message"></app-list-message>
+          <app-list-warnings [warning]="warning"></app-list-warnings>
         </div>
         <form [formGroup]="filterForm">
           <div class="row">
             <div class="col-sm-12">
               <div formGroupName="date">
-                <div class="col-xs-4">
+                <div class="col-xs-3">
                   <div class="form-group">
                     <label class="control-label label-required">From date</label>
                     <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="from" class="form-control">
                     <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
                   </div>
                 </div>
-                <div class="col-xs-4">
+                <div class="col-xs-3">
                   <div class="form-group">
                     <label class="control-label label-required">to</label>
                     <input [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" formControlName="to" class="form-control">
@@ -52,7 +54,8 @@
                   <div class="form-group">
                     <span class="">District</span>
                     <div class="input-group input-group-sm">
-                      <select class="form-control" formControlName="dist_id" disabled="true"  *ngIf="isCurrentUserDCC; else enabled">
+                      <select class="form-control" formControlName="dist_id" disabled="true"
+                              *ngIf="isCurrentUserDCC; else enabled">
                         <option value=""></option>
                         <option *ngFor="let district of districts" value="{{district._id}}">{{district.name}}</option>
                       </select>
@@ -88,48 +91,27 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-xs-2">
-                  <div class="form-group">
-                    <span class="">Cell</span>
-                    <div class="input-group input-group-sm">
-                      <select class="form-control" formControlName="cell_id">
-                        <option value=""></option>
-                        <option *ngFor="let cell of cells" value="{{cell._id}}">{{cell.name}}</option>
-                      </select>
-                      <span class="input-group-btn">
-                      <button type="button" class="btn btn-default btn-flat" (click)="onSubmit('cell')"
-                              [disabled]="!cellId">
-                        <i class="fa fa-search"></i>
-                      </button>
-                    </span>
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
           <div class="row">
             <div class="col-sm-12">
               <div style="margin: 15px">
-                <app-list-message [message]="message"></app-list-message>
                 <app-loader *ngIf="loading"></app-loader>
               </div>
-              <div style="margin: 0 auto; width: fit-content; float: left" *ngIf="showReport">
-                <div class="row">
-                  <div class="col-xs-12">
-                    <div class="pull-left" style="margin-left: 15px; font-size: 14px">
-                      <span style="font-weight: bolder">Total : </span>
-                      <span [ngStyle]="{color: graph.options.colors[0]}">{{ total }} {{ graph.columnNames[1] }}</span>
-                    </div>
-                  </div>
-                </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div style="margin: 0 auto; width: fit-content; float: left" *ngIf="showReport" class="img-responsive">
                 <google-chart #chart
-                              [type]="graph.type"
-                              [data]="graph.data"
-                              [options]="graph.options"
-                              [width]="graph.width"
-                              [columnNames]="graph.columnNames"
-                              [height]="graph.height">
+                              [type]="graph1.type"
+                              [data]="graph1.data"
+                              [options]="graph1.options"
+                              [width]="graph1.width"
+                              [columnNames]="graph1.columnNames"
+                              [height]="graph1.height"
+                              on-select="selectHandler($event)">
                 </google-chart>
               </div>
             </div>

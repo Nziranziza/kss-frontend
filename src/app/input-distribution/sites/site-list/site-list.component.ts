@@ -7,7 +7,6 @@ import {MessageService} from '../../../core/services';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {SiteDetailsComponent} from '../site-details/site-details.component';
 import {BasicComponent} from '../../../core/library';
-import {isArray, isObject} from 'util';
 
 @Component({
   selector: 'app-site-list',

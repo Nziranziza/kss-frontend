@@ -4,7 +4,6 @@ import {AdminComponent} from '../../admin/admin/admin.component';
 import {SiteCreateComponent} from './site-create/site-create.component';
 import {SiteListComponent} from './site-list/site-list.component';
 import {SiteEditComponent} from './site-edit/site-edit.component';
-import {OrganisationFarmersComponent} from '../../organisation/organisation-farmers/organisation-farmers.component';
 import {SiteFarmersComponent} from './site-farmers/site-farmers.component';
 import {SitePendingFarmersComponent} from './site-pending-farmers/site-pending-farmers.component';
 

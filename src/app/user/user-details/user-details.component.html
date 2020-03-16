@@ -1,0 +1,80 @@
+<div class="modal-header">
+  <i class="fa fa-times-circle close" style="font-size: 24px;" aria-label="Close" (click)="modal.dismiss()">
+  </i>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="col-xs-12">
+      <h3 class="page-header">
+        <i class="fa fa-user"></i> User profile
+      </h3>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-4 invoice-col">
+      <div class="row" *ngIf="user.type!==2">
+        <div class="col-sm-6">
+          First name
+        </div>
+        <div class="col-sm-6">
+          <strong>{{ user.foreName }}</strong><br>
+        </div>
+        <div class="col-sm-6">
+          Last name
+        </div>
+        <div class="col-sm-6">
+          {{ user.surname }}<br>
+        </div>
+        <div class="col-sm-6">
+          NID
+        </div>
+        <div class="col-sm-6">
+          {{ user.NID }}<br>
+        </div>
+        <div class="col-sm-6">
+          Phone number
+        </div>
+        <div class="col-sm-6">
+          {{ user.phone_number }}<br>
+        </div>
+        <div class="col-sm-6">
+          REG number
+        </div>
+        <div class="col-sm-6">
+          {{ user.regNumber }}<br>
+        </div>
+      </div>
+      <div class="row" *ngIf="user.type===2">
+        <div class="col-sm-6">
+          Group name
+        </div>
+        <div class="col-sm-6">
+          <strong>{{ user.groupName }}</strong><br>
+        </div>
+        <div class="col-sm-6">
+          REG number
+        </div>
+        <div class="col-sm-6">
+          {{ user.regNumber }}<br>
+        </div>
+        <div class="col-sm-6">
+          Phone number
+        </div>
+        <div class="col-sm-6">
+          {{ user.phone_number }}<br>
+        </div>
+      </div>
+    </div>
+    <ng-container *ngIf="user.hasAccessTo[0].userType == 13">
+      <div class="col-sm-8" *appHasPermission="[0,[8,1],[1,1]]">
+        <a class="btn btn-success btn-margin pull-right" *ngIf="!resetPin" (click)="enableResetPin(true)"><i
+          class="fa fa-check"></i>&nbsp; Enable pin reset
+        </a>
+        <a class="btn btn-warning btn-margin pull-right" *ngIf="resetPin" (click)="enableResetPin(false)"><i
+          class="fa fa-close"></i>&nbsp; Disable pin reset
+        </a>
+      </div>
+    </ng-container>
+  </div>
+  <br/><br/>
+</div>

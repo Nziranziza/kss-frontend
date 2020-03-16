@@ -33,11 +33,13 @@ export class CherrySupplyComponent implements OnInit, OnDestroy {
   regNumber: string;
   message: string;
   organisationId: string;
+  triggerDataTable = true;
 
   ngOnInit() {
     this.recordCherryDeliveryForm = this.formBuilder.group({
       cherriesQty: ['', Validators.required],
-      unitPerKg: ['']
+      cherriesType: ['standard', Validators.required],
+      unitPerKg: [this.authenticationService.getCurrentSeason().seasonParams.cherriesUnitPrice, Validators.required]
     });
     this.filterSuppliesForm = this.formBuilder.group({
       suppliesFilter: ['all', Validators.required],
@@ -48,9 +50,9 @@ export class CherrySupplyComponent implements OnInit, OnDestroy {
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 25,
-      columns: [{}, {}, {}, {}, {}, {}, {}, {
+      columns: [{}, {}, {}, {}, {}, {}, {
         class: 'none'
-      }],
+      }, {}, {}],
       responsive: true
     };
     this.organisationId = this.authenticationService.getCurrentUser().info.org_id;
@@ -59,10 +61,6 @@ export class CherrySupplyComponent implements OnInit, OnDestroy {
     });
     this.getFarmerSupplies(this.organisationId, this.regNumber);
     this.onChangeFarmerSuppliesFilter();
-  }
-
-  ngOnDestroy() {
-    this.dtTrigger.unsubscribe();
   }
 
   onSaveSupply() {
@@ -142,12 +140,36 @@ export class CherrySupplyComponent implements OnInit, OnDestroy {
         }
       }
     );
+
+    this.recordCherryDeliveryForm.get('cherriesType'.toString()).valueChanges.subscribe(
+      (value) => {
+        switch (value) {
+          case 'flottant': {
+            this.recordCherryDeliveryForm.get('unitPerKg'.toString())
+              .setValue(this.authenticationService.getCurrentSeason().seasonParams.floatingUnitPrice);
+            break;
+          }
+          default: {
+            this.recordCherryDeliveryForm.get('unitPerKg'.toString())
+              .setValue(this.authenticationService.getCurrentSeason().seasonParams.cherriesUnitPrice);
+          }
+        }
+      }
+    );
   }
 
   getFarmerSupplies(organisationId: string, regNumber: string): void {
     this.cherrySupplyService.getFarmerDeliveries(organisationId, regNumber).subscribe((data) => {
       this.cherrySupplies = data.content;
+      if (this.triggerDataTable) {
+        this.dtTrigger.next();
+        this.triggerDataTable = false;
+      }
     });
+  }
+
+  ngOnDestroy() {
+    this.dtTrigger.unsubscribe();
   }
 
   selectSupply(isChecked: boolean, supply: any) {

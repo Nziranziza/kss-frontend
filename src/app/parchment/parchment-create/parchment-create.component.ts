@@ -41,6 +41,7 @@ export class ParchmentCreateComponent extends BasicComponent implements OnInit {
     this.currentDate = new Date();
     this.recordParchmentForm = this.formBuilder.group({
       coffeeType: ['', Validators.required],
+      coffeeGrade: ['A', Validators.required],
       date: ['', Validators.required],
       totalKgs: ['', Validators.required],
       producedDate: [this.datePipe.transform(this.currentDate, 'yyyy-MM-dd'), Validators.required]

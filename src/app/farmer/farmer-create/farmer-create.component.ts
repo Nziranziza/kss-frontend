@@ -133,7 +133,19 @@ export class FarmerCreateComponent extends BasicComponent implements OnInit, OnD
           this.setError(['something went wrong!']);
         });
     } else {
-      if (this.isUserDistrictCashCrop) {
+      if (this.isUserCWSOfficer) {
+        this.organisationService.get(this.authenticationService.getCurrentUser().info.org_id).subscribe(data => {
+          this.provinceValue = data.content.location.prov_id._id;
+          this.districtValue = data.content.location.dist_id._id;
+          this.locationService.getDistricts(data.content.location.prov_id._id).subscribe((districts) => {
+            this.districts.push(districts);
+          });
+          this.locationService.getSectors( data.content.location.dist_id._id).subscribe((sectors) => {
+            this.sectors.push(sectors);
+          });
+          (this.createForm.controls.requests as FormArray).push(this.createRequest());
+        });
+      } else if (this.isUserDistrictCashCrop) {
         this.provinceValue = this.authenticationService.getCurrentUser().info.location.prov_id;
         this.districtValue = this.authenticationService.getCurrentUser().info.location.dist_id;
         this.locationService.getDistricts(this.authenticationService.getCurrentUser().info.location.prov_id).subscribe((districts) => {
@@ -280,7 +292,7 @@ export class FarmerCreateComponent extends BasicComponent implements OnInit, OnD
             } else {
               this.farmerService.save(farmer).subscribe(() => {
                   this.messageService.setMessage('Farmer successfully created!');
-                  this.router.navigateByUrl('admin/farmers/list');
+                  this.location.back();
                 },
                 (err) => {
                   if (isArray(err.errors)) {

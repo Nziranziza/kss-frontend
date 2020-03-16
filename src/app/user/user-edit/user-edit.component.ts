@@ -51,6 +51,7 @@ export class UserEditComponent implements OnInit {
     village: true,
   };
   hasSite = false;
+  hideEmail = false;
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute, private router: Router,
@@ -183,18 +184,19 @@ export class UserEditComponent implements OnInit {
         } else {
           this.hasSite = false;
         }
-        if (selectedRoles.includes(4)) {
-          this.userService.userPermissions(4).subscribe(dt => {
+        selectedRoles.forEach((role) => {
+          this.userService.userPermissions(role).subscribe(dt => {
             this.userTypes = Object.keys(dt.content).map(key => {
               return {name: key, value: dt.content[key]};
             });
           });
-        }
+        });
         this.selectedRoles = selectedRoles;
       }
     );
     this.editForm.controls['userType'.toString()].valueChanges.subscribe(
       (value) => {
+        this.hideEmail = +value === 13;
         if (+value === 2) {
           this.selectedType = +value;
           this.hasSite = !!this.selectedRoles.includes(8);

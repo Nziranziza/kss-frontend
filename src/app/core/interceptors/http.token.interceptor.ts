@@ -16,7 +16,7 @@ export class HttpTokenInterceptor implements HttpInterceptor {
       Accept: 'application/json'
     };
     const token = this.jwtService.getToken();
-    if ((req.url.indexOf('/api/users/sign.in') !== -1)
+    if ( (req.url.indexOf('/api/users/sign.in') !== -1)
       || (req.url.indexOf('/api/users/confirmation') !== -1)
       || (req.url.indexOf('/api/users/account/unlock') !== -1)
       || (req.url.indexOf('/api/users/request/password-reset') !== -1)

@@ -65,7 +65,7 @@
                       <div class="input-group input-group-sm">
                         <select class="form-control" formControlName="sect_id">
                           <option value=""></option>
-                          <option *ngFor="let sector of sectors" value="{{sector._id}}">{{sector.name}}</option>
+                          <option *ngFor="let sector of sectors" value="{{sector._id}}">{{sector.name | titlecase}}</option>
                         </select>
                         <span class="input-group-btn">
                       <button type="button" class="btn btn-default btn-flat" (click)="onGetProgress('sector')"

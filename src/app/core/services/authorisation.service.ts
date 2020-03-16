@@ -67,6 +67,10 @@ export class AuthorisationService {
     this.userRoles = this.authenticationService.getCurrentUser().parameters.role;
     return !!(this.userRoles.includes(8) && +this.authenticationService.getCurrentUser().parameters.type === 1);
   }
+  isCWSAdmin() {
+    this.userRoles = this.authenticationService.getCurrentUser().parameters.role;
+    return !!(this.userRoles.includes(1) && +this.authenticationService.getCurrentUser().parameters.type === 1);
+  }
   isSiteManager() {
     this.userRoles = this.authenticationService.getCurrentUser().parameters.role;
     return !!(this.userRoles.includes(8) && +this.authenticationService.getCurrentUser().parameters.type === 2);

@@ -162,7 +162,7 @@ export class DistributionPlanComponent implements OnInit {
   }
 
   exportPlan() {
-    this.excelService.exportAsExcelFile(this.plans, 'application report');
+    this.excelService.exportAsExcelFile(this.plans, 'distribution plan');
   }
 
   initial() {

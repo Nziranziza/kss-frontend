@@ -12,13 +12,14 @@ import {
 } from '../../core/services';
 import {HelperService} from '../../core/helpers';
 import {isUndefined} from 'util';
+import {BasicComponent} from '../../core/library';
 
 @Component({
   selector: 'app-farmers-approval-progress',
   templateUrl: './farmers-approval-progress.component.html',
   styleUrls: ['./farmers-approval-progress.component.css']
 })
-export class FarmersApprovalProgressComponent implements OnInit {
+export class FarmersApprovalProgressComponent extends BasicComponent implements OnInit {
 
   title = 'Farmers approval statistics';
   filterForm: FormGroup;
@@ -55,6 +56,7 @@ export class FarmersApprovalProgressComponent implements OnInit {
               private authenticationService: AuthenticationService,
               private helper: HelperService, private organisationTypeService: OrganisationTypeService,
               private locationService: LocationService, private siteService: SiteService) {
+    super();
   }
 
   ngOnInit() {
@@ -149,16 +151,14 @@ export class FarmersApprovalProgressComponent implements OnInit {
         (err) => {
           if (err.status === 404) {
             this.showReport = false;
-            this.message = err.errors[0];
-            this.errors = '';
-            this.loading = false;
+            this.setWarning(err.errors[0]);
           } else {
-            this.message = '';
-            this.errors = err.errors;
+            this.clear();
+            this.setError(err.errors);
           }
         });
     } else {
-      this.errors = this.helper.getFormValidationErrors(this.filterForm);
+      this.setError(this.helper.getFormValidationErrors(this.filterForm));
     }
   }
 

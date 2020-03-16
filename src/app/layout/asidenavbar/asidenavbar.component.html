@@ -3,8 +3,8 @@
   <section class="sidebar" style="height: auto;">
     <!-- sidebar menu: : style can be found in sidebar.less -->
     <ul class="sidebar-menu tree" data-widget="tree">
-      <li class="header" *appHasPermission="[[4,1],[4,11],[4,12],roles.TEC_HOUSE,6,5,[8,1]]">REGISTRATION</li>
-      <li routerLinkActive="active" *appHasPermission="[[4,1],[4,11],[4,12],0,6,5]">
+      <li class="header" *appHasPermission="[[4,1],[4,11],[4,12],roles.TEC_HOUSE,6,5,[8,1],[1,1]]">REGISTRATION</li>
+      <li routerLinkActive="active" *appHasPermission="[[4,1],[4,11],[4,12],0,6,5,[8,1],[1,1]]">
         <a routerLink="/admin/organisations">
           <i class="fa fa-university" aria-hidden="true"></i>
           <span>Organisations</span>
@@ -43,12 +43,6 @@
             </a>
           </li>
         </ul>
-      </li>
-      <li routerLinkActive="active" *appHasPermission="[[8,1]]">
-        <a routerLink="/admin/organisations">
-          <i class="fa fa-university" aria-hidden="true"></i>
-          <span>Organisations</span>
-        </a>
       </li>
       <li class="header" *appHasPermission="[1]">WET PROCESSING</li>
       <li class="treeview" routerLinkActive="active" *appHasPermission="[1]">
@@ -214,15 +208,9 @@
             </a>
           </li>
           <li routerLinkActive="active" *appHasPermission="[[4,1],[4,11],[4,12],0,6]">
-            <a routerLink="/admin/cherries/supply/reports">
-              <i class="fa fa-circle-o"></i>
-              <span>Cherry supply</span>
-            </a>
-          </li>
-          <li routerLinkActive="active" *appHasPermission="[[4,1],[4,11],[4,12],0,6]">
             <a routerLink="/admin/cherries/parchments/report">
               <i class="fa fa-circle-o"></i>
-              <span>Parchment production</span>
+              <span>Cherries supply</span>
             </a>
           </li>
         </ul>

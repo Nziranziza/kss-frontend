@@ -19,6 +19,10 @@ export class OrganisationService {
     return this.apiService.get('/organizations/' + id);
   }
 
+  getCwsSummary(id: string): Observable<any> {
+    return this.apiService.get('/cwsstats/summary/cws/' + id);
+  }
+
   destroy(id: string): Observable<any> {
     return this.apiService.delete('/organizations/' + id);
   }

@@ -58,7 +58,7 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
   ngOnInit(): void {
     this.parameters['org_id'.toString()] = this.authenticationService.getCurrentUser().info.org_id;
     this.config = {
-      itemsPerPage: 25,
+      itemsPerPage: 10,
       currentPage: 1,
       totalItems: 0
     };

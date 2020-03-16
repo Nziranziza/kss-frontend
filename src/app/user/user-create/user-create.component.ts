@@ -42,6 +42,7 @@ export class UserCreateComponent implements OnInit {
   };
   selectedType: any;
   selectedRoles: any;
+  hideEmail = false;
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute, private router: Router,
@@ -138,60 +139,118 @@ export class UserCreateComponent implements OnInit {
         reason: 'registration'
       };
       user['action'.toString()] = 'create';
-      this.userService.checkEmail(checkEmailBody).subscribe(data => {
-          const response = data.content;
-          if (response.existsInCas) {
-            this.errors = ['User with this email already exists'];
-            return;
-          }
-          if (response.existsInSns) {
-            user['action'.toString()] = 'import';
-          }
-
-          if (!(response.existsInCas || response.existsInSns)) {
-            if (checkNIDBody.nid !== '') {
-              this.userService.checkNID(checkNIDBody).subscribe(result => {
-                  const res = result.content;
-                  if (res.existsInCas) {
-                    this.errors = ['User with this NID already exists'];
-                    return;
-                  }
-                  if (res.existsInSns) {
-                    user['action'.toString()] = 'import';
-                  }
+      if (+user['userType'.toString()] === 13) {
+        delete user.email;
+        if (checkNIDBody.nid !== '') {
+          this.userService.checkNID(checkNIDBody).subscribe(result => {
+              const res = result.content;
+              if (res.existsInCas) {
+                this.errors = ['User with this NID already exists'];
+                return;
+              }
+              if (res.existsInSns) {
+                user['action'.toString()] = 'import';
+              }
+            },
+            (err) => {
+              this.errors = err.errors;
+            },
+            () => {
+              if (this.isFromSuperOrg) {
+                user['userRoles'.toString()] = [0];
+              }
+              delete user.location;
+              if (!selectedRoles.includes(8)) {
+                delete user.distributionSite;
+                delete user.accountExpirationDate;
+              } else {
+                user.accountExpirationDate = this.helper.getDate(this.createForm.value.accountExpirationDate);
+              }
+              this.helper.cleanObject(user);
+              this.userService.save(user).subscribe(() => {
+                  this.router.navigateByUrl('admin/organisations/' + this.organisationId + '/users');
                 },
                 (err) => {
                   this.errors = err.errors;
                 });
-            }
-          }
-        },
-        (err) => {
-          this.errors = err.errors;
-        },
-        () => {
+            });
+        } else {
           if (this.isFromSuperOrg) {
             user['userRoles'.toString()] = [0];
           }
-          if ((!(selectedRoles.includes(6)) && (!(selectedRoles.includes(8))))) {
-            delete user.location;
-          }
+          delete user.location;
           if (!selectedRoles.includes(8)) {
             delete user.distributionSite;
             delete user.accountExpirationDate;
           } else {
             user.accountExpirationDate = this.helper.getDate(this.createForm.value.accountExpirationDate);
           }
-
           this.helper.cleanObject(user);
-          this.helper.cleanObject(user.location);
           this.userService.save(user).subscribe(() => {
               this.router.navigateByUrl('admin/organisations/' + this.organisationId + '/users');
             },
             (err) => {
               this.errors = err.errors;
             });
-        });
+        }
+
+      } else {
+        this.userService.checkEmail(checkEmailBody).subscribe(data => {
+            const response = data.content;
+            if (response.existsInCas) {
+              this.errors = ['User with this email already exists'];
+              return;
+            }
+            if (response.existsInSns) {
+              user['action'.toString()] = 'import';
+            }
+
+            if (!(response.existsInCas || response.existsInSns)) {
+              if (checkNIDBody.nid !== '') {
+                this.userService.checkNID(checkNIDBody).subscribe(result => {
+                    const res = result.content;
+                    if (res.existsInCas) {
+                      this.errors = ['User with this NID already exists'];
+                      return;
+                    }
+                    if (res.existsInSns) {
+                      user['action'.toString()] = 'import';
+                    }
+                  },
+                  (err) => {
+                    this.errors = err.errors;
+                  });
+              }
+            }
+          },
+          (err) => {
+            this.errors = err.errors;
+          },
+          () => {
+            if (this.isFromSuperOrg) {
+              user['userRoles'.toString()] = [0];
+            }
+            if ((!(selectedRoles.includes(6)) && (!(selectedRoles.includes(8))))) {
+              delete user.location;
+            }
+            if (!selectedRoles.includes(8)) {
+              delete user.distributionSite;
+              delete user.accountExpirationDate;
+            } else {
+              user.accountExpirationDate = this.helper.getDate(this.createForm.value.accountExpirationDate);
+            }
+
+            this.helper.cleanObject(user);
+            this.helper.cleanObject(user.location);
+            this.userService.save(user).subscribe(() => {
+                this.router.navigateByUrl('admin/organisations/' + this.organisationId + '/users');
+              },
+              (err) => {
+                this.errors = err.errors;
+              });
+          });
+      }
+
     } else {
       this.errors = this.helper.getFormValidationErrors(this.createForm);
     }
@@ -203,6 +262,8 @@ export class UserCreateComponent implements OnInit {
         const selectedRoles = data
           .map((checked, index) => checked ? this.orgPossibleRoles[index].value : null)
           .filter(value => value !== null);
+
+        /*If selected roles include district cash crop, unable location selection*/
         this.needLocation = !!selectedRoles.includes(6);
         if (selectedRoles.includes(8)) {
           if (this.selectedType === 2) {
@@ -211,20 +272,19 @@ export class UserCreateComponent implements OnInit {
         } else {
           this.hasSite = false;
         }
-
-        /*If selected roles include NAEB, get corresponding user permissions*/
-        if (selectedRoles.includes(4)) {
-          this.userService.userPermissions(4).subscribe(dt => {
+        selectedRoles.forEach((role) => {
+          this.userService.userPermissions(role).subscribe(dt => {
             this.userTypes = Object.keys(dt.content).map(key => {
               return {name: key, value: dt.content[key]};
             });
           });
-        }
+        });
         this.selectedRoles = selectedRoles;
       }
     );
     this.createForm.controls['userType'.toString()].valueChanges.subscribe(
       (value) => {
+        this.hideEmail = +value === 13;
         if (+value === 2) {
           this.selectedType = +value;
           this.hasSite = !!this.selectedRoles.includes(8);
