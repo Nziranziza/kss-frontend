@@ -78,7 +78,7 @@
   </div>
 </div>
 <br/> <br/>
-<ng-container *ngIf="canEditLands">
+<ng-container>
   <h5 class="page-header">
     Lands
   </h5>
@@ -110,11 +110,11 @@
             <span class="details-row-title-sm">Village </span> : <span class="details-row-data-sm">{{ request.location.village_id.name }}</span>
           </td>
           <td>{{ request.numberOfTrees }}</td>
-          <td>{{ request.fertilizer_need }} Kg</td>
-          <td>{{ request.fertilizer_allocate }} Kg</td>
+          <td>{{ request.fertilizer_need |  number:'1.0-1' }} Kg</td>
+          <td>{{ request.fertilizer_allocate |  number:'1.0-1' }} Kg</td>
           <td>
             <button class="btn btn-warning btn-margin btn-sm pull-right" (click)="cancelRequest(request)"
-                    *ngIf="!isUserSiteManager ">Delete
+                    *ngIf="!(isUserSiteManager || isCWSOfficer)">Delete
             </button>
             <button class="btn btn-primary btn-margin btn-sm pull-right" (click)="editRequest(request)">Edit</button>
           </td>

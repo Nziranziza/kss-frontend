@@ -24,6 +24,7 @@
   <div class="col-xs-12">
     <app-list-errors [errorList]="errors"></app-list-errors>
     <app-list-message [message]="message"></app-list-message>
+    <app-list-warnings [warning]="warning"></app-list-warnings>
     <div class="box">
       <div class="box-body table-responsive">
         <table class="row-border hover table table-striped">
@@ -35,6 +36,7 @@
             <th (click)="setOrder('userInfo.NID')">National ID <i class="fa fa-sort sorting"></i></th>
             <th (click)="setOrder('userInfo.phone_number')">Phone number <i class="fa fa-sort sorting"></i></th>
             <th (click)="setOrder('userInfo.regNumber')">Reg number <i class="fa fa-sort sorting"></i></th>
+            <th></th>
             <th></th>
           </tr>
           </thead>
@@ -49,6 +51,9 @@
             <td> {{ farmer.userInfo.NID }}</td>
             <td> {{ farmer.userInfo.phone_number }}</td>
             <td> {{ farmer.userInfo.regNumber | uppercase}}</td>
+            <td>
+              <span style="font-style: oblique; font-size: 11px;">&nbsp; Done by: &nbsp; {{ getEditor(farmer.requests) }} </span>
+            </td>
             <td>
               <button class="btn btn-default btn-margin btn-sm pull-right details-button" (click)="viewDetails(farmer)">
                 ...

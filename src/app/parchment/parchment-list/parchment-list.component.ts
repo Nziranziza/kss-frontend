@@ -73,6 +73,7 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
           };
         }
       });
+    this.setOrder('created_at');
     this.filterForm = this.formBuilder.group({
       term: ['', Validators.minLength(3)],
       searchBy: ['date']
@@ -97,6 +98,7 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
           }
         });
     });
+    this.setOrder('created_at');
   }
 
   onPageChange(event) {
@@ -109,6 +111,7 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
       .subscribe(data => {
         this.parchments = data.data;
       });
+    this.setOrder('created_at');
   }
 
   setOrder(value: string) {
@@ -132,6 +135,7 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
           };
           this.loading = false;
         });
+      this.setOrder('created_at');
     }
   }
 
@@ -147,6 +151,7 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
           totalItems: data.recordsTotal
         };
       });
+    this.setOrder('created_at');
   }
   ngOnDestroy(): void {
     this.messageService.setMessage('');

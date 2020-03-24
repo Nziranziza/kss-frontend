@@ -29,6 +29,7 @@ export class SiteViewDispatchComponent extends BasicComponent implements OnInit 
   // @ts-ignore
   dtTrigger: Subject = new Subject();
   loading = false;
+  table: any;
 
   ngOnInit() {
     this.dtOptions = {
@@ -49,6 +50,7 @@ export class SiteViewDispatchComponent extends BasicComponent implements OnInit 
       const id = this.authenticationService.getCurrentUser().orgInfo.distributionSite;
       this.inputDistributionService.getSiteDispatches(id).subscribe((data) => {
         this.dispatches = data.content;
+        this.dtTrigger.next();
       });
       this.setMessage(message);
     });

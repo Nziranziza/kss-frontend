@@ -63,7 +63,7 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
         this.cwsSummary = data.content[0];
       }
     });
-    this.message = this.messageService.getMessage();
+    this.setMessage(this.messageService.getMessage());
     this.orgCoveredArea = this.route.snapshot.data.orgCoveredAreaData;
     this.currentSeason = this.authenticationService.getCurrentSeason();
     this.getAllFarmers();

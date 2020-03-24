@@ -120,7 +120,7 @@ export class PendingFarmerListComponent extends BasicComponent implements OnInit
 
   canApprove() {
     let canApprove = false;
-    if (this.authorisationService.isTechouseUser()) {
+    if (this.authorisationService.isTechouseUser() || this.authorisationService.isDistrictCashCropOfficer()) {
       canApprove = true;
     }
     return canApprove;

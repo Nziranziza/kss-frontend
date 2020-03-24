@@ -3,5 +3,59 @@
   </i>
 </div>
 <div class="modal-body">
+  <div class="row">
+    <div class="col-sm-12">
+      <div style="margin: 15px">
+        <app-loader *ngIf="loading"></app-loader>
+      </div>
+    </div>
+  </div>
+  <ng-container *ngIf="production">
+    <div class="row">
+      <div class="col-xs-12">
+        <h5 *ngIf="production.regionName">
+          <i class="fa fa-map-marker"></i> {{ production.regionName | uppercase }}
+        </h5>
+        <h5 *ngIf="production.organizationName">
+          <i class="fa fa-map-pin"></i> {{ production.organizationName | uppercase }}
+        </h5>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <h5>
+          <i class="fa fa-cart-plus"></i> Received cherries
+        </h5>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-3 col-sm-6 col-xs-12" *ngFor="let production of production.cherries">
+        <div class="info-box bg-green-gradient">
+          <div class="info-box-content">
+            <span class="info-box-text">{{ production.cherriesType }}</span>
+            <span class="info-box-text">{{ production.totalCherries }}&#13199;</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <h5>
+          <i class="fa fa-archive"></i> Produced parchments
+        </h5>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-3 col-sm-6 col-xs-12" *ngFor="let production of production.parchments">
+        <div class="info-box bg-yellow-gradient">
+          <div class="info-box-content">
+            <span class="info-box-text">{{ production.coffeeType }}</span>
+            <span class="progress-description">Grade A &nbsp;{{ production.gradeA }}&#13199;</span>
+            <span class="progress-description">Grade B &nbsp;{{ production.gradeB }}&#13199;</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
 </div>
 

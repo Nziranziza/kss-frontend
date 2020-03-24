@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthenticationService, AuthorisationService, FarmerService} from '../../core/services';
 import {SeasonService} from '../../core/services';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {SharedDataService} from '../../core/services/shared-data.service';
 import {Subscription} from 'rxjs';
 
@@ -17,6 +17,8 @@ export class TopnavbarComponent implements OnInit {
   seasons: any [];
   currentSeason: any;
   needOfApproval = 0;
+  updatedLandToApprove = 0;
+  newLandToApprove = 0;
   private subscription: Subscription;
 
   constructor(private authenticationService: AuthenticationService,
@@ -35,7 +37,11 @@ export class TopnavbarComponent implements OnInit {
     });
     this.sharedDataService.changeApprovalFlag();
     this.subscription = this.sharedDataService.getEmittedApprovalFlag()
-      .subscribe(item => this.needOfApproval = item);
+      .subscribe((item) => {
+        this.needOfApproval = item.totalUpdatedLandToBeApproved + item.totalNewLandToApproved;
+        this.updatedLandToApprove = item.totalUpdatedLandToBeApproved;
+        this.newLandToApprove = item.totalNewLandToApproved;
+      });
   }
 
   changeSeason(season: string) {

@@ -177,6 +177,7 @@ export class EditFarmerRequestComponent implements OnInit {
       request['documentId'.toString()] = this.farmerId;
       request['subDocumentId'.toString()] = this.land._id;
       request['userId'.toString()] = this.authenticationService.getCurrentUser().info._id;
+      request['updated_by'.toString()] = this.authenticationService.getCurrentUser().info._id;
       delete request.location;
       this.farmerService.updateFarmerRequest(request).subscribe(() => {
           this.setMessage('request successfully updated!');

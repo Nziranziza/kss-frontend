@@ -25,8 +25,8 @@ export class FarmerEditComponent extends BasicComponent implements OnInit, OnDes
   errors = [];
   farmerType = 1;
   message: string;
-  canEditLands = true;
   isUserSiteManager = false;
+  isCWSOfficer = false;
   resetPin = true;
 
   constructor(private route: ActivatedRoute, private router: Router,
@@ -47,10 +47,8 @@ export class FarmerEditComponent extends BasicComponent implements OnInit, OnDes
       this.getFarmer(this.id);
     });
     this.message = this.messageService.getMessage();
-    if (this.authorisationService.isCWSUser()) {
-      this.canEditLands = false;
-    }
     this.isUserSiteManager = this.authorisationService.isSiteManager();
+    this.isCWSOfficer = this.authorisationService.isCWSAdmin();
   }
 
   editRequest(request: any) {

@@ -210,6 +210,7 @@ export class AddFarmerRequestComponent extends BasicComponent implements OnInit 
         requestInfo: []
       };
       farmer['requestInfo'.toString()] = temp.requests;
+      farmer['created_by'.toString()] = this.authenticationService.getCurrentUser().info._id;
       this.helper.cleanObject(farmer);
       farmer.requestInfo.map((item) => {
         item['fertilizer_need'.toString()] = +item['numberOfTrees'.toString()] * this.currentSeason.seasonParams.fertilizerKgPerTree;

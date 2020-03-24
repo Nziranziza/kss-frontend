@@ -7,6 +7,8 @@ import {Farmer} from '../../core/models';
 import {FarmerDetailsComponent} from '../farmer-details/farmer-details.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {SharedDataService} from '../../core/services/shared-data.service';
+import {ActivatedRoute, Router} from '@angular/router';
+import {HelperService} from '../../core/helpers';
 
 @Component({
   selector: 'app-farmer-need-approval-list',
@@ -39,14 +41,18 @@ export class FarmerNeedApprovalListComponent extends BasicComponent implements O
   isFilterDone = false;
   siteId: any;
   showData = false;
+  needApprovalListType = 'updated';
 
-  @Output() needOfApprovalEvent = new EventEmitter<number>();
+  @Output() needOfApprovalEvent = new EventEmitter<any>();
 
   /*------------------------- End dataTable variables --------------------*/
 
   constructor(private formBuilder: FormBuilder,
               private modal: NgbModal,
+              private route: ActivatedRoute,
+              private router: Router,
               private messageService: MessageService,
+              private helper: HelperService,
               private authorisationService: AuthorisationService,
               private sharedDataService: SharedDataService,
               private siteService: SiteService, private farmerService: FarmerService,
@@ -67,6 +73,16 @@ export class FarmerNeedApprovalListComponent extends BasicComponent implements O
       searchBy: 'district',
       dist_id: this.authenticationService.getCurrentUser().info.location.dist_id
     };
+    this.route.params.subscribe(params => {
+      this.needApprovalListType = params['needApproval'.toString()];
+      if (!(this.needApprovalListType === 'updated' || this.needApprovalListType === 'new')) {
+        this.router.navigateByUrl('404');
+      } else {
+        this.requests = [];
+        this.needApprovalListType === 'updated' ? this.title = 'Updated lands to be approved' : this.title =
+          'New lands to be approved';
+      }
+    });
 
     this.siteService.getSite(body).subscribe((data) => {
       this.sites = data.content;
@@ -83,7 +99,7 @@ export class FarmerNeedApprovalListComponent extends BasicComponent implements O
       this.parameters.start = (event - 1) * this.config.itemsPerPage;
     }
 
-    this.farmerService.getUpdatesWaitingForApproval(this.parameters)
+    this.farmerService.getUpdatedLandsWaitingForApproval(this.parameters)
       .subscribe(data => {
         this.requests = data.data;
       });
@@ -116,17 +132,13 @@ export class FarmerNeedApprovalListComponent extends BasicComponent implements O
       const filter = this.filterForm.value;
       this.siteId = filter.site;
       this.parameters['siteId'.toString()] = filter.site;
-      this.farmerService.getUpdatesWaitingForApproval(this.parameters)
-        .subscribe(data => {
-          this.requests = data.data;
-          this.showData = true;
-          this.config = {
-            itemsPerPage: data.recordsTotal < this.parameters.length ? data.recordsTotal : this.parameters.length,
-            currentPage: this.parameters.start + 1,
-            totalItems: data.recordsTotal
-          };
-          this.isFilterDone = true;
-        });
+      if (this.needApprovalListType === 'updated') {
+        this.getUpdatesWaitingForApproval();
+      } else {
+        this.getNewLandsWaitingForApproval();
+      }
+    } else {
+      this.setError(this.helper.getFormValidationErrors(this.filterForm));
     }
   }
 
@@ -135,27 +147,82 @@ export class FarmerNeedApprovalListComponent extends BasicComponent implements O
       this.setError(['please select records to be approved']);
       return;
     }
-    this.farmerService.approveLandsUpdate({
-      siteId: this.siteId,
-      requests: this.requestIds
-    })
-      .subscribe(() => {
-        this.setMessage('changes successful approved.');
-        this.messageService.setMessage('changes successful approved.');
-        this.sharedDataService.changeApprovalFlag();
-        this.farmerService.getUpdatesWaitingForApproval(this.parameters)
-          .subscribe(data => {
-            this.requests = data.data;
-            this.showData = true;
-            this.config = {
-              itemsPerPage: data.recordsTotal < this.parameters.length ? data.recordsTotal : this.parameters.length,
-              currentPage: this.parameters.start + 1,
-              totalItems: data.recordsTotal
-            };
-            this.isFilterDone = true;
-          });
+    if (this.needApprovalListType === 'updated') {
+      this.farmerService.approveLandsUpdate({
+        siteId: this.siteId,
+        requests: this.requestIds
+      })
+        .subscribe(() => {
+          this.setMessage('changes successful approved.');
+          this.messageService.setMessage('changes successful approved.');
+          this.sharedDataService.changeApprovalFlag();
+          this.getUpdatesWaitingForApproval();
+        });
+    } else {
+      this.farmerService.approveNewLands({
+        siteId: this.siteId,
+        requests: this.requestIds
+      })
+        .subscribe(() => {
+          this.setMessage('changes successful approved.');
+          this.messageService.setMessage('changes successful approved.');
+          this.sharedDataService.changeApprovalFlag();
+          this.getUpdatesWaitingForApproval();
+        });
+    }
+  }
+
+  getNewLandsWaitingForApproval() {
+    this.farmerService.getNewLandsWaitingForApproval(this.parameters)
+      .subscribe(data => {
+        this.requests = data.data;
+        this.showData = true;
+        this.config = {
+          itemsPerPage: data.recordsTotal < this.parameters.length ? data.recordsTotal : this.parameters.length,
+          currentPage: this.parameters.start + 1,
+          totalItems: data.recordsTotal
+        };
+        this.isFilterDone = true;
       }, (err) => {
-        this.setError(err.errors);
+        if (err.status === 404) {
+          this.setWarning('No new lands to be approved');
+        } else {
+          this.setError(err.errors);
+        }
+      });
+  }
+
+  getEditor(requests: any) {
+    let contact;
+    if (requests.requestInfo.updatedBy) {
+      contact = requests.requestInfo.updatedBy.surname + ' ' +
+        requests.requestInfo.updatedBy.foreName + ', ' + requests.requestInfo.updatedBy.phone_number;
+    }
+
+    if (requests.requestInfo.createdBy) {
+      contact = requests.requestInfo.createdBy.surname + ' ' +
+        requests.requestInfo.createdBy.foreName + ', ' + requests.requestInfo.createdBy.phone_number;
+    }
+    return contact;
+  }
+
+  getUpdatesWaitingForApproval() {
+    this.farmerService.getUpdatedLandsWaitingForApproval(this.parameters)
+      .subscribe(data => {
+        this.requests = data.data;
+        this.showData = true;
+        this.config = {
+          itemsPerPage: data.recordsTotal < this.parameters.length ? data.recordsTotal : this.parameters.length,
+          currentPage: this.parameters.start + 1,
+          totalItems: data.recordsTotal
+        };
+        this.isFilterDone = true;
+      }, (err) => {
+        if (err.status === 404) {
+          this.setWarning('No updates to be approved.');
+        } else {
+          this.setError(err.errors);
+        }
       });
   }
 }

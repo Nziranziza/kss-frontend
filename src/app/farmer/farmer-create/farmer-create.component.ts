@@ -140,7 +140,7 @@ export class FarmerCreateComponent extends BasicComponent implements OnInit, OnD
           this.locationService.getDistricts(data.content.location.prov_id._id).subscribe((districts) => {
             this.districts.push(districts);
           });
-          this.locationService.getSectors( data.content.location.dist_id._id).subscribe((sectors) => {
+          this.locationService.getSectors(data.content.location.dist_id._id).subscribe((sectors) => {
             this.sectors.push(sectors);
           });
           (this.createForm.controls.requests as FormArray).push(this.createRequest());
@@ -193,6 +193,7 @@ export class FarmerCreateComponent extends BasicComponent implements OnInit, OnD
         farmer['location'.toString()] = temp.requests[0].location;
         farmer['numberOfTrees'.toString()] = temp.requests[0].numberOfTrees;
         farmer['_id'.toString()] = this.id;
+        farmer['created_by'.toString()] = this.authenticationService.getCurrentUser().info._id;
         farmer['type'.toString()] = temp.type;
         farmer['phone_number'.toString()] = temp.phone_number;
         if (!this.isGroup) {
@@ -248,6 +249,7 @@ export class FarmerCreateComponent extends BasicComponent implements OnInit, OnD
         farmer['_id'.toString()] = this.id;
         farmer['type'.toString()] = temp.type;
         farmer['phone_number'.toString()] = temp.phone_number;
+        farmer['created_by'.toString()] = this.authenticationService.getCurrentUser().info._id;
         if (!this.isGroup) {
           farmer['surname'.toString()] = temp.surname;
           farmer['foreName'.toString()] = temp.foreName;
@@ -262,7 +264,6 @@ export class FarmerCreateComponent extends BasicComponent implements OnInit, OnD
         farmer.requestInfo.map((item) => {
           item['fertilizer_need'.toString()] =
             ((+item['numberOfTrees'.toString()]) * this.currentSeason.seasonParams.fertilizerKgPerTree);
-          console.log(((+item['numberOfTrees'.toString()]) * this.currentSeason.seasonParams.fertilizerKgPerTree));
           return this.helperService.cleanObject(item);
         });
         if (this.isGroup) {

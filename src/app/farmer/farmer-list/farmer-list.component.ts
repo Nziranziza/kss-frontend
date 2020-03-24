@@ -187,6 +187,5 @@ export class FarmerListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.messageService.clearMessage();
   }
 }

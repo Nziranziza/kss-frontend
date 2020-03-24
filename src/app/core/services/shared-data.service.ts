@@ -18,7 +18,7 @@ export class SharedDataService {
   changeApprovalFlag() {
     if (this.authorisationService.isDistrictCashCropOfficer()) {
       this.farmerService.calculateNeedForApprovals(this.authenticationService.getCurrentUser().info.location.dist_id).subscribe((data) => {
-        this.fire.emit(data.content[0].totalUnapproved);
+        this.fire.emit(data.content[0]);
       });
     }
   }

@@ -50,7 +50,7 @@ export class CherrySupplyComponent implements OnInit, OnDestroy {
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 25,
-      columns: [{}, {}, {}, {}, {}, {}, {
+      columns: [{}, {}, {}, {}, {}, {}, {}, {
         class: 'none'
       }, {}, {}],
       responsive: true
@@ -71,7 +71,7 @@ export class CherrySupplyComponent implements OnInit, OnDestroy {
       this.cherrySupplyService.saveDelivery(record)
         .subscribe(() => {
             this.getFarmerSupplies(record['org_id'.toString()], record['regNumber'.toString()]);
-            this.message = 'Parchment recorded successfully!';
+            this.message = 'Cherries recorded successfully!';
             this.errors = '';
           },
           (err) => {
@@ -116,6 +116,7 @@ export class CherrySupplyComponent implements OnInit, OnDestroy {
           case 'unapproved_delivery': {
             this.cherrySupplyService.getFarmerUnapprovedDeliveries(this.organisationId, this.regNumber)
               .subscribe((data) => {
+                console.log(data);
                 this.cherrySupplies = data.content;
               });
             break;

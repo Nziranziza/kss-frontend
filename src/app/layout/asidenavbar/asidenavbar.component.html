@@ -19,7 +19,7 @@
         </a>
         <ul class="treeview-menu">
           <li routerLinkActive="active" *appHasPermission="[6]">
-            <a routerLink="/admin/farmers/need-approval/list">
+            <a [routerLink]="['/admin/farmers/need-approval/list', {needApproval:'updated'}]">
               <i class="fa fa-circle-o"></i>
               <span>Pending approval</span>
             </a>

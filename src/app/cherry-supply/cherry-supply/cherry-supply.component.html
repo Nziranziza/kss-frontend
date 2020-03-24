@@ -29,7 +29,7 @@
     </div>
     <div class="col-xs-4">
       <div class="form-group">
-        <label class="control-label label-required">Cherries Qty</label>
+        <label class="control-label label-required">Cherries Qty (kg)</label>
         <input type="text" formControlName="cherriesQty" class="form-control">
       </div>
     </div>
@@ -51,19 +51,17 @@
 <hr>
 <div class="row" style="margin-bottom: 15px;">
   <div class="col-xs-12">
-    <!--
-      <form [formGroup]="filterSuppliesForm">
+    <form [formGroup]="filterSuppliesForm">
       <div class="form-inline pull-left">
         <label class="control-label">Filter</label> &nbsp;
-        <select class="form-control"  formControlName="suppliesFilter">
+        <select class="form-control" formControlName="suppliesFilter">
           <option value="all">All</option>
-          <option value="unapproved_delivery">Unapproved delivery</option>
+          <!--<option value="unapproved_delivery">Unapproved delivery</option>-->
           <option value="unpaid_delivery">Unpaid delivery</option>
-          <option value="unapproved_payment">Unapproved payment</option>
+          <!--<option value="unapproved_payment">Unapproved payment</option>-->
         </select>
       </div>
-      </form>
-    -->
+    </form>
     <form [formGroup]="paySuppliesForm" (ngSubmit)="onSavePay()">
       <button appRequiredSeason class="btn btn-success pull-right btn-margin">
         <i class="fa fa-money"></i> pay
@@ -90,9 +88,10 @@
     <div class="box">
       <div class="box-body">
         <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped">
-        <thead>
+          <thead>
           <tr>
             <th></th>
+            <th><i class="fa fa-check-square-o"></i></th>
             <th>CherriesQty (kg)</th>
             <th>Unit price</th>
             <th>Delivery approval</th>
@@ -105,8 +104,10 @@
           </thead>
           <tbody>
           <tr *ngFor="let supply of cherrySupplies">
+            <td></td>
             <td>
-              <div *ngIf="supply.owedAmount > 0"><input type="checkbox" (click)="selectSupply($event.target.checked, supply)"></div>
+              <div *ngIf="supply.owedAmount > 0" style="margin-left: -10px; text-align: center;"><input type="checkbox"
+                                                        (click)="selectSupply($event.target.checked, supply)"></div>
             </td>
             <td> {{ supply.cherriesQty }}</td>
             <td> {{ supply.unitPerKg }}</td>

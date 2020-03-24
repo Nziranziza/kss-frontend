@@ -54,6 +54,8 @@ export class ParchmentReportComponent extends BasicComponent implements OnInit {
 
   total = 0;
   isCurrentUserDCC;
+  subRegionFilter: any;
+  regionIds = [];
 
   constructor(private formBuilder: FormBuilder,
               private authorisationService: AuthorisationService,
@@ -95,10 +97,14 @@ export class ParchmentReportComponent extends BasicComponent implements OnInit {
         filters.location['searchBy'.toString()] = searchBy;
         this.helper.cleanObject(filters.location);
       }
+      this.subRegionFilter = JSON.parse(JSON.stringify(filters));
+      this.setSubRegionFilter(this.subRegionFilter);
+
       this.parchmentService.report(filters).subscribe((data) => {
         this.loading = false;
         this.total = 0;
         const reports = [];
+        this.regionIds = [];
         if (data.content.length !== 0) {
           data.content.forEach((item) => {
             const existing = reports.filter((value) => {
@@ -109,6 +115,12 @@ export class ParchmentReportComponent extends BasicComponent implements OnInit {
               reports[existingIndex][1] = reports[existingIndex][1] + item.totalCherries;
               reports[existingIndex][3] = (reports[existingIndex][1] / 5);
             } else {
+              if (item.regionId) {
+                this.regionIds.push(item.regionId);
+              }
+              if (item.cwsId) {
+                this.regionIds.push(item.cwsId);
+              }
               reports.push([isUndefined(item.name)
                 ? item.regionName : item.name, item.totalCherries, item.totalParchments, (item.totalCherries)]);
             }
@@ -175,8 +187,11 @@ export class ParchmentReportComponent extends BasicComponent implements OnInit {
   }
 
   selectHandler(event) {
-    const modalRef = this.modal.open(ParchmentReportDetailComponent, {size: 'lg'});
-    modalRef.componentInstance.location = event;
+    if (event[0]) {
+      this.updateSubRegionFilter(this.regionIds[event[0].row]);
+      const modalRef = this.modal.open(ParchmentReportDetailComponent, {size: 'lg'});
+      modalRef.componentInstance.location = this.subRegionFilter;
+    }
   }
 
   initial() {
@@ -189,5 +204,60 @@ export class ParchmentReportComponent extends BasicComponent implements OnInit {
           .patchValue(this.authenticationService.getCurrentUser().info.location.dist_id);
       }
     });
+  }
+
+  setSubRegionFilter(filter: any) {
+    switch (filter.location.searchBy) {
+      case 'all provinces': {
+        this.subRegionFilter.location = {
+          searchBy: 'province',
+          prov_id: null,
+        };
+        break;
+      }
+
+      case 'province': {
+        this.subRegionFilter.location = {
+          searchBy: 'district',
+          dist_id: null,
+        };
+        break;
+      }
+
+      case 'district': {
+        this.subRegionFilter.location = {
+          searchBy: 'cws',
+          cws_id: null,
+        };
+        break;
+      }
+
+      case 'sector': {
+        this.subRegionFilter.location = {
+          searchBy: 'cws',
+          cws_id: null,
+        };
+        break;
+      }
+    }
+  }
+
+  updateSubRegionFilter(id: string) {
+    switch (this.subRegionFilter.location.searchBy) {
+      case 'province': {
+        this.subRegionFilter.location.prov_id = id;
+        break;
+      }
+
+      case 'district': {
+        this.subRegionFilter.location.dist_id = id;
+        break;
+      }
+
+      case 'cws': {
+        this.subRegionFilter.location.cws_id = id;
+        break;
+      }
+    }
   }
 }

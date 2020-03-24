@@ -25,8 +25,13 @@
             <li>
               <ul class="menu">
                 <li>
-                  <a routerLink="/admin/farmers/need-approval/list">
-                    <i class="fa fa-users text-aqua"></i> {{ needOfApproval }} updates need to be approved
+                  <a [routerLink]="['/admin/farmers/need-approval/list', {needApproval:'updated'}]">
+                    <i class="fa fa-map-marker text-aqua"></i> <span class="text-yellow">{{ updatedLandToApprove }}</span> updated lands need to be approved
+                  </a>
+                </li>
+                <li>
+                  <a [routerLink]="['/admin/farmers/need-approval/list', {needApproval:'new'}]">
+                    <i class="fa fa-map-marker text-aqua"></i> <span class="text-yellow"> {{ newLandToApprove }}</span> new lands need to be approved
                   </a>
                 </li>
               </ul>

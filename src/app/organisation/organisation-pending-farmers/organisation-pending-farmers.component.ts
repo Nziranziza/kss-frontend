@@ -109,7 +109,7 @@ export class OrganisationPendingFarmersComponent implements OnInit, OnDestroy {
 
 
   canApprove(missingInfo: any) {
-    return this.isCwsOfficer;
+    return this.isCwsOfficer || this.authorisationService.isDistrictCashCropOfficer();
   }
 
   onFilter() {
