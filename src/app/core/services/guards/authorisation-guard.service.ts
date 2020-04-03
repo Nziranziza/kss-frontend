@@ -6,6 +6,7 @@ import {AuthenticationService} from '../authentication.service';
 @Injectable({
   providedIn: 'root'
 })
+
 export class AuthorisationGuardService implements CanActivate {
   currentUser: any;
 
@@ -31,7 +32,7 @@ export class AuthorisationGuardService implements CanActivate {
           }
         } else {
           hasRole = this.currentUser.parameters.role.includes(permission[0]);
-          isType = +this.currentUser.parameters.type === permission[1];
+          isType = + this.currentUser.parameters.type === permission[1];
           if (hasRole && isType) {
             hasPermission = true;
           }

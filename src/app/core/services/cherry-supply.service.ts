@@ -37,4 +37,8 @@ export class CherrySupplyService {
   report(data: any) {
     return this.apiService.post('/cwsstats/cherrysupply/', data);
   }
+
+  cancelSupply(data: any) {
+    return this.apiService.post('/cherrysupply/cancel/supply', data);
+  }
 }

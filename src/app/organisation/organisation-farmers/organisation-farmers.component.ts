@@ -8,6 +8,7 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {AuthorisationService} from '../../core/services';
 import {isArray, isObject} from 'util';
 import {BasicComponent} from '../../core/library';
+import {ParchmentReportDetailComponent} from '../../parchment/parchment-report/parchment-report-detail/parchment-report-detail.component';
 
 @Component({
   selector: 'app-organisation-farmers',
@@ -43,11 +44,24 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
     totalParchments: 0,
     expectedParchments: 0,
   };
+  subRegionFilter: any;
+  seasonStartingTime: string;
 
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.organisationId = params['organisationId'.toString()];
     });
+    this.seasonStartingTime = this.authenticationService.getCurrentSeason().created_at;
+    this.subRegionFilter = {
+      location: {
+        searchBy: 'cws',
+        cws_id: this.organisationId
+      },
+      date: {
+        from: this.seasonStartingTime,
+        to: new Date()
+      }
+    };
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 25
@@ -104,6 +118,10 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
     }
   }
 
+  showProduction() {
+      const modalRef = this.modal.open(ParchmentReportDetailComponent, {size: 'lg'});
+      modalRef.componentInstance.location = this.subRegionFilter;
+  }
 
   viewDetails(farmer: Farmer) {
     const modalRef = this.modal.open(FarmerDetailsComponent, {size: 'lg'});

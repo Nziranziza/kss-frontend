@@ -67,14 +67,19 @@
     <button class="btn btn-default btn-margin pull-right" (click)="editProfile(farmer.userInfo)">
       <i class="fa fa-pencil"></i> Profile
     </button>
-    <ng-container *appHasPermission="[0,[8,1],[1,1]]">
-      <a class="btn btn-success btn-margin pull-right" *ngIf="!resetPin" (click)="enableResetPin(true)"><i
-        class="fa fa-check"></i>&nbsp; Enable pin reset
-      </a>
-      <a class="btn btn-warning btn-margin pull-right" *ngIf="resetPin" (click)="enableResetPin(false)"><i
-        class="fa fa-close"></i>&nbsp; Disable pin reset
-      </a>
-    </ng-container>
+    <div *appHasPermission="[0,[8,1],[1,1]]">
+      <ng-container *ngIf="showSetPinButton; else loadingSetPinStatus">
+        <a class="btn btn-success btn-margin pull-right" *ngIf="!resetPin" (click)="enableResetPin(true)"><i
+          class="fa fa-check"></i>&nbsp; Enable pin reset
+        </a>
+        <a class="btn btn-warning btn-margin pull-right" *ngIf="resetPin" (click)="enableResetPin(false)"><i
+          class="fa fa-close"></i>&nbsp; Disable pin reset
+        </a>
+      </ng-container>
+      <ng-template #loadingSetPinStatus>
+        <app-spinner class="pull-right"></app-spinner>
+      </ng-template>
+    </div>
   </div>
 </div>
 <br/> <br/>

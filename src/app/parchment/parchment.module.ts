@@ -15,7 +15,9 @@ import {FusionChartsModule} from 'angular-fusioncharts';
 import {GoogleChartsModule} from 'angular-google-charts';
 import {ParchmentReportDetailComponent} from './parchment-report/parchment-report-detail/parchment-report-detail.component';
 
-@NgModule({declarations: [ParchmentListComponent, ParchmentCreateComponent, ParchmentTransferComponent, ParchmentReportComponent, ParchmentReportDetailComponent],
+@NgModule({
+  declarations: [ParchmentListComponent, ParchmentCreateComponent, ParchmentTransferComponent,
+    ParchmentReportComponent, ParchmentReportDetailComponent],
   imports: [
     CommonModule,
     ParchmentRoutingModule, NgbModule, NgxPaginationModule, OrderModule,

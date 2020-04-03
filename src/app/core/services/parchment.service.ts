@@ -33,4 +33,8 @@ export class ParchmentService {
   detailedReport(data: any) {
     return this.apiService.post('/cwsstats/detailed/cherry_parchment', data);
   }
+
+  cancelParchment(data: any) {
+    return this.apiService.post('/parchment/cancel/parchment', data);
+  }
 }

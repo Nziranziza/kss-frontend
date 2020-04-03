@@ -66,10 +66,17 @@
       </div>
     </div>
     <div class="col-sm-8" *appHasPermission="[0,[8,1],[1,1]]">
-      <a class="btn btn-success btn-margin pull-right" *ngIf="!resetPin" (click)="enableResetPin(true)"><i class="fa fa-check"></i>&nbsp; Enable pin reset
-      </a>
-      <a class="btn btn-warning btn-margin pull-right" *ngIf="resetPin" (click)="enableResetPin(false)"><i class="fa fa-close"></i>&nbsp; Disable pin reset
-      </a>
+      <ng-container *ngIf="showSetPinButton; else loadingSetPinStatus">
+        <a class="btn btn-success btn-margin pull-right" *ngIf="!resetPin" (click)="enableResetPin(true)"><i
+          class="fa fa-check"></i>&nbsp; Enable pin reset
+        </a>
+        <a class="btn btn-warning btn-margin pull-right" *ngIf="resetPin" (click)="enableResetPin(false)"><i
+          class="fa fa-close"></i>&nbsp; Disable pin reset
+        </a>
+      </ng-container>
+      <ng-template #loadingSetPinStatus>
+        <app-spinner class="pull-right"></app-spinner>
+      </ng-template>
     </div>
   </div>
   <br/> <br/>
@@ -106,8 +113,8 @@
                                                                        *ngIf="request.location.village_id">{{ request.location.village_id.name }}</span>
           </td>
           <td>{{ request.numberOfTrees }}</td>
-          <td>{{ request.fertilizer_need }} Kg</td>
-          <td>{{ request.fertilizer_allocate }} Kg</td>
+          <td>{{ request.fertilizer_need | number:'1.0-1' }} Kg</td>
+          <td>{{ request.fertilizer_allocate | number:'1.0-1' }} Kg</td>
           <td style="color: #F3A700">{{ request?.treesAtDistribution }} &nbsp; &nbsp;</td>
           <td>{{ request.update_comments }}</td>
         </tr>

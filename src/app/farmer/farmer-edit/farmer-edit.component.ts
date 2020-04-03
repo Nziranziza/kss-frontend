@@ -28,6 +28,7 @@ export class FarmerEditComponent extends BasicComponent implements OnInit, OnDes
   isUserSiteManager = false;
   isCWSOfficer = false;
   resetPin = true;
+  showSetPinButton = false;
 
   constructor(private route: ActivatedRoute, private router: Router,
               private authenticationService: AuthenticationService,
@@ -112,6 +113,7 @@ export class FarmerEditComponent extends BasicComponent implements OnInit, OnDes
         this.farmerType = this.farmer.userInfo.type;
       }
       this.requests = this.farmer.request.requestInfo;
+      this.getSetPinStatus();
     });
   }
 
@@ -125,10 +127,13 @@ export class FarmerEditComponent extends BasicComponent implements OnInit, OnDes
   }
 
   getSetPinStatus() {
+    this.showSetPinButton = false;
     this.userService.isSetPinAllowed(this.farmer.userInfo.regNumber).subscribe((data) => {
+      this.showSetPinButton = true;
       this.resetPin = data.content.allowedToSetPin;
     });
   }
+
   ngOnDestroy(): void {
     this.messageService.setMessage('');
   }

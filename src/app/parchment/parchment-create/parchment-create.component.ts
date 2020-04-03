@@ -61,6 +61,7 @@ export class ParchmentCreateComponent extends BasicComponent implements OnInit {
     if (this.recordParchmentForm.valid) {
       const parchment = JSON.parse(JSON.stringify(this.recordParchmentForm.value));
       parchment['org_id'.toString()] = this.authenticationService.getCurrentUser().info.org_id;
+      parchment['userId'.toString()] = this.authenticationService.getCurrentUser().info._id;
       this.parchmentService.save(parchment)
         .subscribe((data) => {
             this.modal.close(data.message);

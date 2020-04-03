@@ -100,13 +100,14 @@
             <th></th>
             <th>Owed amount</th>
             <th>Date</th>
+            <th></th>
           </tr>
           </thead>
           <tbody>
           <tr *ngFor="let supply of cherrySupplies">
             <td></td>
             <td>
-              <div *ngIf="supply.owedAmount > 0" style="margin-left: -10px; text-align: center;"><input type="checkbox"
+              <div *ngIf="supply.owedAmount > 0" style="text-align: center;"><input type="checkbox"
                                                         (click)="selectSupply($event.target.checked, supply)"></div>
             </td>
             <td> {{ supply.cherriesQty }}</td>
@@ -135,6 +136,11 @@
             </td>
             <td> {{ supply.owedAmount }}</td>
             <td> {{ supply.updatedAt | date }}</td>
+            <td>
+              <button class="btn btn-default btn-margin btn-sm pull-right" (click)="cancelSupply(supply._id)" type="button">
+              <i class="fa fa-remove" aria-hidden="true"></i> Cancel
+              </button>
+            </td>
           </tr>
           </tbody>
         </table>

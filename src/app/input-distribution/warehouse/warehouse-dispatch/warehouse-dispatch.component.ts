@@ -63,7 +63,6 @@ export class WarehouseDispatchComponent extends BasicComponent implements OnInit
   fertilizerStocks: any;
   pesticideStocks: any;
   season: any;
-  table: any;
 
   ngOnInit() {
     this.currentDate = new Date();
@@ -116,7 +115,6 @@ export class WarehouseDispatchComponent extends BasicComponent implements OnInit
     this.getStocks(1);
     this.addPackageFertilizer();
     this.getCurrentSeason();
-    this.table = $('#responsive-table');
   }
 
   get formPackageFertilizer() {

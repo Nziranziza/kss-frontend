@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {MessageService} from '../../core/services';
+import {AuthorisationService, ConfirmDialogService, FarmerService, MessageService} from '../../core/services';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {SeasonService} from '../../core/services';
 import {EditSeasonComponent} from './edit-season/edit-season.component';
@@ -16,6 +16,9 @@ export class SeasonParametersComponent implements OnInit, OnDestroy {
   constructor(private route: ActivatedRoute, private router: Router,
               private seasonService: SeasonService,
               private messageService: MessageService,
+              private farmerService: FarmerService,
+              private confirmDialogService: ConfirmDialogService,
+              private authorisationService: AuthorisationService,
               private modal: NgbModal) {
   }
 
@@ -23,10 +26,12 @@ export class SeasonParametersComponent implements OnInit, OnDestroy {
   id: string;
   errors = [];
   message: string;
+  isTechouseUser = false;
 
   ngOnInit() {
     this.message = this.messageService.getMessage();
     this.getSeasons();
+    this.isTechouseUser = this.authorisationService.isTechouseUser();
   }
 
   editSeason(season: any) {
@@ -48,6 +53,22 @@ export class SeasonParametersComponent implements OnInit, OnDestroy {
     this.seasonService.all().subscribe(data => {
       this.seasons = data.content;
     });
+  }
+
+  copySeason(): void {
+    this.confirmDialogService.openConfirmDialog('Are you sure you want to copy farmers requests from previous season ? ' +
+      'action cannot be undone').afterClosed().subscribe(
+      res => {
+        if (res) {
+          const body = {
+            operatorEmail: 'rukjose@gmail.com'
+          };
+          this.farmerService.copySeason(body)
+            .subscribe((data) => {
+              this.message = data.message;
+            });
+        }
+      });
   }
 
   ngOnDestroy(): void {

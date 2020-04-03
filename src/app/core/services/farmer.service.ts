@@ -70,6 +70,10 @@ export class FarmerService {
     return this.apiService.put('/coffeefarmers/requestinfo/edit', data);
   }
 
+  copySeason(data: any) {
+    return this.apiService.post('/background/service/export_to_current_season', data);
+  }
+
   addFarmerRequest(data: any): Observable<any> {
     return this.apiService.put('/coffeefarmers/request/add', data);
   }
@@ -113,6 +117,7 @@ export class FarmerService {
   approveNewLands(data: any): Observable<any> {
     return this.apiService.put('/coffeefarmers/requestinfo/approve_update', data);
   }
+
   administrativeList(parameters: any) {
     return this.apiService.post('/coffeefarmers/farmers/input_list', parameters);
   }

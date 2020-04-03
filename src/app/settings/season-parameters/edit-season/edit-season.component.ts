@@ -64,46 +64,49 @@ export class EditSeasonComponent implements OnInit {
       cherriesUnitPrice: [''],
       floatingUnitPrice: ['']
     });
-    if (this.season.seasonParams.pesticide) {
-      this.season.seasonParams.pesticide.forEach(() => {
-        this.addPesticide();
-      });
-    } else {
-      this.addPesticide();
-    }
     this.isCurrentUserCeparOfficer = this.authorisationService.isCeparUser();
     this.isCurrentUserNaebOfficer = this.authorisationService.isNaebUser();
     this.editSeasonParamsForm.patchValue(this.season);
-    if (this.season.seasonParams.distribution) {
-      this.season.seasonParams.distribution.totalFertilizerAvailable =
-        (this.season.seasonParams.distribution.totalFertilizerAvailable / 1000);
-      this.season.seasonParams.distribution.totalPesticideAvailable =
-        (this.season.seasonParams.distribution.totalPesticideAvailable);
-    }
-    if (this.season.seasonParams.supplierId) {
-      this.season.seasonParams.distribution.supplierId =
-        this.season.seasonParams.supplierId[this.season.seasonParams.supplierId.length - 1]._id;
-    }
-    if (this.season.seasonParams.inputName) {
-      this.season.seasonParams.inputName = this.season.seasonParams.inputName._id;
-    }
-    if (this.season.seasonParams.pesticide) {
-      const pesticides = [];
-      this.season.seasonParams.pesticide.map((pe) => {
-        pesticides.push({
-          inputName: pe.inputName ? pe.inputName._id : null,
-          pesticideMlPerTree: pe.pesticideMlPerTree
+
+    if (this.season.seasonParams) {
+      if (this.season.seasonParams.pesticide) {
+        this.season.seasonParams.pesticide.forEach(() => {
+          this.addPesticide();
         });
-      });
-      this.season.seasonParams.pesticide = pesticides;
+      } else {
+        this.addPesticide();
+      }
+      if (this.season.seasonParams.distribution) {
+        this.season.seasonParams.distribution.totalFertilizerAvailable =
+          (this.season.seasonParams.distribution.totalFertilizerAvailable / 1000);
+        this.season.seasonParams.distribution.totalPesticideAvailable =
+          (this.season.seasonParams.distribution.totalPesticideAvailable);
+      }
+      if (this.season.seasonParams.supplierId) {
+        this.season.seasonParams.distribution.supplierId =
+          this.season.seasonParams.supplierId[this.season.seasonParams.supplierId.length - 1]._id;
+      }
+      if (this.season.seasonParams.inputName) {
+        this.season.seasonParams.inputName = this.season.seasonParams.inputName._id;
+      }
+      if (this.season.seasonParams.pesticide) {
+        const pesticides = [];
+        this.season.seasonParams.pesticide.map((pe) => {
+          pesticides.push({
+            inputName: pe.inputName ? pe.inputName._id : null,
+            pesticideMlPerTree: pe.pesticideMlPerTree
+          });
+        });
+        this.season.seasonParams.pesticide = pesticides;
+      }
+      if (this.season.seasonParams.distribution) {
+        delete this.season.seasonParams.distribution.supplierId;
+      }
+      this.editDistributionForm.patchValue(this.season.seasonParams);
+      this.editPriceForm.patchValue(this.season.seasonParams);
+      this.editPesticideForm.patchValue(this.season.seasonParams);
+      this.editFertilizerForm.patchValue(this.season.seasonParams);
     }
-    if (this.season.seasonParams.distribution) {
-      delete this.season.seasonParams.distribution.supplierId;
-    }
-    this.editDistributionForm.patchValue(this.season.seasonParams);
-    this.editPriceForm.patchValue(this.season.seasonParams);
-    this.editPesticideForm.patchValue(this.season.seasonParams);
-    this.editFertilizerForm.patchValue(this.season.seasonParams);
     this.initial();
   }
 

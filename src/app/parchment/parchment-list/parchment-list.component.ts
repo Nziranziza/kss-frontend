@@ -1,7 +1,7 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {MessageService} from '../../core/services';
+import {ConfirmDialogService, MessageService} from '../../core/services';
 import {ParchmentService} from '../../core/services';
 import {AuthenticationService} from '../../core/services';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
@@ -40,16 +40,20 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
     {value: 'date', name: 'date'},
     {value: 'type', name: 'type'}
   ];
+  summary: any;
+  filter: any;
+  seasonStartingDate: string;
 
   constructor(private parchmentService: ParchmentService,
               private router: Router,
               private formBuilder: FormBuilder,
               private messageService: MessageService,
+              private confirmDialogService: ConfirmDialogService,
               private modal: NgbModal,
               private authenticationService: AuthenticationService) {
     super();
     this.parameters = {
-      length: 10,
+      length: 25,
       start: 0,
       draw: 1
     };
@@ -57,6 +61,7 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
 
   ngOnInit(): void {
     this.parameters['org_id'.toString()] = this.authenticationService.getCurrentUser().info.org_id;
+    this.seasonStartingDate = this.authenticationService.getCurrentSeason().created_at;
     this.config = {
       itemsPerPage: 10,
       currentPage: 1,
@@ -78,7 +83,7 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
       term: ['', Validators.minLength(3)],
       searchBy: ['date']
     });
-
+    this.productionSummary();
     this.message = this.messageService.getMessage();
   }
 
@@ -121,6 +126,22 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
     this.order = value;
   }
 
+  productionSummary() {
+    this.filter = {
+      date: {
+        from: this.seasonStartingDate,
+        to: new Date()
+      },
+      location: {
+        searchBy: 'cws',
+        cws_id: this.authenticationService.getCurrentUser().info.org_id
+      }
+    };
+    this.parchmentService.detailedReport(this.filter).subscribe((data) => {
+      this.summary = data.content[0].parchments;
+    });
+  }
+
   onFilter() {
     if (this.filterForm.valid) {
       this.loading = true;
@@ -139,6 +160,34 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
     }
   }
 
+  cancelParchment(parchmentId: string): void {
+    this.confirmDialogService.openConfirmDialog('Are you sure you want to cancel this supply? ' +
+      'action cannot be undone').afterClosed().subscribe(
+      res => {
+        if (res) {
+          const body = {
+            userId: this.authenticationService.getCurrentUser().info._id,
+            parchmentId
+          };
+          this.parchmentService.cancelParchment(body).subscribe((response) => {
+            this.setMessage(response.message);
+            this.parchmentService.all(this.parameters)
+              .subscribe(data => {
+                this.parchments = data.data;
+                this.config = {
+                  itemsPerPage: this.parameters.length,
+                  currentPage: this.parameters.start + 1,
+                  totalItems: data.recordsTotal
+                };
+              });
+            this.setOrder('created_at');
+          }, (err) => {
+            this.setError(err.errors);
+          });
+        }
+      });
+  }
+
   onClearFilter() {
     this.filterForm.controls.term.reset();
     delete this.parameters.search;
@@ -153,6 +202,7 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
       });
     this.setOrder('created_at');
   }
+
   ngOnDestroy(): void {
     this.messageService.setMessage('');
   }

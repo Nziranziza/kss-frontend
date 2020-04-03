@@ -15,6 +15,7 @@ export class FarmerDetailsComponent implements OnInit {
   @Input() farmer;
   requests: any;
   resetPin = true;
+  showSetPinButton = false;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object, private userService: UserService,
@@ -52,7 +53,9 @@ export class FarmerDetailsComponent implements OnInit {
   }
 
   getSetPinStatus() {
+    this.showSetPinButton = false;
     this.userService.isSetPinAllowed(this.farmer.userInfo.regNumber).subscribe((data) => {
+      this.showSetPinButton = true;
       this.resetPin = data.content.allowedToSetPin;
     });
   }

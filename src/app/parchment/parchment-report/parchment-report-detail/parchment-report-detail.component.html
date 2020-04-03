@@ -10,6 +10,32 @@
       </div>
     </div>
   </div>
+  <app-list-errors [errorList]="errors"></app-list-errors>
+  <form [formGroup]="filterForm" (ngSubmit)="onSubmit()">
+    <div class="row">
+        <div formGroupName="date">
+          <div class="col-xs-3">
+            <div class="form-group">
+              <label class="control-label label-required">From date</label>
+              <input  [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="from" class="form-control">
+              <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+            </div>
+          </div>
+          <div class="col-xs-3">
+            <div class="form-group">
+              <label class="control-label label-required">to</label>
+              <input [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" formControlName="to" class="form-control">
+              <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
+            </div>
+          </div>
+          <div class="col-xs-3">
+            <div class="form-group" style="margin-top: 25px">
+            <button class="btn btn-success" type="submit"> Request</button>
+            </div>
+          </div>
+        </div>
+    </div>
+  </form>
   <ng-container *ngIf="production">
     <div class="row">
       <div class="col-xs-12">

@@ -62,6 +62,14 @@ export class LoginComponent implements OnInit, OnDestroy {
         }
       });
     if (this.authenticationService.isLoggedIn()) {
+      this.seasonService.all().subscribe((dt) => {
+        const seasons = dt.content;
+        seasons.forEach((item) => {
+          if (item.isCurrent) {
+            this.authenticationService.setCurrentSeason(item);
+          }
+        });
+      });
       this.afterLogInRedirect();
     }
   }

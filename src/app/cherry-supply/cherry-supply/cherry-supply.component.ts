@@ -1,21 +1,23 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {HelperService} from '../../core/helpers';
-import {CherrySupplyService} from '../../core/services';
+import {CherrySupplyService, ConfirmDialogService} from '../../core/services';
 import {Subject} from 'rxjs';
 import {AuthenticationService} from '../../core/services';
 import {Location} from '@angular/common';
+import {DataTableDirective} from 'angular-datatables';
 
 @Component({
   selector: 'app-cherry-supply',
   templateUrl: './cherry-supply.component.html',
   styleUrls: ['./cherry-supply.component.css']
 })
-export class CherrySupplyComponent implements OnInit, OnDestroy {
+export class CherrySupplyComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(private formBuilder: FormBuilder, private cherrySupplyService: CherrySupplyService,
               private route: ActivatedRoute,
+              private confirmDialogService: ConfirmDialogService,
               private router: Router, private helper: HelperService,
               private location: Location, private authenticationService: AuthenticationService) {
   }
@@ -33,7 +35,10 @@ export class CherrySupplyComponent implements OnInit, OnDestroy {
   regNumber: string;
   message: string;
   organisationId: string;
-  triggerDataTable = true;
+
+  // @ts-ignore
+  @ViewChild(DataTableDirective, {static: false})
+  dtElement: DataTableDirective;
 
   ngOnInit() {
     this.recordCherryDeliveryForm = this.formBuilder.group({
@@ -52,14 +57,13 @@ export class CherrySupplyComponent implements OnInit, OnDestroy {
       pageLength: 25,
       columns: [{}, {}, {}, {}, {}, {}, {}, {
         class: 'none'
-      }, {}, {}],
+      }, {}, {}, {}],
       responsive: true
     };
     this.organisationId = this.authenticationService.getCurrentUser().info.org_id;
     this.route.params.subscribe(params => {
       this.regNumber = params['regNumber'.toString()];
     });
-    this.getFarmerSupplies(this.organisationId, this.regNumber);
     this.onChangeFarmerSuppliesFilter();
   }
 
@@ -68,6 +72,7 @@ export class CherrySupplyComponent implements OnInit, OnDestroy {
       const record = this.recordCherryDeliveryForm.value;
       record['org_id'.toString()] = this.organisationId;
       record['regNumber'.toString()] = this.regNumber;
+      record['userId'.toString()] = this.authenticationService.getCurrentUser().info._id;
       this.cherrySupplyService.saveDelivery(record)
         .subscribe(() => {
             this.getFarmerSupplies(record['org_id'.toString()], record['regNumber'.toString()]);
@@ -84,6 +89,13 @@ export class CherrySupplyComponent implements OnInit, OnDestroy {
     }
   }
 
+  ngAfterViewInit(): void {
+    this.cherrySupplyService.getFarmerDeliveries(this.organisationId, this.regNumber).subscribe((data) => {
+      this.cherrySupplies = data.content;
+      this.dtTrigger.next();
+    });
+  }
+
   onSavePay() {
     if (this.paySuppliesForm.valid) {
       if (this.paymentDeliveryIds.length < 1) {
@@ -93,6 +105,7 @@ export class CherrySupplyComponent implements OnInit, OnDestroy {
       const record = JSON.parse(JSON.stringify(this.paySuppliesForm.value));
       record['deliveryIds'.toString()] = this.paymentDeliveryIds;
       record['regNumber'.toString()] = this.regNumber;
+      record['userId'.toString()] = this.authenticationService.getCurrentUser().info._id;
       this.cherrySupplyService.paySupplies(record)
         .subscribe(() => {
             this.getFarmerSupplies(this.organisationId, this.regNumber);
@@ -116,7 +129,6 @@ export class CherrySupplyComponent implements OnInit, OnDestroy {
           case 'unapproved_delivery': {
             this.cherrySupplyService.getFarmerUnapprovedDeliveries(this.organisationId, this.regNumber)
               .subscribe((data) => {
-                console.log(data);
                 this.cherrySupplies = data.content;
               });
             break;
@@ -162,10 +174,7 @@ export class CherrySupplyComponent implements OnInit, OnDestroy {
   getFarmerSupplies(organisationId: string, regNumber: string): void {
     this.cherrySupplyService.getFarmerDeliveries(organisationId, regNumber).subscribe((data) => {
       this.cherrySupplies = data.content;
-      if (this.triggerDataTable) {
-        this.dtTrigger.next();
-        this.triggerDataTable = false;
-      }
+      this.rerender();
     });
   }
 
@@ -181,6 +190,35 @@ export class CherrySupplyComponent implements OnInit, OnDestroy {
       this.totalAmountToPay = this.totalAmountToPay - supply.owedAmount;
       this.paymentDeliveryIds.splice(this.paymentDeliveryIds.indexOf(supply._id), 1);
     }
+  }
+
+  cancelSupply(supplyId: string): void {
+    this.confirmDialogService.openConfirmDialog('Are you sure you want to cancel this supply? ' +
+      'action cannot be undone').afterClosed().subscribe(
+      res => {
+        if (res) {
+          const body = {
+            userId: this.authenticationService.getCurrentUser().info._id,
+            supplyId
+          };
+          this.cherrySupplyService.cancelSupply(body).subscribe((data) => {
+            this.message = data.message;
+            this.getFarmerSupplies(this.organisationId, this.regNumber);
+          }, (err) => {
+            console.log('Here!');
+            console.log(err.errors);
+            this.message = '';
+            this.errors = err.errors;
+          });
+        }
+      });
+  }
+
+  rerender(): void {
+    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      dtInstance.destroy();
+      this.dtTrigger.next();
+    });
   }
 
   onCancel() {
