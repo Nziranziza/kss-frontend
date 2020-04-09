@@ -205,8 +205,6 @@ export class CherrySupplyComponent implements OnInit, OnDestroy, AfterViewInit {
             this.message = data.message;
             this.getFarmerSupplies(this.organisationId, this.regNumber);
           }, (err) => {
-            console.log('Here!');
-            console.log(err.errors);
             this.message = '';
             this.errors = err.errors;
           });

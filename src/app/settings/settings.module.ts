@@ -10,11 +10,12 @@ import {CoffeeTypeCreateComponent} from './coffee-type/coffee-type-create/coffee
 import {DistributionParametersComponent} from './distribution-parameters/distribution-parameters.component';
 import { EditInputComponent } from './distribution-parameters/edit-input/edit-input.component';
 import { EditSupplierComponent } from './distribution-parameters/edit-supplier/edit-supplier.component';
+import { ChannelComponent } from './channel/channel.component';
 
 
 @NgModule({
   declarations: [SeasonParametersComponent, CreateSeasonComponent, EditSeasonComponent,
-    CoffeeTypeComponent, CoffeeTypeCreateComponent, DistributionParametersComponent, EditInputComponent, EditSupplierComponent],
+    CoffeeTypeComponent, CoffeeTypeCreateComponent, DistributionParametersComponent, EditInputComponent, EditSupplierComponent, ChannelComponent],
   imports: [
     CommonModule,
     SettingsRoutingModule,

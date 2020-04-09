@@ -6,6 +6,5 @@ export class ErrorCustomHandler implements ErrorHandler {
   }
 
   handleError(error) {
-    console.log(error);
   }
 }

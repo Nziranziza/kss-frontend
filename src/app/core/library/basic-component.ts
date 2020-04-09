@@ -9,12 +9,14 @@ export abstract class BasicComponent {
     this.message = undefined;
     this.loading = false;
     this.warning = undefined;
+
     $(() => {
       $('.custom-error').each((index, element) => {
         const $element = $(element);
         $element.show();
       });
     });
+
     $(() => {
       $('.custom-error').each((index, element) => {
         const $element = $(element);

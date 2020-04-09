@@ -122,10 +122,13 @@ export class ParchmentReportComponent extends BasicComponent implements OnInit {
                 this.regionIds.push(item.cwsId);
               }
               reports.push([isUndefined(item.name)
-                ? item.regionName : item.name, item.totalCherries, item.totalParchments, (item.totalCherries)]);
+                ? item.regionName : item.name, isUndefined(item.totalCherries) ? 0 : item.totalCherries,
+                isUndefined(item.totalParchments) ? 0 : item.totalParchments,
+                (isUndefined(item.totalCherries) ? 0 : item.totalCherries / 5)]);
             }
           });
           this.graph1.data = reports;
+          console.log(reports);
           this.clear();
           this.showReport = true;
         } else {
