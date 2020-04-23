@@ -10,3 +10,8 @@ table.table-bordered.dataTable td:last-child, table.table-bordered.dataTable td:
 .details-row-data-sm {
   font-size: 12px !important;
 }
+
+.sorting {
+  float: right;
+  color: #dddddd;
+}

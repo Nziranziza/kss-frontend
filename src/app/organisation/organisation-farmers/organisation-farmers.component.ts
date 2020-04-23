@@ -9,6 +9,7 @@ import {AuthorisationService} from '../../core/services';
 import {isArray, isObject} from 'util';
 import {BasicComponent} from '../../core/library';
 import {ParchmentReportDetailComponent} from '../../parchment/parchment-report/parchment-report-detail/parchment-report-detail.component';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-organisation-farmers',
@@ -21,16 +22,21 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
               private authenticationService: AuthenticationService,
               private excelService: ExcelServicesService,
               private route: ActivatedRoute,
+              private formBuilder: FormBuilder,
               private messageService: MessageService,
               private modal: NgbModal, private authorisationService: AuthorisationService) {
     super();
+    this.parameters = {
+      length: 25,
+      start: 0,
+      draw: 1
+    };
   }
 
   farmers: any;
+  paginatedFarmers: any;
   organisationId: string;
-  dtOptions: any = {};
   // @ts-ignore
-  dtTrigger: Subject = new Subject();
   loading = false;
   isUserCWSOfficer = true;
   org: any;
@@ -46,12 +52,48 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
   };
   subRegionFilter: any;
   seasonStartingTime: string;
+  filterForm: FormGroup;
+  maxSize = 9;
+  order = 'userInfo.foreName';
+  reverse = true;
+  directionLinks = true;
+  message: string;
+  showData = false;
+  id = 'farmers-list';
+  parameters: any;
+  config: any;
+  autoHide = false;
+  responsive = false;
+  errors = [];
+  labels: any = {
+    previousLabel: 'Previous',
+    nextLabel: 'Next',
+    screenReaderPaginationLabel: 'Pagination',
+    screenReaderPageLabel: 'page',
+    screenReaderCurrentLabel: `You're on page`
+  };
+  searchFields = [
+    {value: 'phone_number', name: 'phone number'},
+    {value: 'reg_number', name: 'registration number'},
+    {value: 'nid', name: 'NID'},
+    {value: 'forename', name: 'first name'},
+    {value: 'surname', name: 'last name'},
+    {value: 'groupname', name: 'group name'}
+  ];
 
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.organisationId = params['organisationId'.toString()];
     });
     this.seasonStartingTime = this.authenticationService.getCurrentSeason().created_at;
+    this.filterForm = this.formBuilder.group({
+      term: ['', Validators.minLength(3)],
+      searchBy: ['forename'],
+      date: this.formBuilder.group({
+        from: [''],
+        to: ['']
+      })
+    });
     this.subRegionFilter = {
       location: {
         searchBy: 'cws',
@@ -61,10 +103,6 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
         from: this.seasonStartingTime,
         to: new Date()
       }
-    };
-    this.dtOptions = {
-      pagingType: 'full_numbers',
-      pageLength: 25
     };
     this.getFarmers(this.organisationId);
     this.isUserCWSOfficer = this.authorisationService.isCWSUser();
@@ -88,7 +126,64 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
   }
 
   ngOnDestroy(): void {
-    this.dtTrigger.unsubscribe();
+  }
+
+  getPaginatedFarmers() {
+  }
+
+  onPageChange(event) {
+    this.config.currentPage = event;
+    if (event >= 1) {
+      this.parameters.start = (event - 1) * this.config.itemsPerPage;
+    }
+
+    this.organisationService.getFarmers(this.parameters)
+      .subscribe(data => {
+        this.paginatedFarmers = data.data;
+      });
+  }
+
+  setOrder(value: string) {
+    if (this.order === value) {
+      this.reverse = !this.reverse;
+    }
+    this.order = value;
+  }
+
+  onFilter() {
+    if (this.filterForm.valid) {
+      this.loading = true;
+      this.parameters['search'.toString()] = this.filterForm.value;
+      this.organisationService.getFarmers(this.parameters)
+        .subscribe(data => {
+          this.farmers = data.data;
+          this.config = {
+            itemsPerPage: this.parameters.length,
+            currentPage: this.parameters.start + 1,
+            totalItems: data.recordsTotal
+          };
+          this.loading = false;
+        }, (err) => {
+          this.loading = false;
+          this.errors = err.errors;
+        });
+    }
+  }
+
+  onClearFilter() {
+    this.filterForm.controls.term.reset();
+    delete this.parameters.search;
+    this.errors = [];
+
+    this.organisationService.getFarmers(this.parameters)
+      .subscribe(data => {
+        this.farmers = data.data;
+        this.config = {
+          itemsPerPage: this.parameters.length,
+          currentPage: this.parameters.start + 1,
+          totalItems: data.recordsTotal
+        };
+      });
   }
 
   getFarmers(orgId: string): void {
@@ -102,7 +197,6 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
           });
         });
         this.numberOfFarmers = this.farmers.length;
-        this.dtTrigger.next();
         this.loading = false;
       }
     });
