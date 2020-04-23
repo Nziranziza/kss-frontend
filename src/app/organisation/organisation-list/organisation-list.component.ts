@@ -44,6 +44,7 @@ export class OrganisationListComponent implements OnInit, OnDestroy {
     this.isSuperAdmin = this.authenticationService.getCurrentUser().parameters.role.includes(0);
     this.isNaebCoffeeValueChainOfficer = this.authorisationService.isNaebCoffeeValueChainOfficer();
     this.message = this.messageService.getMessage();
+    console.log(this.message);
   }
 
   isOrgCWS(org: any) {
@@ -52,7 +53,7 @@ export class OrganisationListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
-    this.messageService.setMessage('');
+    this.messageService.clearMessage();
   }
 
   isNotSuperOrganisation(organisation: any) {

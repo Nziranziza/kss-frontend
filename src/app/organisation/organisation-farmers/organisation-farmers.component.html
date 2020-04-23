@@ -13,7 +13,7 @@
   <div class="col-md-12">
     <div class="box box-default">
       <div class="box-header with-border">
-        <h3 class="box-title">{{ org?.organizationName }} >> farmers</h3>
+        <h3 class="box-title">{{org? org.organizationName : '' }}  >> farmers</h3>
         <div class="box-tools pull-right">
           <button type="button" class="btn btn-box-tool" data-target="#box-body" data-toggle="collapse"><i
             class="fa fa-expand"></i>
@@ -193,7 +193,7 @@
                  routerLink="/admin/farmers/edit/{{farmer.request._id}}">
                 Edit</a>
               <a appRequiredSeason routerLink="/admin/cherries/supply/select/{{farmer.userInfo.regNumber}}"
-                 *ngIf="isUserCWSOfficer" class="btn btn-success btn-margin pull-right btn-sm"
+                 *appHasPermission="[0,[1,1]]" class="btn btn-success btn-margin pull-right btn-sm"
                  style="margin-left: 10px;">
                 <i class="fa fa-cart-plus"></i> Supply </a>
               <ng-template *ngIf="hasRequest(farmer)">

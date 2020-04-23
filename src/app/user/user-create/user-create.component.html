@@ -1,5 +1,5 @@
 <h3>
-  {{org?.organizationName}} >> Create user
+  {{org? org.organizationName : '' }}  >> Create user
 </h3>
 <app-list-errors [errorList]="errors" *ngIf="errors.length > 0"></app-list-errors>
 <form [formGroup]="createForm" (ngSubmit)="onSubmit()">

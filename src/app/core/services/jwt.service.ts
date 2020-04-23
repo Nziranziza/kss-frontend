@@ -17,5 +17,4 @@ export class JwtService {
   destroyToken() {
     return this.cookieService.delete('token');
   }
-
 }

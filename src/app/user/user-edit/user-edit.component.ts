@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {UserService} from '../../core/services';
+import {MessageService, UserService} from '../../core/services';
 import {AuthenticationService, OrganisationService} from '../../core/services';
 import {LocationService} from '../../core/services';
 import {HelperService} from '../../core/helpers';
@@ -32,6 +32,7 @@ export class UserEditComponent implements OnInit {
   userNIDInfo = {};
   loading = false;
   editUser: any;
+  isFullyEditable = false;
   possibleStatuses = [
     {name: 'Pending', value: 2},
     {name: 'Approved', value: 3},
@@ -58,6 +59,7 @@ export class UserEditComponent implements OnInit {
               private userService: UserService, private helper: HelperService,
               private organisationService: OrganisationService,
               private siteService: SiteService,
+              private messageService: MessageService,
               private locationService: LocationService,
               private authenticationService: AuthenticationService) {
   }
@@ -69,7 +71,7 @@ export class UserEditComponent implements OnInit {
       email: [''],
       phone_number: [''],
       sex: ['', Validators.required],
-      NID: [''],
+      NID: [{value: '', disabled: true}],
       org_id: [''],
       userType: [''],
       userRoles: new FormArray([]),
@@ -120,6 +122,10 @@ export class UserEditComponent implements OnInit {
           });
         });
         this.editUser = user.content;
+        this.isFullyEditable = !!this.editUser.fullyEditable;
+        if (!this.isFullyEditable) {
+          this.editForm.controls.email.disable();
+        }
         const usr = user.content;
         if (usr.userRoles.includes(4)) {
           this.userService.userPermissions(4).subscribe(dt => {
@@ -296,10 +302,11 @@ export class UserEditComponent implements OnInit {
       delete user.userType;
       this.helper.cleanObject(user);
       this.helper.cleanObject(user.location);
-      if ((!this.editUser.fullyEditable) || (!this.editUser.email !== user.email)) {
+      if (!((this.editUser.fullyEditable) && (this.editUser.email !== user.email))) {
         delete user.email;
       }
       this.userService.update(user).subscribe(() => {
+          this.messageService.setMessage('user successfully updated.');
           this.router.navigateByUrl('admin/organisations/' + this.organisationId + '/users');
         },
         (err) => {

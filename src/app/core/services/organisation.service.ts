@@ -58,4 +58,8 @@ export class OrganisationService {
   getAllFarmers(id: string) {
     return this.apiService.get('/coffeefarmers/farmer_by_cws/' + id);
   }
+
+  getFarmers(body: any) {
+    return this.apiService.post('/coffeefarmers/farmer_by_cws/', body);
+  }
 }

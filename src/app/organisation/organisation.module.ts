@@ -12,12 +12,11 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {NgxPaginationModule} from 'ngx-pagination';
 import {OrderModule} from 'ngx-order-pipe';
 import {OwlDateTimeModule, OwlNativeDateTimeModule} from 'ng-pick-datetime';
-import { OrganisationSupplyingFarmersComponent } from './organisation-supplying-farmers/organisation-supplying-farmers.component';
 
 
 @NgModule({
   declarations: [OrganisationListComponent, OrganisationEditComponent,
-    OrganisationCreateComponent, OrganisationFarmersComponent, OrganisationPendingFarmersComponent, OrganisationSupplyingFarmersComponent],
+    OrganisationCreateComponent, OrganisationFarmersComponent, OrganisationPendingFarmersComponent],
   imports: [
     CommonModule,
     OrganisationRoutingModule,

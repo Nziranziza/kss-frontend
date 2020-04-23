@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {AuthorisationService, UserService} from '../../core/services';
+import {AuthorisationService, MessageService, UserService} from '../../core/services';
 import {OrganisationService} from '../../core/services';
 import {LocationService} from '../../core/services';
 import {HelperService} from '../../core/helpers';
@@ -49,6 +49,7 @@ export class UserCreateComponent implements OnInit {
               private userService: UserService,
               private siteService: SiteService,
               private helper: HelperService,
+              private messageService: MessageService,
               private authorisationService: AuthorisationService,
               private organisationService: OrganisationService,
               private locationService: LocationService) {
@@ -168,6 +169,7 @@ export class UserCreateComponent implements OnInit {
               }
               this.helper.cleanObject(user);
               this.userService.save(user).subscribe(() => {
+                  this.messageService.setMessage('user successfully created.');
                   this.router.navigateByUrl('admin/organisations/' + this.organisationId + '/users');
                 },
                 (err) => {
@@ -243,6 +245,7 @@ export class UserCreateComponent implements OnInit {
             this.helper.cleanObject(user);
             this.helper.cleanObject(user.location);
             this.userService.save(user).subscribe(() => {
+
                 this.router.navigateByUrl('admin/organisations/' + this.organisationId + '/users');
               },
               (err) => {

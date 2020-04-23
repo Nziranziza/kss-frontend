@@ -161,7 +161,7 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
   }
 
   cancelParchment(parchmentId: string): void {
-    this.confirmDialogService.openConfirmDialog('Are you sure you want to cancel this supply? ' +
+    this.confirmDialogService.openConfirmDialog('Are you sure you want to cancel this record? ' +
       'action cannot be undone').afterClosed().subscribe(
       res => {
         if (res) {
@@ -204,6 +204,6 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
   }
 
   ngOnDestroy(): void {
-    this.messageService.setMessage('');
+    this.messageService.clearMessage();
   }
 }

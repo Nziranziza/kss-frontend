@@ -1,39 +1,43 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {UserService} from '../../core/services';
+import {AuthorisationService, MessageService, UserService} from '../../core/services';
 import {User} from '../../core/models';
 import {ConfirmDialogService, OrganisationService} from '../../core/services';
 import {Subject} from 'rxjs';
 import {UserDetailsComponent} from '../user-details/user-details.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {BasicComponent} from '../../core/library';
 
 @Component({
   selector: 'app-user',
   templateUrl: './user-list.component.html',
   styleUrls: ['./user-list.component.css']
 })
-export class UserListComponent implements OnInit, OnDestroy {
+export class UserListComponent extends BasicComponent implements OnInit, OnDestroy {
 
   organisationId: string;
   users: User[];
-  message: string;
   dtOptions: DataTables.Settings = {};
   // @ts-ignore
   dtTrigger: Subject = new Subject();
   org: any;
+  isCWSAdmin: boolean;
 
   constructor(private route: ActivatedRoute,
               private modal: NgbModal,
               private userService: UserService,
+              private messageService: MessageService,
+              private authorisationService: AuthorisationService,
               private confirmDialogService: ConfirmDialogService,
               private organisationService: OrganisationService) {
-
+    super();
   }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.organisationId = params['organisationId'.toString()];
     });
+    this.isCWSAdmin = this.authorisationService.isCWSAdmin();
     this.getAllUsers();
     this.dtOptions = {
       pagingType: 'full_numbers',
@@ -42,10 +46,7 @@ export class UserListComponent implements OnInit, OnDestroy {
     this.organisationService.get(this.organisationId).subscribe(data => {
       this.org = data.content;
     });
-  }
-
-  ngOnDestroy(): void {
-    this.dtTrigger.unsubscribe();
+    this.message = this.messageService.getMessage();
   }
 
   getAllUsers(): void {
@@ -61,4 +62,20 @@ export class UserListComponent implements OnInit, OnDestroy {
     const modalRef = this.modal.open(UserDetailsComponent, {size: 'lg'});
     modalRef.componentInstance.user = user;
   }
+
+  isUserCWSCollector(user: any) {
+    let isCollector = false;
+    user.hasAccessTo.forEach((form) => {
+      if (+form.app === 2 && +form.userType === 13) {
+        isCollector = true;
+      }
+    });
+    return isCollector;
+  }
+
+  ngOnDestroy(): void {
+    this.messageService.clearMessage();
+    this.dtTrigger.unsubscribe();
+  }
 }
+

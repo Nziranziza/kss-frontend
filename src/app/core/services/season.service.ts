@@ -13,7 +13,6 @@ export class SeasonService {
   all(): Observable<any> {
     return this.apiService.get('/season/settings');
   }
-
   updateDistribution(data: any): Observable<any> {
     return this.apiService.post('/season/update_distribution', data);
   }
@@ -29,7 +28,6 @@ export class SeasonService {
   changeSeason(data: any): Observable<any> {
     return this.apiService.post('/season/set/cache', data);
   }
-
   addSeason(data: any): Observable<any> {
     return this.apiService.post('/season/settings', data);
   }

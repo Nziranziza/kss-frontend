@@ -1,6 +1,6 @@
 module.exports = shipit => {
   require('shipit-deploy')(shipit);
-  //createDeployTasks(shipit);
+  // createDeployTasks(shipit);
   shipit.initConfig({
     default: {
       workspace: '/home/joseph/html/smart-kungahara/dist/basic-angular',

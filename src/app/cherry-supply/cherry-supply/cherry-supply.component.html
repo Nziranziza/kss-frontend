@@ -51,17 +51,19 @@
 <hr>
 <div class="row" style="margin-bottom: 15px;">
   <div class="col-xs-12">
+    <!--
     <form [formGroup]="filterSuppliesForm">
       <div class="form-inline pull-left">
         <label class="control-label">Filter</label> &nbsp;
         <select class="form-control" formControlName="suppliesFilter">
           <option value="all">All</option>
-          <!--<option value="unapproved_delivery">Unapproved delivery</option>-->
+          <option value="unapproved_delivery">Unapproved delivery</option>
           <option value="unpaid_delivery">Unpaid delivery</option>
-          <!--<option value="unapproved_payment">Unapproved payment</option>-->
+          <option value="unapproved_payment">Unapproved payment</option>
         </select>
       </div>
     </form>
+    -->
     <form [formGroup]="paySuppliesForm" (ngSubmit)="onSavePay()">
       <button appRequiredSeason class="btn btn-success pull-right btn-margin">
         <i class="fa fa-money"></i> pay
@@ -96,6 +98,7 @@
             <th>Unit price</th>
             <th>Delivery approval</th>
             <th>Paid amount (rwf)</th>
+            <th>Recorded by</th>
             <th>Payment status</th>
             <th></th>
             <th>Owed amount</th>
@@ -108,7 +111,8 @@
             <td></td>
             <td>
               <div *ngIf="supply.owedAmount > 0" style="text-align: center;"><input type="checkbox"
-                                                        (click)="selectSupply($event.target.checked, supply)"></div>
+                                                                                    (click)="selectSupply($event.target.checked, supply)">
+              </div>
             </td>
             <td> {{ supply.cherriesQty }}</td>
             <td> {{ supply.unitPerKg }}</td>
@@ -117,6 +121,11 @@
               <ng-template #notDelivered> not approved</ng-template>
             </td>
             <td> {{ supply.paidAmount }}</td>
+            <td>
+              <ng-container *ngIf="supply.recordedBy">
+                <span style="font-size: 12px;"> {{ supply.recordedBy.foreName|titlecase }} &nbsp; {{ supply.recordedBy.surname|titlecase }}  </span>
+              </ng-container>
+            </td>
             <td><span style="color: #dca956">{{ (supply.paymentStatus.split("_")).join(" ") | lowercase }} </span></td>
             <td>
               <table style="background: transparent; width: 750px;" class="pull-right">
@@ -137,8 +146,9 @@
             <td> {{ supply.owedAmount }}</td>
             <td> {{ supply.updatedAt | date }}</td>
             <td>
-              <button class="btn btn-default btn-margin btn-sm pull-right" (click)="cancelSupply(supply._id)" type="button">
-              <i class="fa fa-remove" aria-hidden="true"></i> Cancel
+              <button class="btn btn-default btn-margin btn-sm pull-right" (click)="cancelSupply(supply._id)"
+                      type="button">
+                <i class="fa fa-remove" aria-hidden="true"></i> Cancel
               </button>
             </td>
           </tr>

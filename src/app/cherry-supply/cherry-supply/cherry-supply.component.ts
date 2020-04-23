@@ -55,7 +55,7 @@ export class CherrySupplyComponent implements OnInit, OnDestroy, AfterViewInit {
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 25,
-      columns: [{}, {}, {}, {}, {}, {}, {}, {
+      columns: [{}, {}, {}, {}, {}, {}, {}, {}, {
         class: 'none'
       }, {}, {}, {}],
       responsive: true
@@ -130,6 +130,7 @@ export class CherrySupplyComponent implements OnInit, OnDestroy, AfterViewInit {
             this.cherrySupplyService.getFarmerUnapprovedDeliveries(this.organisationId, this.regNumber)
               .subscribe((data) => {
                 this.cherrySupplies = data.content;
+                this.rerender();
               });
             break;
           }
@@ -137,6 +138,7 @@ export class CherrySupplyComponent implements OnInit, OnDestroy, AfterViewInit {
             this.cherrySupplyService.getFarmerUnpaidDeliveries(this.organisationId, this.regNumber)
               .subscribe((data) => {
                 this.cherrySupplies = data.content;
+                this.rerender();
               });
             break;
           }
@@ -144,6 +146,7 @@ export class CherrySupplyComponent implements OnInit, OnDestroy, AfterViewInit {
             this.cherrySupplyService.getFarmerUnapprovedPayment(this.organisationId, this.regNumber)
               .subscribe((data) => {
                 this.cherrySupplies = data.content;
+                this.rerender();
               });
             break;
           }

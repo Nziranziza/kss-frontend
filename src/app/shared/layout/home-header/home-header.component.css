@@ -1,9 +1,9 @@
 .navbar {
-  margin-bottom: 0px !important;
+  margin-bottom: 0 !important;
   background: none;
 }
 
-.navbar-default .navbar-nav>li>a {
+.navbar-default .navbar-nav > li > a {
   color: #ffffff;
 }
 
@@ -11,11 +11,17 @@
   border: none;
 }
 
-.navbar-default .navbar-brand{
+.navbar-default .navbar-brand {
   color: #ffffff;
 }
 
 .navbar-brand {
   font-size: 24px;
   font-weight: bold;
+}
+
+@media screen and (max-device-width: 900px) {
+  .navbar {
+    background: #3F71A7 !important;
+  }
 }
