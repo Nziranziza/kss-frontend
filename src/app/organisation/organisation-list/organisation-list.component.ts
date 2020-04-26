@@ -44,7 +44,6 @@ export class OrganisationListComponent implements OnInit, OnDestroy {
     this.isSuperAdmin = this.authenticationService.getCurrentUser().parameters.role.includes(0);
     this.isNaebCoffeeValueChainOfficer = this.authorisationService.isNaebCoffeeValueChainOfficer();
     this.message = this.messageService.getMessage();
-    console.log(this.message);
   }
 
   isOrgCWS(org: any) {

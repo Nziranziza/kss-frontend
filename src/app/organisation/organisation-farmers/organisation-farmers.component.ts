@@ -42,7 +42,7 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
   cwsSummary = {
     totalCherries: 0,
     totalParchments: 0,
-    expectedParchments: 0,
+    expectedParchments: 0
   };
   subRegionFilter: any;
   seasonStartingTime: string;
@@ -119,8 +119,8 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
   }
 
   showProduction() {
-      const modalRef = this.modal.open(ParchmentReportDetailComponent, {size: 'lg'});
-      modalRef.componentInstance.location = this.subRegionFilter;
+    const modalRef = this.modal.open(ParchmentReportDetailComponent, {size: 'lg'});
+    modalRef.componentInstance.location = this.subRegionFilter;
   }
 
   viewDetails(farmer: Farmer) {

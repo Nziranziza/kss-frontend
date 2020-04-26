@@ -8,7 +8,6 @@ import {ApiService} from './api.service';
 
 export class InputDistributionService {
 
-
   constructor(private apiService: ApiService) {
   }
 

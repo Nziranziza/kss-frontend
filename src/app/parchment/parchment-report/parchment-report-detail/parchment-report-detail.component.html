@@ -76,8 +76,9 @@
         <div class="info-box bg-yellow-gradient">
           <div class="info-box-content">
             <span class="info-box-text">{{ production.coffeeType }}</span>
-            <span class="progress-description">Grade A &nbsp;{{ production.gradeA }}&#13199;</span>
-            <span class="progress-description">Grade B &nbsp;{{ production.gradeB }}&#13199;</span>
+            <span class="progress-description" *ngFor="let item of production.grade | keyvalue">
+              Grade {{ item.key }} &nbsp;{{ item.value }}&#13199;
+            </span>
           </div>
         </div>
       </div>

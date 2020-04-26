@@ -12,8 +12,9 @@
   <div class="col-md-2 col-sm-3 col-xs-6" *ngFor="let production of summary">
     <div class="info-box-content bg-yellow-gradient" style="margin-left: 0px">
       <span class="info-box-text">{{ production.coffeeType }}</span>
-      <span class="progress-description">Grade A &nbsp;{{ production.gradeA }}&#13199;</span>
-      <span class="progress-description">Grade B &nbsp;{{ production.gradeB }}&#13199;</span>
+      <span class="progress-description" *ngFor="let item of production.grade | keyvalue">
+        Grade {{ item.key }} &nbsp;{{ item.value }}&#13199;
+      </span>
     </div>
   </div>
 </div>
