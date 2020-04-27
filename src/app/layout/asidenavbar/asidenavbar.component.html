@@ -60,6 +60,12 @@
             </a>
           </li>
           <li routerLinkActive="active" *appHasPermission="[1]">
+            <a routerLink="/admin/cws-suppliers/{{user.org_id}}/">
+              <i class="fa fa-circle-o"></i>
+              <span>Supplying farmers</span>
+            </a>
+          </li>
+          <li routerLinkActive="active" *appHasPermission="[1]">
             <a routerLink="/admin/cws-pending-farmers/{{user.org_id}}">
               <i class="fa fa-circle-o"></i>
               <span>Temporary farmers</span>

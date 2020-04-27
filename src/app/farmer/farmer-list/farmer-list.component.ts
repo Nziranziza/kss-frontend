@@ -102,8 +102,6 @@ export class FarmerListComponent implements OnInit, OnDestroy {
     if (this.filterForm.valid) {
       this.loading = true;
       this.parameters['search'.toString()] = this.filterForm.value;
-
-
       this.farmerService.getFarmers(this.parameters, this.as)
         .subscribe(data => {
           this.farmers = data.data;

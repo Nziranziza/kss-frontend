@@ -1,7 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AuthenticationService, ExcelServicesService, MessageService, OrganisationService, UserService} from '../../core/services';
 import {ActivatedRoute} from '@angular/router';
-import {Subject} from 'rxjs';
 import {Farmer} from '../../core/models';
 import {FarmerDetailsComponent} from '../../farmer/farmer-details/farmer-details.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
@@ -9,6 +8,7 @@ import {AuthorisationService} from '../../core/services';
 import {isArray, isObject} from 'util';
 import {BasicComponent} from '../../core/library';
 import {ParchmentReportDetailComponent} from '../../parchment/parchment-report/parchment-report-detail/parchment-report-detail.component';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-organisation-farmers',
@@ -21,16 +21,16 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
               private authenticationService: AuthenticationService,
               private excelService: ExcelServicesService,
               private route: ActivatedRoute,
+              private formBuilder: FormBuilder,
               private messageService: MessageService,
               private modal: NgbModal, private authorisationService: AuthorisationService) {
     super();
   }
 
   farmers: any;
+  paginatedFarmers: any;
   organisationId: string;
-  dtOptions: any = {};
   // @ts-ignore
-  dtTrigger: Subject = new Subject();
   loading = false;
   isUserCWSOfficer = true;
   org: any;
@@ -46,12 +46,50 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
   };
   subRegionFilter: any;
   seasonStartingTime: string;
+  filterForm: FormGroup;
+  maxSize = 9;
+  order = 'userInfo.foreName';
+  reverse = true;
+  directionLinks = true;
+  message: string;
+  showData = false;
+  parameters: any;
+  config: any;
+  autoHide = false;
+  responsive = false;
+  errors = [];
+  labels: any = {
+    previousLabel: 'Previous',
+    nextLabel: 'Next',
+    screenReaderPaginationLabel: 'Pagination',
+    screenReaderPageLabel: 'page',
+    screenReaderCurrentLabel: `You're on page`
+  };
+  searchFields = [
+    /*{value: 'phone_number', name: 'phone number'},*/
+    {value: 'reg_number', name: 'registration number'},
+    {value: 'nid', name: 'NID'},
+    /*{value: 'forename', name: 'first name'},
+    {value: 'surname', name: 'last name'},
+    {value: 'groupname', name: 'group name'}*/
+  ];
 
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.organisationId = params['organisationId'.toString()];
     });
+    this.parameters = {
+      length: 25,
+      start: 0,
+      draw: 1,
+      org_id: this.organisationId
+    };
     this.seasonStartingTime = this.authenticationService.getCurrentSeason().created_at;
+    this.filterForm = this.formBuilder.group({
+      term: ['', Validators.minLength(3)],
+      searchBy: ['reg_number'],
+
+    });
     this.subRegionFilter = {
       location: {
         searchBy: 'cws',
@@ -62,16 +100,12 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
         to: new Date()
       }
     };
-    this.dtOptions = {
-      pagingType: 'full_numbers',
-      pageLength: 25
-    };
     this.getFarmers(this.organisationId);
+    this.getPaginatedFarmers();
     this.isUserCWSOfficer = this.authorisationService.isCWSUser();
     this.organisationService.get(this.organisationId).subscribe(data => {
       this.org = data.content;
     });
-
     this.organisationService.getCwsSummary(this.organisationId).subscribe(data => {
       if (data.content.length) {
         this.cwsSummary = data.content[0];
@@ -88,11 +122,62 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
   }
 
   ngOnDestroy(): void {
-    this.dtTrigger.unsubscribe();
+  }
+
+  onPageChange(event) {
+    this.config.currentPage = event;
+    if (event >= 1) {
+      this.parameters.start = (event - 1) * this.config.itemsPerPage;
+    }
+
+    this.organisationService.getFarmers(this.parameters)
+      .subscribe(data => {
+        this.paginatedFarmers = data.data;
+      });
+  }
+
+  setOrder(value: string) {
+    if (this.order === value) {
+      this.reverse = !this.reverse;
+    }
+    this.order = value;
+  }
+
+  onFilter() {
+    if (this.filterForm.valid) {
+      this.loading = true;
+      this.parameters['search'.toString()] = this.filterForm.value;
+      this.organisationService.getFarmers(this.parameters)
+        .subscribe(data => {
+          this.farmers = data.data;
+          this.config = {
+            itemsPerPage: this.parameters.length,
+            currentPage: this.parameters.start + 1,
+            totalItems: data.recordsTotal
+          };
+          this.loading = false;
+        }, (err) => {
+          this.loading = false;
+          this.errors = err.errors;
+        });
+    }
+  }
+
+  onClearFilter() {
+    this.filterForm.controls.term.reset();
+    delete this.parameters.search;
+    this.organisationService.getFarmers(this.parameters)
+      .subscribe(data => {
+        this.farmers = data.data;
+        this.config = {
+          itemsPerPage: this.parameters.length,
+          currentPage: this.parameters.start + 1,
+          totalItems: data.recordsTotal
+        };
+      });
   }
 
   getFarmers(orgId: string): void {
-    this.loading = true;
     this.organisationService.getOrgFarmers(orgId).subscribe(data => {
       if (data) {
         this.farmers = data.content;
@@ -101,11 +186,24 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
             this.numberOfTrees = this.numberOfTrees + land.numberOfTrees;
           });
         });
-        this.numberOfFarmers = this.farmers.length;
-        this.dtTrigger.next();
-        this.loading = false;
       }
     });
+  }
+
+  getPaginatedFarmers(): void {
+    this.loading = true;
+    this.organisationService.getFarmers(this.parameters)
+      .subscribe(data => {
+        this.paginatedFarmers = data.data;
+        this.config = {
+          itemsPerPage: this.parameters.length,
+          currentPage: this.parameters.start + 1,
+          totalItems: data.recordsTotal
+        };
+        this.numberOfFarmers = data.recordsTotal;
+        this.showData = true;
+        this.loading = false;
+      });
   }
 
   hasRequest(farmer: any) {
