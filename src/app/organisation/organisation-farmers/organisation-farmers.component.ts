@@ -66,14 +66,13 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
     screenReaderCurrentLabel: `You're on page`
   };
   searchFields = [
-    /*{value: 'phone_number', name: 'phone number'},*/
+    {value: 'phone_number', name: 'phone number'},
     {value: 'reg_number', name: 'registration number'},
     {value: 'nid', name: 'NID'},
-    /*{value: 'forename', name: 'first name'},
+    {value: 'forename', name: 'first name'},
     {value: 'surname', name: 'last name'},
-    {value: 'groupname', name: 'group name'}*/
+    {value: 'groupname', name: 'group name'}
   ];
-
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.organisationId = params['organisationId'.toString()];

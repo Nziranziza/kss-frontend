@@ -141,6 +141,7 @@
   </div>
   <!-- /.col -->
 </div>
+<app-list-errors [errorList]="errors"></app-list-errors>
 <div class="row">
   <div class="col-xs-12">
     <form [formGroup]="filterForm" (ngSubmit)="onFilter()">
@@ -178,7 +179,6 @@
     </form>
   </div>
 </div>
-<app-list-errors [errorList]="errors"></app-list-errors>
 <div class="row">
   <div class="col-xs-12">
     <div class="box">
