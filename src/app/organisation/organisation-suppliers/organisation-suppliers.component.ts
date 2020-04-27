@@ -10,10 +10,8 @@ import {
 import {ActivatedRoute} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {isArray, isObject} from 'util';
+import {Subject} from 'rxjs';
 import {ParchmentReportDetailComponent} from '../../parchment/parchment-report/parchment-report-detail/parchment-report-detail.component';
-import {Farmer} from '../../core/models';
-import {FarmerDetailsComponent} from '../../farmer/farmer-details/farmer-details.component';
 import {BasicComponent} from '../../core/library';
 import {DatePipe} from '@angular/common';
 
@@ -77,18 +75,26 @@ export class OrganisationSuppliersComponent extends BasicComponent implements On
     {value: 'surname', name: 'last name'},
     {value: 'groupname', name: 'group name'}
   ];
+  dtOptions: any = {};
+  // @ts-ignore
+  dtTrigger: Subject = new Subject();
 
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.organisationId = params['organisationId'.toString()];
     });
+    this.seasonStartingTime = this.authenticationService.getCurrentSeason().created_at;
     this.parameters = {
       status: 'supplied',
       org_id: this.organisationId,
       date: {
-        from: this.authenticationService.getCurrentSeason().created_at,
+        from: this.seasonStartingTime,
         to: new Date()
       }
+    };
+    this.dtOptions = {
+      pagingType: 'full_numbers',
+      pageLength: 25
     };
     this.filterForm = this.formBuilder.group({
       status: ['supplied', Validators.required],
@@ -97,7 +103,7 @@ export class OrganisationSuppliersComponent extends BasicComponent implements On
         searchBy: ['forename']
       }),
       date: this.formBuilder.group({
-        from: [this.datePipe.transform(this.authenticationService.getCurrentSeason().created_at,
+        from: [this.datePipe.transform(this.seasonStartingTime,
           'yyyy-MM-dd', 'GMT+2'), Validators.required],
         to: [this.datePipe.transform(new Date(), 'yyyy-MM-dd', 'GMT+2'), Validators.required],
       })
@@ -125,19 +131,21 @@ export class OrganisationSuppliersComponent extends BasicComponent implements On
     this.setMessage(this.messageService.getMessage());
     this.orgCoveredArea = this.route.snapshot.data.orgCoveredAreaData;
     this.currentSeason = this.authenticationService.getCurrentSeason();
+    this.onChangeFarmerStatusFilter();
   }
+
   onFilter() {
     if (this.filterForm.valid) {
       this.loading = true;
-      this.parameters.search = this.filterForm.getRawValue().search;
+      if (this.filterForm.getRawValue().search.term) {
+        this.parameters.search = this.filterForm.getRawValue().search;
+      } else {
+        delete this.parameters.search;
+      }
+      this.parameters.date = this.filterForm.getRawValue().date;
       this.organisationService.getSuppliers(this.parameters)
         .subscribe(data => {
-          this.suppliers = data.data;
-          this.config = {
-            itemsPerPage: this.parameters.length,
-            currentPage: this.parameters.start + 1,
-            totalItems: data.recordsTotal
-          };
+          this.suppliers = data.content;
           this.loading = false;
         }, (err) => {
           this.loading = false;
@@ -147,31 +155,23 @@ export class OrganisationSuppliersComponent extends BasicComponent implements On
   }
 
   onClearFilter() {
-    this.filterForm.controls.term.reset();
+    this.filterForm.controls.search.get('term'.toString()).reset();
     delete this.parameters.search;
     this.organisationService.getSuppliers(this.parameters)
       .subscribe(data => {
-        this.suppliers = data.data;
-        this.config = {
-          itemsPerPage: this.parameters.length,
-          currentPage: this.parameters.start + 1,
-          totalItems: data.recordsTotal
-        };
+        this.suppliers = data.content;
       });
   }
 
   onChangeFarmerStatusFilter() {
-    this.filterForm.get('status'.toString()).valueChanges.subscribe(
+    this.filterForm.controls.status.valueChanges.subscribe(
       (value) => {
         this.parameters.status = value;
+        this.filterForm.controls.search.get('term'.toString()).reset();
+        delete this.parameters.search;
         this.organisationService.getSuppliers(this.parameters)
           .subscribe(data => {
-            this.suppliers = data.data;
-            this.config = {
-              itemsPerPage: this.parameters.length,
-              currentPage: this.parameters.start + 1,
-              totalItems: data.recordsTotal
-            };
+            this.suppliers = data.content;
             this.loading = false;
           }, (err) => {
             this.loading = false;
@@ -185,13 +185,8 @@ export class OrganisationSuppliersComponent extends BasicComponent implements On
     this.loading = true;
     this.organisationService.getSuppliers(this.parameters)
       .subscribe(data => {
-        this.suppliers = data.data;
-        this.config = {
-          itemsPerPage: this.parameters.length,
-          currentPage: this.parameters.start + 1,
-          totalItems: data.recordsTotal
-        };
-        this.showData = true;
+        this.suppliers = data.content;
+        this.dtTrigger.next();
         this.loading = false;
       });
   }

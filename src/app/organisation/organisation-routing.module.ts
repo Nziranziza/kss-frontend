@@ -34,7 +34,7 @@ const routes: Routes = [
         resolve: {orgCoveredAreaData: CoveredAreaResolverService}
       },
       {
-        path: 'cws-farmers/:organisationId/suppliers',
+        path: 'cws-suppliers/:organisationId',
         component: OrganisationSuppliersComponent,
         resolve: {orgCoveredAreaData: CoveredAreaResolverService}
       },
