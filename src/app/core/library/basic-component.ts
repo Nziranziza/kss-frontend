@@ -55,7 +55,6 @@ export abstract class BasicComponent {
     this.message = message;
     this.loading = false;
     this.warning = undefined;
-    console.log(this.message);
     $(() => {
       $('.custom-message').each((index, element) => {
         const $element = $(element);
