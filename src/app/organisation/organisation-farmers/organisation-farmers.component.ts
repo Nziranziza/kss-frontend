@@ -66,13 +66,16 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
     screenReaderCurrentLabel: `You're on page`
   };
   searchFields = [
-    {value: 'phone_number', name: 'phone number'},
     {value: 'reg_number', name: 'registration number'},
-    {value: 'nid', name: 'NID'},
+    {value: 'nid', name: 'NID'}
+    /*
     {value: 'forename', name: 'first name'},
     {value: 'surname', name: 'last name'},
-    {value: 'groupname', name: 'group name'}
+    {value: 'groupname', name: 'group name'},
+    {value: 'phone_number', name: 'phone number'}
+    */
   ];
+
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.organisationId = params['organisationId'.toString()];
@@ -148,7 +151,7 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
       this.parameters['search'.toString()] = this.filterForm.value;
       this.organisationService.getFarmers(this.parameters)
         .subscribe(data => {
-          this.farmers = data.data;
+          this.paginatedFarmers = data.data;
           this.config = {
             itemsPerPage: this.parameters.length,
             currentPage: this.parameters.start + 1,
@@ -167,7 +170,7 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
     delete this.parameters.search;
     this.organisationService.getFarmers(this.parameters)
       .subscribe(data => {
-        this.farmers = data.data;
+        this.paginatedFarmers = data.data;
         this.config = {
           itemsPerPage: this.parameters.length,
           currentPage: this.parameters.start + 1,

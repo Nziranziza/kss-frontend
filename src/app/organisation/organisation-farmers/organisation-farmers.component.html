@@ -95,7 +95,7 @@
       <!-- ./box-body -->
       <div class="box-footer">
         <div class="row">
-          <div class="col-sm-2 col-xs-4">
+          <div class="col-sm-2 col-xs-4 top-col-statistics">
             <div class="description-block border-right">
               <h5 class="description-header text-green">{{ numberOfTrees }}</h5>
               <span class="description-text">TREES</span>
@@ -103,14 +103,14 @@
             <!-- /.description-block -->
           </div>
           <!-- /.col -->
-          <div class="col-sm-2 col-xs-4">
+          <div class="col-sm-2 col-xs-4 top-col-statistics">
             <div class="description-block border-right">
               <h5 class="description-header text-blue">{{ numberOfFarmers }}</h5>
               <span class="description-text">FARMERS</span>
             </div>
             <!-- /.description-block -->
           </div>
-          <div class="col-sm-2 col-xs-4">
+          <div class="col-sm-2 col-xs-4 top-col-statistics">
             <div class="description-block border-right">
               <h5 class="description-header text-red">{{ cwsSummary.totalCherries }} &#13199;</h5>
               <span class="description-text">RECEIVED CHERRIES</span>
@@ -122,14 +122,14 @@
             </div>
             <!-- /.description-block -->
           </div>
-          <div class="col-sm-2 col-xs-4">
+          <div class="col-sm-2 col-xs-4 top-col-statistics">
             <div class="description-block border-right">
               <h5 class="description-header text-light-blue">{{ cwsSummary.totalParchments }} &#13199;</h5>
               <span class="description-text">PRODUCED PARCHMENTS</span>
             </div>
             <!-- /.description-block -->
           </div>
-          <div class="col-sm-2 col-xs-4">
+          <div class="col-sm-2 col-xs-4 top-col-statistics">
             <div class="description-block border-right">
               <ng-container *ngIf="(cwsSummary.totalParchments && cwsSummary.expectedParchments) else completionZero ">
                 <i class="fa fa-caret-up"></i>&nbsp;
@@ -145,7 +145,7 @@
             </div>
             <!-- /.description-block -->
           </div>
-          <div class="col-sm-2 col-xs-4">
+          <div class="col-sm-2 col-xs-4 top-col-statistics">
             <div class="description-block">
               <button class="btn btn-link" (click)="showProduction()" style="text-decoration: none">
                 Production in Details <i class="fa fa-window-maximize"></i>

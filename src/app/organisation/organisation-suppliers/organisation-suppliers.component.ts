@@ -35,6 +35,9 @@ export class OrganisationSuppliersComponent extends BasicComponent implements On
 
   suppliers: any;
   organisationId: string;
+  cherriesTotalQty = 0;
+  owedAmount = 0;
+  totalCost = 0;
   // @ts-ignore
   loading = false;
   isUserCWSOfficer = true;
@@ -68,9 +71,7 @@ export class OrganisationSuppliersComponent extends BasicComponent implements On
     screenReaderCurrentLabel: `You're on page`
   };
   searchFields = [
-    {value: 'phone_number', name: 'phone number'},
     {value: 'reg_number', name: 'registration number'},
-    {value: 'nid', name: 'NID'},
     {value: 'forename', name: 'first name'},
     {value: 'surname', name: 'last name'},
     {value: 'groupname', name: 'group name'}
@@ -137,30 +138,21 @@ export class OrganisationSuppliersComponent extends BasicComponent implements On
   onFilter() {
     if (this.filterForm.valid) {
       this.loading = true;
-      if (this.filterForm.getRawValue().search.term) {
+      /*if (this.filterForm.getRawValue().search.term) {
         this.parameters.search = this.filterForm.getRawValue().search;
       } else {
         delete this.parameters.search;
-      }
+      }*/
+      delete this.parameters.search;
       this.parameters.date = this.filterForm.getRawValue().date;
-      this.organisationService.getSuppliers(this.parameters)
-        .subscribe(data => {
-          this.suppliers = data.content;
-          this.loading = false;
-        }, (err) => {
-          this.loading = false;
-          this.errors = err.errors;
-        });
+      this.updateSuppliers();
     }
   }
 
   onClearFilter() {
     this.filterForm.controls.search.get('term'.toString()).reset();
     delete this.parameters.search;
-    this.organisationService.getSuppliers(this.parameters)
-      .subscribe(data => {
-        this.suppliers = data.content;
-      });
+    this.updateSuppliers();
   }
 
   onChangeFarmerStatusFilter() {
@@ -169,14 +161,10 @@ export class OrganisationSuppliersComponent extends BasicComponent implements On
         this.parameters.status = value;
         this.filterForm.controls.search.get('term'.toString()).reset();
         delete this.parameters.search;
-        this.organisationService.getSuppliers(this.parameters)
-          .subscribe(data => {
-            this.suppliers = data.content;
-            this.loading = false;
-          }, (err) => {
-            this.loading = false;
-            this.errors = err.errors;
-          });
+        this.cherriesTotalQty = 0;
+        this.owedAmount = 0;
+        this.totalCost = 0;
+        this.updateSuppliers();
       }
     );
   }
@@ -188,6 +176,7 @@ export class OrganisationSuppliersComponent extends BasicComponent implements On
         this.suppliers = data.content;
         this.dtTrigger.next();
         this.loading = false;
+        this.updateStatistics();
       });
   }
 
@@ -198,6 +187,28 @@ export class OrganisationSuppliersComponent extends BasicComponent implements On
 
   exportAsXLSX() {
     this.excelService.exportAsExcelFile(this.allFarmers, 'farmers');
+  }
+
+  updateSuppliers() {
+    this.organisationService.getSuppliers(this.parameters)
+      .subscribe(data => {
+        this.suppliers = data.content;
+        this.loading = false;
+        this.updateStatistics();
+      }, (err) => {
+        this.loading = false;
+        this.errors = err.errors;
+      });
+  }
+
+  updateStatistics() {
+    this.suppliers.map((farmer) => {
+      farmer.deliveries.map((delivery) => {
+        this.cherriesTotalQty = this.cherriesTotalQty + delivery.cherriesQty;
+        this.owedAmount = this.owedAmount + delivery.owedAmount;
+        this.totalCost = this.totalCost + (+delivery.cherriesQty * +delivery.unitPerKg);
+      });
+    });
   }
 
   ngOnDestroy(): void {

@@ -120,6 +120,11 @@ h3 {
 .box {
   border-top: 1px solid #d2d6de;
 }
+
+.top-col-statistics {
+  padding-right: 0;
+  padding-left: 0;
+}
 /*------------------------------------ expanded row organisation list -----------------------------*/
 
 .details-row-title {
