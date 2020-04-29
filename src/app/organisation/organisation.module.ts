@@ -12,12 +12,14 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {NgxPaginationModule} from 'ngx-pagination';
 import {OrderModule} from 'ngx-order-pipe';
 import {OwlDateTimeModule, OwlNativeDateTimeModule} from 'ng-pick-datetime';
-import { OrganisationSuppliersComponent } from './organisation-suppliers/organisation-suppliers.component';
-
+import {OrganisationSuppliersComponent} from './organisation-suppliers/organisation-suppliers.component';
+import {SupplierDeliveriesComponent} from './organisation-suppliers/supplier-deliveries/supplier-deliveries.component';
 
 @NgModule({
   declarations: [OrganisationListComponent, OrganisationEditComponent,
-    OrganisationCreateComponent, OrganisationFarmersComponent, OrganisationPendingFarmersComponent, OrganisationSuppliersComponent],
+    OrganisationCreateComponent, OrganisationFarmersComponent,
+    OrganisationPendingFarmersComponent, OrganisationSuppliersComponent,
+    SupplierDeliveriesComponent],
   imports: [
     CommonModule,
     OrganisationRoutingModule,
@@ -28,7 +30,8 @@ import { OrganisationSuppliersComponent } from './organisation-suppliers/organis
     OwlDateTimeModule,
     OwlNativeDateTimeModule
   ],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  entryComponents: [SupplierDeliveriesComponent]
 })
 export class OrganisationModule {
 }

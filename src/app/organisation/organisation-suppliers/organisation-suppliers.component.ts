@@ -14,6 +14,8 @@ import {Subject} from 'rxjs';
 import {ParchmentReportDetailComponent} from '../../parchment/parchment-report/parchment-report-detail/parchment-report-detail.component';
 import {BasicComponent} from '../../core/library';
 import {DatePipe} from '@angular/common';
+import {SupplierDeliveriesComponent} from './supplier-deliveries/supplier-deliveries.component';
+import {del} from 'selenium-webdriver/http';
 
 @Component({
   selector: 'app-organisation-suppliers',
@@ -44,7 +46,7 @@ export class OrganisationSuppliersComponent extends BasicComponent implements On
   org: any;
   currentSeason: any;
   orgCoveredArea = [];
-  allFarmers = [];
+  printable = [];
   cwsSummary = {
     totalCherries: 0,
     totalParchments: 0,
@@ -151,6 +153,14 @@ export class OrganisationSuppliersComponent extends BasicComponent implements On
 
   onClearFilter() {
     this.filterForm.controls.search.get('term'.toString()).reset();
+    this.filterForm.controls.date.get('from'.toString()).setValue(this.datePipe.transform(this.seasonStartingTime,
+      'yyyy-MM-dd', 'GMT+2'));
+    this.filterForm.controls.date.get('to'.toString()).setValue(this.datePipe.transform(new Date(), 'yyyy-MM-dd',
+      'GMT+2'));
+    this.parameters.date.from = this.datePipe.transform(this.seasonStartingTime,
+      'yyyy-MM-dd', 'GMT+2');
+    this.parameters.date.to = this.datePipe.transform(new Date(),
+      'yyyy-MM-dd', 'GMT+2');
     delete this.parameters.search;
     this.updateSuppliers();
   }
@@ -174,6 +184,7 @@ export class OrganisationSuppliersComponent extends BasicComponent implements On
     this.organisationService.getSuppliers(this.parameters)
       .subscribe(data => {
         this.suppliers = data.content;
+        this.makePrintable();
         this.dtTrigger.next();
         this.loading = false;
         this.updateStatistics();
@@ -185,14 +196,20 @@ export class OrganisationSuppliersComponent extends BasicComponent implements On
     modalRef.componentInstance.location = this.subRegionFilter;
   }
 
+  viewDeliveries(supplier: any) {
+    const modalRef = this.modal.open(SupplierDeliveriesComponent, {size: 'lg'});
+    modalRef.componentInstance.supplier = supplier;
+  }
+
   exportAsXLSX() {
-    this.excelService.exportAsExcelFile(this.allFarmers, 'farmers');
+    this.excelService.exportAsExcelFile(this.printable, 'Deliveries');
   }
 
   updateSuppliers() {
     this.organisationService.getSuppliers(this.parameters)
       .subscribe(data => {
         this.suppliers = data.content;
+        this.makePrintable();
         this.loading = false;
         this.updateStatistics();
       }, (err) => {
@@ -207,6 +224,30 @@ export class OrganisationSuppliersComponent extends BasicComponent implements On
         this.cherriesTotalQty = this.cherriesTotalQty + delivery.cherriesQty;
         this.owedAmount = this.owedAmount + delivery.owedAmount;
         this.totalCost = this.totalCost + (+delivery.cherriesQty * +delivery.unitPerKg);
+      });
+    });
+  }
+
+  makePrintable() {
+    this.printable = [];
+    this.suppliers.map((farmer) => {
+      farmer.deliveries.map((delivery) => {
+        this.printable.push({
+          LastName: farmer.userInfo.surname,
+          FirstName: farmer.userInfo.foreName,
+          RegNumber: farmer.userInfo.regNumber,
+          PaymentStatus: delivery.paymentStatus,
+          PaidAmount: delivery.paidAmount,
+          DeliveryApproval: delivery.deliveryApproval,
+          Season: delivery.season.name,
+          CherriesType: delivery.cherriesType,
+          Qty: delivery.cherriesQty,
+          UnitPrice: delivery.unitPerKg,
+          OwedAmount: delivery.owedAmount,
+          RecordedBy: delivery.recordedBy ? delivery.recordedBy.foreName + ' ' + delivery.recordedBy.surname : '',
+          Date: this.datePipe.transform(delivery.created_at,
+            'yyyy-MM-dd', 'GMT+2')
+        });
       });
     });
   }

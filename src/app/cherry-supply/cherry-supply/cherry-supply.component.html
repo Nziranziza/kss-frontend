@@ -144,7 +144,7 @@
               </table>
             </td>
             <td> {{ supply.owedAmount }}</td>
-            <td> {{ supply.updatedAt | date }}</td>
+            <td> {{ supply.create_at | date }}</td>
             <td>
               <button class="btn btn-default btn-margin btn-sm pull-right" (click)="cancelSupply(supply._id)"
                       type="button">

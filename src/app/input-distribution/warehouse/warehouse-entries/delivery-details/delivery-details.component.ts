@@ -93,7 +93,7 @@ export class DeliveryDetailsComponent extends BasicComponent implements OnInit, 
       });
   }
   exportAsXLSX() {
-    this.excelService.exportAsExcelFile(this.printable, 'entries');
+    this.excelService.exportAsExcelFile(this.printable, 'Entries');
   }
 
   ngOnDestroy(): void {

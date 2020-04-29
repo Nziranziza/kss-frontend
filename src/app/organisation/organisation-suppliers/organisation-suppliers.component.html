@@ -5,9 +5,6 @@
          routerLink="/admin/farmers/create"><i
         class="fa fa-plus"></i> New Farmer
       </a>
-      <button class="btn btn-success pull-right btn-margin" type="button" (click)="exportAsXLSX()"><i
-        class="fa fa-download"></i> Export all farmers
-      </button>
     </h3>
   </div>
 </div>
@@ -179,12 +176,17 @@
                  placeholder="to..">
           <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
         </ng-container>
-        <!--        <ng-container formGroupName="search">
+        <!--
+        <ng-container formGroupName="search">
           <select class="form-control btn-margin" formControlName="searchBy" style="margin-right: 10px">
             <option *ngFor="let field of searchFields" value="{{field.value}}">{{field.name}}</option>
           </select>
           <input type="text" formControlName="term" class="form-control" placeholder="search..">
-        </ng-container>-->
+        </ng-container>
+        -->
+        <button class="btn btn-success pull-right btn-margin" type="button" (click)="exportAsXLSX()"><i
+          class="fa fa-file-excel-o"></i> Export
+        </button>
         <button class="btn btn-warning pull-right btn-margin" type="button" (click)="onClearFilter()">Clear</button>
         <button class="btn btn-success pull-right btn-margin" type="submit"><i class="fa fa-search"></i> Search
         </button>
@@ -223,6 +225,9 @@
                  *appHasPermission="[0,[1,1]]" class="btn btn-success btn-margin pull-right btn-sm"
                  style="margin-left: 10px;">
                 <i class="fa fa-cart-plus"></i> Supply </a>
+              <button class="btn btn-default btn-sm btn-margin pull-right details-button"
+                      (click)="viewDeliveries(farmer)">...
+              </button>
             </td>
           </tr>
         </table>
