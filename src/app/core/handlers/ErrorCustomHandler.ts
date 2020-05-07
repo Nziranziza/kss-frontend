@@ -4,7 +4,6 @@ import {ErrorHandler, Injectable} from '@angular/core';
 export class ErrorCustomHandler implements ErrorHandler {
   constructor() {
   }
-
   handleError(error) {
   }
 }

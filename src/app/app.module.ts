@@ -25,6 +25,7 @@ import {InputDistributionModule} from './input-distribution/input-distribution.m
 import {SitesModule} from './input-distribution/sites/sites.module';
 import {WarehouseModule} from './input-distribution/warehouse/warehouse.module';
 import {DatePipe} from '@angular/common';
+import {PaymentsModule} from './payments/payments.module';
 
 /*import {DataService} from './data.service';
   import {HttpClientInMemoryWebApiModule} from 'angular-in-memory-web-api';*/
@@ -36,6 +37,7 @@ import {DatePipe} from '@angular/common';
   imports: [
     BrowserModule,
     LoginModule,
+    PaymentsModule,
     AppRoutingModule,
     CoreModule,
     SharedModule,

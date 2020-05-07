@@ -73,6 +73,28 @@
           </li>
         </ul>
       </li>
+      <li class="treeview" routerLinkActive="active" *appHasPermission="[0]">
+        <a href="#">
+          <i class="fa fa-gg"></i> <span>Payments</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
+        </a>
+        <ul class="treeview-menu">
+          <li routerLinkActive="active" *appHasPermission="[1]">
+            <a routerLink="/admin/top-ups/payments/{{user.org_id}}">
+              <i class="fa fa-circle-o"></i>
+              <span>Top-ups</span>
+            </a>
+          </li>
+          <li routerLinkActive="active" *appHasPermission="[1]">
+            <a routerLink="/admin/history/payments/{{user.org_id}}">
+              <i class="fa fa-google-wallet"></i>
+              <span>History</span>
+            </a>
+          </li>
+        </ul>
+      </li>
       <li routerLinkActive="active" *appHasPermission="[1]">
         <a routerLink="/admin/cws/parchments/list">
           <i class="fa fa-archive" aria-hidden="true"></i>

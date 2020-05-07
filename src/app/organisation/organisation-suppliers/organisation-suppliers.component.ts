@@ -15,7 +15,6 @@ import {ParchmentReportDetailComponent} from '../../parchment/parchment-report/p
 import {BasicComponent} from '../../core/library';
 import {DatePipe} from '@angular/common';
 import {SupplierDeliveriesComponent} from './supplier-deliveries/supplier-deliveries.component';
-import {del} from 'selenium-webdriver/http';
 
 @Component({
   selector: 'app-organisation-suppliers',
@@ -140,11 +139,13 @@ export class OrganisationSuppliersComponent extends BasicComponent implements On
   onFilter() {
     if (this.filterForm.valid) {
       this.loading = true;
-      /*if (this.filterForm.getRawValue().search.term) {
+      /*
+      if (this.filterForm.getRawValue().search.term) {
         this.parameters.search = this.filterForm.getRawValue().search;
       } else {
         delete this.parameters.search;
-      }*/
+      }
+      */
       delete this.parameters.search;
       this.parameters.date = this.filterForm.getRawValue().date;
       this.updateSuppliers();
@@ -196,9 +197,12 @@ export class OrganisationSuppliersComponent extends BasicComponent implements On
     modalRef.componentInstance.location = this.subRegionFilter;
   }
 
-  viewDeliveries(supplier: any) {
+  viewDeliveries(regNumber: string) {
     const modalRef = this.modal.open(SupplierDeliveriesComponent, {size: 'lg'});
-    modalRef.componentInstance.supplier = supplier;
+    const parameters = JSON.parse(JSON.stringify(this.parameters));
+    delete parameters.search;
+    parameters.regNumber = regNumber;
+    modalRef.componentInstance.parameters = parameters;
   }
 
   exportAsXLSX() {
