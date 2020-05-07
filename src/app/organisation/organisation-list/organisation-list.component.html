@@ -1,6 +1,7 @@
 <h3>
   Organisations
-  <a class="btn btn-success pull-right" routerLink="/admin/organisations/create"  *appHasPermission="[[4,1],0]"><i class="fa fa-plus"></i> New
+  <a class="btn btn-success pull-right" routerLink="/admin/organisations/create" *appHasPermission="[[4,1],0]"><i
+    class="fa fa-plus"></i> New
     organisation</a>
 </h3>
 <app-list-message [message]="message"></app-list-message>
@@ -26,15 +27,17 @@
               <td> {{ organisation.email }}</td>
               <td> {{ organisation.phone_number }}</td>
               <td>
-                  <span class="details-row-title">Genre : </span>
-                  <span class="details-row-data">{{ organisation.genre.genre }}</span>
-                  <span class="details-row-title">Street number : </span>
-                  <span class="details-row-data">{{ organisation.streetNumber }}</span>
+                <span class="details-row-title">Genre : </span>
+                <span class="details-row-data">{{ organisation.genre.genre }}</span>
+                <span class="details-row-title">Street number : </span>
+                <span class="details-row-data">{{ organisation.streetNumber }}</span>
               </td>
               <td class="actions no-wrap text-right">
-                <a routerLink="/admin/organisations/{{organisation._id}}/users" *appHasPermission="[4,0,[8,1]]" class="btn btn-info btn-sm"><i
+                <a routerLink="/admin/organisations/{{organisation._id}}/users" *appHasPermission="[4,0,[8,1]]"
+                   class="btn btn-info btn-sm"><i
                   class="fa fa-users"></i> Users</a>
-                <a class="btn btn-success btn-margin btn-sm" [appRequiredRoles]="[4,0]" [routerLink]="['edit/', organisation._id]"
+                <a class="btn btn-success btn-margin btn-sm" [appRequiredRoles]="[4,0]"
+                   [routerLink]="['edit/', organisation._id]"
                    style="margin-left: 10px;"> Edit</a>
               </td>
             </tr>
@@ -49,13 +52,18 @@
                 <span class="details-row-data">{{ organisation.streetNumber }}</span>
               </td>
               <td class="actions no-wrap text-right">
-                <a routerLink="/admin/organisations/{{organisation._id}}/farmers" class="btn btn-info btn-sm" *ngIf="isOrgCWS(organisation)"><i
+                <a routerLink="/admin/organisations/{{organisation._id}}/farmers" class="btn btn-info btn-sm"
+                   *ngIf="isOrgCWS(organisation)"><i
                   class="fa fa-users"></i> Farmers</a>
-                <a routerLink="/admin/cws-pending-farmers/{{organisation._id}}" class="btn btn-warning btn-margin btn-sm" *ngIf="isOrgCWS(organisation)"><i
+                <a routerLink="/admin/cws-pending-farmers/{{organisation._id}}"
+                   class="btn btn-warning btn-margin btn-sm" *ngIf="isOrgCWS(organisation)"><i
                   class="fa fa-users"></i> Pending farmers</a>
-                <a routerLink="/admin/organisations/{{organisation._id}}/users" *appHasPermission="[[4,1],0,[8,1],[1,1],[6,1]]" class="btn btn-info btn-sm" style="margin-left: 10px"><i
+                <a routerLink="/admin/organisations/{{organisation._id}}/users"
+                   *appHasPermission="[[4,1],0,[8,1],[1,1],[6,1]]" class="btn btn-info btn-sm"
+                   style="margin-left: 10px"><i
                   class="fa fa-users"></i> Users</a>
-                <a class="btn btn-success btn-margin btn-sm" *appHasPermission="[[4,1],0]" [routerLink]="['edit/', organisation._id]"
+                <a class="btn btn-success btn-margin btn-sm" *appHasPermission="[[4,1],0]"
+                   [routerLink]="['edit/', organisation._id]"
                    style="margin-left: 10px;">Edit</a>
               </td>
             </tr>

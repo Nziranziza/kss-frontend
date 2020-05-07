@@ -1,5 +1,4 @@
 import {
-  AfterViewInit,
   Component,
   Inject,
   Injector,
@@ -9,7 +8,7 @@ import {
   PLATFORM_ID,
 } from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
-import {UserService} from '../../../core/services';
+import {OrganisationService} from '../../../core/services';
 import {isPlatformBrowser} from '@angular/common';
 import {Subject} from 'rxjs';
 
@@ -18,16 +17,17 @@ import {Subject} from 'rxjs';
   templateUrl: './supplier-deliveries.component.html',
   styleUrls: ['./supplier-deliveries.component.css']
 })
-export class SupplierDeliveriesComponent implements OnInit, OnDestroy, AfterViewInit {
+export class SupplierDeliveriesComponent implements OnInit, OnDestroy {
 
   modal: NgbActiveModal;
-  @Input() supplier: any;
+  supplier: any;
+  @Input() parameters: any;
   dtOptions: any = {};
   // @ts-ignore
   dtTrigger: Subject = new Subject();
 
   constructor(
-    @Inject(PLATFORM_ID) private platformId: object, private userService: UserService,
+    @Inject(PLATFORM_ID) private platformId: object, private organisationService: OrganisationService,
     private injector: Injector) {
 
     if (isPlatformBrowser(this.platformId)) {
@@ -44,12 +44,13 @@ export class SupplierDeliveriesComponent implements OnInit, OnDestroy, AfterView
       }, {}, {}],
       responsive: true
     };
+    this.organisationService.getSingleSupplier(this.parameters).subscribe((data) => {
+      this.supplier = data.content[0];
+      this.dtTrigger.next();
+    });
   }
 
   ngOnDestroy() {
     this.dtTrigger.unsubscribe();
-  }
-  ngAfterViewInit(): void {
-    this.dtTrigger.next();
   }
 }

@@ -97,7 +97,7 @@
         <div class="row">
           <div class="col-sm-2 col-xs-4 top-col-statistics">
             <div class="description-block border-right">
-              <h5 class="description-header text-green">{{ numberOfTrees }}</h5>
+              <h5 class="description-header text-green">{{ numberOfTrees| number }}</h5>
               <span class="description-text">TREES</span>
             </div>
             <!-- /.description-block -->
@@ -105,14 +105,14 @@
           <!-- /.col -->
           <div class="col-sm-2 col-xs-4 top-col-statistics">
             <div class="description-block border-right">
-              <h5 class="description-header text-blue">{{ numberOfFarmers }}</h5>
+              <h5 class="description-header text-blue">{{ numberOfFarmers | number }}</h5>
               <span class="description-text">FARMERS</span>
             </div>
             <!-- /.description-block -->
           </div>
           <div class="col-sm-2 col-xs-4 top-col-statistics">
             <div class="description-block border-right">
-              <h5 class="description-header text-red">{{ cwsSummary.totalCherries }} &#13199;</h5>
+              <h5 class="description-header text-red">{{ cwsSummary.totalCherries | number }} &#13199;</h5>
               <span class="description-text">RECEIVED CHERRIES</span>
               <br />
               <a routerLink="/admin/cws-suppliers/{{org?._id}}">
@@ -124,7 +124,7 @@
           </div>
           <div class="col-sm-2 col-xs-4 top-col-statistics">
             <div class="description-block border-right">
-              <h5 class="description-header text-light-blue">{{ cwsSummary.totalParchments }} &#13199;</h5>
+              <h5 class="description-header text-light-blue">{{ cwsSummary.totalParchments | number }} &#13199;</h5>
               <span class="description-text">PRODUCED PARCHMENTS</span>
             </div>
             <!-- /.description-block -->
@@ -140,7 +140,7 @@
                 <i class="fa fa-caret-up"></i>&nbsp; 0% Completion
                  </span>
               </ng-template>
-              <h5 class="description-header text-yellow">{{ cwsSummary.expectedParchments }} &#13199;</h5>
+              <h5 class="description-header text-yellow">{{ cwsSummary.expectedParchments | number }} &#13199;</h5>
               <span class="description-text">EXPECTED PARCHMENTS</span>
             </div>
             <!-- /.description-block -->

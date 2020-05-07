@@ -66,4 +66,8 @@ export class OrganisationService {
   getSuppliers(body: any) {
     return this.apiService.post('/cherrysupply/farmer_by_cws/status', body);
   }
+
+  getSingleSupplier(body: any) {
+    return this.apiService.post('/cherrysupply/single_farmer_by_cws/status', body);
+  }
 }

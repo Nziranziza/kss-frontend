@@ -31,6 +31,7 @@ export class OrganisationTypeEditComponent implements OnInit {
       });
     });
   }
+
   onSubmit() {
     if (this.editForm.valid) {
       this.organisationTypeService.save(this.editForm.value).subscribe(data => {

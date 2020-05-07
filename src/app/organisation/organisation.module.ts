@@ -30,7 +30,6 @@ import {SupplierDeliveriesComponent} from './organisation-suppliers/supplier-del
     OwlDateTimeModule,
     OwlNativeDateTimeModule
   ],
-  exports: [RouterModule],
   entryComponents: [SupplierDeliveriesComponent]
 })
 export class OrganisationModule {

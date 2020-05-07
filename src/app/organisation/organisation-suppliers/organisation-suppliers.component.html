@@ -94,28 +94,28 @@
         <div class="row">
           <div class="col-sm-2 col-xs-4 top-col-statistics">
             <div class="description-block border-right">
-              <h5 class="description-header text-green">{{ totalCost }} &nbsp;frw</h5>
+              <h5 class="description-header text-green">{{ totalCost | number }} &nbsp;frw</h5>
               <span class="description-text">TOTAL COST</span>
             </div>
             <!-- /.description-block -->
           </div>
           <div class="col-sm-2 col-xs-4 top-col-statistics">
             <div class="description-block border-right">
-              <h5 class="description-header text-green">{{ owedAmount }} &nbsp;frw</h5>
+              <h5 class="description-header text-green">{{ owedAmount | number }} &nbsp;frw</h5>
               <span class="description-text">OWED AMOUNT</span>
             </div>
             <!-- /.description-block -->
           </div>
           <div class="col-sm-2 col-xs-4 top-col-statistics">
             <div class="description-block border-right">
-              <h5 class="description-header text-red">{{ cherriesTotalQty }} &#13199;</h5>
+              <h5 class="description-header text-red">{{ cherriesTotalQty | number }} &#13199;</h5>
               <span class="description-text">CHERRIES</span>
             </div>
             <!-- /.description-block -->
           </div>
           <div class="col-sm-2 col-xs-4 top-col-statistics">
             <div class="description-block border-right">
-              <h5 class="description-header text-light-blue">{{ cwsSummary.totalParchments }} &#13199;</h5>
+              <h5 class="description-header text-light-blue">{{ cwsSummary.totalParchments | number }} &#13199;</h5>
               <span class="description-text">PRODUCED PARCHMENTS</span>
             </div>
             <!-- /.description-block -->
@@ -131,7 +131,7 @@
                 <i class="fa fa-caret-up"></i>&nbsp; 0% Completion
                  </span>
               </ng-template>
-              <h5 class="description-header text-yellow">{{ cwsSummary.expectedParchments }} &#13199;</h5>
+              <h5 class="description-header text-yellow">{{ cwsSummary.expectedParchments | number }} &#13199;</h5>
               <span class="description-text">EXPECTED PARCHMENTS</span>
             </div>
             <!-- /.description-block -->
@@ -226,7 +226,7 @@
                  style="margin-left: 10px;">
                 <i class="fa fa-cart-plus"></i> Supply </a>
               <button class="btn btn-default btn-sm btn-margin pull-right details-button"
-                      (click)="viewDeliveries(farmer)">...
+                      (click)="viewDeliveries(farmer.userInfo.regNumber)">...
               </button>
             </td>
           </tr>

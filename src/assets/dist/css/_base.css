@@ -246,13 +246,13 @@ table.dataTable > tbody > tr.child:hover {
 .custom-tabs .nav-tabs > li > a {
   border: none;
   color: #535658;
-  background: #dbdbdb;
+  background: #f9f9f9;
 }
 
 .custom-tabs .nav-tabs > li.active > a, .nav-tabs > li > a:hover {
   border: none;
   color: #535658 !important;
-  background: #fff;
+  background: #dbdbdb;
 }
 
 .custom-tabs .nav-tabs > li > a::after {
