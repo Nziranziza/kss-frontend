@@ -29,7 +29,7 @@
               <div role="tabpanel" class="tab-pane active" id="deposit">
                 <app-list-errors [errorList]="errors"></app-list-errors>
                 <app-list-message [message]="message"></app-list-message>
-                <form [formGroup]="depositForm" (ngSubmit)="onSubmit()">
+                <form [formGroup]="depositForm" (ngSubmit)="onSubmitDeposit()">
                   <div class="row">
                     <div class="col-xs-12">
                       <div class="box">
