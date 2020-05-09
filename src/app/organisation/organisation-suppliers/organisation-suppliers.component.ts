@@ -210,6 +210,7 @@ export class OrganisationSuppliersComponent extends BasicComponent implements On
   }
 
   updateSuppliers() {
+    this.loading = false;
     this.organisationService.getSuppliers(this.parameters)
       .subscribe(data => {
         this.suppliers = data.content;

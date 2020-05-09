@@ -9,11 +9,11 @@ import {BasicComponent} from '../../core/library';
 })
 export class OrganisationPayTopUpsComponent extends BasicComponent implements OnInit {
 
-  private previewImagePath: any;
-  private depositForm: FormGroup;
-  private imageError: string;
-  private isImageSaved: boolean;
-  private cardImageBase64: string;
+  previewImagePath: any;
+  depositForm: FormGroup;
+  imageError: string;
+  isImageSaved: boolean;
+  cardImageBase64: string;
 
   constructor(private formBuilder: FormBuilder) {
     super();
