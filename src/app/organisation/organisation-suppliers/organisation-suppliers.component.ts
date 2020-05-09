@@ -11,7 +11,7 @@ import {ActivatedRoute} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Subject} from 'rxjs';
-import {ParchmentReportDetailComponent} from '../../parchment/parchment-report/parchment-report-detail/parchment-report-detail.component';
+import {ParchmentReportDetailComponent} from '../../reports/parchment-report/parchment-report-detail/parchment-report-detail.component';
 import {BasicComponent} from '../../core/library';
 import {DatePipe} from '@angular/common';
 import {SupplierDeliveriesComponent} from './supplier-deliveries/supplier-deliveries.component';

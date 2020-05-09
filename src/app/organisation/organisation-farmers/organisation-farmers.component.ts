@@ -7,7 +7,7 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {AuthorisationService} from '../../core/services';
 import {isArray, isObject} from 'util';
 import {BasicComponent} from '../../core/library';
-import {ParchmentReportDetailComponent} from '../../parchment/parchment-report/parchment-report-detail/parchment-report-detail.component';
+import {ParchmentReportDetailComponent} from '../../reports/parchment-report/parchment-report-detail/parchment-report-detail.component';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 @Component({

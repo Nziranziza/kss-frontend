@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {AdminComponent} from '../../admin/admin/admin.component';
 import {DispatchProgressComponent} from './dispatch-progress/dispatch-progress.component';
-import {DistributionProgressComponent} from './distribution-progress/distribution-progress.component';
+import {FertilizerDistributionProgressComponent} from './fertilizer-distribution-progress/fertilizer-distribution-progress.component';
 import {PesticideDistributionProgressComponent} from './pesticide-distribution-progress/pesticide-distribution-progress.component';
 
 const routes: Routes = [
@@ -12,7 +12,7 @@ const routes: Routes = [
     children: [
       {
         path: 'input/application/progress',
-        component: DistributionProgressComponent
+        component: FertilizerDistributionProgressComponent
       },
       {
         path: 'input/pesticide/application/progress',

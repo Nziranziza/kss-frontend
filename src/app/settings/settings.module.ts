@@ -8,14 +8,19 @@ import {SharedModule} from '../shared';
 import {CoffeeTypeComponent} from './coffee-type/coffee-type.component';
 import {CoffeeTypeCreateComponent} from './coffee-type/coffee-type-create/coffee-type-create.component';
 import {DistributionParametersComponent} from './distribution-parameters/distribution-parameters.component';
-import { EditInputComponent } from './distribution-parameters/edit-input/edit-input.component';
-import { EditSupplierComponent } from './distribution-parameters/edit-supplier/edit-supplier.component';
-import { ChannelComponent } from './channel/channel.component';
+import {EditInputComponent} from './distribution-parameters/edit-input/edit-input.component';
+import {EditSupplierComponent} from './distribution-parameters/edit-supplier/edit-supplier.component';
+import {ChannelComponent} from './channel/channel-create/channel.component';
+import { ChannelListComponent } from './channel/channel-list/channel-list.component';
+import { ChannelEditComponent } from './channel/channel-edit/channel-edit.component';
 
 
 @NgModule({
-  declarations: [SeasonParametersComponent, CreateSeasonComponent, EditSeasonComponent,
-    CoffeeTypeComponent, CoffeeTypeCreateComponent, DistributionParametersComponent, EditInputComponent, EditSupplierComponent, ChannelComponent],
+  declarations: [SeasonParametersComponent, CreateSeasonComponent, EditSeasonComponent, ChannelComponent,
+    CoffeeTypeComponent, CoffeeTypeCreateComponent, DistributionParametersComponent, EditInputComponent,
+    EditSupplierComponent,
+    ChannelListComponent,
+    ChannelEditComponent],
   imports: [
     CommonModule,
     SettingsRoutingModule,

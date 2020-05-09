@@ -6,7 +6,7 @@ import {CoffeeTypeComponent} from './coffee-type/coffee-type.component';
 import {CoffeeTypeCreateComponent} from './coffee-type/coffee-type-create/coffee-type-create.component';
 import {AdminGuard} from '../core/services/guards/admin.guard';
 import {DistributionParametersComponent} from './distribution-parameters/distribution-parameters.component';
-import {ChannelComponent} from './channel/channel.component';
+import {ChannelComponent} from './channel/channel-create/channel.component';
 
 const routes: Routes = [
   {

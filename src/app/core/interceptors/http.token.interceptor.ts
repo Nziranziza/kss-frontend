@@ -6,6 +6,15 @@ import {Router} from '@angular/router';
 
 @Injectable()
 export class HttpTokenInterceptor implements HttpInterceptor {
+
+  excepts = [
+    '/api/users/sign.in',
+    '/api/users/confirmation',
+    '/api/users/account/unlock',
+    '/api/users/request/password-reset',
+    '/api/users/password-reset'
+  ];
+
   constructor(private jwtService: JwtService, private router: Router,
               private authenticationService: AuthenticationService) {
   }
@@ -16,11 +25,7 @@ export class HttpTokenInterceptor implements HttpInterceptor {
       Accept: 'application/json'
     };
     const token = this.jwtService.getToken();
-    if ( (req.url.indexOf('/api/users/sign.in') !== -1)
-      || (req.url.indexOf('/api/users/confirmation') !== -1)
-      || (req.url.indexOf('/api/users/account/unlock') !== -1)
-      || (req.url.indexOf('/api/users/request/password-reset') !== -1)
-      || (req.url.indexOf('/api/users/password-reset') !== -1)) {
+    if (!this.excepts.includes(req.url)) {
       if (this.authenticationService.isLoggedIn()) {
         if (token) {
           headersConfig['x-auth-token'.toString()] = token;

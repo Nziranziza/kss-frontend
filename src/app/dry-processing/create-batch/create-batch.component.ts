@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {FormBuilder} from '@angular/forms';
 import {AuthenticationService} from '../../core/services';
 import {HelperService} from '../../core/helpers';
 import {DryProcessingService} from '../../core/services';
@@ -19,6 +19,7 @@ export class CreateBatchComponent implements OnInit, OnDestroy {
               private helper: HelperService, private coffeeTypeService: CoffeeTypeService,
               private authenticationService: AuthenticationService) {
   }
+
   id: string;
   selectedLots = [];
   errors: any;
@@ -47,6 +48,7 @@ export class CreateBatchComponent implements OnInit, OnDestroy {
       });
     });
   }
+
   selectLot(isChecked: boolean, lot: any) {
     if (isChecked) {
       this.selectedLots.push(lot);
