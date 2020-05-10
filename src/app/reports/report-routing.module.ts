@@ -4,6 +4,7 @@ import {AdminComponent} from '../admin/admin/admin.component';
 import {FarmersReportComponent} from './farmers-report/farmers-report.component';
 import {AdminGuard} from '../core/services/guards/admin.guard';
 import {FarmersApprovalProgressComponent} from './farmers-approval-progress/farmers-approval-progress.component';
+import {ParchmentReportComponent} from './parchment-report/parchment-report.component';
 
 const routes: Routes =  [
   {
@@ -18,6 +19,10 @@ const routes: Routes =  [
       {
         path: 'farmers/approval/progress',
         component: FarmersApprovalProgressComponent
+      },
+      {
+        path: 'cherries/parchments/report',
+        component: ParchmentReportComponent
       }
     ],
   }

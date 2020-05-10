@@ -63,7 +63,7 @@
         <div class="row">
           <div class="col-sm-3 col-xs-6">
             <div class="description-block border-right">
-              <h5 class="description-header text-green">{{ totalTrees }}</h5>
+              <h5 class="description-header text-green">{{ totalTrees | number }}</h5>
               <span class="description-text">TREES</span>
             </div>
             <!-- /.description-block -->
@@ -71,7 +71,7 @@
           <!-- /.col -->
           <div class="col-sm-3 col-xs-6">
             <div class="description-block border-right">
-              <h5 class="description-header text-blue">{{ totalFertilizerNeeded }}</h5>
+              <h5 class="description-header text-blue">{{ totalFertilizerNeeded | number:'1.0-1' }}</h5>
               <span class="description-text">FERTILIZER (KG)</span>
             </div>
             <!-- /.description-block -->
@@ -79,7 +79,7 @@
           <!-- /.col -->
           <div class="col-sm-3 col-xs-6">
             <div class="description-block border-right">
-              <h5 class="description-header text-blue">{{ totalFarmers }}</h5>
+              <h5 class="description-header text-blue">{{ totalFarmers | number }}</h5>
               <span class="description-text">FARMERS</span>
             </div>
             <!-- /.description-block -->
@@ -87,7 +87,7 @@
           <!-- /.col -->
           <div class="col-sm-3 col-xs-6">
             <div class="description-block">
-              <h5 class="description-header text-blue">{{ totalNumberOfLands }}</h5>
+              <h5 class="description-header text-blue">{{ totalNumberOfLands | number }}</h5>
               <span class="description-text">LANDS</span>
             </div>
             <!-- /.description-block -->
@@ -111,8 +111,8 @@
               <tbody>
               <tr *ngFor="let plan of plans;">
                 <td>{{plan.location}}</td>
-                <td>{{plan.numberOfTrees }}</td>
-                <td>{{plan.numberOfFarmers }}</td>
+                <td>{{plan.numberOfTrees | number }}</td>
+                <td>{{plan.numberOfFarmers | number }}</td>
                 <td>{{plan.fertilizerNeed | number:'1.0-1' }} Kg</td>
               </tr>
               </tbody>
