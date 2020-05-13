@@ -67,13 +67,11 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
   };
   searchFields = [
     {value: 'reg_number', name: 'registration number'},
-    {value: 'nid', name: 'NID'}
-    /*
+    {value: 'nid', name: 'NID'},
     {value: 'forename', name: 'first name'},
     {value: 'surname', name: 'last name'},
     {value: 'groupname', name: 'group name'},
     {value: 'phone_number', name: 'phone number'}
-    */
   ];
 
   ngOnInit() {
@@ -81,7 +79,7 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
       this.organisationId = params['organisationId'.toString()];
     });
     this.parameters = {
-      length: 25,
+      length: 5,
       start: 0,
       draw: 1,
       org_id: this.organisationId
