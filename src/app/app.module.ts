@@ -26,6 +26,7 @@ import {SitesModule} from './input-distribution/sites/sites.module';
 import {WarehouseModule} from './input-distribution/warehouse/warehouse.module';
 import {DatePipe} from '@angular/common';
 import {PaymentsModule} from './payments/payments.module';
+import {OrganisationPayFarmersModule} from './payments/organisation-pay-farmers/organisation-pay-farmers.module';
 
 /*import {DataService} from './data.service';
   import {HttpClientInMemoryWebApiModule} from 'angular-in-memory-web-api';*/
@@ -53,6 +54,7 @@ import {PaymentsModule} from './payments/payments.module';
     CherrySupplyModule,
     SettingsModule,
     ParchmentModule,
+    OrganisationPayFarmersModule,
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
     DryProcessingModule,

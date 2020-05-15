@@ -4,6 +4,7 @@ import {Subject} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {AuthorisationService, ConfirmDialogService, MessageService, OrganisationService} from '../../core/services';
+import {SelectDeliveriesComponent} from '../organisation-pay-farmers/select-deliveries/select-deliveries.component';
 
 @Component({
   selector: 'app-organisation-top-ups',
@@ -79,6 +80,10 @@ export class OrganisationTopUpsComponent extends BasicComponent implements OnIni
 
   ngAfterViewInit(): void {
     this.dtTrigger.next();
+  }
+
+  payFarmers() {
+    this.modal.open(SelectDeliveriesComponent, {size: 'lg'});
   }
 
   ngOnDestroy(): void {

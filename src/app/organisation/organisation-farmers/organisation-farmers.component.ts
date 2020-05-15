@@ -79,7 +79,7 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
       this.organisationId = params['organisationId'.toString()];
     });
     this.parameters = {
-      length: 5,
+      length: 25,
       start: 0,
       draw: 1,
       org_id: this.organisationId
