@@ -2,9 +2,8 @@ import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
 import {BasicComponent} from '../../core/library';
 import {Subject} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {AuthorisationService, ConfirmDialogService, MessageService, OrganisationService} from '../../core/services';
-import {SelectDeliveriesComponent} from '../organisation-pay-farmers/select-deliveries/select-deliveries.component';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-organisation-top-ups',
@@ -14,8 +13,8 @@ import {SelectDeliveriesComponent} from '../organisation-pay-farmers/select-deli
 export class OrganisationTopUpsComponent extends BasicComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(private route: ActivatedRoute,
-              private modal: NgbModal,
               private messageService: MessageService,
+              private modal: NgbModal,
               private authorisationService: AuthorisationService,
               private confirmDialogService: ConfirmDialogService,
               private organisationService: OrganisationService) {
@@ -80,10 +79,6 @@ export class OrganisationTopUpsComponent extends BasicComponent implements OnIni
 
   ngAfterViewInit(): void {
     this.dtTrigger.next();
-  }
-
-  payFarmers() {
-    this.modal.open(SelectDeliveriesComponent, {size: 'lg'});
   }
 
   ngOnDestroy(): void {

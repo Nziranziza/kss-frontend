@@ -14,7 +14,7 @@ const routes: Routes = [
     children: [
       {
         path: 'top-ups/payments/:organisationId',
-        component: OrganisationTopUpsComponent
+        component: OrganisationTopUpsComponent,
       },
       {
         path: 'history/payments/:organisationId',
@@ -22,8 +22,8 @@ const routes: Routes = [
       },
       {
         path: 'pay/top-ups/:organisationId',
-        component: OrganisationPayTopUpsComponent
-      },
+        component: OrganisationPayTopUpsComponent,
+      }
     ]
   }
 ];

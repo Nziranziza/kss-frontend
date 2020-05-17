@@ -1,15 +1,9 @@
-import {Component, OnInit, OnDestroy, Inject, PLATFORM_ID, Injector} from '@angular/core';
-import {
-  AuthenticationService,
-  MessageService,
-  OrganisationService,
-  UserService
-} from '../../../core/services';
-
-import {DatePipe, isPlatformBrowser} from '@angular/common';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {AuthenticationService, OrganisationService, UserService} from '../../../core/services';
+import {DatePipe} from '@angular/common';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {Subject} from 'rxjs';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-select-deliveries',
@@ -22,16 +16,10 @@ export class SelectDeliveriesComponent implements OnInit, OnDestroy {
   constructor(private organisationService: OrganisationService, private userService: UserService,
               private authenticationService: AuthenticationService,
               private datePipe: DatePipe,
-              private formBuilder: FormBuilder,
-              private messageService: MessageService,
-              @Inject(PLATFORM_ID) private platformId: object,
-              private injector: Injector) {
-    if (isPlatformBrowser(this.platformId)) {
-      this.modal = this.injector.get(NgbActiveModal);
-    }
+              private router: Router,
+              private formBuilder: FormBuilder) {
   }
 
-  modal: NgbActiveModal;
   suppliers: any;
   organisationId: string;
   // @ts-ignore
@@ -137,6 +125,10 @@ export class SelectDeliveriesComponent implements OnInit, OnDestroy {
       }, (err) => {
         console.log(err.errors);
       });
+  }
+
+  onNext() {
+    this.router.navigateByUrl('admin/pay-farmers/preview-deliveries');
   }
 
   ngOnDestroy(): void {

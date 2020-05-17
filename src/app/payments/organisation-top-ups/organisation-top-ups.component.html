@@ -18,9 +18,9 @@
     <a class="btn btn-group btn-success pull-right btn-margin" routerLink="/admin/pay/top-ups/{{organisationId}}">
       <i class="fa fa-credit-card"></i> Top up
     </a>
-    <button class="btn btn-group btn-success pull-right btn-margin"  (click)="payFarmers()">
-      <i class="fa fa-gg"></i> Pay farmers
-    </button>
+    <a class="btn btn-group btn-success pull-right btn-margin" routerLink="/admin/pay-farmers/select-deliveries">
+      <i class="fa fa-credit-card"></i> Pay farmers
+    </a>
   </div>
 </div>
 <div class="row">
@@ -55,3 +55,4 @@
     </div>
   </div>
 </div>
+<router-outlet name="modal"></router-outlet>
