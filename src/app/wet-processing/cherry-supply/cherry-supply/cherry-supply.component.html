@@ -51,19 +51,6 @@
 <hr>
 <div class="row" style="margin-bottom: 15px;">
   <div class="col-xs-12">
-    <!--
-    <form [formGroup]="filterSuppliesForm">
-      <div class="form-inline pull-left">
-        <label class="control-label">Filter</label> &nbsp;
-        <select class="form-control" formControlName="suppliesFilter">
-          <option value="all">All</option>
-          <option value="unapproved_delivery">Unapproved delivery</option>
-          <option value="unpaid_delivery">Unpaid delivery</option>
-          <option value="unapproved_payment">Unapproved payment</option>
-        </select>
-      </div>
-    </form>
-    -->
     <form [formGroup]="paySuppliesForm" (ngSubmit)="onSavePay()">
       <button appRequiredSeason class="btn btn-success pull-right btn-margin">
         <i class="fa fa-money"></i> pay

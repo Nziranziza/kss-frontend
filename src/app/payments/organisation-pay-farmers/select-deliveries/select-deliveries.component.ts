@@ -1,9 +1,11 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {AuthenticationService, OrganisationService, UserService} from '../../../core/services';
 import {DatePipe} from '@angular/common';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {Router} from '@angular/router';
+import {DataTableDirective} from 'angular-datatables';
+import {PaymentProcessingService} from '../../../core/services/payment-processing.service';
 
 @Component({
   selector: 'app-select-deliveries',
@@ -16,6 +18,7 @@ export class SelectDeliveriesComponent implements OnInit, OnDestroy {
   constructor(private organisationService: OrganisationService, private userService: UserService,
               private authenticationService: AuthenticationService,
               private datePipe: DatePipe,
+              private paymentProcessingService: PaymentProcessingService,
               private router: Router,
               private formBuilder: FormBuilder) {
   }
@@ -27,24 +30,20 @@ export class SelectDeliveriesComponent implements OnInit, OnDestroy {
   currentSeason: any;
   seasonStartingTime: string;
   filterForm: FormGroup;
-  maxSize = 9;
-  order = 'userInfo.foreName';
-  reverse = true;
-  directionLinks = true;
   parameters: any;
-  config: any;
-  autoHide = false;
-  responsive = false;
-  labels: any = {
-    previousLabel: 'Previous',
-    nextLabel: 'Next',
-    screenReaderPaginationLabel: 'Pagination',
-    screenReaderPageLabel: 'page',
-    screenReaderCurrentLabel: `You're on page`
-  };
   dtOptions: any = {};
   // @ts-ignore
   dtTrigger: Subject = new Subject();
+  owedAmount = 0;
+  totalAmountToPay = 0;
+  totalCost = 0;
+  cherriesTotalQty = 0;
+  allSelected = false;
+
+  // @ts-ignore
+  @ViewChild(DataTableDirective, {static: false})
+  dtElement: DataTableDirective;
+
 
   ngOnInit() {
     this.seasonStartingTime = this.authenticationService.getCurrentSeason().created_at;
@@ -56,10 +55,14 @@ export class SelectDeliveriesComponent implements OnInit, OnDestroy {
         to: new Date()
       }
     };
+
     this.dtOptions = {
       pagingType: 'full_numbers',
-      pageLength: 25
+      pageLength: 25,
+      columns: [{}, {}, {}, {}, {}, {class: 'all'}, {}],
+      responsive: true
     };
+
     this.filterForm = this.formBuilder.group({
       status: ['supplied', Validators.required],
       search: this.formBuilder.group({
@@ -111,24 +114,83 @@ export class SelectDeliveriesComponent implements OnInit, OnDestroy {
   }
 
   getSuppliers(): void {
-    this.organisationService.getSuppliers(this.parameters)
-      .subscribe(data => {
-        this.suppliers = data.content;
+    if (!this.paymentProcessingService.getSelectedDeliveries()) {
+      this.organisationService.getSuppliers(this.parameters)
+        .subscribe(data => {
+          this.suppliers = data.content;
+          this.dtTrigger.next();
+        });
+    } else {
+      this.suppliers = this.paymentProcessingService.getSelectedDeliveries();
+      this.filterForm.patchValue(this.paymentProcessingService.getSelectionFilter());
+      setTimeout(function() {
         this.dtTrigger.next();
-      });
+      }.bind(this));
+    }
   }
 
   updateSuppliers() {
     this.organisationService.getSuppliers(this.parameters)
       .subscribe(data => {
         this.suppliers = data.content;
+        this.rerender();
       }, (err) => {
         console.log(err.errors);
       });
   }
 
+  selectAll(isChecked: boolean) {
+    if (isChecked) {
+      this.suppliers.forEach((supplier) => {
+        supplier.selected = true;
+        supplier.deliveries.forEach((delivery) => {
+          delivery.selected = true;
+        });
+      });
+    } else {
+      this.suppliers.forEach((supplier) => {
+        supplier.selected = false;
+        supplier.deliveries.forEach((delivery) => {
+          delivery.selected = false;
+        });
+      });
+    }
+    this.allSelected = isChecked;
+    this.rerender();
+  }
+
+  selectFarmer(isChecked: boolean, i: number) {
+    this.suppliers[i].selected = isChecked;
+    if (isChecked) {
+      this.suppliers[i].deliveries.forEach((delivery) => {
+        delivery.selected = true;
+      });
+    } else {
+      this.suppliers[i].deliveries.forEach((delivery) => {
+        delivery.selected = false;
+      });
+    }
+    this.rerender();
+  }
+
+  selectDelivery(isChecked: boolean, i: number, t: number) {
+    this.suppliers[i].deliveries[t].selected = isChecked;
+    this.suppliers[i].selected = isChecked;
+    this.rerender();
+  }
+
   onNext() {
+    this.paymentProcessingService.setSelectionFilter(this.filterForm.getRawValue());
+    this.paymentProcessingService.setSelectedDeliveries(this.suppliers);
     this.router.navigateByUrl('admin/pay-farmers/preview-deliveries');
+  }
+
+  rerender(): void {
+    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      dtInstance.destroy();
+      this.dtTrigger.next();
+    });
+    this.allSelected = false;
   }
 
   ngOnDestroy(): void {

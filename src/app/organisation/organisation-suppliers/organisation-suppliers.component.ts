@@ -54,23 +54,9 @@ export class OrganisationSuppliersComponent extends BasicComponent implements On
   subRegionFilter: any;
   seasonStartingTime: string;
   filterForm: FormGroup;
-  maxSize = 9;
-  order = 'userInfo.foreName';
-  reverse = true;
-  directionLinks = true;
   showData = false;
   parameters: any;
-  config: any;
-  autoHide = false;
-  responsive = false;
   errors = [];
-  labels: any = {
-    previousLabel: 'Previous',
-    nextLabel: 'Next',
-    screenReaderPaginationLabel: 'Pagination',
-    screenReaderPageLabel: 'page',
-    screenReaderCurrentLabel: `You're on page`
-  };
   searchFields = [
     {value: 'reg_number', name: 'registration number'},
     {value: 'forename', name: 'first name'},

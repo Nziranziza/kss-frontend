@@ -78,7 +78,7 @@ div .wrapper {
 
 @media (min-width: 992px) {
   .modal-lg {
-    width: 1200px !important;
+    width: 1300px !important;
     height: auto !important;
   }
 }

@@ -18,6 +18,6 @@ export class ConfirmPaymentComponent implements OnInit {
   onPay() {}
 
   onPrevious() {
-    this.router.navigateByUrl('admin/pay-farmers/select-deliveries');
+    this.router.navigateByUrl('admin/pay-farmers/preview-deliveries');
   }
 }

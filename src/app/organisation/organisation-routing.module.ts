@@ -20,7 +20,7 @@ const routes: Routes = [
       {
         path: 'organisations',
         component: OrganisationListComponent,
-        data : {permissions: [0, 4, 6, 8, 5, 1]},
+        data: {permissions: [0, 4, 6, 8, 5, 1]},
         canActivate: [AuthorisationGuardService]
       }, {
         path: 'organisations/create',
@@ -41,7 +41,8 @@ const routes: Routes = [
       {
         path: 'cws-pending-farmers/:organisationId',
         component: OrganisationPendingFarmersComponent,
-      }, {
+      },
+      {
         path: 'organisations/:organisationId/farmers',
         component: OrganisationFarmersComponent,
         resolve: {orgCoveredAreaData: CoveredAreaResolverService}
