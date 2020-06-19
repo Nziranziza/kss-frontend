@@ -1,38 +1,46 @@
 <div class="row">
   <div class="col-sm-2 col-xs-4 top-col-statistics">
     <div class="description-block border-right">
-      <h5 class="description-header text-green">{{ totalCost | number }} &nbsp;frw</h5>
+      <h5 class="description-header text-green">{{ statistics?.totalCost | number }} &nbsp;frw</h5>
       <span class="description-text">TOTAL COST</span>
     </div>
     <!-- /.description-block -->
   </div>
   <div class="col-sm-2 col-xs-4 top-col-statistics">
     <div class="description-block border-right">
-      <h5 class="description-header text-green">{{ owedAmount | number }} &nbsp;frw</h5>
+      <h5 class="description-header text-green">{{ statistics?.owedAmount | number }} &nbsp;frw</h5>
       <span class="description-text">OWED AMOUNT</span>
     </div>
     <!-- /.description-block -->
   </div>
   <div class="col-sm-2 col-xs-4 top-col-statistics">
     <div class="description-block border-right">
-      <h5 class="description-header text-red">{{ cherriesTotalQty | number }} &#13199;</h5>
+      <h5 class="description-header text-red">{{ statistics?.cherriesTotalQty | number }} &#13199;</h5>
       <span class="description-text">CHERRIES</span>
     </div>
     <!-- /.description-block -->
   </div>
   <div class="col-sm-2 col-xs-4 top-col-statistics">
     <div class="description-block border-right">
-      <h5 class="description-header text-red">{{ totalAmountToPay | number }} frw</h5>
+      <h5 class="description-header text-red">{{ statistics?.totalAmountToPay | number }} frw</h5>
       <span class="description-text">AMOUNT TO PAY</span>
     </div>
     <!-- /.description-block -->
   </div>
+  <div class="col-sm-2 col-xs-4 top-col-statistics">
+    <div class="description-block border-right">
+      <h5 class="description-header text-red">{{ statistics?.selectedFarmers | number }}</h5>
+      <span class="description-text">SELECTED FARMERS</span>
+    </div>
+    <!-- /.description-block -->
+  </div>
 </div>
+<app-list-warnings [warning]="warning"></app-list-warnings>
 <div class="row">
   <div class="col-xs-12">
     <form [formGroup]="filterForm" (ngSubmit)="onFilter()">
-      <div class="form-inline pull-left">
-        <label class="control-label">Status</label> &nbsp;
+      <div class="form-group pull-left">
+        <span class="control-label">Status</span> &nbsp;
         <select class="form-control" formControlName="status">
           <option value="supplied">All</option>
           <option value="fully_paid">Fully paid</option>
@@ -42,7 +50,15 @@
           <option value="unapproved_payment">Unapproved payment</option>
         </select>
       </div>
-      <div class="form-inline pull-right">
+      <div class="form-group pull-left btn-margin">
+        <span class="control-label">Farmers payment channel</span>
+        <select class="form-control" formControlName="paymentChannel">
+          <option *ngFor="let channel of paymentChannels" value="{{channel._id}}">
+            {{ channel.channel }}
+          </option>
+        </select>
+      </div>
+      <div class="form-inline pull-right" style="margin-top: 20px;">
         <ng-container formGroupName="date">
           <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="from" class="form-control"
                  placeholder="from..">
@@ -82,7 +98,8 @@
           <tr *ngFor="let farmer of suppliers; let i = index">
             <td>
               <div style="text-align: center;">
-                <input type="checkbox" (click)="selectFarmer($event.target.checked, i)" [(ngModel)]="suppliers[i].selected">
+                <input type="checkbox" (click)="selectFarmer($event.target.checked, i)"
+                       [(ngModel)]="suppliers[i].selected">
               </div>
             </td>
             <td *ngIf="farmer.userInfo.type===2; else foreName"> {{ farmer.userInfo.groupName }}</td>
@@ -103,7 +120,8 @@
                   <th>Owed amount</th>
                   <th>Date</th>
                 </tr>
-                <tr *ngFor="let supply of farmer.deliveries; let t = index" style="font-size: 12px; background: transparent">
+                <tr *ngFor="let supply of farmer.deliveries; let t = index"
+                    style="font-size: 12px; background: transparent">
                   <td class="all">
                     <div style="text-align: center;">
                       <input type="checkbox" (click)="selectDelivery($event.target.checked, i, t)"

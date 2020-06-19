@@ -5,18 +5,25 @@ import {OrganisationTopUpsComponent} from './organisation-top-ups/organisation-t
 import {SharedModule} from '../shared';
 import {OwlDateTimeModule, OwlNativeDateTimeModule} from 'ng-pick-datetime';
 import {RouterModule} from '@angular/router';
-import { OrganisationPaymentsHistoryComponent } from './organisation-payments-history/organisation-payments-history.component';
-import { OrganisationPayTopUpsComponent } from './organisation-pay-top-ups/organisation-pay-top-ups.component';
+import {OrganisationPaymentsHistoryComponent} from './organisation-payments-history/organisation-payments-history.component';
+import {OrganisationPayTopUpsComponent} from './organisation-pay-top-ups/organisation-pay-top-ups.component';
+import {CoreModule} from '../core';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {NgxPaginationModule} from 'ngx-pagination';
+import {OrderModule} from 'ngx-order-pipe';
 
 @NgModule({
   declarations: [OrganisationTopUpsComponent, OrganisationPaymentsHistoryComponent, OrganisationPayTopUpsComponent],
   imports: [
     CommonModule,
     PaymentsRoutingModule,
+    NgbModule, NgxPaginationModule,
+    OrderModule,
     SharedModule,
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
-    RouterModule
+    RouterModule,
+    CoreModule
   ],
 })
 export class PaymentsModule {

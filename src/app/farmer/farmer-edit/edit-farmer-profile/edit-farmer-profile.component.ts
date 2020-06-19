@@ -1,34 +1,40 @@
 import {Component, Inject, Injector, Input, OnInit, PLATFORM_ID} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {isPlatformBrowser} from '@angular/common';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {UserService} from '../../../core/services';
 import {HelperService} from '../../../core/helpers';
 import {AuthenticationService, FarmerService} from '../../../core/services';
 import {isUndefined} from 'util';
+import {PaymentService} from '../../../core/services/payment.service';
+import {BasicComponent} from '../../../core/library';
 
 @Component({
   selector: 'app-edit-farmer-profile',
   templateUrl: './edit-farmer-profile.component.html',
   styleUrls: ['./edit-farmer-profile.component.css']
 })
-export class EditFarmerProfileComponent implements OnInit {
+export class EditFarmerProfileComponent extends BasicComponent implements OnInit {
 
   modal: NgbActiveModal;
   @Input() farmer;
   editFarmerProfileForm: FormGroup;
+  addPaymentChannelsForm: FormGroup;
   isGroup = false;
-  errors: any;
-  message: string;
   loading = false;
   submit = true;
   invalidId = false;
+  paymentChannels: any;
+  channels: any;
+  coffeeFarmerPaymentChannels: any;
+
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object, private authenticationService: AuthenticationService,
     private injector: Injector, private formBuilder: FormBuilder, private userService: UserService,
-    private helper: HelperService, private farmerService: FarmerService) {
+    private helper: HelperService, private farmerService: FarmerService, private paymentService: PaymentService) {
 
+    super();
     if (isPlatformBrowser(this.platformId)) {
       this.modal = this.injector.get(NgbActiveModal);
     }
@@ -49,12 +55,19 @@ export class EditFarmerProfileComponent implements OnInit {
         phone: ['']
       })
     });
+
+    this.addPaymentChannelsForm = this.formBuilder.group({
+      paymentChannels: new FormArray([])
+    });
     this.onChangeType();
     this.farmer.sex = this.farmer.sex.toLowerCase();
     if (!isUndefined(this.farmer.type)) {
       this.farmer.type = this.farmer.type.toString();
     }
     this.editFarmerProfileForm.patchValue(this.farmer);
+    this.getPaymentChannels();
+    this.addPaymentChannel();
+    this.getCoffeeFarmerPaymentChannels();
   }
 
   onChangeType() {
@@ -68,6 +81,26 @@ export class EditFarmerProfileComponent implements OnInit {
         }
       }
     );
+  }
+
+  onAddChannel() {
+    if (this.addPaymentChannelsForm.valid) {
+      const paymentChannel = this.addPaymentChannelsForm.value;
+      paymentChannel['userId'.toString()] = this.farmer._id;
+      paymentChannel.paymentChannels.map((channel) => {
+        channel.paymentChannel = +channel.paymentChannel;
+      });
+      this.farmerService.addPaymentChannels(paymentChannel)
+        .subscribe((data) => {
+            this.setMessage(data.message);
+            this.getCoffeeFarmerPaymentChannels();
+          },
+          (err) => {
+            this.setError(err.errors);
+          });
+    } else {
+      this.setError(['missing required data']);
+    }
   }
 
   onSubmit() {
@@ -96,7 +129,7 @@ export class EditFarmerProfileComponent implements OnInit {
           this.setError(err.errors);
         });
     } else {
-      this.setError(this.helper.getFormValidationErrors(this.editFarmerProfileForm));
+      this.setError(this.helper.getFormValidationErrors(this.addPaymentChannelsForm));
     }
   }
 
@@ -130,13 +163,58 @@ export class EditFarmerProfileComponent implements OnInit {
       this.submit = true;
     }
   }
-  setError(errors: any) {
-    this.errors = errors;
-    this.message = undefined;
+
+  get formPaymentChannel() {
+    return this.addPaymentChannelsForm.controls.paymentChannels as FormArray;
   }
 
-  setMessage(message: string) {
-    this.errors = undefined;
-    this.message = message;
+  onChangePaymentChannel(index: number) {
+    const value = this.formPaymentChannel.value[index];
+    this.formPaymentChannel.value.forEach((el, i) => {
+      if ((value.channelId === el.channelId) && (this.formPaymentChannel.value.length > 1) && (i !== index)) {
+        this.removePaymentChannel(index);
+      }
+    });
+  }
+
+  addPaymentChannel() {
+    (this.addPaymentChannelsForm.controls.paymentChannels as FormArray).push(this.createPaymentChannel());
+  }
+
+  removePaymentChannel(index: number) {
+    (this.addPaymentChannelsForm.controls.paymentChannels as FormArray).removeAt(index);
+  }
+
+  getPaymenntChannelFormGroup(index): FormGroup {
+    this.paymentChannels = this.addPaymentChannelsForm.controls.paymentChannels as FormArray;
+    return this.paymentChannels.controls[index] as FormGroup;
+  }
+
+  createPaymentChannel(): FormGroup {
+    return this.formBuilder.group({
+      paymentChannel: ['', Validators.required],
+      subscriptionCode: ['', Validators.required]
+    });
+  }
+
+  getPaymentChannels() {
+    this.paymentService.listChannelsConstants().subscribe((data) => {
+      this.channels = Object.keys(data.content).map(key => {
+        return {channel: key, _id: data.content[key]};
+      });
+    });
+  }
+
+  getPaymentChannelName(id: number) {
+    const result = this.channels.find((channel) => {
+      return channel._id === id;
+    });
+    return result.channel;
+  }
+
+  getCoffeeFarmerPaymentChannels() {
+    this.userService.get(this.farmer._id).subscribe((data) => {
+      this.coffeeFarmerPaymentChannels = data.content.paymentChannels;
+    });
   }
 }

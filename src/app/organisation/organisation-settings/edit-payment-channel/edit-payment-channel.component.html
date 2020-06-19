@@ -1,0 +1,7 @@
+<div class="modal-header">
+  <i class="fa fa-times-circle close" style="font-size: 24px;" aria-label="Close" (click)="modal.dismiss()">
+  </i>
+</div>
+<div class="modal-body">
+  <app-list-errors [errorList]="errors" *ngIf="errors"></app-list-errors>
+</div>

@@ -14,7 +14,6 @@ export class HelperService {
   getFormValidationErrors(form) {
     const errors = [];
     Object.keys(form.controls).forEach(key => {
-
       const controlErrors: ValidationErrors = form.get(key).errors;
       if (controlErrors != null) {
         Object.keys(controlErrors).forEach(keyError => {

@@ -1,9 +1,9 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {PayFarmersComponent} from './pay-farmers/pay-farmers.component';
-import {SelectDeliveriesComponent} from './select-deliveries/select-deliveries.component';
-import {PreviewDeliveriesListComponent} from './preview-deliveries-list/preview-deliveries-list.component';
-import {ConfirmPaymentComponent} from './confirm-payment/confirm-payment.component';
+import {SelectDeliveriesComponent} from './pay-farmers/select-deliveries/select-deliveries.component';
+import {PreviewDeliveriesListComponent} from './pay-farmers/preview-deliveries-list/preview-deliveries-list.component';
+import {ConfirmPaymentComponent} from './pay-farmers/confirm-payment/confirm-payment.component';
 import {AdminComponent} from '../../admin/admin/admin.component';
 import {AdminGuard} from '../../core/services/guards/admin.guard';
 

@@ -24,6 +24,10 @@
   border-color: #dca956;
 }
 
+.no-border>.table>tbody>tr>th, .no-border>.table>tfoot>tr>th, .no-border>.table>thead>tr>td, .no-border>.table>tbody>tr>td, .no-border>.table>tfoot>tr>td {
+  border-top: none;
+}
+
 .big-modal-dialog {
   width: 80% !important;
   height: auto;
@@ -77,8 +81,14 @@ div .wrapper {
 }
 
 @media (min-width: 992px) {
+
   .modal-lg {
     width: 1300px !important;
+    height: auto !important;
+  }
+
+  .modal-sm {
+    width: 950px !important;
     height: auto !important;
   }
 }
@@ -132,6 +142,7 @@ h3 {
 .top-col-statistics {
   padding-right: 0;
   padding-left: 0;
+  margin-bottom: 15px;
 }
 
 /*------------------------------------------ custom pagination and sorting -------------------------------*/
@@ -280,7 +291,6 @@ h3 {
 
 @media all and (max-width: 724px) {
   .custom-tabs .nav-tabs > li > a > span {
-    display: none;
   }
 
   .custom-tabs .nav-tabs > li > a {

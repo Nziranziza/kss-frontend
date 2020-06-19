@@ -21,6 +21,7 @@ import {WarehouseService} from './services';
 import {AdminGuard} from './services/guards/admin.guard';
 import {CoveredAreaResolverService} from './services/resolvers/covered-area-resolver.service';
 import {SharedDataService} from './services/shared-data.service';
+import {PaymentService} from './services/payment.service';
 
 @NgModule({
   imports: [
@@ -42,6 +43,7 @@ import {SharedDataService} from './services/shared-data.service';
     SharedDataService,
     AdminGuard,
     CookieService,
+    PaymentService,
     CoveredAreaResolverService,
     /*{provide: ErrorHandler, useClass: ErrorCustomHandler}*/
   ],

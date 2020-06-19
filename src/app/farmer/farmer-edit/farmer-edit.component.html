@@ -13,31 +13,31 @@
         First name
       </div>
       <div class="col-sm-6">
-        <strong>{{ farmer.userInfo.foreName }}</strong><br>
+        <strong>{{ farmer?.userInfo.foreName }}</strong><br>
       </div>
       <div class="col-sm-6">
         Last name
       </div>
       <div class="col-sm-6">
-        {{ farmer.userInfo.surname }}<br>
+        {{ farmer?.userInfo.surname }}<br>
       </div>
       <div class="col-sm-6">
         NID
       </div>
       <div class="col-sm-6">
-        {{ farmer.userInfo.NID }}<br>
+        {{ farmer?.userInfo.NID }}<br>
       </div>
       <div class="col-sm-6">
         Phone number
       </div>
       <div class="col-sm-6">
-        {{ farmer.userInfo.phone_number }}<br>
+        {{ farmer?.userInfo.phone_number }}<br>
       </div>
       <div class="col-sm-6">
         REG number
       </div>
       <div class="col-sm-6">
-        {{ farmer.userInfo.regNumber }}<br>
+        {{ farmer?.userInfo.regNumber }}<br>
       </div>
     </div>
     <div class="row" *ngIf="farmerType===2">
@@ -45,19 +45,19 @@
         Group name
       </div>
       <div class="col-sm-6">
-        <strong>{{ farmer.userInfo.groupName }}</strong><br>
+        <strong>{{ farmer?.userInfo.groupName }}</strong><br>
       </div>
       <div class="col-sm-6">
         REG number
       </div>
       <div class="col-sm-6">
-        {{ farmer.userInfo.regNumber }}<br>
+        {{ farmer?.userInfo.regNumber }}<br>
       </div>
       <div class="col-sm-6">
         Phone number
       </div>
       <div class="col-sm-6">
-        {{ farmer.userInfo.phone_number }}<br>
+        {{ farmer?.userInfo.phone_number }}<br>
       </div>
     </div>
   </div>

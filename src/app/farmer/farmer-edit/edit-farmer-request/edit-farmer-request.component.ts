@@ -186,7 +186,7 @@ export class EditFarmerRequestComponent implements OnInit {
           this.setError(err.errors);
         });
     } else {
-      this.setError('Missing required land(s) information');
+      this.setError('missing required land(s) information');
     }
   }
 

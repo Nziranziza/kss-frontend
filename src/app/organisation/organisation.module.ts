@@ -14,12 +14,16 @@ import {OrderModule} from 'ngx-order-pipe';
 import {OwlDateTimeModule, OwlNativeDateTimeModule} from 'ng-pick-datetime';
 import {OrganisationSuppliersComponent} from './organisation-suppliers/organisation-suppliers.component';
 import {SupplierDeliveriesComponent} from './organisation-suppliers/supplier-deliveries/supplier-deliveries.component';
+import {OrganisationSettingsComponent} from './organisation-settings/organisation-settings.component';
+import {EditPaymentChannelComponent} from './organisation-settings/edit-payment-channel/edit-payment-channel.component';
 
 @NgModule({
   declarations: [OrganisationListComponent, OrganisationEditComponent,
     OrganisationCreateComponent, OrganisationFarmersComponent,
     OrganisationPendingFarmersComponent, OrganisationSuppliersComponent,
-    SupplierDeliveriesComponent],
+    SupplierDeliveriesComponent,
+    OrganisationSettingsComponent,
+    EditPaymentChannelComponent],
   imports: [
     CommonModule,
     OrganisationRoutingModule,

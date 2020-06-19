@@ -6,7 +6,9 @@ import {CoffeeTypeComponent} from './coffee-type/coffee-type.component';
 import {CoffeeTypeCreateComponent} from './coffee-type/coffee-type-create/coffee-type-create.component';
 import {AdminGuard} from '../core/services/guards/admin.guard';
 import {DistributionParametersComponent} from './distribution-parameters/distribution-parameters.component';
-import {ChannelComponent} from './channel/channel-create/channel.component';
+import {ChannelComponent} from './payment-channel/channel-create/channel.component';
+import {ChannelListComponent} from './payment-channel/channel-list/channel-list.component';
+import {ChannelEditComponent} from './payment-channel/channel-edit/channel-edit.component';
 
 const routes: Routes = [
   {
@@ -23,8 +25,16 @@ const routes: Routes = [
         component: CoffeeTypeCreateComponent
       },
       {
-        path: 'payment-channel',
+        path: 'payment-channel/create',
         component: ChannelComponent
+      },
+      {
+        path: 'payment-channel/list',
+        component: ChannelListComponent
+      },
+      {
+        path: 'payment-channel/edit/:id',
+        component: ChannelEditComponent
       },
       {
         path: 'coffee-type/list',
@@ -34,7 +44,6 @@ const routes: Routes = [
         path: 'distribution-parameters',
         component: DistributionParametersComponent
       }
-
     ]
   }
 ];

@@ -45,6 +45,8 @@ export class FarmerCreateComponent extends BasicComponent implements OnInit, OnD
   sectorValue = '';
   cellValue = '';
   villageValue = '';
+  paymentChannels: any;
+  channels: any;
 
   public requestList: FormArray;
 
@@ -76,6 +78,7 @@ export class FarmerCreateComponent extends BasicComponent implements OnInit, OnD
         lastName: [''],
         phone: ['']
       }),
+      paymentChannels: new FormArray([]),
       requests: new FormArray([])
     });
     this.currentSeason = this.authenticationService.getCurrentSeason();
@@ -179,6 +182,8 @@ export class FarmerCreateComponent extends BasicComponent implements OnInit, OnD
     }
 
     this.initial();
+    this.getPaymentChannels();
+    this.addPaymentChannel();
     this.setMessage(this.messageService.getMessage());
     this.onChangeType();
   }
@@ -517,10 +522,57 @@ export class FarmerCreateComponent extends BasicComponent implements OnInit, OnD
     }
   }
 
+  get formPaymentChannel() {
+    return this.createForm.controls.paymentChannels as FormArray;
+  }
+
+  onChangePaymentChannel(index: number) {
+    const value = this.formPaymentChannel.value[index];
+    this.formPaymentChannel.value.forEach((el, i) => {
+      if ((value.inputName === el.inputName) && (this.formPaymentChannel.value.length > 1) && (i !== index)) {
+        this.removePaymentChannel(index);
+      }
+    });
+  }
+
+  addPaymentChannel() {
+    (this.createForm.controls.paymentChannels as FormArray).push(this.createPaymentChannel());
+  }
+
+  removePaymentChannel(index: number) {
+    (this.createForm.controls.paymentChannels as FormArray).removeAt(index);
+  }
+
+  getPaymenntChannelFormGroup(index): FormGroup {
+    this.paymentChannels = this.createForm.controls.paymentChannels as FormArray;
+    return this.paymentChannels.controls[index] as FormGroup;
+  }
+
+  createPaymentChannel(): FormGroup {
+    return this.formBuilder.group({
+      channelId: ['', Validators.required],
+      account: ['', Validators.required]
+    });
+  }
+
+
   initial() {
     this.locationService.getProvinces().toPromise().then(data => {
       this.provinces.push(data);
     });
+  }
+
+  getPaymentChannels() {
+    this.channels = [
+      {
+        name: 'MTN',
+        _id: '5d1635ac60c3dd116164d4ae'
+      },
+      {
+        name: 'IKOFI',
+        _id: '5d1635ac60c3dd116164d4ac'
+      }
+    ];
   }
 
   ngOnDestroy() {

@@ -81,15 +81,23 @@
           </span>
         </a>
         <ul class="treeview-menu">
+          <!--
+            <li routerLinkActive="active" *appHasPermission="[1]">
+              <a routerLink="/admin/top-ups/payments/{{user.org_id}}">
+                <i class="fa fa-circle-o"></i>
+                <span>Top-ups</span>
+              </a>
+            </li>
+          -->
           <li routerLinkActive="active" *appHasPermission="[1]">
-            <a routerLink="/admin/top-ups/payments/{{user.org_id}}">
+            <a routerLink="/admin/pay-farmers/select-deliveries">
               <i class="fa fa-circle-o"></i>
-              <span>Top-ups</span>
+              <span>Pay farmers</span>
             </a>
           </li>
           <li routerLinkActive="active" *appHasPermission="[1]">
             <a routerLink="/admin/history/payments/{{user.org_id}}">
-              <i class="fa fa-google-wallet"></i>
+              <i class="fa fa-circle-o"></i>
               <span>History</span>
             </a>
           </li>
@@ -243,6 +251,12 @@
           </li>
         </ul>
       </li>
+      <li routerLinkActive="active" *appHasPermission="[1]">
+        <a routerLink="/admin/settings/organisation/{{user.org_id}}">
+          <i class="fa fa-cogs"></i>
+          <span>Settings</span>
+        </a>
+      </li>
       <li class="treeview" routerLinkActive="active" *appHasPermission="[4,0,5]">
         <a href="#">
           <i class="fa fa-cogs"></i><span>Settings</span>
@@ -275,12 +289,14 @@
               <span>Coffee types</span>
             </a>
           </li>
-          <li routerLinkActive="active" *appHasPermission="[0]">
-            <a routerLink="/admin/payment-channel">
-              <i class="fa fa-circle-o"></i>
-              <span>Payment channel</span>
-            </a>
-          </li>
+          <!--
+            <li routerLinkActive="active" *appHasPermission="[0]">
+              <a routerLink="/admin/payment-channel/list">
+                <i class="fa fa-circle-o"></i>
+                <span>Payment channels</span>
+              </a>
+            </li>
+          -->
         </ul>
       </li>
       <li routerLinkActive="active">

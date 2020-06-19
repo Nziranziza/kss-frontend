@@ -10,6 +10,7 @@ import {AdminGuard} from '../core/services/guards/admin.guard';
 import {CoveredAreaResolverService} from '../core/services/resolvers/covered-area-resolver.service';
 import {AuthorisationGuardService} from '../core/services';
 import {OrganisationSuppliersComponent} from './organisation-suppliers/organisation-suppliers.component';
+import {OrganisationSettingsComponent} from './organisation-settings/organisation-settings.component';
 
 const routes: Routes = [
   {
@@ -41,6 +42,10 @@ const routes: Routes = [
       {
         path: 'cws-pending-farmers/:organisationId',
         component: OrganisationPendingFarmersComponent,
+      },
+      {
+        path: 'settings/organisation/:organisationId',
+        component: OrganisationSettingsComponent,
       },
       {
         path: 'organisations/:organisationId/farmers',
