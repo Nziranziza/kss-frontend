@@ -5,8 +5,8 @@
          routerLink="/admin/farmers/create"><i
         class="fa fa-plus"></i> New Farmer
       </a>
-      <button class="btn btn-success pull-right btn-margin" type="button" (click)="exportAsXLSX()"><i
-        class="fa fa-download"></i> Export all farmers
+      <button class="btn btn-success pull-right btn-margin" type="button" (click)="exportAsXLSX()" [disabled]="downloadingAll">
+        <span *ngIf="downloadingAll"> Downloading... <br> </span><i class="fa fa-download"  *ngIf="!downloadingAll"></i> Export all farmers
       </button>
     </h3>
   </div>

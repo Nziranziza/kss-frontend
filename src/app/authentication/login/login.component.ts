@@ -77,7 +77,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   onSubmit() {
     if (!this.authForm.invalid) {
       const credentials = this.authForm.value;
-      this.authenticationService.attemptAuth(credentials).subscribe(data => {
+      this.authenticationService.attemptAuth(credentials).subscribe(() => {
           this.seasonService.all().subscribe((dt) => {
             const seasons = dt.content;
             seasons.forEach((item) => {

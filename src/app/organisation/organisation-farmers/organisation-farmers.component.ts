@@ -54,6 +54,7 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
   message: string;
   showData = false;
   parameters: any;
+  downloadingAll = true;
   config: any;
   autoHide = false;
   responsive = false;
@@ -227,6 +228,7 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
   }
 
   getAllFarmers() {
+    this.downloadingAll = true;
     this.organisationService.getAllFarmers(this.organisationId)
       .subscribe(data => {
         data.content.map((item) => {
@@ -244,6 +246,7 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
           };
           this.allFarmers.push(temp);
         });
+        this.downloadingAll = false;
       });
   }
 }
