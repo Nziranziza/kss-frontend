@@ -19,6 +19,7 @@ export class AuthenticationService {
   }
 
   setAuth(user: AuthUser) {
+    localStorage.clear();
     this.jwtService.saveToken(user.token);
     this.setCurrentUser(user);
     this.setIsLoggedIn(true);
@@ -28,6 +29,7 @@ export class AuthenticationService {
     this.jwtService.destroyToken();
     this.setIsLoggedIn(false);
     this.cookieService.delete('user');
+    localStorage.clear();
   }
 
   attemptAuth(credentials): Observable<any> {

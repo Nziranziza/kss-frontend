@@ -211,7 +211,6 @@ export class OrganisationPaymentsHistoryComponent extends BasicComponent impleme
         }
       });
   }
-
   ngAfterViewInit(): void {
     this.dtTrigger.next();
   }
