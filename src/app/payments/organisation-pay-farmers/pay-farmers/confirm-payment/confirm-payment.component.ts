@@ -52,8 +52,12 @@ export class ConfirmPaymentComponent extends BasicComponent implements OnInit {
   onPay() {
     this.paymentRequest = {...this.payerAccount, ...this.paymentList};
     if (this.payerAccount) {
-      this.paymentRequest = {...{paymentChannel: this.payerAccount.channelId,
-          payerSubscriptionNumber: this.payerAccount.subscriptionNumber}, ...this.paymentList};
+      const payer: any = {paymentChannel: this.payerAccount.channelId,
+        payerSubscriptionNumber: this.payerAccount.subscriptionNumber};
+      if (this.payerAccount.channelId === 5) {
+        payer['bankName'.toString()] = this.payerAccount.bankName;
+      }
+      this.paymentRequest = {...payer, ...this.paymentList};
       this.paymentService.bulkPayment(this.paymentRequest).subscribe(() => {
         this.setMessage('Payment successfully initiated!');
         },

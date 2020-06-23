@@ -3,6 +3,7 @@ import {Router} from '@angular/router';
 import {PaymentProcessingService} from '../../../../core/services/payment-processing.service';
 import {Subject} from 'rxjs';
 import {AuthenticationService} from '../../../../core/services';
+import {HelperService} from '../../../../core/helpers';
 
 @Component({
   selector: 'app-preview-deliveries-list',
@@ -12,7 +13,7 @@ import {AuthenticationService} from '../../../../core/services';
 export class PreviewDeliveriesListComponent implements OnInit {
 
   constructor(private router: Router,
-              private authenticationService: AuthenticationService,
+              private authenticationService: AuthenticationService, private helper: HelperService,
               private paymentProcessingService: PaymentProcessingService) {
   }
 
@@ -36,15 +37,18 @@ export class PreviewDeliveriesListComponent implements OnInit {
     this.selectedDeliveries = this.paymentProcessingService.getSelectedDeliveries();
     this.paymentList = this.selectedDeliveries.reduce((results, supplier) => {
       if (supplier.selected) {
-        results.push(
-          {
-            firstName: supplier.userInfo.type === 2 ? supplier.userInfo.groupName : supplier.userInfo.foreName,
-            surname: supplier.userInfo.surname,
-            phone_number: supplier.userInfo.phone_number,
-            regNumber: supplier.userInfo.regNumber,
-            amount: this.getOwedAmount(supplier.deliveries),
-            deliveries: this.getDeliveries(supplier.deliveries)
-          });
+        const element: any = {
+          foreName: supplier.userInfo.type === 2 ? supplier.userInfo.groupName : supplier.userInfo.foreName,
+          regNumber: supplier.userInfo.regNumber,
+          subscriptionNumber: this.getSubscriptionNumber(supplier.userInfo.paymentChannels),
+          amount: this.getOwedAmount(supplier.deliveries),
+          deliveries: this.getDeliveries(supplier.deliveries)
+        };
+        if (supplier.userInfo.type === 1) {
+          element.surname = supplier.userInfo.surname;
+        }
+        this.helper.cleanObject(element);
+        results.push(element);
       }
       return results;
     }, []);
@@ -83,6 +87,10 @@ export class PreviewDeliveriesListComponent implements OnInit {
     return ids;
   }
 
+  getSubscriptionNumber(paymentChannels: any) {
+    const selectedChannel = this.paymentProcessingService.getSelectionFilter().paymentChannel;
+    return paymentChannels.find(element => element.paymentChannel === +selectedChannel).subscriptionCode;
+  }
 
   onNext() {
     this.router.navigateByUrl('admin/pay-farmers/confirm-payment');

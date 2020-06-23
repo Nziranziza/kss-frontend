@@ -70,6 +70,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           }
         });
       });
+      this.authenticationService.clearLocalStorage();
       this.afterLogInRedirect();
     }
   }

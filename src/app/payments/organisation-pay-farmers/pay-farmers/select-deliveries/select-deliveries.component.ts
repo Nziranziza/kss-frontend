@@ -161,6 +161,7 @@ export class SelectDeliveriesComponent extends BasicComponent implements OnInit,
         this.suppliers = data.content;
         this.paymentProcessingService.setSelectionFilter(this.filterForm.getRawValue());
         this.paymentProcessingService.setSelectedDeliveries(this.suppliers);
+        this.rerender();
         this.updateStatistics();
       }, (err) => {
         if (err.status === 400) {

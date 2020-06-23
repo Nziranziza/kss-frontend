@@ -61,29 +61,25 @@
   <div class="col-xs-12">
     <div class="box">
       <div class="box-body table-responsive">
-        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped">
+        <table class="row-border hover table table-striped">
           <thead>
           <tr>
-            <th (click)="setOrder('transaction.regNumber')">REG Number</th>
-            <th (click)="setOrder('transaction.mode')">Mode</th>
-            <th (click)="setOrder('transaction.channel')">Channel</th>
-            <th (click)="setOrder('transaction.payer')">Payer</th>
-            <th (click)="setOrder('transaction.transactionNumber')">Transaction number</th>
-            <th (click)="setOrder('transaction.amount')">Amount</th>
-            <th (click)="setOrder('transaction.status')">Status</th>
-            <th (click)="setOrder('transaction.date')">Date/Time</th>
+            <th (click)="setOrder('transaction.regNumber')">REG number<i class="fa fa-sort sorting"></i></th>
+            <th (click)="setOrder('transaction.foreName')">First name<i class="fa fa-sort sorting"></i></th>
+            <th (click)="setOrder('transaction.surname')">Last name<i class="fa fa-sort sorting"></i></th>
+            <th (click)="setOrder('transaction.subscriptionNumber')">Subscription number<i class="fa fa-sort sorting"></i></th>
+            <th (click)="setOrder('transaction.transactionID')">Transaction number<i class="fa fa-sort sorting"></i></th>
+            <th (click)="setOrder('transaction.status')">Status<i class="fa fa-sort sorting"></i></th>
           </tr>
           </thead>
           <tbody *ngIf="showData">
           <tr *ngFor="let transaction of (transactions | orderBy : order:reverse:'case-insensitive') | paginate: config">
             <td> {{ transaction.regNumber }}</td>
-            <td> {{ transaction.mode }}</td>
-            <td> {{ transaction.channel }}</td>
-            <td> {{ transaction.payer }}</td>
-            <td> {{ transaction.transactionNumber }}</td>
-            <td> {{ transaction.amount }}</td>
+            <td> {{ transaction.foreName }}</td>
+            <td> {{ transaction.surname }}</td>
+            <td> {{ transaction.subscriptionNumber }}</td>
+            <td> {{ transaction.transactionID }}</td>
             <td> {{ transaction.status }}</td>
-            <td> {{ transaction.date }}</td>
           </tr>
           </tbody>
         </table>

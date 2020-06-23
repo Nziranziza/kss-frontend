@@ -14,7 +14,7 @@ import {PaymentService} from '../../core/services/payment.service';
   templateUrl: './organisation-payments-history.component.html',
   styleUrls: ['./organisation-payments-history.component.css']
 })
-export class OrganisationPaymentsHistoryComponent extends BasicComponent implements OnInit, OnDestroy, AfterViewInit {
+export class OrganisationPaymentsHistoryComponent extends BasicComponent implements OnInit, OnDestroy {
   constructor(private route: ActivatedRoute,
               private modal: NgbModal,
               private messageService: MessageService,
@@ -31,9 +31,6 @@ export class OrganisationPaymentsHistoryComponent extends BasicComponent impleme
   transactions: any;
   totalPayments: number;
   organisationId: string;
-  dtOptions: DataTables.Settings = {};
-  // @ts-ignore
-  dtTrigger: Subject = new Subject();
   org: any;
   currentSeason: any;
   seasonStartingTime: string;
@@ -41,7 +38,7 @@ export class OrganisationPaymentsHistoryComponent extends BasicComponent impleme
   parameters: any;
   paymentChannels: any;
   maxSize = 9;
-  order = 'userInfo.foreName';
+  order = 'transaction.regNumber';
   reverse = true;
   directionLinks = true;
   message: string;
@@ -59,23 +56,14 @@ export class OrganisationPaymentsHistoryComponent extends BasicComponent impleme
   searchFields = [
     {value: 'reg_number', name: 'registration number'},
     {value: 'nid', name: 'NID'},
-    {value: 'forename', name: 'first name'},
-    {value: 'surname', name: 'last name'},
-    {value: 'groupname', name: 'group name'}
+    {value: 'forename', name: 'first name/group name'},
+    {value: 'surname', name: 'last name'}
   ];
-
-  // @ts-ignore
-  @ViewChild(DataTableDirective, {static: false})
-  dtElement: DataTableDirective;
 
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.organisationId = params['organisationId'.toString()];
     });
-    this.dtOptions = {
-      pagingType: 'full_numbers',
-      pageLength: 25
-    };
     this.organisationService.get(this.organisationId).subscribe(data => {
       this.org = data.content;
     });
@@ -107,10 +95,10 @@ export class OrganisationPaymentsHistoryComponent extends BasicComponent impleme
         to: [this.datePipe.transform(new Date(), 'yyyy-MM-dd', 'GMT+2'), Validators.required],
       })
     });
-    this.getTransactions();
     this.getPaymentChannels();
     this.onChangeFarmerStatusFilter();
     this.onChangePaymentChannelFilter();
+    this.getTransactions();
   }
 
   onPageChange(event) {
@@ -127,6 +115,7 @@ export class OrganisationPaymentsHistoryComponent extends BasicComponent impleme
     }
     this.order = value;
   }
+
   onFilter() {
     if (!this.filterForm.getRawValue().search.term) {
       delete this.parameters.search;
@@ -173,12 +162,13 @@ export class OrganisationPaymentsHistoryComponent extends BasicComponent impleme
 
   getTransactions() {
     this.paymentService.getPaymentHistory(this.parameters)
-      .subscribe(data => {
-        this.transactions = data;
+      .subscribe((dt) => {
+        this.transactions = dt.data.beneficiaries;
+        this.showData = true;
         this.config = {
           itemsPerPage: this.parameters.length,
           currentPage: this.parameters.start + 1,
-          totalItems: data.recordsTotal
+          totalItems: dt.recordsTotal
         };
       }, (err) => {
         if (err.status === 404) {
@@ -197,12 +187,12 @@ export class OrganisationPaymentsHistoryComponent extends BasicComponent impleme
 
   updateHistory() {
     this.paymentService.getPaymentHistory(this.parameters)
-      .subscribe(data => {
-        this.transactions = data;
+      .subscribe((dt) => {
+        this.transactions = dt.data.beneficiaries;
         this.config = {
           itemsPerPage: this.parameters.length,
           currentPage: this.parameters.start + 1,
-          totalItems: data.recordsTotal
+          totalItems: dt.recordsTotal
         };
       }, (err) => {
         if (err.status === 404) {
@@ -211,12 +201,8 @@ export class OrganisationPaymentsHistoryComponent extends BasicComponent impleme
         }
       });
   }
-  ngAfterViewInit(): void {
-    this.dtTrigger.next();
-  }
 
   ngOnDestroy(): void {
-    this.dtTrigger.unsubscribe();
   }
 
 }
