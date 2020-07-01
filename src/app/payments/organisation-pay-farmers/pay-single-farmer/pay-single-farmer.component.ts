@@ -4,7 +4,7 @@ import {BasicComponent} from '../../../core/library';
 import {HelperService} from '../../../core/helpers';
 import {isPlatformBrowser} from '@angular/common';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
-import {AuthenticationService, CherrySupplyService, OrganisationService} from '../../../core/services';
+import {AuthenticationService, CherrySupplyService, OrganisationService, UserService} from '../../../core/services';
 import {PaymentService} from '../../../core/services/payment.service';
 
 @Component({
@@ -18,9 +18,12 @@ export class PaySingleFarmerComponent extends BasicComponent implements OnInit {
   ePaymentForm: FormGroup;
   modal: NgbActiveModal;
   @Input() paymentData;
+  @Input() farmerUserId;
   channels: any;
   payerAccount: any;
   orgPaymentChannels: any;
+  farmerPaymentChannels: any;
+  supplier: any;
   organisationId: string;
   paymentRequest: any;
 
@@ -29,6 +32,7 @@ export class PaySingleFarmerComponent extends BasicComponent implements OnInit {
     private injector: Injector, private formBuilder: FormBuilder,
     private cherrySupplyService: CherrySupplyService,
     private organisationService: OrganisationService,
+    private userService: UserService,
     private authenticationService: AuthenticationService,
     private paymentService: PaymentService,
     private helper: HelperService) {
@@ -46,9 +50,12 @@ export class PaySingleFarmerComponent extends BasicComponent implements OnInit {
     this.organisationId = this.authenticationService.getCurrentUser().info.org_id;
     this.ePaymentForm = this.formBuilder.group({
       amount: ['', Validators.required],
-      paymentChannel: ['', Validators.required]
+      paymentChannel: ['', Validators.required],
+      receivingChannel: ['', Validators.required],
     });
-    console.log(this.paymentData);
+    this.userService.get(this.farmerUserId).subscribe((user) => {
+      this.supplier = user.content;
+    });
     this.cashPaymentForm.controls.amount.setValue(this.paymentData.paidAmount);
     this.ePaymentForm.controls.amount.setValue(this.paymentData.paidAmount);
     this.getOrgPaymentChannels();
@@ -73,6 +80,8 @@ export class PaySingleFarmerComponent extends BasicComponent implements OnInit {
     this.ePaymentForm.get('paymentChannel'.toString()).valueChanges.subscribe(
       (value) => {
         this.payerAccount = this.orgPaymentChannels.find(channel => channel.channelId === +value);
+        this.farmerPaymentChannels = this.helper.getFarmerPossibleReceivingPaymentChannels(+value, this.supplier.paymentChannels);
+        this.ePaymentForm.controls.receivingChannel.reset();
       });
   }
 
@@ -82,8 +91,23 @@ export class PaySingleFarmerComponent extends BasicComponent implements OnInit {
     });
   }
 
+  getSubscriptionNumber(channelId: number) {
+    return this.farmerPaymentChannels.find(element => element.paymentChannel === channelId).subscriptionCode;
+  }
+
   onSubmitEPayment() {
     if (this.payerAccount) {
+      const beneficiary: any = {
+        foreName: this.supplier.type === 2 ? this.supplier.groupName : this.supplier.foreName,
+        regNumber: this.paymentData.regNumber,
+        subscriptionNumber: this.getSubscriptionNumber(+this.ePaymentForm.controls.receivingChannel.value),
+        amount: this.paymentData.paidAmount,
+        deliveries: this.paymentData.deliveryIds,
+      };
+      if (this.supplier.type === 1) {
+        beneficiary.surname = this.supplier.surname;
+      }
+      this.helper.cleanObject(beneficiary);
       this.paymentRequest = {
         org_id: this.organisationId,
         userId: this.paymentData.userId,
@@ -91,14 +115,12 @@ export class PaySingleFarmerComponent extends BasicComponent implements OnInit {
         payerSubscriptionNumber: this.payerAccount.subscriptionNumber,
         totalAmountPaid: this.paymentData.paidAmount,
         beneficiaries: [
-          {
-            regNumber: this.paymentData.regNumber,
-            subscriptionNumber: this.paymentData.subscriptionNumber,
-            amount: this.paymentData.paidAmount,
-            deliveries: this.paymentData.deliveries
-          }
+          beneficiary
         ]
       };
+      if (this.payerAccount.channelId === 5) {
+        this.paymentRequest['bankName'.toString()] = this.payerAccount.bankName;
+      }
       this.paymentService.bulkPayment(this.paymentRequest).subscribe(() => {
           this.setMessage('Payment successfully initiated!');
         },

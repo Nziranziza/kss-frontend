@@ -1,0 +1,80 @@
+<div class="modal-header">
+  <i class="fa fa-times-circle close" style="font-size: 24px;" aria-label="Close" (click)="modal.dismiss()">
+  </i>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="col-sm-3">
+      <div class="row">
+        <div class="col-sm-6">
+          <br>
+          REG number
+        </div>
+        <div class="col-sm-6">
+          <br>
+          <span style="font-weight: bold;">{{ regNumber }}</span><br>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-body" style="overflow: hidden">
+          <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped">
+            <thead>
+            <tr>
+              <th>CherriesQty (kg)</th>
+              <th>Unit price</th>
+              <th>Delivery approval</th>
+              <th>Paid amount (rwf)</th>
+              <th>Recorded by</th>
+              <th>Payment status</th>
+              <th></th>
+              <th>Owed amount</th>
+              <th>Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let supply of detailedDeliveries">
+              <td> {{ supply.cherriesQty }}</td>
+              <td> {{ supply.unitPerKg }}</td>
+              <td>
+                <ng-container *ngIf="supply.deliveryApproval; else notDelivered">approved</ng-container>
+                <ng-template #notDelivered> not approved</ng-template>
+              </td>
+              <td> {{ supply.paidAmount }}</td>
+              <td>
+                <ng-container *ngIf="supply.recordedBy">
+                  <span style="font-size: 12px;"> {{ supply.recordedBy.foreName|titlecase }} &nbsp; {{ supply.recordedBy.surname|titlecase }}  </span>
+                </ng-container>
+              </td>
+              <td><span style="color: #dca956">{{ (supply.paymentStatus.split("_")).join(" ") | lowercase }} </span>
+              </td>
+              <td>
+                <table style="background: transparent; width: 750px;" class="pull-right">
+                  <tr style="font-size: 12px; background: transparent; font-weight: bold">
+                    <td>Amount paid (rwf)</td>
+                    <td>Payment approval status</td>
+                  </tr>
+                  <tr *ngFor="let payment of supply.payment"
+                      style="font-size: 12px; background: transparent">
+                    <td>{{ payment.amount }}</td>
+                    <td>
+                      <ng-container *ngIf="payment.approval; else notApproved">approved</ng-container>
+                      <ng-template #notApproved> not approved</ng-template>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+              <td> {{ supply.owedAmount }}</td>
+              <td> {{ supply.created_at | date }}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

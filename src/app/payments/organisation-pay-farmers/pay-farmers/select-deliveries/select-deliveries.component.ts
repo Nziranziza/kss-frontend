@@ -8,6 +8,7 @@ import {DataTableDirective} from 'angular-datatables';
 import {PaymentProcessingService} from '../../../../core/services/payment-processing.service';
 import {PaymentService} from '../../../../core/services/payment.service';
 import {BasicComponent} from '../../../../core/library';
+import {HelperService} from '../../../../core/helpers';
 
 @Component({
   selector: 'app-select-deliveries',
@@ -18,7 +19,7 @@ import {BasicComponent} from '../../../../core/library';
 export class SelectDeliveriesComponent extends BasicComponent implements OnInit, OnDestroy {
 
   constructor(private organisationService: OrganisationService, private userService: UserService,
-              private authenticationService: AuthenticationService,
+              private authenticationService: AuthenticationService, private helper: HelperService,
               private datePipe: DatePipe, private formBuilder: FormBuilder,
               private paymentService: PaymentService,
               private paymentProcessingService: PaymentProcessingService,
@@ -129,7 +130,7 @@ export class SelectDeliveriesComponent extends BasicComponent implements OnInit,
   onChangePaymentChannelFilter() {
     this.filterForm.controls.paymentChannel.valueChanges.subscribe(
       (value) => {
-        this.parameters.paymentChannel = value;
+        this.parameters.paymentChannel = +value;
         this.filterForm.controls.search.get('term'.toString()).reset();
         delete this.parameters.search;
         this.updateSuppliers();
@@ -162,11 +163,15 @@ export class SelectDeliveriesComponent extends BasicComponent implements OnInit,
         this.paymentProcessingService.setSelectionFilter(this.filterForm.getRawValue());
         this.paymentProcessingService.setSelectedDeliveries(this.suppliers);
         this.rerender();
+        if (this.suppliers.length === 0) {
+          this.setWarning('Suppliers not found!');
+        }
         this.updateStatistics();
       }, (err) => {
-        if (err.status === 400) {
-          this.setWarning('Payments not found!');
+        if (err.status === 404) {
+          this.setWarning('Suppliers not found!');
           this.suppliers = undefined;
+          this.rerender();
         }
       });
   }
@@ -242,6 +247,7 @@ export class SelectDeliveriesComponent extends BasicComponent implements OnInit,
       this.paymentChannels = Object.keys(data.content).map(key => {
         return {channel: key, _id: data.content[key]};
       });
+      this.paymentChannels = this.helper.getFarmersPossiblePaymentChannels(this.paymentChannels);
     });
   }
 

@@ -97,6 +97,6 @@ export class PreviewDeliveriesListComponent implements OnInit {
   }
 
   onPrevious() {
-    this.router.navigateByUrl('admin/pay-farmers/select-deliveries');
+    this.router.navigateByUrl('admin/pay-farmers');
   }
 }

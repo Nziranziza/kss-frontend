@@ -6,6 +6,7 @@ import {PreviewDeliveriesListComponent} from './pay-farmers/preview-deliveries-l
 import {ConfirmPaymentComponent} from './pay-farmers/confirm-payment/confirm-payment.component';
 import {AdminComponent} from '../../admin/admin/admin.component';
 import {AdminGuard} from '../../core/services/guards/admin.guard';
+import {PaymentReportsComponent} from './payment-reports/payment-reports.component';
 
 const routes: Routes = [
   {
@@ -17,10 +18,14 @@ const routes: Routes = [
         path: 'pay-farmers',
         component: PayFarmersComponent,
         children: [
-          {path: 'select-deliveries', component: SelectDeliveriesComponent},
+          {path: '', component: SelectDeliveriesComponent},
           {path: 'preview-deliveries', component: PreviewDeliveriesListComponent},
           {path: 'confirm-payment', component: ConfirmPaymentComponent}
         ]
+      },
+      {
+        path: 'payment/reports',
+        component: PaymentReportsComponent
       }
     ]
   }

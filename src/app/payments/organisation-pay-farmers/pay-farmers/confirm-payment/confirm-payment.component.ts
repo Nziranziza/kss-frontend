@@ -80,6 +80,8 @@ export class ConfirmPaymentComponent extends BasicComponent implements OnInit {
   getOrgPaymentChannels() {
     this.organisationService.orgPaymentChannels(this.organisationId).subscribe((data) => {
       this.orgPaymentChannels = data.content;
+      const selectedChannel = this.paymentProcessingService.getSelectionFilter().paymentChannel;
+      this.orgPaymentChannels = this.helper.getOrgPossibleSourcePaymentChannels(selectedChannel, this.orgPaymentChannels);
     });
   }
 

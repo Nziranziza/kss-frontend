@@ -1,13 +1,13 @@
-import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {AuthenticationService, AuthorisationService, ConfirmDialogService, MessageService, OrganisationService} from '../../core/services';
-import {Subject} from 'rxjs';
 import {BasicComponent} from '../../core/library';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {DataTableDirective} from 'angular-datatables';
 import {DatePipe} from '@angular/common';
 import {PaymentService} from '../../core/services/payment.service';
+import {PaymentHistoryDetailsComponent} from './payment-history-details/payment-history-details.component';
+import {HelperService} from '../../core/helpers';
 
 @Component({
   selector: 'app-organisation-payments-history',
@@ -21,6 +21,7 @@ export class OrganisationPaymentsHistoryComponent extends BasicComponent impleme
               private authorisationService: AuthorisationService,
               private datePipe: DatePipe,
               private formBuilder: FormBuilder,
+              private helper: HelperService,
               private paymentService: PaymentService,
               private authenticationService: AuthenticationService,
               private confirmDialogService: ConfirmDialogService,
@@ -28,7 +29,7 @@ export class OrganisationPaymentsHistoryComponent extends BasicComponent impleme
     super();
   }
 
-  transactions: any;
+  payments: any;
   totalPayments: number;
   organisationId: string;
   org: any;
@@ -56,9 +57,10 @@ export class OrganisationPaymentsHistoryComponent extends BasicComponent impleme
   searchFields = [
     {value: 'reg_number', name: 'registration number'},
     {value: 'nid', name: 'NID'},
-    {value: 'forename', name: 'first name/group name'},
+    {value: 'foreName', name: 'first name/group name'},
     {value: 'surname', name: 'last name'}
   ];
+  status: any;
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -82,12 +84,16 @@ export class OrganisationPaymentsHistoryComponent extends BasicComponent impleme
       draw: 1
     };
 
+    if (this.authorisationService.isCWSAdmin()) {
+      this.parameters.org_id = this.organisationId;
+    }
+
     this.filterForm = this.formBuilder.group({
       status: ['', Validators.required],
       paymentChannel: ['', Validators.required],
       search: this.formBuilder.group({
         term: ['', Validators.minLength(3)],
-        searchBy: ['forename']
+        searchBy: ['foreName']
       }),
       date: this.formBuilder.group({
         from: [this.datePipe.transform(this.seasonStartingTime,
@@ -99,6 +105,7 @@ export class OrganisationPaymentsHistoryComponent extends BasicComponent impleme
     this.onChangeFarmerStatusFilter();
     this.onChangePaymentChannelFilter();
     this.getTransactions();
+    this.getPaymentsStatus();
   }
 
   onPageChange(event) {
@@ -117,8 +124,10 @@ export class OrganisationPaymentsHistoryComponent extends BasicComponent impleme
   }
 
   onFilter() {
-    if (!this.filterForm.getRawValue().search.term) {
+    if (this.filterForm.getRawValue().search.term === '') {
       delete this.parameters.search;
+    } else {
+      this.parameters.search = this.filterForm.getRawValue().search;
     }
     this.parameters.date = this.filterForm.getRawValue().date;
     this.updateHistory();
@@ -139,9 +148,13 @@ export class OrganisationPaymentsHistoryComponent extends BasicComponent impleme
   onChangeFarmerStatusFilter() {
     this.filterForm.controls.status.valueChanges.subscribe(
       (value) => {
-        this.parameters.status = value;
+        if (value === '') {
+          delete this.parameters.status;
+        } else {
+          this.parameters.status = +value;
+        }
         this.filterForm.controls.search.reset();
-        this.filterForm.controls.paymentChannel.reset();
+        this.filterForm.controls.search.get('searchBy').setValue('foreName');
         delete this.parameters.search;
         this.updateHistory();
       }
@@ -151,9 +164,13 @@ export class OrganisationPaymentsHistoryComponent extends BasicComponent impleme
   onChangePaymentChannelFilter() {
     this.filterForm.controls.paymentChannel.valueChanges.subscribe(
       (value) => {
-        this.parameters.paymentChannel = value;
-        this.filterForm.controls.paymentChannel.reset();
+        if (value === '') {
+          delete this.parameters.paymentChannel;
+        } else {
+          this.parameters.paymentChannel = +value;
+        }
         this.filterForm.controls.search.reset();
+        this.filterForm.controls.search.get('searchBy').setValue('foreName');
         delete this.parameters.search;
         this.updateHistory();
       }
@@ -163,7 +180,7 @@ export class OrganisationPaymentsHistoryComponent extends BasicComponent impleme
   getTransactions() {
     this.paymentService.getPaymentHistory(this.parameters)
       .subscribe((dt) => {
-        this.transactions = dt.data.beneficiaries;
+        this.payments = dt.data;
         this.showData = true;
         this.config = {
           itemsPerPage: this.parameters.length,
@@ -172,7 +189,7 @@ export class OrganisationPaymentsHistoryComponent extends BasicComponent impleme
         };
       }, (err) => {
         if (err.status === 404) {
-          this.transactions = undefined;
+          this.payments = undefined;
         }
       });
   }
@@ -182,13 +199,14 @@ export class OrganisationPaymentsHistoryComponent extends BasicComponent impleme
       this.paymentChannels = Object.keys(data.content).map(key => {
         return {channel: key, _id: data.content[key]};
       });
+      this.paymentChannels = this.helper.getFarmersPossiblePaymentChannels(this.paymentChannels);
     });
   }
 
   updateHistory() {
     this.paymentService.getPaymentHistory(this.parameters)
       .subscribe((dt) => {
-        this.transactions = dt.data.beneficiaries;
+        this.payments = dt.data;
         this.config = {
           itemsPerPage: this.parameters.length,
           currentPage: this.parameters.start + 1,
@@ -197,12 +215,35 @@ export class OrganisationPaymentsHistoryComponent extends BasicComponent impleme
       }, (err) => {
         if (err.status === 404) {
           this.setWarning('Payments not found!');
-          this.transactions = undefined;
+          this.payments = undefined;
+        } else {
+          this.setError(err.errors);
         }
       });
   }
 
-  ngOnDestroy(): void {
+  getPaymentsStatus() {
+    const object = {
+      PENDING: 0,
+      SUCCESS: 1,
+      FAILED: 2,
+      REJECTED: 3
+    };
+    this.status = Object.keys(object).map(key => {
+      return {name: key, value: object[key]};
+    });
   }
 
+  viewDeliveries(regNumber: string, paidDeliveries: any) {
+    const modalRef = this.modal.open(PaymentHistoryDetailsComponent, {size: 'lg'});
+    modalRef.componentInstance.regNumber = regNumber;
+    modalRef.componentInstance.deliveries = paidDeliveries;
+  }
+
+  viewStatus(value: number) {
+    return this.status.find(el => el.value === value).name;
+  }
+
+  ngOnDestroy(): void {
+  }
 }

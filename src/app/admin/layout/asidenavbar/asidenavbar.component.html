@@ -90,7 +90,7 @@
             </li>
           -->
           <li routerLinkActive="active" *appHasPermission="[1]">
-            <a routerLink="/admin/pay-farmers/select-deliveries">
+            <a routerLink="/admin/pay-farmers">
               <i class="fa fa-circle-o"></i>
               <span>Pay farmers</span>
             </a>
@@ -99,6 +99,12 @@
             <a routerLink="/admin/history/payments/{{user.org_id}}">
               <i class="fa fa-circle-o"></i>
               <span>History</span>
+            </a>
+          </li>
+          <li routerLinkActive="active" *appHasPermission="[1]">
+            <a routerLink="/admin/payment/reports">
+              <i class="fa fa-circle-o"></i>
+              <span>Reports</span>
             </a>
           </li>
         </ul>
@@ -249,6 +255,12 @@
               <span>Cherries supply</span>
             </a>
           </li>
+          <li routerLinkActive="active" *appHasPermission="[0]">
+            <a routerLink="/admin/payment/reports">
+              <i class="fa fa-circle-o"></i>
+              <span>Payments report</span>
+            </a>
+          </li>
         </ul>
       </li>
       <li routerLinkActive="active" *appHasPermission="[1]">
@@ -289,14 +301,6 @@
               <span>Coffee types</span>
             </a>
           </li>
-          <!--
-            <li routerLinkActive="active" *appHasPermission="[0]">
-              <a routerLink="/admin/payment-channel/list">
-                <i class="fa fa-circle-o"></i>
-                <span>Payment channels</span>
-              </a>
-            </li>
-          -->
         </ul>
       </li>
       <li routerLinkActive="active">

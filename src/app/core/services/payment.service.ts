@@ -27,7 +27,7 @@ export class PaymentService {
   }
 
   listBanks(): Observable<any> {
-    return this.apiService.get('/organizations/banks/list ');
+    return this.apiService.get('/organizations/banks/list');
   }
 
   bulkPayment(body: any): Observable<any> {
@@ -36,5 +36,9 @@ export class PaymentService {
 
   getPaymentHistory(body: any): Observable<any> {
     return this.apiService.post('/payment/list', body);
+  }
+
+  getPaymentsReport(body: any): Observable<any> {
+    return this.apiService.post('/payments/report', body);
   }
 }

@@ -202,6 +202,7 @@ export class EditFarmerProfileComponent extends BasicComponent implements OnInit
       this.channels = Object.keys(data.content).map(key => {
         return {channel: key, _id: data.content[key]};
       });
+      this.channels = this.helper.getFarmersPossiblePaymentChannels(this.channels);
     });
   }
 

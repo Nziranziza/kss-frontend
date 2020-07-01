@@ -49,18 +49,20 @@
                           <table class="table table-condensed">
                             <tbody>
                             <tr>
-                              <th><label class="control-label">Payer account </label></th>
                               <td>
-                                <div class="form-inline">
-                                  <select class="form-control" formControlName="paymentChannel">
-                                    <option value="none">Select paying account</option>
+                                <div class="form-group">
+                                  <label class="control-label label-required">Payer account </label>
+                                  <select class="form-control" formControlName="paymentChannel"  style="width: 200px">
+                                    <option value="">Select paying account</option>
                                     <ng-container *ngFor="let channel of orgPaymentChannels">
-                                      <option value="{{channel.channelId}}" *ngIf="channel.channelId !== 4">
+                                      <option value="{{channel.channelId}}">
                                         {{ channel.channelName }}
                                       </option>
                                     </ng-container>
                                   </select>
                                 </div>
+                              </td>
+                              <td>
                               </td>
                             </tr>
                             <tr>
@@ -79,10 +81,23 @@
                           </table>
                         </div>
                       </div>
-                      <div class="col-xs-12 col-md-6" >
-                        <div class="form-inline">
+                      <div class="col-xs-12 col-md-3">
+                        <div class="form-group">
                           <label class="control-label label-required">Amount</label>&nbsp;&nbsp;
                           <input type="text" formControlName="amount" class="form-control">
+                        </div>
+                      </div>
+                      <div class="col-xs-12 col-md-3" >
+                        <div class="form-group">
+                          <label class="control-label label-required">Farmer account</label>&nbsp;&nbsp;
+                          <select class="form-control" formControlName="receivingChannel">
+                            <option value="">Select  account</option>
+                            <ng-container *ngFor="let channel of farmerPaymentChannels">
+                              <option value="{{channel.paymentChannel}}">
+                                {{ channel.subscriptionCode  }} &nbsp;-&nbsp; {{ channel.label }}
+                              </option>
+                            </ng-container>
+                          </select>
                         </div>
                       </div>
                     </div>

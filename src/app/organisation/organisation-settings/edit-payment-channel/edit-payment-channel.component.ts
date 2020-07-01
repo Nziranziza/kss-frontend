@@ -15,7 +15,8 @@ export class EditPaymentChannelComponent implements OnInit {
   modal: NgbActiveModal;
   editChannelForm: FormGroup;
   organisationId: string;
-  channel: any;
+  channels: any;
+  banks: any;
   errors: string [];
   message: string;
 
@@ -53,5 +54,4 @@ export class EditPaymentChannelComponent implements OnInit {
       this.errors = this.helper.getFormValidationErrors(this.editChannelForm);
     }
   }
-
 }

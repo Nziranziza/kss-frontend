@@ -37,6 +37,7 @@ export class OrganisationPendingFarmersComponent implements OnInit, OnDestroy {
   title = 'Temporary Farmers';
   i: number;
   parameters: any;
+  showData = false;
   org: any;
   config: any;
   autoHide = false;
@@ -75,6 +76,7 @@ export class OrganisationPendingFarmersComponent implements OnInit, OnDestroy {
           currentPage: this.parameters.start + 1,
           totalItems: data.recordsTotal
         };
+        this.showData = true;
       });
     this.filterForm = this.formBuilder.group({
       term: ['', Validators.minLength(3)],

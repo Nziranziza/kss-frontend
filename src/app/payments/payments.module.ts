@@ -11,9 +11,11 @@ import {CoreModule} from '../core';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {NgxPaginationModule} from 'ngx-pagination';
 import {OrderModule} from 'ngx-order-pipe';
+import {PaymentHistoryDetailsComponent} from './organisation-payments-history/payment-history-details/payment-history-details.component';
 
 @NgModule({
-  declarations: [OrganisationTopUpsComponent, OrganisationPaymentsHistoryComponent, OrganisationPayTopUpsComponent],
+  declarations: [OrganisationTopUpsComponent, OrganisationPaymentsHistoryComponent, OrganisationPayTopUpsComponent,
+    PaymentHistoryDetailsComponent],
   imports: [
     CommonModule,
     PaymentsRoutingModule,
@@ -25,6 +27,7 @@ import {OrderModule} from 'ngx-order-pipe';
     RouterModule,
     CoreModule
   ],
+  entryComponents: [PaymentHistoryDetailsComponent]
 })
 export class PaymentsModule {
 }

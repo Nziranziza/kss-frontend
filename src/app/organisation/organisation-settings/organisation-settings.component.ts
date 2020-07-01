@@ -105,6 +105,7 @@ export class OrganisationSettingsComponent extends BasicComponent implements OnI
       this.channels = Object.keys(data.content).map(key => {
         return {channel: key, _id: data.content[key]};
       });
+      this.channels = this.helper.getOrgPossiblePaymentChannels(this.channels);
     });
   }
 
