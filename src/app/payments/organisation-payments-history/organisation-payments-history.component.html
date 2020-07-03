@@ -34,10 +34,10 @@
                  style="margin-right: 10px">
         </ng-container>
         <ng-container formGroupName="date">
-          <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="from" class="form-control"
+          <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="from" class="form-control owl-date-input"
                  placeholder="from..">
           <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
-          <input [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" formControlName="to" class="form-control btn-margin"
+          <input [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" formControlName="to" class="form-control owl-date-input"
                  placeholder="to..">
           <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
         </ng-container>

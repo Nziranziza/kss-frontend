@@ -6,7 +6,7 @@ import {PreviewDeliveriesListComponent} from './pay-farmers/preview-deliveries-l
 import {ConfirmPaymentComponent} from './pay-farmers/confirm-payment/confirm-payment.component';
 import {AdminComponent} from '../../admin/admin/admin.component';
 import {AdminGuard} from '../../core/services/guards/admin.guard';
-import {PaymentReportsComponent} from './payment-reports/payment-reports.component';
+import {PaymentReportsComponent} from '../../reports/payment-report/payment-reports.component';
 
 const routes: Routes = [
   {

@@ -10,7 +10,7 @@ import {PayFarmersComponent} from './pay-farmers/pay-farmers.component';
 import {PreviewDeliveriesListComponent} from './pay-farmers/preview-deliveries-list/preview-deliveries-list.component';
 import {ConfirmPaymentComponent} from './pay-farmers/confirm-payment/confirm-payment.component';
 import {PaySingleFarmerComponent} from './pay-single-farmer/pay-single-farmer.component';
-import {PaymentReportsComponent} from './payment-reports/payment-reports.component';
+import {PaymentReportsComponent} from '../../reports/payment-report/payment-reports.component';
 import {FusionChartsModule} from 'angular-fusioncharts';
 import {GoogleChartsModule} from 'angular-google-charts';
 

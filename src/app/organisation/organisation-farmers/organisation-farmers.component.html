@@ -167,10 +167,10 @@
       <div class="filter-form pull-right">
         <form [formGroup]="filterForm" (ngSubmit)="onFilter()">
           <div class="form-inline">
-            <select class="form-control" formControlName="searchBy" style="margin-right: 10px">
+            <select class="form-control col-xs-3 col-sm-3 col-md-2 col-lg-2" formControlName="searchBy" style="margin-right: 10px">
               <option *ngFor="let field of searchFields"  value="{{field.value}}">{{field.name}}</option>
             </select>
-            <input type="text" formControlName="term" class="form-control" placeholder="search..">
+            <input type="text" formControlName="term" class="form-control col-xs-3 col-sm-3 col-md-2 col-lg-2" placeholder="search..">
             <button class="btn btn-warning pull-right btn-margin" type="button" (click)="onClearFilter()">Clear</button>
             <button class="btn btn-success pull-right btn-margin" type="submit"><i class="fa fa-search"></i> Search</button>
           </div>

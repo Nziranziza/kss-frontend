@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {BasicComponent} from '../../../core/library';
+import {BasicComponent} from '../../core/library';
 import {FormBuilder, FormGroup} from '@angular/forms';
 
 @Component({
@@ -40,6 +40,13 @@ export class PaymentReportsComponent extends BasicComponent implements OnInit {
     ],
     columnNames: ['Channel', 'Pending', 'Failed', 'Success', 'Rejected'],
     options: {
+      legend: {position: 'bottom', maxLines: 3},
+      chartArea: {
+        left: '10%',
+        top: '10%',
+        height: 'auto',
+        width: '100%'
+      },
     },
     width: 550,
     height: 400

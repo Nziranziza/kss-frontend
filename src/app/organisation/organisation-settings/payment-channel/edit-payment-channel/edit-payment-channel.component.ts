@@ -1,8 +1,8 @@
 import {Component, Inject, Injector, OnInit, PLATFORM_ID} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {HelperService} from '../../../core/helpers';
-import {AuthenticationService, OrganisationService} from '../../../core/services';
+import {HelperService} from '../../../../core/helpers';
+import {AuthenticationService, OrganisationService} from '../../../../core/services';
 import {isPlatformBrowser} from '@angular/common';
 
 @Component({

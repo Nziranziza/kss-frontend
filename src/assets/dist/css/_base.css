@@ -63,9 +63,22 @@ html, body {
 }
 
 input.ng-invalid.ng-touched {
-  /*
-    border: 1px solid indianred;
-  */
+}
+
+.form-inline .owl-date-input {
+  margin-left: 10px;
+}
+
+@media (max-width: 800px) {
+  .form-inline .owl-date-input {
+    margin-left: 0px;
+  }
+}
+
+@media (max-width: 800px) {
+  .form-inline input {
+    margin: 10px 0;
+  }
 }
 
 div .wrapper {

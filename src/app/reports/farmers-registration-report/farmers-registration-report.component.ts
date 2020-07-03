@@ -7,11 +7,11 @@ import {HelperService} from '../../core/helpers';
 import {AuthorisationService} from '../../core/services';
 
 @Component({
-  selector: 'app-farmers-report',
-  templateUrl: './farmers-report.component.html',
-  styleUrls: ['./farmers-report.component.css']
+  selector: 'app-farmers-registration-report',
+  templateUrl: './farmers-registration-report.component.html',
+  styleUrls: ['./farmers-registration-report.component.css']
 })
-export class FarmersReportComponent implements OnInit {
+export class FarmersRegistrationReportComponent implements OnInit {
 
   title = 'Farmers registration report';
   filterForm: FormGroup;

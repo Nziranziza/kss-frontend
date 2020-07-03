@@ -1,17 +1,17 @@
 import {Component, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {BasicComponent} from '../../core/library';
-import {PaymentService} from '../../core/services/payment.service';
-import {HelperService} from '../../core/helpers';
-import {OrganisationService} from '../../core/services';
+import {BasicComponent} from '../../../../core/library';
+import {PaymentService} from '../../../../core/services/payment.service';
+import {HelperService} from '../../../../core/helpers';
+import {OrganisationService} from '../../../../core/services';
 import {ActivatedRoute} from '@angular/router';
 
 @Component({
-  selector: 'app-organisation-settings',
-  templateUrl: './organisation-settings.component.html',
-  styleUrls: ['./organisation-settings.component.css']
+  selector: 'app-add-payment-channel',
+  templateUrl: './add-payment-channel.component.html',
+  styleUrls: ['./add-payment-channel.component.css']
 })
-export class OrganisationSettingsComponent extends BasicComponent implements OnInit {
+export class AddPaymentChannelComponent extends BasicComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder, private paymentService: PaymentService,
               private route: ActivatedRoute,

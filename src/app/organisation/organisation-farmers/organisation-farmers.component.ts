@@ -57,7 +57,7 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
   downloadingAll = true;
   config: any;
   autoHide = false;
-  responsive = false;
+  responsive = true;
   errors = [];
   labels: any = {
     previousLabel: 'Previous',

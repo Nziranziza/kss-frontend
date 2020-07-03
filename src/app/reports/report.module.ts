@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 
 import {ReportRoutingModule} from './report-routing.module';
-import {FarmersReportComponent} from './farmers-report/farmers-report.component';
+import {FarmersRegistrationReportComponent} from './farmers-registration-report/farmers-registration-report.component';
 
 import {FusionChartsModule} from 'angular-fusioncharts';
 import * as FusionCharts from 'fusioncharts';
@@ -14,7 +14,7 @@ import {FarmersApprovalProgressComponent} from './farmers-approval-progress/farm
 FusionChartsModule.fcRoot(FusionCharts, Charts);
 
 @NgModule({
-  declarations: [FarmersReportComponent, FarmersApprovalProgressComponent],
+  declarations: [FarmersRegistrationReportComponent, FarmersApprovalProgressComponent],
   imports: [
     CommonModule,
     ReportRoutingModule,
