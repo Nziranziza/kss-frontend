@@ -142,6 +142,8 @@ export class OrganisationPaymentsHistoryComponent extends BasicComponent impleme
       'yyyy-MM-dd', 'GMT+2');
     this.parameters.date.to = this.datePipe.transform(new Date(),
       'yyyy-MM-dd', 'GMT+2');
+    delete this.parameters.search;
+    this.filterForm.controls.search.get('term').reset();
     this.updateHistory();
   }
 

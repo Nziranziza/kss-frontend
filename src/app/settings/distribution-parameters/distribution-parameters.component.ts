@@ -110,7 +110,7 @@ export class DistributionParametersComponent extends BasicComponent implements O
   }
 
   editInput(input: any) {
-    const modalRef = this.modal.open(EditInputComponent, {size: 'lg'});
+    const modalRef = this.modal.open(EditInputComponent, {size: 'sm'});
     modalRef.componentInstance.input = input;
     modalRef.result.finally(() => {
       this.initial();

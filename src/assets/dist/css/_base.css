@@ -295,6 +295,7 @@ h3 {
 .custom-tabs .nav-tabs > li {
   width: 20%;
   text-align: center;
+  margin-bottom: 0px;
 }
 
 .custom-tabs .card {

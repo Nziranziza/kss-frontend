@@ -10,7 +10,7 @@ import {AdminGuard} from '../core/services/guards/admin.guard';
 import {CoveredAreaResolverService} from '../core/services/resolvers/covered-area-resolver.service';
 import {AuthorisationGuardService} from '../core/services';
 import {OrganisationSuppliersComponent} from './organisation-suppliers/organisation-suppliers.component';
-import {AddPaymentChannelComponent} from './organisation-settings/payment-channel/add-payment-channel/add-payment-channel.component';
+import {OrganisationSettingsComponent} from './organisation-settings/settings/settings/organisation-settings.component';
 
 const routes: Routes = [
   {
@@ -45,7 +45,7 @@ const routes: Routes = [
       },
       {
         path: 'settings/organisation/:organisationId',
-        component: AddPaymentChannelComponent,
+        component: OrganisationSettingsComponent,
       },
       {
         path: 'organisations/:organisationId/farmers',
