@@ -88,11 +88,11 @@ export class OrganisationEditComponent implements OnInit {
           org.organizationRole.includes(1) ||
           org.organizationRole.includes(2)) {
           if (org.location) {
-            org['location'.toString()]['prov_id'.toString()] = org.location.prov_id._id;
-            org['location'.toString()]['dist_id'.toString()] = org.location.dist_id._id;
-            org['location'.toString()]['sect_id'.toString()] = org.location.sect_id._id;
-            org['location'.toString()]['cell_id'.toString()] = org.location.cell_id._id;
-            org['location'.toString()]['village_id'.toString()] = org.location.village_id._id;
+            org['location'.toString()]['prov_id'.toString()] = org.location.prov_id ? org.location.prov_id._id : '';
+            org['location'.toString()]['dist_id'.toString()] = org.location.dist_id ? org.location.dist_id._id : '';
+            org['location'.toString()]['sect_id'.toString()] = org.location.sect_id ? org.location.sect_id._id : '';
+            org['location'.toString()]['cell_id'.toString()] = org.location.cell_id ? org.location.cell_id._id : '';
+            org['location'.toString()]['village_id'.toString()] = org.location.village_id ? org.location.village_id._id : '';
             delete org.location._id;
           }
           this.needLocation = true;
