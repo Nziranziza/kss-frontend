@@ -7,7 +7,7 @@
 <app-list-warnings [warning]="warning"></app-list-warnings>
 <div class="row" style="margin-top: 20px; margin-bottom: 20px;">
   <div class="col-xs-12">
-    <form [formGroup]="filterForm">
+    <form [formGroup]="filterForm" (ngSubmit)="onSubmit()">
       <div class="form-inline pull-right">
         <ng-container formGroupName="date">
           <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="from"
@@ -20,7 +20,7 @@
         </ng-container>
         <button class="btn btn-success btn-margin" type="submit"><i class="fa fa-filter"></i>
         </button>
-        <button class="btn btn-warning btn-margin" type="button"><i class="fa fa-refresh"></i>
+        <button class="btn btn-warning btn-margin" type="button" (click)="onClearFilter()"><i class="fa fa-refresh"></i>
         </button>
       </div>
     </form>
@@ -32,12 +32,12 @@
       <span class="info-box-icon"></span>
       <div class="info-box-content">
         <span class="info-box-text">Ikofi</span>
-        <span class="info-box-number">41,410 Rwf</span>
+        <span class="info-box-number">{{ payment.ikofi.amount }} Rwf</span>
         <div class="progress">
-          <div class="progress-bar" style="width: 70%"></div>
+          <div class="progress-bar" style="width: 100%"></div>
         </div>
         <span class="progress-description">
-              200 Transactions
+              {{ payment.ikofi.transactions }} Transactions
             </span>
       </div>
       <!-- /.info-box-content -->
@@ -51,13 +51,13 @@
 
       <div class="info-box-content">
         <span class="info-box-text">Cash</span>
-        <span class="info-box-number">41,410 Rwf</span>
+        <span class="info-box-number">{{ payment.cash.amount }} Rwf</span>
 
         <div class="progress">
-          <div class="progress-bar" style="width: 70%"></div>
+          <div class="progress-bar" style="width: 100%"></div>
         </div>
         <span class="progress-description">
-              200 Transactions
+              {{ payment.cash.transactions }} Transactions
             </span>
       </div>
       <!-- /.info-box-content -->
@@ -71,12 +71,12 @@
 
       <div class="info-box-content">
         <span class="info-box-text">MTN</span>
-        <span class="info-box-number">41,410 Rwf</span>
+        <span class="info-box-number">{{ payment.mtn.amount }} Rwf</span>
         <div class="progress">
-          <div class="progress-bar" style="width: 70%"></div>
+          <div class="progress-bar" style="width: 100%"></div>
         </div>
         <span class="progress-description">
-              200 Transactions
+              {{ payment.mtn.transactions }} Transactions
             </span>
       </div>
       <!-- /.info-box-content -->
@@ -87,16 +87,14 @@
   <div class="col-md-3 col-sm-6 col-xs-6">
     <div class="info-box bg-red">
       <span class="info-box-icon"></span>
-
       <div class="info-box-content">
         <span class="info-box-text">Airtel</span>
-        <span class="info-box-number">41,410 Rwf</span>
-
+        <span class="info-box-number">{{ payment.airtel.amount }} Rwf</span>
         <div class="progress">
-          <div class="progress-bar" style="width: 70%"></div>
+          <div class="progress-bar" style="width: 100%"></div>
         </div>
         <span class="progress-description">
-              200 Transactions
+              {{ payment.airtel.transactions }} Transactions
             </span>
       </div>
       <!-- /.info-box-content -->

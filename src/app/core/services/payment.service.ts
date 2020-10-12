@@ -39,6 +39,6 @@ export class PaymentService {
   }
 
   getPaymentsReport(body: any): Observable<any> {
-    return this.apiService.post('/payments/report', body);
+    return this.apiService.post('/paymentstats', body);
   }
 }

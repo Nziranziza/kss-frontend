@@ -128,7 +128,6 @@ export class ParchmentReportComponent extends BasicComponent implements OnInit {
             }
           });
           this.graph1.data = reports;
-          console.log(reports);
           this.clear();
           this.showReport = true;
         } else {

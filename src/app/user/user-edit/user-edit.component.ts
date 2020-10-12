@@ -107,6 +107,7 @@ export class UserEditComponent implements OnInit {
     this.onChanges();
     this.route.params.subscribe(params => {
       this.userService.get(params['id'.toString()]).subscribe(user => {
+        console.log(user);
         this.organisationService.get(this.organisationId).subscribe(data => {
           this.org = data.content;
           this.isSuperOrganisation(data.content);
@@ -190,6 +191,8 @@ export class UserEditComponent implements OnInit {
         } else {
           this.hasSite = false;
         }
+
+        this.hasSite = !!(selectedRoles.includes(8) && selectedRoles.includes(1));
         selectedRoles.forEach((role) => {
           this.userService.userPermissions(role).subscribe(dt => {
             this.userTypes = Object.keys(dt.content).map(key => {
@@ -299,7 +302,7 @@ export class UserEditComponent implements OnInit {
         _id: this.authenticationService.getCurrentUser().info._id,
         name: this.authenticationService.getCurrentUser().info.surname
       };
-      delete user.userType;
+      // delete user.userType;
       this.helper.cleanObject(user);
       this.helper.cleanObject(user.location);
       if (!((this.editUser.fullyEditable) && (this.editUser.email !== user.email))) {

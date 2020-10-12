@@ -78,7 +78,7 @@ export class FarmerCreateComponent extends BasicComponent implements OnInit, OnD
         lastName: [''],
         phone: ['']
       }),
-      paymentChannels: new FormArray([]),
+      /* paymentChannels: new FormArray([]),*/
       requests: new FormArray([])
     });
     this.currentSeason = this.authenticationService.getCurrentSeason();
@@ -183,7 +183,7 @@ export class FarmerCreateComponent extends BasicComponent implements OnInit, OnD
 
     this.initial();
     this.getPaymentChannels();
-    this.addPaymentChannel();
+    /*this.addPaymentChannel();*/
     this.setMessage(this.messageService.getMessage());
     this.onChangeType();
   }
