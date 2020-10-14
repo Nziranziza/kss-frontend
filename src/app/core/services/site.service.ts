@@ -40,6 +40,10 @@ export class SiteService {
     return this.apiService.post('/site/zone/list', body);
   }
 
+  getZoneByLocation(body: any): Observable<any> {
+    return this.apiService.post('/site/zone/list_by_location', body);
+  }
+
   getSite(body: any): Observable<any> {
     return this.apiService.post('/site/list', body);
   }

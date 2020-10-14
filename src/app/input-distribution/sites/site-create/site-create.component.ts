@@ -126,6 +126,7 @@ export class SiteCreateComponent implements OnInit {
         this.createForm.controls.allocatedQty.setValue(this.totalAllocatedQty);
       });
       this.selectedCoveredSectors.push(item.name);
+      this.getZoneByLocation();
     } else {
       let i: number;
       i = this.createForm.value.coveredAreas.coveredSectors.indexOf(item._id);
@@ -136,6 +137,7 @@ export class SiteCreateComponent implements OnInit {
           this.createForm.controls.allocatedQty.setValue(this.totalAllocatedQty);
         });
         this.selectedCoveredSectors.splice(i, 1);
+        this.getZoneByLocation();
       }
     }
   }
@@ -146,6 +148,8 @@ export class SiteCreateComponent implements OnInit {
         if (value !== '') {
           this.locationService.getDistricts(value).subscribe((data) => {
             this.districts = data;
+            this.createForm.controls.location.get('dist_id'.toString()).reset();
+            this.clearCoveredArea();
             this.coveredSectorsSet = null;
             this.sectors = null;
             this.cells = null;
@@ -157,18 +161,13 @@ export class SiteCreateComponent implements OnInit {
     this.createForm.controls.location.get('dist_id'.toString()).valueChanges.subscribe(
       (value) => {
         if (value !== '') {
-          const body = {
-            searchBy: 'district',
-            dist_id: value
-          };
           this.locationService.getSectors(value).subscribe((data) => {
             this.sectors = data;
+            this.createForm.controls.location.get('sect_id'.toString()).reset();
             this.coveredSectorsSet = data;
+            this.clearCoveredArea();
             this.cells = null;
             this.villages = null;
-          });
-          this.siteService.getZone(body).subscribe((zones) => {
-            this.coveredCWSSet = zones.content;
           });
         }
       }
@@ -178,6 +177,7 @@ export class SiteCreateComponent implements OnInit {
         if (value !== '') {
           this.locationService.getCells(value).subscribe((data) => {
             this.cells = data;
+            this.createForm.controls.location.get('cell_id'.toString()).reset();
             this.villages = null;
           });
         }
@@ -188,10 +188,37 @@ export class SiteCreateComponent implements OnInit {
         if (value !== '') {
           this.locationService.getVillages(value).subscribe((data) => {
             this.villages = data;
+            this.createForm.controls.location.get('village_id'.toString()).reset();
           });
         }
       }
     );
+  }
+
+  getZoneByLocation() {
+    this.siteService.getZoneByLocation({
+      searchBy: 'sector',
+      _ids: this.createForm.controls.coveredAreas.get('coveredSectors'.toString()).value
+    }).subscribe((zones) => {
+      this.coveredCWSSet = zones.content;
+      const saveCoveredCWS = this.createForm.controls.coveredAreas.get('coveredCWS'.toString()).value;
+      this.createForm.controls.coveredAreas.get('coveredCWS'.toString()).setValue([]);
+      this.selectedCoveredCWS = [];
+      this.coveredCWSSet.forEach((cws) => {
+        if (saveCoveredCWS.includes(cws._id)) {
+          this.createForm.controls.coveredAreas.get('coveredCWS'.toString()).value.push(cws._id);
+          this.selectedCoveredCWS.push(cws.organizationName);
+        }
+      });
+    });
+  }
+
+  clearCoveredArea() {
+    this.selectedCoveredSectors = [];
+    this.createForm.controls.coveredAreas.get('coveredCWS'.toString()).setValue([]);
+    this.createForm.controls.coveredAreas.get('coveredSectors'.toString()).setValue([]);
+    this.selectedCoveredCWS = [];
+    this.coveredCWSSet = null;
   }
 
   initial() {

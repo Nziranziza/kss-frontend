@@ -189,6 +189,7 @@ export class FarmerCreateComponent extends BasicComponent implements OnInit, OnD
   }
 
   onSubmit() {
+    console.log(this.createForm.value);
     if (this.createForm.valid) {
       if (this.createFromPending) {
         const temp = this.createForm.getRawValue();

@@ -210,7 +210,7 @@ export class UserEditComponent implements OnInit {
           this.selectedType = +value;
           this.hasSite = !!this.selectedRoles.includes(8);
         } else {
-          this.hasSite = false;
+          this.hasSite = !!(this.selectedRoles.includes(8) && this.selectedRoles.includes(1));
         }
       }
     );
