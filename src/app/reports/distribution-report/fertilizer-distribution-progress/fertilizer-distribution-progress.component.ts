@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {FormArray, FormBuilder, FormGroup} from '@angular/forms';
 import {Subject} from 'rxjs';
 
 import {
@@ -28,6 +28,7 @@ export class FertilizerDistributionProgressComponent extends BasicComponent impl
   message: string;
   isCurrentUserDCC = false;
   isSiteManager = false;
+  isCWSUser = false;
   distributionProgress: any;
   printable = [];
   dtOptions: any = {};
@@ -63,6 +64,7 @@ export class FertilizerDistributionProgressComponent extends BasicComponent impl
   ngOnInit() {
     this.isCurrentUserDCC = this.authorisationService.isDistrictCashCropOfficer();
     this.isSiteManager = this.authorisationService.isSiteManager();
+    this.isCWSUser = this.authorisationService.isCWSUser();
     this.reportIsReady = true;
     this.checkProgressForm = this.formBuilder.group({
       location: this.formBuilder.group({
@@ -88,6 +90,17 @@ export class FertilizerDistributionProgressComponent extends BasicComponent impl
               name: sector.name
             }
           );
+        });
+        this.sectors = temp;
+      });
+    } else if (this.isCWSUser) {
+      this.organisationService.get(this.authenticationService.getCurrentUser().info.org_id).subscribe(data => {
+        const temp = [];
+        data.content.coveredSectors.map((sector) => {
+          temp.push({
+            _id: sector.sectorId,
+            name: sector.name
+          });
         });
         this.sectors = temp;
       });

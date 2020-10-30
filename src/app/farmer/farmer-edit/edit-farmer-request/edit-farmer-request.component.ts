@@ -1,8 +1,8 @@
 import {Component, Inject, Injector, Input, OnInit, PLATFORM_ID} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {HelperService} from '../../../core/helpers';
-import {AuthenticationService, FarmerService, SiteService} from '../../../core/services';
+import {AuthenticationService, FarmerService, OrganisationService, SiteService} from '../../../core/services';
 import {isPlatformBrowser} from '@angular/common';
 import {LocationService} from '../../../core/services';
 import {AuthorisationService} from '../../../core/services';
@@ -28,6 +28,7 @@ export class EditFarmerRequestComponent implements OnInit {
   sectors = [];
   cells: any;
   villages: any;
+  org: any;
   currentSeason: any;
   isUserCWSOfficer = false;
   isUserSiteManager = false;
@@ -39,7 +40,9 @@ export class EditFarmerRequestComponent implements OnInit {
     private injector: Injector, private formBuilder: FormBuilder, private locationService: LocationService,
     private helper: HelperService, private farmerService: FarmerService,
     private siteService: SiteService,
-    private authenticationService: AuthenticationService, private authorisationService: AuthorisationService) {
+    private authenticationService: AuthenticationService,
+    private organisationService: OrganisationService,
+    private authorisationService: AuthorisationService) {
 
     if (isPlatformBrowser(this.platformId)) {
       this.modal = this.injector.get(NgbActiveModal);
@@ -54,8 +57,7 @@ export class EditFarmerRequestComponent implements OnInit {
       this.disableProvId = true;
     }
     this.editFarmerRequestForm = this.formBuilder.group({
-      numberOfTrees: ['', [Validators.required,
-        Validators.min(1), Validators.pattern('[0-9]*')]],
+      numberOfTrees: ['', [Validators.required, Validators.pattern('[0-9]*')]],
       fertilizer_allocate: [0],
       location: this.formBuilder.group({
         prov_id: [{value: '', disabled: this.disableProvId}, Validators.required],
@@ -78,22 +80,29 @@ export class EditFarmerRequestComponent implements OnInit {
     this.isUserCWSOfficer = this.authorisationService.isCWSUser();
     this.isUserSiteManager = this.authorisationService.isSiteManager();
     this.isUserDistrictCashCrop = this.authorisationService.isDistrictCashCropOfficer();
-
     temp.location['prov_id'.toString()] = this.land.location.prov_id._id;
     temp.location['dist_id'.toString()] = this.land.location.dist_id._id;
     temp.location['sect_id'.toString()] = this.land.location.sect_id._id;
     temp.location['cell_id'.toString()] = this.land.location.cell_id._id;
     temp.location['village_id'.toString()] = this.land.location.village_id._id;
+    this.organisationService.get(this.authenticationService.getCurrentUser().info.org_id).subscribe(data => {
+      this.org = data.content;
+    });
     this.initial();
     this.locationService.getDistricts(this.land.location.prov_id._id).subscribe((districts) => {
       this.districts = districts;
     });
-    if (!this.isUserSiteManager) {
-      this.locationService.getSectors(this.land.location.dist_id._id).subscribe((sectors) => {
-        this.sectors = sectors;
-      });
+    if (this.isUserCWSOfficer) {
+      this.organisationService.get(this.authenticationService.getCurrentUser().info.org_id).subscribe(data => {
 
-    } else {
+        data.content.coveredSectors.map((sector) => {
+          this.sectors.push({
+            _id: sector.sectorId,
+            name: sector.name
+          });
+        });
+      });
+    } else if (this.isUserSiteManager) {
       this.siteService.get(this.authenticationService.getCurrentUser().orgInfo.distributionSite).subscribe((site) => {
         this.site = site.content;
         this.site.coveredAreas.coveredSectors.map((sector) => {
@@ -102,6 +111,11 @@ export class EditFarmerRequestComponent implements OnInit {
             name: sector.name
           });
         });
+      });
+
+    } else {
+      this.locationService.getSectors(this.land.location.dist_id._id).subscribe((sectors) => {
+        this.sectors = sectors;
       });
     }
     this.locationService.getCells(this.land.location.sect_id._id).subscribe((cells) => {
@@ -124,6 +138,24 @@ export class EditFarmerRequestComponent implements OnInit {
             this.cells = null;
             this.villages = null;
           });
+          if (this.isUserSiteManager && (!this.isUserCWSOfficer)) {
+            const temp = [];
+            this.site.coveredAreas.coveredSectors.map((sector) => {
+              temp.push({
+                _id: sector.sect_id,
+                name: sector.name
+              });
+            });
+            this.sectors.push(temp);
+          } else if (this.isUserCWSOfficer) {
+            this.filterCustomSectors(this.org);
+          } else {
+            this.locationService.getSectors(value).toPromise().then(data => {
+              this.sectors = data;
+              this.cells = [];
+              this.villages= [];
+            });
+          }
         }
       }
     );
@@ -135,6 +167,14 @@ export class EditFarmerRequestComponent implements OnInit {
             this.cells = null;
             this.villages = null;
           });
+          if (this.isUserCWSOfficer) {
+            this.filterCustomCells(this.org);
+          } else {
+            this.locationService.getCells(value).toPromise().then(data => {
+              this.cells = data;
+              this.villages = [];
+            });
+          }
         }
       }
     );
@@ -145,6 +185,13 @@ export class EditFarmerRequestComponent implements OnInit {
             this.cells = data;
             this.villages = null;
           });
+          if (this.isUserCWSOfficer) {
+            this.filterCustomVillages(this.org);
+          } else {
+            this.locationService.getVillages(value).toPromise().then(data => {
+              this.villages = data;
+            });
+          }
         }
       }
     );
@@ -188,6 +235,44 @@ export class EditFarmerRequestComponent implements OnInit {
     } else {
       this.setError('missing required land(s) information');
     }
+  }
+  filterCustomSectors(org: any) {
+    const temp = [];
+    org.coveredSectors.map((sector) => {
+      temp.push({
+        _id: sector.sectorId,
+        name: sector.name
+      });
+    });
+    this.sectors = temp;
+  }
+
+  filterCustomCells(org: any) {
+    const temp = [];
+    const sectorId = this.editFarmerRequestForm.controls.location.get('sect_id'.toString()).value;
+    const i = org.coveredSectors.findIndex(element => element.sectorId === sectorId);
+    const sector = org.coveredSectors[i];
+    sector.coveredCells.map((cell) => {
+      temp.push({
+        _id: cell.cell_id,
+        name: cell.name
+      });
+    });
+    this.cells = temp;
+  }
+
+  filterCustomVillages(org: any) {
+    const temp = [];
+    const sectorId = this.editFarmerRequestForm.controls.location.get('sect_id'.toString()).value;
+    const i = org.coveredSectors.findIndex(element => element.sectorId === sectorId);
+    const sector = org.coveredSectors[i];
+    sector.coveredVillages.map((village) => {
+      temp.push({
+        _id: village.village_id,
+        name: village.name
+      });
+    });
+    this.villages = temp;
   }
 
   setError(errors: any) {

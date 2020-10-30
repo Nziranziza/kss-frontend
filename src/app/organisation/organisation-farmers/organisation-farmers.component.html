@@ -16,6 +16,12 @@
   <div class="col-md-12">
     <div class="box box-default">
       <div class="box-header with-border">
+        <ng-container *ngIf="site">
+          <strong><i class="fa fa-tree margin-r-5"></i> Distribution Site</strong>
+          <p class="text-muted">
+            {{ site.siteName | uppercase }}
+          </p>
+        </ng-container>
         <h3 class="box-title">{{org? org.organizationName : '' }} >> farmers</h3>
         <div class="box-tools pull-right">
           <button type="button" class="btn btn-box-tool" data-target="#box-body" data-toggle="collapse"><i

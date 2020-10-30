@@ -1,5 +1,12 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {AuthenticationService, ExcelServicesService, MessageService, OrganisationService, UserService} from '../../core/services';
+import {
+  AuthenticationService,
+  ExcelServicesService,
+  MessageService,
+  OrganisationService,
+  SiteService,
+  UserService
+} from '../../core/services';
 import {ActivatedRoute} from '@angular/router';
 import {Farmer} from '../../core/models';
 import {FarmerDetailsComponent} from '../../farmer/farmer-details/farmer-details.component';
@@ -20,6 +27,7 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
   constructor(private organisationService: OrganisationService, private userService: UserService,
               private authenticationService: AuthenticationService,
               private excelService: ExcelServicesService,
+              private siteService: SiteService,
               private route: ActivatedRoute,
               private formBuilder: FormBuilder,
               private messageService: MessageService,
@@ -34,6 +42,7 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
   loading = false;
   isUserCWSOfficer = true;
   org: any;
+  site: any;
   numberOfTrees = 0;
   numberOfFarmers = 0;
   currentSeason: any;
@@ -112,6 +121,11 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
         this.cwsSummary = data.content[0];
       }
     });
+    if (this.authenticationService.getCurrentUser().orgInfo.distributionSite) {
+      this.siteService.get(this.authenticationService.getCurrentUser().orgInfo.distributionSite).subscribe(data => {
+        this.site = data.content;
+      });
+    }
     this.setMessage(this.messageService.getMessage());
     this.orgCoveredArea = this.route.snapshot.data.orgCoveredAreaData;
     this.currentSeason = this.authenticationService.getCurrentSeason();

@@ -27,6 +27,7 @@ export class PesticideDistributionProgressComponent extends BasicComponent imple
   message: string;
   isCurrentUserDCC = false;
   isSiteManager = false;
+  isCWSUser = false;
   distributionProgress: any;
   printable = [];
   dtOptions: any = {};
@@ -62,6 +63,7 @@ export class PesticideDistributionProgressComponent extends BasicComponent imple
   ngOnInit() {
     this.isCurrentUserDCC = this.authorisationService.isDistrictCashCropOfficer();
     this.isSiteManager = this.authorisationService.isSiteManager();
+    this.isCWSUser = this.authorisationService.isCWSUser();
     this.checkProgressForm = this.formBuilder.group({
       location: this.formBuilder.group({
         prov_id: [''],
@@ -87,6 +89,17 @@ export class PesticideDistributionProgressComponent extends BasicComponent imple
               name: sector.name
             }
           );
+        });
+        this.sectors = temp;
+      });
+    } else if (this.isCWSUser) {
+      this.organisationService.get(this.authenticationService.getCurrentUser().info.org_id).subscribe(data => {
+        const temp = [];
+        data.content.coveredSectors.map((sector) => {
+          temp.push({
+            _id: sector.sectorId,
+            name: sector.name
+          });
         });
         this.sectors = temp;
       });

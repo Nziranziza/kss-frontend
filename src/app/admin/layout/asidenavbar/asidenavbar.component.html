@@ -171,14 +171,14 @@
           </li>
         </ul>
       </li>
-      <li class="header" *appHasPermission="[0,5,[4,10],[4,11],[4,12],[8,1],[4,1],6]">INPUT DISTRIBUTION</li>
-      <li routerLinkActive="active" *appHasPermission="[0,5,[4,10],[4,11],[4,12],[8,1],[4,1],[4,2],6]">
+      <li class="header" *appHasPermission="[0,5,[4,10],[4,11],[4,12],8,[4,1],6]">INPUT DISTRIBUTION</li>
+      <li routerLinkActive="active" *appHasPermission="[0,5,[4,10],[4,11],[4,12],[4,1],[4,2],[[8,1],[1,1],'XOR'],6]">
         <a routerLink="/admin/sites">
           <i class="fa fa-square" aria-hidden="true"></i>
           <span>Sites</span>
         </a>
       </li>
-      <li routerLinkActive="active" *appHasPermission="[[4,10],[4,11],[4,12],[4,1],0,6,5]">
+      <li routerLinkActive="active" *appHasPermission="[[4,10],[4,11],[4,12],[4,1],0,6,5,[[8,1],[1,1],'XOR']]">
         <a routerLink="/admin/input/distribution/plan">
           <i class="fa fa-history" aria-hidden="true"></i>
           <span>Distribution plan</span>
@@ -192,20 +192,20 @@
           </span>
         </a>
         <ul class="treeview-menu">
-          <li routerLinkActive="active" *appHasPermission="[0,6,[4,1],[4,11],[4,12],5,8]">
+          <li routerLinkActive="active" *appHasPermission="[0,6,[4,1],[4,11],[4,12],5,[8,1],[8,2],[[1,1],[8,1],'AND']]">
             <a routerLink="/admin/input/application/progress">
               <i class="fa fa-circle-o"></i>
               <span>Fertilizer application</span>
             </a>
           </li>
-          <li routerLinkActive="active" *appHasPermission="[0,6,[4,1],[4,11],[4,12],5,8]">
+          <li routerLinkActive="active" *appHasPermission="[0,6,[4,1],[4,11],[4,12],5,[8,1],[8,2],[[1,1],[8,1],'AND']]">
             <a routerLink="/admin/input/pesticide/application/progress">
               <i class="fa fa-circle-o"></i>
               <span>Pesticide application</span>
             </a>
           </li>
 
-          <li routerLinkActive="active" *appHasPermission="[0,6,[4,1],[4,11],[4,12],5,[8,1]]">
+          <li routerLinkActive="active" *appHasPermission="[0,6,[4,1],[4,11],[4,12],5,[[8,1],[1,1],'NOT']]">
             <a routerLink="/admin/input/distribution/progress">
               <i class="fa fa-circle-o"></i>
               <span>Distribution</span>
@@ -261,7 +261,7 @@
           </li>
         </ul>
       </li>
-      <li routerLinkActive="active" *appHasPermission="[1]">
+      <li routerLinkActive="active" *appHasPermission="[-1]">
         <a routerLink="/admin/settings/organisation/{{user.org_id}}">
           <i class="fa fa-cogs"></i>
           <span>Settings</span>

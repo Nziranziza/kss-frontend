@@ -79,11 +79,11 @@ export class FarmerNeedApprovalListComponent extends BasicComponent implements O
         this.router.navigateByUrl('404');
       } else {
         this.requests = [];
+        this.filterForm.controls.site.setValue('');
         this.needApprovalListType === 'updated' ? this.title = 'Updated lands to be approved' : this.title =
           'New lands to be approved';
       }
     });
-
     this.siteService.getSite(body).subscribe((data) => {
       this.sites = data.content;
     });
@@ -154,7 +154,6 @@ export class FarmerNeedApprovalListComponent extends BasicComponent implements O
       })
         .subscribe(() => {
           this.setMessage('changes successful approved.');
-          this.messageService.setMessage('changes successful approved.');
           this.sharedDataService.changeApprovalFlag();
           this.getUpdatesWaitingForApproval();
         });
@@ -165,7 +164,6 @@ export class FarmerNeedApprovalListComponent extends BasicComponent implements O
       })
         .subscribe(() => {
           this.setMessage('changes successful approved.');
-          this.messageService.setMessage('changes successful approved.');
           this.sharedDataService.changeApprovalFlag();
           this.getUpdatesWaitingForApproval();
         });
@@ -198,7 +196,6 @@ export class FarmerNeedApprovalListComponent extends BasicComponent implements O
       contact = requests.requestInfo.updatedBy.surname + ' ' +
         requests.requestInfo.updatedBy.foreName + ', ' + requests.requestInfo.updatedBy.phone_number;
     }
-
     if (requests.requestInfo.createdBy) {
       contact = requests.requestInfo.createdBy.surname + ' ' +
         requests.requestInfo.createdBy.foreName + ', ' + requests.requestInfo.createdBy.phone_number;

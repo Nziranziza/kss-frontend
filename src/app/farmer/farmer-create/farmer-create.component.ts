@@ -38,6 +38,7 @@ export class FarmerCreateComponent extends BasicComponent implements OnInit, OnD
   isUserSiteManager = false;
   user: any;
   site: any;
+  org: any;
   disableProvId = false;
   disableDistId = false;
   provinceValue = '';
@@ -78,7 +79,7 @@ export class FarmerCreateComponent extends BasicComponent implements OnInit, OnD
         lastName: [''],
         phone: ['']
       }),
-      /* paymentChannels: new FormArray([]),*/
+      /* paymentChannels: new FormArray([]), */
       requests: new FormArray([])
     });
     this.currentSeason = this.authenticationService.getCurrentSeason();
@@ -97,13 +98,18 @@ export class FarmerCreateComponent extends BasicComponent implements OnInit, OnD
           this.id = params.id;
         }
       });
+    if (this.authenticationService.getCurrentUser().orgInfo.distributionSite) {
+      this.siteService.get(this.authenticationService.getCurrentUser().orgInfo.distributionSite).subscribe((site) => {
+        this.site = site.content;
+      });
+    }
+    this.organisationService.get(this.authenticationService.getCurrentUser().info.org_id).subscribe(data => {
+      this.org = data.content;
+    });
     if (this.createFromPending) {
       this.farmerService.getPendingFarmer(this.id).subscribe(data => {
           this.farmer = data.content;
           this.createFromPending = true;
-          this.siteService.get(this.authenticationService.getCurrentUser().orgInfo.distributionSite).subscribe((site) => {
-            this.site = site.content;
-          });
           const temp = {
             foreName: this.farmer.foreName,
             surname: this.farmer.surname,
@@ -143,9 +149,14 @@ export class FarmerCreateComponent extends BasicComponent implements OnInit, OnD
           this.locationService.getDistricts(data.content.location.prov_id._id).subscribe((districts) => {
             this.districts.push(districts);
           });
-          this.locationService.getSectors(data.content.location.dist_id._id).subscribe((sectors) => {
-            this.sectors.push(sectors);
+          const temp = [];
+          data.content.coveredSectors.map((sector) => {
+            temp.push({
+              _id: sector.sectorId,
+              name: sector.name
+            });
           });
+          this.sectors.push(temp);
           (this.createForm.controls.requests as FormArray).push(this.createRequest());
         });
       } else if (this.isUserDistrictCashCrop) {
@@ -158,7 +169,7 @@ export class FarmerCreateComponent extends BasicComponent implements OnInit, OnD
           this.sectors.push(sectors);
         });
         (this.createForm.controls.requests as FormArray).push(this.createRequest());
-      } else if (this.isUserSiteManager) {
+      } else if (this.isUserSiteManager && (!this.isUserCWSOfficer)) {
         this.siteService.get(this.authenticationService.getCurrentUser().orgInfo.distributionSite).subscribe((site) => {
           this.site = site.content;
           this.provinceValue = this.site.location.prov_id._id;
@@ -183,13 +194,12 @@ export class FarmerCreateComponent extends BasicComponent implements OnInit, OnD
 
     this.initial();
     this.getPaymentChannels();
-    /*this.addPaymentChannel();*/
+    /* this.addPaymentChannel(); */
     this.setMessage(this.messageService.getMessage());
     this.onChangeType();
   }
 
   onSubmit() {
-    console.log(this.createForm.value);
     if (this.createForm.valid) {
       if (this.createFromPending) {
         const temp = this.createForm.getRawValue();
@@ -391,6 +401,7 @@ export class FarmerCreateComponent extends BasicComponent implements OnInit, OnD
         });
     } else {
       this.submit = false;
+      this.resetNIDInfo();
     }
   }
 
@@ -429,6 +440,7 @@ export class FarmerCreateComponent extends BasicComponent implements OnInit, OnD
     this.provinces.push(this.provinces[0]);
     if (this.disableDistId) {
       this.districts.push(this.districts[0]);
+      this.onChangeDistrict(this.districts.length - 1);
     }
   }
 
@@ -474,7 +486,7 @@ export class FarmerCreateComponent extends BasicComponent implements OnInit, OnD
   onChangeDistrict(index: number) {
     const value = this.getRequestsFormGroup(index).controls.location.get('dist_id'.toString()).value;
     if (value !== '') {
-      if (this.isUserSiteManager) {
+      if (this.isUserSiteManager && (!this.isUserCWSOfficer)) {
         const temp = [];
         this.site.coveredAreas.coveredSectors.map((sector) => {
           temp.push({
@@ -482,7 +494,9 @@ export class FarmerCreateComponent extends BasicComponent implements OnInit, OnD
             name: sector.name
           });
         });
-        this.sectors[index] = temp;
+        this.sectors.push(temp);
+      } else if (this.isUserCWSOfficer) {
+        this.filterCustomSectors(this.org,  index);
       } else {
         this.locationService.getSectors(value).toPromise().then(data => {
           this.sectors[index] = data;
@@ -500,26 +514,34 @@ export class FarmerCreateComponent extends BasicComponent implements OnInit, OnD
   onChangeSector(index: number) {
     const value = this.getRequestsFormGroup(index).controls.location.get('sect_id'.toString()).value;
     if (value !== '') {
-      this.locationService.getCells(value).toPromise().then(data => {
-        this.cells[index] = data;
-        this.villages[index] = [];
-        if (this.createFromPending) {
-          this.getLocationInput(index, 'cell_id').setValue(this.farmer.location.cell_id);
-          this.onChangeCell(0);
-        }
-      });
+      if (this.isUserCWSOfficer) {
+        this.filterCustomCells(this.org, index);
+      } else {
+        this.locationService.getCells(value).toPromise().then(data => {
+          this.cells[index] = data;
+          this.villages[index] = [];
+          if (this.createFromPending) {
+            this.getLocationInput(index, 'cell_id').setValue(this.farmer.location.cell_id);
+            this.onChangeCell(0);
+          }
+        });
+      }
     }
   }
 
   onChangeCell(index: number) {
     const value = this.getRequestsFormGroup(index).controls.location.get('cell_id'.toString()).value;
     if (value !== '') {
-      this.locationService.getVillages(value).toPromise().then(data => {
-        this.villages[index] = data;
-        if (this.createFromPending) {
-          this.getLocationInput(index, 'village_id').setValue(this.farmer.location.village_id);
-        }
-      });
+      if (this.isUserCWSOfficer) {
+        this.filterCustomVillages(this.org, index);
+      } else {
+        this.locationService.getVillages(value).toPromise().then(data => {
+          this.villages[index] = data;
+          if (this.createFromPending) {
+            this.getLocationInput(index, 'village_id').setValue(this.farmer.location.village_id);
+          }
+        });
+      }
     }
   }
 
@@ -556,6 +578,44 @@ export class FarmerCreateComponent extends BasicComponent implements OnInit, OnD
     });
   }
 
+  filterCustomSectors(org: any, index: number) {
+    const temp = [];
+    org.coveredSectors.map((sector) => {
+      temp.push({
+        _id: sector.sectorId,
+        name: sector.name
+      });
+    });
+    this.sectors[index] = temp;
+  }
+
+  filterCustomCells(org: any, index: number) {
+    const temp = [];
+    const sectorId = this.getRequestsFormGroup(index).controls.location.get('sect_id'.toString()).value;
+    const i = org.coveredSectors.findIndex(element => element.sectorId === sectorId);
+    const sector = org.coveredSectors[i];
+    sector.coveredCells.map((cell) => {
+      temp.push({
+        _id: cell.cell_id,
+        name: cell.name
+      });
+    });
+    this.cells[index] = temp;
+  }
+
+  filterCustomVillages(org: any, index: number) {
+    const temp = [];
+    const sectorId = this.getRequestsFormGroup(index).controls.location.get('sect_id'.toString()).value;
+    const i = org.coveredSectors.findIndex(element => element.sectorId === sectorId);
+    const sector = org.coveredSectors[i];
+    sector.coveredVillages.map((village) => {
+      temp.push({
+        _id: village.village_id,
+        name: village.name
+      });
+    });
+    this.villages[index] = temp;
+  }
 
   initial() {
     this.locationService.getProvinces().toPromise().then(data => {

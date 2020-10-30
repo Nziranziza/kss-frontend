@@ -17,7 +17,7 @@
             <div class="col-sm-12">
               <div class="row">
                 <div formGroupName="location">
-                  <div class="col-xs-2" *ngIf="!(isCurrentUserDCC || isSiteManager)">
+                  <div class="col-xs-2" *ngIf="!(isCurrentUserDCC || isSiteManager || isCWSUser)">
                     <div class="form-group">
                       <span class="">Province</span>
                       <div class="input-group input-group-sm">
@@ -34,7 +34,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-xs-2" *ngIf="!isSiteManager">
+                  <div class="col-xs-2" *ngIf="!(isSiteManager || isCWSUser)">
                     <div class="form-group">
                       <span class="">District</span>
                       <div class="input-group input-group-sm">

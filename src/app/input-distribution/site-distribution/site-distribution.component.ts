@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {AuthenticationService, OrganisationTypeService} from '../../core/services';
+import {AuthenticationService, AuthorisationService, OrganisationTypeService} from '../../core/services';
 import {HelperService} from '../../core/helpers';
 import {InputDistributionService} from '../../core/services';
 import {RecordDistributionComponent} from './record-distribution/record-distribution.component';
@@ -19,6 +19,7 @@ export class SiteDistributionComponent extends BasicComponent implements OnInit 
 
   constructor(private formBuilder: FormBuilder, private authenticationService: AuthenticationService,
               private organisationTypeService: OrganisationTypeService,
+              private authorisationService: AuthorisationService,
               private inputDistributionService: InputDistributionService,
               private helper: HelperService,
               private messageService: MessageService,
@@ -47,8 +48,9 @@ export class SiteDistributionComponent extends BasicComponent implements OnInit 
     modalRef.componentInstance.numberOfTrees = numberOfTrees;
     modalRef.result.then((message) => {
       this.setMessage(message);
-      this.inputDistributionService.getFarmerRequests(this.requestsOf).subscribe((data) => {
-        this.requests = data.content[0].requestInfo;
+      this.inputDistributionService.getFarmerRequestsAsCWS(this.authenticationService.getCurrentUser()
+        .info.org_id, this.requestsOf.farmerRegNumber).subscribe((data) => {
+        this.requests = data.content[0].request.requestInfo;
       });
     });
   }
@@ -58,13 +60,24 @@ export class SiteDistributionComponent extends BasicComponent implements OnInit 
       const requestsOf = JSON.parse(JSON.stringify(this.getFarmerRequestsForm.value));
       requestsOf['managerUserId'.toString()] = this.authenticationService.getCurrentUser().info._id;
       this.requestsOf = requestsOf;
-      this.inputDistributionService.getFarmerRequests(requestsOf).subscribe((data) => {
-        this.requests = data.content[0].requestInfo;
-        this.documentId = data.content[0]._id;
-        this.regNumber = requestsOf.farmerRegNumber;
-      }, (err) => {
-        this.setError(err.errors);
-      });
+      if (this.authorisationService.isCWSAdmin()) {
+        this.inputDistributionService.getFarmerRequestsAsCWS(this.authenticationService.getCurrentUser()
+          .info.org_id, requestsOf.farmerRegNumber).subscribe((data) => {
+          this.requests = data.content[0].request.requestInfo;
+          this.documentId = data.content[0].request._id;
+          this.regNumber = requestsOf.farmerRegNumber;
+        }, (err) => {
+          this.setError(err.errors);
+        });
+      } else {
+        this.inputDistributionService.getFarmerRequests(this.requestsOf).subscribe((data) => {
+          this.requests = data.content[0].requestInfo;
+          this.documentId = data.content[0]._id;
+          this.regNumber = requestsOf.farmerRegNumber;
+        }, (err) => {
+          this.setError(err.errors);
+        });
+      }
     } else {
       this.setError(this.helper.getFormValidationErrors(this.getFarmerRequestsForm));
     }
