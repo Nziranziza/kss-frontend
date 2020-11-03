@@ -165,7 +165,7 @@ export class FarmerNeedApprovalListComponent extends BasicComponent implements O
         .subscribe(() => {
           this.setMessage('changes successful approved.');
           this.sharedDataService.changeApprovalFlag();
-          this.getUpdatesWaitingForApproval();
+          this.getNewLandsWaitingForApproval();
         });
     }
   }
@@ -183,7 +183,10 @@ export class FarmerNeedApprovalListComponent extends BasicComponent implements O
         this.isFilterDone = true;
       }, (err) => {
         if (err.status === 404) {
-          this.setWarning('No new lands to be approved');
+          this.setMessage('All new lands are approved');
+          this.requests = [];
+          this.config.currentPage = 1;
+          this.config.totalItems = 0;
         } else {
           this.setError(err.errors);
         }
@@ -216,7 +219,10 @@ export class FarmerNeedApprovalListComponent extends BasicComponent implements O
         this.isFilterDone = true;
       }, (err) => {
         if (err.status === 404) {
-          this.setWarning('No updates to be approved.');
+          this.setMessage('All lands updates are approved');
+          this.requests = [];
+          this.config.currentPage = 1;
+          this.config.totalItems = 0;
         } else {
           this.setError(err.errors);
         }

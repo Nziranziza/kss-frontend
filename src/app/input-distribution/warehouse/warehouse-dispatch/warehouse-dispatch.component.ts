@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {HelperService} from '../../../core/helpers';
@@ -9,6 +9,7 @@ import {Subject} from 'rxjs';
 import {WarehouseService} from '../../../core/services';
 import {DatePipe} from '@angular/common';
 import {BasicComponent} from '../../../core/library';
+import {DataTableDirective} from 'angular-datatables';
 
 @Component({
   selector: 'app-warehouse-dispatch',
@@ -54,6 +55,10 @@ export class WarehouseDispatchComponent extends BasicComponent implements OnInit
     {value: 'driver', name: 'driver'},
     {value: 'vehicle', name: 'vehicle'}
   ];
+
+  // @ts-ignore
+  @ViewChild(DataTableDirective, {static: false})
+  dtElement: DataTableDirective;
 
   packagePesticide: any;
   packageFertilizer: any;
@@ -295,6 +300,7 @@ export class WarehouseDispatchComponent extends BasicComponent implements OnInit
       delete filter.search.location;
       this.warehouseService.filterDispatches(filter).subscribe((data) => {
         this.inputDispatches = data.content;
+        this.rerender();
       }, (err) => {
         if (err.status === 404) {
           this.setWarning('Sorry no matching data');
@@ -309,6 +315,7 @@ export class WarehouseDispatchComponent extends BasicComponent implements OnInit
     this.filterForm.controls.search.get('searchBy').setValue('no_filter');
     this.warehouseService.getDispatches().subscribe((data) => {
       this.inputDispatches = data.content;
+      this.rerender();
     });
   }
 
@@ -362,6 +369,7 @@ export class WarehouseDispatchComponent extends BasicComponent implements OnInit
             this.setMessage('Dispatch recorded successfully!');
             this.warehouseService.getDispatches().subscribe((data) => {
               this.inputDispatches = data.content;
+              this.rerender();
             });
             this.recordDispatchForm.reset();
             this.recordDispatchForm.controls.entries.get('date').setValue(this.datePipe.transform(this.currentDate, 'yyyy-MM-dd', 'GMT+2'));
@@ -453,6 +461,13 @@ export class WarehouseDispatchComponent extends BasicComponent implements OnInit
           });
         }
       });
+  }
+
+  rerender(): void {
+    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      dtInstance.destroy();
+      this.dtTrigger.next();
+    });
   }
 
   ngOnDestroy(): void {

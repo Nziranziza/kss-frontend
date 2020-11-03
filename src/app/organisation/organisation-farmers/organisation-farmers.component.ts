@@ -139,6 +139,7 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
   ngOnDestroy(): void {
   }
 
+
   onPageChange(event) {
     this.config.currentPage = event;
     if (event >= 1) {

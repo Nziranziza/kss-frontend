@@ -20,11 +20,6 @@ export class OrganisationPendingFarmersComponent implements OnInit, OnDestroy {
               private authorisationService: AuthorisationService,
               private excelService: ExcelServicesService, private http: HttpClient,
               private modal: NgbModal, private formBuilder: FormBuilder, private messageService: MessageService) {
-    this.parameters = {
-      length: 25,
-      start: 0,
-      draw: 1
-    };
   }
 
   message: string;
@@ -68,9 +63,14 @@ export class OrganisationPendingFarmersComponent implements OnInit, OnDestroy {
     this.organisationService.get(this.orgId).subscribe(data => {
       this.org = data.content;
     });
+    this.parameters = {
+      length: 25,
+      start: 0,
+      draw: 1
+    };
     this.organisationService.getOrgPendingFarmers(this.orgId, this.parameters)
       .subscribe(data => {
-        this.farmers = data.data;
+        this.farmers = data.content;
         this.config = {
           itemsPerPage: this.parameters.length,
           currentPage: this.parameters.start + 1,
@@ -120,7 +120,7 @@ export class OrganisationPendingFarmersComponent implements OnInit, OnDestroy {
       this.parameters['search'.toString()] = this.filterForm.value;
       this.organisationService.getOrgPendingFarmers(this.orgId, this.parameters)
         .subscribe(data => {
-          this.farmers = data.data;
+          this.farmers = data.content;
           this.config = {
             itemsPerPage: this.parameters.length,
             currentPage: this.parameters.start + 1,
@@ -140,7 +140,7 @@ export class OrganisationPendingFarmersComponent implements OnInit, OnDestroy {
     delete this.parameters.search;
     this.organisationService.getOrgPendingFarmers(this.orgId, this.parameters)
       .subscribe(data => {
-        this.farmers = data.data;
+        this.farmers = data.content;
         this.config = {
           itemsPerPage: this.parameters.length,
           currentPage: this.parameters.start + 1,

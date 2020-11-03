@@ -40,6 +40,7 @@ export class PesticideDistributionProgressComponent extends BasicComponent imple
   villages: any;
   distId = false;
   sectorId = false;
+  org: any;
   cellId = false;
   downloadSummaryEnabled = false;
   downloadDetailedEnabled = false;
@@ -95,6 +96,7 @@ export class PesticideDistributionProgressComponent extends BasicComponent imple
     } else if (this.isCWSUser) {
       this.organisationService.get(this.authenticationService.getCurrentUser().info.org_id).subscribe(data => {
         const temp = [];
+        this.org = data.content;
         data.content.coveredSectors.map((sector) => {
           temp.push({
             _id: sector.sectorId,
@@ -166,25 +168,29 @@ export class PesticideDistributionProgressComponent extends BasicComponent imple
     this.checkProgressForm.controls.location.get('prov_id'.toString()).valueChanges.subscribe(
       (value) => {
         if (value !== '') {
-          this.downloadDetailedEnabled = false;
           this.locationService.getDistricts(value).subscribe((data) => {
             this.districts = data;
             this.sectors = null;
             this.cells = null;
             this.villages = null;
           });
+          this.downloadDetailedEnabled = false;
         }
       }
     );
     this.checkProgressForm.controls.location.get('dist_id'.toString()).valueChanges.subscribe(
       (value) => {
         if (value !== '') {
-          this.locationService.getSectors(value).subscribe((data) => {
-            this.sectors = data;
-            this.cells = null;
-            this.villages = null;
-            this.distId = true;
-          });
+          if (this.isCWSUser) {
+            this.filterCustomSectors(this.org);
+          } else {
+            this.locationService.getSectors(value).subscribe((data) => {
+              this.sectors = data;
+              this.cells = null;
+              this.villages = null;
+              this.distId = true;
+            });
+          }
         } else {
           this.distId = false;
         }
@@ -193,11 +199,15 @@ export class PesticideDistributionProgressComponent extends BasicComponent imple
     this.checkProgressForm.controls.location.get('sect_id'.toString()).valueChanges.subscribe(
       (value) => {
         if (value !== '') {
-          this.locationService.getCells(value).subscribe((data) => {
-            this.cells = data;
-            this.villages = null;
-            this.sectorId = true;
-          });
+          if (this.isCWSUser) {
+            this.filterCustomCells(this.org);
+          } else {
+            this.locationService.getCells(value).subscribe((data) => {
+              this.cells = data;
+              this.villages = null;
+              this.sectorId = true;
+            });
+          }
         } else {
           this.sectorId = false;
         }
@@ -206,15 +216,60 @@ export class PesticideDistributionProgressComponent extends BasicComponent imple
     this.checkProgressForm.controls.location.get('cell_id'.toString()).valueChanges.subscribe(
       (value) => {
         if (value !== '') {
-          this.locationService.getVillages(value).subscribe((data) => {
-            this.villages = data;
-            this.cellId = true;
-          });
+          if (this.isCWSUser) {
+            this.filterCustomVillages(this.org);
+          } else {
+            this.locationService.getVillages(value).subscribe((data) => {
+              this.villages = data;
+              this.cellId = true;
+            });
+          }
         } else {
           this.cellId = false;
         }
       }
     );
+  }
+
+  filterCustomSectors(org: any) {
+    const temp = [];
+    org.coveredSectors.map((sector) => {
+      temp.push({
+        sect_id: sector.sectorId,
+        name: sector.name
+      });
+    });
+    this.sectors = temp;
+    this.sectorId = true;
+  }
+
+  filterCustomCells(org: any) {
+    const temp = [];
+    const sectorId = this.checkProgressForm.controls.location.get('sect_id'.toString()).value;
+    const i = org.coveredSectors.findIndex(element => element.sectorId === sectorId);
+    const sector = org.coveredSectors[i];
+    sector.coveredCells.map((cell) => {
+      temp.push({
+        _id: cell.cell_id,
+        name: cell.name
+      });
+    });
+    this.cells = temp;
+    this.cellId = true;
+  }
+
+  filterCustomVillages(org: any) {
+    const temp = [];
+    const sectorId = this.checkProgressForm.controls.location.get('sect_id'.toString()).value;
+    const i = org.coveredSectors.findIndex(element => element.sectorId === sectorId);
+    const sector = org.coveredSectors[i];
+    sector.coveredVillages.map((village) => {
+      temp.push({
+        _id: village.village_id,
+        name: village.name
+      });
+    });
+    this.villages = temp;
   }
 
   downloadDetails() {
