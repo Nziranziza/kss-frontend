@@ -49,7 +49,7 @@
             <td> {{ farmer.userInfo.phone_number }}</td>
             <td> {{ farmer.userInfo.regNumber | uppercase}}</td>
             <td>
-              <a appRequiredSeason class="btn btn-success btn-margin pull-right btn-sm" routerLink="/admin/farmers/edit/{{farmer.request._id}}">
+              <a appRequiredSeason class="btn btn-success btn-margin pull-right btn-sm"  *appHasPermission="[[4,1],0,[8,1],[1,1]]" routerLink="/admin/farmers/edit/{{farmer.request._id}}">
                 Edit</a>
               <button *ngIf="hasRequest(farmer)" class="btn btn-default btn-margin btn-sm pull-right details-button" (click)="viewDetails(farmer)">...</button>
               </td>

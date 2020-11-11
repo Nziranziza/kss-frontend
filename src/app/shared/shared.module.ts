@@ -20,7 +20,7 @@ import {HasPermissionDirective} from './directives/has-permission.directive';
 import {QuantityUnitComponent} from './layout';
 import {ListWarningsComponent} from './layout';
 import {DownloaderComponent} from './layout';
-import { SpinnerComponent } from './layout';
+import {SpinnerComponent } from './layout';
 
 @NgModule({
   imports: [

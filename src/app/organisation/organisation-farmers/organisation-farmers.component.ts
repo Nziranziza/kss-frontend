@@ -51,7 +51,10 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
   cwsSummary = {
     totalCherries: 0,
     totalParchments: 0,
-    expectedParchments: 0
+    expectedParchments: 0,
+    totalNumberOfTrees: 0,
+    totalNumberOfLands: 0,
+    uniqueFarmersCount: 0
   };
   subRegionFilter: any;
   seasonStartingTime: string;
@@ -223,12 +226,10 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
   }
 
   hasRequest(farmer: any) {
-    if (isArray(farmer.request)) {
-      if (farmer.request.length < 0) {
-        return false;
-      }
+    if (isArray(farmer.request.requestInfo)) {
+      return farmer.request.requestInfo.length >= 0;
     } else {
-      return isObject(farmer.request);
+      return isObject(farmer.request.requestInfo);
     }
   }
 

@@ -222,9 +222,9 @@ export class FertilizerDistributionProgressComponent extends BasicComponent impl
               this.sectors = data;
               this.cells = null;
               this.villages = null;
-              this.distId = true;
             });
           }
+          this.distId = true;
         } else {
           this.distId = false;
         }
@@ -239,9 +239,9 @@ export class FertilizerDistributionProgressComponent extends BasicComponent impl
             this.locationService.getCells(value).subscribe((data) => {
               this.cells = data;
               this.villages = null;
-              this.sectorId = true;
             });
           }
+          this.sectorId = true;
         } else {
           this.sectorId = false;
         }
@@ -255,9 +255,9 @@ export class FertilizerDistributionProgressComponent extends BasicComponent impl
           } else {
             this.locationService.getVillages(value).subscribe((data) => {
               this.villages = data;
-              this.cellId = true;
             });
           }
+          this.cellId = true;
         } else {
           this.cellId = false;
         }
@@ -274,7 +274,6 @@ export class FertilizerDistributionProgressComponent extends BasicComponent impl
       });
     });
     this.sectors = temp;
-    this.sectorId = true;
   }
 
   filterCustomCells(org: any) {
@@ -289,7 +288,6 @@ export class FertilizerDistributionProgressComponent extends BasicComponent impl
       });
     });
     this.cells = temp;
-    this.cellId = true;
   }
 
   filterCustomVillages(org: any) {

@@ -129,7 +129,7 @@ export class EditFarmerProfileComponent extends BasicComponent implements OnInit
           this.setError(err.errors);
         });
     } else {
-      this.setError(this.helper.getFormValidationErrors(this.addPaymentChannelsForm));
+      this.setError(this.helper.getFormValidationErrors(this.editFarmerProfileForm));
     }
   }
 

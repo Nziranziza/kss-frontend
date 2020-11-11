@@ -103,7 +103,7 @@
         <div class="row">
           <div class="col-sm-2 col-xs-4 top-col-statistics">
             <div class="description-block border-right">
-              <h5 class="description-header text-green">{{ numberOfTrees| number }}</h5>
+              <h5 class="description-header text-green">{{ cwsSummary.totalNumberOfTrees | number }}</h5>
               <span class="description-text">TREES</span>
             </div>
             <!-- /.description-block -->
@@ -111,7 +111,7 @@
           <!-- /.col -->
           <div class="col-sm-2 col-xs-4 top-col-statistics">
             <div class="description-block border-right">
-              <h5 class="description-header text-blue">{{ numberOfFarmers | number }}</h5>
+              <h5 class="description-header text-blue">{{ cwsSummary.uniqueFarmersCount | number }}</h5>
               <span class="description-text">FARMERS</span>
             </div>
             <!-- /.description-block -->
@@ -201,7 +201,7 @@
           </tr>
           </thead>
           <tbody *ngIf="showData">
-          <tr *ngFor="let farmer of (paginatedFarmers | orderBy : order:reverse:'case-insensitive') | paginate: config">
+          <tr *ngFor="let farmer of (paginatedFarmers | orderBy : order:reverse) | paginate: config">
             <td *ngIf="farmer.userInfo.type===2; else foreName"> {{ farmer.userInfo.groupName }} </td>
             <ng-template #foreName>
               <td> {{ farmer.userInfo.foreName }} </td>
@@ -212,17 +212,19 @@
             <td> {{ farmer.userInfo.regNumber | uppercase}}</td>
             <td>
               <a appRequiredSeason class="btn btn-success btn-margin pull-right btn-sm"
-                 routerLink="/admin/farmers/edit/{{farmer.request._id}}">
-                Edit</a>
+                 routerLink="/admin/farmers/edit/{{farmer.request._id}}"  *appHasPermission="[[4,1],0,[8,1],[1,1]]">
+                Edit
+              </a>
               <a appRequiredSeason routerLink="/admin/cherries/supply/select/{{farmer.userInfo._id}}/{{farmer.userInfo.regNumber}}"
                  *appHasPermission="[[1,1]]" class="btn btn-success btn-margin pull-right btn-sm"
                  style="margin-left: 10px;">
-                <i class="fa fa-cart-plus"></i> Supply </a>
-              <ng-template *ngIf="hasRequest(farmer)">
-                <button class="btn btn-default btn-sm btn-margin pull-right details-button" *ngIf="!isUserCWSOfficer"
+                <i class="fa fa-cart-plus"></i> Supply
+              </a>
+              <ng-container *ngIf="hasRequest(farmer)">
+                <button class="btn btn-default btn-sm btn-margin pull-right details-button"
                         (click)="viewDetails(farmer)">...
                 </button>
-              </ng-template>
+              </ng-container>
             </td>
           </tr>
         </table>
