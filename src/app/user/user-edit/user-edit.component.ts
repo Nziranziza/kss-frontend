@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {MessageService, UserService} from '../../core/services';
+import {AuthorisationService, MessageService, UserService} from '../../core/services';
 import {AuthenticationService, OrganisationService} from '../../core/services';
 import {LocationService} from '../../core/services';
 import {HelperService} from '../../core/helpers';
@@ -33,6 +33,7 @@ export class UserEditComponent implements OnInit {
   loading = false;
   editUser: any;
   isFullyEditable = false;
+  isCWSAdmin = false;
   possibleStatuses = [
     {name: 'Pending', value: 2},
     {name: 'Approved', value: 3},
@@ -61,6 +62,7 @@ export class UserEditComponent implements OnInit {
               private siteService: SiteService,
               private messageService: MessageService,
               private locationService: LocationService,
+              private authorisationService: AuthorisationService,
               private authenticationService: AuthenticationService) {
   }
 
@@ -92,6 +94,7 @@ export class UserEditComponent implements OnInit {
       });
     });
 
+    this.isCWSAdmin = this.authorisationService.isCWSAdmin();
     this.organisationService.possibleRoles().subscribe(data => {
       this.possibleRoles = Object.keys(data.content).map(key => {
         return {name: key, value: data.content[key]};

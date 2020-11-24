@@ -28,6 +28,7 @@ export class UserCreateComponent implements OnInit {
   needLocation = false;
   hasSite = false;
   possibleRoles: any[];
+  isCWSAdmin: any;
   isFromSuperOrg = false;
   userNIDInfo = {};
   invalidId = false;
@@ -91,6 +92,7 @@ export class UserCreateComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.organisationId = params['organisationId'.toString()];
     });
+    this.isCWSAdmin = this.authorisationService.isCWSAdmin();
     this.initial();
     this.onChanges();
   }
@@ -284,10 +286,9 @@ export class UserCreateComponent implements OnInit {
         selectedRoles.forEach((role) => {
           this.userService.userPermissions(role).subscribe(dt => {
             const temp = Object.keys(dt.content).map(key => {
-              return {name: key, value: dt.content[key]};
+              return {name: key, value: +dt.content[key]};
             });
             this.userTypes = [...this.userTypes, ...temp].filter((v, i, a) => a.findIndex(t => (t.name === v.name)) === i);
-
             /*remove collector user type if cws is also an input distribution site*/
 
             if (selectedRoles.includes(8) && selectedRoles.includes(1)) {

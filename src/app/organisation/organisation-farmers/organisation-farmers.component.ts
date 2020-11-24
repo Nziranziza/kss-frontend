@@ -139,10 +139,6 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
     this.excelService.exportAsExcelFile(this.allFarmers, 'farmers');
   }
 
-  ngOnDestroy(): void {
-  }
-
-
   onPageChange(event) {
     this.config.currentPage = event;
     if (event >= 1) {
@@ -241,6 +237,10 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
   viewDetails(farmer: Farmer) {
     const modalRef = this.modal.open(FarmerDetailsComponent, {size: 'lg'});
     modalRef.componentInstance.farmer = farmer;
+  }
+
+  ngOnDestroy(): void {
+    this.messageService.clearMessage();
   }
 
   getAllFarmers() {

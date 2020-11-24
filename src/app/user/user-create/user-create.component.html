@@ -59,17 +59,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-xs-6">
-              <div class="form-group">
-                <label class="control-label label-required">User type</label>
-                <select class="form-control" formControlName="userType">
-                  <option value=""></option>
-                  <ng-container *ngFor="let type of userTypes">
-                    <option *ngIf="type.value !==3" value="{{type.value}}">{{type.name}}</option>
-                  </ng-container>
-                </select>
-              </div>
-            </div>
+
             <div class="col-xs-6" *ngIf="!isFromSuperOrg">
               <label class="control-label label-required">Roles</label>
               <div class="checkbox" formArrayName="userRoles"
@@ -78,6 +68,17 @@
                   <input type="checkbox" formControlName="{{i}}">
                   {{ orgPossibleRoles[i].name }}
                 </label>
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <div class="form-group">
+                <label class="control-label label-required">User type</label>
+                <select class="form-control" formControlName="userType">
+                  <option value=""></option>
+                  <ng-container *ngFor="let type of userTypes">
+                    <option *ngIf="(type.value !==3) && (!(isCWSAdmin && type.value == 1))" value="{{type.value}}">{{type.name}}</option>
+                  </ng-container>
+                </select>
               </div>
             </div>
           </div>

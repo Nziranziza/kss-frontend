@@ -65,7 +65,7 @@
                 <select class="form-control" formControlName="userType">
                   <option value=""></option>
                   <ng-container *ngFor="let type of userTypes">
-                    <option *ngIf="type.value !==3" value="{{type.value}}">{{type.name}}</option>
+                    <option *ngIf="(type.value !==3) && (!(isCWSAdmin && type.value == 1))" value="{{type.value}}">{{type.name}}</option>
                   </ng-container>
                 </select>
               </div>
