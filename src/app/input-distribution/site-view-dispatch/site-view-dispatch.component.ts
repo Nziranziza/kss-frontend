@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {AuthenticationService, ConfirmDialogService, InputDistributionService, MessageService} from '../../core/services';
 import {FormBuilder} from '@angular/forms';
 import {HelperService} from '../../core/helpers';
@@ -6,13 +6,14 @@ import {ConfirmDispatchComponent} from './confirm-dispatch/confirm-dispatch.comp
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Subject} from 'rxjs';
 import {BasicComponent} from '../../core/library';
+import {DataTableDirective} from 'angular-datatables';
 
 @Component({
   selector: 'app-site-view-dispatch',
   templateUrl: './site-view-dispatch.component.html',
   styleUrls: ['./site-view-dispatch.component.css']
 })
-export class SiteViewDispatchComponent extends BasicComponent implements OnInit {
+export class SiteViewDispatchComponent extends BasicComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(private confirmDialogService: ConfirmDialogService,
               private formBuilder: FormBuilder,
@@ -23,6 +24,7 @@ export class SiteViewDispatchComponent extends BasicComponent implements OnInit 
               private inputDistributionService: InputDistributionService) {
     super();
   }
+
   dispatches: any;
   errors: any;
   dtOptions: any = {};
@@ -30,6 +32,10 @@ export class SiteViewDispatchComponent extends BasicComponent implements OnInit 
   dtTrigger: Subject = new Subject();
   loading = false;
   table: any;
+
+  // @ts-ignore
+  @ViewChild(DataTableDirective, {static: false})
+  dtElement: DataTableDirective;
 
   ngOnInit() {
     this.dtOptions = {
@@ -40,18 +46,13 @@ export class SiteViewDispatchComponent extends BasicComponent implements OnInit 
       }, {}, {}],
       responsive: true
     };
-    this.getSiteDispatches();
   }
 
   confirmDispatch(dispatch): void {
     const modalRef = this.modal.open(ConfirmDispatchComponent, {size: 'lg'});
     modalRef.componentInstance.dispatch = dispatch;
     modalRef.result.then((message) => {
-      const id = this.authenticationService.getCurrentUser().orgInfo.distributionSite;
-      this.inputDistributionService.getSiteDispatches(id).subscribe((data) => {
-        this.dispatches = data.content;
-        this.dtTrigger.next();
-      });
+      this.getSiteDispatches();
       this.setMessage(message);
     });
   }
@@ -78,8 +79,29 @@ export class SiteViewDispatchComponent extends BasicComponent implements OnInit 
     const id = this.authenticationService.getCurrentUser().orgInfo.distributionSite;
     this.inputDistributionService.getSiteDispatches(id).subscribe((data) => {
       this.loading = false;
+      this.dispatches = data.content;
+      this.rerender();
+    });
+  }
+
+  ngAfterViewInit(): void {
+    this.loading = true;
+    const id = this.authenticationService.getCurrentUser().orgInfo.distributionSite;
+    this.inputDistributionService.getSiteDispatches(id).subscribe((data) => {
+      this.loading = false;
       this.dtTrigger.next();
       this.dispatches = data.content;
     });
+  }
+
+  rerender(): void {
+    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      dtInstance.destroy();
+      this.dtTrigger.next();
+    });
+  }
+
+  ngOnDestroy() {
+    this.dtTrigger.unsubscribe();
   }
 }

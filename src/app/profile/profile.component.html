@@ -6,16 +6,23 @@
   <div class="box-body">
     <strong><i class="fa fa-mail-forward margin-r-5"></i> Email</strong>
     <p class="text-muted">
-    {{ userInfo.email }}
+      {{ userInfo.email }}
     </p>
     <hr>
     <strong><i class="fa fa-university margin-r-5"></i> Organisation</strong>
     <p class="text-muted">
-    {{ orgInfo.orgName | uppercase }}
+      {{ orgInfo.orgName | uppercase }}
     </p>
     <hr>
+    <ng-container *ngIf="orgInfo.distributionSite">
+      <strong><i class="fa fa-tree margin-r-5"></i> Distribution Site</strong>
+      <p class="text-muted">
+        {{ site.siteName | uppercase }}
+      </p>
+    </ng-container>
+    <hr>
     <p>
-    <strong><i class="fa fa-lock margin-r-5"></i> Change password</strong>
+      <strong><i class="fa fa-lock margin-r-5"></i> Change password</strong>
     </p>
     <app-list-errors [errorList]="errors"></app-list-errors>
     <app-list-message [message]="message"></app-list-message>

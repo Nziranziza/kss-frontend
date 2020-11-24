@@ -1,6 +1,13 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {AuthenticationService, ConfirmDialogService, FarmerService, OrganisationService, UserService} from '../../core/services';
+import {
+  AuthenticationService,
+  ConfirmDialogService,
+  FarmerService,
+  OrganisationService,
+  SiteService,
+  UserService
+} from '../../core/services';
 import {LocationService} from '../../core/services';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {EditFarmerRequestComponent} from './edit-farmer-request/edit-farmer-request.component';
@@ -27,12 +34,16 @@ export class FarmerEditComponent extends BasicComponent implements OnInit, OnDes
   message: string;
   isUserSiteManager = false;
   isCWSOfficer = false;
+  isUserDCC = false;
+  site: any;
+  org: any;
   resetPin = true;
   showSetPinButton = false;
 
   constructor(private route: ActivatedRoute, private router: Router,
               private authenticationService: AuthenticationService,
               private authorisationService: AuthorisationService,
+              private siteService: SiteService,
               private farmerService: FarmerService,
               private organisationService: OrganisationService,
               private confirmDialogService: ConfirmDialogService,
@@ -43,13 +54,22 @@ export class FarmerEditComponent extends BasicComponent implements OnInit, OnDes
   }
 
   ngOnInit() {
+    this.message = this.messageService.getMessage();
+    this.isUserSiteManager = this.authorisationService.isSiteManager();
+    this.isCWSOfficer = this.authorisationService.isCWSAdmin();
+    this.isUserDCC = this.authorisationService.isDistrictCashCropOfficer();
+    if (this.authenticationService.getCurrentUser().orgInfo.distributionSite) {
+      this.siteService.get(this.authenticationService.getCurrentUser().orgInfo.distributionSite).subscribe((site) => {
+        this.site = site.content;
+      });
+    }
+    this.organisationService.get(this.authenticationService.getCurrentUser().info.org_id).subscribe(data => {
+      this.org = data.content;
+    });
     this.route.params.subscribe(params => {
       this.id = params['id'.toString()];
       this.getFarmer(this.id);
     });
-    this.message = this.messageService.getMessage();
-    this.isUserSiteManager = this.authorisationService.isSiteManager();
-    this.isCWSOfficer = this.authorisationService.isCWSAdmin();
   }
 
   editRequest(request: any) {
@@ -112,7 +132,35 @@ export class FarmerEditComponent extends BasicComponent implements OnInit, OnDes
       if (this.farmer.userInfo.type) {
         this.farmerType = this.farmer.userInfo.type;
       }
-      this.requests = this.farmer.request.requestInfo;
+      if (this.authorisationService.isCWSUser()) {
+        const villagesSet = [];
+        this.org.coveredSectors.map((sector) => {
+          sector.coveredVillages.map((village) => {
+            villagesSet.push(village.village_id);
+          });
+        });
+        this.requests = this.farmer.request.requestInfo.filter((req) => {
+          if (villagesSet.includes(req.location.village_id._id)) {
+            return req;
+          }
+        });
+      } else if (this.authorisationService.isSiteManager() && (!this.isCWSOfficer)) {
+        const sectorsSet = [];
+        this.site.coveredAreas.coveredSectors.map((sector) => {
+          sectorsSet.push(sector.sect_id);
+        });
+        this.requests = this.farmer.request.requestInfo.filter((req) => {
+          if (sectorsSet.includes(req.location.sect_id._id)) {
+            return req;
+          }
+        });
+      } else if (this.authorisationService.isDistrictCashCropOfficer()) {
+        this.requests = this.farmer.request.requestInfo.filter((req) => {
+          return (req.location.dist_id._id === this.authenticationService.getCurrentUser().info.location.dist_id);
+        });
+      } else {
+        this.requests = this.farmer.request.requestInfo;
+      }
       this.getSetPinStatus();
     });
   }

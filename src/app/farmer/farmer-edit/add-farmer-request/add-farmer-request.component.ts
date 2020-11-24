@@ -2,7 +2,7 @@ import {Component, Inject, Injector, Input, OnInit, PLATFORM_ID} from '@angular/
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {HelperService} from '../../../core/helpers';
-import {AuthenticationService, AuthorisationService, FarmerService, SiteService} from '../../../core/services';
+import {AuthenticationService, AuthorisationService, FarmerService, OrganisationService, SiteService} from '../../../core/services';
 import {isPlatformBrowser} from '@angular/common';
 import {LocationService} from '../../../core/services';
 import {MessageService} from '../../../core/services';
@@ -26,8 +26,11 @@ export class AddFarmerRequestComponent extends BasicComponent implements OnInit 
   villages = [];
   requestIndex = 0;
   currentSeason: any;
+  org: any;
   isUserSiteManager = false;
   isUserDistrictCashCrop = false;
+  isUserCWSOfficer = false;
+  user: any;
   site: any;
   disableProvId = false;
   disableDistId = false;
@@ -41,6 +44,7 @@ export class AddFarmerRequestComponent extends BasicComponent implements OnInit 
     private injector: Injector, private formBuilder: FormBuilder,
     private authenticationService: AuthenticationService,
     private siteService: SiteService,
+    private organisationService: OrganisationService,
     private helper: HelperService, private farmerService: FarmerService,
     private messageService: MessageService, private authorisationService: AuthorisationService,
     private locationService: LocationService) {
@@ -57,31 +61,51 @@ export class AddFarmerRequestComponent extends BasicComponent implements OnInit 
     this.currentSeason = this.authenticationService.getCurrentSeason();
     this.isUserDistrictCashCrop = this.authorisationService.isDistrictCashCropOfficer();
     this.isUserSiteManager = this.authorisationService.isSiteManager();
+    this.isUserCWSOfficer = this.authorisationService.isCWSUser();
+    this.user = this.authenticationService.getCurrentUser();
     this.initial();
-    if (!(this.isUserSiteManager || this.isUserDistrictCashCrop)) {
-      (this.addFarmerRequestForm.controls.requests as FormArray).push(this.createRequest());
-    } else {
+    this.organisationService.get(this.authenticationService.getCurrentUser().info.org_id).subscribe(data => {
+      this.org = data.content;
+    });
+    if (this.isUserSiteManager || this.isUserDistrictCashCrop || this.isUserCWSOfficer) {
       this.disableDistId = true;
       this.disableProvId = true;
     }
-    if (this.isUserDistrictCashCrop) {
+    if (this.isUserCWSOfficer) {
+      this.organisationService.get(this.authenticationService.getCurrentUser().info.org_id).subscribe(data => {
+        this.provinceValue = data.content.location.prov_id._id;
+        this.districtValue = data.content.location.dist_id._id;
+        this.locationService.getDistricts(data.content.location.prov_id._id).subscribe((districts) => {
+          this.districts.push(districts);
+        });
+        const temp = [];
+        data.content.coveredSectors.map((sector) => {
+          temp.push({
+            _id: sector.sectorId._id,
+            name: sector.sectorId.name
+          });
+        });
+        this.sectors.push(temp);
+        (this.addFarmerRequestForm.controls.requests as FormArray).push(this.createRequest());
+      });
+    } else if (this.isUserDistrictCashCrop) {
       this.provinceValue = this.authenticationService.getCurrentUser().info.location.prov_id;
       this.districtValue = this.authenticationService.getCurrentUser().info.location.dist_id;
-      (this.addFarmerRequestForm.controls.requests as FormArray).push(this.createRequest());
       this.locationService.getDistricts(this.authenticationService.getCurrentUser().info.location.prov_id).subscribe((districts) => {
         this.districts.push(districts);
       });
       this.locationService.getSectors(this.authenticationService.getCurrentUser().info.location.dist_id).subscribe((sectors) => {
         this.sectors.push(sectors);
       });
-    } else if (this.isUserSiteManager) {
+      (this.addFarmerRequestForm.controls.requests as FormArray).push(this.createRequest());
+    } else if (this.isUserSiteManager && (!this.isUserCWSOfficer)) {
       this.siteService.get(this.authenticationService.getCurrentUser().orgInfo.distributionSite).subscribe((site) => {
         this.site = site.content;
         this.provinceValue = this.site.location.prov_id._id;
         this.districtValue = this.site.location.dist_id._id;
-        (this.addFarmerRequestForm.controls.requests as FormArray).push(this.createRequest());
         this.locationService.getDistricts(this.site.location.prov_id._id).subscribe((districts) => {
           this.districts.push(districts);
+          (this.addFarmerRequestForm.controls.requests as FormArray).push(this.createRequest());
         });
         const temp = [];
         this.site.coveredAreas.coveredSectors.map((sector) => {
@@ -92,6 +116,8 @@ export class AddFarmerRequestComponent extends BasicComponent implements OnInit 
         });
         this.sectors.push(temp);
       });
+    } else {
+      (this.addFarmerRequestForm.controls.requests as FormArray).push(this.createRequest());
     }
   }
 
@@ -170,31 +196,50 @@ export class AddFarmerRequestComponent extends BasicComponent implements OnInit 
   onChangeDistrict(index: number) {
     const value = this.getRequestsFormGroup(index).controls.location.get('dist_id'.toString()).value;
     if (value !== '') {
-      this.locationService.getSectors(value).subscribe((data) => {
-        this.sectors[index] = data;
-        this.cells[index] = [];
-        this.villages[index] = [];
-      });
+      if (this.isUserSiteManager && (!this.isUserCWSOfficer)) {
+        const temp = [];
+        this.site.coveredAreas.coveredSectors.map((sector) => {
+          temp.push({
+            _id: sector.sect_id,
+            name: sector.name
+          });
+        });
+        this.sectors.push(temp);
+      } else if (this.isUserCWSOfficer) {
+        this.filterCustomSectors(this.org, index);
+      } else {
+        this.locationService.getSectors(value).subscribe((data) => {
+          this.sectors[index] = data;
+          this.cells[index] = [];
+          this.villages[index] = [];
+        });
+      }
     }
   }
 
   onChangeSector(index: number) {
     const value = this.getRequestsFormGroup(index).controls.location.get('sect_id'.toString()).value;
     if (value !== '') {
-      this.locationService.getCells(value).subscribe((data) => {
-        this.cells[index] = data;
-        this.villages[index] = [];
-      });
+      if (this.isUserCWSOfficer) {
+        this.filterCustomCells(this.org, index);
+      } else {
+        this.locationService.getCells(value).subscribe((data) => {
+          this.cells[index] = data;
+          this.villages[index] = [];
+        });
+      }
     }
   }
 
   onChangeCell(index: number) {
     const value = this.getRequestsFormGroup(index).controls.location.get('cell_id'.toString()).value;
     if (value !== '') {
+
       this.locationService.getVillages(value).subscribe((data) => {
         this.villages[index] = data;
       });
     }
+
   }
 
   initial() {
@@ -234,4 +279,30 @@ export class AddFarmerRequestComponent extends BasicComponent implements OnInit 
       }
     }
   }
+
+  filterCustomSectors(org: any, index: number) {
+    const temp = [];
+    org.coveredSectors.map((sector) => {
+      temp.push({
+        _id: sector.sectorId._id,
+        name: sector.sectorId.name
+      });
+    });
+    this.sectors[index] = temp;
+  }
+
+  filterCustomCells(org: any, index: number) {
+    const temp = [];
+    const sectorId = this.getRequestsFormGroup(index).controls.location.get('sect_id'.toString()).value;
+    const i = org.coveredSectors.findIndex(element => element.sectorId._id === sectorId);
+    const sector = org.coveredSectors[i];
+    sector.coveredCells.map((cell) => {
+      temp.push({
+        _id: cell.cell_id,
+        name: cell.name
+      });
+    });
+    this.cells[index] = temp;
+  }
+
 }

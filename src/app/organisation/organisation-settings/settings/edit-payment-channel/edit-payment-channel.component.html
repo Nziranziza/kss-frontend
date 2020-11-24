@@ -1,0 +1,42 @@
+<div class="modal-header">
+  <i class="fa fa-times-circle close" style="font-size: 24px;" aria-label="Close" (click)="modal.dismiss()">
+  </i>
+</div>
+<div class="modal-body">
+  <app-list-errors [errorList]="errors" *ngIf="errors"></app-list-errors>
+  <form [formGroup]="editChannelForm" (ngSubmit)="onSubmit()">
+    <div class="row">
+      <div class="col-xs-2">
+        <div class="form-group">
+          <span class="label-required">Channel</span>
+          <select class="form-control" formControlName="channelId">
+            <option *ngFor="let channel of channels" value="{{channel._id}}">
+              {{ channel.channel }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="col-xs-3">
+        <div class="form-group">
+          <span class="label-required"> Subscription number </span>
+          <input class="form-control" formControlName="subscriptionNumber">
+        </div>
+      </div>
+      <div class="col-xs-3">
+        <div class="form-group">
+          <span>Bank name (Optional)</span>
+          <select class="form-control" formControlName="bankName">
+            <option *ngFor="let bank of banks" value="{{bank.name}}">
+              {{ bank.name }}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <button class="btn btn-success pull-right">Save</button>
+      </div>
+    </div>
+  </form>
+</div>

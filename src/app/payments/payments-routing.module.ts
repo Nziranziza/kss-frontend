@@ -21,7 +21,7 @@ const routes: Routes = [
         component: OrganisationPaymentsHistoryComponent
       },
       {
-        path: 'pay/top-ups/:organisationId',
+        path: 'top-ups/pay/:organisationId',
         component: OrganisationPayTopUpsComponent,
       }
     ]

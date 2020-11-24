@@ -70,4 +70,16 @@ export class OrganisationService {
   getSingleSupplier(body: any) {
     return this.apiService.post('/cherrysupply/single_farmer_by_cws/status', body);
   }
+
+  orgPaymentChannels(id: string): Observable<any> {
+    return this.apiService.get('/organizations/payment_channels/list/' + id);
+  }
+
+  orgAddPaymentChannels(body: any): Observable<any> {
+    return this.apiService.post('/organizations/payment_channels', body);
+  }
+
+  orgEditPaymentChannel(body: any): Observable<any> {
+    return this.apiService.put('/organizations/payment_channel', body);
+  }
 }

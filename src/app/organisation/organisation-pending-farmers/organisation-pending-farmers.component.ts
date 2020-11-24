@@ -20,15 +20,10 @@ export class OrganisationPendingFarmersComponent implements OnInit, OnDestroy {
               private authorisationService: AuthorisationService,
               private excelService: ExcelServicesService, private http: HttpClient,
               private modal: NgbModal, private formBuilder: FormBuilder, private messageService: MessageService) {
-    this.parameters = {
-      length: 25,
-      start: 0,
-      draw: 1
-    };
   }
 
   message: string;
-  farmers: any;
+  farmers = [];
   maxSize = 9;
   order = 'foreName';
   reverse = true;
@@ -37,6 +32,7 @@ export class OrganisationPendingFarmersComponent implements OnInit, OnDestroy {
   title = 'Temporary Farmers';
   i: number;
   parameters: any;
+  showData = false;
   org: any;
   config: any;
   autoHide = false;
@@ -67,14 +63,20 @@ export class OrganisationPendingFarmersComponent implements OnInit, OnDestroy {
     this.organisationService.get(this.orgId).subscribe(data => {
       this.org = data.content;
     });
+    this.parameters = {
+      length: 25,
+      start: 0,
+      draw: 1
+    };
     this.organisationService.getOrgPendingFarmers(this.orgId, this.parameters)
       .subscribe(data => {
-        this.farmers = data.data;
+        this.farmers = data.content;
         this.config = {
           itemsPerPage: this.parameters.length,
           currentPage: this.parameters.start + 1,
           totalItems: data.recordsTotal
         };
+        this.showData = true;
       });
     this.filterForm = this.formBuilder.group({
       term: ['', Validators.minLength(3)],
@@ -118,7 +120,7 @@ export class OrganisationPendingFarmersComponent implements OnInit, OnDestroy {
       this.parameters['search'.toString()] = this.filterForm.value;
       this.organisationService.getOrgPendingFarmers(this.orgId, this.parameters)
         .subscribe(data => {
-          this.farmers = data.data;
+          this.farmers = data.content;
           this.config = {
             itemsPerPage: this.parameters.length,
             currentPage: this.parameters.start + 1,
@@ -138,7 +140,7 @@ export class OrganisationPendingFarmersComponent implements OnInit, OnDestroy {
     delete this.parameters.search;
     this.organisationService.getOrgPendingFarmers(this.orgId, this.parameters)
       .subscribe(data => {
-        this.farmers = data.data;
+        this.farmers = data.content;
         this.config = {
           itemsPerPage: this.parameters.length,
           currentPage: this.parameters.start + 1,

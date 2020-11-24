@@ -118,7 +118,11 @@ export class FarmerService {
     return this.apiService.put('/coffeefarmers/requestinfo/approve_update', data);
   }
 
-  administrativeList(parameters: any) {
+  administrativeList(parameters: any): Observable<any> {
     return this.apiService.post('/coffeefarmers/farmers/input_list', parameters);
+  }
+
+  addPaymentChannels(body: any): Observable<any>  {
+    return this.apiService.post('/coffeefarmers/payment_channels ', body);
   }
 }

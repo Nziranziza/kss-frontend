@@ -93,4 +93,8 @@ export class AuthenticationService {
     return this.http.post(`${environment.api_url}${'/users/account/unlock'}`, body, options);
   }
 
+  clearLocalStorage() {
+    localStorage.clear();
+  }
+
 }

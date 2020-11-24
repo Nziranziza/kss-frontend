@@ -13,31 +13,31 @@
         First name
       </div>
       <div class="col-sm-6">
-        <strong>{{ farmer.userInfo.foreName }}</strong><br>
+        <strong>{{ farmer?.userInfo.foreName }}</strong><br>
       </div>
       <div class="col-sm-6">
         Last name
       </div>
       <div class="col-sm-6">
-        {{ farmer.userInfo.surname }}<br>
+        {{ farmer?.userInfo.surname }}<br>
       </div>
       <div class="col-sm-6">
         NID
       </div>
       <div class="col-sm-6">
-        {{ farmer.userInfo.NID }}<br>
+        {{ farmer?.userInfo.NID }}<br>
       </div>
       <div class="col-sm-6">
         Phone number
       </div>
       <div class="col-sm-6">
-        {{ farmer.userInfo.phone_number }}<br>
+        {{ farmer?.userInfo.phone_number }}<br>
       </div>
       <div class="col-sm-6">
         REG number
       </div>
       <div class="col-sm-6">
-        {{ farmer.userInfo.regNumber }}<br>
+        {{ farmer?.userInfo.regNumber }}<br>
       </div>
     </div>
     <div class="row" *ngIf="farmerType===2">
@@ -45,19 +45,19 @@
         Group name
       </div>
       <div class="col-sm-6">
-        <strong>{{ farmer.userInfo.groupName }}</strong><br>
+        <strong>{{ farmer?.userInfo.groupName }}</strong><br>
       </div>
       <div class="col-sm-6">
         REG number
       </div>
       <div class="col-sm-6">
-        {{ farmer.userInfo.regNumber }}<br>
+        {{ farmer?.userInfo.regNumber }}<br>
       </div>
       <div class="col-sm-6">
         Phone number
       </div>
       <div class="col-sm-6">
-        {{ farmer.userInfo.phone_number }}<br>
+        {{ farmer?.userInfo.phone_number }}<br>
       </div>
     </div>
   </div>
@@ -99,6 +99,8 @@
           <th>Number of trees</th>
           <th>Fertilizer needed</th>
           <th>Fertilizer allocated</th>
+          <th>Trees at distribution</th>
+          <th>Comment</th>
           <th></th>
         </tr>
         </thead>
@@ -106,17 +108,18 @@
         <tr *ngFor="let request of requests;">
           <td>{{farmer.request.season.name}}</td>
           <td>
-            <span class="details-row-title-sm" style="margin-left: 0px">Province </span> : <span
+            <span class="details-row-title-sm" style="margin-left: 0">Province </span> : <span
             class="details-row-data-sm" *ngIf="request.location.prov_id">{{ request.location.prov_id.namek }}</span>
-            <span class="details-row-title-sm">District </span> : <span class="details-row-data-sm"
-          >{{ request.location.dist_id.name }}</span>
-            <span class="details-row-title-sm">Sector </span> : <span class="details-row-data-sm">{{ request.location.sect_id.name }}</span>
+            <span class="details-row-title-sm">District </span> : <span class="details-row-data-sm">{{ request.location.dist_id.name }}</span>
+            <span class="details-row-title-sm">Sector </span> : <span class="details-row-data-sm">{{ request.location.sect_id.name }}</span><br />
             <span class="details-row-title-sm">Cell </span> : <span class="details-row-data-sm">{{ request.location.cell_id.name }}</span>
             <span class="details-row-title-sm">Village </span> : <span class="details-row-data-sm">{{ request.location.village_id.name }}</span>
           </td>
           <td>{{ request.numberOfTrees }}</td>
           <td>{{ request.fertilizer_need |  number:'1.0-1' }} Kg</td>
           <td>{{ request.fertilizer_allocate |  number:'1.0-1' }} Kg</td>
+          <td style="color: #F3A700">{{ request?.treesAtDistribution }} &nbsp; &nbsp;</td>
+          <td>{{ request.update_comments }}</td>
           <td>
             <button class="btn btn-warning btn-margin btn-sm pull-right" (click)="cancelRequest(request)"
                     *ngIf="!(isUserSiteManager || isCWSOfficer)">Delete

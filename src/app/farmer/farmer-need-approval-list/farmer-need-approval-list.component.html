@@ -6,7 +6,7 @@
         <form [formGroup]="filterForm" (ngSubmit)="onFilter()">
           <div class="form-inline">
             <select class="form-control" formControlName="site" style="margin-right: 10px">
-              <option></option>
+              <option value="">Select site</option>
               <option *ngFor="let site of sites" value="{{ site._id }}">{{ site.siteName }}</option>
             </select>
             <button class="btn btn-default pull-right btn-margin" type="button" (click)="onApprove()"><i

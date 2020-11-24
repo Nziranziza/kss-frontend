@@ -39,7 +39,7 @@
           </tr>
           </thead>
           <tbody>
-          <tr *ngFor="let parchment of (parchments | orderBy : order:reverse:'case-insensitive') | paginate: config">
+          <tr *ngFor="let parchment of (parchments | orderBy : order:reverse) | paginate: config">
             <td> {{ parchment.coffeeType.name }}</td>
             <td> {{ parchment.coffeeGrade }}</td>
             <td> {{ parchment.totalKgs }}</td>
@@ -47,11 +47,9 @@
             <td> {{ parchment.remainingQty }}</td>
             <td> {{ parchment.created_at | date }}</td>
             <td>
-              <!--
-                <a appRequiredSeason routerLink="/admin/cws/parchments/transfer/{{parchment._id}}" class="btn btn-success btn-margin pull-right btn-sm" style="margin-left: 10px;">
-                  <i class="fa fa-truck"></i> transfer
-                </a>
-              -->
+              <a appRequiredSeason *appHasPermission="[1]" routerLink="/admin/cws/parchments/transfer/{{parchment._id}}" class="btn btn-success btn-margin pull-right btn-sm" style="margin-left: 10px;">
+                <i class="fa fa-truck"></i> transfer
+              </a>
               <button class="btn btn-default btn-margin btn-sm pull-right" (click)="cancelParchment(parchment._id)"
                       type="button">
                 <i class="fa fa-remove" aria-hidden="true"></i> Cancel

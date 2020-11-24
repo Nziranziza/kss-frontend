@@ -24,6 +24,10 @@
   border-color: #dca956;
 }
 
+.no-border>.table>tbody>tr>th, .no-border>.table>tfoot>tr>th, .no-border>.table>thead>tr>td, .no-border>.table>tbody>tr>td, .no-border>.table>tfoot>tr>td {
+  border-top: none;
+}
+
 .big-modal-dialog {
   width: 80% !important;
   height: auto;
@@ -59,9 +63,22 @@ html, body {
 }
 
 input.ng-invalid.ng-touched {
-  /*
-    border: 1px solid indianred;
-  */
+}
+
+.form-inline .owl-date-input {
+  margin-left: 10px;
+}
+
+@media (max-width: 800px) {
+  .form-inline .owl-date-input {
+    margin-left: 0px;
+  }
+}
+
+@media (max-width: 800px) {
+  .form-inline input {
+    margin: 10px 0;
+  }
 }
 
 div .wrapper {
@@ -77,8 +94,14 @@ div .wrapper {
 }
 
 @media (min-width: 992px) {
+
   .modal-lg {
     width: 1300px !important;
+    height: auto !important;
+  }
+
+  .modal-sm {
+    width: 950px !important;
     height: auto !important;
   }
 }
@@ -132,6 +155,7 @@ h3 {
 .top-col-statistics {
   padding-right: 0;
   padding-left: 0;
+  margin-bottom: 15px;
 }
 
 /*------------------------------------------ custom pagination and sorting -------------------------------*/
@@ -271,6 +295,7 @@ h3 {
 .custom-tabs .nav-tabs > li {
   width: 20%;
   text-align: center;
+  margin-bottom: 0px;
 }
 
 .custom-tabs .card {
@@ -280,7 +305,6 @@ h3 {
 
 @media all and (max-width: 724px) {
   .custom-tabs .nav-tabs > li > a > span {
-    display: none;
   }
 
   .custom-tabs .nav-tabs > li > a {

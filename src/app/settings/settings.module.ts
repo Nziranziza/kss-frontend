@@ -10,9 +10,9 @@ import {CoffeeTypeCreateComponent} from './coffee-type/coffee-type-create/coffee
 import {DistributionParametersComponent} from './distribution-parameters/distribution-parameters.component';
 import {EditInputComponent} from './distribution-parameters/edit-input/edit-input.component';
 import {EditSupplierComponent} from './distribution-parameters/edit-supplier/edit-supplier.component';
-import {ChannelComponent} from './channel/channel-create/channel.component';
-import { ChannelListComponent } from './channel/channel-list/channel-list.component';
-import { ChannelEditComponent } from './channel/channel-edit/channel-edit.component';
+import {ChannelComponent} from './payment-channel/channel-create/channel.component';
+import {ChannelListComponent} from './payment-channel/channel-list/channel-list.component';
+import {ChannelEditComponent} from './payment-channel/channel-edit/channel-edit.component';
 
 
 @NgModule({

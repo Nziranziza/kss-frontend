@@ -5,19 +5,29 @@ import {OrganisationTopUpsComponent} from './organisation-top-ups/organisation-t
 import {SharedModule} from '../shared';
 import {OwlDateTimeModule, OwlNativeDateTimeModule} from 'ng-pick-datetime';
 import {RouterModule} from '@angular/router';
-import { OrganisationPaymentsHistoryComponent } from './organisation-payments-history/organisation-payments-history.component';
-import { OrganisationPayTopUpsComponent } from './organisation-pay-top-ups/organisation-pay-top-ups.component';
+import {OrganisationPaymentsHistoryComponent} from './organisation-payments-history/organisation-payments-history.component';
+import {OrganisationPayTopUpsComponent} from './organisation-pay-top-ups/organisation-pay-top-ups.component';
+import {CoreModule} from '../core';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {NgxPaginationModule} from 'ngx-pagination';
+import {OrderModule} from 'ngx-order-pipe';
+import {PaymentHistoryDetailsComponent} from './organisation-payments-history/payment-history-details/payment-history-details.component';
 
 @NgModule({
-  declarations: [OrganisationTopUpsComponent, OrganisationPaymentsHistoryComponent, OrganisationPayTopUpsComponent],
+  declarations: [OrganisationTopUpsComponent, OrganisationPaymentsHistoryComponent, OrganisationPayTopUpsComponent,
+    PaymentHistoryDetailsComponent],
   imports: [
     CommonModule,
     PaymentsRoutingModule,
+    NgbModule, NgxPaginationModule,
+    OrderModule,
     SharedModule,
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
-    RouterModule
+    RouterModule,
+    CoreModule
   ],
+  entryComponents: [PaymentHistoryDetailsComponent]
 })
 export class PaymentsModule {
 }

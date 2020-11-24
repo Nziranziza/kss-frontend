@@ -1,5 +1,12 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {AuthenticationService, ExcelServicesService, MessageService, OrganisationService, UserService} from '../../core/services';
+import {
+  AuthenticationService,
+  ExcelServicesService,
+  MessageService,
+  OrganisationService,
+  SiteService,
+  UserService
+} from '../../core/services';
 import {ActivatedRoute} from '@angular/router';
 import {Farmer} from '../../core/models';
 import {FarmerDetailsComponent} from '../../farmer/farmer-details/farmer-details.component';
@@ -20,6 +27,7 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
   constructor(private organisationService: OrganisationService, private userService: UserService,
               private authenticationService: AuthenticationService,
               private excelService: ExcelServicesService,
+              private siteService: SiteService,
               private route: ActivatedRoute,
               private formBuilder: FormBuilder,
               private messageService: MessageService,
@@ -34,6 +42,7 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
   loading = false;
   isUserCWSOfficer = true;
   org: any;
+  site: any;
   numberOfTrees = 0;
   numberOfFarmers = 0;
   currentSeason: any;
@@ -42,7 +51,10 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
   cwsSummary = {
     totalCherries: 0,
     totalParchments: 0,
-    expectedParchments: 0
+    expectedParchments: 0,
+    totalNumberOfTrees: 0,
+    totalNumberOfLands: 0,
+    uniqueFarmersCount: 0
   };
   subRegionFilter: any;
   seasonStartingTime: string;
@@ -57,7 +69,7 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
   downloadingAll = true;
   config: any;
   autoHide = false;
-  responsive = false;
+  responsive = true;
   errors = [];
   labels: any = {
     previousLabel: 'Previous',
@@ -112,6 +124,11 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
         this.cwsSummary = data.content[0];
       }
     });
+    if (this.authenticationService.getCurrentUser().orgInfo.distributionSite) {
+      this.siteService.get(this.authenticationService.getCurrentUser().orgInfo.distributionSite).subscribe(data => {
+        this.site = data.content;
+      });
+    }
     this.setMessage(this.messageService.getMessage());
     this.orgCoveredArea = this.route.snapshot.data.orgCoveredAreaData;
     this.currentSeason = this.authenticationService.getCurrentSeason();
@@ -124,6 +141,7 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
 
   ngOnDestroy(): void {
   }
+
 
   onPageChange(event) {
     this.config.currentPage = event;
@@ -208,12 +226,10 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
   }
 
   hasRequest(farmer: any) {
-    if (isArray(farmer.request)) {
-      if (farmer.request.length < 0) {
-        return false;
-      }
+    if (isArray(farmer.request.requestInfo)) {
+      return farmer.request.requestInfo.length >= 0;
     } else {
-      return isObject(farmer.request);
+      return isObject(farmer.request.requestInfo);
     }
   }
 

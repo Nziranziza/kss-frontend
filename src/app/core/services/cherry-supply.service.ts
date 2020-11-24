@@ -41,4 +41,8 @@ export class CherrySupplyService {
   cancelSupply(data: any) {
     return this.apiService.post('/cherrysupply/cancel/supply', data);
   }
+
+  getDetailedDeliveries(data: any): Observable<any> {
+    return this.apiService.post('/payment/detail/deliveries', data);
+  }
 }

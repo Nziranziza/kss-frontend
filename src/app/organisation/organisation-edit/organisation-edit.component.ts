@@ -1,22 +1,26 @@
 import {Component, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {OrganisationService, OrganisationTypeService} from '../../core/services';
+import {AuthenticationService, AuthorisationService, OrganisationService, OrganisationTypeService} from '../../core/services';
 import {HelperService} from '../../core/helpers';
 import {LocationService} from '../../core/services';
 import {MessageService} from '../../core/services';
+import {BasicComponent} from '../../core/library';
 
 @Component({
   selector: 'app-organisation-edit',
   templateUrl: './organisation-edit.component.html',
   styleUrls: ['./organisation-edit.component.css']
 })
-export class OrganisationEditComponent implements OnInit {
+export class OrganisationEditComponent extends BasicComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute, private router: Router, private helper: HelperService,
               private organisationService: OrganisationService, private locationService: LocationService,
+              private authenticationService: AuthenticationService,
+              private authorisationService: AuthorisationService,
               private organisationTypeService: OrganisationTypeService, private messageService: MessageService) {
+    super();
   }
 
   editForm: FormGroup;
@@ -32,6 +36,8 @@ export class OrganisationEditComponent implements OnInit {
   selectedRoles: any;
   id: string;
   coverVillages = false;
+  disableProvId = false;
+  disableDistId = false;
   isSuperOrg = false;
   coveredVillagesSet = [[]];
   coveredCellsSet = [[]];
@@ -40,8 +46,15 @@ export class OrganisationEditComponent implements OnInit {
   coveredSectorsList: FormArray;
   onInitial = true;
   hasExpiration = false;
+  isUserDCC = false;
+
 
   ngOnInit() {
+    if (this.authorisationService.isDistrictCashCropOfficer()) {
+      this.disableDistId = true;
+      this.disableProvId = true;
+      this.isUserDCC = true;
+    }
     this.editForm = this.formBuilder.group({
       organizationName: [''],
       email: [''],
@@ -317,10 +330,10 @@ export class OrganisationEditComponent implements OnInit {
           this.router.navigateByUrl('admin/organisations');
         },
         (err) => {
-          this.errors = err.errors;
+          this.setError(err.errors);
         });
     } else {
-      this.errors = this.helper.getFormValidationErrors(this.editForm);
+      this.setError(this.helper.getFormValidationErrors(this.editForm));
     }
   }
 

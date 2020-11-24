@@ -66,6 +66,7 @@ export class RecordDistributionComponent extends BasicComponent implements OnIni
             this.stockOuts.push(stock);
           }
         });
+        console.log(this.stockOuts);
       });
   }
 

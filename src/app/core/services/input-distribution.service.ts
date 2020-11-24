@@ -15,6 +15,10 @@ export class InputDistributionService {
     return this.apiService.post('/site/distribution/farmer_requests', regNumber);
   }
 
+  getFarmerRequestsAsCWS(orgId: any, regNumber: any): Observable<any> {
+    return this.apiService.get('/coffeefarmers/farmer_in_cws/' + orgId + '/' + regNumber);
+  }
+
   recordDispatch(body: any): Observable<any> {
     return this.apiService.post('/inputdispatch/record_dispatch', body);
   }

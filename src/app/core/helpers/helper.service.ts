@@ -14,7 +14,6 @@ export class HelperService {
   getFormValidationErrors(form) {
     const errors = [];
     Object.keys(form.controls).forEach(key => {
-
       const controlErrors: ValidationErrors = form.get(key).errors;
       if (controlErrors != null) {
         Object.keys(controlErrors).forEach(keyError => {
@@ -86,5 +85,95 @@ export class HelperService {
     } else {
       return null;
     }
+  }
+
+  getOrgPossiblePaymentChannels(paymentChannels: any) {
+    return paymentChannels.filter((channel) => {
+      return channel._id !== 4;
+    });
+  }
+
+  getFarmersPossiblePaymentChannels(paymentChannels: any) {
+    return paymentChannels.filter((channel) => {
+      return channel._id !== 4 && channel._id !== 5;
+    });
+  }
+
+  getOrgPossibleSourcePaymentChannels(selectedChannel: number, orgPaymentChannels: any) {
+    let result = [];
+    if (orgPaymentChannels) {
+      switch (+selectedChannel) {
+        case 1:
+          result = orgPaymentChannels.filter((channel) => {
+            return channel.channelId === 1;
+          });
+          break;
+        case 2:
+          result = orgPaymentChannels.filter((channel) => {
+            return channel.channelId === 2;
+          });
+          break;
+        case 3:
+          result = orgPaymentChannels.filter((channel) => {
+            return channel.channelId === 3 || channel.channelId === 5;
+          });
+          break;
+        case 4:
+          result = orgPaymentChannels.filter((channel) => {
+            return channel.channelId === 4;
+          });
+          break;
+      }
+    }
+    return result;
+  }
+
+  getFarmerPossibleReceivingPaymentChannels(selectedPayingChannel: number, farmerPaymentChannels: any) {
+    let result = [];
+    if (farmerPaymentChannels) {
+      switch (+selectedPayingChannel) {
+        case 1:
+          result = farmerPaymentChannels.filter((channel) => {
+            return channel.paymentChannel === 1;
+          });
+          if (result [0]) {
+            result [0]['label'.toString()] = 'AIRTEL';
+          }
+          break;
+        case 2:
+          result = farmerPaymentChannels.filter((channel) => {
+            return channel.paymentChannel === 2;
+          });
+          if (result [0]) {
+            result [0]['label'.toString()] = 'MTN';
+          }
+          break;
+        case 3:
+          result = farmerPaymentChannels.filter((channel) => {
+            return channel.paymentChannel === 3;
+          });
+          if (result [0]) {
+            result [0]['label'.toString()] = 'IKOFI';
+          }
+          break;
+        case 5:
+          result = farmerPaymentChannels.filter((channel) => {
+            return channel.paymentChannel === 3;
+          });
+          if (result [0]) {
+            result [0]['label'.toString()] = 'IKOFI';
+          }
+          break;
+        case 4:
+          result = farmerPaymentChannels.filter((channel) => {
+            return channel.paymentChannel === 4;
+          });
+          if (result [0]) {
+            result [0]['label'.toString()] = 'CASH';
+          }
+          break;
+      }
+    }
+    return result;
   }
 }

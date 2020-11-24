@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {AuthenticationService} from '../core/services';
+import {AuthenticationService, SiteService} from '../core/services';
 import {HelperService} from '../core/helpers';
 import {MessageService} from '../core/services';
 
@@ -14,7 +14,7 @@ export class ProfileComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute, private router: Router,
-              private authenticationService: AuthenticationService,
+              private authenticationService: AuthenticationService, private siteService: SiteService,
               private helperService: HelperService, private messageService: MessageService) {
   }
 
@@ -22,6 +22,7 @@ export class ProfileComponent implements OnInit {
   errors: string[];
   orgInfo: any;
   userInfo: any;
+  site: any;
   message: string;
 
   ngOnInit() {
@@ -31,6 +32,11 @@ export class ProfileComponent implements OnInit {
     });
     this.userInfo = this.authenticationService.getCurrentUser().info;
     this.orgInfo = this.authenticationService.getCurrentUser().orgInfo;
+    if (this.orgInfo.distributionSite) {
+      this.siteService.get(this.orgInfo.distributionSite).subscribe(data => {
+        this.site = data.content;
+      });
+    }
   }
 
   onSubmit() {

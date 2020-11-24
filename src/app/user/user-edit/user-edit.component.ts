@@ -103,8 +103,6 @@ export class UserEditComponent implements OnInit {
       this.id = params['id'.toString()];
     });
 
-    this.initial();
-    this.onChanges();
     this.route.params.subscribe(params => {
       this.userService.get(params['id'.toString()]).subscribe(user => {
         this.organisationService.get(this.organisationId).subscribe(data => {
@@ -145,10 +143,70 @@ export class UserEditComponent implements OnInit {
         if (usr.accountExpirationDate !== undefined) {
           usr['accountExpirationDate'.toString()] = usr['accountExpirationDate'.toString()];
         }
-        this.editForm.patchValue(usr);
+        this.setDefaultValues(usr);
+        this.onChanges();
       });
     });
+    this.initial();
+  }
 
+  setDefaultValues(currentUser: any) {
+    if (currentUser.location) {
+      if (currentUser.location.prov_id && currentUser.location.dist_id) {
+        this.locationService.getDistricts(currentUser.location.prov_id).subscribe((districts) => {
+          this.districts = districts;
+        });
+      }
+      if (currentUser.location.dist_id && currentUser.location.sect_id) {
+        this.locationService.getSectors(currentUser.location.dist_id).subscribe((sectors) => {
+          this.sectors = sectors;
+        });
+      }
+      if (currentUser.location.sect_id && currentUser.location.cell_id) {
+        this.locationService.getCells(currentUser.location.sect_id).subscribe((cells) => {
+          this.cells = cells;
+        });
+      }
+      if (currentUser.location.cell_id && currentUser.location.village_id) {
+        this.locationService.getVillages(currentUser.location.cell_id).subscribe((villages) => {
+          this.villages = villages;
+        });
+      }
+
+    }
+    if (currentUser.userRoles.includes(8) && currentUser.location) {
+      const body = {
+        searchBy: 'district',
+        dist_id: currentUser.location.dist_id
+      };
+      this.siteService.all(body).subscribe((dt) => {
+        this.sites = dt.content;
+      });
+    }
+    const usrType = currentUser.hasAccessTo[0].userType;
+    this.hideEmail = +usrType === 13;
+
+    this.hasSite = !!((currentUser.userRoles.includes(8) && currentUser.userRoles.includes(1)) ||
+      (currentUser.userRoles.includes(8) && usrType === 2));
+
+    currentUser.userRoles.forEach((role) => {
+      this.userService.userPermissions(role).subscribe(dt => {
+        const temp = Object.keys(dt.content).map(key => {
+          return {name: key, value: dt.content[key]};
+        });
+        this.userTypes = [...this.userTypes, ...temp].filter((v, i, a) => a.findIndex(t => (t.name === v.name)) === i);
+
+        /*remove collector user type if cws is also an input distribution site*/
+
+        if (currentUser.userRoles.includes(8) && currentUser.userRoles.includes(1)) {
+          const index = this.userTypes.findIndex(v => v.name === 'COFFEE_COLLECTOR');
+          if (index > -1) {
+            this.userTypes.splice(index, 1);
+          }
+        }
+      });
+    });
+    this.editForm.patchValue(currentUser, {emitEvent: false});
   }
 
   isSuperOrganisation(organisation: any) {
@@ -190,11 +248,23 @@ export class UserEditComponent implements OnInit {
         } else {
           this.hasSite = false;
         }
+        this.hasSite = !!(selectedRoles.includes(8) && selectedRoles.includes(1));
+        this.userTypes = [];
         selectedRoles.forEach((role) => {
           this.userService.userPermissions(role).subscribe(dt => {
-            this.userTypes = Object.keys(dt.content).map(key => {
+            const temp = Object.keys(dt.content).map(key => {
               return {name: key, value: dt.content[key]};
             });
+            this.userTypes = [...this.userTypes, ...temp].filter((v, i, a) => a.findIndex(t => (t.name === v.name)) === i);
+
+            /*remove collector user type if cws is also an input distribution site*/
+
+            if (selectedRoles.includes(8) && selectedRoles.includes(1)) {
+              const index = this.userTypes.findIndex(v => v.name === 'COFFEE_COLLECTOR');
+              if (index > -1) {
+                this.userTypes.splice(index, 1);
+              }
+            }
           });
         });
         this.selectedRoles = selectedRoles;
@@ -207,7 +277,7 @@ export class UserEditComponent implements OnInit {
           this.selectedType = +value;
           this.hasSite = !!this.selectedRoles.includes(8);
         } else {
-          this.hasSite = false;
+          this.hasSite = !!(this.selectedRoles.includes(8) && this.selectedRoles.includes(1));
         }
       }
     );
@@ -220,16 +290,8 @@ export class UserEditComponent implements OnInit {
             this.sectors = null;
             this.cells = null;
             this.villages = null;
+
           });
-          if (this.hasSite) {
-            const body = {
-              searchBy: 'province',
-              prov_id: value
-            };
-            this.siteService.all(body).subscribe((data) => {
-              this.sites = data.content;
-            });
-          }
         }
       }
     );
@@ -240,16 +302,16 @@ export class UserEditComponent implements OnInit {
             this.sectors = data;
             this.cells = null;
             this.villages = null;
+            if (this.hasSite) {
+              const body = {
+                searchBy: 'district',
+                dist_id: value
+              };
+              this.siteService.all(body).subscribe((dt) => {
+                this.sites = dt.content;
+              });
+            }
           });
-          if (this.hasSite) {
-            const body = {
-              searchBy: 'district',
-              dist_id: value
-            };
-            this.siteService.all(body).subscribe((data) => {
-              this.sites = data.content;
-            });
-          }
         }
       }
     );
@@ -299,7 +361,7 @@ export class UserEditComponent implements OnInit {
         _id: this.authenticationService.getCurrentUser().info._id,
         name: this.authenticationService.getCurrentUser().info.surname
       };
-      delete user.userType;
+      // delete user.userType;
       this.helper.cleanObject(user);
       this.helper.cleanObject(user.location);
       if (!((this.editUser.fullyEditable) && (this.editUser.email !== user.email))) {

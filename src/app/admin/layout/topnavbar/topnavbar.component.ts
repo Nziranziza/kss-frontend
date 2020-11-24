@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {AuthenticationService, AuthorisationService, FarmerService} from '../../../core/services';
-import {SeasonService} from '../../../core/services';
-import {ActivatedRoute, Router} from '@angular/router';
+import {AuthenticationService, AuthorisationService, FarmerService, SeasonService} from '../../../core/services';
+import {Router} from '@angular/router';
 import {SharedDataService} from '../../../core/services/shared-data.service';
 import {Subscription} from 'rxjs';
 

@@ -2,11 +2,12 @@ import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/c
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {HelperService} from '../../../core/helpers';
-import {CherrySupplyService, ConfirmDialogService} from '../../../core/services';
+import {AuthenticationService, CherrySupplyService, ConfirmDialogService, UserService} from '../../../core/services';
 import {Subject} from 'rxjs';
-import {AuthenticationService} from '../../../core/services';
 import {Location} from '@angular/common';
 import {DataTableDirective} from 'angular-datatables';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {PaySingleFarmerComponent} from '../../../payments/organisation-pay-farmers/pay-single-farmer/pay-single-farmer.component';
 
 @Component({
   selector: 'app-cherry-supply',
@@ -18,6 +19,8 @@ export class CherrySupplyComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(private formBuilder: FormBuilder, private cherrySupplyService: CherrySupplyService,
               private route: ActivatedRoute,
               private confirmDialogService: ConfirmDialogService,
+              private userService: UserService,
+              private modal: NgbModal,
               private router: Router, private helper: HelperService,
               private location: Location, private authenticationService: AuthenticationService) {
   }
@@ -32,6 +35,7 @@ export class CherrySupplyComponent implements OnInit, OnDestroy, AfterViewInit {
   cherrySupplies = [];
   totalAmountToPay = 0;
   paymentDeliveryIds = [];
+  farmerUserId: string;
   regNumber: string;
   message: string;
   organisationId: string;
@@ -61,6 +65,9 @@ export class CherrySupplyComponent implements OnInit, OnDestroy, AfterViewInit {
       responsive: true
     };
     this.organisationId = this.authenticationService.getCurrentUser().info.org_id;
+    this.route.params.subscribe(params => {
+      this.farmerUserId = params['userId'.toString()];
+    });
     this.route.params.subscribe(params => {
       this.regNumber = params['regNumber'.toString()];
     });
@@ -106,16 +113,13 @@ export class CherrySupplyComponent implements OnInit, OnDestroy, AfterViewInit {
       record['deliveryIds'.toString()] = this.paymentDeliveryIds;
       record['regNumber'.toString()] = this.regNumber;
       record['userId'.toString()] = this.authenticationService.getCurrentUser().info._id;
-      this.cherrySupplyService.paySupplies(record)
-        .subscribe(() => {
-            this.getFarmerSupplies(this.organisationId, this.regNumber);
-            this.errors = '';
-            this.message = 'Successful payment!';
-          },
-          (err) => {
-            this.message = '';
-            this.errors = err.errors;
-          });
+      this.helper.cleanObject(record);
+      const modalRef = this.modal.open(PaySingleFarmerComponent, {size: 'sm'});
+      modalRef.componentInstance.paymentData = record;
+      modalRef.componentInstance.farmerUserId = this.farmerUserId;
+      modalRef.result.finally(() => {
+        this.getFarmerSupplies(this.organisationId, this.regNumber);
+      });
     } else {
       this.message = '';
       this.errors = this.helper.getFormValidationErrors(this.paySuppliesForm);

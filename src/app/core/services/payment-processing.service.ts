@@ -63,4 +63,22 @@ export class PaymentProcessingService {
       localStorage.setItem('paymentProcessing', JSON.stringify(current));
     }
   }
+
+  getSelectionStatistics() {
+    if (!isNullOrUndefined(localStorage.getItem('paymentProcessing'))) {
+      return JSON.parse(localStorage.getItem('paymentProcessing')).selectionStatistics;
+    }
+  }
+
+  setSelectionStatistics(value: any) {
+    if (isNullOrUndefined(localStorage.getItem('paymentProcessing'))) {
+      localStorage.setItem('paymentProcessing', JSON.stringify(
+        {selectionStatistics: value}
+      ));
+    } else {
+      const current = JSON.parse(localStorage.getItem('paymentProcessing'));
+      current.selectionStatistics = value;
+      localStorage.setItem('paymentProcessing', JSON.stringify(current));
+    }
+  }
 }

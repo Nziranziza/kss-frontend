@@ -11,7 +11,6 @@ export class OrganisationPayTopUpsComponent extends BasicComponent implements On
 
   previewImagePath: any;
   depositForm: FormGroup;
-  mobileTransferForm: FormGroup;
   imageError: string;
   isImageSaved: boolean;
   cardImageBase64: string;
@@ -23,13 +22,7 @@ export class OrganisationPayTopUpsComponent extends BasicComponent implements On
   ngOnInit() {
     this.depositForm = this.formBuilder.group({
       amount: ['', Validators.required],
-      wallet: ['ikofi', Validators.required]
-    });
-
-    this.mobileTransferForm = this.formBuilder.group({
-      amount: ['', Validators.required],
-      wallet: ['ikofi', Validators.required],
-      subscription_number: ['', Validators.required]
+      wallet: ['mtn', Validators.required]
     });
   }
 

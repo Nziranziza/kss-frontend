@@ -1,0 +1,200 @@
+<div class="row">
+  <div class="col-xs-12">
+    <div class="container custom-tabs">
+      <div class="row">
+        <div class="col-md-12" style="padding-right: 0px; padding-left: 0px; margin-top: 15px">
+          <div class="card" style="border: none !important;">
+            <ul class="nav nav-tabs" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#payment-channels" aria-controls="payment-channels" role="tab" data-toggle="tab">
+                  <span>Payment channels</span>
+                </a>
+              </li>
+              <li role="presentation"  *appHasPermission="[1]">
+                <a href="#certificates" aria-controls="certificates" role="tab" data-toggle="tab">
+                  <span>Certificates</span>
+                </a>
+              </li>
+            </ul>
+            <div class="tab-content">
+              <div role="tabpanel" class="tab-pane active" id="payment-channels">
+                <app-list-message [message]="message"></app-list-message>
+                <app-list-errors [errorList]="errors"></app-list-errors>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <table class="hover table table-striped">
+                      <thead>
+                      <tr>
+                        <th>Channel name</th>
+                        <th>Subscription number
+                        <th>Bank name</th>
+                        <th></th>
+                      </tr>
+                      </thead>
+                      <tbody style="border-width: 1px">
+                      <tr *ngFor="let channel of orgPaymentChannels">
+                        <td> {{ channel.channelName }}</td>
+                        <td> {{ channel.subscriptionNumber }}</td>
+                        <td> {{ channel.bankName }}</td>
+                        <td></td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <form [formGroup]="addPaymentChannelForm" (ngSubmit)="onSubmitPaymentChannel()">
+                  <div class="row">
+                    <div class="col-xs-12">
+                      <button class="btn btn-success btn-sm" (click)="addPaymentChannel()" type="button"
+                              style="margin-bottom: 10px;">
+                        <i class="fa fa-plus"></i> Payment channel
+                      </button>
+                    </div>
+                  </div>
+                  <div *ngFor="let control of formPaymentChannel.controls; let i=index" formArrayName="paymentChannels">
+                    <div class="row" [formGroupName]="i">
+                      <div class="col-xs-2">
+                        <div class="form-group">
+                          <span class="label-required">Channel</span>
+                          <select class="form-control" formControlName="channelId" (change)="onChangePaymentChannel(i)">
+                            <option *ngFor="let channel of channels" value="{{channel._id}}">
+                              {{ channel.channel }}
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-xs-3">
+                        <div class="form-group">
+                          <span class="label-required"> Subscription number </span>
+                          <input class="form-control" formControlName="subscriptionNumber">
+                        </div>
+                      </div>
+                      <div class="col-xs-3">
+                        <div class="form-group">
+                          <span>Bank name (Optional)</span>
+                          <select class="form-control" formControlName="bankName">
+                            <option *ngFor="let bank of banks" value="{{bank.name}}">
+                              {{ bank.name }}
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="form-group col-xs-1">
+                        <button class="btn btn-danger btn-sm pull-left" type="button"
+                                (click)="removePaymentChannel(i)" style="margin-top: 20px"> Remove
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-xs-12">
+                      <button class="btn btn-success pull-right">Save</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <div role="tabpanel" class="tab-pane" id="certificates">
+                <app-list-message [message]="message"></app-list-message>
+                <app-list-errors [errorList]="errors"></app-list-errors>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <table class="hover table table-striped">
+                      <thead>
+                      <tr>
+                        <th>Certificate name</th>
+                        <th>Issued date</th>
+                        <th>Issued by</th>
+                        <th>Expiration date</th>
+                        <th></th>
+                      </tr>
+                      </thead>
+                      <tbody style="border-width: 1px">
+                      <tr *ngFor="let certificate of certificates">
+                        <td> {{ certificate.certificateName }}</td>
+                        <td> {{ certificate.issuedDate }}</td>
+                        <td> {{ certificate.issuedBy }}</td>
+                        <td> {{ certificate.expirationDate }}</td>
+                        <td></td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <form [formGroup]="addCertificateForm" (ngSubmit)="onSubmitCertificate()">
+                  <div class="row">
+                    <div class="col-xs-3">
+                      <div class="form-group">
+                        <span class="label-required">Certificate name</span>
+                        <input class="form-control" formControlName="certificateName">
+                      </div>
+                    </div>
+                    <div class="col-xs-3">
+                      <div class="form-group">
+                        <span class="label-required">Issued by</span>
+                        <input class="form-control" formControlName="issuedBy">
+                      </div>
+                    </div>
+                    <div class="col-xs-3">
+                      <div class="form-group">
+                        <span class="label-required">Coffee type</span>
+                        <select class="form-control" formControlName="coffeeType">
+                          <option *ngFor="let type of coffeeTypes" value="{{type._id}}"> {{ type.name }}</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-xs-3">
+                      <div class="form-group">
+                        <span class="label-required">Issued date</span>
+                        <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="issuedDate"
+                               class="form-control col-xs-3 col-sm-3 col-md-2 col-lg-2 owl-date-input">
+                        <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+                      </div>
+                    </div>
+                    <div class="col-xs-3">
+                      <div class="form-group">
+                        <span>Expiration date</span>
+                        <input [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" formControlName="expirationDate"
+                               class="form-control col-xs-3 col-sm-3 col-md-2 col-lg-2 owl-date-input">
+                        <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
+                      </div>
+                    </div>
+                    <div class="col-xs-3">
+                      <div class="form-group">
+                        <span class="label-required">Upload certificate</span>
+                        <br>
+                        <span style="font-size: 10px; color: crimson">{{fileError}}</span>
+                        <input type="file" (change)="fileChangeEvent($event)">
+                        <div style="margin-top: 10px;">
+                          <ng-container *ngIf="isFileSaved; else elseTemplate">
+                            <img [src]="cardFileBase64" style="max-height: 100px; max-width: 100px;" *ngIf="isImage"/>
+                            <img src="./assets/dist/img/pdf-word-file.png" style="max-height: 100px; max-width: 100px;" *ngIf="!isImage"/>
+                            <button class="btn-link" (click)="removeFile()"
+                                    style=" text-decoration:none; margin-left: 10px; color: crimson">
+                              <i class="fa fa-close"></i>&nbsp;Remove
+                            </button>
+                          </ng-container>
+                          <ng-template #elseTemplate>
+                            <img src="./assets/dist/img/default-file.png"
+                                 class="img-responsive" style="max-height: 100px; max-width: 100px;"/>
+                          </ng-template>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-xs-12">
+                      <button class="btn btn-success pull-right">Save</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

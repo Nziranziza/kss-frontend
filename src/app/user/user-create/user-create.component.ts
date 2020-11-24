@@ -268,6 +268,8 @@ export class UserCreateComponent implements OnInit {
 
         /*If selected roles include district cash crop, unable location selection*/
         this.needLocation = !!selectedRoles.includes(6);
+
+        /*If selected roles include input distribution and user type is normal, unable site selection*/
         if (selectedRoles.includes(8)) {
           if (this.selectedType === 2) {
             this.hasSite = true;
@@ -275,11 +277,25 @@ export class UserCreateComponent implements OnInit {
         } else {
           this.hasSite = false;
         }
+        /*If selected roles include input distribution and cws, unable site selection*/
+        this.hasSite = !!(selectedRoles.includes(8) && selectedRoles.includes(1));
+
+        this.userTypes = [];
         selectedRoles.forEach((role) => {
           this.userService.userPermissions(role).subscribe(dt => {
-            this.userTypes = Object.keys(dt.content).map(key => {
+            const temp = Object.keys(dt.content).map(key => {
               return {name: key, value: dt.content[key]};
             });
+            this.userTypes = [...this.userTypes, ...temp].filter((v, i, a) => a.findIndex(t => (t.name === v.name)) === i);
+
+            /*remove collector user type if cws is also an input distribution site*/
+
+            if (selectedRoles.includes(8) && selectedRoles.includes(1)) {
+              const index = this.userTypes.findIndex(v => v.name === 'COFFEE_COLLECTOR');
+              if (index > -1) {
+                this.userTypes.splice(index, 1);
+              }
+            }
           });
         });
         this.selectedRoles = selectedRoles;
@@ -292,7 +308,7 @@ export class UserCreateComponent implements OnInit {
           this.selectedType = +value;
           this.hasSite = !!this.selectedRoles.includes(8);
         } else {
-          this.hasSite = false;
+          this.hasSite = !!(this.selectedRoles.includes(8) && this.selectedRoles.includes(1));
         }
       }
     );
@@ -305,15 +321,6 @@ export class UserCreateComponent implements OnInit {
             this.cells = null;
             this.villages = null;
           });
-          if (this.hasSite) {
-            const body = {
-              searchBy: 'province',
-              prov_id: value
-            };
-            this.siteService.all(body).subscribe((data) => {
-              this.sites = data.content;
-            });
-          }
         }
       }
     );

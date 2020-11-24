@@ -5,10 +5,10 @@
       <div class="filter-form pull-right">
         <form [formGroup]="filterForm" (ngSubmit)="onFilter()">
           <div class="form-inline">
-            <select class="form-control" formControlName="searchBy" style="margin-right: 10px">
+            <select class="form-control col-xs-3 col-sm-3 col-md-2 col-lg-2" formControlName="searchBy" style="margin-right: 10px">
               <option *ngFor="let field of searchFields" value="{{field.value}}">{{field.name}}</option>
             </select>
-            <input type="text" formControlName="term" class="form-control" placeholder="search..">
+            <input type="text" formControlName="term" class="form-control col-xs-3 col-sm-3 col-md-2 col-lg-2" placeholder="search..">
             <button class="btn btn-success pull-right btn-margin" type="button" (click)="exportAsXLSX()"><i
               class="fa fa-download"></i> Export
             </button>
@@ -38,7 +38,7 @@
             <th></th>
           </tr>
           </thead>
-          <tbody>
+          <tbody *ngIf="showData">
           <tr *ngFor="let farmer of (farmers | orderBy : order:reverse:'case-insensitive') | paginate: config">
             <td> {{ farmer.foreName }}</td>
             <td> {{ farmer.surname }}</td>
@@ -56,7 +56,7 @@
           </tr>
           </tbody>
         </table>
-        <div style="width: 100%;  border-top: 1px solid #0a0a0a;">
+        <div style="width: 100%;  border-top: 1px solid #0a0a0a;" *ngIf="showData">
           <div style=" clear: both; float: left; padding-top: 0.755em;">Showing {{(config.currentPage - 1)*
             config.itemsPerPage + 1}} to {{config.currentPage* config.itemsPerPage}} of {{config.totalItems}} entries
           </div>

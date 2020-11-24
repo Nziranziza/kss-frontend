@@ -82,6 +82,44 @@
               </div>
             </div>
           </div>
+
+          <!--------------------------------- Payment channels
+
+          <div class="row">
+            <div class="col-xs-12">
+              <button class="btn btn-success btn-sm" (click)="addPaymentChannel()" type="button" style="margin-bottom: 10px;">
+                <i class="fa fa-plus"></i> Payment channel
+              </button>
+            </div>
+          </div>
+          <div *ngFor="let control of formPaymentChannel.controls; let i=index" formArrayName="paymentChannels">
+            <div class="row" [formGroupName]="i">
+              <div class="col-xs-2">
+                <div class="form-group">
+                  <span class="label-required">Channel</span>
+                  <select class="form-control" formControlName="channelId" (change)="onChangePaymentChanel(i)">
+                    <option *ngFor="let channel of channels" value="{{channel._id}}">
+                      {{ channel.name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xs-3">
+                <div class="form-group">
+                  <span class="label-required"> Account </span>
+                  <input class="form-control" formControlName="account">
+                </div>
+              </div>
+              <div class="form-group col-xs-1">
+                <button class="btn btn-danger btn pull-left" type="button"
+                  (click)="removePaymentChannel(i)" style="margin-top: 20px"> Remove
+                </button>
+              </div>
+            </div>
+          </div>
+
+          End payment channels ----------------------------->
+
           <div class="row">
             <fieldset class="location" *ngIf="isGroup">
               <legend>

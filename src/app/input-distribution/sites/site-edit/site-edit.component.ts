@@ -11,7 +11,7 @@ import {isUndefined} from 'util';
   templateUrl: './site-edit.component.html',
   styleUrls: ['./site-edit.component.css']
 })
-export class SiteEditComponent implements OnInit {
+export class SiteEditComponent implements OnInit{
 
   constructor(private formBuilder: FormBuilder, private route: ActivatedRoute,
               private router: Router, private siteService: SiteService,
@@ -34,9 +34,10 @@ export class SiteEditComponent implements OnInit {
   selectedCoveredSectors = [];
   id: string;
   totalAllocatedQty = 0;
-  afterInitial = false;
+  afterInitial = 0;
 
   ngOnInit() {
+    this.initial();
     this.editForm = this.formBuilder.group({
       siteName: [''],
       location: this.formBuilder.group({
@@ -52,6 +53,7 @@ export class SiteEditComponent implements OnInit {
         coveredCWS: [[]],
       })
     });
+    this.onChanges();
     this.route.params.subscribe(params => {
       this.id = params['id'.toString()];
       this.siteService.get(params['id'.toString()]).subscribe(data => {
@@ -102,24 +104,29 @@ export class SiteEditComponent implements OnInit {
             site['location'.toString()]['prov_id'.toString()] = site.location.prov_id._id;
             site['location'.toString()]['dist_id'.toString()] = site.location.dist_id._id;
             site['location'.toString()]['sect_id'.toString()] = site.location.sect_id._id;
-            site['location'.toString()]['cell_id'.toString()] = site.location.cell_id._id;
-            site['location'.toString()]['village_id'.toString()] = site.location.village_id._id;
+            if (site.location.cell_id) {
+              site['location'.toString()]['cell_id'.toString()] = site.location.cell_id._id;
+            }
+            if (site.location.village_id) {
+              site['location'.toString()]['village_id'.toString()] = site.location.village_id._id;
+            }
           }
           this.editForm.patchValue(site);
           this.editForm.controls.coveredAreas.get('coveredSectors'.toString()).patchValue(site.coveredAreas.coveredSectors);
           this.editForm.controls.coveredAreas.get('coveredCWS'.toString()).patchValue(site.coveredAreas.coveredCWS);
-          this.afterInitial = true;
         });
-        this.locationService.getCells(site.location.sect_id._id).subscribe((cells) => {
-          this.cells = cells;
-        });
-        this.locationService.getVillages(site.location.cell_id._id).subscribe((villages) => {
-          this.villages = villages;
-        });
+        if (site.location.cell_id) {
+          this.locationService.getCells(site.location.sect_id._id).subscribe((cells) => {
+            this.cells = cells;
+          });
+        }
+        if (site.location.village_id) {
+          this.locationService.getVillages(site.location.cell_id._id).subscribe((villages) => {
+            this.villages = villages;
+          });
+        }
       });
     });
-    this.initial();
-    this.onChanges();
   }
 
   onSubmit() {
@@ -192,6 +199,7 @@ export class SiteEditComponent implements OnInit {
         this.editForm.controls.allocatedQty.setValue(this.totalAllocatedQty);
       });
       this.selectedCoveredSectors.push(item.name);
+      this.getZoneByLocation();
     } else {
       let i: number;
       i = this.editForm.value.coveredAreas.coveredSectors.indexOf(item._id);
@@ -202,6 +210,7 @@ export class SiteEditComponent implements OnInit {
           this.editForm.controls.allocatedQty.setValue(this.totalAllocatedQty);
         });
         this.selectedCoveredSectors.splice(i, 1);
+        this.getZoneByLocation();
       }
     }
   }
@@ -212,10 +221,14 @@ export class SiteEditComponent implements OnInit {
         if (value !== '') {
           this.locationService.getDistricts(value).subscribe((data) => {
             this.districts = data;
-            this.coveredSectorsSet = null;
-            this.sectors = null;
-            this.cells = null;
-            this.villages = null;
+            if (this.afterInitial > 1) {
+              this.clearCoveredArea();
+              this.coveredSectorsSet = null;
+              this.sectors = null;
+              this.cells = null;
+              this.villages = null;
+            }
+            this.afterInitial ++;
           });
         }
       }
@@ -223,18 +236,15 @@ export class SiteEditComponent implements OnInit {
     this.editForm.controls.location.get('dist_id'.toString()).valueChanges.subscribe(
       (value) => {
         if (value !== '') {
-          const body = {
-            searchBy: 'district',
-            dist_id: value
-          };
           this.locationService.getSectors(value).subscribe((data) => {
             this.sectors = data;
             this.coveredSectorsSet = data;
-            this.cells = null;
-            this.villages = null;
-          });
-          this.siteService.getZone(body).subscribe((zones) => {
-            this.coveredCWSSet = zones.content;
+            if (this.afterInitial > 1) {
+              this.clearCoveredArea();
+              this.cells = null;
+              this.villages = null;
+            }
+            this.afterInitial ++;
           });
         }
       }
@@ -244,7 +254,9 @@ export class SiteEditComponent implements OnInit {
         if (value !== '') {
           this.locationService.getCells(value).subscribe((data) => {
             this.cells = data;
+            if (this.afterInitial > 1) {
             this.villages = null;
+            }
           });
         }
       }
@@ -258,6 +270,32 @@ export class SiteEditComponent implements OnInit {
         }
       }
     );
+  }
+
+  getZoneByLocation() {
+    this.siteService.getZoneByLocation({
+      searchBy: 'sector',
+      _ids: this.editForm.controls.coveredAreas.get('coveredSectors'.toString()).value
+    }).subscribe((zones) => {
+      this.coveredCWSSet = zones.content;
+      const saveCoveredCWS = this.editForm.controls.coveredAreas.get('coveredCWS'.toString()).value;
+      this.editForm.controls.coveredAreas.get('coveredCWS'.toString()).setValue([]);
+      this.selectedCoveredCWS = [];
+      this.coveredCWSSet.forEach((cws) => {
+        if (saveCoveredCWS.includes(cws._id)) {
+          this.editForm.controls.coveredAreas.get('coveredCWS'.toString()).value.push(cws._id);
+          this.selectedCoveredCWS.push(cws.organizationName);
+        }
+      });
+    });
+  }
+
+  clearCoveredArea() {
+    this.selectedCoveredSectors = [];
+    this.selectedCoveredCWS = [];
+    this.editForm.controls.coveredAreas.get('coveredCWS'.toString()).setValue([]);
+    this.editForm.controls.coveredAreas.get('coveredSectors'.toString()).setValue([]);
+    this.coveredCWSSet = null;
   }
 
   initial() {

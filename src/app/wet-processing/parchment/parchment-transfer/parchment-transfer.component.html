@@ -14,19 +14,19 @@
           Remaining Qty
         </div>
         <div class="col-sm-6">
-          <strong>{{ parchment.remainingQty }} Kg</strong><br>
+          <strong>{{ parchment?.remainingQty }} Kg</strong><br>
         </div>
         <div class="col-sm-6">
           Initial Qty
         </div>
         <div class="col-sm-6">
-          {{ parchment.totalKgs }} Kg<br>
+          {{ parchment?.totalKgs }} Kg<br>
         </div>
         <div class="col-sm-6">
           Lot number
         </div>
         <div class="col-sm-6">
-          {{ parchment.lotNumber }}<br>
+          {{ parchment?.lotNumber }}<br>
         </div>
       </div>
     </div>
@@ -38,26 +38,26 @@
   <div class="box">
     <div class="box-body">
       <div class="row">
-        <div class="col-xs-6">
+        <div class="col-xs-3">
           <div class="form-group">
             <label class="control-label label-required">Qty</label>
             <input type="number" formControlName="totalKgs" class="form-control" min="0"
-                   max="{{ parchment.remainingQty }}">
+                   max="{{ parchment?.remainingQty }}">
           </div>
         </div>
-        <div class="col-xs-6">
+        <div class="col-xs-3">
           <div class="form-group">
             <label class="control-label">Destination</label> &nbsp; &nbsp;
             <select class="form-control" formControlName="destOrgId">
               <ng-container *ngFor="let organisation of organisations">
                 <option *ngIf="organisation.organizationRole.includes(2)" value="{{organisation._id}}"> {{
-                  organisation.organizationName }}
+                  organisation?.organizationName }}
                 </option>
               </ng-container>
             </select>
           </div>
         </div>
-        <div class="col-xs-6">
+        <div class="col-xs-3">
           <div class="form-group">
             <label class="control-label">Release date</label> &nbsp; &nbsp;
             <input [owlDateTimeTrigger]="dt3" [owlDateTime]="dt3" formControlName="releaseDate" class="form-control">
@@ -85,7 +85,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let org of parchment.destinationOrg">
+      <tr *ngFor="let org of parchment?.destinationOrg">
         <ng-container>
           <td> {{ org.destinationOrg.name }}</td>
           <td> {{ org.transferredKgs }}</td>

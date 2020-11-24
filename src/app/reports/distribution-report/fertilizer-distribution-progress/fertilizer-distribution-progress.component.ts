@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {FormArray, FormBuilder, FormGroup} from '@angular/forms';
 import {Subject} from 'rxjs';
 
 import {
@@ -28,6 +28,7 @@ export class FertilizerDistributionProgressComponent extends BasicComponent impl
   message: string;
   isCurrentUserDCC = false;
   isSiteManager = false;
+  isCWSUser = false;
   distributionProgress: any;
   printable = [];
   dtOptions: any = {};
@@ -46,6 +47,7 @@ export class FertilizerDistributionProgressComponent extends BasicComponent impl
   showData = false;
   request: any;
   site: any;
+  org: any;
   printableDetails = [];
   downloading = false;
   reportIsReady: boolean;
@@ -63,6 +65,7 @@ export class FertilizerDistributionProgressComponent extends BasicComponent impl
   ngOnInit() {
     this.isCurrentUserDCC = this.authorisationService.isDistrictCashCropOfficer();
     this.isSiteManager = this.authorisationService.isSiteManager();
+    this.isCWSUser = this.authorisationService.isCWSUser();
     this.reportIsReady = true;
     this.checkProgressForm = this.formBuilder.group({
       location: this.formBuilder.group({
@@ -88,6 +91,19 @@ export class FertilizerDistributionProgressComponent extends BasicComponent impl
               name: sector.name
             }
           );
+        });
+        this.sectors = temp;
+      });
+    } else if (this.isCWSUser) {
+      this.organisationService.get(this.authenticationService.getCurrentUser().info.org_id).subscribe(data => {
+        const temp = [];
+        this.org = data.content;
+        console.log(this.org);
+        data.content.coveredSectors.map((sector) => {
+          temp.push({
+            _id: sector.sectorId._id,
+            name: sector.sectorId.name
+          });
         });
         this.sectors = temp;
       });
@@ -200,12 +216,16 @@ export class FertilizerDistributionProgressComponent extends BasicComponent impl
     this.checkProgressForm.controls.location.get('dist_id'.toString()).valueChanges.subscribe(
       (value) => {
         if (value !== '') {
-          this.locationService.getSectors(value).subscribe((data) => {
-            this.sectors = data;
-            this.cells = null;
-            this.villages = null;
-            this.distId = true;
-          });
+          if (this.isCWSUser) {
+            this.filterCustomSectors(this.org);
+          } else {
+            this.locationService.getSectors(value).subscribe((data) => {
+              this.sectors = data;
+              this.cells = null;
+              this.villages = null;
+            });
+          }
+          this.distId = true;
         } else {
           this.distId = false;
         }
@@ -214,11 +234,15 @@ export class FertilizerDistributionProgressComponent extends BasicComponent impl
     this.checkProgressForm.controls.location.get('sect_id'.toString()).valueChanges.subscribe(
       (value) => {
         if (value !== '') {
-          this.locationService.getCells(value).subscribe((data) => {
-            this.cells = data;
-            this.villages = null;
-            this.sectorId = true;
-          });
+          if (this.isCWSUser) {
+            this.filterCustomCells(this.org);
+          } else {
+            this.locationService.getCells(value).subscribe((data) => {
+              this.cells = data;
+              this.villages = null;
+            });
+          }
+          this.sectorId = true;
         } else {
           this.sectorId = false;
         }
@@ -227,15 +251,41 @@ export class FertilizerDistributionProgressComponent extends BasicComponent impl
     this.checkProgressForm.controls.location.get('cell_id'.toString()).valueChanges.subscribe(
       (value) => {
         if (value !== '') {
+
           this.locationService.getVillages(value).subscribe((data) => {
             this.villages = data;
-            this.cellId = true;
           });
+          this.cellId = true;
         } else {
           this.cellId = false;
         }
       }
     );
+  }
+
+  filterCustomSectors(org: any) {
+    const temp = [];
+    org.coveredSectors.map((sector) => {
+      temp.push({
+        _id: sector.sectorId._id,
+        name: sector.sectorId.name
+      });
+    });
+    this.sectors = temp;
+  }
+
+  filterCustomCells(org: any) {
+    const temp = [];
+    const sectorId = this.checkProgressForm.controls.location.get('sect_id'.toString()).value;
+    const i = org.coveredSectors.findIndex(element => element.sectorId._id === sectorId);
+    const sector = org.coveredSectors[i];
+    sector.coveredCells.map((cell) => {
+      temp.push({
+        _id: cell.cell_id,
+        name: cell.name
+      });
+    });
+    this.cells = temp;
   }
 
   initial() {

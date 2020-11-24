@@ -11,7 +11,7 @@ const routes: Routes = [
     canActivateChild: [AdminGuard],
     children: [
       {
-        path: 'cherries/supply/select/:regNumber',
+        path: 'cherries/supply/select/:userId/:regNumber',
         component: CherrySupplyComponent
       }
     ]

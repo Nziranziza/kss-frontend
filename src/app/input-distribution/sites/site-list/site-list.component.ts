@@ -36,13 +36,12 @@ export class SiteListComponent extends BasicComponent implements OnInit, OnDestr
       pagingType: 'full_numbers',
       pageLength: 25
     };
-    this.message = this.messageService.getMessage();
     this.getAllSites();
+    this.message = this.messageService.getMessage();
   }
 
   getAllSites(): void {
     this.loading = true;
-    this.clear();
     if (!this.authorisationService.isDistrictCashCropOfficer()) {
       this.siteService.getAll().subscribe(data => {
         if (data) {
