@@ -46,6 +46,7 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
       this.modal = this.injector.get(NgbActiveModal);
     }
   }
+
   ngOnInit(): void {
     this.currentDate = new Date();
     this.isUserCWSOfficer = this.authorisationService.isCWSUser();
@@ -92,8 +93,7 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
       this.inputDistributionService.recordStockOut(record).subscribe(() => {
           this.messageService.setMessage('Stock out recorded!');
           this.siteStockOutForm.reset();
-          this.siteStockOutForm.controls.date.
-            setValue(this.datePipe.transform(this.currentDate, 'yyyy-MM-dd', 'GMT+2'));
+          this.siteStockOutForm.controls.date.setValue(this.datePipe.transform(this.currentDate, 'yyyy-MM-dd', 'GMT+2'));
           this.modal.dismiss();
         },
         (err) => {
@@ -103,6 +103,7 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
       this.setError(this.helper.getFormValidationErrors(this.siteStockOutForm));
     }
   }
+
   onChanges() {
     this.siteStockOutForm.controls.location.get('sect_id'.toString()).valueChanges.subscribe(
       (value) => {
@@ -121,14 +122,12 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
     this.siteStockOutForm.controls.location.get('cell_id'.toString()).valueChanges.subscribe(
       (value) => {
         if (value !== '') {
-          if (this.isUserCWSOfficer) {
-            this.filterCustomVillages(this.org);
-          } else {
-            this.locationService.getVillages(value).subscribe((data) => {
-              this.villages = data;
-            });
-          }
+
+          this.locationService.getVillages(value).subscribe((data) => {
+            this.villages = data;
+          });
         }
+
       }
     );
   }
@@ -137,8 +136,8 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
     const temp = [];
     org.coveredSectors.map((sector) => {
       temp.push({
-        sect_id: sector.sectorId,
-        name: sector.name
+        sect_id: sector.sectorId._id,
+        name: sector.sectorId.name
       });
     });
     this.sectors = temp;
@@ -147,7 +146,7 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
   filterCustomCells(org: any) {
     const temp = [];
     const sectorId = this.siteStockOutForm.controls.location.get('sect_id'.toString()).value;
-    const i = org.coveredSectors.findIndex(element => element.sectorId === sectorId);
+    const i = org.coveredSectors.findIndex(element => element.sectorId._id === sectorId);
     const sector = org.coveredSectors[i];
     sector.coveredCells.map((cell) => {
       temp.push({
@@ -156,20 +155,6 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
       });
     });
     this.cells = temp;
-  }
-
-  filterCustomVillages(org: any) {
-    const temp = [];
-    const sectorId = this.siteStockOutForm.controls.location.get('sect_id'.toString()).value;
-    const i = org.coveredSectors.findIndex(element => element.sectorId === sectorId);
-    const sector = org.coveredSectors[i];
-    sector.coveredVillages.map((village) => {
-      temp.push({
-        _id: village.village_id,
-        name: village.name
-      });
-    });
-    this.villages = temp;
   }
 
   initial() {

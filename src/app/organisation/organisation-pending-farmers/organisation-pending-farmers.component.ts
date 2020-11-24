@@ -23,7 +23,7 @@ export class OrganisationPendingFarmersComponent implements OnInit, OnDestroy {
   }
 
   message: string;
-  farmers: any;
+  farmers = [];
   maxSize = 9;
   order = 'foreName';
   reverse = true;

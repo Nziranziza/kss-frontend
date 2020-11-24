@@ -99,8 +99,8 @@ export class PesticideDistributionProgressComponent extends BasicComponent imple
         this.org = data.content;
         data.content.coveredSectors.map((sector) => {
           temp.push({
-            _id: sector.sectorId,
-            name: sector.name
+            _id: sector.sectorId._id,
+            name: sector.sectorId.name
           });
         });
         this.sectors = temp;
@@ -216,13 +216,11 @@ export class PesticideDistributionProgressComponent extends BasicComponent imple
     this.checkProgressForm.controls.location.get('cell_id'.toString()).valueChanges.subscribe(
       (value) => {
         if (value !== '') {
-          if (this.isCWSUser) {
-            this.filterCustomVillages(this.org);
-          } else {
-            this.locationService.getVillages(value).subscribe((data) => {
-              this.villages = data;
-            });
-          }
+
+          this.locationService.getVillages(value).subscribe((data) => {
+            this.villages = data;
+          });
+
           this.cellId = true;
         } else {
           this.cellId = false;
@@ -235,8 +233,8 @@ export class PesticideDistributionProgressComponent extends BasicComponent imple
     const temp = [];
     org.coveredSectors.map((sector) => {
       temp.push({
-        sect_id: sector.sectorId,
-        name: sector.name
+        _id: sector.sectorId._id,
+        name: sector.sectorId.name
       });
     });
     this.sectors = temp;
@@ -245,7 +243,7 @@ export class PesticideDistributionProgressComponent extends BasicComponent imple
   filterCustomCells(org: any) {
     const temp = [];
     const sectorId = this.checkProgressForm.controls.location.get('sect_id'.toString()).value;
-    const i = org.coveredSectors.findIndex(element => element.sectorId === sectorId);
+    const i = org.coveredSectors.findIndex(element => element.sectorId._id === sectorId);
     const sector = org.coveredSectors[i];
     sector.coveredCells.map((cell) => {
       temp.push({
@@ -254,20 +252,6 @@ export class PesticideDistributionProgressComponent extends BasicComponent imple
       });
     });
     this.cells = temp;
-  }
-
-  filterCustomVillages(org: any) {
-    const temp = [];
-    const sectorId = this.checkProgressForm.controls.location.get('sect_id'.toString()).value;
-    const i = org.coveredSectors.findIndex(element => element.sectorId === sectorId);
-    const sector = org.coveredSectors[i];
-    sector.coveredVillages.map((village) => {
-      temp.push({
-        _id: village.village_id,
-        name: village.name
-      });
-    });
-    this.villages = temp;
   }
 
   downloadDetails() {

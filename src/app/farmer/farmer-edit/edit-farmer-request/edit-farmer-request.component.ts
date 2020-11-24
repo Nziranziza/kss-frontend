@@ -153,7 +153,7 @@ export class EditFarmerRequestComponent implements OnInit {
             this.locationService.getSectors(value).toPromise().then(data => {
               this.sectors = data;
               this.cells = [];
-              this.villages= [];
+              this.villages = [];
             });
           }
         }

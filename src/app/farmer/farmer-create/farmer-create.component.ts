@@ -152,8 +152,8 @@ export class FarmerCreateComponent extends BasicComponent implements OnInit, OnD
           const temp = [];
           data.content.coveredSectors.map((sector) => {
             temp.push({
-              _id: sector.sectorId,
-              name: sector.name
+              _id: sector.sectorId._id,
+              name: sector.sectorId.name
             });
           });
           this.sectors.push(temp);
@@ -532,16 +532,12 @@ export class FarmerCreateComponent extends BasicComponent implements OnInit, OnD
   onChangeCell(index: number) {
     const value = this.getRequestsFormGroup(index).controls.location.get('cell_id'.toString()).value;
     if (value !== '') {
-      if (this.isUserCWSOfficer) {
-        this.filterCustomVillages(this.org, index);
-      } else {
         this.locationService.getVillages(value).toPromise().then(data => {
           this.villages[index] = data;
           if (this.createFromPending) {
             this.getLocationInput(index, 'village_id').setValue(this.farmer.location.village_id);
           }
         });
-      }
     }
   }
 
@@ -582,8 +578,8 @@ export class FarmerCreateComponent extends BasicComponent implements OnInit, OnD
     const temp = [];
     org.coveredSectors.map((sector) => {
       temp.push({
-        _id: sector.sectorId,
-        name: sector.name
+        _id: sector.sectorId._id,
+        name: sector.sectorId.name
       });
     });
     this.sectors[index] = temp;
@@ -592,7 +588,7 @@ export class FarmerCreateComponent extends BasicComponent implements OnInit, OnD
   filterCustomCells(org: any, index: number) {
     const temp = [];
     const sectorId = this.getRequestsFormGroup(index).controls.location.get('sect_id'.toString()).value;
-    const i = org.coveredSectors.findIndex(element => element.sectorId === sectorId);
+    const i = org.coveredSectors.findIndex(element => element.sectorId._id === sectorId);
     const sector = org.coveredSectors[i];
     sector.coveredCells.map((cell) => {
       temp.push({
@@ -601,20 +597,6 @@ export class FarmerCreateComponent extends BasicComponent implements OnInit, OnD
       });
     });
     this.cells[index] = temp;
-  }
-
-  filterCustomVillages(org: any, index: number) {
-    const temp = [];
-    const sectorId = this.getRequestsFormGroup(index).controls.location.get('sect_id'.toString()).value;
-    const i = org.coveredSectors.findIndex(element => element.sectorId === sectorId);
-    const sector = org.coveredSectors[i];
-    sector.coveredVillages.map((village) => {
-      temp.push({
-        _id: village.village_id,
-        name: village.name
-      });
-    });
-    this.villages[index] = temp;
   }
 
   initial() {
