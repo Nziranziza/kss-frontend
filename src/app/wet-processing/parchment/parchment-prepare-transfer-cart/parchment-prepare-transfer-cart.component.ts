@@ -52,8 +52,8 @@ export class ParchmentPrepareTransferCartComponent extends BasicComponent implem
     this.filterForm = this.formBuilder.group({
       type: ['', Validators.minLength(3)],
       grade: ['', Validators.required],
-      date: this.formBuilder.group({
-        from: [],
+      producedDate: this.formBuilder.group({
+        from: [this.seasonStartingDate],
         to: [this.datePipe.transform(this.currentDate, 'yyyy-MM-dd')]
       }),
       amount: [''],
@@ -82,7 +82,7 @@ export class ParchmentPrepareTransferCartComponent extends BasicComponent implem
       this.loading = true;
       this.filter = this.filterForm.value;
       this.filter['org_id'.toString()] = this.authenticationService.getCurrentUser().info.org_id;
-      this.parchmentService.collectParchments(this.filter)
+      this.parchmentService.collectParchments(this.helper.cleanObject(this.filter))
         .subscribe(data => {
           this.items = data.data;
         }, (err) => {
