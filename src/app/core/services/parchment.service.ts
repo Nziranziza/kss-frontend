@@ -14,6 +14,11 @@ export class ParchmentService {
     return this.apiService.post('/parchment/cws_parchment/list', body);
   }
 
+  allWithFilter(body: any): Observable<any> {
+    return this.apiService.post('parchment/cws_parchment/org/list', body);
+  }
+
+
   collectParchments(body: any): Observable<any> {
     return this.apiService.post('/parchment/prepare/parchment', body);
   }

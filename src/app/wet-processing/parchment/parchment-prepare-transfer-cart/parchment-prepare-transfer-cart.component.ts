@@ -23,6 +23,7 @@ import {HelperService} from '../../../core/helpers';
 export class ParchmentPrepareTransferCartComponent extends BasicComponent implements OnInit, OnDestroy {
 
   filterForm: FormGroup;
+  transferForm: FormGroup;
   items = [];
   selectedItems = [];
   title = 'Prepare parchments transfer';
@@ -58,6 +59,12 @@ export class ParchmentPrepareTransferCartComponent extends BasicComponent implem
       }),
       amount: [''],
     });
+
+    this.transferForm = this.formBuilder.group({
+      destOrgId: ['', Validators.required],
+      transferType: ['', Validators.required]
+    });
+
     this.initialSearchValue = this.filterForm.value;
     this.organisationService.all().subscribe(data => {
       if (data) {
@@ -76,7 +83,6 @@ export class ParchmentPrepareTransferCartComponent extends BasicComponent implem
     this.onChange();
   }
 
-
   onFilter() {
     if (this.filterForm.valid) {
       this.loading = true;
@@ -91,6 +97,9 @@ export class ParchmentPrepareTransferCartComponent extends BasicComponent implem
     } else {
       this.setError(this.helper.getFormValidationErrors(this.filterForm));
     }
+  }
+
+  onTransfer() {
   }
 
   onClearFilter() {
