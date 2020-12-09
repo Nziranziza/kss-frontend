@@ -16,6 +16,7 @@ import {OrganisationSuppliersComponent} from './organisation-suppliers/organisat
 import {SupplierDeliveriesComponent} from './organisation-suppliers/supplier-deliveries/supplier-deliveries.component';
 import {OrganisationSettingsComponent} from './organisation-settings/settings/settings/organisation-settings.component';
 import {EditPaymentChannelComponent} from './organisation-settings/settings/edit-payment-channel/edit-payment-channel.component';
+import { EditCertificateComponent } from './organisation-settings/settings/edit-certificate/edit-certificate.component';
 
 @NgModule({
   declarations: [OrganisationListComponent, OrganisationEditComponent,
@@ -23,7 +24,8 @@ import {EditPaymentChannelComponent} from './organisation-settings/settings/edit
     OrganisationPendingFarmersComponent, OrganisationSuppliersComponent,
     SupplierDeliveriesComponent,
     OrganisationSettingsComponent,
-    EditPaymentChannelComponent
+    EditPaymentChannelComponent,
+    EditCertificateComponent
   ],
   imports: [
     CommonModule,

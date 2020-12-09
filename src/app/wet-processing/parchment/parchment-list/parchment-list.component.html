@@ -18,8 +18,110 @@
     </div>
   </div>
 </div>
+<app-list-warnings [warning]="warning"></app-list-warnings>
 <app-list-message [message]="message"></app-list-message>
 <app-list-errors [errorList]="errors"></app-list-errors>
+<div class="row filter-form" style="margin-top: 15px;">
+  <form [formGroup]="filterForm" (ngSubmit)="onFilter()">
+    <div class="col-xs-1">
+      <select class="form-control" formControlName="type">
+        <option value="">select type</option>
+        <option *ngFor="let type of coffeeTypes" value="{{type._id}}"> {{ type.name }}</option>
+      </select>
+    </div>
+    <div class="col-xs-1">
+      <select class="form-control" formControlName="grade">
+        <option value="">select grade</option>
+        <option value="A"> A </option>
+        <option value="B"> B </option>
+        <option value="C"> C </option>
+      </select>
+    </div>
+    <div class="col-xs-1">
+      <select class="form-control" formControlName="destOrgId">
+        <option value="">select destination</option>
+        <ng-container *ngFor="let organisation of organisations">
+          <option *ngIf="organisation.organizationRole.includes(2)" value="{{organisation._id}}"> {{
+            organisation?.organizationName }}
+          </option>
+        </ng-container>
+      </select>
+    </div>
+    <ng-container formGroupName="produced">
+      <div class="col-xs-1">
+        <div class="form-inline">
+          <label class="control-label">Produced</label>
+        </div>
+      </div>
+      <div class="col-xs-1">
+        <div class="form-group">
+          <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="from" class="form-control"
+                 placeholder="from ..">
+          <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+        </div>
+      </div>
+      <div class="col-xs-1">
+        <div class="form-group">
+          <input [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" formControlName="to" class="form-control"
+                 placeholder="to ..">
+          <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container formGroupName="released">
+      <div class="col-xs-1">
+        <div class="form-inline">
+          <label class="control-label">Released</label>
+        </div>
+      </div>
+      <div class="col-xs-1">
+        <div class="form-group">
+          <input [owlDateTimeTrigger]="dt3" [owlDateTime]="dt3" formControlName="from" class="form-control"
+                 placeholder="from ..">
+          <owl-date-time [pickerType]="'calendar'" #dt3></owl-date-time>
+        </div>
+      </div>
+      <div class="col-xs-1">
+        <div class="form-group">
+          <input [owlDateTimeTrigger]="dt4" [owlDateTime]="dt4" formControlName="to" class="form-control"
+                 placeholder="to ..">
+          <owl-date-time [pickerType]="'calendar'" #dt4></owl-date-time>
+        </div>
+      </div>
+    </ng-container>
+    <div class="col-xs-2">
+      <button class="btn btn-warning btn-margin pull-right" type="button" (click)="onClearFilter()">Clear</button>
+      <button class="btn btn-success btn-margin pull-right" type="submit"><i class="fa fa-search"></i> Search</button>
+    </div>
+  </form>
+</div>
+<div class="box-footer">
+  <div class="row">
+    <div class="col-sm-2 col-xs-4 top-col-statistics">
+      <div class="description-block border-right">
+        <h5 class="description-header text-green">{{ 0 | number }} &#13199;</h5>
+        <span class="description-text">Produced</span>
+      </div>
+      <!-- /.description-block -->
+    </div>
+    <!-- /.col -->
+    <div class="col-sm-2 col-xs-4 top-col-statistics">
+      <div class="description-block border-right">
+        <h5 class="description-header text-blue">{{ 0 | number }} &#13199;</h5>
+        <span class="description-text">Released</span>
+      </div>
+      <!-- /.description-block -->
+    </div>
+    <div class="col-sm-2 col-xs-4 top-col-statistics">
+      <div class="description-block border-right">
+        <h5 class="description-header text-red">{{ 0 | number }} &#13199;</h5>
+        <span class="description-text">Remaining</span>
+      </div>
+      <!-- /.description-block -->
+    </div>
+  </div>
+  <!-- /.row -->
+</div>
 <div class="row">
   <div class="col-xs-12">
     <div></div>
@@ -40,27 +142,29 @@
           </thead>
           <tbody>
           <tr *ngFor="let parchment of (parchments | orderBy : order:reverse) | paginate: config">
-            <td> {{ parchment.coffeeType.name }}</td>
-            <td> {{ parchment.coffeeGrade }}</td>
-            <td> {{ parchment.totalKgs }}</td>
-            <td> {{ parchment.lotNumber }}</td>
-            <td> {{ parchment.remainingQty }}</td>
-            <td> {{ parchment.created_at | date }}</td>
+            <td> {{ parchment.coffeeType.name }} </td>
+            <td> {{ parchment.coffeeGrade }} </td>
+            <td> {{ parchment.totalKgs }} </td>
+            <td> {{ parchment.lotNumber }} </td>
+            <td> {{ parchment.remainingQty }} </td>
+            <td> {{ parchment.created_at | date }} </td>
             <td>
-              <a appRequiredSeason *appHasPermission="[1]" routerLink="/admin/cws/parchments/transfer/{{parchment._id}}" class="btn btn-success btn-margin pull-right btn-sm" style="margin-left: 10px;">
-                <i class="fa fa-truck"></i> transfer
-              </a>
               <button class="btn btn-default btn-margin btn-sm pull-right" (click)="cancelParchment(parchment._id)"
                       type="button">
                 <i class="fa fa-remove" aria-hidden="true"></i> Cancel
               </button>
+              <!--
+                <a appRequiredSeason *appHasPermission="[1]" routerLink="/admin/cws/parchments/transfer/history/{{parchment._id}}" class="btn btn-success btn-margin pull-right btn-sm" style="margin-left: 10px;">
+                  <i class="fa fa-truck"></i> transfer history
+                </a>
+              -->
             </td>
           </tr>
           </tbody>
         </table>
         <div style="width: 100%;  border-top: 1px solid #0a0a0a;">
-          <div style=" clear: both; float: left; padding-top: 0.755em;">Showing {{(config.currentPage - 1)*
-            config.itemsPerPage + 1}} to {{config.currentPage* config.itemsPerPage}} of {{config.totalItems}} entries
+          <div style=" clear: both; float: left; padding-top: 0.755em;">Showing {{(config.currentPage - 1) *
+          config.itemsPerPage + 1}} to {{config.currentPage * config.itemsPerPage}} of {{config.totalItems}} entries
           </div>
           <pagination-controls class="custom-pagination"
                                [maxSize]="maxSize"

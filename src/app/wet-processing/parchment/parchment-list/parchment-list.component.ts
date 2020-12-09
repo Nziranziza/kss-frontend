@@ -1,12 +1,15 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ConfirmDialogService, MessageService} from '../../../core/services';
+import {CoffeeTypeService, ConfirmDialogService, MessageService, OrganisationService} from '../../../core/services';
 import {ParchmentService} from '../../../core/services';
 import {AuthenticationService} from '../../../core/services';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {ParchmentCreateComponent} from '../parchment-create/parchment-create.component';
 import {BasicComponent} from '../../../core/library';
+import {Subject} from 'rxjs';
+import {ParchmentCreateComponent} from '../parchment-create/parchment-create.component';
+import {HelperService} from '../../../core/helpers';
+import {DatePipe} from '@angular/common';
 
 @Component({
   selector: 'app-parchment-list',
@@ -26,8 +29,16 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
   id = 'parchments-list';
   parameters: any;
   config: any;
+  currentDate: any;
   autoHide = false;
   responsive = false;
+  organisations: any;
+  dtOptions: any = {};
+  totalQty = 0;
+  coffeeTypes = [];
+  initialSearchValue: any;
+  // @ts-ignore
+  dtTrigger: Subject = new Subject();
   labels: any = {
     previousLabel: 'Previous',
     nextLabel: 'Next',
@@ -36,10 +47,6 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
     screenReaderCurrentLabel: `You're on page`
   };
   loading = false;
-  searchFields = [
-    {value: 'date', name: 'date'},
-    {value: 'type', name: 'type'}
-  ];
   summary: any;
   filter: any;
   seasonStartingDate: string;
@@ -48,14 +55,22 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
               private router: Router,
               private formBuilder: FormBuilder,
               private messageService: MessageService,
+              private coffeeTypeService: CoffeeTypeService,
               private confirmDialogService: ConfirmDialogService,
+              private organisationService: OrganisationService,
               private modal: NgbModal,
+              private helper: HelperService,
+              private datePipe: DatePipe,
               private authenticationService: AuthenticationService) {
     super();
     this.parameters = {
       length: 25,
       start: 0,
       draw: 1
+    };
+    this.dtOptions = {
+      pagingType: 'full_numbers',
+      pageLength: 25
     };
   }
 
@@ -67,6 +82,7 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
       currentPage: 1,
       totalItems: 0
     };
+    this.currentDate = new Date();
     this.parchmentService.all(this.parameters)
       .subscribe(data => {
         this.parchments = data.data;
@@ -80,9 +96,34 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
       });
     this.setOrder('created_at');
     this.filterForm = this.formBuilder.group({
-      term: ['', Validators.minLength(3)],
-      searchBy: ['date']
+      type: [''],
+      grade: [''],
+      destOrgId: [''],
+      produced: this.formBuilder.group({
+        from: [this.seasonStartingDate],
+        to: [this.datePipe.transform(this.currentDate, 'yyyy-MM-dd')]
+      }),
+      released: this.formBuilder.group({
+        from: [this.seasonStartingDate],
+        to: [this.datePipe.transform(this.currentDate, 'yyyy-MM-dd')]
+      })
     });
+    this.initialSearchValue = this.filterForm.value;
+    this.organisationService.all().subscribe(data => {
+      if (data) {
+        this.organisations = data.content;
+      }
+    });
+    this.coffeeTypeService.all().subscribe((data) => {
+      data.content.map((item) => {
+        if (item.level === 'CWS') {
+          item.category.map((el) => {
+            this.coffeeTypes.push(el);
+          });
+        }
+      });
+    });
+    this.onChange();
     this.productionSummary();
     this.message = this.messageService.getMessage();
   }
@@ -146,7 +187,7 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
     if (this.filterForm.valid) {
       this.loading = true;
       this.parameters['search'.toString()] = this.filterForm.value;
-      this.parchmentService.all(this.parameters)
+      this.parchmentService.all(this.helper.cleanObject(this.parameters))
         .subscribe(data => {
           this.parchments = data.data;
           this.config = {
@@ -155,8 +196,14 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
             totalItems: data.recordsTotal
           };
           this.loading = false;
+        }, (err) => {
+          this.loading = false;
+          this.errors = err.errors;
         });
       this.setOrder('created_at');
+    } else {
+      this.loading = false;
+      this.errors = this.helper.getFormValidationErrors(this.filterForm);
     }
   }
 
@@ -189,7 +236,7 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
   }
 
   onClearFilter() {
-    this.filterForm.controls.term.reset();
+    this.filterForm.reset(this.initialSearchValue);
     delete this.parameters.search;
     this.parchmentService.all(this.parameters)
       .subscribe(data => {
@@ -201,6 +248,9 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
         };
       });
     this.setOrder('created_at');
+  }
+
+  onChange() {
   }
 
   ngOnDestroy(): void {
