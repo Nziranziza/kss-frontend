@@ -83,7 +83,7 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
       totalItems: 0
     };
     this.currentDate = new Date();
-    this.parchmentService.all(this.parameters)
+    this.parchmentService.allWithFilter(this.parameters)
       .subscribe(data => {
         this.parchments = data.data;
         if (this.parchments.length > 0) {
@@ -132,7 +132,7 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
     const modalRef = this.modal.open(ParchmentCreateComponent, {size: 'lg'});
     modalRef.result.then((message) => {
       this.setMessage(message);
-      this.parchmentService.all(this.parameters)
+      this.parchmentService.allWithFilter(this.parameters)
         .subscribe(data => {
           this.parchments = data.data;
           if (this.parchments.length > 0) {
@@ -153,7 +153,7 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
       this.parameters.start = (event - 1) * this.config.itemsPerPage;
     }
 
-    this.parchmentService.all(this.parameters)
+    this.parchmentService.allWithFilter(this.parameters)
       .subscribe(data => {
         this.parchments = data.data;
       });
@@ -187,7 +187,7 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
     if (this.filterForm.valid) {
       this.loading = true;
       this.parameters['search'.toString()] = this.filterForm.value;
-      this.parchmentService.all(this.helper.cleanObject(this.parameters))
+      this.parchmentService.allWithFilter(this.helper.cleanObject(this.parameters))
         .subscribe(data => {
           this.parchments = data.data;
           this.config = {
@@ -218,7 +218,7 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
           };
           this.parchmentService.cancelParchment(body).subscribe((response) => {
             this.setMessage(response.message);
-            this.parchmentService.all(this.parameters)
+            this.parchmentService.allWithFilter(this.parameters)
               .subscribe(data => {
                 this.parchments = data.data;
                 this.config = {
@@ -238,7 +238,7 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
   onClearFilter() {
     this.filterForm.reset(this.initialSearchValue);
     delete this.parameters.search;
-    this.parchmentService.all(this.parameters)
+    this.parchmentService.allWithFilter(this.parameters)
       .subscribe(data => {
         this.parchments = data.data;
         this.config = {
