@@ -73,7 +73,35 @@
           </li>
         </ul>
       </li>
-      <li class="treeview" routerLinkActive="active" *appHasPermission="[-1]">
+      <li class="treeview" routerLinkActive="active" *appHasPermission="[1]">
+        <a href="#">
+          <i class="fa fa-archive" aria-hidden="true"></i> <span>Parchments</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
+        </a>
+        <ul class="treeview-menu">
+          <li routerLinkActive="active" *appHasPermission="[1]">
+            <a routerLink="/admin/cws/parchments/list">
+              <i class="fa fa-circle-o"></i>
+              <span>Parchments</span>
+            </a>
+          </li>
+          <li routerLinkActive="active" *appHasPermission="[1]">
+            <a routerLink="/admin/cws/parchments/transfer/cart">
+              <i class="fa fa-circle-o"></i>
+              <span>Transfer parchments</span>
+            </a>
+          </li>
+          <li routerLinkActive="active" *appHasPermission="[1]">
+            <a routerLink="/admin/cws/parchments/transfer/history">
+              <i class="fa fa-circle-o"></i>
+              <span>Transfer history</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      <li class="treeview" routerLinkActive="active" *appHasPermission="[1]">
         <a href="#">
           <i class="fa fa-gg"></i> <span>Payments</span>
           <span class="pull-right-container">
@@ -108,12 +136,6 @@
             </a>
           </li>
         </ul>
-      </li>
-      <li routerLinkActive="active" *appHasPermission="[1]">
-        <a routerLink="/admin/cws/parchments/list">
-          <i class="fa fa-archive" aria-hidden="true"></i>
-          <span>Parchments</span>
-        </a>
       </li>
       <li class="header" *appHasPermission="[2]">DRY PROCESSING</li>
       <li routerLinkActive="active" *appHasPermission="[2]">
@@ -263,7 +285,7 @@
           </li>
         </ul>
       </li>
-      <li routerLinkActive="active" *appHasPermission="[-1]">
+      <li routerLinkActive="active" *appHasPermission="[1]">
         <a routerLink="/admin/settings/organisation/{{user.org_id}}">
           <i class="fa fa-cogs"></i>
           <span>Settings</span>

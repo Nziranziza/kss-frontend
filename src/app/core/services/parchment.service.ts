@@ -14,6 +14,10 @@ export class ParchmentService {
     return this.apiService.post('/parchment/cws_parchment/list', body);
   }
 
+  collectParchments(body: any): Observable<any> {
+    return this.apiService.post('/parchment/prepare/parchment', body);
+  }
+
   save(body: any) {
     return this.apiService.post('/parchment/record_parchment', body);
   }

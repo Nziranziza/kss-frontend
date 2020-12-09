@@ -14,10 +14,12 @@ import {GoogleChartsModule} from 'angular-google-charts';
 import {ParchmentReportComponent} from '../../reports/parchment-report/parchment-report.component';
 import {ParchmentReportDetailComponent} from '../../reports/parchment-report/parchment-report-detail/parchment-report-detail.component';
 import {SharedModule} from '../../shared';
+import {ParchmentPrepareTransferCartComponent} from './parchment-prepare-transfer-cart/parchment-prepare-transfer-cart.component';
+import { ParchmentListTransfersComponent } from './parchment-list-transfers/parchment-list-transfers.component';
 
 @NgModule({
   declarations: [ParchmentListComponent, ParchmentCreateComponent, ParchmentTransferComponent,
-    ParchmentReportComponent, ParchmentReportDetailComponent],
+    ParchmentReportComponent, ParchmentReportDetailComponent, ParchmentPrepareTransferCartComponent, ParchmentListTransfersComponent],
   imports: [
     CommonModule,
     ParchmentRoutingModule, NgbModule, NgxPaginationModule, OrderModule,
@@ -26,7 +28,7 @@ import {SharedModule} from '../../shared';
     OwlNativeDateTimeModule,
     OwlNativeDateTimeModule, BrowserAnimationsModule
   ],
-  exports: [ParchmentCreateComponent],
+  exports: [ParchmentCreateComponent, ParchmentPrepareTransferCartComponent],
   entryComponents: [ParchmentCreateComponent, ParchmentReportDetailComponent]
 })
 export class ParchmentModule {

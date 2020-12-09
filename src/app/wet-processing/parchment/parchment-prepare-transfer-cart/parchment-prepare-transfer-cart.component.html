@@ -1,0 +1,122 @@
+<div class="row">
+  <div class="col-xs-12">
+    <h3>
+      Prepare parchments transfer
+    </h3>
+  </div>
+</div>
+<app-list-message [message]="message"></app-list-message>
+<app-list-errors [errorList]="errors"></app-list-errors>
+<div class="row filter-form" style="margin-top: 15px;">
+  <form [formGroup]="filterForm" (ngSubmit)="onFilter()">
+    <div class="col-xs-2 input-required">
+      <select class="form-control" formControlName="type">
+        <option value="">select type</option>
+        <option *ngFor="let type of coffeeTypes" value="{{type._id}}"> {{ type.name }}</option>
+      </select>
+      <span class="asterisk"></span>
+    </div>
+    <div class="col-xs-2 input-required">
+      <select class="form-control" formControlName="grade">
+        <option value="">select grade</option>
+        <option value="A"> A</option>
+        <option value="B"> B</option>
+        <option value="C"> C</option>
+      </select>
+      <span class="asterisk"></span>
+    </div>
+    <ng-container formGroupName="date">
+      <div class="col-xs-1">
+        <div class="form-inline">
+          <label class="control-label label-optional">Produced </label>
+        </div>
+      </div>
+      <div class="col-xs-1">
+        <div class="form-group">
+          <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="from" class="form-control"
+                 placeholder="from ..">
+          <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+        </div>
+      </div>
+      <div class="col-xs-1">
+        <div class="form-group">
+          <input [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" formControlName="to" class="form-control label-optional"
+                 placeholder="to ..">
+          <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
+        </div>
+      </div>
+    </ng-container>
+    <div class="col-xs-2">
+      <div class="form-group">
+        <input type="text" formControlName="amount" class="form-control label-required" placeholder="amount .. (optional)">
+      </div>
+    </div>
+    <div class="col-xs-3">
+      <button class="btn btn-warning btn-margin pull-right" type="button" (click)="onClearFilter()"> Clear </button>
+
+      <button class="btn btn-success btn-margin pull-right" type="submit"><i class="fa fa-filter"></i> Filter</button>
+    </div>
+  </form>
+</div>
+<div class="row">
+  <div class="col-xs-12">
+    <app-loader *ngIf="loading"></app-loader>
+    <table class="row-border hover table table-striped">
+      <thead>
+      <tr>
+        <td> Coffee type</td>
+        <td> Coffee grade</td>
+        <td> Total Qty</td>
+        <td> Lots</td>
+        <td></td>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let item of items">
+        <td> {{ item.coffeeType.name }} </td>
+        <td> {{ item.coffeeGrade }} </td>
+        <td> {{ item.totalKgs }} </td>
+        <td></td>
+        <td>
+          <button class="btn btn-default btn-margin btn-sm pull-right" (click)="cancelItem(item.index)"
+                  type="button">
+            <i class="fa fa-remove" aria-hidden="true"></i> Cancel
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="box">
+      <div class="box-header with-border" style="min-height: 35px;">
+        <h3 class="box-title"> Cart </h3>
+        <div class="box-tools pull-right">
+          <button type="button" class="btn btn-box-tool" data-target="#box-body" data-toggle="collapse"><i
+            class="fa fa-shopping-cart"> 0 </i>
+          </button>
+        </div>
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body collapse" id="box-body">
+        <table class="row-border hover table table-striped">
+          <tbody>
+          <tr *ngFor="let item of selectedItems; let i = index">
+            <td> {{ item.coffeeType.name }} </td>
+            <td> {{ item.coffeeGrade }} </td>
+            <td> {{ item.totalKgs }} </td>
+            <td></td>
+            <td>
+              <button class="btn btn-default btn-margin btn-sm pull-right" (click)="cancelItem(i)" type="button">
+                <i class="fa fa-remove" aria-hidden="true"></i> Cancel
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

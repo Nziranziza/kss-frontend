@@ -1,5 +1,5 @@
 import {Component, Inject, Injector, OnInit, PLATFORM_ID} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {CoffeeTypeService, UserService} from '../../../core/services';
 import {HelperService} from '../../../core/helpers';
@@ -35,6 +35,8 @@ export class ParchmentCreateComponent extends BasicComponent implements OnInit {
   recordParchmentForm: FormGroup;
   errors: string[];
   coffeeTypes = [];
+  package: any;
+  totalKgs = 0;
   currentDate: any;
 
   ngOnInit() {
@@ -43,6 +45,7 @@ export class ParchmentCreateComponent extends BasicComponent implements OnInit {
       coffeeType: ['', Validators.required],
       coffeeGrade: ['A', Validators.required],
       date: ['', Validators.required],
+      package: new FormArray([]),
       totalKgs: ['', Validators.required],
       producedDate: [this.datePipe.transform(this.currentDate, 'yyyy-MM-dd'), Validators.required]
     });
@@ -55,6 +58,66 @@ export class ParchmentCreateComponent extends BasicComponent implements OnInit {
         }
       });
     });
+    this.onChange();
+    this.addPackage();
+  }
+
+  get formPackage() {
+    return this.recordParchmentForm.controls.package as FormArray;
+  }
+
+  addPackage() {
+    (this.recordParchmentForm.controls.package as FormArray).push(this.createPackage());
+  }
+
+  removePackage(index: number) {
+    (this.recordParchmentForm.controls.package as FormArray).removeAt(index);
+  }
+
+  getPackageFormGroup(index): FormGroup {
+    this.package = this.recordParchmentForm.controls.package as FormArray;
+    return this.package.controls[index] as FormGroup;
+  }
+
+  createPackage(): FormGroup {
+    return this.formBuilder.group({
+      bagSize: [''],
+      numberOfBags: [''],
+      subTotal: ['']
+    });
+  }
+
+  onChangePackageQty(index: number) {
+    const value = this.formPackage.value[index];
+    const subTotal = (+value.bagSize) * (+value.numberOfBags);
+    this.getPackageFormGroup(index).controls['subTotal'.toString()].setValue(subTotal);
+  }
+
+  onChangePackageSize(index: number) {
+    const value = this.formPackage.value[index];
+    let removed = false;
+    this.formPackage.value.forEach((el, i) => {
+      if (((value.bagSize) === el.bagSize) && (this.formPackage.value.length > 1) && (i !== index)) {
+        this.removePackage(index);
+        removed = true;
+      }
+    });
+    if (!removed) {
+      const subTotal = (+value.bagSize) * (+value.numberOfBags);
+      this.getPackageFormGroup(index).controls['subTotal'.toString()].setValue(subTotal);
+    }
+  }
+
+  onChange() {
+    this.formPackage.valueChanges.subscribe((values) => {
+      this.totalKgs = 0;
+      values.forEach((value) => {
+        if (value.bagSize && value.numberOfBags) {
+          this.totalKgs = this.totalKgs + (+value.bagSize) * (+value.numberOfBags);
+        }
+      });
+      this.recordParchmentForm.controls.totalKgs.setValue(this.totalKgs);
+    });
   }
 
   onSubmit() {
@@ -62,6 +125,7 @@ export class ParchmentCreateComponent extends BasicComponent implements OnInit {
       const parchment = JSON.parse(JSON.stringify(this.recordParchmentForm.value));
       parchment['org_id'.toString()] = this.authenticationService.getCurrentUser().info.org_id;
       parchment['userId'.toString()] = this.authenticationService.getCurrentUser().info._id;
+      console.log(parchment);
       this.parchmentService.save(parchment)
         .subscribe((data) => {
             this.modal.close(data.message);

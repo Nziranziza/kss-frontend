@@ -24,7 +24,7 @@
   border-color: #dca956;
 }
 
-.no-border>.table>tbody>tr>th, .no-border>.table>tfoot>tr>th, .no-border>.table>thead>tr>td, .no-border>.table>tbody>tr>td, .no-border>.table>tfoot>tr>td {
+.no-border > .table > tbody > tr > th, .no-border > .table > tfoot > tr > th, .no-border > .table > thead > tr > td, .no-border > .table > tbody > tr > td, .no-border > .table > tfoot > tr > td {
   border-top: none;
 }
 
@@ -49,6 +49,31 @@ html, body {
   content: '*';
   color: #ff0f0f;
   padding-left: 5px;
+}
+
+.label-optional:after {
+  content: '(opt)';
+  color: #dca956;
+  font-size: 12px;
+  font-weight: 300;
+  position: absolute;
+}
+
+form .input-required .asterisk:before {
+  color: #ff0f0f;
+  content: "*";
+  position: relative;
+  margin-left: 5px;
+}
+
+form .input-required input,
+form .input-required select,
+form .input-required textarea {
+  width: 95%;
+}
+
+form .input-required {
+  display: flex;
 }
 
 .box {

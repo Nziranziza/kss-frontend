@@ -25,11 +25,22 @@ export class HelperService {
   }
 
   cleanObject(obj) {
-    for (const propName in obj) {
-      if (obj[propName] === '' || obj[propName] === undefined || obj[propName] === null) {
-        delete obj[propName];
-      }
+    if (obj !== '' && obj !== undefined && obj !== null) {
+      Object.keys(obj).forEach(key => {
+        if (typeof obj[key] === 'object') {
+          obj[key] = this.cleanObject(obj[key]);
+          if (JSON.stringify(obj[key]) === '{}') {
+            delete obj[key];
+          }
+        }
+        if (obj[key] === '' || obj[key] === undefined || obj[key] === null) {
+          delete obj[key];
+        }
+      });
+    } else {
+      return ;
     }
+    return obj;
   }
 
   getProvinceName(id: string) {
