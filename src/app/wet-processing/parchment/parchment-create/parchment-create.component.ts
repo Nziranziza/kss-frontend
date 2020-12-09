@@ -83,7 +83,7 @@ export class ParchmentCreateComponent extends BasicComponent implements OnInit {
     return this.formBuilder.group({
       bagSize: [''],
       numberOfBags: [''],
-      subTotal: ['']
+      subTotal: [0]
     });
   }
 
