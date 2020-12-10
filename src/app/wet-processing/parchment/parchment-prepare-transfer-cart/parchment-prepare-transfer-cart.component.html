@@ -48,11 +48,12 @@
     </ng-container>
     <div class="col-xs-2">
       <div class="form-group">
-        <input type="text" formControlName="amount" class="form-control label-required" placeholder="amount .. (optional)">
+        <input type="text" formControlName="amount" class="form-control label-required"
+               placeholder="amount .. (optional)">
       </div>
     </div>
     <div class="col-xs-3">
-      <button class="btn btn-warning btn-margin pull-right" type="button" (click)="onClearFilter()"> Clear </button>
+      <button class="btn btn-warning btn-margin pull-right" type="button" (click)="onClearFilter()"> Clear</button>
 
       <button class="btn btn-success btn-margin pull-right" type="submit"><i class="fa fa-filter"></i> Filter</button>
     </div>
@@ -72,15 +73,25 @@
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let item of items">
-        <td> {{ item.coffeeType.name }} </td>
-        <td> {{ item.coffeeGrade }} </td>
-        <td> {{ item.totalKgs }} </td>
-        <td></td>
+      <tr>
+        <td> {{ lotsSetSummary.coffeeType }} </td>
+        <td> {{ lotsSetSummary.coffeeGrade }} </td>
+        <td> {{ lotsSetSummary.totalKgs + ' &#13199;'}} </td>
         <td>
-          <button class="btn btn-default btn-margin btn-sm pull-right" (click)="cancelItem(item.index)"
+          <button *ngFor="let lot of lotsSet; let i = index" type="button" class="btn btn-sm btn-link"
+                  data-container="body" data-toggle="popover" data-placement="top"
+                  [attr.data-content]="'Total Qty : ' + lot.totalKgs + ' &#13199;'">
+            {{ lot.lotNumber }}
+          </button>
+        </td>
+        <td>
+          <button class="btn btn-default btn-margin btn-sm pull-right" (click)="cancelLotsSet()"
                   type="button">
-            <i class="fa fa-remove" aria-hidden="true"></i> Cancel
+            <i class="fa fa-remove" aria-hidden="true"></i>
+          </button>
+          <button class="btn btn-success btn-margin btn-sm pull-right" (click)="addLotsSetToCart()"
+                  type="button">
+            <i class="fa fa-cart-plus" aria-hidden="true"></i>
           </button>
         </td>
       </tr>
@@ -94,23 +105,39 @@
       <div class="box-header with-border" style="min-height: 35px;">
         <h3 class="box-title"> Cart </h3>
         <div class="box-tools pull-right">
-          <button type="button" class="btn btn-box-tool" data-target="#box-body" data-toggle="collapse" style="font-size: 15px; color: #367fa9">
-            <i class="fa fa-shopping-cart">  </i> {{ 0 | number }} &#13199;
+          <button type="button" class="btn btn-box-tool" data-target="#box-body" data-toggle="collapse"
+                  style="font-size: 15px; color: #367fa9">
+            <i class="fa fa-shopping-cart"> </i> {{ 0 | number }} &#13199;
           </button>
         </div>
       </div>
       <!-- /.box-header -->
       <div class="box-body collapse in" id="box-body">
         <table class="row-border hover table table-striped">
-          <tbody>
-          <tr *ngFor="let item of selectedItems; let i = index">
-            <td> {{ item.coffeeType.name }} </td>
-            <td> {{ item.coffeeGrade }} </td>
-            <td> {{ item.totalKgs }} </td>
+          <thead>
+          <tr>
+            <td> Coffee type</td>
+            <td> Coffee grade</td>
+            <td> Total Qty</td>
+            <td> Lots</td>
             <td></td>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let item of cart; let i = index">
+            <td> {{ item.lotsSetSummary.coffeeType }} </td>
+            <td> {{ item.lotsSetSummary.coffeeGrade }} </td>
+            <td> {{ item.lotsSetSummary.lotsSetTotalKgs }} </td>
             <td>
-              <button class="btn btn-default btn-margin btn-sm pull-right" (click)="cancelItem(i)" type="button">
-                <i class="fa fa-remove" aria-hidden="true"></i> Cancel
+              <button *ngFor="let lot of item.lotsSet; let i = index" type="button" class="btn btn-sm btn-link"
+                      data-container="body" data-toggle="popover" data-placement="top"
+                      [attr.data-content]="'Total Qty : ' + lot.totalKgs + ' &#13199;'">
+                {{ lot.lotNumber }}
+              </button>
+            </td>
+            <td>
+              <button class="btn btn-default btn-margin btn-sm pull-right" (click)="cancelCartItem(i)" type="button">
+                <i class="fa fa-remove" aria-hidden="true"></i>
               </button>
             </td>
           </tr>
@@ -145,7 +172,8 @@
               </div>
             </div>
             <div class="col-xs-2">
-              <button class="btn btn-success btn-margin pull-right" type="submit"><i class="fa fa-truck"></i> Transfer </button>
+              <button class="btn btn-success btn-margin pull-right" type="submit"><i class="fa fa-truck"></i> Transfer
+              </button>
             </div>
           </form>
         </div>

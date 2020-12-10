@@ -32,7 +32,6 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
   currentDate: any;
   autoHide = false;
   responsive = false;
-  organisations: any;
   dtOptions: any = {};
   totalQty = 0;
   coffeeTypes = [];
@@ -98,22 +97,16 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
     this.filterForm = this.formBuilder.group({
       type: [''],
       grade: [''],
-      destOrgId: [''],
-      produced: this.formBuilder.group({
+      producedDate: this.formBuilder.group({
         from: [this.seasonStartingDate],
         to: [this.datePipe.transform(this.currentDate, 'yyyy-MM-dd')]
       }),
-      released: this.formBuilder.group({
+      releaseDate: this.formBuilder.group({
         from: [this.seasonStartingDate],
         to: [this.datePipe.transform(this.currentDate, 'yyyy-MM-dd')]
       })
     });
     this.initialSearchValue = this.filterForm.value;
-    this.organisationService.all().subscribe(data => {
-      if (data) {
-        this.organisations = data.content;
-      }
-    });
     this.coffeeTypeService.all().subscribe((data) => {
       data.content.map((item) => {
         if (item.level === 'CWS') {
@@ -143,6 +136,7 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
             };
           }
         });
+      this.productionSummary();
     });
     this.setOrder('created_at');
   }
@@ -168,6 +162,7 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
   }
 
   productionSummary() {
+    console.log('summary');
     this.filter = {
       date: {
         from: this.seasonStartingDate,
@@ -231,6 +226,7 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
           }, (err) => {
             this.setError(err.errors);
           });
+          this.productionSummary();
         }
       });
   }

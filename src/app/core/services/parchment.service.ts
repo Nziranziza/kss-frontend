@@ -15,7 +15,7 @@ export class ParchmentService {
   }
 
   allWithFilter(body: any): Observable<any> {
-    return this.apiService.post('parchment/cws_parchment/org/list', body);
+    return this.apiService.post('/parchment/cws_parchment/org/list', body);
   }
 
 
