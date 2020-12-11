@@ -124,7 +124,7 @@ export class ParchmentPrepareTransferCartComponent extends BasicComponent implem
         const items = [];
         this.cart.map((item) => {
           const itm = {
-            type: item.lotsSetSummary.coffeeType,
+            type: item.lotsSetSummary.coffeeType._id,
             grade: item.lotsSetSummary.coffeeGrade,
             totalKgs: item.lotsSetSummary.totalKgs,
             parchments: []
