@@ -228,12 +228,12 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
                   currentPage: this.parameters.start + 1,
                   totalItems: data.recordsTotal
                 };
+                this.productionSummary();
               });
             this.setOrder('created_at');
           }, (err) => {
             this.setError(err.errors);
           });
-          this.productionSummary();
         }
       });
   }
