@@ -5,7 +5,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {
   AuthenticationService,
   CoffeeTypeService,
-  ConfirmDialogService,
+  ConfirmDialogService, MessageService,
   OrganisationService,
   ParchmentService
 } from '../../../core/services';
@@ -26,53 +26,7 @@ export class ParchmentPrepareTransferCartComponent extends BasicComponent implem
 
   filterForm: FormGroup;
   transferForm: FormGroup;
-  lotsSet = [
-    {
-      _id: '5fd0f3e746c1af31c9f70732',
-      organization: {
-        _id: '5d1635ac60c3dd116164d4ae',
-        name: 'Nkara/Dukundekawa II',
-        prov_id: '5bf8170953d485a9eae4b41a',
-        dist_id: '5bf8171e53d485a9eae4b434',
-        sect_id: '5bfd8dbf91703530fcb9b2f2',
-        cell_id: '5bf816d753d485a9eae4b016',
-        village_id: '5bf8163553d485a9eae45466'
-      },
-      cherriesSupplyDate: '2020-11-30T22:00:00.000Z',
-      producedDate: '2020-12-09T00:00:00.000Z',
-      coffeeGrade: 'A',
-      coffeeType: {
-        _id: '5d357e6a7965873efa4f9b8f',
-        name: 'Honey washed'
-      },
-      season: {
-        _id: '5fd0f3e746c1af31c9f70733',
-        seasonId: '5f7cf3b6459cd90b920092b8',
-        name: '20A'
-      },
-      lotNumber: '201130/PHW/1015',
-      package: [
-        {
-          _id: '5fd0f3e746c1af31c9f70734',
-          bagSize: 50,
-          numberOfBags: 20,
-          subTotal: 1000
-        }
-      ],
-      totalKgs: 1000,
-      remainingQty: 1000,
-      recordedBy: {
-        _id: '5fd0f3e746c1af31c9f70735',
-        userId: '5d1c5be629df995f135ad41b',
-        foreName: 'JOSEPH',
-        surname: 'RUKUNDO'
-      },
-      destinationOrg: [],
-      updatedAt: '2020-12-09T15:57:27.417Z',
-      created_at: '2020-12-09T15:57:27.417Z',
-      __v: 0
-    }
-  ];
+  lotsSet = [];
   cart = [];
   title = 'Prepare parchments transfer';
   organisations: any;
@@ -80,14 +34,9 @@ export class ParchmentPrepareTransferCartComponent extends BasicComponent implem
   initialSearchValue: any;
   filter: any;
   seasonStartingDate: string;
-  lotsSetSummary = {
-    coffeeType: 'Full washed',
-    coffeeGrade: 'A',
-    totalKgs: 0,
-    addedToCart: false
-  };
+  lotsSetSummary: any;
   currentDate: any;
-  lotsSetTotalKgs = 0;
+  totalAmountToTransfer = 0;
 
   constructor(private parchmentService: ParchmentService,
               private router: Router,
@@ -96,6 +45,7 @@ export class ParchmentPrepareTransferCartComponent extends BasicComponent implem
               private confirmDialogService: ConfirmDialogService,
               private organisationService: OrganisationService,
               private modal: NgbModal,
+              private messageService: MessageService,
               private datePipe: DatePipe,
               private helper: HelperService,
               private authenticationService: AuthenticationService) {
@@ -106,17 +56,18 @@ export class ParchmentPrepareTransferCartComponent extends BasicComponent implem
     $(document).ready(() => {
       $('[data-toggle="popover"]').popover();
     });
-    this.currentDate = new Date();
-    this.seasonStartingDate = this.authenticationService.getCurrentSeason().created_at;
+    this.currentDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
+    this.seasonStartingDate = this.datePipe.transform(this.authenticationService.getCurrentSeason().created_at, 'yyyy-MM-dd');
     this.filterForm = this.formBuilder.group({
       type: ['', Validators.minLength(3)],
       grade: ['', Validators.required],
       producedDate: this.formBuilder.group({
         from: [this.seasonStartingDate],
-        to: [this.datePipe.transform(this.currentDate, 'yyyy-MM-dd')]
+        to: [this.currentDate]
       }),
       amount: [''],
     });
+    this.resetFilter();
     this.lotsSet.forEach(itm => this.lotsSetSummary.totalKgs += itm.totalKgs);
     this.transferForm = this.formBuilder.group({
       destOrgId: ['', Validators.required],
@@ -151,9 +102,9 @@ export class ParchmentPrepareTransferCartComponent extends BasicComponent implem
           this.lotsSetSummary.totalKgs = 0;
           this.lotsSet = data.content;
           this.loading = false;
-          this.lotsSet.forEach(itm => this.lotsSetSummary.totalKgs += itm.totalKgs);
+          this.lotsSet.forEach(itm => this.lotsSetSummary.totalKgs += itm.amountToTransfer);
           this.lotsSetSummary.coffeeGrade = this.filter.grade;
-          this.lotsSetSummary.coffeeType = this.coffeeTypes.find(t => t._id === this.filter.type).name;
+          this.lotsSetSummary.coffeeType = this.coffeeTypes.find(t => t._id === this.filter.type);
         }, (err) => {
           this.setError(err.errors);
 
@@ -164,32 +115,86 @@ export class ParchmentPrepareTransferCartComponent extends BasicComponent implem
   }
 
   onTransfer() {
+    if (this.cart.length !== 0) {
+      if (this.transferForm.valid) {
+        let payload = {
+          totalAmountToTransfer: this.totalAmountToTransfer,
+          items: []
+        };
+        const items = [];
+        this.cart.map((item) => {
+          const itm = {
+            type: item.lotsSetSummary.type,
+            grade: item.lotsSetSummary.grade,
+            totalKgs: item.lotsSetSummary.totalKgs,
+            parchments: []
+          };
+          const parchments = [];
+          item.lotsSet.map((lot) => {
+            parchments.push({
+              parchmentId: lot._id,
+              amountToTransfer: lot.amountToTransfer
+            });
+          });
+          itm.parchments = parchments;
+          items.push(itm);
+        });
+        payload.items = items;
+        payload = {...payload, ...this.transferForm.value};
+        this.parchmentService.transferCart(payload)
+          .subscribe(() => {
+              this.messageService.setMessage('Transfer successfully recorded');
+              this.router.navigateByUrl('admin/cws/parchments/transfer/history');
+            },
+            (err) => {
+              this.errors = err.errors;
+            });
+
+      } else {
+        this.setError(this.helper.getFormValidationErrors(this.transferForm));
+      }
+    } else {
+      this.setError(['Please add at least one(1) item to cart before transfer']);
+
+    }
+
   }
 
   onClearFilter() {
     this.filterForm.reset(this.initialSearchValue);
-    this.lotsSet = [];
+    this.resetFilter();
   }
 
   cancelCartItem(i: number) {
-    delete this.cart[i];
+    this.totalAmountToTransfer -= this.cart[i].lotsSetSummary.totalKgs;
+    this.cart.splice(i, 1);
   }
 
   onChange() {
   }
 
-  cancelLotsSet() {
-    this.lotsSet = [];
-  }
-
   addLotsSetToCart() {
-    if (!this.lotsSetSummary.addedToCart) {
+    if (this.lotsSet.length !== 0 && !this.lotsSetSummary.addedToCart) {
       this.lotsSetSummary['addedToCart'.toString()] = true;
+      this.totalAmountToTransfer += this.lotsSetSummary.totalKgs;
       this.cart.push({
         lotsSetSummary: this.lotsSetSummary,
         lotsSet: this.lotsSet,
       });
     }
+  }
+
+  resetFilter() {
+    this.lotsSetSummary = {
+      coffeeType: {
+        name: '',
+        _id: ''
+      },
+      coffeeGrade: '',
+      totalKgs: 0,
+      addedToCart: false
+    };
+    this.lotsSet = [];
   }
 
   ngOnDestroy(): void {

@@ -34,14 +34,14 @@
       <div class="col-xs-1">
         <div class="form-group">
           <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="from" class="form-control"
-                 placeholder="from ..">
+                 placeholder="from .." [min]="seasonStartingDate" [max]="currentDate">
           <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
         </div>
       </div>
       <div class="col-xs-1">
         <div class="form-group">
           <input [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" formControlName="to" class="form-control label-optional"
-                 placeholder="to ..">
+                 placeholder="to .." [min]="seasonStartingDate" [max]="currentDate">
           <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
         </div>
       </div>
@@ -55,7 +55,7 @@
     <div class="col-xs-3">
       <button class="btn btn-warning btn-margin pull-right" type="button" (click)="onClearFilter()"> Clear</button>
 
-      <button class="btn btn-success btn-margin pull-right" type="submit"><i class="fa fa-filter"></i> Filter</button>
+      <button class="btn btn-success btn-margin pull-right" type="submit"><i class="fa fa-filter"></i> Select</button>
     </div>
   </form>
 </div>
@@ -74,18 +74,17 @@
       </thead>
       <tbody>
       <tr>
-        <td> {{ lotsSetSummary.coffeeType }} </td>
+        <td> {{ lotsSetSummary.coffeeType.name }} </td>
         <td> {{ lotsSetSummary.coffeeGrade }} </td>
         <td> {{ lotsSetSummary.totalKgs + ' &#13199;'}} </td>
         <td>
           <button *ngFor="let lot of lotsSet; let i = index" type="button" class="btn btn-sm btn-link"
-                  data-container="body" data-toggle="popover" data-placement="top"
-                  [attr.data-content]="'Total Qty : ' + lot.totalKgs + ' &#13199;'">
+                  ngbPopover="{{ 'Remaining Qty : ' + lot.remainingQty + '&#13199; ' + ' ; Qty to transfer : ' + lot.amountToTransfer + ' &#13199; ' }}" container="body">
             {{ lot.lotNumber }}
           </button>
         </td>
         <td>
-          <button class="btn btn-default btn-margin btn-sm pull-right" (click)="cancelLotsSet()"
+          <button class="btn btn-default btn-margin btn-sm pull-right" (click)="resetFilter()"
                   type="button">
             <i class="fa fa-remove" aria-hidden="true"></i>
           </button>
@@ -105,10 +104,10 @@
       <div class="box-header with-border" style="min-height: 35px;">
         <h3 class="box-title"> Cart </h3>
         <div class="box-tools pull-right">
-          <button type="button" class="btn btn-box-tool" data-target="#box-body" data-toggle="collapse"
-                  style="font-size: 15px; color: #367fa9">
-            <i class="fa fa-shopping-cart"> </i> {{ 0 | number }} &#13199;
-          </button>
+          <a class="btn btn-box-tool" data-target="#box-body" data-toggle="collapse" style="padding: 10px; height: auto">
+            <span class="badge bg-light-blue-gradient">{{ cart.length }} items</span>
+            {{ totalAmountToTransfer | number }} &#13199;
+          </a>
         </div>
       </div>
       <!-- /.box-header -->
@@ -125,13 +124,12 @@
           </thead>
           <tbody>
           <tr *ngFor="let item of cart; let i = index">
-            <td> {{ item.lotsSetSummary.coffeeType }} </td>
+            <td> {{ item.lotsSetSummary.coffeeType.name }} </td>
             <td> {{ item.lotsSetSummary.coffeeGrade }} </td>
-            <td> {{ item.lotsSetSummary.lotsSetTotalKgs }} </td>
+            <td> {{ item.lotsSetSummary.totalKgs }}  &#13199;</td>
             <td>
               <button *ngFor="let lot of item.lotsSet; let i = index" type="button" class="btn btn-sm btn-link"
-                      data-container="body" data-toggle="popover" data-placement="top"
-                      [attr.data-content]="'Total Qty : ' + lot.totalKgs + ' &#13199;'">
+                      ngbPopover="{{ 'Remaining Qty : ' + lot.remainingQty + '&#13199; ' + ' ; Qty to transfer : ' + lot.amountToTransfer + ' &#13199; ' }}" container="body">
                 {{ lot.lotNumber }}
               </button>
             </td>

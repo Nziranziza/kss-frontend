@@ -10,6 +10,7 @@ import {Subject} from 'rxjs';
 import {ParchmentCreateComponent} from '../parchment-create/parchment-create.component';
 import {HelperService} from '../../../core/helpers';
 import {DatePipe} from '@angular/common';
+import {isArray} from 'util';
 
 @Component({
   selector: 'app-parchment-list',
@@ -75,13 +76,13 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
 
   ngOnInit(): void {
     this.parameters['org_id'.toString()] = this.authenticationService.getCurrentUser().info.org_id;
-    this.seasonStartingDate = this.authenticationService.getCurrentSeason().created_at;
+    this.seasonStartingDate = this.datePipe.transform(this.authenticationService.getCurrentSeason().created_at, 'yyyy-MM-dd');
+    this.currentDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
     this.config = {
       itemsPerPage: 10,
       currentPage: 1,
       totalItems: 0
     };
-    this.currentDate = new Date();
     this.parchmentService.allWithFilter(this.parameters)
       .subscribe(data => {
         this.parchments = data.data;
@@ -99,11 +100,11 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
       grade: [''],
       producedDate: this.formBuilder.group({
         from: [this.seasonStartingDate],
-        to: [this.datePipe.transform(this.currentDate, 'yyyy-MM-dd')]
+        to: [this.currentDate]
       }),
       releaseDate: this.formBuilder.group({
-        from: [this.seasonStartingDate],
-        to: [this.datePipe.transform(this.currentDate, 'yyyy-MM-dd')]
+        from: [''],
+        to: ['']
       })
     });
     this.initialSearchValue = this.filterForm.value;
@@ -135,8 +136,8 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
               totalItems: data.recordsTotal
             };
           }
+          this.productionSummary();
         });
-      this.productionSummary();
     });
     this.setOrder('created_at');
   }
@@ -162,11 +163,10 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
   }
 
   productionSummary() {
-    console.log('summary');
     this.filter = {
       date: {
         from: this.seasonStartingDate,
-        to: new Date()
+        to: this.currentDate
       },
       location: {
         searchBy: 'cws',
@@ -175,6 +175,7 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
     };
     this.parchmentService.detailedReport(this.filter).subscribe((data) => {
       this.summary = data.content[0].parchments;
+      console.log(this.summary);
     });
   }
 
@@ -182,6 +183,12 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
     if (this.filterForm.valid) {
       this.loading = true;
       this.parameters['search'.toString()] = this.filterForm.value;
+      if (isArray(this.parameters.search.producedDate.from)) {
+        this.parameters.search.producedDate.from = this.parameters.search.producedDate.from[0];
+      }
+      if (isArray(this.parameters.search.producedDate.to)) {
+        this.parameters.search.producedDate.to = this.parameters.search.producedDate.to[1];
+      }
       this.parchmentService.allWithFilter(this.helper.cleanObject(this.parameters))
         .subscribe(data => {
           this.parchments = data.data;
