@@ -67,7 +67,7 @@ export class ParchmentPrepareTransferCartComponent extends BasicComponent implem
       }),
       amount: [''],
     });
-    this.resetFilter();
+    this.resetSelection();
     this.lotsSet.forEach(itm => this.lotsSetSummary.totalKgs += itm.totalKgs);
     this.transferForm = this.formBuilder.group({
       destOrgId: ['', Validators.required],
@@ -101,13 +101,13 @@ export class ParchmentPrepareTransferCartComponent extends BasicComponent implem
         .subscribe(data => {
           this.lotsSetSummary.totalKgs = 0;
           this.lotsSet = data.content;
+          this.lotsSetSummary['addedToCart'.toString()] = false;
           this.loading = false;
           this.lotsSet.forEach(itm => this.lotsSetSummary.totalKgs += itm.amountToTransfer);
           this.lotsSetSummary.coffeeGrade = this.filter.grade;
           this.lotsSetSummary.coffeeType = this.coffeeTypes.find(t => t._id === this.filter.type);
         }, (err) => {
           this.setError(err.errors);
-
         });
     } else {
       this.setError(this.helper.getFormValidationErrors(this.filterForm));
@@ -162,7 +162,7 @@ export class ParchmentPrepareTransferCartComponent extends BasicComponent implem
 
   onClearFilter() {
     this.filterForm.reset(this.initialSearchValue);
-    this.resetFilter();
+    this.resetSelection();
   }
 
   cancelCartItem(i: number) {
@@ -178,13 +178,14 @@ export class ParchmentPrepareTransferCartComponent extends BasicComponent implem
       this.lotsSetSummary['addedToCart'.toString()] = true;
       this.totalAmountToTransfer += this.lotsSetSummary.totalKgs;
       this.cart.push({
-        lotsSetSummary: this.lotsSetSummary,
-        lotsSet: this.lotsSet,
+        lotsSetSummary: JSON.parse(JSON.stringify(this.lotsSetSummary)),
+        lotsSet: JSON.parse(JSON.stringify(this.lotsSet)),
       });
     }
+    this.resetSelection();
   }
 
-  resetFilter() {
+  resetSelection() {
     this.lotsSetSummary = {
       coffeeType: {
         name: '',
