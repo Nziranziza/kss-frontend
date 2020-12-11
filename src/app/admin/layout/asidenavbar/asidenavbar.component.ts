@@ -17,7 +17,6 @@ export class AsidenavbarComponent implements OnInit {
   parameters: any;
   user: any;
   roles: any;
-
   constructor(private router: Router, private authenticationService: AuthenticationService) {
   }
 

@@ -26,6 +26,8 @@
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.js",
+              "src/assets/bower_components/bootstrap/js/popper.min.js",
+              "src/assets/bower_components/bootstrap/js/tooltip.js",
               "src/assets/bower_components/bootstrap/dist/js/bootstrap.min.js",
               "src/assets/bower_components/jquery-sparkline/dist/jquery.sparkline.min.js",
               "src/assets/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js",

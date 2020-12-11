@@ -31,6 +31,10 @@ export class ParchmentService {
     return this.apiService.get('/parchment/cws_parchment/' + orgId + '/' + id);
   }
 
+  transferCart(body: any) {
+    return this.apiService.post('/parchment/transfer_parchment/cart', body);
+  }
+
   transfer(body: any) {
     return this.apiService.post('/parchment/transfer_parchment', body);
   }
