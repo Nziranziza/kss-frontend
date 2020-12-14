@@ -14,6 +14,7 @@ import {Router} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {DatePipe} from '@angular/common';
 import {HelperService} from '../../../core/helpers';
+import {ParchmentTransferService} from '../../../core/services/parchment-transfer.service';
 
 declare var $;
 
@@ -37,6 +38,8 @@ export class ParchmentPrepareTransferCartComponent extends BasicComponent implem
   lotsSetSummary: any;
   currentDate: any;
   totalAmountToTransfer = 0;
+  itemIndex: number;
+  requestedAmount: number;
 
   constructor(private parchmentService: ParchmentService,
               private router: Router,
@@ -46,6 +49,7 @@ export class ParchmentPrepareTransferCartComponent extends BasicComponent implem
               private organisationService: OrganisationService,
               private modal: NgbModal,
               private messageService: MessageService,
+              private parchmentTransferService: ParchmentTransferService,
               private datePipe: DatePipe,
               private helper: HelperService,
               private authenticationService: AuthenticationService) {
@@ -89,24 +93,32 @@ export class ParchmentPrepareTransferCartComponent extends BasicComponent implem
         }
       });
     });
+    this.cart = this.parchmentTransferService.getCart();
+    this.getTotalAmountToTransfer();
     this.onChange();
   }
 
   onFilter() {
     if (this.filterForm.valid) {
       this.loading = true;
-      this.filter = this.filterForm.value;
+      this.filter = JSON.parse(JSON.stringify(this.filterForm.value));
       this.filter['org_id'.toString()] = this.authenticationService.getCurrentUser().info.org_id;
-      this.parchmentService.collectParchments(this.helper.cleanObject(this.filter))
+      this.itemIndex = this.cart.findIndex(item => (item.lotsSetSummary.coffeeGrade === this.filter.grade
+        && item.lotsSetSummary.coffeeType._id === this.filter.type));
+      this.filter = this.helper.cleanObject(this.filter);
+      if (this.itemIndex !== -1 && this.filter.amount) {
+        this.filter.amount = +this.filter.amount  + this.cart[this.itemIndex].lotsSetSummary.totalKgs;
+      }
+      this.parchmentService.collectParchments(this.filter)
         .subscribe(data => {
           this.lotsSetSummary.totalKgs = 0;
           this.lotsSet = data.content;
           this.lotsSetSummary['addedToCart'.toString()] = false;
           this.loading = false;
-          this.lotsSet.forEach(itm => this.lotsSetSummary.totalKgs += itm.amountToTransfer);
+          this.lotsSet.forEach(itm => this.lotsSetSummary.totalKgs += (+itm.amountToTransfer));
           this.lotsSetSummary.coffeeGrade = this.filter.grade;
           this.lotsSetSummary.coffeeType = this.coffeeTypes.find(t => t._id === this.filter.type);
-        }, (err) => {
+          }, (err) => {
           this.setError(err.errors);
         });
     } else {
@@ -144,6 +156,7 @@ export class ParchmentPrepareTransferCartComponent extends BasicComponent implem
         this.parchmentService.transferCart(payload)
           .subscribe(() => {
               this.messageService.setMessage('Transfer successfully recorded');
+              this.parchmentTransferService.resetCart();
               this.router.navigateByUrl('admin/cws/parchments/transfer/history');
             },
             (err) => {
@@ -168,20 +181,24 @@ export class ParchmentPrepareTransferCartComponent extends BasicComponent implem
   cancelCartItem(i: number) {
     this.totalAmountToTransfer -= this.cart[i].lotsSetSummary.totalKgs;
     this.cart.splice(i, 1);
+    this.parchmentTransferService.setCart(this.cart);
   }
 
   onChange() {
   }
 
   addLotsSetToCart() {
-    if (this.lotsSet.length !== 0 && !this.lotsSetSummary.addedToCart) {
-      this.lotsSetSummary['addedToCart'.toString()] = true;
+    if (this.lotsSet.length !== 0) {
+      if (this.itemIndex !== -1) {
+        this.cart.splice(this.itemIndex, 1);
+      }
       this.totalAmountToTransfer += this.lotsSetSummary.totalKgs;
       this.cart.push({
         lotsSetSummary: JSON.parse(JSON.stringify(this.lotsSetSummary)),
         lotsSet: JSON.parse(JSON.stringify(this.lotsSet)),
       });
     }
+    this.parchmentTransferService.setCart(this.cart);
     this.resetSelection();
   }
 
@@ -192,10 +209,14 @@ export class ParchmentPrepareTransferCartComponent extends BasicComponent implem
         _id: ''
       },
       coffeeGrade: '',
-      totalKgs: 0,
-      addedToCart: false
+      totalKgs: 0
     };
     this.lotsSet = [];
+  }
+
+  getTotalAmountToTransfer() {
+    this.cart.forEach(itm => this.totalAmountToTransfer += (+itm.lotsSetSummary.totalKgs));
+    return this.totalAmountToTransfer;
   }
 
   ngOnDestroy(): void {
