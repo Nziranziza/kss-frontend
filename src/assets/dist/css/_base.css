@@ -141,6 +141,10 @@ div .wrapper {
   background: rgba(0, 0, 0, 0.0);
 }
 
+.modal-header {
+  border-bottom: none;
+}
+
 .spinner-container {
   text-align: center;
   vertical-align: middle;

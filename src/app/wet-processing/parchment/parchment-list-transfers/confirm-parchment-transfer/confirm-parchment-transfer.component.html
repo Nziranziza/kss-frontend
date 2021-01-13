@@ -1,0 +1,66 @@
+<div class="modal-header">
+  <i class="fa fa-times-circle close" style="font-size: 24px;" aria-label="Close" (click)="modal.dismiss()">
+  </i>
+</div>
+<div class="modal-body">
+  <app-list-errors [errorList]="errors" *ngIf="errors"></app-list-errors>
+  <app-list-message [message]="message"></app-list-message>
+  <div class="row" style="margin-bottom: 15px">
+    <div class="col-md-4">
+      <strong>Transfer type: </strong>
+      <span class="text-muted">
+        {{ transfer.transferType }}
+      </span>
+    </div>
+    <div class="col-md-4">
+      <strong>Total Quantity: </strong>
+      <span class="text-muted">
+        {{ transfer.totalAmountToTransfer + '&#13199;' }}
+      </span>
+    </div>
+    <div class="col-md-4">
+      <strong>Source: </strong>
+      <span class="text-muted">
+        {{ transfer.sourceOrgId.organizationName }}
+      </span>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <table style="background: transparent; " class="pull-right table table-responsive">
+        <tr>
+          <td>Type</td>
+          <td>Grade</td>
+          <td>Qty</td>
+          <td>Lots</td>
+        </tr>
+        <tr *ngFor="let item of transfer.items">
+          <td>{{ item.type.name }}</td>
+          <td>{{ item.grade }}</td>
+          <td>{{ item.totalKgs + '&#13199;' }}</td>
+          <td>
+            <button *ngFor="let lot of item.parchments; let i = index" type="button" class="btn btn-sm btn-link"
+                    ngbPopover="{{'Qty : ' + lot.amountToTransfer + '&#13199; '}}"> {{ lot.parchmentId.lotNumber }}
+            </button>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <form [formGroup]="confirmForm" (ngSubmit)="onSubmit()">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label>Comment</label>
+          <textarea type="text" formControlName="comment" style="margin: 0 auto; width: 100%">
+        </textarea>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-1 pull-right">
+        <button class="btn btn-success pull-right btn-margin">Confirm</button>
+      </div>
+    </div>
+  </form>
+</div>

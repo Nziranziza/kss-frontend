@@ -1,12 +1,14 @@
 import {Injectable} from '@angular/core';
 import {isNullOrUndefined} from 'util';
+import {Observable} from 'rxjs';
+import {ApiService} from './api.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ParchmentTransferService {
 
-  constructor() {
+  constructor(private apiService: ApiService) {
   }
 
   resetCart() {
