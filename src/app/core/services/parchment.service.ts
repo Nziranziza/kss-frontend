@@ -50,4 +50,20 @@ export class ParchmentService {
   cancelParchment(data: any) {
     return this.apiService.post('/parchment/cancel/parchment', data);
   }
+
+  getTransferHistory(body: any): Observable<any> {
+    return this.apiService.post('/parchment/transfer/history', body);
+  }
+
+  cancelTransfer(body: any) {
+    return this.apiService.put('/parchment/transfer/cancel', body);
+  }
+
+  printDeliveryNote(id: string): Observable<any> {
+    return this.apiService.get('/parchment/generate/transfer_note/' + id);
+  }
+
+  confirmTranfer(body: any): Observable<any> {
+    return this.apiService.post('/parchment/transfer/confirm', body);
+  }
 }

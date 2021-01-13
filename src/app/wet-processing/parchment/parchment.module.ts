@@ -15,21 +15,28 @@ import {ParchmentReportComponent} from '../../reports/parchment-report/parchment
 import {ParchmentReportDetailComponent} from '../../reports/parchment-report/parchment-report-detail/parchment-report-detail.component';
 import {SharedModule} from '../../shared';
 import {ParchmentPrepareTransferCartComponent} from './parchment-prepare-transfer-cart/parchment-prepare-transfer-cart.component';
-import { ParchmentListTransfersComponent } from './parchment-list-transfers/parchment-list-transfers.component';
+import {ParchmentListTransfersComponent} from './parchment-list-transfers/parchment-list-transfers.component';
+import {AutocompleteLibModule} from 'angular-ng-autocomplete';
+import {ConfirmParchmentTransferComponent}
+  from './parchment-list-transfers/confirm-parchment-transfer/confirm-parchment-transfer.component';
 
 @NgModule({
   declarations: [ParchmentListComponent, ParchmentCreateComponent, ParchmentTransferComponent,
-    ParchmentReportComponent, ParchmentReportDetailComponent, ParchmentPrepareTransferCartComponent, ParchmentListTransfersComponent],
+    ParchmentReportComponent,
+    ParchmentReportDetailComponent,
+    ParchmentPrepareTransferCartComponent, ParchmentListTransfersComponent, ConfirmParchmentTransferComponent],
   imports: [
     CommonModule,
     ParchmentRoutingModule, NgbModule, NgxPaginationModule, OrderModule,
     SharedModule, OwlDateTimeModule,
     FusionChartsModule, GoogleChartsModule,
+    AutocompleteLibModule,
     OwlNativeDateTimeModule,
     OwlNativeDateTimeModule, BrowserAnimationsModule
   ],
   exports: [ParchmentCreateComponent, ParchmentPrepareTransferCartComponent],
-  entryComponents: [ParchmentCreateComponent, ParchmentReportDetailComponent]
+  entryComponents: [ParchmentCreateComponent, ParchmentReportDetailComponent,
+    ConfirmParchmentTransferComponent]
 })
 export class ParchmentModule {
 }

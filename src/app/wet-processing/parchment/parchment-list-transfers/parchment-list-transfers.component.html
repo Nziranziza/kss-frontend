@@ -1,3 +1,129 @@
-<p>
-  parchment-list-transfers works!
-</p>
+<div class="row">
+  <div class="col-xs-12">
+    <h3>
+      Parchments transfer history
+    </h3>
+  </div>
+</div>
+
+<div class="row filter-form" style="margin-bottom: 10px; margin-left: -1px">
+  <div class="col-xs-2">
+  <div class="ng-autocomplete">
+    <ng-autocomplete
+      [data]="data"
+      [searchKeyword]="keyword"
+      (selected)='selectEvent($event)'
+      [placeHolder]="'select destination'"
+      (inputChanged)='onChangeSearch($event)'
+      [itemTemplate]="itemTemplate"
+      [notFoundTemplate]="notFoundTemplate">
+    </ng-autocomplete>
+
+    <ng-template #itemTemplate let-item>
+      <a [innerHTML]="item.name"></a>
+    </ng-template>
+
+    <ng-template #notFoundTemplate let-notFound>
+      <div [innerHTML]="notFound"></div>
+    </ng-template>
+  </div>
+  </div>
+  <form [formGroup]="filterForm" (ngSubmit)="onFilter()">
+    <ng-container formGroupName="date">
+      <div class="col-xs-1">
+        <div class="form-group">
+          <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="from" class="form-control"
+                 placeholder="from date..">
+          <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+        </div>
+      </div>
+      <div class="col-xs-1">
+        <div class="form-group">
+          <input [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" formControlName="to" class="form-control"
+                 placeholder="to..">
+          <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
+        </div>
+      </div>
+    </ng-container>
+    <div class="col-xs-2">
+      <button class="btn btn-warning pull-right btn-margin" type="button" (click)="onClearFilter()">Clear</button>
+      <button class="btn btn-success pull-right btn-margin" type="submit"><i class="fa fa-search"></i> Search</button>
+    </div>
+  </form>
+</div>
+
+<app-list-warnings [warning]="warning"></app-list-warnings>
+<app-list-message [message]="message"></app-list-message>
+<app-list-errors [errorList]="errors"></app-list-errors>
+
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-body expendable-dataTable">
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped" id="responsive-table">
+          <thead>
+          <tr>
+            <th>Transfer type</th>
+            <th>Source</th>
+            <th>Destination</th>
+            <th>Qty</th>
+            <th></th>
+            <th>Date</th>
+            <th>Received</th>
+            <th>Comment</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let transfer of transfers">
+            <td>{{ transfer.transferType }}</td>
+            <td>{{ transfer.sourceOrgId.organizationName }}</td>
+            <td>{{ transfer.destOrgId.organizationName }}</td>
+            <td>{{ transfer.totalAmountToTransfer }}</td>
+            <td>
+              <table style="background: transparent; width: 750px;" class="pull-right">
+                <tr style="font-style: oblique; font-size: 12px; background: transparent; font-weight: bold">
+                  <td>Type</td>
+                  <td>Grade</td>
+                  <td>Qty</td>
+                  <td>Lots</td>
+                </tr>
+                <tr *ngFor="let item of transfer.items" style="font-style: oblique; font-size: 12px; background: transparent">
+                  <td>{{ item.type.name }}</td>
+                  <td>{{ item.grade }}</td>
+                  <td>{{ item.totalKgs }}</td>
+                  <td>
+                    <button *ngFor="let lot of item.parchments; let i = index" type="button" class="btn btn-sm btn-link" data-toggle="tooltip"
+                      title="{{'Qty : ' + lot.amountToTransfer + '&#13199; '}}"> {{ lot.parchmentId.lotNumber }}
+                    </button>
+                  </td>
+                </tr>
+              </table>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>
+              <ng-container *ngIf="transfer.receivedBy; else confirm">
+              </ng-container>
+              <ng-template #confirm>
+                <button class="btn btn-success btn-margin btn-sm pull-right" (click)="confirmTransfer(transfer)"
+                        type="button">
+                  <i class="fa fa-check-circle" aria-hidden="true"></i> Confirm
+                </button>
+              </ng-template>
+              <button class="btn btn-info btn-margin btn-sm pull-right" (click)="printNote(transfer._id)" type="button">
+                <i class="fa fa-print" aria-hidden="true"></i> Note
+              </button>
+              <button class="btn btn-default btn-margin btn-sm pull-right" (click)="cancelTransfer(transfer._id)"
+                      type="button">
+                <i class="fa fa-remove" aria-hidden="true"></i> Cancel
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

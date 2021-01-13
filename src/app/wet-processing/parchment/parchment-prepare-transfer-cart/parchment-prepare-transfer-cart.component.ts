@@ -39,7 +39,6 @@ export class ParchmentPrepareTransferCartComponent extends BasicComponent implem
   currentDate: any;
   totalAmountToTransfer = 0;
   itemIndex: number;
-  requestedAmount: number;
 
   constructor(private parchmentService: ParchmentService,
               private router: Router,
