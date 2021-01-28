@@ -2,13 +2,19 @@ import {Injectable} from '@angular/core';
 import {ValidationErrors} from '@angular/forms';
 import {LocationService} from '../services';
 import {DatePipe} from '@angular/common';
+import {constant} from '../../../environments/constant';
+import * as moment from 'moment-timezone';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class HelperService {
 
-  constructor(private locationService: LocationService, private datePipe: DatePipe) {
+  constructor(
+    private locationService: LocationService,
+    private datePipe: DatePipe,
+  ) {
   }
 
   getFormValidationErrors(form) {
@@ -38,7 +44,7 @@ export class HelperService {
         }
       });
     } else {
-      return ;
+      return;
     }
     return obj;
   }
@@ -186,5 +192,10 @@ export class HelperService {
       }
     }
     return result;
+  }
+
+  setLocalTimeZone(time: string) {
+    const momentTimeZone = moment(time);
+    return momentTimeZone.tz(constant.timezone).format('YYYY-MM-DD').valueOf();
   }
 }

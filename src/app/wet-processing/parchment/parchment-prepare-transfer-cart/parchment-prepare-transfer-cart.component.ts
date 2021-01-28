@@ -167,7 +167,6 @@ export class ParchmentPrepareTransferCartComponent extends BasicComponent implem
       }
     } else {
       this.setError(['Please add at least one(1) item to cart before transfer']);
-
     }
 
   }
@@ -184,6 +183,12 @@ export class ParchmentPrepareTransferCartComponent extends BasicComponent implem
   }
 
   onChange() {
+    this.filterForm.controls.producedDate.get('from'.toString()).valueChanges.subscribe((value) => {
+      this.filterForm.controls.producedDate.get('from').patchValue(this.helper.setLocalTimeZone(value), {emitEvent: false});
+    });
+    this.filterForm.controls.producedDate.get('to'.toString()).valueChanges.subscribe((value) => {
+      this.filterForm.controls.producedDate.get('to').patchValue(this.helper.setLocalTimeZone(value), {emitEvent: false});
+    });
   }
 
   addLotsSetToCart() {

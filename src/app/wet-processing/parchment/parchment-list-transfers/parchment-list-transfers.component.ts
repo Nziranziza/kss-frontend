@@ -13,7 +13,6 @@ import {DatePipe} from '@angular/common';
 import {HelperService} from '../../../core/helpers';
 import {Subject} from 'rxjs';
 import {DataTableDirective} from 'angular-datatables';
-import {ConfirmDispatchComponent} from '../../../input-distribution/site-view-dispatch/confirm-dispatch/confirm-dispatch.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ConfirmParchmentTransferComponent} from './confirm-parchment-transfer/confirm-parchment-transfer.component';
 
@@ -44,8 +43,6 @@ export class ParchmentListTransfersComponent extends BasicComponent implements O
   dtTrigger: Subject = new Subject();
   loading = false;
   currentDate: any;
-  data = [];
-
   // @ts-ignore
   @ViewChild(DataTableDirective, {static: false})
   dtElement: DataTableDirective;
@@ -53,6 +50,7 @@ export class ParchmentListTransfersComponent extends BasicComponent implements O
   seasonStartingDate: string;
   initialSearchValue: any;
   transfers = [];
+  organisations = [];
   parameters: any;
   keyword = 'name';
 
@@ -60,7 +58,8 @@ export class ParchmentListTransfersComponent extends BasicComponent implements O
     $(document).ready(() => {
       $('[data-toggle="tooltip"]').tooltip();
     });
-    this.currentDate = new Date();
+    this.seasonStartingDate = this.datePipe.transform(this.authenticationService.getCurrentSeason().created_at, 'yyyy-MM-dd');
+    this.currentDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 10,
@@ -69,17 +68,6 @@ export class ParchmentListTransfersComponent extends BasicComponent implements O
       }, {}, {}, {}, {}],
       responsive: true
     };
-
-    this.data = [
-      {
-        id: 1,
-        name: 'Usa'
-      },
-      {
-        id: 2,
-        name: 'England'
-      }
-    ];
     this.filterForm = this.formBuilder.group({
       type: [''],
       grade: [''],
@@ -89,34 +77,7 @@ export class ParchmentListTransfersComponent extends BasicComponent implements O
       })
     });
     this.initialSearchValue = this.filterForm.value;
-    this.transfers = [{
-      _id: '',
-      totalAmountToTransfer: 1800,
-      items: [
-        {
-          totalKgs: 1800,
-          parchments: [
-            {
-              parchmentId: {
-                lotNumber: '201102/PFW/1015'
-              },
-              amountToTransfer: 1800
-            }
-          ],
-          type: {
-            name: 'Full washed'
-          },
-          grade: 'A'
-        }
-      ],
-      destOrgId: {
-        organizationName: 'RWACOF DM'
-      },
-      sourceOrgId: {
-        organizationName: 'Nkara Dukunde Kawa'
-      },
-      transferType: 'Sold'
-    }];
+    this.getTransfers();
   }
 
   ngAfterViewInit(): void {
@@ -148,13 +109,10 @@ export class ParchmentListTransfersComponent extends BasicComponent implements O
 
   selectEvent(item) {
     console.log(item);
-    // do something with selected item
   }
 
   onChangeSearch(val: string) {
     console.log(val);
-    // fetch remote data from here
-    // And reassign the 'data' which is binded to 'data' property.
   }
 
   onClearFilter() {
@@ -223,6 +181,34 @@ export class ParchmentListTransfersComponent extends BasicComponent implements O
   }
 
   getTransfers() {
+    this.transfers = [{
+      _id: '',
+      totalAmountToTransfer: 1800,
+      items: [
+        {
+          totalKgs: 1800,
+          parchments: [
+            {
+              parchmentId: {
+                lotNumber: '201102/PFW/1015'
+              },
+              amountToTransfer: 1800
+            }
+          ],
+          type: {
+            name: 'Full washed'
+          },
+          grade: 'A'
+        }
+      ],
+      destOrgId: {
+        organizationName: 'RWACOF DM'
+      },
+      sourceOrgId: {
+        organizationName: 'Nkara Dukunde Kawa'
+      },
+      transferType: 'Sold'
+    }];
   }
 
   rerender(): void {

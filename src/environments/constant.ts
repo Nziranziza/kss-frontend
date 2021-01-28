@@ -5,5 +5,6 @@ export const constant = {
   },
   roles : {
     TEC_HOUSE: 0
-  }
+  },
+  timezone: 'Africa/Cairo'
 };

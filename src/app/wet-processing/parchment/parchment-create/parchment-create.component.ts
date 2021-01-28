@@ -118,6 +118,14 @@ export class ParchmentCreateComponent extends BasicComponent implements OnInit {
       });
       this.recordParchmentForm.controls.totalKgs.setValue(this.totalKgs);
     });
+
+    this.recordParchmentForm.controls.date.valueChanges.subscribe((value) => {
+      this.recordParchmentForm.controls.date.patchValue(this.helper.setLocalTimeZone(value), {emitEvent: false});
+    });
+
+    this.recordParchmentForm.controls.producedDate.valueChanges.subscribe((value) => {
+      this.recordParchmentForm.controls.producedDate.patchValue(this.helper.setLocalTimeZone(value), {emitEvent: false});
+    });
   }
 
   onSubmit() {

@@ -63,11 +63,6 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
               private datePipe: DatePipe,
               private authenticationService: AuthenticationService) {
     super();
-    this.parameters = {
-      length: 25,
-      start: 0,
-      draw: 1
-    };
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 25
@@ -75,7 +70,7 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
   }
 
   ngOnInit(): void {
-    this.parameters['org_id'.toString()] = this.authenticationService.getCurrentUser().info.org_id;
+    this.initiateParameters();
     this.seasonStartingDate = this.datePipe.transform(this.authenticationService.getCurrentSeason().created_at, 'yyyy-MM-dd');
     this.currentDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
     this.config = {
@@ -175,13 +170,13 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
     };
     this.parchmentService.detailedReport(this.filter).subscribe((data) => {
       this.summary = data.content[0].parchments;
-      console.log(this.summary);
     });
   }
 
   onFilter() {
     if (this.filterForm.valid) {
       this.loading = true;
+      this.initiateParameters();
       this.parameters['search'.toString()] = this.filterForm.value;
       if (isArray(this.parameters.search.producedDate.from)) {
         this.parameters.search.producedDate.from = this.parameters.search.producedDate.from[0];
@@ -240,7 +235,8 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
 
   onClearFilter() {
     this.filterForm.reset(this.initialSearchValue);
-    delete this.parameters.search;
+    this.initiateParameters();
+    this.parameters['search'.toString()] = this.filterForm.value;
     this.parchmentService.allWithFilter(this.parameters)
       .subscribe(data => {
         this.parchments = data.data;
@@ -254,9 +250,30 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
   }
 
   onChange() {
+    this.filterForm.controls.releaseDate.get('from'.toString()).valueChanges.subscribe((value) => {
+      this.filterForm.controls.releaseDate.get('from').patchValue(this.helper.setLocalTimeZone(value), {emitEvent: false});
+    });
+    this.filterForm.controls.releaseDate.get('to'.toString()).valueChanges.subscribe((value) => {
+      this.filterForm.controls.releaseDate.get('to').patchValue(this.helper.setLocalTimeZone(value), {emitEvent: false});
+    });
+    this.filterForm.controls.producedDate.get('from'.toString()).valueChanges.subscribe((value) => {
+      this.filterForm.controls.producedDate.get('from').patchValue(this.helper.setLocalTimeZone(value), {emitEvent: false});
+    });
+    this.filterForm.controls.producedDate.get('to'.toString()).valueChanges.subscribe((value) => {
+      this.filterForm.controls.producedDate.get('to').patchValue(this.helper.setLocalTimeZone(value), {emitEvent: false});
+    });
   }
 
   ngOnDestroy(): void {
     this.messageService.clearMessage();
+  }
+
+  initiateParameters() {
+    this.parameters = {
+      length: 25,
+      start: 0,
+      draw: 1
+    };
+    this.parameters['org_id'.toString()] = this.authenticationService.getCurrentUser().info.org_id;
   }
 }
