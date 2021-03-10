@@ -64,7 +64,27 @@ export class PaySingleFarmerComponent extends BasicComponent implements OnInit {
 
   onSubmitCashPayment() {
     if (this.cashPaymentForm.valid) {
-      this.cherrySupplyService.paySupplies(this.paymentData)
+      const beneficiary: any = {
+        foreName: this.supplier.type === 2 ? this.supplier.groupName : this.supplier.foreName,
+        userId: this.supplier._id,
+        regNumber: this.paymentData.regNumber,
+        amount: this.paymentData.paidAmount,
+        deliveries: this.paymentData.deliveryIds,
+      };
+      if (+this.supplier.type === 1) {
+        beneficiary.surname = this.supplier.surname;
+      }
+      this.helper.cleanObject(beneficiary);
+      this.paymentRequest = {
+        org_id: this.organisationId,
+        userId: this.paymentData.userId,
+        paymentChannel: 4,
+        totalAmountPaid: this.paymentData.paidAmount,
+        beneficiaries: [
+          beneficiary
+        ]
+      };
+      this.paymentService.payCherries( this.paymentRequest)
         .subscribe(() => {
             this.setMessage('Payment successfully recorded!');
           },
@@ -121,7 +141,7 @@ export class PaySingleFarmerComponent extends BasicComponent implements OnInit {
       if (this.payerAccount.channelId === 5) {
         this.paymentRequest['bankName'.toString()] = this.payerAccount.bankName;
       }
-      this.paymentService.bulkPayment(this.paymentRequest).subscribe(() => {
+      this.paymentService.payCherriesEPayment(this.paymentRequest).subscribe(() => {
           this.setMessage('Payment successfully initiated!');
         },
         (err) => {

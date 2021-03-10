@@ -67,6 +67,10 @@ export class OrganisationService {
     return this.apiService.post('/cherrysupply/farmer_by_cws/status', body);
   }
 
+  selectSuppliersOnPayment(body: any) {
+    return this.apiService.post('/cherrysupply/payment/status', body);
+  }
+
   getSingleSupplier(body: any) {
     return this.apiService.post('/cherrysupply/single_farmer_by_cws/status', body);
   }
@@ -80,6 +84,6 @@ export class OrganisationService {
   }
 
   orgEditPaymentChannel(body: any): Observable<any> {
-    return this.apiService.put('/organizations/payment_channel', body);
+    return this.apiService.put('/organizations/payment_channels/edit', body);
   }
 }

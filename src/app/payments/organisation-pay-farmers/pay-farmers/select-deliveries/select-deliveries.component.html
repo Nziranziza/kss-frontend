@@ -42,12 +42,9 @@
       <div class="form-group pull-left">
         <span class="control-label">Status</span> &nbsp;
         <select class="form-control" formControlName="status">
-          <option value="supplied">All</option>
-          <option value="fully_paid">Fully paid</option>
+          <option value="both">All</option>
           <option value="partial_paid">Partial paid</option>
           <option value="unpaid">Unpaid</option>
-          <option value="unapproved_delivery">Unapproved delivery</option>
-          <option value="unapproved_payment">Unapproved payment</option>
         </select>
       </div>
       <div class="form-group pull-left btn-margin">
@@ -118,12 +115,15 @@
                   <th>Owed amount</th>
                   <th>Date</th>
                 </tr>
-                <tr *ngFor="let supply of farmer.deliveries; let t = index"
-                    style="font-size: 12px; background: transparent">
+                <ng-container *ngFor="let supply of farmer.deliveries; let t = index">
+                <tr style="font-size: 12px; background: transparent">
                   <td class="all">
-                    <div style="text-align: center;">
+                    <div style="text-align: center;" *ngIf="supply.deliveryApproval && (!withPendingApproval(supply.payment))">
                       <input type="checkbox" (click)="selectDelivery($event.target.checked, i, t)"
                              [(ngModel)]="suppliers[i].deliveries[t].selected">
+                    </div>
+                    <div style="text-align: center; color: #dca956;" *ngIf="withPendingApproval(supply.payment)">
+                      <i class="fa fa-warning"></i>
                     </div>
                   </td>
                   <td> {{ supply.cherriesQty }}</td>
@@ -136,6 +136,7 @@
                   <td> {{ supply.owedAmount }}</td>
                   <td> {{ supply.created_at | date }}</td>
                 </tr>
+                </ng-container>
               </table>
             </td>
             <td></td>

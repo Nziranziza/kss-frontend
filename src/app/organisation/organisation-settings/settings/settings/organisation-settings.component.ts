@@ -5,6 +5,8 @@ import {PaymentService} from '../../../../core/services/payment.service';
 import {HelperService} from '../../../../core/helpers';
 import {CoffeeTypeService, OrganisationService} from '../../../../core/services';
 import {ActivatedRoute} from '@angular/router';
+import {EditPaymentChannelComponent} from '../edit-payment-channel/edit-payment-channel.component';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-organisation-settings-channel',
@@ -13,7 +15,7 @@ import {ActivatedRoute} from '@angular/router';
 })
 export class OrganisationSettingsComponent extends BasicComponent implements OnInit {
 
-  constructor(private formBuilder: FormBuilder, private paymentService: PaymentService,
+  constructor(private formBuilder: FormBuilder, private modal: NgbModal, private paymentService: PaymentService,
               private route: ActivatedRoute, private coffeeTypeService: CoffeeTypeService,
               private helper: HelperService, private organisationService: OrganisationService) {
     super();
@@ -75,6 +77,14 @@ export class OrganisationSettingsComponent extends BasicComponent implements OnI
     } else {
       this.setError(['missing required data']);
     }
+  }
+
+  editOrgPaymentChannel(channel: any) {
+    const modalRef = this.modal.open(EditPaymentChannelComponent, {size: 'lg'});
+    modalRef.componentInstance.channel = channel;
+    modalRef.result.finally(() => {
+      this.getOrgPaymentChannels();
+    });
   }
 
   get formPaymentChannel() {
@@ -196,5 +206,27 @@ export class OrganisationSettingsComponent extends BasicComponent implements OnI
     this.paymentService.listBanks().subscribe((data) => {
       this.banks = data.content;
     });
+  }
+
+  changeChannelStatus(channel: any, action: string) {
+    const chl = {
+      channelId: channel.channelId,
+      subscriptionNumber: channel.subscriptionNumber,
+      org_id: this.organisationId
+    };
+    chl['org_id'.toString()] = this.organisationId;
+    if (action === 'enable') {
+      chl['action'.toString()] = 'enable';
+    } else {
+      chl['action'.toString()] = 'disable';
+    }
+
+    this.organisationService.orgEditPaymentChannel(chl).subscribe(() => {
+        this.getOrgPaymentChannels();
+        this.setMessage('channel status successfully updated!');
+      },
+      (err) => {
+        this.setError(err.errors);
+      });
   }
 }

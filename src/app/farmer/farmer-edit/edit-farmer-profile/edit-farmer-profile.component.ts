@@ -1,5 +1,5 @@
 import {Component, Inject, Injector, Input, OnInit, PLATFORM_ID} from '@angular/core';
-import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
+import {NgbActiveModal, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {isPlatformBrowser} from '@angular/common';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {UserService} from '../../../core/services';
@@ -20,20 +20,24 @@ export class EditFarmerProfileComponent extends BasicComponent implements OnInit
   @Input() farmer;
   editFarmerProfileForm: FormGroup;
   addPaymentChannelsForm: FormGroup;
+  editPaymentChannelForm: FormGroup;
   isGroup = false;
   loading = false;
+  showEditPaymentChannelForm = false;
   submit = true;
   invalidId = false;
   paymentChannels: any;
+  selectedChannel: any;
   channels: any;
   coffeeFarmerPaymentChannels: any;
 
 
   constructor(
-    @Inject(PLATFORM_ID) private platformId: object, private authenticationService: AuthenticationService,
+    @Inject(PLATFORM_ID) private platformId: object,
+    private editPaymentChannelModal: NgbModal, private authenticationService: AuthenticationService,
     private injector: Injector, private formBuilder: FormBuilder, private userService: UserService,
-    private helper: HelperService, private farmerService: FarmerService, private paymentService: PaymentService) {
-
+    private helper: HelperService, private farmerService: FarmerService,
+    private paymentService: PaymentService) {
     super();
     if (isPlatformBrowser(this.platformId)) {
       this.modal = this.injector.get(NgbActiveModal);
@@ -58,6 +62,10 @@ export class EditFarmerProfileComponent extends BasicComponent implements OnInit
 
     this.addPaymentChannelsForm = this.formBuilder.group({
       paymentChannels: new FormArray([])
+    });
+    this.editPaymentChannelForm = this.formBuilder.group({
+      channelId: [{value: '', disabled: true}, Validators.required],
+      subscriptionCode: ['', Validators.required],
     });
     this.onChangeType();
     this.farmer.sex = this.farmer.sex.toLowerCase();
@@ -100,6 +108,25 @@ export class EditFarmerProfileComponent extends BasicComponent implements OnInit
           });
     } else {
       this.setError(['missing required data']);
+    }
+  }
+  onEditChannel() {
+    if (this.editPaymentChannelForm.valid) {
+      let channel: {};
+      channel = this.editPaymentChannelForm.value;
+      channel['channelId'.toString()] = this.selectedChannel._id;
+      channel['userId'.toString()] = this.farmer._id;
+      channel['action'.toString()] = 'edit';
+      this.farmerService.editFarmerPaymentChannel(channel).subscribe(() => {
+          this.setMessage('channel successfully updated!');
+          this.getCoffeeFarmerPaymentChannels();
+          this.showEditPaymentChannelForm = false;
+        },
+        (err) => {
+          this.setError(err.errors);
+        });
+    } else {
+      this.setError(this.helper.getFormValidationErrors(this.editPaymentChannelForm));
     }
   }
 
@@ -185,7 +212,7 @@ export class EditFarmerProfileComponent extends BasicComponent implements OnInit
     (this.addPaymentChannelsForm.controls.paymentChannels as FormArray).removeAt(index);
   }
 
-  getPaymenntChannelFormGroup(index): FormGroup {
+  getPaymentChannelFormGroup(index): FormGroup {
     this.paymentChannels = this.addPaymentChannelsForm.controls.paymentChannels as FormArray;
     return this.paymentChannels.controls[index] as FormGroup;
   }
@@ -217,5 +244,31 @@ export class EditFarmerProfileComponent extends BasicComponent implements OnInit
     this.userService.get(this.farmer._id).subscribe((data) => {
       this.coffeeFarmerPaymentChannels = data.content.paymentChannels;
     });
+  }
+
+  editCoffeeFarmerPaymentChannel(channel: any) {
+    this.selectedChannel = {
+      channelId: channel.paymentChannel,
+      _id: channel._id,
+      subscriptionCode: channel.subscriptionCode
+    };
+    this.showEditPaymentChannelForm = true;
+    this.editPaymentChannelForm.patchValue(this.selectedChannel);
+  }
+
+  deleteCoffeeFarmerPaymentChannel(channel: any) {
+    const chl = {
+      channelId: channel._id,
+      subscriptionCode: channel.subscriptionCode,
+    };
+    chl['userId'.toString()] = this.farmer._id;
+    chl['action'.toString()] = 'delete';
+    this.farmerService.editFarmerPaymentChannel(chl).subscribe(() => {
+        this.getCoffeeFarmerPaymentChannels();
+        this.setMessage('channel status successfully deleted');
+      },
+      (err) => {
+        this.setError(err.errors);
+      });
   }
 }

@@ -37,7 +37,7 @@ import { EditCertificateComponent } from './organisation-settings/settings/edit-
     OwlDateTimeModule,
     OwlNativeDateTimeModule
   ],
-  entryComponents: [SupplierDeliveriesComponent]
+  entryComponents: [SupplierDeliveriesComponent, EditPaymentChannelComponent]
 })
 export class OrganisationModule {
 }

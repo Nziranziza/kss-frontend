@@ -39,11 +39,16 @@ export class PreviewDeliveriesListComponent implements OnInit {
       if (supplier.selected) {
         const element: any = {
           foreName: supplier.userInfo.type === 2 ? supplier.userInfo.groupName : supplier.userInfo.foreName,
+          surname: supplier.userInfo.surname,
           regNumber: supplier.userInfo.regNumber,
-          subscriptionNumber: this.getSubscriptionNumber(supplier.userInfo.paymentChannels),
+          userId: supplier.userInfo.userId,
           amount: this.getOwedAmount(supplier.deliveries),
           deliveries: this.getDeliveries(supplier.deliveries)
         };
+        /*  if it is not a cash payment */
+        if (+this.paymentProcessingService.getSelectionFilter().paymentChannel !== 4) {
+          element['subscriptionNumber'.toString()] = this.getSubscriptionNumber(supplier.userInfo.paymentChannels);
+        }
         if (supplier.userInfo.type === 1) {
           element.surname = supplier.userInfo.surname;
         }
@@ -69,7 +74,7 @@ export class PreviewDeliveriesListComponent implements OnInit {
   getOwedAmount(deliveries: any) {
     let sum = 0;
     deliveries.map((delivery) => {
-      if (delivery.selected) {
+      if (delivery.selected && delivery.deliveryApproval) {
         sum = sum + delivery.owedAmount;
       }
     });

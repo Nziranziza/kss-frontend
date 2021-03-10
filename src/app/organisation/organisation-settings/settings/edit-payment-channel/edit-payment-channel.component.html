@@ -3,7 +3,8 @@
   </i>
 </div>
 <div class="modal-body">
-  <app-list-errors [errorList]="errors" *ngIf="errors"></app-list-errors>
+  <app-list-message [message]="message"></app-list-message>
+  <app-list-errors [errorList]="errors"></app-list-errors>
   <form [formGroup]="editChannelForm" (ngSubmit)="onSubmit()">
     <div class="row">
       <div class="col-xs-2">

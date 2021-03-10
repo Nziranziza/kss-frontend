@@ -54,7 +54,7 @@ export class CherrySupplyComponent implements OnInit, OnDestroy, AfterViewInit {
       suppliesFilter: ['all', Validators.required],
     });
     this.paySuppliesForm = this.formBuilder.group({
-      paidAmount: ['', [Validators.required, Validators.min(1)]],
+      paidAmount: [0, [Validators.required, Validators.min(1)]],
     });
     this.dtOptions = {
       pagingType: 'full_numbers',
@@ -71,7 +71,6 @@ export class CherrySupplyComponent implements OnInit, OnDestroy, AfterViewInit {
     this.route.params.subscribe(params => {
       this.regNumber = params['regNumber'.toString()];
     });
-    this.onChangeFarmerSuppliesFilter();
   }
 
   onSaveSupply() {
@@ -126,62 +125,11 @@ export class CherrySupplyComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  onChangeFarmerSuppliesFilter() {
-    this.filterSuppliesForm.get('suppliesFilter'.toString()).valueChanges.subscribe(
-      (value) => {
-        switch (value) {
-          case 'unapproved_delivery': {
-            this.cherrySupplyService.getFarmerUnapprovedDeliveries(this.organisationId, this.regNumber)
-              .subscribe((data) => {
-                this.cherrySupplies = data.content;
-                this.rerender();
-              });
-            break;
-          }
-          case 'unpaid_delivery': {
-            this.cherrySupplyService.getFarmerUnpaidDeliveries(this.organisationId, this.regNumber)
-              .subscribe((data) => {
-                this.cherrySupplies = data.content;
-                this.rerender();
-              });
-            break;
-          }
-          case 'unapproved_payment': {
-            this.cherrySupplyService.getFarmerUnapprovedPayment(this.organisationId, this.regNumber)
-              .subscribe((data) => {
-                this.cherrySupplies = data.content;
-                this.rerender();
-              });
-            break;
-          }
-          default: {
-            this.getFarmerSupplies(this.organisationId, this.regNumber);
-          }
-        }
-      }
-    );
-
-    this.recordCherryDeliveryForm.get('cherriesType'.toString()).valueChanges.subscribe(
-      (value) => {
-        switch (value) {
-          case 'flottant': {
-            this.recordCherryDeliveryForm.get('unitPerKg'.toString())
-              .setValue(this.authenticationService.getCurrentSeason().seasonParams.floatingUnitPrice);
-            break;
-          }
-          default: {
-            this.recordCherryDeliveryForm.get('unitPerKg'.toString())
-              .setValue(this.authenticationService.getCurrentSeason().seasonParams.cherriesUnitPrice);
-          }
-        }
-      }
-    );
-  }
-
   getFarmerSupplies(organisationId: string, regNumber: string): void {
     this.cherrySupplyService.getFarmerDeliveries(organisationId, regNumber).subscribe((data) => {
-      this.cherrySupplies = data.content;
       this.rerender();
+      this.cherrySupplies = data.content;
+      this.draw();
     });
   }
 
@@ -197,6 +145,7 @@ export class CherrySupplyComponent implements OnInit, OnDestroy, AfterViewInit {
       this.totalAmountToPay = this.totalAmountToPay - supply.owedAmount;
       this.paymentDeliveryIds.splice(this.paymentDeliveryIds.indexOf(supply._id), 1);
     }
+    this.paySuppliesForm.controls.paidAmount.setValue(this.totalAmountToPay);
   }
 
   cancelSupply(supplyId: string): void {
@@ -221,12 +170,23 @@ export class CherrySupplyComponent implements OnInit, OnDestroy, AfterViewInit {
 
   rerender(): void {
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      this.totalAmountToPay = 0;
+      this.paySuppliesForm.controls.paidAmount.setValue(0);
       dtInstance.destroy();
+    });
+  }
+
+  draw(): void {
+    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
       this.dtTrigger.next();
     });
   }
 
   onCancel() {
     this.location.back();
+  }
+
+  withPendingApproval(payments: any) {
+    return (payments.findIndex((element) => !element.approval)) !== -1;
   }
 }

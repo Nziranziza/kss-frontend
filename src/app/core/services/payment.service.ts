@@ -30,8 +30,12 @@ export class PaymentService {
     return this.apiService.get('/organizations/banks/list');
   }
 
-  bulkPayment(body: any): Observable<any> {
-    return this.apiService.post('/payment', body);
+  payCherries(data: any): Observable<any> {
+    return this.apiService.post('/payment/cherries', data);
+  }
+
+  payCherriesEPayment(body: any): Observable<any> {
+    return this.apiService.post('/cherrysupply/payment/e-payment', body);
   }
 
   getPaymentHistory(body: any): Observable<any> {

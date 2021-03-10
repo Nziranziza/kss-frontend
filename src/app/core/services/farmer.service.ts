@@ -125,4 +125,8 @@ export class FarmerService {
   addPaymentChannels(body: any): Observable<any>  {
     return this.apiService.post('/coffeefarmers/payment_channels ', body);
   }
+
+  editFarmerPaymentChannel(data: any): Observable<any> {
+    return this.apiService.put('/coffeefarmers/payment_channel/edit', data);
+  }
 }

@@ -101,6 +101,7 @@ export class OrganisationPaymentsHistoryComponent extends BasicComponent impleme
         to: [this.datePipe.transform(new Date(), 'yyyy-MM-dd', 'GMT+2'), Validators.required],
       })
     });
+    this.message = this.messageService.getMessage();
     this.getPaymentChannels();
     this.onChangeFarmerStatusFilter();
     this.onChangePaymentChannelFilter();
@@ -201,7 +202,7 @@ export class OrganisationPaymentsHistoryComponent extends BasicComponent impleme
       this.paymentChannels = Object.keys(data.content).map(key => {
         return {channel: key, _id: data.content[key]};
       });
-      this.paymentChannels = this.helper.getFarmersPossiblePaymentChannels(this.paymentChannels);
+      this.paymentChannels = this.helper.getFarmersAllPossibleReceivingPaymentChannels(this.paymentChannels);
     });
   }
 
@@ -247,5 +248,6 @@ export class OrganisationPaymentsHistoryComponent extends BasicComponent impleme
   }
 
   ngOnDestroy(): void {
+    this.messageService.clearMessage();
   }
 }

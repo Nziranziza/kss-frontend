@@ -36,7 +36,11 @@
                         <td> {{ channel.channelName }}</td>
                         <td> {{ channel.subscriptionNumber }}</td>
                         <td> {{ channel.bankName }}</td>
-                        <td></td>
+                        <td>
+                          <button class="btn btn-success btn-margin btn-sm" (click)="editOrgPaymentChannel(channel)"> Edit</button>
+                          <button class="btn btn-primary btn-margin btn-sm" (click)="changeChannelStatus(channel, 'enable')" *ngIf="channel.channelStatus !== 'ACTIVE'"> Enable</button>
+                          <button class="btn btn-warning btn-margin btn-sm" (click)="changeChannelStatus(channel, 'disable')" *ngIf="channel.channelStatus === 'ACTIVE'"> Disable</button>
+                        </td>
                       </tr>
                       </tbody>
                     </table>
@@ -73,7 +77,7 @@
                         <div class="form-group">
                           <span>Bank name (Optional)</span>
                           <select class="form-control" formControlName="bankName">
-                            <option *ngFor="let bank of banks" value="{{bank.name}}">
+                            <option *ngFor="let bank of banks" value="{{ bank.name }}">
                               {{ bank.name }}
                             </option>
                           </select>

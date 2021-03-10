@@ -9,7 +9,7 @@
 <app-list-errors [errorList]="errors"></app-list-errors>
 <app-list-message [message]="message"></app-list-message>
 <div class="row">
-  <div class="col-sm-12 col-md-6">
+  <div class="col-sm-12 col-md-6" *ngIf="!isCashPaymentMode">
     <div class="table-responsive no-border" style="font-size: 13px">
       <table class="table table-condensed">
         <tbody>

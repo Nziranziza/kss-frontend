@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {BasicComponent} from '../../../../core/library';
 import {PaymentProcessingService} from '../../../../core/services/payment-processing.service';
-import {AuthenticationService, OrganisationService} from '../../../../core/services';
+import {AuthenticationService, MessageService, OrganisationService} from '../../../../core/services';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {DatePipe} from '@angular/common';
 import {PaymentService} from '../../../../core/services/payment.service';
@@ -19,6 +19,7 @@ export class ConfirmPaymentComponent extends BasicComponent implements OnInit {
               private authenticationService: AuthenticationService,
               private organisationService: OrganisationService,
               private formBuilder: FormBuilder,
+              private messageService: MessageService,
               private datePipe: DatePipe,
               private paymentService: PaymentService,
               private helper: HelperService,
@@ -34,6 +35,7 @@ export class ConfirmPaymentComponent extends BasicComponent implements OnInit {
   today: any;
   payerAccount: any;
   paymentRequest: any;
+  isCashPaymentMode: boolean;
   paymentList: any;
 
   ngOnInit() {
@@ -43,6 +45,7 @@ export class ConfirmPaymentComponent extends BasicComponent implements OnInit {
     this.selectPayerForm = this.formBuilder.group({
       paymentChannel: ['none', Validators.required]
     });
+    this.isCashPaymentMode = (+this.paymentProcessingService.getSelectionFilter().paymentChannel === 4);
     this.today = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
     this.getOrgPaymentChannels();
     this.onChangePaymentChannel();
@@ -51,22 +54,38 @@ export class ConfirmPaymentComponent extends BasicComponent implements OnInit {
 
   onPay() {
     this.paymentRequest = {...this.payerAccount, ...this.paymentList};
-    if (this.payerAccount) {
-      const payer: any = {paymentChannel: this.payerAccount.channelId,
-        payerSubscriptionNumber: this.payerAccount.subscriptionNumber};
-      if (this.payerAccount.channelId === 5) {
-        payer['bankName'.toString()] = this.payerAccount.bankName;
+    /* if is not a cash payment mode */
+    if (!this.isCashPaymentMode) {
+      if (this.payerAccount) {
+        const payer: any = {
+          paymentChannel: this.payerAccount.channelId,
+          payerSubscriptionNumber: this.payerAccount.subscriptionNumber
+        };
+        if (this.payerAccount.channelId === 5) {
+          payer['bankName'.toString()] = this.payerAccount.bankName;
+        }
+        this.paymentRequest = {...payer, ...this.paymentList};
+        this.paymentService.payCherriesEPayment(this.paymentRequest).subscribe(() => {
+            this.setMessage('Payment successfully initiated!');
+          },
+          (err) => {
+            this.setError(err.errors);
+          });
+      } else {
+        this.setError(['Please select the paying account!']);
+        return;
       }
+    } else {
+      const payer: any = {
+        paymentChannel: +this.paymentProcessingService.getSelectionFilter().paymentChannel
+      };
       this.paymentRequest = {...payer, ...this.paymentList};
-      this.paymentService.bulkPayment(this.paymentRequest).subscribe(() => {
-        this.setMessage('Payment successfully initiated!');
+      this.paymentService.payCherries(this.paymentRequest).subscribe(() => {
+          this.messageService.setMessage('Payment successfully recorded!');
         },
         (err) => {
           this.setError(err.errors);
         });
-    } else {
-      this.setError(['Please select the paying account!']);
-      return;
     }
   }
 

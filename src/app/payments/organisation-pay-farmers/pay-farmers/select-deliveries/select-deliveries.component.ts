@@ -54,13 +54,13 @@ export class SelectDeliveriesComponent extends BasicComponent implements OnInit,
   ngOnInit() {
     this.seasonStartingTime = this.authenticationService.getCurrentSeason().created_at;
     this.parameters = {
-      status: 'supplied',
+      status: 'both',
       org_id: this.authenticationService.getCurrentUser().info.org_id,
       date: {
         from: this.seasonStartingTime,
         to: new Date()
       },
-      paymentChannel: 1
+      paymentChannel: 4
     };
 
     this.dtOptions = {
@@ -71,8 +71,8 @@ export class SelectDeliveriesComponent extends BasicComponent implements OnInit,
     };
 
     this.filterForm = this.formBuilder.group({
-      status: ['supplied', Validators.required],
-      paymentChannel: [1, Validators.required],
+      status: ['both', Validators.required],
+      paymentChannel: [4, Validators.required],
       search: this.formBuilder.group({
         term: ['', Validators.minLength(3)],
         searchBy: ['forename']
@@ -109,10 +109,10 @@ export class SelectDeliveriesComponent extends BasicComponent implements OnInit,
     this.parameters.date.to = this.datePipe.transform(new Date(),
       'yyyy-MM-dd', 'GMT+2');
     delete this.parameters.search;
-    this.parameters.paymentChannel = 1;
-    this.parameters.status = 'supplied';
-    this.filterForm.controls.status.setValue('supplied');
-    this.filterForm.controls.paymentChannel.setValue(1);
+    this.parameters.paymentChannel = 4;
+    this.parameters.status = 'both';
+    this.filterForm.controls.status.setValue('both');
+    this.filterForm.controls.paymentChannel.setValue(4);
     this.updateSuppliers();
   }
 
@@ -139,30 +139,20 @@ export class SelectDeliveriesComponent extends BasicComponent implements OnInit,
   }
 
   getSuppliers(): void {
-    if (!this.paymentProcessingService.getSelectedDeliveries()) {
-      this.organisationService.getSuppliers(this.parameters)
-        .subscribe(data => {
-          this.suppliers = data.content;
-          this.updateStatistics();
-          this.dtTrigger.next();
-        });
-    } else {
-      this.suppliers = this.paymentProcessingService.getSelectedDeliveries();
-      this.filterForm.patchValue(this.paymentProcessingService.getSelectionFilter());
-      this.statistics = this.paymentProcessingService.getSelectionStatistics();
-      setTimeout(function() {
+    this.organisationService.selectSuppliersOnPayment(this.parameters)
+      .subscribe(data => {
+        this.suppliers = data.content;
+        this.updateStatistics();
         this.dtTrigger.next();
-      }.bind(this));
-    }
+      });
   }
 
   updateSuppliers() {
-    this.organisationService.getSuppliers(this.parameters)
+    this.organisationService.selectSuppliersOnPayment(this.parameters)
       .subscribe(data => {
         this.suppliers = data.content;
         this.paymentProcessingService.setSelectionFilter(this.filterForm.getRawValue());
         this.paymentProcessingService.setSelectedDeliveries(this.suppliers);
-        this.rerender();
         if (this.suppliers.length === 0) {
           this.setWarning('Suppliers not found!');
         }
@@ -171,7 +161,6 @@ export class SelectDeliveriesComponent extends BasicComponent implements OnInit,
         if (err.status === 404) {
           this.setWarning('Suppliers not found!');
           this.suppliers = undefined;
-          this.rerender();
         }
       });
   }
@@ -181,7 +170,9 @@ export class SelectDeliveriesComponent extends BasicComponent implements OnInit,
       this.suppliers.forEach((supplier) => {
         supplier.selected = true;
         supplier.deliveries.forEach((delivery) => {
-          delivery.selected = true;
+          if (delivery.deliveryApproval && (!this.withPendingApproval(delivery.payment))) {
+            delivery.selected = true;
+          }
         });
       });
     } else {
@@ -201,7 +192,9 @@ export class SelectDeliveriesComponent extends BasicComponent implements OnInit,
     this.suppliers[i].selected = isChecked;
     if (isChecked) {
       this.suppliers[i].deliveries.forEach((delivery) => {
-        delivery.selected = true;
+        if (delivery.deliveryApproval && (!this.withPendingApproval(delivery.payment))) {
+          delivery.selected = true;
+        }
       });
     } else {
       this.suppliers[i].deliveries.forEach((delivery) => {
@@ -213,7 +206,10 @@ export class SelectDeliveriesComponent extends BasicComponent implements OnInit,
   }
 
   selectDelivery(isChecked: boolean, i: number, t: number) {
-    this.suppliers[i].deliveries[t].selected = isChecked;
+    if (this.suppliers[i].deliveries[t].deliveryApproval &&
+      (!this.withPendingApproval(this.suppliers[i].deliveries[t].payment))) {
+      this.suppliers[i].deliveries[t].selected = isChecked;
+    }
     this.suppliers[i].selected = false;
     this.suppliers[i].deliveries.forEach((delivery) => {
       if (delivery.selected) {
@@ -247,7 +243,7 @@ export class SelectDeliveriesComponent extends BasicComponent implements OnInit,
       this.paymentChannels = Object.keys(data.content).map(key => {
         return {channel: key, _id: data.content[key]};
       });
-      this.paymentChannels = this.helper.getFarmersPossiblePaymentChannels(this.paymentChannels);
+      this.paymentChannels = this.helper.getFarmersAllPossibleReceivingPaymentChannels(this.paymentChannels);
     });
   }
 
@@ -260,7 +256,7 @@ export class SelectDeliveriesComponent extends BasicComponent implements OnInit,
     this.suppliers.map((farmer) => {
       farmer.deliveries.map((delivery) => {
         this.statistics.owedAmount = this.statistics.owedAmount + delivery.owedAmount;
-        if (delivery.selected) {
+        if (delivery.selected && delivery.deliveryApproval) {
           this.statistics.totalAmountToPay = this.statistics.totalAmountToPay + delivery.owedAmount;
           this.statistics.cherriesTotalQty = this.statistics.cherriesTotalQty + delivery.cherriesQty;
         }
@@ -272,4 +268,9 @@ export class SelectDeliveriesComponent extends BasicComponent implements OnInit,
     });
     this.paymentProcessingService.setSelectionStatistics(this.statistics);
   }
+
+  withPendingApproval(payments: any) {
+    return (payments.findIndex((element) => !element.approval)) !== -1;
+  }
+
 }

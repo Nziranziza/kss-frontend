@@ -97,8 +97,11 @@
           <tr *ngFor="let supply of cherrySupplies">
             <td></td>
             <td>
-              <div *ngIf="supply.owedAmount > 0" style="text-align: center;"><input type="checkbox"
-                                                                                    (click)="selectSupply($event.target.checked, supply)">
+              <div *ngIf="(supply.owedAmount > 0) && (supply.deliveryApproval)" style="text-align: center;">
+                <input type="checkbox" (click)="selectSupply($event.target.checked, supply)" *ngIf="(!withPendingApproval(supply.payment)); else warning">
+                <ng-template #warning >
+                  <i class="fa fa-warning" style="color: #dca956"></i>
+                </ng-template>
               </div>
             </td>
             <td> {{ supply.cherriesQty }}</td>

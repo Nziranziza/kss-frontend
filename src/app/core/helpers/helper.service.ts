@@ -106,15 +106,25 @@ export class HelperService {
 
   getOrgPossiblePaymentChannels(paymentChannels: any) {
     return paymentChannels.filter((channel) => {
+      /* not cash */
       return channel._id !== 4;
     });
   }
 
   getFarmersPossiblePaymentChannels(paymentChannels: any) {
     return paymentChannels.filter((channel) => {
-      return channel._id !== 4 && channel._id !== 5;
+      /* not bank and not cash */
+      return channel._id !== 5 && channel._id !== 4;
     });
   }
+
+  getFarmersAllPossibleReceivingPaymentChannels(paymentChannels: any) {
+    return paymentChannels.filter((channel) => {
+      /* not bank */
+      return channel._id !== 5;
+    });
+  }
+
 
   getOrgPossibleSourcePaymentChannels(selectedChannel: number, orgPaymentChannels: any) {
     let result = [];
@@ -151,7 +161,7 @@ export class HelperService {
       switch (+selectedPayingChannel) {
         case 1:
           result = farmerPaymentChannels.filter((channel) => {
-            return channel.paymentChannel === 1;
+            return channel.paymentChannel === 1 && channel.status === 3;
           });
           if (result [0]) {
             result [0]['label'.toString()] = 'AIRTEL';
@@ -159,7 +169,7 @@ export class HelperService {
           break;
         case 2:
           result = farmerPaymentChannels.filter((channel) => {
-            return channel.paymentChannel === 2;
+            return channel.paymentChannel === 2 && channel.status === 3;
           });
           if (result [0]) {
             result [0]['label'.toString()] = 'MTN';
@@ -167,7 +177,7 @@ export class HelperService {
           break;
         case 3:
           result = farmerPaymentChannels.filter((channel) => {
-            return channel.paymentChannel === 3;
+            return channel.paymentChannel === 3 && channel.status === 3;
           });
           if (result [0]) {
             result [0]['label'.toString()] = 'IKOFI';
@@ -175,7 +185,7 @@ export class HelperService {
           break;
         case 5:
           result = farmerPaymentChannels.filter((channel) => {
-            return channel.paymentChannel === 3;
+            return channel.paymentChannel === 3 && channel.status === 3;
           });
           if (result [0]) {
             result [0]['label'.toString()] = 'IKOFI';

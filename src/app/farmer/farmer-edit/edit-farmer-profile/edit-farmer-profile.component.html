@@ -151,6 +151,39 @@
       <app-list-errors [errorList]="errors"></app-list-errors>
       <div class="row">
         <div class="col-sm-12">
+          <div class="box" *ngIf="showEditPaymentChannelForm">
+            <div class="box-body">
+              <form [formGroup]="editPaymentChannelForm" (ngSubmit)="onEditChannel()">
+                <div class="row">
+                  <div class="col-xs-3">
+                    <div class="form-group">
+                      <span class="label-required">Channel</span>
+                      <select class="form-control" formControlName="channelId">
+                        <option *ngFor="let channel of channels" value="{{channel._id}}">
+                          {{ channel.channel }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-xs-3">
+                    <div class="form-group">
+                      <span class="label-required"> Subscription number </span>
+                      <input class="form-control" formControlName="subscriptionCode">
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-12">
+                    <button class="btn btn-success pull-right">Save</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
           <table class="hover table table-striped">
             <thead>
             <tr>
@@ -163,7 +196,14 @@
             <tr *ngFor="let channel of coffeeFarmerPaymentChannels">
               <td> {{ getPaymentChannelName(channel.paymentChannel) }}</td>
               <td> {{ channel.subscriptionCode }}</td>
-              <td></td>
+              <td>
+                <button class="btn btn-success btn-margin btn-sm" (click)="editCoffeeFarmerPaymentChannel(channel)">
+                  Edit
+                </button>
+                <button class="btn btn-primary btn-margin btn-sm" (click)="deleteCoffeeFarmerPaymentChannel(channel)"
+                        *ngIf="channel.status === 2"> Delete
+                </button>
+              </td>
             </tr>
             </tbody>
           </table>
@@ -190,7 +230,8 @@
                     <div class="col-xs-2">
                       <div class="form-group">
                         <span class="label-required">Channel</span>
-                        <select class="form-control" formControlName="paymentChannel" (change)="onChangePaymentChannel(i)">
+                        <select class="form-control" formControlName="paymentChannel"
+                                (change)="onChangePaymentChannel(i)">
                           <option *ngFor="let channel of channels" value="{{channel._id}}">
                             {{ channel.channel }}
                           </option>

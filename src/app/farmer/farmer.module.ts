@@ -15,7 +15,7 @@ import {EditFarmerRequestComponent} from './farmer-edit/edit-farmer-request/edit
 import {AddFarmerRequestComponent} from './farmer-edit/add-farmer-request/add-farmer-request.component';
 import {FarmerNeedApprovalListComponent} from './farmer-need-approval-list/farmer-need-approval-list.component';
 import {PendingFarmerListComponent} from './pending-farmer/pending-farmer-list/pending-farmer-list.component';
-import {FarmerAdministrativeListComponent } from './farmer-administrative-list/farmer-administrative-list.component';
+import {FarmerAdministrativeListComponent} from './farmer-administrative-list/farmer-administrative-list.component';
 
 @NgModule({
   declarations: [FarmerListComponent, FarmerDetailsComponent, FarmerCreateComponent,
@@ -28,7 +28,8 @@ import {FarmerAdministrativeListComponent } from './farmer-administrative-list/f
     SharedModule, NgbModule, NgxPaginationModule, OrderModule
   ],
   exports: [FarmerDetailsComponent],
-  entryComponents: [FarmerDetailsComponent, AddFarmerRequestComponent, EditFarmerRequestComponent, EditFarmerProfileComponent]
+  entryComponents: [FarmerDetailsComponent, AddFarmerRequestComponent,
+    EditFarmerRequestComponent, EditFarmerProfileComponent]
 })
 export class FarmerModule {
 }
