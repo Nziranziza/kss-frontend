@@ -76,6 +76,7 @@ export class OrganisationEditComponent extends BasicComponent implements OnInit 
     this.organisationTypeService.all().subscribe(types => {
       this.genres = types.content;
     });
+    this.onChanges();
     this.route.params.subscribe(params => {
       this.id = params['id'.toString()];
       this.organisationService.get(params['id'.toString()]).subscribe(data => {
@@ -92,7 +93,6 @@ export class OrganisationEditComponent extends BasicComponent implements OnInit 
               (this.editForm.controls.organizationRole as FormArray).push(control);
             }
           });
-          this.onChanges();
         });
         const org = data.content;
         org['genreId'.toString()] = org.genre._id;
@@ -132,6 +132,7 @@ export class OrganisationEditComponent extends BasicComponent implements OnInit 
             });
             org.coveredSectors[index].coveredVillages = restoreCoveredVillages;
             org.coveredSectors[index].coveredCells = restoreCoveredCells;
+            org.coveredSectors[index].sectorId = sector.sectorId._id;
           });
           this.locationService.getDistricts(org.location.prov_id).subscribe((districts) => {
             this.districts = districts;
@@ -156,17 +157,18 @@ export class OrganisationEditComponent extends BasicComponent implements OnInit 
           if (org.organizationRole.includes(1)) {
             this.coverVillages = true;
           }
-          this.editForm.patchValue(org);
+          this.editForm.patchValue(org, {emitEvent : false});
           org.coveredSectors.map((sector, index) => {
-            this.addCoveredSector();
-            this.getCoveredSectorsFormGroup(index).patchValue(sector);
+            console.log(sector);
+            (this.editForm.controls.coveredSectors as FormArray).push(this.newCoveredSector());
+            this.getCoveredSectorsFormGroup(index).patchValue(sector, {emitEvent: false});
           });
         } else {
           if (org.location === null) {
             delete org.location;
           }
           this.editForm.controls['genreId'.toString()].setValue(org.genreId);
-          this.editForm.patchValue(org);
+          this.editForm.patchValue(org, {emitEvent : false});
         }
       });
     });

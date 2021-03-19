@@ -94,10 +94,10 @@ export class EditFarmerRequestComponent implements OnInit {
     });
     if (this.isUserCWSOfficer) {
       this.organisationService.get(this.authenticationService.getCurrentUser().info.org_id).subscribe(data => {
-
         data.content.coveredSectors.map((sector) => {
+          console.log(sector);
           this.sectors.push({
-            _id: sector.sectorId,
+            _id: sector.sectorId._id,
             name: sector.name
           });
         });
@@ -124,7 +124,7 @@ export class EditFarmerRequestComponent implements OnInit {
     this.locationService.getVillages(this.land.location.cell_id._id).subscribe((villages) => {
       this.villages = villages;
     });
-    this.editFarmerRequestForm.patchValue(temp);
+    this.editFarmerRequestForm.patchValue(temp, {emitEvent: false});
     this.onChanges();
   }
 

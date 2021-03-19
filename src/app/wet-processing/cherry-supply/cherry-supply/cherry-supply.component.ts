@@ -117,7 +117,8 @@ export class CherrySupplyComponent implements OnInit, OnDestroy, AfterViewInit {
       modalRef.componentInstance.paymentData = record;
       modalRef.componentInstance.farmerUserId = this.farmerUserId;
       modalRef.result.finally(() => {
-        this.getFarmerSupplies(this.organisationId, this.regNumber);
+        // this.getFarmerSupplies(this.organisationId, this.regNumber);
+        window.location.reload();
       });
     } else {
       this.message = '';

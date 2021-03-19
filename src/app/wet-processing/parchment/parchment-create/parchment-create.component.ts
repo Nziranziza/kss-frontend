@@ -35,7 +35,7 @@ export class ParchmentCreateComponent extends BasicComponent implements OnInit {
   recordParchmentForm: FormGroup;
   errors: string[];
   coffeeTypes = [];
-  package: any;
+  packaging: any;
   totalKgs = 0;
   currentDate: any;
 
@@ -45,7 +45,7 @@ export class ParchmentCreateComponent extends BasicComponent implements OnInit {
       coffeeType: ['', Validators.required],
       coffeeGrade: ['A', Validators.required],
       date: ['', Validators.required],
-      package: new FormArray([]),
+      packaging: new FormArray([]),
       totalKgs: ['', Validators.required],
       producedDate: [this.datePipe.transform(this.currentDate, 'yyyy-MM-dd'), Validators.required]
     });
@@ -63,20 +63,20 @@ export class ParchmentCreateComponent extends BasicComponent implements OnInit {
   }
 
   get formPackage() {
-    return this.recordParchmentForm.controls.package as FormArray;
+    return this.recordParchmentForm.controls.packaging as FormArray;
   }
 
   addPackage() {
-    (this.recordParchmentForm.controls.package as FormArray).push(this.createPackage());
+    (this.recordParchmentForm.controls.packaging as FormArray).push(this.createPackage());
   }
 
   removePackage(index: number) {
-    (this.recordParchmentForm.controls.package as FormArray).removeAt(index);
+    (this.recordParchmentForm.controls.packaging as FormArray).removeAt(index);
   }
 
   getPackageFormGroup(index): FormGroup {
-    this.package = this.recordParchmentForm.controls.package as FormArray;
-    return this.package.controls[index] as FormGroup;
+    this.packaging = this.recordParchmentForm.controls.package as FormArray;
+    return this.packaging.controls[index] as FormGroup;
   }
 
   createPackage(): FormGroup {
