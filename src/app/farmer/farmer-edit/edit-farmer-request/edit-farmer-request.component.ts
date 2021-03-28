@@ -198,9 +198,23 @@ export class EditFarmerRequestComponent implements OnInit {
     this.editFarmerRequestForm.controls.location.get('cell_id'.toString()).valueChanges.subscribe(
       (value) => {
         if (value !== null) {
-          this.locationService.getVillages(value).subscribe((data) => {
-            this.villages = data;
-          });
+          if (this.isUserCWSOfficer) {
+            this.locationService.getVillages(value).toPromise().then(data => {
+              const sectorId = this.editFarmerRequestForm.controls.location.get('sect_id'.toString()).value;
+              const i = this.org.coveredSectors.findIndex(element => element.sectorId === sectorId);
+              const sector = this.org.coveredSectors[i];
+              this.villages = [];
+              data.map((village) => {
+                if (sector.coveredVillages.findIndex((vil) => village._id === vil.village_id) >= 0) {
+                  this.villages.push(village);
+                }
+              });
+            });
+          } else {
+            this.locationService.getVillages(value).subscribe((data) => {
+              this.villages = data;
+            });
+          }
         }
       }
     );
@@ -236,6 +250,7 @@ export class EditFarmerRequestComponent implements OnInit {
       this.setError('missing required land(s) information');
     }
   }
+
   filterCustomSectors(org: any) {
     const temp = [];
     org.coveredSectors.map((sector) => {

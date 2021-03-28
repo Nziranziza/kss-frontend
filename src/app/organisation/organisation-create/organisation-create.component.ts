@@ -254,7 +254,7 @@ export class OrganisationCreateComponent implements OnInit {
           this.coveredVillagesSet = [];
           this.createForm.controls.coveredSectors.reset();
         }
-        this.hasExpiration = !!this.selectedRoles.includes(8);
+        this.hasExpiration = this.selectedRoles.includes(8) && (!this.selectedRoles.includes(1));
       });
     this.createForm.controls.location.get('prov_id'.toString()).valueChanges.subscribe(
       (value) => {

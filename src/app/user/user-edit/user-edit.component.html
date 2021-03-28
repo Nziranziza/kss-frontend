@@ -62,12 +62,15 @@
             <div class="col-xs-6">
               <div class="form-group">
                 <label class="control-label label-required">User type</label>
-                <select class="form-control" formControlName="userType">
-                  <option value=""></option>
-                  <ng-container *ngFor="let type of userTypes">
-                    <option *ngIf="(type.value !==3) && (!(isCWSAdmin && type.value == 1))" value="{{type.value}}">{{type.name}}</option>
-                  </ng-container>
-                </select>
+                  <select class="form-control" formControlName="userType">
+                    <option value=""></option>
+                    <ng-container *ngFor="let type of userTypes">
+                      <!--
+                        *ngIf="(type.value !==3) && (!(isCWSAdmin && type.value == 1))"
+                      -->
+                      <option value="{{type.value}}">{{type.name}}</option>
+                    </ng-container>
+                  </select>
               </div>
             </div>
             <div class="col-xs-6">

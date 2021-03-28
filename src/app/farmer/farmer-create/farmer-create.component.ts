@@ -496,7 +496,7 @@ export class FarmerCreateComponent extends BasicComponent implements OnInit, OnD
         });
         this.sectors.push(temp);
       } else if (this.isUserCWSOfficer) {
-        this.filterCustomSectors(this.org,  index);
+        this.filterCustomSectors(this.org, index);
       } else {
         this.locationService.getSectors(value).toPromise().then(data => {
           this.sectors[index] = data;
@@ -532,12 +532,29 @@ export class FarmerCreateComponent extends BasicComponent implements OnInit, OnD
   onChangeCell(index: number) {
     const value = this.getRequestsFormGroup(index).controls.location.get('cell_id'.toString()).value;
     if (value !== '') {
+      if (this.isUserCWSOfficer) {
+        this.locationService.getVillages(value).toPromise().then(data => {
+          const sectorId = this.getRequestsFormGroup(index).controls.location.get('sect_id'.toString()).value;
+          const i = this.org.coveredSectors.findIndex(element => element.sectorId._id === sectorId);
+          const sector = this.org.coveredSectors[i];
+          this.villages[index] = [];
+          data.map((village) => {
+            if (sector.coveredVillages.findIndex((vil) => village._id === vil.village_id) >= 0) {
+              this.villages[index].push(village);
+            }
+          });
+          if (this.createFromPending) {
+            this.getLocationInput(index, 'village_id').setValue(this.farmer.location.village_id);
+          }
+        });
+      } else {
         this.locationService.getVillages(value).toPromise().then(data => {
           this.villages[index] = data;
           if (this.createFromPending) {
             this.getLocationInput(index, 'village_id').setValue(this.farmer.location.village_id);
           }
         });
+      }
     }
   }
 
@@ -598,6 +615,7 @@ export class FarmerCreateComponent extends BasicComponent implements OnInit, OnD
     });
     this.cells[index] = temp;
   }
+
 
   initial() {
     this.locationService.getProvinces().toPromise().then(data => {

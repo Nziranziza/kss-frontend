@@ -75,7 +75,7 @@ export class UserEditComponent implements OnInit {
       sex: ['', Validators.required],
       NID: [{value: '', disabled: true}],
       org_id: [''],
-      userType: [''],
+      userType: [{value: '', disabled: true}],
       userRoles: new FormArray([]),
       location: this.formBuilder.group({
         prov_id: [''],

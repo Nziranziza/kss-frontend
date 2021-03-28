@@ -112,7 +112,7 @@ export class OrganisationEditComponent extends BasicComponent implements OnInit 
         } else {
           this.needLocation = false;
         }
-        this.hasExpiration = !!org.organizationRole.includes(8);
+        this.hasExpiration = org.organizationRole.includes(8) && (!org.organizationRole.includes(1));
         this.locationService.getProvinces().subscribe((provinces) => {
           this.provinces = provinces;
         });
@@ -363,11 +363,7 @@ export class OrganisationEditComponent extends BasicComponent implements OnInit 
           this.coveredVillagesSet = [];
           this.editForm.controls.coveredSectors.reset();
         }
-        if (this.selectedRoles.includes(8)) {
-          this.hasExpiration = false;
-        } else {
-          this.hasExpiration = true;
-        }
+        this.hasExpiration = this.selectedRoles.includes(8) && (!this.selectedRoles.includes(1));
       });
     this.editForm.controls.location.get('prov_id'.toString()).valueChanges.subscribe(
       (value) => {

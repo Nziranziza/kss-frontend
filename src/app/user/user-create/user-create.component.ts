@@ -289,14 +289,21 @@ export class UserCreateComponent implements OnInit {
               return {name: key, value: +dt.content[key]};
             });
             this.userTypes = [...this.userTypes, ...temp].filter((v, i, a) => a.findIndex(t => (t.name === v.name)) === i);
-            /*remove collector user type if cws is also an input distribution site*/
-
-            if (selectedRoles.includes(8) && selectedRoles.includes(1)) {
-              const index = this.userTypes.findIndex(v => v.name === 'COFFEE_COLLECTOR');
+            if ((!this.authorisationService.isNaebAdmin()) && (!this.authorisationService.isTechouseUser()) ) {
+              const index = this.userTypes.findIndex(v => v.name === 'ADMIN');
               if (index > -1) {
                 this.userTypes.splice(index, 1);
               }
             }
+            /*
+              remove collector user type if cws is also an input distribution site
+                if (selectedRoles.includes(8) && selectedRoles.includes(1)) {
+                  const index = this.userTypes.findIndex(v => v.name === 'COFFEE_COLLECTOR');
+                  if (index > -1) {
+                    this.userTypes.splice(index, 1);
+                  }
+               }
+            */
           });
         });
         this.selectedRoles = selectedRoles;
