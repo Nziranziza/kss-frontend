@@ -258,11 +258,20 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
             DISTRICT: item.request.requestInfo[0].location.dist_id.name,
             SECTOR: item.request.requestInfo[0].location.sect_id.name,
             CELL: item.request.requestInfo[0].location.cell_id.name,
-            VILLAGE: item.request.requestInfo[0].location.village_id.name
+            VILLAGE: item.request.requestInfo[0].location.village_id.name,
+            NUMBER_OF_TREES: this.getNumberOfTrees(item.request.requestInfo)
           };
           this.allFarmers.push(temp);
         });
         this.downloadingAll = false;
       });
+  }
+
+  getNumberOfTrees = (requestInfo: any) => {
+    let sum = 0;
+    requestInfo.map((request) => {
+      sum = sum + request.numberOfTrees;
+    });
+    return sum;
   }
 }

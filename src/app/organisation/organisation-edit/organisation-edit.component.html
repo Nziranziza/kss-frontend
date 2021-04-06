@@ -75,7 +75,7 @@
                 <div class="col-xs-2">
                   <div class="form-group">
                     <span class="">Province</span>
-                    <select class="form-control" formControlName="prov_id" disabled="disableProvId">
+                    <select class="form-control" formControlName="prov_id">
                       <option value=""></option>
                       <option *ngFor="let province of provinces" value="{{province._id}}">{{province.namee}}</option>
                     </select>
@@ -84,7 +84,7 @@
                 <div class="col-xs-2">
                   <div class="form-group">
                     <span class="">District</span>
-                    <select class="form-control" formControlName="dist_id" disabled="disableDistId">
+                    <select class="form-control" formControlName="dist_id">
                       <option value=""></option>
                       <option *ngFor="let district of districts" value="{{district._id}}">{{district.name}}</option>
                     </select>

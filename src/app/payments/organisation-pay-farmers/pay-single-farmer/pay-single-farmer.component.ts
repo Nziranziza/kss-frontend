@@ -65,15 +65,13 @@ export class PaySingleFarmerComponent extends BasicComponent implements OnInit {
   onSubmitCashPayment() {
     if (this.cashPaymentForm.valid) {
       const beneficiary: any = {
-        foreName: this.supplier.type === 2 ? this.supplier.groupName : this.supplier.foreName,
+        foreName: this.supplier.groupName ? this.supplier.groupName : this.supplier.foreName,
         userId: this.supplier._id,
+        surname: this.supplier.surname ? this.supplier.surname : '',
         regNumber: this.paymentData.regNumber,
         amount: this.paymentData.paidAmount,
         deliveries: this.paymentData.deliveryIds,
       };
-      if (+this.supplier.type === 1) {
-        beneficiary.surname = this.supplier.surname;
-      }
       this.helper.cleanObject(beneficiary);
       this.paymentRequest = {
         org_id: this.organisationId,

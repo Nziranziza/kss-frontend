@@ -75,7 +75,8 @@ export class UserEditComponent implements OnInit {
       sex: ['', Validators.required],
       NID: [{value: '', disabled: true}],
       org_id: [''],
-      userType: [{value: '', disabled: true}],
+      /* userType: [{value: '', disabled: true}], */
+      userType: [''],
       userRoles: new FormArray([]),
       location: this.formBuilder.group({
         prov_id: [''],
@@ -198,11 +199,8 @@ export class UserEditComponent implements OnInit {
           return {name: key, value: dt.content[key]};
         });
         this.userTypes = [...this.userTypes, ...temp].filter((v, i, a) => a.findIndex(t => (t.name === v.name)) === i);
-
-        /*remove collector user type if cws is also an input distribution site*/
-
-        if (currentUser.userRoles.includes(8) && currentUser.userRoles.includes(1)) {
-          const index = this.userTypes.findIndex(v => v.name === 'COFFEE_COLLECTOR');
+        if ((!this.authorisationService.isNaebAdmin()) && (!this.authorisationService.isTechouseUser()) ) {
+          const index = this.userTypes.findIndex(v => v.name === 'ADMIN');
           if (index > -1) {
             this.userTypes.splice(index, 1);
           }
@@ -259,11 +257,8 @@ export class UserEditComponent implements OnInit {
               return {name: key, value: dt.content[key]};
             });
             this.userTypes = [...this.userTypes, ...temp].filter((v, i, a) => a.findIndex(t => (t.name === v.name)) === i);
-
-            /*remove collector user type if cws is also an input distribution site*/
-
-            if (selectedRoles.includes(8) && selectedRoles.includes(1)) {
-              const index = this.userTypes.findIndex(v => v.name === 'COFFEE_COLLECTOR');
+            if ((!this.authorisationService.isNaebAdmin()) && (!this.authorisationService.isTechouseUser()) ) {
+              const index = this.userTypes.findIndex(v => v.name === 'ADMIN');
               if (index > -1) {
                 this.userTypes.splice(index, 1);
               }
@@ -355,10 +350,10 @@ export class UserEditComponent implements OnInit {
         delete user.location;
       }
       if (!selectedRoles.includes(8)) {
+        delete user.distributionSite;
         delete user.accountExpirationDate;
       } else {
-        const myDate = this.helper.getDate(this.editForm.value.accountExpirationDate);
-        user.accountExpirationDate = new Date(myDate).getTime();
+        user.accountExpirationDate = this.helper.getDate(this.editForm.value.accountExpirationDate);
       }
       user['lastModifiedBy'.toString()] = {
         _id: this.authenticationService.getCurrentUser().info._id,

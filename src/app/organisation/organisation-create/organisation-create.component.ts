@@ -245,15 +245,18 @@ export class OrganisationCreateComponent implements OnInit {
           .filter(value => value !== null);
         this.needLocation = !!(this.selectedRoles.includes(1) ||
           this.selectedRoles.includes(2));
-        if (
-          this.selectedRoles.includes(1)) {
+        if (this.selectedRoles.includes(1)) {
           this.coverVillages = true;
-          this.addCoveredSector();
+          if (this.formCoveredSectors.length < 1) {
+            this.addCoveredSector();
+          }
         } else {
           this.coverVillages = false;
-          this.coveredVillagesSet = [];
-          this.createForm.controls.coveredSectors.reset();
+          // this.coveredVillagesSet = [];
+          // this.createForm.controls.coveredSectors.reset();
         }
+
+        /* organisation has expiration date if is a distribution site but not a cws  */
         this.hasExpiration = this.selectedRoles.includes(8) && (!this.selectedRoles.includes(1));
       });
     this.createForm.controls.location.get('prov_id'.toString()).valueChanges.subscribe(

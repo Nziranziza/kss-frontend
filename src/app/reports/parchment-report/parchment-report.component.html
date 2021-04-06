@@ -101,6 +101,33 @@
               </div>
             </div>
           </div>
+          <div class="box-footer" style="margin: 15px;">
+            <div class="row">
+              <div class="col-sm-2 col-xs-4 top-col-statistics">
+                <div class="description-block border-right">
+                  <h5 class="description-header text-green">{{ total.cherriesQty | number }}  &#13199;</h5>
+                  <span class="description-text">RECEIVED CHERRIES</span>
+                </div>
+                <!-- /.description-block -->
+              </div>
+              <!-- /.col -->
+              <div class="col-sm-2 col-xs-4 top-col-statistics">
+                <div class="description-block border-right">
+                  <h5 class="description-header text-blue">{{ total.expectedParchmentsQty | number }}  &#13199;</h5>
+                  <span class="description-text">EXPECTED PARCHMENTS</span>
+                </div>
+                <!-- /.description-block -->
+              </div>
+              <div class="col-sm-2 col-xs-4 top-col-statistics">
+                <div class="description-block border-right">
+                  <h5 class="description-header text-red">{{ total.parchmentsQty | number }} &#13199;</h5>
+                  <span class="description-text">PRODUCED PARCHMENTS</span>
+                </div>
+                <!-- /.description-block -->
+              </div>
+            </div>
+            <!-- /.row -->
+          </div>
           <div class="row">
             <div class="col-sm-12">
               <div style="margin: 0 auto; width: fit-content; float: left" *ngIf="showReport" class="img-responsive">

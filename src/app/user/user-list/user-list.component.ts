@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {AuthorisationService, MessageService, UserService} from '../../core/services';
+import {AuthenticationService, AuthorisationService, MessageService, UserService} from '../../core/services';
 import {User} from '../../core/models';
 import {ConfirmDialogService, OrganisationService} from '../../core/services';
 import {Subject} from 'rxjs';
@@ -22,12 +22,14 @@ export class UserListComponent extends BasicComponent implements OnInit, OnDestr
   dtTrigger: Subject = new Subject();
   org: any;
   isCWSAdmin: boolean;
+  currentUser: any;
 
   constructor(private route: ActivatedRoute,
               private modal: NgbModal,
               private userService: UserService,
               private messageService: MessageService,
               private authorisationService: AuthorisationService,
+              private authenticationService: AuthenticationService,
               private confirmDialogService: ConfirmDialogService,
               private organisationService: OrganisationService) {
     super();
@@ -38,6 +40,7 @@ export class UserListComponent extends BasicComponent implements OnInit, OnDestr
       this.organisationId = params['organisationId'.toString()];
     });
     this.isCWSAdmin = this.authorisationService.isCWSAdmin();
+    this.currentUser = this.authenticationService.getCurrentUser();
     this.getAllUsers();
     this.dtOptions = {
       pagingType: 'full_numbers',

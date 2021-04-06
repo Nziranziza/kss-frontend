@@ -107,16 +107,8 @@
           <span class="pull-right-container">
             <i class="fa fa-angle-left pull-right"></i>
           </span>
-        </a>-->
+        </a>
         <ul class="treeview-menu">
-          <!--
-            <li routerLinkActive="active" *appHasPermission="[1]">
-               <a routerLink="/admin/top-ups/payments/{{user.org_id}}">
-                 <i class="fa fa-circle-o"></i>
-                 <span>Top-ups</span>
-               </a>
-            </li>
-          -->
           <li routerLinkActive="active" *appHasPermission="[1]">
             <a routerLink="/admin/pay-farmers">
               <i class="fa fa-circle-o"></i>
@@ -135,7 +127,15 @@
               <span>Reports</span>
             </a>
           </li>
-        </ul>
+          &lt;!&ndash;
+            <li routerLinkActive="active" *appHasPermission="[1]">
+               <a routerLink="/admin/top-ups/payments/{{user.org_id}}">
+                 <i class="fa fa-circle-o"></i>
+                 <span>Top-ups</span>
+               </a>
+            </li>
+          &ndash;&gt;
+        </ul>-->
       </li>
       <li class="header" *appHasPermission="[2]">DRY PROCESSING</li>
       <li routerLinkActive="active" *appHasPermission="[2]">

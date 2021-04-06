@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AuthenticationService, AuthorisationService, OrganisationService, OrganisationTypeService} from '../../core/services';
 import {HelperService} from '../../core/helpers';
@@ -30,6 +30,7 @@ export class OrganisationEditComponent extends BasicComponent implements OnInit 
   provinces: any;
   districts: any;
   sectors: any;
+  organisation: any;
   cells: any;
   villages: any;
   needLocation = false;
@@ -44,10 +45,8 @@ export class OrganisationEditComponent extends BasicComponent implements OnInit 
   selectedCoveredVillages = [[]];
   selectedCoveredCells = [[]];
   coveredSectorsList: FormArray;
-  onInitial = true;
   hasExpiration = false;
   isUserDCC = false;
-
 
   ngOnInit() {
     if (this.authorisationService.isDistrictCashCropOfficer()) {
@@ -62,8 +61,8 @@ export class OrganisationEditComponent extends BasicComponent implements OnInit 
       genreId: [''],
       streetNumber: [''],
       location: this.formBuilder.group({
-        prov_id: [''],
-        dist_id: [''],
+        prov_id: [{disabled: this.disableProvId, value: ''}],
+        dist_id: [{disabled: this.disableDistId, value: ''}],
         sect_id: [''],
         cell_id: [''],
         village_id: [''],
@@ -94,6 +93,7 @@ export class OrganisationEditComponent extends BasicComponent implements OnInit 
             }
           });
         });
+        this.organisation = JSON.parse(JSON.stringify(data.content));
         const org = data.content;
         org['genreId'.toString()] = org.genre._id;
         delete org.genre;
@@ -157,9 +157,8 @@ export class OrganisationEditComponent extends BasicComponent implements OnInit 
           if (org.organizationRole.includes(1)) {
             this.coverVillages = true;
           }
-          this.editForm.patchValue(org, {emitEvent : false});
+          this.editForm.patchValue(org, {emitEvent: false});
           org.coveredSectors.map((sector, index) => {
-            console.log(sector);
             (this.editForm.controls.coveredSectors as FormArray).push(this.newCoveredSector());
             this.getCoveredSectorsFormGroup(index).patchValue(sector, {emitEvent: false});
           });
@@ -168,7 +167,7 @@ export class OrganisationEditComponent extends BasicComponent implements OnInit 
             delete org.location;
           }
           this.editForm.controls['genreId'.toString()].setValue(org.genreId);
-          this.editForm.patchValue(org, {emitEvent : false});
+          this.editForm.patchValue(org, {emitEvent: false});
         }
       });
     });
@@ -290,6 +289,11 @@ export class OrganisationEditComponent extends BasicComponent implements OnInit 
       org['organizationRole'.toString()] = selectedRoles;
       if (!(selectedRoles.includes(1) || selectedRoles.includes(2))) {
         delete org.location;
+      } else if (this.authorisationService.isDistrictCashCropOfficer()) {
+        console.log('here!');
+        console.log(this.organisation);
+        org['location'.toString()]['prov_id'.toString()] = this.organisation.location.prov_id ? this.organisation.location.prov_id._id : '';
+        org['location'.toString()]['dist_id'.toString()] = this.organisation.location.dist_id ? this.organisation.location.dist_id._id : '';
       }
       if (!(selectedRoles.includes(1))) {
         delete org.coveredVillages;
@@ -328,7 +332,7 @@ export class OrganisationEditComponent extends BasicComponent implements OnInit 
       }
       this.helper.cleanObject(org);
       this.organisationService.update(org, this.id).subscribe(data => {
-          this.messageService.setMessage('Organisation successfully updated!');
+          this.messageService.setMessage('organisation successfully updated!');
           this.router.navigateByUrl('admin/organisations');
         },
         (err) => {
@@ -345,23 +349,16 @@ export class OrganisationEditComponent extends BasicComponent implements OnInit 
         this.selectedRoles = data
           .map((checked, index) => checked ? this.possibleRoles[index].value : null)
           .filter(value => value !== null);
-        if (
-          this.selectedRoles.includes(1) ||
-          this.selectedRoles.includes(2)) {
-          this.needLocation = true;
-        } else {
-          this.needLocation = false;
-        }
-        if (
-          this.selectedRoles.includes(1)) {
+        this.needLocation = !!(this.selectedRoles.includes(1) || this.selectedRoles.includes(2));
+        if (this.selectedRoles.includes(1)) {
           this.coverVillages = true;
-          if (!this.onInitial) {
+          if (this.formCoveredSectors.length < 1) {
             this.addCoveredSector();
           }
         } else {
           this.coverVillages = false;
-          this.coveredVillagesSet = [];
-          this.editForm.controls.coveredSectors.reset();
+          // this.coveredVillagesSet = [];
+          // this.editForm.controls.coveredSectors.reset();
         }
         this.hasExpiration = this.selectedRoles.includes(8) && (!this.selectedRoles.includes(1));
       });

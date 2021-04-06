@@ -52,7 +52,12 @@ export class ParchmentReportComponent extends BasicComponent implements OnInit {
     height: 450
   };
 
-  total = 0;
+  total = {
+    cherriesQty: 0,
+    parchmentsQty: 0,
+    expectedParchmentsQty: 0
+  };
+
   isCurrentUserDCC;
   subRegionFilter: any;
   regionIds = [];
@@ -87,6 +92,11 @@ export class ParchmentReportComponent extends BasicComponent implements OnInit {
   onSubmit(searchBy: string) {
     if (this.filterForm.valid) {
       this.loading = true;
+      this.total = {
+        cherriesQty: 0,
+        parchmentsQty: 0,
+        expectedParchmentsQty: 0
+      };
       const filters = JSON.parse(JSON.stringify(this.filterForm.value));
       if (filters.location.prov_id === '' && searchBy === 'province') {
         delete filters.location;
@@ -102,7 +112,6 @@ export class ParchmentReportComponent extends BasicComponent implements OnInit {
 
       this.parchmentService.report(filters).subscribe((data) => {
         this.loading = false;
-        this.total = 0;
         const reports = [];
         this.regionIds = [];
         if (data.content.length !== 0) {
@@ -114,6 +123,8 @@ export class ParchmentReportComponent extends BasicComponent implements OnInit {
               const existingIndex = reports.indexOf(existing[0]);
               reports[existingIndex][1] = reports[existingIndex][1] + item.totalCherries;
               reports[existingIndex][3] = (reports[existingIndex][1] / 5);
+              this.total.cherriesQty = this.total.cherriesQty + (isUndefined(item.totalCherries) ? 0 : item.totalCherries);
+              this.total.expectedParchmentsQty = this.total.expectedParchmentsQty + (item.totalCherries / 5);
             } else {
               if (item.regionId) {
                 this.regionIds.push(item.regionId);
@@ -125,6 +136,9 @@ export class ParchmentReportComponent extends BasicComponent implements OnInit {
                 ? item.regionName : item.name, isUndefined(item.totalCherries) ? 0 : item.totalCherries,
                 isUndefined(item.totalParchments) ? 0 : item.totalParchments,
                 (isUndefined(item.totalCherries) ? 0 : item.totalCherries / 5)]);
+              this.total.cherriesQty = this.total.cherriesQty + (isUndefined(item.totalCherries) ? 0 : item.totalCherries);
+              this.total.parchmentsQty = this.total.parchmentsQty + (isUndefined(item.totalParchments) ? 0 : item.totalParchments);
+              this.total.expectedParchmentsQty = this.total.expectedParchmentsQty + (item.totalCherries / 5);
             }
           });
           this.graph1.data = reports;

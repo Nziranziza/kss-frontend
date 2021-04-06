@@ -19,11 +19,12 @@ export class CoveredAreaResolverService implements Resolve<any> {
     this.organisationId = route.paramMap.get('organisationId');
     this.organisationService.get(this.organisationId).subscribe(data => {
       const org = data.content;
+      console.log(org);
       const orgSectors = [];
       const orgCells = [];
       const orgVillages = [];
       org.coveredSectors.map((sector) => {
-        orgSectors.push(sector.sectorId);
+        orgSectors.push(sector.sectorId._id);
         sector.coveredCells.map((cell) => {
           orgCells.push(cell.cell_id);
         });
