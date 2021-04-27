@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {AuthenticationService, ExcelServicesService, OrganisationService, OrganisationTypeService} from '../../core/services';
 import {HelperService} from '../../core/helpers';
@@ -10,6 +10,7 @@ import {BasicComponent} from '../../core/library';
 import {isUndefined} from 'util';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ParchmentReportDetailComponent} from './parchment-report-detail/parchment-report-detail.component';
+import {DatePipe} from '@angular/common';
 
 @Component({
   selector: 'app-parchment-report',
@@ -52,6 +53,9 @@ export class ParchmentReportComponent extends BasicComponent implements OnInit {
     height: 450
   };
 
+  seasonStartingTime: string;
+  currentDate: string;
+
   total = {
     cherriesQty: 0,
     parchmentsQty: 0,
@@ -67,6 +71,7 @@ export class ParchmentReportComponent extends BasicComponent implements OnInit {
               private authenticationService: AuthenticationService,
               private excelService: ExcelServicesService,
               private modal: NgbModal,
+              private datePipe: DatePipe,
               private router: Router, private organisationService: OrganisationService,
               private helper: HelperService, private organisationTypeService: OrganisationTypeService,
               private locationService: LocationService, private parchmentService: ParchmentService) {
@@ -75,6 +80,8 @@ export class ParchmentReportComponent extends BasicComponent implements OnInit {
 
   ngOnInit() {
     this.isCurrentUserDCC = this.authorisationService.isDistrictCashCropOfficer();
+    this.seasonStartingTime = this.authenticationService.getCurrentSeason().created_at;
+    this.currentDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
     this.filterForm = this.formBuilder.group({
       location: this.formBuilder.group({
         prov_id: [''],
@@ -82,8 +89,9 @@ export class ParchmentReportComponent extends BasicComponent implements OnInit {
         sect_id: [''],
       }),
       date: this.formBuilder.group({
-        from: [''],
-        to: ['']
+        from: [this.datePipe.transform(this.seasonStartingTime,
+          'yyyy-MM-dd', 'GMT+2'), Validators.required],
+        to: [this.datePipe.transform(this.currentDate, 'yyyy-MM-dd', 'GMT+2'), Validators.required],
       })
     });
     this.initial();
