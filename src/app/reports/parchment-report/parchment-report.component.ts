@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {Router} from '@angular/router';
-import {AuthenticationService, OrganisationService, OrganisationTypeService} from '../../core/services';
+import {AuthenticationService, ExcelServicesService, OrganisationService, OrganisationTypeService} from '../../core/services';
 import {HelperService} from '../../core/helpers';
 import {LocationService} from '../../core/services';
 import {ParchmentService} from '../../core/services';
@@ -65,6 +65,7 @@ export class ParchmentReportComponent extends BasicComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
               private authorisationService: AuthorisationService,
               private authenticationService: AuthenticationService,
+              private excelService: ExcelServicesService,
               private modal: NgbModal,
               private router: Router, private organisationService: OrganisationService,
               private helper: HelperService, private organisationTypeService: OrganisationTypeService,
@@ -257,6 +258,21 @@ export class ParchmentReportComponent extends BasicComponent implements OnInit {
       }
     }
   }
+
+  exportReport() {
+    const report = [];
+    this.graph1.data.forEach((item) => {
+      const temp = {
+        location: item[0],
+        cherries: item[1],
+        parchments: item [2],
+        expected_parchments: item[3]
+      };
+      report.push(temp);
+    });
+    this.excelService.exportAsExcelFile(report, 'production report');
+  }
+
 
   updateSubRegionFilter(id: string) {
     switch (this.subRegionFilter.location.searchBy) {

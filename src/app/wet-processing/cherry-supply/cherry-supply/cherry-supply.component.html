@@ -79,7 +79,7 @@
         <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped">
           <thead>
           <tr>
-            <th></th>
+            <th style="width: 20px"></th>
             <th><i class="fa fa-check-square-o"></i></th>
             <th>CherriesQty (kg)</th>
             <th>Unit price</th>
@@ -95,7 +95,7 @@
           </thead>
           <tbody>
           <tr *ngFor="let supply of cherrySupplies">
-            <td></td>
+            <td style="width: 20px"></td>
             <td>
               <div *ngIf="(supply.owedAmount > 0) && (supply.deliveryApproval)" style="text-align: center;">
                 <input type="checkbox" (click)="selectSupply($event.target.checked, supply)" *ngIf="(!withPendingApproval(supply.payment)); else warning">
