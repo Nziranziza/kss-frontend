@@ -128,8 +128,8 @@ export class CherrySupplyComponent implements OnInit, OnDestroy, AfterViewInit {
 
   getFarmerSupplies(organisationId: string, regNumber: string): void {
     this.cherrySupplyService.getFarmerDeliveries(organisationId, regNumber).subscribe((data) => {
-      this.rerender();
       this.cherrySupplies = data.content;
+      this.rerender();
       this.draw();
     });
   }

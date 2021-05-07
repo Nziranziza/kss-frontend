@@ -23,8 +23,8 @@ export class OrganisationService {
     return this.apiService.get('/cwsstats/summary/cws/' + id);
   }
 
-  destroy(id: string): Observable<any> {
-    return this.apiService.delete('/organizations/' + id);
+  destroy(body: any): Observable<any> {
+    return this.apiService.post('/organizations/remove', body);
   }
 
   save(organisation: Organisation): Observable<any> {

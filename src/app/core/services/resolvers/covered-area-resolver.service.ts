@@ -19,7 +19,6 @@ export class CoveredAreaResolverService implements Resolve<any> {
     this.organisationId = route.paramMap.get('organisationId');
     this.organisationService.get(this.organisationId).subscribe(data => {
       const org = data.content;
-      console.log(org);
       const orgSectors = [];
       const orgCells = [];
       const orgVillages = [];

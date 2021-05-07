@@ -1,33 +1,37 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {AuthenticationService, OrganisationService} from '../../core/services';
-import {Organisation} from '../../core/models';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ConfirmDialogService} from '../../core/services';
 import {Subject} from 'rxjs';
 import {MessageService} from '../../core/services';
 import {AuthorisationService} from '../../core/services';
 import {SiteService} from '../../core/services';
+import {BasicComponent} from '../../core/library';
+import {DataTableDirective} from 'angular-datatables';
 
 @Component({
   selector: 'app-organisation-list',
   templateUrl: './organisation-list.component.html',
   styleUrls: ['./organisation-list.component.css']
 })
-export class OrganisationListComponent implements OnInit, OnDestroy {
+export class OrganisationListComponent extends BasicComponent implements OnInit, OnDestroy {
 
   constructor(private organisationService: OrganisationService, private siteService: SiteService,
               private router: Router, private  confirmDialogService: ConfirmDialogService,
               private authorisationService: AuthorisationService,
               private route: ActivatedRoute,
               private authenticationService: AuthenticationService, private messageService: MessageService) {
+    super();
   }
 
-  message: string;
   organisations = [];
   dtOptions: any = {};
   loading = false;
   // @ts-ignore
   dtTrigger: Subject = new Subject();
+  // @ts-ignore
+  @ViewChild(DataTableDirective, {static: false})
+  dtElement: DataTableDirective;
   isSuperAdmin = false;
   isNaebCoffeeValueChainOfficer = false;
 
@@ -43,7 +47,7 @@ export class OrganisationListComponent implements OnInit, OnDestroy {
     };
     this.isSuperAdmin = this.authenticationService.getCurrentUser().parameters.role.includes(0);
     this.isNaebCoffeeValueChainOfficer = this.authorisationService.isNaebCoffeeValueChainOfficer();
-    this.message = this.messageService.getMessage();
+    this.setMessage(this.messageService.getMessage());
   }
 
   isOrgCWS(org: any) {
@@ -59,16 +63,38 @@ export class OrganisationListComponent implements OnInit, OnDestroy {
     return organisation.organizationRole.indexOf(0) === -1 && organisation.organizationName !== 'BK Techouse';
   }
 
-  deleteOrganisation(organisation: Organisation): void {
+  deleteOrganisation(id: string): void {
     this.confirmDialogService.openConfirmDialog('Are you sure you want to delete this record?').afterClosed().subscribe(
       res => {
         if (res) {
-          this.organisationService.destroy(organisation._id)
+          const body = {
+            id
+          };
+          this.organisationService.destroy(body)
             .subscribe(() => {
-              this.getAllOrganisations();
-              this.message = 'Record successful deleted!';
-            });
-          this.getAllOrganisations();
+                this.setMessage('Organisation successful deleted!');
+                this.organisationService.all().subscribe(data => {
+                  if (data) {
+                    this.organisations = data.content;
+                    if (this.authorisationService.isNaebCoffeeValueChainOfficer()) {
+                      this.organisations = this.organisations.filter((org) => {
+                        return (
+                          org.organizationRole.indexOf(1) > -1 ||
+                          org.organizationRole.indexOf(2) > -1 ||
+                          org.organizationRole.indexOf(7) > -1 ||
+                          org.organizationRole.indexOf(9) > -1 ||
+                          org.organizationRole.indexOf(10) > -1
+                        );
+                      });
+                    }
+                    this.loading = false;
+                    this.rerender();
+                  }
+                });
+              },
+              (err) => {
+                this.setError(err.errors);
+              });
         }
       });
   }
@@ -116,4 +142,11 @@ export class OrganisationListComponent implements OnInit, OnDestroy {
       });
     }
   }
+  rerender(): void {
+    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      dtInstance.destroy();
+      this.dtTrigger.next();
+    });
+  }
+
 }
