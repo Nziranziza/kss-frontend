@@ -17,7 +17,7 @@ module.exports = shipit => {
     staging: {
       deployTo: '/var/www/html/sks-front-end',
       ignores: [],
-      key: '~/.ssh/id_rsa.pub',
+      key: '~/.ssh/id_ed25519.pub',
       servers: 'jrukundo@105.179.10.30:2202'
     },
     production: {

@@ -26,7 +26,7 @@ export class OrganisationService {
   destroy(body: any): Observable<any> {
     return this.apiService.post('/organizations/remove', body);
   }
-
+  
   save(organisation: Organisation): Observable<any> {
     return this.apiService.post('/organizations/', organisation);
   }

@@ -64,7 +64,7 @@ export class OrganisationListComponent extends BasicComponent implements OnInit,
   }
 
   deleteOrganisation(id: string): void {
-    this.confirmDialogService.openConfirmDialog('Are you sure you want to delete this record?').afterClosed().subscribe(
+    this.confirmDialogService.openConfirmDialog('Are you sure you want to delete this organization?').afterClosed().subscribe(
       res => {
         if (res) {
           const body = {

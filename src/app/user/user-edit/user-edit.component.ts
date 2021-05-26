@@ -39,6 +39,7 @@ export class UserEditComponent implements OnInit {
     {name: 'Approved', value: 3},
     {name: 'Locked', value: 4},
     {name: 'Expired', value: 5},
+    {name: 'Disabled', value: 6},
   ];
   invalidId = false;
   org: any;
@@ -75,8 +76,8 @@ export class UserEditComponent implements OnInit {
       sex: ['', Validators.required],
       NID: [{value: '', disabled: true}],
       org_id: [''],
-      /* userType: [{value: '', disabled: true}], */
-      userType: [''],
+      userType: [{value: '', disabled: true}],
+      // userType: [''],
       userRoles: new FormArray([]),
       location: this.formBuilder.group({
         prov_id: [''],

@@ -39,7 +39,9 @@
                     <span class="">Province</span>
                     <div class="input-group input-group-sm">
                       <select class="form-control" formControlName="prov_id">
-                        <option value="" selected="selected">ALL PROVINCES</option>
+                        <option value="all provinces" selected="selected">All provinces</option>
+                        <option value="all districts">All districts</option>
+                        <option value="all cws">All cws</option>
                         <option *ngFor="let province of provinces" value="{{province._id}}">{{province.namee}}</option>
                       </select>
                       <span class="input-group-btn">
@@ -57,11 +59,13 @@
                       <select class="form-control" formControlName="dist_id" disabled="true"
                               *ngIf="isCurrentUserDCC; else enabled">
                         <option value=""></option>
+                        <option value="all cws" *ngIf="showDistrictAllCWS">All cws</option>
                         <option *ngFor="let district of districts" value="{{district._id}}">{{district.name}}</option>
                       </select>
                       <ng-template #enabled>
                         <select class="form-control" formControlName="dist_id">
                           <option value=""></option>
+                          <option value="all cws" *ngIf="showDistrictAllCWS">All cws</option>
                           <option *ngFor="let district of districts" value="{{district._id}}">{{district.name}}</option>
                         </select>
                       </ng-template>
@@ -131,7 +135,8 @@
           <button class="btn btn-success btn-margin pull-right" (click)="exportReport()"><i class="fa fa-download"></i> Export</button>
           <div class="row">
             <div class="col-sm-12">
-              <div style="margin: 0 auto; width: fit-content; float: left" *ngIf="showReport" class="img-responsive">
+              <ng-container *ngIf=" subRegionFilter && subRegionFilter.location.searchBy !== 'all cws' ;else inTable ">
+                <div style="margin: 0 auto; width: fit-content; float: left" *ngIf="showReport" class="img-responsive">
                 <google-chart #chart
                               [type]="graph1.type"
                               [data]="graph1.data"
@@ -142,6 +147,29 @@
                               on-select="selectHandler($event)">
                 </google-chart>
               </div>
+              </ng-container>
+              <ng-template #inTable>
+                <div style="margin: 0 auto; width: fit-content; float: left" *ngIf="showReport" class="img-responsive">
+                  <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped">
+                    <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Cherries (Kg)</th>
+                      <th>Parchments (Kg)</th>
+                      <th>Expected Parchments (Kg)</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr  *ngFor="let dt of graph1.data">
+                      <td>{{ dt[0] }}</td>
+                      <td>{{ dt[1] }}</td>
+                      <td>{{ dt[2] }}</td>
+                      <td>{{ dt[3] }}</td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </ng-template>
             </div>
           </div>
         </form>

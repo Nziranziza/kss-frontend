@@ -11,6 +11,7 @@ import {isUndefined} from 'util';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ParchmentReportDetailComponent} from './parchment-report-detail/parchment-report-detail.component';
 import {DatePipe} from '@angular/common';
+import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-parchment-report',
@@ -30,6 +31,7 @@ export class ParchmentReportComponent extends BasicComponent implements OnInit {
   distId = false;
   sectorId = false;
   showReport = false;
+  showDistrictAllCWS = false;
   graph1 = {
     type: 'ComboChart',
     data: [],
@@ -49,9 +51,13 @@ export class ParchmentReportComponent extends BasicComponent implements OnInit {
         2: {color: '#f0a732'}
       }
     },
-    width: 1050,
-    height: 450
+    width: 1250,
+    height: 550
   };
+
+  dtOptions: DataTables.Settings = {};
+  // @ts-ignore
+  dtTrigger: Subject = new Subject();
 
   seasonStartingTime: string;
   currentDate: string;
@@ -65,6 +71,8 @@ export class ParchmentReportComponent extends BasicComponent implements OnInit {
   isCurrentUserDCC;
   subRegionFilter: any;
   regionIds = [];
+
+  tableData = [];
 
   constructor(private formBuilder: FormBuilder,
               private authorisationService: AuthorisationService,
@@ -90,111 +98,133 @@ export class ParchmentReportComponent extends BasicComponent implements OnInit {
       }),
       date: this.formBuilder.group({
         from: [this.datePipe.transform(this.seasonStartingTime,
-          'yyyy-MM-dd', 'GMT+2'), Validators.required],
-        to: [this.datePipe.transform(this.currentDate, 'yyyy-MM-dd', 'GMT+2'), Validators.required],
+          'yyyy-MM-dd', 'GMT+2')],
+        to: [this.datePipe.transform(this.currentDate, 'yyyy-MM-dd', 'GMT+2')],
       })
     });
+    this.dtOptions = {
+      pagingType: 'full_numbers',
+      pageLength: 10
+    };
     this.initial();
     this.onChanges();
   }
 
   onSubmit(searchBy: string) {
-    if (this.filterForm.valid) {
-      this.loading = true;
-      this.total = {
-        cherriesQty: 0,
-        parchmentsQty: 0,
-        expectedParchmentsQty: 0
+    this.loading = true;
+    this.total = {
+      cherriesQty: 0,
+      parchmentsQty: 0,
+      expectedParchmentsQty: 0
+    };
+    const filters = JSON.parse(JSON.stringify(this.filterForm.value));
+    if ((filters.location.prov_id === 'all provinces' ||
+      filters.location.prov_id === 'all districts' || filters.location.prov_id === 'all cws') && searchBy === 'province') {
+      filters['location'.toString()] = {
+        searchBy: filters.location.prov_id
       };
-      const filters = JSON.parse(JSON.stringify(this.filterForm.value));
-      if (filters.location.prov_id === '' && searchBy === 'province') {
-        delete filters.location;
-        filters['location'.toString()] = {
-          searchBy: 'all provinces'
-        };
-      } else {
-        filters.location['searchBy'.toString()] = searchBy;
-        this.helper.cleanObject(filters.location);
-      }
-      this.subRegionFilter = JSON.parse(JSON.stringify(filters));
-      this.setSubRegionFilter(this.subRegionFilter);
-
-      this.parchmentService.report(filters).subscribe((data) => {
-        this.loading = false;
-        const reports = [];
-        this.regionIds = [];
-        if (data.content.length !== 0) {
-          data.content.forEach((item) => {
-            const existing = reports.filter((value) => {
-              return value[0] === item.regionName || value[0] === item.name;
-            });
-            if (existing.length) {
-              const existingIndex = reports.indexOf(existing[0]);
-              reports[existingIndex][1] = reports[existingIndex][1] + item.totalCherries;
-              reports[existingIndex][3] = (reports[existingIndex][1] / 5);
-              this.total.cherriesQty = this.total.cherriesQty + (isUndefined(item.totalCherries) ? 0 : item.totalCherries);
-              this.total.expectedParchmentsQty = this.total.expectedParchmentsQty + (item.totalCherries / 5);
-            } else {
-              if (item.regionId) {
-                this.regionIds.push(item.regionId);
-              }
-              if (item.cwsId) {
-                this.regionIds.push(item.cwsId);
-              }
-              reports.push([isUndefined(item.name)
-                ? item.regionName : item.name, isUndefined(item.totalCherries) ? 0 : item.totalCherries,
-                isUndefined(item.totalParchments) ? 0 : item.totalParchments,
-                (isUndefined(item.totalCherries) ? 0 : item.totalCherries / 5)]);
-              this.total.cherriesQty = this.total.cherriesQty + (isUndefined(item.totalCherries) ? 0 : item.totalCherries);
-              this.total.parchmentsQty = this.total.parchmentsQty + (isUndefined(item.totalParchments) ? 0 : item.totalParchments);
-              this.total.expectedParchmentsQty = this.total.expectedParchmentsQty + (item.totalCherries / 5);
-            }
-          });
-          this.graph1.data = reports;
-          this.clear();
-          this.showReport = true;
-        } else {
-          this.showReport = false;
-          this.setMessage('Sorry no data found to this location!');
-        }
-      }, (err) => {
-        if (err.status === 404) {
-          this.showReport = false;
-          this.setWarning(err.errors[0]);
-        } else {
-          this.setError(err.errors);
-        }
-      });
+    } else if (filters.location.dist_id === 'all cws' && searchBy === 'district') {
+      filters.location['searchBy'.toString()] = 'all cws';
+      delete filters.location.dist_id;
+      this.helper.cleanObject(filters.location);
     } else {
-      this.setError(this.helper.getFormValidationErrors(this.filterForm));
+      if (searchBy === 'province') {
+        delete filters.location.dist_id;
+        delete filters.location.sect_id;
+      }
+      if (searchBy === 'district') {
+        delete filters.location.prov_id;
+        delete filters.location.sect_id;
+      }
+      if (searchBy === 'sector') {
+        delete filters.location.dist_id;
+        delete filters.location.prov_id;
+      }
+      filters.location['searchBy'.toString()] = searchBy;
+      this.helper.cleanObject(filters.location);
     }
+    this.subRegionFilter = JSON.parse(JSON.stringify(filters));
+    this.setSubRegionFilter(this.subRegionFilter);
+
+    this.parchmentService.report(filters).subscribe((data) => {
+      this.loading = false;
+      const reports = [];
+      this.regionIds = [];
+      if (data.content.length !== 0) {
+        data.content.forEach((item) => {
+          const existing = reports.filter((value) => {
+            return value[0] === item.regionName || value[0] === item.name;
+          });
+          if (existing.length) {
+            const existingIndex = reports.indexOf(existing[0]);
+            reports[existingIndex][1] = reports[existingIndex][1] + item.totalCherries;
+            reports[existingIndex][3] = (reports[existingIndex][1] / 5);
+            this.total.cherriesQty = this.total.cherriesQty + (isUndefined(item.totalCherries) ? 0 : item.totalCherries);
+            this.total.expectedParchmentsQty = this.total.expectedParchmentsQty + (item.totalCherries / 5);
+          } else {
+            if (item.regionId) {
+              this.regionIds.push(item.regionId);
+            }
+            if (item.cwsId) {
+              this.regionIds.push(item.cwsId);
+            }
+            reports.push([isUndefined(item.name)
+              ? item.regionName : item.name, isUndefined(item.totalCherries) ? 0 : item.totalCherries,
+              isUndefined(item.totalParchments) ? 0 : item.totalParchments,
+              (isUndefined(item.totalCherries) ? 0 : item.totalCherries / 5)]);
+            this.total.cherriesQty = this.total.cherriesQty + (isUndefined(item.totalCherries) ? 0 : item.totalCherries);
+            this.total.parchmentsQty = this.total.parchmentsQty + (isUndefined(item.totalParchments) ? 0 : item.totalParchments);
+            this.total.expectedParchmentsQty = this.total.expectedParchmentsQty + (item.totalCherries / 5);
+          }
+        });
+        this.graph1.data = reports;
+        this.clear();
+        this.showReport = true;
+      } else {
+        this.showReport = false;
+        this.setWarning('Sorry no data found to this location!');
+      }
+    }, (err) => {
+      if (err.status === 404) {
+        this.showReport = false;
+        this.setWarning(err.errors[0]);
+      } else {
+        this.setError(err.errors);
+      }
+    });
   }
 
   onChanges() {
     this.filterForm.controls.location.get('prov_id'.toString()).valueChanges.subscribe(
       (value) => {
-        if (value !== '') {
+        if (value !== 'all provinces' && value !== 'all cws' && value !== 'all districts') {
           this.locationService.getDistricts(value).subscribe((data) => {
             this.districts = data;
             this.sectors = null;
             this.cells = null;
             this.villages = null;
           });
+          this.showDistrictAllCWS = true;
+        } else {
+          this.distId = false;
+          this.districts = null;
+          this.sectors = null;
+          this.cells = null;
+          this.villages = null;
+          this.showDistrictAllCWS = false;
         }
       }
     );
     this.filterForm.controls.location.get('dist_id'.toString()).valueChanges.subscribe(
       (value) => {
-        if (value !== '') {
+        if (value !== '' && value !== 'all cws') {
           this.locationService.getSectors(value).subscribe((data) => {
             this.sectors = data;
             this.cells = null;
             this.villages = null;
             this.distId = true;
           });
-        } else {
-          this.distId = false;
-        }
+        } else { this.distId = value === 'all cws'; }
       }
     );
     this.filterForm.controls.location.get('sect_id'.toString()).valueChanges.subscribe(
