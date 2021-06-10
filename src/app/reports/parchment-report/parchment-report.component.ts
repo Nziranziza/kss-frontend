@@ -72,8 +72,6 @@ export class ParchmentReportComponent extends BasicComponent implements OnInit {
   subRegionFilter: any;
   regionIds = [];
 
-  tableData = [];
-
   constructor(private formBuilder: FormBuilder,
               private authorisationService: AuthorisationService,
               private authenticationService: AuthenticationService,

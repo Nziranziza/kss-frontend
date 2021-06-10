@@ -31,9 +31,9 @@ export class OrganisationSettingsComponent extends BasicComponent implements OnI
   banks: any;
   fileError: string;
   isFileSaved: boolean;
-  isImage: boolean;
   cardFileBase64: string;
   certificates: any;
+  isImage: boolean;
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -55,6 +55,7 @@ export class OrganisationSettingsComponent extends BasicComponent implements OnI
     this.getPaymentChannels();
     this.addPaymentChannel();
     this.getOrgPaymentChannels();
+    this.getCertificates();
   }
 
   onSubmitPaymentChannel() {
@@ -141,15 +142,20 @@ export class OrganisationSettingsComponent extends BasicComponent implements OnI
     });
   }
 
+  getCertificates() {
+    this.organisationService.orgCertificates(this.organisationId).subscribe((data) => {
+      this.certificates = data.content;
+    });
+  }
+
   fileChangeEvent(fileInput: any) {
     this.fileError = null;
+    this.isImage = false;
     if (fileInput.target.files && fileInput.target.files[0]) {
       const maxSize = 20971520;
       const allowedTypes = [
-        'application/msword',
         'image/jpg',
         'image/jpeg',
-        'application/pdf',
         'image/png'
       ];
 
@@ -161,12 +167,13 @@ export class OrganisationSettingsComponent extends BasicComponent implements OnI
       }
 
       if (!allowedTypes.includes(fileInput.target.files[0].type)) {
-        this.fileError = 'Only ( JPG | PNG | PDF | MS WORD ) types are allowed';
+        this.fileError = 'Only ( JPG | PNG ) types are allowed';
         this.removeFile();
         return false;
+      } else {
+        this.isImage = true;
       }
-      this.isImage = !(fileInput.target.files[0].type === 'application/msword' ||
-        fileInput.target.files[0].type === 'application/pdf');
+
       const reader = new FileReader();
       reader.onload = (e: any) => {
         const image = new Image();
@@ -174,6 +181,7 @@ export class OrganisationSettingsComponent extends BasicComponent implements OnI
         this.cardFileBase64 = e.target.result;
         this.isFileSaved = true;
       };
+
       reader.readAsDataURL(fileInput.target.files[0]);
     }
   }
@@ -185,9 +193,14 @@ export class OrganisationSettingsComponent extends BasicComponent implements OnI
 
   onSubmitCertificate() {
     const certificate = this.addCertificateForm.value;
-    certificate.file = this.cardFileBase64;
     certificate.org_id = this.organisationId;
-    console.log(certificate);
+    certificate.file = this.cardFileBase64;
+    this.organisationService.registerCertificate(certificate)
+      .subscribe(() => {
+        this.setMessage('certificate successful recorded!');
+      }, (error) => {
+        this.setError(error.errors);
+      });
   }
 
   getAllCoffeeTypes(): void {

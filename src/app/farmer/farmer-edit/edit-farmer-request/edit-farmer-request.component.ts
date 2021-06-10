@@ -95,7 +95,6 @@ export class EditFarmerRequestComponent implements OnInit {
     if (this.isUserCWSOfficer) {
       this.organisationService.get(this.authenticationService.getCurrentUser().info.org_id).subscribe(data => {
         data.content.coveredSectors.map((sector) => {
-          console.log(sector);
           this.sectors.push({
             _id: sector.sectorId._id,
             name: sector.name

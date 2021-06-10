@@ -10,8 +10,7 @@ import {OrganisationType} from '../../core/models';
 })
 export class OrganisationTypeListComponent implements OnInit, OnDestroy {
 
-  constructor(private route: ActivatedRoute, private organisationTypeService: OrganisationTypeService,
-              private router: Router, private  confirmDialogService: ConfirmDialogService) {
+  constructor(private route: ActivatedRoute, private organisationTypeService: OrganisationTypeService) {
 
   }
 
@@ -24,21 +23,6 @@ export class OrganisationTypeListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
 
-  }
-
-
-  deleteOrganisationType(organisationType: OrganisationType): void {
-    this.confirmDialogService.openConfirmDialog('Are you sure you want to delete this record?').afterClosed().subscribe(
-      res => {
-        if (res) {
-          this.organisationTypeService.destroy(organisationType._id)
-            .subscribe(data => {
-              this.getAllOrganisationTypes();
-              this.message = 'Record successful deleted!';
-            });
-          this.getAllOrganisationTypes();
-        }
-      });
   }
 
   getAllOrganisationTypes(): void {

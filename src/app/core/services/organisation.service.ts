@@ -26,7 +26,7 @@ export class OrganisationService {
   destroy(body: any): Observable<any> {
     return this.apiService.post('/organizations/remove', body);
   }
-  
+
   save(organisation: Organisation): Observable<any> {
     return this.apiService.post('/organizations/', organisation);
   }
@@ -86,4 +86,21 @@ export class OrganisationService {
   orgEditPaymentChannel(body: any): Observable<any> {
     return this.apiService.put('/organizations/payment_channels/edit', body);
   }
+
+  orgCertificates(id: string): Observable<any> {
+    return this.apiService.get('/organizations/certificates/list/' + id);
+  }
+
+  getCertificate(id: string): Observable<any> {
+    return this.apiService.get('/organizations/certificates/' + id);
+  }
+
+  registerCertificate(body: any): Observable<any> {
+    return this.apiService.post('/organizations/certificates/create', body);
+  }
+
+  updateCertificate(body: any): Observable<any> {
+    return this.apiService.put('/organizations/certificates/update', body);
+  }
+
 }
