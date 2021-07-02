@@ -100,36 +100,13 @@
               <div role="tabpanel" class="tab-pane active" id="certificates">
                 <app-list-message [message]="message"></app-list-message>
                 <app-list-errors [errorList]="errors"></app-list-errors>
-                <div class="row">
-                  <div class="col-sm-12">
-                    <table class="hover table table-striped">
-                      <thead>
-                      <tr>
-                        <th>Certificate name</th>
-                        <th>Issued date</th>
-                        <th>Issued by</th>
-                        <th>Expiration date</th>
-                        <th></th>
-                      </tr>
-                      </thead>
-                      <tbody style="border-width: 1px">
-                      <tr *ngFor="let certificate of certificates">
-                        <td> {{ certificate.name }}</td>
-                        <td> {{ certificate.issuedDate | date }}</td>
-                        <td> {{ certificate.issuedBy }}</td>
-                        <td> {{ certificate.expirationDate | date }}</td>
-                        <td></td>
-                      </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
+
                 <form [formGroup]="addCertificateForm" (ngSubmit)="onSubmitCertificate()">
                   <div class="row">
                     <div class="col-xs-3">
                       <div class="form-group">
                         <span class="label-required">Certificate name</span>
-                        <input class="form-control" formControlName="name">
+                        <input class="form-control" formControlName="certificateName">
                       </div>
                     </div>
                     <div class="col-xs-3">
@@ -169,7 +146,7 @@
                         <span class="label-required">Upload certificate</span>
                         <br>
                         <span style="font-size: 10px; color: crimson">{{fileError}}</span>
-                        <input type="file" (change)="fileChangeEvent($event)">
+                        <input #fileInput type="file" (change)="fileChangeEvent($event)">
                         <div style="margin-top: 10px;">
                           <ng-container *ngIf="isFileSaved; else elseTemplate">
                             <img [src]="cardFileBase64" style="max-height: 100px; max-width: 100px;" *ngIf="isImage"/>
@@ -193,6 +170,39 @@
                     </div>
                   </div>
                 </form>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <table class="hover table table-striped">
+                      <thead>
+                      <tr>
+                        <th>Certificate name</th>
+                        <th>Coffee type</th>
+                        <th>Issued date</th>
+                        <th>Issued by</th>
+                        <th>Expiration date</th>
+                        <th></th>
+                      </tr>
+                      </thead>
+                      <tbody style="border-width: 1px">
+                      <tr *ngFor="let certificate of certificates">
+                        <td> {{ certificate.name }}</td>
+                        <td> {{ certificate.coffeeType.name }}</td>
+                        <td> {{ certificate.issuedDate | date }}</td>
+                        <td> {{ certificate.issuedBy }}</td>
+                        <td> {{ certificate.expirationDate | date }}</td>
+                        <td>
+                          <button class="btn btn-default btn-margin btn-sm pull-right" *appHasPermission="[[4,1],0,[1,1]]" (click)="deleteCertificate(certificate._id)"
+                                  type="button">Remove
+                          </button>
+                          <a class="btn btn-success btn-margin btn-sm pull-right" *appHasPermission="[[4,1],0,[1,1]]"
+                             (click)="editCertificate(certificate._id)"
+                             style="margin-left: 10px;">Edit</a>
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

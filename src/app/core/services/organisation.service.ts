@@ -43,6 +43,10 @@ export class OrganisationService {
     return this.apiService.get('/organizations/organization.roles/list' + id);
   }
 
+  getOrgsByRoles(body: any) {
+    return this.apiService.post('/organizations/by/roles', body);
+  }
+
   getOrgFarmers(id: string): Observable<any> {
     return this.apiService.get('/coffeefarmers/farmer_by_cws/' + id);
   }
@@ -101,6 +105,10 @@ export class OrganisationService {
 
   updateCertificate(body: any): Observable<any> {
     return this.apiService.put('/organizations/certificates/update', body);
+  }
+
+  deleteCertificate(id: string): Observable<any> {
+    return this.apiService.delete('/organizations/certificates/delete/' + id);
   }
 
 }

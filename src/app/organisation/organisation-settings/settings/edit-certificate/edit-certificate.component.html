@@ -1,3 +1,76 @@
-<p>
-  edit-certificate works!
-</p>
+<div class="modal-header">
+  <i class="fa fa-times-circle close" style="font-size: 24px;" aria-label="Close" (click)="modal.dismiss()">
+  </i>
+</div>
+<div class="modal-body">
+  <app-list-message [message]="message"></app-list-message>
+  <app-list-errors [errorList]="errors"></app-list-errors>
+  <form [formGroup]="editCertificateForm" (ngSubmit)="onUpdateCertificate()">
+    <div class="row">
+      <div class="col-xs-3">
+        <div class="form-group">
+          <span class="label-required">Certificate name</span>
+          <input class="form-control" formControlName="certificateName">
+        </div>
+      </div>
+      <div class="col-xs-3">
+        <div class="form-group">
+          <span class="label-required">Issued by</span>
+          <input class="form-control" formControlName="issuedBy">
+        </div>
+      </div>
+      <div class="col-xs-3">
+        <div class="form-group">
+          <span class="label-required">Coffee type</span>
+          <select class="form-control" formControlName="coffeeType">
+            <option *ngFor="let type of coffeeTypes" value="{{type._id}}"> {{ type.name }}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-3">
+        <div class="form-group">
+          <span class="label-required">Issued date</span>
+          <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="issuedDate"
+                 class="form-control col-xs-3 col-sm-3 col-md-2 col-lg-2 owl-date-input">
+          <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+        </div>
+      </div>
+      <div class="col-xs-3">
+        <div class="form-group">
+          <span>Expiration date</span>
+          <input [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" formControlName="expirationDate"
+                 class="form-control col-xs-3 col-sm-3 col-md-2 col-lg-2 owl-date-input">
+          <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
+        </div>
+      </div>
+      <div class="col-xs-3">
+        <div class="form-group">
+          <span class="label-required">Upload certificate</span>
+          <br>
+          <span style="font-size: 10px; color: crimson">{{fileError}}</span>
+          <input type="file" (change)="fileChangeEvent($event)">
+          <div style="margin-top: 10px;">
+            <ng-container *ngIf="isFileSaved; else elseTemplate">
+              <img [src]="cardFileBase64" style="max-height: 100px; max-width: 100px;" *ngIf="isImage"/>
+              <button class="btn-link" (click)="removeFile()"
+                      style=" text-decoration:none; margin-left: 10px; color: crimson">
+                <i class="fa fa-close"></i>&nbsp;Remove
+              </button>
+            </ng-container>
+            <ng-template #elseTemplate>
+              <img src="./assets/dist/img/default-file.png"
+                   class="img-responsive" style="max-height: 100px; max-width: 100px;"/>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <button class="btn btn-success pull-right">Save</button>
+      </div>
+    </div>
+  </form>
+</div>

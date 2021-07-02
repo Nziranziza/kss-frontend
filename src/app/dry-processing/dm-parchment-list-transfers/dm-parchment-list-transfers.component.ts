@@ -1,16 +1,16 @@
-import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild} from '@angular/core';
-import {BasicComponent} from '../../../core/library';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {BasicComponent} from '../../core/library';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {
   AuthenticationService,
-  ConfirmDialogService, MessageService, OrganisationService,
+  ConfirmDialogService, OrganisationService,
   ParchmentService,
   SeasonService,
   WarehouseService
-} from '../../../core/services';
+} from '../../core/services';
 import {Router} from '@angular/router';
 import {DatePipe} from '@angular/common';
-import {HelperService} from '../../../core/helpers';
+import {HelperService} from '../../core/helpers';
 import {Subject} from 'rxjs';
 import {DataTableDirective} from 'angular-datatables';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
@@ -19,19 +19,17 @@ declare var $;
 
 @Component({
   selector: 'app-parchment-list-transfers',
-  templateUrl: './parchment-list-transfers.component.html',
-  styleUrls: ['./parchment-list-transfers.component.css']
+  templateUrl: './dm-parchment-list-transfers.component.html',
+  styleUrls: ['./dm-parchment-list-transfers.component.css']
 })
 
-export class ParchmentListTransfersComponent extends BasicComponent implements OnInit, OnDestroy, AfterViewInit {
+export class DmParchmentListTransfersComponent extends BasicComponent implements OnInit, AfterViewInit {
 
   constructor(private formBuilder: FormBuilder,
               private router: Router, private confirmDialogService: ConfirmDialogService,
               private seasonService: SeasonService,
               private modal: NgbModal,
-              private renderer: Renderer2,
               private organisationService: OrganisationService,
-              private messageService: MessageService,
               private wareHouseService: WarehouseService,
               private datePipe: DatePipe, private authenticationService: AuthenticationService,
               private parchmentService: ParchmentService,
@@ -48,8 +46,7 @@ export class ParchmentListTransfersComponent extends BasicComponent implements O
   // @ts-ignore
   @ViewChild(DataTableDirective, {static: false})
   dtElement: DataTableDirective;
-  @ViewChild('destination') destination: any;
-  @ViewChild('cancelButton') cancelButton: ElementRef;
+  @ViewChild('origin')  origin: any;
   season: any;
   seasonStartingDate: string;
   transfers = [];
@@ -67,14 +64,12 @@ export class ParchmentListTransfersComponent extends BasicComponent implements O
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 10,
-      columns: [{}, {}, {}, {
-        class: 'none'
+      columns: [{}, {}, {}, { class: 'none'
       }, {}, {}, {}],
       responsive: true
     };
     this.filterForm = this.formBuilder.group({
-      type: [''],
-      destination: [''],
+      origin: ['', Validators.required],
       date: this.formBuilder.group({
         from: [this.seasonStartingDate],
         to: [this.currentDate]
@@ -83,29 +78,20 @@ export class ParchmentListTransfersComponent extends BasicComponent implements O
     this.parameters = {
       org_id: this.authenticationService.getCurrentUser().info.org_id
     };
-    this.setMessage(this.messageService.getMessage());
+    this.organisationService.getOrgsByRoles({roles: [1]} ).subscribe(data => {
+      if (data) {
+        this.organisations = data.content;
+      }
+    });
     this.getTransfers();
   }
 
   ngAfterViewInit(): void {
     this.dtTrigger.next();
-    setTimeout(() => {
-      const el = this.cancelButton.nativeElement.querySelector('.btn');
-      if (el) {
-        el.addEventListener('click', () => {
-          console.log('here!');
-        });
-      }
-      this.renderer.listen(el, 'click', evt => {
-        console.log('Clicking the button', evt);
-      });
-    }, 1000);
   }
 
   onFilter() {
-    console.log('here');
     if (this.filterForm.valid) {
-      console.log('here!');
       const filter = JSON.parse(JSON.stringify(this.filterForm.value));
       if ((!filter.date.from) || (!filter.date.to)) {
         delete filter.date;
@@ -128,16 +114,23 @@ export class ParchmentListTransfersComponent extends BasicComponent implements O
   }
 
   selectEvent(item) {
-    this.filterForm.controls.destination.setValue(item._id);
+    this.filterForm.controls.origin.setValue(item._id);
   }
 
   onClearFilter() {
-    this.filterForm.controls.destination.reset();
+    this.filterForm.controls.origin.reset();
     this.filterForm.controls.date.get('from').setValue(this.seasonStartingDate);
     this.filterForm.controls.date.get('to').setValue(this.currentDate);
-    this.destination.clear();
+    this.origin.clear();
     delete this.parameters.search;
     this.getTransfers();
+    this.parchmentService.getDeliveries(this.parameters).subscribe((data) => {
+      this.transfers = data.content;
+      this.rerender();
+    });
+  }
+
+  confirmTransfer(transferId: string): void {
   }
 
   printNote(id: string) {
@@ -169,22 +162,6 @@ export class ParchmentListTransfersComponent extends BasicComponent implements O
     });
   }
 
-  cancelTransfer(id: string) {
-    this.confirmDialogService.openConfirmDialog('Are you sure you want to cancel this transfer? ' +
-      'action cannot be undone').afterClosed().subscribe(
-      res => {
-        if (res) {
-          this.parchmentService.cancelTransfer(id).subscribe(() => {
-            this.setMessage('Transfer successfully cancelled!');
-            this.getTransfers();
-          }, (err) => {
-            this.setError(this.errors = err.errors);
-            window.scroll(0, 0);
-          });
-        }
-      });
-  }
-
   checkOrg(org: any, list: any) {
     return list.some((el) => {
       return el._id === org._id;
@@ -192,30 +169,20 @@ export class ParchmentListTransfersComponent extends BasicComponent implements O
   }
 
   getTransfers() {
-    this.parchmentService.getTransferHistory(this.parameters).subscribe((data) => {
+    this.parchmentService.getDeliveries(this.parameters).subscribe((data) => {
       this.transfers = data.content;
       this.transfers.forEach((transfer) => {
-        if (!this.checkOrg(transfer.destOrg, this.organisations)) {
-          this.organisations.push(transfer.destOrg);
+        if (!this.checkOrg(transfer.originOrg, this.organisations)) {
+          this.organisations.push(transfer.originOrg);
         }
       });
       this.rerender();
     });
   }
-
   rerender(): void {
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
       dtInstance.destroy();
       this.dtTrigger.next();
     });
-  }
-
-  ngOnDestroy(): void {
-    this.dtTrigger.unsubscribe();
-    this.messageService.clearMessage();
-  }
-
-  cancelTransferItem(itemId: string) {
-    console.log(itemId);
   }
 }

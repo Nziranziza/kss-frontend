@@ -23,6 +23,7 @@ export abstract class BasicComponent {
         const timeout = $element.data('auto-dismiss') || 10000;
         setTimeout(() => {
           $element.hide();
+          this.clear();
         }, timeout);
       });
     });
@@ -45,6 +46,7 @@ export abstract class BasicComponent {
         const timeout = $element.data('auto-dismiss') || 7500;
         setTimeout(() => {
           $element.hide();
+          this.clear();
         }, timeout);
       });
     });
@@ -67,6 +69,7 @@ export abstract class BasicComponent {
         const timeout = $element.data('auto-dismiss') || 7500;
         setTimeout(() => {
           $element.hide();
+          this.clear();
         }, timeout);
       });
     });

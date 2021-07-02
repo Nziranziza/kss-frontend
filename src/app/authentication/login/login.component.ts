@@ -107,7 +107,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     if (this.authorisationService.isCWSUser()) {
       this.router.navigateByUrl('admin/cws-farmers/' + orgId);
     } else if (this.authorisationService.isDryMillUser()) {
-      this.router.navigateByUrl('admin/drymill/batch/create');
+      this.router.navigateByUrl('admin/drymill/parchment/list');
     } else if (this.authorisationService.isCeparUser()) {
       this.router.navigateByUrl('admin/warehouse/dispatches');
     } else if (this.authorisationService.isSiteManager()) {

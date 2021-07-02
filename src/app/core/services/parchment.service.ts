@@ -31,10 +31,6 @@ export class ParchmentService {
     return this.apiService.get('/parchment/cws_parchment/' + orgId + '/' + id);
   }
 
-  transferCart(body: any) {
-    return this.apiService.post('/parchment/transfer_parchment/cart', body);
-  }
-
   transfer(body: any) {
     return this.apiService.post('/parchment/transfer_parchment', body);
   }
@@ -52,18 +48,23 @@ export class ParchmentService {
   }
 
   getTransferHistory(body: any): Observable<any> {
-    return this.apiService.post('/parchment/transfer/history', body);
+    return this.apiService.post('/parchment/cws_parchment/transfers/org/list', body);
   }
 
-  cancelTransfer(body: any) {
-    return this.apiService.put('/parchment/transfer/cancel', body);
+
+  getDeliveries(body: any): Observable<any> {
+    return this.apiService.post('/dmparchment/dm_deliveries', body);
+  }
+
+  cancelTransfer(id: string) {
+    return this.apiService.delete('/parchment/delete/transfer_parchment/' + id);
   }
 
   printDeliveryNote(id: string): Observable<any> {
     return this.apiService.get('/parchment/generate/transfer_note/' + id);
   }
 
-  confirmTranfer(body: any): Observable<any> {
+  confirmTransfer(body: any): Observable<any> {
     return this.apiService.post('/parchment/transfer/confirm', body);
   }
 }

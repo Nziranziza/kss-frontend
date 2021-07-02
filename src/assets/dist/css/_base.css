@@ -400,3 +400,44 @@ table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > td:first-child:b
   margin-top: 5px;
   margin-bottom: 5px;
 }
+
+
+/*----------------------------------------Auto-complete--------------------------------------*/
+
+.ng-autocomplete {
+  width: 100%;
+}
+
+.ng-autocomplete ::ng-deep .autocomplete-container {
+  height: 34px;
+  box-shadow: none;
+}
+
+.ng-autocomplete ::ng-deep .autocomplete-container .input-container input {
+  height: 34px;
+  border: 1px solid #d2d6de;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #555;
+  background-color: #fff;
+  border-radius: 3px;
+}
+
+.ng-autocomplete ::ng-deep .autocomplete-container .suggestions-container ul li a {
+  color: #555;
+  background-color: #faf9f8;
+  border: 1px solid #ffffff;
+  padding: 6px 12px;
+  font-size: 12px;
+}
+
+
+.ng-autocomplete ::ng-deep .autocomplete-container .input-container .x i {
+  font-size: 14px;
+  font-weight: bolder;
+}
+
+.ng-autocomplete ::ng-deep .autocomplete-container .suggestions-container {
+  box-shadow: none;
+}

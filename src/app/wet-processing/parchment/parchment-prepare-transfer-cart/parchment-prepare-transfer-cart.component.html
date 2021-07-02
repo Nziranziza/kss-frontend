@@ -48,7 +48,7 @@
     </ng-container>
     <div class="col-xs-2">
       <div class="form-group">
-        <input type="text" formControlName="amount" class="form-control label-required"
+        <input type="number" formControlName="amount" class="form-control label-required"
                placeholder="amount .. (optional)">
       </div>
     </div>
@@ -74,11 +74,11 @@
       </thead>
       <tbody>
       <tr>
-        <td> {{ lotsSetSummary.coffeeType.name }} </td>
-        <td> {{ lotsSetSummary.coffeeGrade }} </td>
-        <td> {{ lotsSetSummary.totalKgs + ' &#13199;'}} </td>
+        <td> {{ cartItemInfo.coffeeType.name }} </td>
+        <td> {{ cartItemInfo.coffeeGrade }} </td>
+        <td> {{ cartItemInfo.totalKgs + ' &#13199;'}} </td>
         <td>
-          <button *ngFor="let lot of lotsSet; let i = index" type="button" class="btn btn-sm btn-link"
+          <button *ngFor="let lot of cartItem; let i = index" type="button" class="btn btn-sm btn-link"
                   ngbPopover="{{ 'Remaining Qty : ' + lot.remainingQty + '&#13199; ' + ' ; Qty to transfer : ' + lot.amountToTransfer + ' &#13199; ' }}" container="body">
             {{ lot.lotNumber }}
           </button>
@@ -88,7 +88,7 @@
                   type="button">
             <i class="fa fa-remove" aria-hidden="true"></i>
           </button>
-          <button class="btn btn-success btn-margin btn-sm pull-right" (click)="addLotsSetToCart()"
+          <button class="btn btn-success btn-margin btn-sm pull-right" (click)="addCartItemToCart()"
                   type="button">
             <i class="fa fa-cart-plus" aria-hidden="true"></i>
           </button>
@@ -124,11 +124,11 @@
           </thead>
           <tbody>
           <tr *ngFor="let item of cart; let i = index">
-            <td> {{ item.lotsSetSummary.coffeeType.name }} </td>
-            <td> {{ item.lotsSetSummary.coffeeGrade }} </td>
-            <td> {{ item.lotsSetSummary.totalKgs }}  &#13199;</td>
+            <td> {{ item.cartItemInfo.coffeeType.name }} </td>
+            <td> {{ item.cartItemInfo.coffeeGrade }} </td>
+            <td> {{ item.cartItemInfo.totalKgs }}  &#13199;</td>
             <td>
-              <button *ngFor="let lot of item.lotsSet; let i = index" type="button" class="btn btn-sm btn-link"
+              <button *ngFor="let lot of item.cartItem; let i = index" type="button" class="btn btn-sm btn-link"
                       ngbPopover="{{ 'Remaining Qty : ' + lot.remainingQty + '&#13199; ' + ' ; Qty to transfer : ' + lot.amountToTransfer + ' &#13199; ' }}" container="body">
                 {{ lot.lotNumber }}
               </button>
@@ -147,13 +147,13 @@
               <select class="form-control" formControlName="destOrgId">
                 <option value="">select destination</option>
                 <ng-container *ngFor="let organisation of organisations">
-                  <option *ngIf="organisation.organizationRole.includes(2)" value="{{organisation._id}}"> {{
+                  <option value="{{organisation._id}}"> {{
                     organisation?.organizationName }}
                   </option>
                 </ng-container>
               </select>
             </div>
-            <div class="col-xs-6">
+            <div class="col-xs-4">
               <div class="form-inline">
                 <div class="radio">
                   <label>
@@ -168,6 +168,18 @@
                   </label>
                 </div>
               </div>
+            </div>
+            <div class="col-xs-4">
+              <ng-container *ngIf="transferForm.get('appliedCertificates')['controls'].length">
+                <label class="control-label">Applied certificates</label>
+                <div class="checkbox" formArrayName="appliedCertificates"
+                     *ngFor="let role of transferForm.get('appliedCertificates')['controls']; let i = index">
+                  <label>
+                    <input type="checkbox" formControlName="{{i}}">
+                    {{ certificates[i].name }}
+                  </label>
+                </div>
+              </ng-container>
             </div>
             <div class="col-xs-2">
               <button class="btn btn-success btn-margin pull-right" type="submit"><i class="fa fa-truck"></i> Transfer

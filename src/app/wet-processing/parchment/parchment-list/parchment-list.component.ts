@@ -1,6 +1,6 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {Router} from '@angular/router';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup} from '@angular/forms';
 import {CoffeeTypeService, ConfirmDialogService, MessageService, OrganisationService} from '../../../core/services';
 import {ParchmentService} from '../../../core/services';
 import {AuthenticationService} from '../../../core/services';

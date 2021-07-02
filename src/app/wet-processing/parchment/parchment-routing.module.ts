@@ -6,7 +6,6 @@ import {ParchmentListComponent} from './parchment-list/parchment-list.component'
 import {AdminGuard} from '../../core/services/guards/admin.guard';
 import {ParchmentPrepareTransferCartComponent} from './parchment-prepare-transfer-cart/parchment-prepare-transfer-cart.component';
 import {ParchmentListTransfersComponent} from './parchment-list-transfers/parchment-list-transfers.component';
-import {ParchmentTransferComponent} from './parchment-transfer/parchment-transfer.component';
 
 const routes: Routes = [
   {
@@ -28,12 +27,7 @@ const routes: Routes = [
       {
         path: 'cws/parchments/transfer/history',
         component: ParchmentListTransfersComponent
-      },
-      {
-        path: 'cws/parchments/transfer/history/:id',
-        component: ParchmentTransferComponent
       }
-
     ]
   }
 ];

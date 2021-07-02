@@ -1,41 +1,9 @@
 <div class="row">
   <div class="col-xs-12">
     <h3>
-      Received parchments
+      Create batch
     </h3>
   </div>
 </div>
 <app-list-message [message]="message"></app-list-message>
 <app-list-errors [errorList]="errors"></app-list-errors>
-<div class="row">
-  <div class="col-xs-12">
-    <div></div>
-    <div class="box">
-      <div class="box-body table-responsive">
-        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped">
-          <thead>
-          <tr>
-            <th> </th>
-            <th> Coffee type </th>
-            <th> Qty </th>
-            <th> Lot number </th>
-            <th> Produced </th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr *ngFor="let lot of lots">
-            <ng-container *ngIf="!lot.isReleased">
-              <td> <input type="checkbox" (click)="selectLot($event.target.checked, lot)"></td>
-              <td> {{ parchment.coffeeType.name }} </td>
-              <td> {{ lot.totalKgs }} </td>
-              <td> {{ lot.lotNumber}} </td>
-              <td> {{ lot.producedDate | date }} </td>
-            </ng-container>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</div>
-

@@ -52,6 +52,7 @@ export class EditCertificateComponent extends BasicComponent implements OnInit {
       expirationDate: ['', Validators.required]
     });
     this.getAllCoffeeTypes();
+    this.getCertificates(this.id);
   }
 
   getCertificates(id: string) {
@@ -63,6 +64,10 @@ export class EditCertificateComponent extends BasicComponent implements OnInit {
         expirationDate: data.content.expirationDate,
         certificateName: data.content.name,
       };
+      this.cardFileBase64 = data.content.image;
+      this.isFileSaved = true;
+      this.isImage = true;
+      this.editCertificateForm.patchValue(this.certificate);
     });
   }
 
@@ -109,10 +114,11 @@ export class EditCertificateComponent extends BasicComponent implements OnInit {
     this.isFileSaved = false;
   }
 
-  onUpdateCertificate(id: string) {
+  onUpdateCertificate() {
     const certificate = this.editCertificateForm.value;
-    certificate._id = id;
+    certificate._id = this.id;
     certificate.file = this.cardFileBase64;
+    this.helper.cleanObject(certificate);
     this.organisationService.updateCertificate(certificate)
       .subscribe(() => {
         this.setMessage('certificate successful updated!');

@@ -1,21 +1,21 @@
 <div class="row">
   <div class="col-xs-12">
     <h3>
-      Parchments transfer history
+      Received parchments
     </h3>
   </div>
 </div>
-<div class="row filter-form" style="margin-bottom: 10px; margin-left: -1px">
 
+<div class="row filter-form" style="margin-bottom: 10px; margin-left: -1px">
   <div class="col-xs-2">
   <div class="ng-autocomplete">
     <ng-autocomplete
-      #destination
+      #origin
       [data]="organisations"
       [searchKeyword]="keyword"
       (selected)='selectEvent($event)'
       [initialValue]="initialValue"
-      [placeHolder]="'Select destination'"
+      [placeHolder]="'Select origin'"
       [itemTemplate]="itemTemplate"
       [notFoundTemplate]="notFoundTemplate">
     </ng-autocomplete>
@@ -30,13 +30,6 @@
   </div>
   </div>
   <form [formGroup]="filterForm" (ngSubmit)="onFilter()">
-    <div class="col-lg-1 col-md-2 col-sm-3 col-xs-6">
-      <select class="form-control" formControlName="type">
-        <option value="" [selected]="true"> all </option>
-        <option value="processing"> processing </option>
-        <option value="sold"> sold </option>
-      </select>
-    </div>
     <ng-container formGroupName="date">
       <div class="col-xs-1">
         <div class="form-group">
@@ -72,7 +65,7 @@
           <thead>
           <tr>
             <th>Transfer type</th>
-            <th>Destination</th>
+            <th>Source</th>
             <th>Qty</th>
             <th></th>
             <th>Date</th>
@@ -83,7 +76,7 @@
           <tbody>
           <tr *ngFor="let transfer of transfers">
             <td>{{ transfer.transferType | titlecase }}</td>
-            <td>{{ transfer.destOrg.name }}</td>
+            <td>{{ transfer.originOrg.name }}</td>
             <td>{{ transfer.totalAmountToTransfer }}</td>
             <td>
               <table style="background: transparent; width: 650px;" class="pull-right">
@@ -92,7 +85,6 @@
                   <td>Grade</td>
                   <td>Qty</td>
                   <td>Lots</td>
-                  <td></td>
                 </tr>
                 <tr *ngFor="let item of transfer.items" style="font-style: oblique; font-size: 12px; background: transparent">
                   <td>{{ item.type.name }}</td>
@@ -103,24 +95,24 @@
                       title="{{'Qty : ' + lot.amountToTransfer + '&#13199; '}}"> {{ lot.lotNumber }}
                     </button>
                   </td>
-                  <td #cancelButton>
-                    <a class="btn btn-default btn-margin btn-sm pull-right" (click)="cancelTransferItem(item._id)" type="button" data-id="{{ item._id }}">
-                      <i class="fa fa-remove" aria-hidden="true"  ></i>
-                    </a>
-                  </td>
                 </tr>
               </table>
             </td>
-            <td> {{ transfer.created_at | date}}</td>
+            <td> {{ transfer.created_at| date}}</td>
             <td></td>
             <td style="width: 15%">
               <button class="btn btn-info btn-margin btn-sm pull-right" (click)="printNote(transfer._id)" type="button">
                 <i class="fa fa-print" aria-hidden="true"></i> Note
               </button>
-              <button class="btn btn-default btn-margin btn-sm pull-right" (click)="cancelTransfer(transfer._id)"
-                      type="button">
-                <i class="fa fa-remove" aria-hidden="true"></i> Cancel
-              </button>
+              <ng-container *ngIf="transfer.receivedBy; else confirm">
+                <span>&#10003;</span>
+                <span style="font-style: oblique; font-size: 11px;">&nbsp; by: &nbsp; {{ transfer.receivedBy.foreName|lowercase }} &nbsp; {{ transfer.receivedBy.surname|lowercase }}  </span>
+              </ng-container>
+              <ng-template #confirm>
+                <button class="btn btn-default btn-margin btn-sm pull-right" (click)="confirmTransfer(transfer._id)"
+                        type="button"> Confirm
+                </button>
+              </ng-template>
             </td>
           </tr>
           </tbody>

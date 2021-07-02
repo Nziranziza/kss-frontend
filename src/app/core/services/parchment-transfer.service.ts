@@ -8,7 +8,7 @@ import {ApiService} from './api.service';
 })
 export class ParchmentTransferService {
 
-  constructor(private apiService: ApiService) {
+  constructor() {
   }
 
   resetCart() {

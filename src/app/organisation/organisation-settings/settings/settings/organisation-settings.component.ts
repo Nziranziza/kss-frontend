@@ -1,12 +1,13 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {BasicComponent} from '../../../../core/library';
 import {PaymentService} from '../../../../core/services/payment.service';
 import {HelperService} from '../../../../core/helpers';
-import {CoffeeTypeService, OrganisationService} from '../../../../core/services';
+import {CoffeeTypeService, ConfirmDialogService, OrganisationService} from '../../../../core/services';
 import {ActivatedRoute} from '@angular/router';
 import {EditPaymentChannelComponent} from '../edit-payment-channel/edit-payment-channel.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {EditCertificateComponent} from '../edit-certificate/edit-certificate.component';
 
 @Component({
   selector: 'app-organisation-settings-channel',
@@ -15,7 +16,8 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 })
 export class OrganisationSettingsComponent extends BasicComponent implements OnInit {
 
-  constructor(private formBuilder: FormBuilder, private modal: NgbModal, private paymentService: PaymentService,
+  constructor(private formBuilder: FormBuilder, private modal: NgbModal,
+              private paymentService: PaymentService, private  confirmDialogService: ConfirmDialogService,
               private route: ActivatedRoute, private coffeeTypeService: CoffeeTypeService,
               private helper: HelperService, private organisationService: OrganisationService) {
     super();
@@ -34,6 +36,8 @@ export class OrganisationSettingsComponent extends BasicComponent implements OnI
   cardFileBase64: string;
   certificates: any;
   isImage: boolean;
+  @ViewChild('fileInput')
+  fileInputVariable: ElementRef;
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -48,7 +52,7 @@ export class OrganisationSettingsComponent extends BasicComponent implements OnI
       issuedDate: ['', Validators.required],
       issuedBy: ['', Validators.required],
       file: ['', Validators.required],
-      expirationDate: ['', Validators.required]
+      expirationDate: ['']
     });
     this.getAllCoffeeTypes();
     this.getBanksList();
@@ -85,6 +89,14 @@ export class OrganisationSettingsComponent extends BasicComponent implements OnI
     modalRef.componentInstance.channel = channel;
     modalRef.result.finally(() => {
       this.getOrgPaymentChannels();
+    });
+  }
+
+  editCertificate(id: string) {
+    const modalRef = this.modal.open(EditCertificateComponent, {size: 'lg'});
+    modalRef.componentInstance.id = id;
+    modalRef.result.finally(() => {
+      this.getCertificates();
     });
   }
 
@@ -181,7 +193,6 @@ export class OrganisationSettingsComponent extends BasicComponent implements OnI
         this.cardFileBase64 = e.target.result;
         this.isFileSaved = true;
       };
-
       reader.readAsDataURL(fileInput.target.files[0]);
     }
   }
@@ -189,17 +200,40 @@ export class OrganisationSettingsComponent extends BasicComponent implements OnI
   removeFile() {
     this.cardFileBase64 = null;
     this.isFileSaved = false;
+    this.fileInputVariable.nativeElement.value = '';
   }
 
   onSubmitCertificate() {
     const certificate = this.addCertificateForm.value;
     certificate.org_id = this.organisationId;
     certificate.file = this.cardFileBase64;
+    this.helper.cleanObject(certificate);
     this.organisationService.registerCertificate(certificate)
       .subscribe(() => {
         this.setMessage('certificate successful recorded!');
+        this.getCertificates();
+        this.addCertificateForm.reset();
+        this.removeFile();
       }, (error) => {
         this.setError(error.errors);
+      });
+  }
+
+  deleteCertificate(id: string): void {
+    this.confirmDialogService.
+    openConfirmDialog('Are you sure you want to delete this certificate? Action can not be undone')
+      .afterClosed().subscribe(
+      res => {
+        if (res) {
+          this.organisationService.deleteCertificate(id)
+            .subscribe(() => {
+                this.setMessage('Certificate successful removed!');
+                this.getCertificates();
+              },
+              (err) => {
+                this.setError(err.errors);
+              });
+        }
       });
   }
 
