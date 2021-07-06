@@ -69,7 +69,8 @@ export class DmParchmentListTransfersComponent extends BasicComponent implements
       responsive: true
     };
     this.filterForm = this.formBuilder.group({
-      origin: ['', Validators.required],
+      type: [''],
+      origin: [''],
       date: this.formBuilder.group({
         from: [this.seasonStartingDate],
         to: [this.currentDate]
@@ -78,11 +79,6 @@ export class DmParchmentListTransfersComponent extends BasicComponent implements
     this.parameters = {
       org_id: this.authenticationService.getCurrentUser().info.org_id
     };
-    this.organisationService.getOrgsByRoles({roles: [1]} ).subscribe(data => {
-      if (data) {
-        this.organisations = data.content;
-      }
-    });
     this.getTransfers();
   }
 
@@ -101,7 +97,7 @@ export class DmParchmentListTransfersComponent extends BasicComponent implements
       }
       this.helper.cleanObject(filter);
       this.parameters['search'.toString()] = filter;
-      this.parchmentService.getTransferHistory(this.parameters).subscribe((data) => {
+      this.parchmentService.getDeliveries(this.parameters).subscribe((data) => {
         this.transfers = data.content;
         this.rerender();
       }, (err) => {
@@ -119,6 +115,7 @@ export class DmParchmentListTransfersComponent extends BasicComponent implements
 
   onClearFilter() {
     this.filterForm.controls.origin.reset();
+    this.filterForm.controls.type.setValue('');
     this.filterForm.controls.date.get('from').setValue(this.seasonStartingDate);
     this.filterForm.controls.date.get('to').setValue(this.currentDate);
     this.origin.clear();

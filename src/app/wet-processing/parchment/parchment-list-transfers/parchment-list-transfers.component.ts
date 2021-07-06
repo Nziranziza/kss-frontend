@@ -133,6 +133,7 @@ export class ParchmentListTransfersComponent extends BasicComponent implements O
 
   onClearFilter() {
     this.filterForm.controls.destination.reset();
+    this.filterForm.controls.type.setValue('');
     this.filterForm.controls.date.get('from').setValue(this.seasonStartingDate);
     this.filterForm.controls.date.get('to').setValue(this.currentDate);
     this.destination.clear();

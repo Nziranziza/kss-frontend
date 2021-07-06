@@ -30,6 +30,13 @@
   </div>
   </div>
   <form [formGroup]="filterForm" (ngSubmit)="onFilter()">
+    <div class="col-lg-1 col-md-2 col-sm-3 col-xs-6">
+      <select class="form-control" formControlName="type">
+        <option value="" [selected]="true"> all </option>
+        <option value="processing"> processing </option>
+        <option value="sold"> sold </option>
+      </select>
+    </div>
     <ng-container formGroupName="date">
       <div class="col-xs-1">
         <div class="form-group">

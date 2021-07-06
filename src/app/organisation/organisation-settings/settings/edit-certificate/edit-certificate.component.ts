@@ -75,7 +75,7 @@ export class EditCertificateComponent extends BasicComponent implements OnInit {
     this.fileError = null;
     this.isImage = false;
     if (fileInput.target.files && fileInput.target.files[0]) {
-      const maxSize = 20971520;
+      const maxSize = 4194304;
       const allowedTypes = [
         'image/jpg',
         'image/jpeg',
@@ -84,7 +84,7 @@ export class EditCertificateComponent extends BasicComponent implements OnInit {
 
       if (fileInput.target.files[0].size > maxSize) {
         this.fileError =
-          'Maximum size allowed is ' + maxSize / 1000 + 'Mb';
+          'Maximum size allowed is ' + '4Mb';
         this.removeFile();
         return false;
       }
