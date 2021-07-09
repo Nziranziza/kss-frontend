@@ -5,8 +5,18 @@
     </h3>
   </div>
 </div>
+<div class="row">
+  <div class="col-md-2 col-sm-3 col-xs-6" *ngFor="let production of summary">
+    <div class="info-box-content bg-yellow-gradient" style="margin-left: 0px">
+      <span class="info-box-text">{{ production.coffeeType }}</span>
+      <span class="progress-description" *ngFor="let item of production.grade | keyvalue">
+        Grade {{ item.key }} &nbsp;{{ item.value }}&#13199;
+      </span>
+    </div>
+  </div>
+</div>
 
-<div class="row filter-form" style="margin-bottom: 10px; margin-left: -1px">
+<div class="row filter-form" style="margin-bottom: 10px; margin-left: -1px; margin-top: 15px;">
   <div class="col-xs-2">
   <div class="ng-autocomplete">
     <ng-autocomplete
@@ -14,6 +24,7 @@
       [data]="organisations"
       [searchKeyword]="keyword"
       (selected)='selectEvent($event)'
+      (inputCleared) = 'deselectEvent()'
       [initialValue]="initialValue"
       [placeHolder]="'Select origin'"
       [itemTemplate]="itemTemplate"
@@ -76,7 +87,6 @@
             <th>Qty</th>
             <th></th>
             <th>Date</th>
-            <th>Received</th>
             <th></th>
           </tr>
           </thead>
@@ -106,14 +116,13 @@
               </table>
             </td>
             <td> {{ transfer.created_at| date}}</td>
-            <td></td>
             <td style="width: 15%">
               <button class="btn btn-info btn-margin btn-sm pull-right" (click)="printNote(transfer._id)" type="button">
                 <i class="fa fa-print" aria-hidden="true"></i> Note
               </button>
               <ng-container *ngIf="transfer.receivedBy; else confirm">
                 <span>&#10003;</span>
-                <span style="font-style: oblique; font-size: 11px;">&nbsp; by: &nbsp; {{ transfer.receivedBy.foreName|lowercase }} &nbsp; {{ transfer.receivedBy.surname|lowercase }}  </span>
+                <span style="font-style: oblique; font-size: 11px;">&nbsp;Received by: &nbsp; {{ transfer.receivedBy.foreName|lowercase }} &nbsp; {{ transfer.receivedBy.surname|lowercase }}  </span>
               </ng-container>
               <ng-template #confirm>
                 <button class="btn btn-default btn-margin btn-sm pull-right" (click)="confirmTransfer(transfer._id)"

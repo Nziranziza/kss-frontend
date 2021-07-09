@@ -52,6 +52,7 @@ export class DmParchmentListTransfersComponent extends BasicComponent implements
   transfers = [];
   organisations = [];
   parameters: any;
+  summary: any;
   keyword = 'name';
   initialValue = '';
 
@@ -65,7 +66,7 @@ export class DmParchmentListTransfersComponent extends BasicComponent implements
       pagingType: 'full_numbers',
       pageLength: 10,
       columns: [{}, {}, {}, { class: 'none'
-      }, {}, {}, {}],
+      }, {}, {}],
       responsive: true
     };
     this.filterForm = this.formBuilder.group({
@@ -79,7 +80,7 @@ export class DmParchmentListTransfersComponent extends BasicComponent implements
     this.parameters = {
       org_id: this.authenticationService.getCurrentUser().info.org_id
     };
-    this.getTransfers();
+    this.getDeliveries();
   }
 
   ngAfterViewInit(): void {
@@ -97,20 +98,19 @@ export class DmParchmentListTransfersComponent extends BasicComponent implements
       }
       this.helper.cleanObject(filter);
       this.parameters['search'.toString()] = filter;
-      this.parchmentService.getDeliveries(this.parameters).subscribe((data) => {
-        this.transfers = data.content;
-        this.rerender();
-      }, (err) => {
-        if (err.status === 404) {
-          this.setWarning('Sorry no matching data');
-          this.transfers = [];
-        }
-      });
+      this.getDeliveries();
     }
   }
 
   selectEvent(item) {
     this.filterForm.controls.origin.setValue(item._id);
+  }
+
+  deselectEvent() {
+    if (this.parameters.search && this.parameters.search.origin) {
+      delete this.parameters.search.origin;
+      this.filterForm.controls.origin.setValue('');
+    }
   }
 
   onClearFilter() {
@@ -120,14 +120,27 @@ export class DmParchmentListTransfersComponent extends BasicComponent implements
     this.filterForm.controls.date.get('to').setValue(this.currentDate);
     this.origin.clear();
     delete this.parameters.search;
-    this.getTransfers();
-    this.parchmentService.getDeliveries(this.parameters).subscribe((data) => {
-      this.transfers = data.content;
-      this.rerender();
-    });
+    this.getDeliveries();
   }
 
-  confirmTransfer(transferId: string): void {
+  confirmTransfer(deliveryId: string): void {
+    this.confirmDialogService.openConfirmDialog('Are you sure you want to confirm the deliveries? ' +
+      'action cannot be undone').afterClosed().subscribe(
+      res => {
+        if (res) {
+          const body = {
+            deliveryId,
+            userId: this.authenticationService.getCurrentUser().info._id,
+            org_id: this.authenticationService.getCurrentUser().info.org_id
+          };
+          this.parchmentService.confirmDeliveries(body).subscribe(() => {
+              this.setMessage('Deliveries successful confirmed!');
+            },
+            (err) => {
+              this.setError(err.errors);
+            });
+        }
+    });
   }
 
   printNote(id: string) {
@@ -165,7 +178,7 @@ export class DmParchmentListTransfersComponent extends BasicComponent implements
     });
   }
 
-  getTransfers() {
+  getDeliveries() {
     this.parchmentService.getDeliveries(this.parameters).subscribe((data) => {
       this.transfers = data.content;
       this.transfers.forEach((transfer) => {
@@ -174,6 +187,14 @@ export class DmParchmentListTransfersComponent extends BasicComponent implements
         }
       });
       this.rerender();
+    }, (err) => {
+      if (err.status === 404) {
+        this.setWarning('Sorry no matching data');
+        this.transfers = [];
+      }
+    });
+    this.parchmentService.getDeliveriesSummary(this.parameters).subscribe((data) => {
+      this.summary = data.content;
     });
   }
   rerender(): void {

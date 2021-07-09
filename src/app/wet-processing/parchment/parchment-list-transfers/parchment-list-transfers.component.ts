@@ -57,6 +57,7 @@ export class ParchmentListTransfersComponent extends BasicComponent implements O
   parameters: any;
   keyword = 'name';
   initialValue = '';
+  summary: any;
 
   ngOnInit() {
     $(document).ready(() => {
@@ -69,7 +70,7 @@ export class ParchmentListTransfersComponent extends BasicComponent implements O
       pageLength: 10,
       columns: [{}, {}, {}, {
         class: 'none'
-      }, {}, {}, {}],
+      }, {}, {}],
       responsive: true
     };
     this.filterForm = this.formBuilder.group({
@@ -93,19 +94,15 @@ export class ParchmentListTransfersComponent extends BasicComponent implements O
       const el = this.cancelButton.nativeElement.querySelector('.btn');
       if (el) {
         el.addEventListener('click', () => {
-          console.log('here!');
         });
       }
-      this.renderer.listen(el, 'click', evt => {
-        console.log('Clicking the button', evt);
+      this.renderer.listen(el, 'click', () => {
       });
     }, 1000);
   }
 
   onFilter() {
-    console.log('here');
     if (this.filterForm.valid) {
-      console.log('here!');
       const filter = JSON.parse(JSON.stringify(this.filterForm.value));
       if ((!filter.date.from) || (!filter.date.to)) {
         delete filter.date;
@@ -115,20 +112,19 @@ export class ParchmentListTransfersComponent extends BasicComponent implements O
       }
       this.helper.cleanObject(filter);
       this.parameters['search'.toString()] = filter;
-      this.parchmentService.getTransferHistory(this.parameters).subscribe((data) => {
-        this.transfers = data.content;
-        this.rerender();
-      }, (err) => {
-        if (err.status === 404) {
-          this.setWarning('Sorry no matching data');
-          this.transfers = [];
-        }
-      });
+      this.getTransfers();
     }
   }
 
   selectEvent(item) {
     this.filterForm.controls.destination.setValue(item._id);
+  }
+
+  deselectEvent() {
+    if (this.parameters.search && this.parameters.search.destination) {
+      delete this.parameters.search.destination;
+      this.filterForm.controls.destination.setValue('');
+    }
   }
 
   onClearFilter() {
@@ -195,12 +191,21 @@ export class ParchmentListTransfersComponent extends BasicComponent implements O
   getTransfers() {
     this.parchmentService.getTransferHistory(this.parameters).subscribe((data) => {
       this.transfers = data.content;
+      this.rerender();
       this.transfers.forEach((transfer) => {
         if (!this.checkOrg(transfer.destOrg, this.organisations)) {
           this.organisations.push(transfer.destOrg);
         }
+      }, (err) => {
+        if (err.status === 404) {
+          this.setWarning('Sorry no matching data');
+          this.transfers = [];
+        }
       });
-      this.rerender();
+      this.parchmentService.getTransfersSummary(this.parameters).subscribe((dt) => {
+        this.summary = dt.content;
+      });
+
     });
   }
 

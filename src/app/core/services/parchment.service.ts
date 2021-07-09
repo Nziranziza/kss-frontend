@@ -51,9 +51,20 @@ export class ParchmentService {
     return this.apiService.post('/parchment/cws_parchment/transfers/org/list', body);
   }
 
+  getTransfersSummary(body: any): Observable<any> {
+    return this.apiService.post('/parchment/cws_parchment/transfers/org/summary', body);
+  }
 
   getDeliveries(body: any): Observable<any> {
     return this.apiService.post('/dmparchment/dm_deliveries', body);
+  }
+
+  getDeliveriesSummary(body: any): Observable<any> {
+    return this.apiService.post('/dmparchment/dm_deliveries/summary', body);
+  }
+
+  confirmDeliveries(body: any): Observable<any> {
+    return this.apiService.put('/dmparchment/confirm_deliveries', body);
   }
 
   cancelTransfer(id: string) {
