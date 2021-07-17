@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild} from '@angular/core';
+import {AfterViewChecked, AfterViewInit, Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild} from '@angular/core';
 import {BasicComponent} from '../../../core/library';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {
@@ -49,7 +49,7 @@ export class ParchmentListTransfersComponent extends BasicComponent implements O
   @ViewChild(DataTableDirective, {static: false})
   dtElement: DataTableDirective;
   @ViewChild('destination') destination: any;
-  @ViewChild('cancelButton') cancelButton: ElementRef;
+  @ViewChild('expendableTable') expendableTable: ElementRef;
   season: any;
   seasonStartingDate: string;
   transfers = [];
@@ -86,19 +86,17 @@ export class ParchmentListTransfersComponent extends BasicComponent implements O
     };
     this.setMessage(this.messageService.getMessage());
     this.getTransfers();
+    const self = this;
+    $('#responsive-table').on('click', 'a.cancel-item', function(e) {
+      e.preventDefault();
+      console.log($(this).attr('id'));
+      self.cancelTransferItem($(this).attr('id'));
+    });
+
   }
 
   ngAfterViewInit(): void {
     this.dtTrigger.next();
-    setTimeout(() => {
-      const el = this.cancelButton.nativeElement.querySelector('.btn');
-      if (el) {
-        el.addEventListener('click', () => {
-        });
-      }
-      this.renderer.listen(el, 'click', () => {
-      });
-    }, 1000);
   }
 
   onFilter() {
@@ -192,6 +190,7 @@ export class ParchmentListTransfersComponent extends BasicComponent implements O
     this.parchmentService.getTransferHistory(this.parameters).subscribe((data) => {
       this.transfers = data.content;
       this.rerender();
+
       this.transfers.forEach((transfer) => {
         if (!this.checkOrg(transfer.destOrg, this.organisations)) {
           this.organisations.push(transfer.destOrg);
@@ -205,7 +204,6 @@ export class ParchmentListTransfersComponent extends BasicComponent implements O
       this.parchmentService.getTransfersSummary(this.parameters).subscribe((dt) => {
         this.summary = dt.content;
       });
-
     });
   }
 
@@ -213,6 +211,16 @@ export class ParchmentListTransfersComponent extends BasicComponent implements O
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
       dtInstance.destroy();
       this.dtTrigger.next();
+      const el = this.expendableTable.nativeElement.querySelector('.expendable-dataTable .dtr-data .cancel');
+      if (el) {
+        el.addEventListener('click', () => {
+          console.log('here1');
+        });
+
+        this.renderer.listen(el, 'click', () => {
+          console.log('here2');
+        });
+      }
     });
   }
 
@@ -222,6 +230,18 @@ export class ParchmentListTransfersComponent extends BasicComponent implements O
   }
 
   cancelTransferItem(itemId: string) {
-    console.log(itemId);
+    this.confirmDialogService.openConfirmDialog('Are you sure you want to cancel this transfer item? ' +
+      'action cannot be undone').afterClosed().subscribe(
+      res => {
+        if (res) {
+          this.parchmentService.cancelTransferItem(itemId).subscribe(() => {
+            this.setMessage('Item successfully cancelled!');
+            this.getTransfers();
+          }, (err) => {
+            this.setError(this.errors = err.errors);
+            window.scroll(0, 0);
+          });
+        }
+      });
   }
 }

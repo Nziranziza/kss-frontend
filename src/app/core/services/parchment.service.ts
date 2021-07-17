@@ -71,11 +71,11 @@ export class ParchmentService {
     return this.apiService.delete('/parchment/delete/transfer_parchment/' + id);
   }
 
-  printDeliveryNote(id: string): Observable<any> {
-    return this.apiService.get('/parchment/generate/transfer_note/' + id);
+  cancelTransferItem(id: string) {
+    return this.apiService.delete('/parchment/delete/transfer_parchment/item/' + id);
   }
 
-  confirmTransfer(body: any): Observable<any> {
-    return this.apiService.post('/parchment/transfer/confirm', body);
+  printDeliveryNote(id: string): Observable<any> {
+    return this.apiService.get('/dmparchment/download/deliveries/note/' + id);
   }
 }

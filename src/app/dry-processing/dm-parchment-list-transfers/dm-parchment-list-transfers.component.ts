@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {BasicComponent} from '../../core/library';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup} from '@angular/forms';
 import {
   AuthenticationService,
   ConfirmDialogService, OrganisationService,
@@ -135,6 +135,7 @@ export class DmParchmentListTransfersComponent extends BasicComponent implements
           };
           this.parchmentService.confirmDeliveries(body).subscribe(() => {
               this.setMessage('Deliveries successful confirmed!');
+              this.getDeliveries();
             },
             (err) => {
               this.setError(err.errors);
