@@ -6,7 +6,6 @@ import {
   ConfirmDialogService, OrganisationService,
   ParchmentService,
   SeasonService,
-  WarehouseService
 } from '../../core/services';
 import {Router} from '@angular/router';
 import {DatePipe} from '@angular/common';
@@ -14,23 +13,25 @@ import {HelperService} from '../../core/helpers';
 import {Subject} from 'rxjs';
 import {DataTableDirective} from 'angular-datatables';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {Farmer} from '../../core/models';
+import {FarmerDetailsComponent} from '../../farmer/farmer-details/farmer-details.component';
+import {EditDeliveryItemComponent} from './edit-delivery-item/edit-delivery-item.component';
 
 declare var $;
 
 @Component({
-  selector: 'app-parchment-list-transfers',
-  templateUrl: './dm-parchment-list-transfers.component.html',
-  styleUrls: ['./dm-parchment-list-transfers.component.css']
+  selector: 'app-parchment-list-deliveries',
+  templateUrl: './dm-parchment-list-deliveries.component.html',
+  styleUrls: ['./dm-parchment-list-deliveries.component.css']
 })
 
-export class DmParchmentListTransfersComponent extends BasicComponent implements OnInit, AfterViewInit {
+export class DmParchmentListDeliveriesComponent extends BasicComponent implements OnInit, AfterViewInit {
 
   constructor(private formBuilder: FormBuilder,
               private router: Router, private confirmDialogService: ConfirmDialogService,
               private seasonService: SeasonService,
               private modal: NgbModal,
               private organisationService: OrganisationService,
-              private wareHouseService: WarehouseService,
               private datePipe: DatePipe, private authenticationService: AuthenticationService,
               private parchmentService: ParchmentService,
               private helper: HelperService) {
@@ -81,6 +82,12 @@ export class DmParchmentListTransfersComponent extends BasicComponent implements
       org_id: this.authenticationService.getCurrentUser().info.org_id
     };
     this.getDeliveries();
+    const self = this;
+    $('#responsive-table').on('click', 'a.edit-parchment', function(e) {
+      const data = $(this).attr('id').split('-');
+      e.preventDefault();
+      self.editParchment(data[0], data[1], data[2], data[3], data[4] );
+    });
   }
 
   ngAfterViewInit(): void {
@@ -198,10 +205,27 @@ export class DmParchmentListTransfersComponent extends BasicComponent implements
       this.summary = data.content;
     });
   }
+
   rerender(): void {
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
       dtInstance.destroy();
       this.dtTrigger.next();
+    });
+  }
+
+  editParchment(transferId: string, itemId: string, parchmentId: string, quantity: number, lotNumber: string) {
+    const payload = {
+      transferId,
+      itemId,
+      parchmentId,
+      quantity,
+      lotNumber
+    };
+    const modalRef = this.modal.open(EditDeliveryItemComponent, {size: 'sm'});
+    modalRef.componentInstance.payload = payload;
+    modalRef.result.then((message) => {
+      this.setMessage(message);
+      this.getDeliveries();
     });
   }
 }

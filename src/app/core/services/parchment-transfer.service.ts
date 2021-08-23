@@ -6,9 +6,6 @@ import {isNullOrUndefined} from 'util';
 })
 export class ParchmentTransferService {
 
-  constructor() {
-  }
-
   resetCart() {
     localStorage.removeItem('parchmentTransferCart');
   }

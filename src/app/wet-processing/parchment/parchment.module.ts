@@ -16,12 +16,13 @@ import {SharedModule} from '../../shared';
 import {ParchmentPrepareTransferCartComponent} from './parchment-prepare-transfer-cart/parchment-prepare-transfer-cart.component';
 import {ParchmentListTransfersComponent} from './parchment-list-transfers/parchment-list-transfers.component';
 import {AutocompleteLibModule} from 'angular-ng-autocomplete';
+import { ParchmentEditComponent } from './parchment-edit/parchment-edit.component';
 
 @NgModule({
   declarations: [ParchmentListComponent, ParchmentCreateComponent,
     ParchmentReportComponent,
     ParchmentReportDetailComponent,
-    ParchmentPrepareTransferCartComponent, ParchmentListTransfersComponent],
+    ParchmentPrepareTransferCartComponent, ParchmentListTransfersComponent, ParchmentEditComponent],
   imports: [
     CommonModule,
     ParchmentRoutingModule, NgbModule, NgxPaginationModule, OrderModule,

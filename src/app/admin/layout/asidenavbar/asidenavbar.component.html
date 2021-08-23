@@ -141,8 +141,30 @@
       <li routerLinkActive="active" *appHasPermission="[2]">
         <a routerLink="/admin/drymill/parchment/list">
           <i class="fa fa-archive" aria-hidden="true"></i>
-          <span>Received parchments</span>
+          <span>Parchments</span>
         </a>
+      </li>
+      <li class="treeview" routerLinkActive="active" *appHasPermission="[2]">
+        <a href="#">
+          <i class="fa fa-coffee"></i><span>Green coffee</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
+        </a>
+        <ul class="treeview-menu">
+          <li routerLinkActive="active" *appHasPermission="[2]">
+            <a routerLink="/admin/drymill/prepare/green_coffee">
+              <i class="fa fa-circle-o" aria-hidden="true"></i>
+              <span>Prepare green coffee</span>
+            </a>
+          </li>
+          <li routerLinkActive="active" *appHasPermission="[2]">
+            <a routerLink="/admin/drymill/green_coffee/mixtures">
+              <i class="fa fa-circle-o" aria-hidden="true"></i>
+              <span>Green coffee mixtures</span>
+            </a>
+          </li>
+        </ul>
       </li>
       <li class="header" *appHasPermission="[[8,2]]">SITE</li>
       <li class="treeview" routerLinkActive="active" *appHasPermission="[[8,2]]">
@@ -286,11 +308,11 @@
         </ul>
       </li>
       <li routerLinkActive="active" *appHasPermission="[1]">
-         <a routerLink="/admin/settings/organisation/{{user.org_id}}">
-           <i class="fa fa-cogs"></i>
-           <span>Settings</span>
-         </a>
-       </li>
+        <a routerLink="/admin/settings/organisation/{{user.org_id}}">
+          <i class="fa fa-cogs"></i>
+          <span>Settings</span>
+        </a>
+      </li>
       <li class="treeview" routerLinkActive="active" *appHasPermission="[4,0,5]">
         <a href="#">
           <i class="fa fa-cogs"></i><span>Settings</span>

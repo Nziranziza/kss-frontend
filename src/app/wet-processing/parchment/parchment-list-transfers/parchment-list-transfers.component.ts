@@ -89,7 +89,6 @@ export class ParchmentListTransfersComponent extends BasicComponent implements O
     const self = this;
     $('#responsive-table').on('click', 'a.cancel-item', function(e) {
       e.preventDefault();
-      console.log($(this).attr('id'));
       self.cancelTransferItem($(this).attr('id'));
     });
 
@@ -211,16 +210,6 @@ export class ParchmentListTransfersComponent extends BasicComponent implements O
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
       dtInstance.destroy();
       this.dtTrigger.next();
-      const el = this.expendableTable.nativeElement.querySelector('.expendable-dataTable .dtr-data .cancel');
-      if (el) {
-        el.addEventListener('click', () => {
-          console.log('here1');
-        });
-
-        this.renderer.listen(el, 'click', () => {
-          console.log('here2');
-        });
-      }
     });
   }
 

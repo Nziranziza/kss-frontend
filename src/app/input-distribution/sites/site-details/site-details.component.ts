@@ -22,6 +22,5 @@ export class SiteDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.site);
   }
 }

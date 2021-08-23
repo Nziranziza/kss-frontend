@@ -27,6 +27,10 @@ export class ParchmentService {
     return this.apiService.post('/parchment/record_parchment', body);
   }
 
+  update(id: string, body: any) {
+    return this.apiService.put('/parchment/update_parchment/' + id, body);
+  }
+
   get(orgId: string, id: string) {
     return this.apiService.get('/parchment/cws_parchment/' + orgId + '/' + id);
   }
@@ -36,7 +40,7 @@ export class ParchmentService {
   }
 
   report(data: any) {
-    return this.apiService.post('/cwsstats/parchment', data);
+     return this.apiService.post('/cwsstats/parchment', data);
   }
 
   detailedReport(data: any) {
@@ -65,6 +69,10 @@ export class ParchmentService {
 
   confirmDeliveries(body: any): Observable<any> {
     return this.apiService.put('/dmparchment/confirm_deliveries', body);
+  }
+
+  updateDelivery(body: any): Observable<any> {
+    return this.apiService.put('/dmparchment/dm_deliveries/' + body.transferId, body);
   }
 
   cancelTransfer(id: string) {

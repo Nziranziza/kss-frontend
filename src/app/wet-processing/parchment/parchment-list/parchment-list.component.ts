@@ -11,6 +11,7 @@ import {ParchmentCreateComponent} from '../parchment-create/parchment-create.com
 import {HelperService} from '../../../core/helpers';
 import {DatePipe} from '@angular/common';
 import {isArray} from 'util';
+import {ParchmentEditComponent} from '../parchment-edit/parchment-edit.component';
 
 @Component({
   selector: 'app-parchment-list',
@@ -233,6 +234,26 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
       });
   }
 
+  editParchment(id: string) {
+    const modalRef = this.modal.open(ParchmentEditComponent, {size: 'lg'});
+    modalRef.componentInstance.id = id;
+    modalRef.result.then((message) => {
+      this.setMessage(message);
+      this.parchmentService.allWithFilter(this.parameters)
+        .subscribe(data => {
+          this.parchments = data.data;
+          if (this.parchments.length > 0) {
+            this.config = {
+              itemsPerPage: this.parameters.length,
+              currentPage: this.parameters.start + 1,
+              totalItems: data.recordsTotal
+            };
+          }
+          this.productionSummary();
+        });
+    });
+  }
+
   onClearFilter() {
     this.filterForm.reset(this.initialSearchValue);
     this.initiateParameters();
@@ -246,7 +267,6 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
           totalItems: data.recordsTotal
         };
       });
-    this.setOrder('created_at');
   }
 
   onChange() {

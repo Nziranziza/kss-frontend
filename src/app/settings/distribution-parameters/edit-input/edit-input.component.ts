@@ -27,7 +27,6 @@ export class EditInputComponent extends BasicComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.input);
     this.editInputForm = this.formBuilder.group({
       inputName: ['', Validators.required]
     });

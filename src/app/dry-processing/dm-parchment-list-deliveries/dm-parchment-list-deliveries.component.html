@@ -102,15 +102,16 @@
                   <td>Grade</td>
                   <td>Qty</td>
                   <td>Lots</td>
+                  <td></td>
                 </tr>
                 <tr *ngFor="let item of transfer.items" style="font-style: oblique; font-size: 12px; background: transparent">
                   <td>{{ item.type.name }}</td>
                   <td>{{ item.grade }}</td>
-                  <td>{{ item.totalKgs }}</td>
+                  <td>{{ item.remainingQty }}</td>
                   <td>
-                    <button *ngFor="let lot of item.parchments; let i = index" type="button" class="btn btn-sm btn-link" data-toggle="tooltip"
-                      title="{{'Qty : ' + lot.amountToTransfer + '&#13199; '}}"> {{ lot.lotNumber }}
-                    </button>
+                    <a *ngFor="let lot of item.parchments; let i = index" type="button" class="btn btn-sm btn-link parchment edit-parchment" data-toggle="tooltip"
+                      title="{{'Qty : ' + lot.amountToTransfer + '&#13199; '}}" id="{{ transfer._id }}-{{ item._id }}-{{ lot._id }}-{{ lot.amountToTransfer }}-{{ lot.lotNumber }}"> {{ lot.lotNumber }}
+                    </a>
                   </td>
                 </tr>
               </table>

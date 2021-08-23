@@ -32,9 +32,9 @@
     <div class="col-lg-1 col-md-2 col-sm-3 col-xs-6">
       <select class="form-control" formControlName="grade">
         <option value="">select grade</option>
-        <option value="A"> A </option>
-        <option value="B"> B </option>
-        <option value="C"> C </option>
+        <option value="A"> A</option>
+        <option value="B"> B</option>
+        <option value="C"> C</option>
       </select>
     </div>
     <ng-container formGroupName="producedDate">
@@ -114,13 +114,14 @@
             <td>
               <button class="btn btn-default btn-margin btn-sm pull-right" (click)="cancelParchment(parchment._id)"
                       type="button">
-                <i class="fa fa-remove" aria-hidden="true"></i> Cancel
+                Cancel
               </button>
-              <!--
-              <a appRequiredSeason *appHasPermission="[1]" routerLink="/admin/cws/parchments/transfer/history/{{parchment._id}}" class="btn btn-success btn-margin pull-right btn-sm" style="margin-left: 10px;">
-                <i class="fa fa-truck"></i> transfer history
-              </a>
-              -->
+              <ng-container *ngIf="parchment.remainingQty === parchment.totalKgs">
+                <button appRequiredSeason *appHasPermission="[1]" (click)="editParchment(parchment._id)"
+                        class="btn btn-success btn-margin pull-right btn-sm" style="margin-left: 10px;">
+                  Edit
+                </button>
+              </ng-container>
             </td>
           </tr>
           </tbody>

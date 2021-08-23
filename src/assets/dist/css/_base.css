@@ -121,12 +121,12 @@ div .wrapper {
 @media (min-width: 992px) {
 
   .modal-lg {
-    width: 1300px !important;
+    width: 85% !important;
     height: auto !important;
   }
 
   .modal-sm {
-    width: 950px !important;
+    width: 65% !important;
     height: auto !important;
   }
 }

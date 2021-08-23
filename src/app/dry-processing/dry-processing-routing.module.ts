@@ -1,9 +1,10 @@
 import {NgModule} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
 import {AdminComponent} from '../admin/admin/admin.component';
-import {CreateBatchComponent} from './create-batch/create-batch.component';
 import {AdminGuard} from '../core/services/guards/admin.guard';
-import {DmParchmentListTransfersComponent} from './dm-parchment-list-transfers/dm-parchment-list-transfers.component';
+import {DmParchmentListDeliveriesComponent} from './dm-parchment-list-deliveries/dm-parchment-list-deliveries.component';
+import {PrepareGreenCoffeeComponent} from './prepare-green-coffee/prepare-green-coffee.component';
+import {ListGreenCoffeeComponent} from './list-green-coffee/list-green-coffee.component';
 
 const routes: Routes = [
   {
@@ -12,13 +13,17 @@ const routes: Routes = [
     canActivateChild: [AdminGuard],
     children: [
       {
-        path: 'drymill/batch/create',
-        component: CreateBatchComponent
+        path: 'drymill/parchment/list',
+        component: DmParchmentListDeliveriesComponent
       },
       {
-        path: 'drymill/parchment/list',
-        component: DmParchmentListTransfersComponent
-      }
+        path: 'drymill/prepare/green_coffee',
+        component: PrepareGreenCoffeeComponent
+      },
+      {
+        path: 'drymill/green_coffee/mixtures',
+        component: ListGreenCoffeeComponent
+      },
     ]
   }
 ];

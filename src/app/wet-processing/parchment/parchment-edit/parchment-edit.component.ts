@@ -1,25 +1,24 @@
-import {Component, Inject, Injector, OnInit, PLATFORM_ID} from '@angular/core';
+import {Component, Inject, Injector, Input, OnInit, PLATFORM_ID} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Router} from '@angular/router';
-import {CoffeeTypeService, UserService} from '../../../core/services';
-import {HelperService} from '../../../core/helpers';
-import {ParchmentService} from '../../../core/services';
-import {AuthenticationService} from '../../../core/services';
-import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
+import {ActivatedRoute, Router} from '@angular/router';
+import {AuthenticationService, CoffeeTypeService, ParchmentService, UserService} from '../../../core/services';
 import {DatePipe, isPlatformBrowser} from '@angular/common';
+import {HelperService} from '../../../core/helpers';
+import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {BasicComponent} from '../../../core/library';
 
 @Component({
-  selector: 'app-parchment-create',
-  templateUrl: './parchment-create.component.html',
-  styleUrls: ['./parchment-create.component.css']
+  selector: 'app-parchment-edit',
+  templateUrl: './parchment-edit.component.html',
+  styleUrls: ['./parchment-edit.component.css']
 })
-export class ParchmentCreateComponent extends BasicComponent implements OnInit {
+export class ParchmentEditComponent  extends BasicComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
               private router: Router, private parchmentService: ParchmentService,
               private coffeeTypeService: CoffeeTypeService,
               private datePipe: DatePipe,
+              private route: ActivatedRoute,
               private helper: HelperService, private authenticationService: AuthenticationService,
               @Inject(PLATFORM_ID) private platformId: object, private userService: UserService,
               private injector: Injector) {
@@ -38,6 +37,8 @@ export class ParchmentCreateComponent extends BasicComponent implements OnInit {
   packaging: any;
   totalKgs = 0;
   currentDate: any;
+  @Input() id;
+  parchment: any;
 
   ngOnInit() {
     this.currentDate = new Date();
@@ -59,7 +60,23 @@ export class ParchmentCreateComponent extends BasicComponent implements OnInit {
       });
     });
     this.onChange();
-    this.addPackage();
+    this.parchmentService.get(this.authenticationService.getCurrentUser().info.org_id, this.id).subscribe(data => {
+      this.recordParchmentForm.patchValue(data.content);
+      this.parchment = data.content;
+      this.parchment.package.forEach((item, i) => {
+        this.addPackage();
+        ((this.recordParchmentForm.get('packaging') as FormArray).at(i) as FormGroup).get('bagSize')
+          .setValue(item.bagSize);
+        ((this.recordParchmentForm.get('packaging') as FormArray).at(i) as FormGroup).get('numberOfBags')
+          .setValue(item.numberOfBags);
+        ((this.recordParchmentForm.get('packaging') as FormArray).at(i) as FormGroup).get('subTotal')
+          .setValue(item.bagSize * item.numberOfBags);
+      });
+      this.recordParchmentForm.controls.coffeeType.setValue(this.parchment.coffeeType._id);
+      this.recordParchmentForm.controls.coffeeGrade.setValue(this.parchment.coffeeGrade);
+      this.recordParchmentForm.controls.producedDate.setValue(this.parchment.producedDate);
+      this.recordParchmentForm.controls.date.setValue(this.parchment.cherriesSupplyDate);
+    });
   }
 
   get formPackage() {
@@ -133,7 +150,7 @@ export class ParchmentCreateComponent extends BasicComponent implements OnInit {
       const parchment = JSON.parse(JSON.stringify(this.recordParchmentForm.value));
       parchment['org_id'.toString()] = this.authenticationService.getCurrentUser().info.org_id;
       parchment['userId'.toString()] = this.authenticationService.getCurrentUser().info._id;
-      this.parchmentService.save(parchment)
+      this.parchmentService.update(this.parchment._id, parchment)
         .subscribe((data) => {
             this.modal.close(data.message);
           },
@@ -144,4 +161,5 @@ export class ParchmentCreateComponent extends BasicComponent implements OnInit {
       this.errors = this.helper.getFormValidationErrors(this.recordParchmentForm);
     }
   }
+
 }

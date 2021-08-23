@@ -1,0 +1,36 @@
+<div class="modal-header">
+  <div class="row">
+    <div class="col-sm-6">
+      <h3>
+        Edit parchment : <span style="font-size: 15px; font-weight: bolder">{{ payload?.lotNumber }}</span>
+      </h3>
+    </div>
+    <div class="col-sm-6">
+      <i class="fa fa-times-circle close" style="font-size: 24px;" aria-label="Close" (click)="modal.dismiss()">
+      </i>
+    </div>
+  </div>
+</div>
+<form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+  <div class="modal-body">
+    <app-list-errors [errorList]="errors"></app-list-errors>
+    <div class="row">
+      <div class="col-sm-6 invoice-col">
+        <div class="row">
+          <div class="col-sm-6">
+            Quantity
+          </div>
+          <div class="col-sm-6">
+            <input type="number" formControlName="quantity" class="form-control" min="0">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row" style="margin-top: 15px;">
+      <div class="col-xs-12">
+        <button class="btn btn-success btn-margin pull-right" (click)="onSubmit()"><i class="fa fa-save"></i> Update
+        </button>
+      </div>
+    </div>
+  </div>
+</form>

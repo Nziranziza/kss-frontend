@@ -98,7 +98,6 @@ export class FertilizerDistributionProgressComponent extends BasicComponent impl
       this.organisationService.get(this.authenticationService.getCurrentUser().info.org_id).subscribe(data => {
         const temp = [];
         this.org = data.content;
-        console.log(this.org);
         data.content.coveredSectors.map((sector) => {
           temp.push({
             _id: sector.sectorId._id,

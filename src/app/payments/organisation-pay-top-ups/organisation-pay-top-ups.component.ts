@@ -58,7 +58,6 @@ export class OrganisationPayTopUpsComponent extends BasicComponent implements On
         image.onload = rs => {
           const imgHeight = rs.currentTarget['height'.toString()];
           const imgWidth = rs.currentTarget['width'.toString()];
-          console.log(imgHeight, imgWidth);
           if (imgHeight > maxHeight && imgWidth > maxWidth) {
             this.imageError =
               'Maximum dimensions allowed ' +

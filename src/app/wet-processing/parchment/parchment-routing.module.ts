@@ -6,6 +6,7 @@ import {ParchmentListComponent} from './parchment-list/parchment-list.component'
 import {AdminGuard} from '../../core/services/guards/admin.guard';
 import {ParchmentPrepareTransferCartComponent} from './parchment-prepare-transfer-cart/parchment-prepare-transfer-cart.component';
 import {ParchmentListTransfersComponent} from './parchment-list-transfers/parchment-list-transfers.component';
+import {ParchmentEditComponent} from './parchment-edit/parchment-edit.component';
 
 const routes: Routes = [
   {
@@ -23,6 +24,10 @@ const routes: Routes = [
       {
         path: 'cws/parchments/transfer/cart',
         component: ParchmentPrepareTransferCartComponent
+      },
+      {
+        path: 'cws/parchments/edit/:id',
+        component: ParchmentEditComponent
       },
       {
         path: 'cws/parchments/transfer/history',
