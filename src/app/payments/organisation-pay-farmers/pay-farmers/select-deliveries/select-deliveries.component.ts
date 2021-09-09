@@ -153,6 +153,7 @@ export class SelectDeliveriesComponent extends BasicComponent implements OnInit,
         this.suppliers = data.content;
         this.paymentProcessingService.setSelectionFilter(this.filterForm.getRawValue());
         this.paymentProcessingService.setSelectedDeliveries(this.suppliers);
+        this.rerender();
         if (this.suppliers.length === 0) {
           this.setWarning('Suppliers not found!');
         }
@@ -231,7 +232,6 @@ export class SelectDeliveriesComponent extends BasicComponent implements OnInit,
       dtInstance.destroy();
       this.dtTrigger.next();
     });
-    this.allSelected = false;
   }
 
   ngOnDestroy(): void {

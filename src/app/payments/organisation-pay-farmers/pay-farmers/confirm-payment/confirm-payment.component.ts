@@ -65,7 +65,7 @@ export class ConfirmPaymentComponent extends BasicComponent implements OnInit {
           payer['bankName'.toString()] = this.payerAccount.bankName;
         }
         this.paymentRequest = {...payer, ...this.paymentList};
-        this.paymentService.payCherriesEPayment(this.paymentRequest).subscribe(() => {
+        this.paymentService.payCherries(this.paymentRequest).subscribe(() => {
             this.setMessage('Payment successfully initiated!');
           },
           (err) => {

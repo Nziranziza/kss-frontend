@@ -102,6 +102,7 @@ export class EditFarmerProfileComponent extends BasicComponent implements OnInit
         .subscribe((data) => {
             this.setMessage(data.message);
             this.getCoffeeFarmerPaymentChannels();
+            this.addPaymentChannelsForm.reset();
           },
           (err) => {
             this.setError(err.errors);

@@ -22,7 +22,7 @@
           </thead>
           <tbody>
           <ng-container  *ngFor="let user of users">
-          <tr *ngIf="currentUser.info._id != user._id">
+          <tr>
             <td> {{ user.foreName }}</td>
             <td> {{ user.surname }}</td>
             <td> {{ user.email }}</td>
@@ -32,9 +32,11 @@
             <td> {{ user.sex }}</td>
             <td class="actions no-wrap text-right">
               <button class="btn btn-default btn-margin btn-sm pull-right details-button" (click)="viewDetails(user)">...</button>
+              <!--<ng-container *ngIf="currentUser.info._id != user._id">-->
               <a class="btn btn-success btn-sm btn-margin" routerLink="/admin/organisations/{{organisationId}}/users/edit/{{user._id}}" *appHasPermission="[[4,1],0,[8,1],[1,1]]" style="margin-left: 10px;" >
                 Edit
               </a>
+              <!--</ng-container>-->
             </td>
           </tr>
           </ng-container>

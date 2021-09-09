@@ -8,6 +8,7 @@
             <p class="login-box-msg">Sign in</p>
             <app-list-errors [errorList]="errors"></app-list-errors>
             <app-list-message [message]="message"></app-list-message>
+            <app-list-warnings [warning]="warning"></app-list-warnings>
             <form [formGroup]="authForm" (ngSubmit)="onSubmit()">
               <div class="form-group has-feedback">
                 <input type="text" formControlName="email" class="form-control"

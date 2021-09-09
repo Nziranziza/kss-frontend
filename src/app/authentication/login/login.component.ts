@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {AuthenticationService} from '../../core';
+import {AuthenticationService, BasicComponent} from '../../core';
 import {MessageService} from '../../core/services';
 import {HttpHeaders} from '@angular/common/http';
 import {AuthorisationService} from '../../core/services';
@@ -14,7 +14,7 @@ declare var $;
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit, OnDestroy {
+export class LoginComponent extends BasicComponent implements OnInit, OnDestroy {
 
   errors: any;
   authForm: FormGroup;
@@ -29,6 +29,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private authorisationService: AuthorisationService,
     private seasonService: SeasonService
   ) {
+    super();
   }
 
   ngOnInit() {
@@ -58,6 +59,8 @@ export class LoginComponent implements OnInit, OnDestroy {
             if (data) {
               this.message = 'Account successfully unlocked!';
             }
+          },  err => {
+            this.setWarning(err.errors);
           });
         }
       });
@@ -90,11 +93,11 @@ export class LoginComponent implements OnInit, OnDestroy {
           });
         },
         err => {
-          this.errors = err.errors;
+          this.setError(err.errors);
         });
 
     } else {
-      this.errors = ['Invalid username or email'];
+      this.setError(['Invalid username or email']);
     }
   }
 

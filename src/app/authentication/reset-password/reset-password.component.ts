@@ -5,6 +5,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {HelperService} from '../../core/helpers';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {MessageService} from '../../core/services';
+import {BasicComponent} from '../../core/library';
 
 declare var $;
 
@@ -13,10 +14,8 @@ declare var $;
   templateUrl: './reset-password.component.html',
   styleUrls: ['./reset-password.component.css']
 })
-export class ResetPasswordComponent implements OnInit {
+export class ResetPasswordComponent extends BasicComponent implements OnInit {
 
-  errors: any;
-  message: string;
   resetPasswordForm: FormGroup;
   userId: string;
   isValidToken = false;
@@ -29,7 +28,9 @@ export class ResetPasswordComponent implements OnInit {
     private http: HttpClient,
     private formBuilder: FormBuilder, private helperService: HelperService,
     private messageService: MessageService
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit() {
     this.resetPasswordForm = this.formBuilder.group({
@@ -52,7 +53,7 @@ export class ResetPasswordComponent implements OnInit {
         this.userId = data.content._id;
       },
       (err) => {
-        this.errors = err.errors;
+        this.setWarning(err.errors);
       });
   }
 
@@ -62,7 +63,7 @@ export class ResetPasswordComponent implements OnInit {
       const confirmPassword = this.resetPasswordForm.controls.confirmPassword.value;
 
       if (password !== confirmPassword) {
-        this.errors = ['Passwords do not match'];
+        this.setError(['Passwords do not match']);
         return;
       }
       const resets = {};
@@ -78,10 +79,10 @@ export class ResetPasswordComponent implements OnInit {
           this.router.navigate(['login']);
         },
         (err) => {
-          this.errors = err.errors;
+          this.setError(err.errors);
         });
     } else {
-      this.errors = this.helperService.getFormValidationErrors(this.resetPasswordForm);
+      this.setError(this.helperService.getFormValidationErrors(this.resetPasswordForm));
       return;
     }
   }

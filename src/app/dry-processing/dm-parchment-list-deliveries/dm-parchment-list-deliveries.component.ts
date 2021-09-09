@@ -13,8 +13,6 @@ import {HelperService} from '../../core/helpers';
 import {Subject} from 'rxjs';
 import {DataTableDirective} from 'angular-datatables';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {Farmer} from '../../core/models';
-import {FarmerDetailsComponent} from '../../farmer/farmer-details/farmer-details.component';
 import {EditDeliveryItemComponent} from './edit-delivery-item/edit-delivery-item.component';
 
 declare var $;
@@ -66,7 +64,7 @@ export class DmParchmentListDeliveriesComponent extends BasicComponent implement
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 10,
-      columns: [{}, {}, {}, { class: 'none'
+      columns: [{}, {}, {}, {}, { class: 'none'
       }, {}, {}],
       responsive: true
     };
@@ -227,5 +225,11 @@ export class DmParchmentListDeliveriesComponent extends BasicComponent implement
       this.setMessage(message);
       this.getDeliveries();
     });
+  }
+
+  getRemaining(index: number) {
+    return this.transfers[index].items.reduce((previous, current) => {
+      return previous + current.remainingQty;
+    }, 0);
   }
 }

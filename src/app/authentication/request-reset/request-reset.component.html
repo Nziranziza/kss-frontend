@@ -7,6 +7,7 @@
           <div class="login-box-body">
             <app-list-errors [errorList]="errors"></app-list-errors>
             <app-list-message [message]="message"></app-list-message>
+            <app-list-warnings [warning]="warning"></app-list-warnings>
             <p class="login-box-msg">Reset password</p>
             <form [formGroup]="requestResetForm" (ngSubmit)="onSubmit()">
               <div class="form-group has-feedback">

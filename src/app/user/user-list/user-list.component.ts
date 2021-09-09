@@ -49,7 +49,7 @@ export class UserListComponent extends BasicComponent implements OnInit, OnDestr
     this.organisationService.get(this.organisationId).subscribe(data => {
       this.org = data.content;
     });
-    this.message = this.messageService.getMessage();
+    this.setMessage(this.messageService.getMessage());
   }
 
   getAllUsers(): void {

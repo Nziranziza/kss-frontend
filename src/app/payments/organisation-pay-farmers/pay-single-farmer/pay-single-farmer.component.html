@@ -17,13 +17,11 @@
                     <span style=" font-weight: bolder"> Cash </span>
                   </a>
                 </li>
-               <!--
-                  <li role="presentation">
+                <li role="presentation">
                   <a href="#e-payment" aria-controls="mobile" role="tab" data-toggle="tab">
                     <span style="font-weight: bolder"> E-payment </span>
                   </a>
-                  </li>
-              -->
+                </li>
               </ul>
               <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="cash">
@@ -54,7 +52,7 @@
                               <td>
                                 <div class="form-group">
                                   <label class="control-label label-required">Payer account </label>
-                                  <select class="form-control" formControlName="paymentChannel"  style="width: 200px">
+                                  <select class="form-control" formControlName="paymentChannel" style="width: 200px">
                                     <option value="">Select paying account</option>
                                     <ng-container *ngFor="let channel of orgPaymentChannels">
                                       <option value="{{channel.channelId}}">
@@ -89,11 +87,11 @@
                           <input type="text" formControlName="amount" class="form-control">
                         </div>
                       </div>
-                      <div class="col-xs-12 col-md-3" >
+                      <div class="col-xs-12 col-md-3">
                         <div class="form-group">
                           <label class="control-label label-required">Farmer account</label>&nbsp;&nbsp;
                           <select class="form-control" formControlName="receivingChannel">
-                            <option value="">Select  account</option>
+                            <option value="">Select account</option>
                             <ng-container *ngFor="let channel of farmerPaymentChannels">
                               <option value="{{channel.paymentChannel}}">
                                 {{ channel.subscriptionCode  }} &nbsp;-&nbsp; {{ channel.label }}

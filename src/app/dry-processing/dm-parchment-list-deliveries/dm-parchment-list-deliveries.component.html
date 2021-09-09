@@ -84,6 +84,7 @@
           <tr>
             <th>Transfer type</th>
             <th>Source</th>
+            <th>Remaining Qty</th>
             <th>Qty</th>
             <th></th>
             <th>Date</th>
@@ -91,9 +92,10 @@
           </tr>
           </thead>
           <tbody>
-          <tr *ngFor="let transfer of transfers">
+          <tr *ngFor="let transfer of transfers;  let i = index">
             <td>{{ transfer.transferType | titlecase }}</td>
             <td>{{ transfer.originOrg.name }}</td>
+            <td>{{ getRemaining(i) }}</td>
             <td>{{ transfer.totalAmountToTransfer }}</td>
             <td>
               <table style="background: transparent; width: 650px;" class="pull-right">

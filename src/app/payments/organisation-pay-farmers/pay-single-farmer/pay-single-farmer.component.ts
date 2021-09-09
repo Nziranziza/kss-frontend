@@ -120,6 +120,7 @@ export class PaySingleFarmerComponent extends BasicComponent implements OnInit {
         regNumber: this.paymentData.regNumber,
         subscriptionNumber: this.getSubscriptionNumber(+this.ePaymentForm.controls.receivingChannel.value),
         amount: this.paymentData.paidAmount,
+        userId: this.supplier._id,
         deliveries: this.paymentData.deliveryIds,
       };
       if (this.supplier.type === 1) {
@@ -139,7 +140,7 @@ export class PaySingleFarmerComponent extends BasicComponent implements OnInit {
       if (this.payerAccount.channelId === 5) {
         this.paymentRequest['bankName'.toString()] = this.payerAccount.bankName;
       }
-      this.paymentService.payCherriesEPayment(this.paymentRequest).subscribe(() => {
+      this.paymentService.payCherries(this.paymentRequest).subscribe(() => {
           this.setMessage('Payment successfully initiated!');
         },
         (err) => {

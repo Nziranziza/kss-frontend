@@ -4,6 +4,7 @@ import {PaymentProcessingService} from '../../../../core/services/payment-proces
 import {Subject} from 'rxjs';
 import {AuthenticationService} from '../../../../core/services';
 import {HelperService} from '../../../../core/helpers';
+import {isArray} from 'util';
 
 @Component({
   selector: 'app-preview-deliveries-list',
@@ -94,6 +95,9 @@ export class PreviewDeliveriesListComponent implements OnInit {
 
   getSubscriptionNumber(paymentChannels: any) {
     const selectedChannel = this.paymentProcessingService.getSelectionFilter().paymentChannel;
+    if (!isArray(paymentChannels)) {
+      paymentChannels = [paymentChannels];
+    }
     return paymentChannels.find(element => element.paymentChannel === +selectedChannel).subscriptionCode;
   }
 

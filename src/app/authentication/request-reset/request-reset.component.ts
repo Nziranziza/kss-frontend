@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AuthenticationService} from '../../core/services';
 import {HelperService} from '../../core/helpers';
+import {BasicComponent} from '../../core/library';
 
 declare var $;
 
@@ -11,7 +12,7 @@ declare var $;
   templateUrl: './request-reset.component.html',
   styleUrls: ['./request-reset.component.css']
 })
-export class RequestResetComponent implements OnInit {
+export class RequestResetComponent extends BasicComponent implements OnInit {
 
   errors: any;
   message: string;
@@ -22,7 +23,9 @@ export class RequestResetComponent implements OnInit {
     private router: Router,
     private authenticationService: AuthenticationService,
     private formBuilder: FormBuilder, private helperService: HelperService
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit() {
     this.requestResetForm = this.formBuilder.group({
@@ -41,15 +44,15 @@ export class RequestResetComponent implements OnInit {
   onSubmit() {
     if (!this.requestResetForm.invalid) {
       this.authenticationService.requestReset(this.requestResetForm.value).subscribe(data => {
-          this.message = 'Request successful submitted!';
+          this.setMessage('Request successful submitted!');
           return;
         },
         (err) => {
           this.message = '';
-          this.errors = err.errors;
+          this.setError(err.errors);
         });
     } else {
-      this.errors = this.helperService.getFormValidationErrors(this.requestResetForm);
+      this.setError(this.helperService.getFormValidationErrors(this.requestResetForm));
       return;
     }
   }

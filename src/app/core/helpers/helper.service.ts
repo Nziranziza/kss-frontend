@@ -17,6 +17,11 @@ export class HelperService {
   ) {
   }
 
+  activeOrganisationEPaymentChannel = [5];
+  activeFarmerEPaymentChannel = [3];
+  activeFarmerReceivingPaymentChannel = [4, 3];
+
+
   getFormValidationErrors(form) {
     const errors = [];
     Object.keys(form.controls).forEach(key => {
@@ -106,22 +111,22 @@ export class HelperService {
 
   getOrgPossiblePaymentChannels(paymentChannels: any) {
     return paymentChannels.filter((channel) => {
-      /* not cash */
-      return channel._id !== 4;
+      /* only bank */
+      return this.activeOrganisationEPaymentChannel.includes(channel._id);
     });
   }
 
   getFarmersPossiblePaymentChannels(paymentChannels: any) {
     return paymentChannels.filter((channel) => {
-      /* not bank and not cash */
-      return channel._id !== 5 && channel._id !== 4;
+      /* only Ikofi */
+      return this.activeFarmerEPaymentChannel.includes(channel._id);
     });
   }
 
   getFarmersAllPossibleReceivingPaymentChannels(paymentChannels: any) {
     return paymentChannels.filter((channel) => {
       /* not bank */
-      return channel._id !== 5;
+      return this.activeFarmerReceivingPaymentChannel.includes(channel._id);
     });
   }
 

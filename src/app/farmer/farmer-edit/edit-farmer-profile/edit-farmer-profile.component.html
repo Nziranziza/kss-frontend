@@ -8,10 +8,10 @@
       <a href="#profile" aria-controls="Profile" role="tab"
          data-toggle="tab"><span>Edit Profile</span></a>
     </li>
-    <!-- <li role="presentation" class="" *appHasPermission="[0,1]">
+    <li role="presentation" class="" *appHasPermission="[0,1]">
       <a href="#payment-channels" aria-controls="payment-channels" role="tab"
          data-toggle="tab"><span>Payment channels</span></a>
-    </li>-->
+    </li>
   </ul>
   <div class="tab-content">
     <div role="tabpanel" class="tab-pane active" id="profile">
@@ -155,6 +155,13 @@
             <div class="box-body">
               <form [formGroup]="editPaymentChannelForm" (ngSubmit)="onEditChannel()">
                 <div class="row">
+                  <div class="col-xs-12">
+                    <h5>
+                      Edit payment channel
+                    </h5>
+                  </div>
+                </div>
+                <div class="row">
                   <div class="col-xs-3">
                     <div class="form-group">
                       <span class="label-required">Channel</span>
@@ -182,41 +189,20 @@
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-sm-12">
-          <table class="hover table table-striped">
-            <thead>
-            <tr>
-              <th>Channel name</th>
-              <th>Subscription number</th>
-              <th></th>
-            </tr>
-            </thead>
-            <tbody style="border-width: 1px">
-            <tr *ngFor="let channel of coffeeFarmerPaymentChannels">
-              <td> {{ getPaymentChannelName(channel.paymentChannel) }}</td>
-              <td> {{ channel.subscriptionCode }}</td>
-              <td>
-                <button class="btn btn-success btn-margin btn-sm" (click)="editCoffeeFarmerPaymentChannel(channel)">
-                  Edit
-                </button>
-                <button class="btn btn-primary btn-margin btn-sm" (click)="deleteCoffeeFarmerPaymentChannel(channel)"
-                        *ngIf="channel.status === 2"> Delete
-                </button>
-              </td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <form [formGroup]="addPaymentChannelsForm" (ngSubmit)="onAddChannel()">
+      <form [formGroup]="addPaymentChannelsForm" (ngSubmit)="onAddChannel()" *ngIf="!showEditPaymentChannelForm">
         <div class="row">
           <div class="col-xs-12">
             <div class="box">
               <div class="box-body">
 
                 <!------------------------------------ Payment channels ---------------------------------->
-
+                <div class="row">
+                  <div class="col-xs-12">
+                    <h5>
+                      Add payment channels
+                    </h5>
+                  </div>
+                </div>
                 <div class="row">
                   <div class="col-xs-12">
                     <button class="btn btn-success btn-sm" (click)="addPaymentChannel()" type="button"
@@ -266,6 +252,33 @@
           </div>
         </div>
       </form>
+      <div class="row">
+        <div class="col-sm-12">
+          <table class="hover table table-striped">
+            <thead>
+            <tr>
+              <th>Channel name</th>
+              <th>Subscription number</th>
+              <th></th>
+            </tr>
+            </thead>
+            <tbody style="border-width: 1px">
+            <tr *ngFor="let channel of coffeeFarmerPaymentChannels">
+              <td> {{ getPaymentChannelName(channel.paymentChannel) }}</td>
+              <td> {{ channel.subscriptionCode }}</td>
+              <td>
+                <button class="btn btn-success btn-margin btn-sm" (click)="editCoffeeFarmerPaymentChannel(channel)">
+                  Edit
+                </button>
+                <button class="btn btn-primary btn-margin btn-sm" (click)="deleteCoffeeFarmerPaymentChannel(channel)"
+                        *ngIf="channel.status === 2"> Delete
+                </button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
 </div>

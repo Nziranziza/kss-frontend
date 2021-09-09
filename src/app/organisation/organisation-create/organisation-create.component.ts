@@ -124,7 +124,7 @@ export class OrganisationCreateComponent implements OnInit {
       this.helper.cleanObject(org);
       this.organisationService.save(org)
         .subscribe(() => {
-            this.messageService.setMessage('Organisation successfully updated!');
+            this.messageService.setMessage('Organisation successfully created!');
             this.router.navigateByUrl('admin/organisations');
           },
           (err) => {
