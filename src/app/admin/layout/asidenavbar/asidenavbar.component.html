@@ -218,13 +218,13 @@
         </ul>
       </li>
       <li class="header" *appHasPermission="[0,5,[4,10],[4,11],[4,12],8,[4,1],6]">INPUT DISTRIBUTION</li>
-      <li routerLinkActive="active" *appHasPermission="[0,5,[4,10],[4,11],[4,12],[4,1],[4,2],[8,1],6]">
+      <li routerLinkActive="active" *appHasPermission="[0,5,[4,10],[4,11],[4,12],[4,1],[4,2],[[8,1], 1, 'NOT'],6]">
         <a routerLink="/admin/sites">
           <i class="fa fa-square" aria-hidden="true"></i>
           <span>Sites</span>
         </a>
       </li>
-      <li routerLinkActive="active" *appHasPermission="[[4,10],[4,11],[4,12],[4,1],0,6,5,[8,1]]">
+      <li routerLinkActive="active" *appHasPermission="[[4,10],[4,11],[4,12],[4,1],0,6,5,[[8,1], 1, 'NOT']]">
         <a routerLink="/admin/input/distribution/plan">
           <i class="fa fa-history" aria-hidden="true"></i>
           <span>Distribution plan</span>
