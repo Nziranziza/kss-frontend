@@ -76,8 +76,7 @@ export class UserEditComponent implements OnInit {
       sex: ['', Validators.required],
       NID: [{value: '', disabled: true}],
       org_id: [''],
-      userType: [{value: '', disabled: true}],
-      // userType: [''],
+      userType: [{value: '', disabled: (!(this.authorisationService.isTechouseAdmin() || this.authorisationService.isNaebAdmin())) }],
       userRoles: new FormArray([]),
       location: this.formBuilder.group({
         prov_id: [''],
@@ -88,7 +87,7 @@ export class UserEditComponent implements OnInit {
       }),
       accountExpirationDate: [''],
       distributionSite: [''],
-      status: ['']
+      status: [ {value: '', disabled: (!(this.authorisationService.isTechouseAdmin()))}]
     });
     this.userService.userTypes().subscribe(data => {
       this.userTypes = Object.keys(data.content).map(key => {
@@ -125,9 +124,17 @@ export class UserEditComponent implements OnInit {
           });
         });
         this.editUser = user.content;
+
+        if (this.isCWSAdmin &&
+          (this.authorisationService.canEditUserType(+this.editUser.hasAccessTo.find(element => element.app === 2).userType))) {
+          this.editForm.controls.userType.enable();
+        }
         this.isFullyEditable = !!this.editUser.fullyEditable;
         if (!this.isFullyEditable) {
           this.editForm.controls.email.disable();
+        }
+        if (this.editUser.distributionSite) {
+          this.hasSite = true;
         }
         const usr = user.content;
         if (usr.userRoles.includes(4)) {
@@ -137,11 +144,9 @@ export class UserEditComponent implements OnInit {
             });
           });
         }
-        usr.hasAccessTo.map(access => {
-          if (access.app === 2) {
-            usr['userType'.toString()] = access.userType;
-          }
-        });
+
+        usr['userType'.toString()] = this.editUser.hasAccessTo.find(element => element.app === 2).userType;
+
         if (usr.sex !== undefined) {
           usr['sex'.toString()] = usr['sex'.toString()].toLowerCase();
         }
@@ -177,7 +182,6 @@ export class UserEditComponent implements OnInit {
           this.villages = villages;
         });
       }
-
     }
     if (currentUser.userRoles.includes(8) && currentUser.location) {
       const body = {
@@ -251,6 +255,15 @@ export class UserEditComponent implements OnInit {
           this.hasSite = false;
         }
         this.hasSite = !!(selectedRoles.includes(8) && selectedRoles.includes(1));
+        if (this.hasSite && this.editForm.controls.location.get('dist_id'.toString()).value) {
+          const body = {
+            searchBy: 'district',
+            dist_id: this.editForm.controls.location.get('dist_id'.toString()).value
+          };
+          this.siteService.all(body).subscribe((dt) => {
+            this.sites = dt.content;
+          });
+        }
         this.userTypes = [];
         selectedRoles.forEach((role) => {
           this.userService.userPermissions(role).subscribe(dt => {
