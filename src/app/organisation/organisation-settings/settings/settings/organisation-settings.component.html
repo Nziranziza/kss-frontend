@@ -5,7 +5,7 @@
         <div class="col-md-12" style="padding-right: 0px; padding-left: 0px; margin-top: 15px">
           <div class="card" style="border: none !important;">
             <ul class="nav nav-tabs" role="tablist">
-              <li role="presentation" *appHasPermission="[-1]" class="active">
+              <li role="presentation" *appHasPermission="[1]" class="active">
                 <a href="#payment-channels" aria-controls="payment-channels" role="tab" data-toggle="tab">
                   <span>Payment channels</span>
                 </a>
@@ -17,7 +17,7 @@
               </li>
             </ul>
             <div class="tab-content">
-              <div role="tabpanel" class="tab-pane" *appHasPermission="[-1]" id="payment-channels">
+              <div role="tabpanel" class="tab-pane active" *appHasPermission="[1]" id="payment-channels">
                 <app-list-message [message]="message"></app-list-message>
                 <app-list-errors [errorList]="errors"></app-list-errors>
                 <div class="row">
@@ -97,7 +97,7 @@
                   </div>
                 </form>
               </div>
-              <div role="tabpanel" class="tab-pane active" id="certificates">
+              <div role="tabpanel" class="tab-pane" id="certificates">
                 <app-list-message [message]="message"></app-list-message>
                 <app-list-errors [errorList]="errors"></app-list-errors>
                 <form [formGroup]="addCertificateForm" (ngSubmit)="onSubmitCertificate()">

@@ -79,7 +79,7 @@ export class SiteFarmersComponent extends BasicComponent implements OnInit, OnDe
     this.parameters.siteId = this.siteId;
     this.filterForm = this.formBuilder.group({
       term: ['', Validators.minLength(3)],
-      searchBy: ['foreName']
+      searchBy: ['reg_number']
     });
     this.getFarmers();
     this.setMessage(this.messageService.getMessage());

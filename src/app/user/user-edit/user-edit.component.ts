@@ -14,7 +14,6 @@ import {SiteService} from '../../core/services';
 })
 
 export class UserEditComponent implements OnInit {
-
   organisationId: string;
   editForm: FormGroup;
   errors = [];
