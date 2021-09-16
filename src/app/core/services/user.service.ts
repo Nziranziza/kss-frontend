@@ -29,6 +29,9 @@ export class UserService {
   update(user: User): Observable<any> {
     return this.apiService.put('/users/full', user);
   }
+  updateBasic(user: User): Observable<any> {
+    return this.apiService.put('/users/basic', user);
+  }
   userTypes(): Observable<any> {
     return this.apiService.get('/users/user.types/list');
   }
