@@ -441,3 +441,9 @@ table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > td:first-child:b
 .ng-autocomplete ::ng-deep .autocomplete-container .suggestions-container {
   box-shadow: none;
 }
+
+.selected-parchment {
+  color: #fd7e14;
+  text-decoration: none;
+  font-weight: bold;
+}

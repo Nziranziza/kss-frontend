@@ -97,7 +97,8 @@
 <div class="row">
   <div class="col-xs-12">
     <app-loader *ngIf="loading"></app-loader>
-    <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTriggerItem" class="row-border hover table table-striped responsive-table" id="item">
+    <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTriggerItem"
+           class="row-border hover table table-striped responsive-table" id="item">
       <thead>
       <tr>
         <td> Supplier</td>
@@ -124,17 +125,29 @@
             <tr *ngFor="let item of cartItem" style="font-style: oblique; font-size: 12px; background: transparent">
               <td>{{ item.items.amountToDeduct }}</td>
               <td>
-                <a *ngFor="let parchment of item.items.parchments; let i = index" type="button"
-                        class="btn btn-sm btn-link select-parchment" data-toggle="tooltip"
-                        title="{{'Qty : ' + parchment.amountToTransfer + '&#13199; '}}"> {{ parchment.lotNumber }}
-                </a>
+                <ng-container *ngFor="let parchment of item.items.parchments; let i = index">
+                  <ng-container *ngIf="parchment?.selected; else not_selected">
+                    <a type="button"
+                       class="btn btn-sm btn-link select-parchment selected-parchment" data-toggle="tooltip"
+                       id="{{ item._id }}-{{ item.items._id }}-{{ parchment._id }}"
+                       title="{{'Qty : ' + parchment.remainingQty + '&#13199; ' + ' - ' + parchment?.qtyToDeduct + '&#13199; ' }}"> {{ parchment.lotNumber }}
+                    </a>
+                  </ng-container>
+                  <ng-template #not_selected>
+                    <a type="button"
+                       class="btn btn-sm btn-link select-parchment " data-toggle="tooltip"
+                       id="{{ item._id }}-{{ item.items._id }}-{{ parchment._id }}"
+                       title="{{'Qty : ' + parchment.remainingQty + '&#13199; ' + ' - ' + 0 + '&#13199; ' }}"> {{ parchment.lotNumber }}
+                    </a>
+                  </ng-template>
+                </ng-container>
               </td>
               <td>
-                <a class="btn btn-default btn-margin btn-sm pull-right print-note" (click)="printNote(item._id)" type="button" id="{{ item._id }}">
-                  <i class="fa fa-print" aria-hidden="true"  ></i>
+                <a class="btn btn-default btn-margin btn-sm pull-right print-note" id="{{ item._id }}"
+                   type="button">
+                  <i class="fa fa-print" aria-hidden="true"></i>
                 </a>
               </td>
-
             </tr>
           </table>
         </td>
@@ -144,7 +157,7 @@
             <i class="fa fa-remove" aria-hidden="true"></i>
           </button>
           <button class="btn btn-success btn-margin btn-sm pull-right" (click)="addItemToCart()"
-                  type="button">
+                  type="button" [disabled]="addToCartDisabled">
             <i class="fa fa-cart-plus" aria-hidden="true"></i>
           </button>
         </td>
@@ -168,7 +181,8 @@
       </div>
       <!-- /.box-header -->
       <div class="box-body collapse in" id="box-body">
-        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTriggerCart" class="row-border hover table table-striped responsive-table" id="cart">
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTriggerCart"
+               class="row-border hover table table-striped responsive-table" id="cart">
           <thead>
           <tr>
             <td> Supplier</td>
@@ -192,7 +206,8 @@
                   <td>Lots</td>
                   <td></td>
                 </tr>
-                <tr *ngFor="let itm of item.cartItem" style="font-style: oblique; font-size: 12px; background: transparent">
+                <tr *ngFor="let itm of item.cartItem"
+                    style="font-style: oblique; font-size: 12px; background: transparent">
                   <td>{{ itm.items.totalKgs }}</td>
                   <td>
                     <button *ngFor="let parchment of itm.items.parchments; let i = index" type="button"
@@ -201,8 +216,9 @@
                     </button>
                   </td>
                   <td>
-                    <a class="btn btn-default btn-margin btn-sm pull-right print-note" (click)="printNote(itm._id)" type="button" id="{{itm._id}}">
-                      <i class="fa fa-print" aria-hidden="true"  ></i>
+                    <a class="btn btn-default btn-margin btn-sm pull-right print-note" (click)="printNote(itm._id)"
+                       type="button" id="{{itm._id}}">
+                      <i class="fa fa-print" aria-hidden="true"></i>
                     </a>
                   </td>
                 </tr>
@@ -216,12 +232,11 @@
           </tr>
           </tbody>
         </table>
-
         <div class="row" style="margin-top: 15px;">
-            <div class="col-xs-12">
-              <button class="btn btn-success btn-margin pull-right" (click)="onSubmit()" ><i class="fa fa-save"></i> Save
-              </button>
-            </div>
+          <div class="col-xs-12">
+            <button class="btn btn-success btn-margin pull-right" (click)="onSubmit()"><i class="fa fa-save"></i> Save
+            </button>
+          </div>
         </div>
       </div>
     </div>
