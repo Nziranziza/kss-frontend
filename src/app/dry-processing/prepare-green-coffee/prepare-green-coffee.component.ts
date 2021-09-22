@@ -344,6 +344,7 @@ export class PrepareGreenCoffeeComponent extends BasicComponent implements OnIni
       });
       this.rerender();
     }
+    console.log(this.cart);
     this.filterForm.controls.transferType.disable();
     this.prepareGreenCoffeeService.setCart(this.cart);
     this.resetSelection();

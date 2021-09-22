@@ -210,10 +210,14 @@
                     style="font-style: oblique; font-size: 12px; background: transparent">
                   <td>{{ itm.items.totalKgs }}</td>
                   <td>
-                    <button *ngFor="let parchment of itm.items.parchments; let i = index" type="button"
-                            class="btn btn-sm btn-link" data-toggle="tooltip"
-                            title="{{'Qty : ' + parchment.amountToTransfer + '&#13199; '}}"> {{ parchment.lotNumber }}
-                    </button>
+                    <ng-container *ngFor="let parchment of itm.items.parchments; let i = index">
+                      <ng-container *ngIf="parchment?.selected;">
+                        <a type="button"
+                           class="btn btn-sm btn-link select-parchment selected-parchment" data-toggle="tooltip"
+                           title="{{'Qty : ' + parchment.remainingQty + '&#13199; ' + ' - ' + parchment?.qtyToDeduct + '&#13199; ' }}"> {{ parchment.lotNumber }}
+                        </a>
+                      </ng-container>
+                    </ng-container>
                   </td>
                   <td>
                     <a class="btn btn-default btn-margin btn-sm pull-right print-note" (click)="printNote(itm._id)"
