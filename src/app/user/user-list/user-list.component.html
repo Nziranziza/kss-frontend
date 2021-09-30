@@ -36,6 +36,9 @@
               <a class="btn btn-success btn-sm btn-margin" routerLink="/admin/organisations/{{organisationId}}/users/edit/{{user._id}}" *appHasPermission="[[4,1],0,[8,1],[1,1]]" style="margin-left: 10px;" >
                 Edit
               </a>
+              <a class="btn btn-success btn-sm btn-margin" (click)="changeUsersOrganisation(user)" *appHasPermission="[[4,1],0,[8,1]]" style="margin-left: 10px;" >
+                Chng Org
+              </a>
               <!--</ng-container>-->
             </td>
           </tr>
