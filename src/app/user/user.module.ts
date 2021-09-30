@@ -8,22 +8,26 @@ import {SharedModule} from '../shared';
 import {RouterModule} from '@angular/router';
 import {OwlDateTimeModule, OwlNativeDateTimeModule} from 'ng-pick-datetime';
 import {UserDetailsComponent} from './user-details/user-details.component';
+import { ChangeUserOrgComponent } from './change-user-org/change-user-org.component';
+import { AutocompleteLibModule } from 'angular-ng-autocomplete';
 
 @NgModule({
-  declarations: [UserListComponent, UserEditComponent, UserCreateComponent, UserDetailsComponent],
+  declarations: [UserListComponent, UserEditComponent, UserCreateComponent, UserDetailsComponent, ChangeUserOrgComponent],
   imports: [
     CommonModule,
     UserRoutingModule,
     SharedModule,
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
-    RouterModule
+    RouterModule,
+    AutocompleteLibModule
   ],
   exports: [
     UserRoutingModule
   ],
   entryComponents: [
-    UserDetailsComponent
+    UserDetailsComponent,
+    ChangeUserOrgComponent
   ]
 })
 export class UserModule {
