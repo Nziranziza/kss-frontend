@@ -7,9 +7,10 @@ import {DataTablesModule} from 'angular-datatables';
 import {WarehouseRoutingModule} from './warehouse-routing.module';
 import {WarehouseDispatchComponent} from './warehouse-dispatch/warehouse-dispatch.component';
 import {DeliveryDetailsComponent} from './warehouse-entries/delivery-details/delivery-details.component';
+import { WarehouseDispatchEditComponent } from './warehouse-dispatch-edit/warehouse-dispatch-edit.component';
 
 @NgModule({
-  declarations: [WarehouseEntriesComponent, WarehouseDispatchComponent, DeliveryDetailsComponent],
+  declarations: [WarehouseEntriesComponent, WarehouseDispatchComponent, DeliveryDetailsComponent, WarehouseDispatchEditComponent],
   imports: [
     CommonModule,
     SharedModule,

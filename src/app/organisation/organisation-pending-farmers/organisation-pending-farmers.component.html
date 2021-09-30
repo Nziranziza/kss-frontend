@@ -39,7 +39,7 @@
           </tr>
           </thead>
           <tbody *ngIf="showData">
-          <tr *ngFor="let farmer of (farmers | orderBy : order:reverse:'case-insensitive') | paginate: config">
+          <tr *ngFor="let farmer of (farmers | orderBy : order:reverse: 'case-insensitive') | paginate: config">
             <td> {{ farmer.foreName }}</td>
             <td> {{ farmer.surname }}</td>
             <td> {{ farmer.NID }}</td>

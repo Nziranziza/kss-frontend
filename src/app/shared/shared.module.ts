@@ -13,7 +13,7 @@ import {
 import {MatDialogModule, MatIconModule} from '@angular/material';
 import {ConfirmDialogComponent} from './layout';
 import {DataTablesModule} from 'angular-datatables';
-import {RequiredRolesDirective} from './directives/required-roles';
+import {RequiredRolesDirective} from './directives/required-roles.directive';
 import {LoaderComponent} from './layout';
 import {RequiredSeasonDirective} from './directives/required-season.directive';
 import {HasPermissionDirective} from './directives/has-permission.directive';
@@ -21,6 +21,7 @@ import {QuantityUnitComponent} from './layout';
 import {ListWarningsComponent} from './layout';
 import {DownloaderComponent} from './layout';
 import {SpinnerComponent } from './layout';
+import {InternalDirective} from './directives/internal.directives';
 
 @NgModule({
   imports: [
@@ -33,7 +34,7 @@ import {SpinnerComponent } from './layout';
   ],
   declarations: [ListErrorsComponent, LoaderComponent,
     HomeHeaderComponent, HomeFooterComponent, ListMessageComponent,
-    ConfirmDialogComponent, RequiredRolesDirective, LoaderComponent,
+    ConfirmDialogComponent, RequiredRolesDirective, InternalDirective, LoaderComponent,
     RequiredSeasonDirective, HasPermissionDirective, QuantityUnitComponent, ListWarningsComponent, DownloaderComponent, SpinnerComponent],
   exports: [
     CommonModule,
@@ -53,7 +54,7 @@ import {SpinnerComponent } from './layout';
     DownloaderComponent,
     MatIconModule, MatDialogModule,
     DataTablesModule, RequiredRolesDirective,
-    RequiredSeasonDirective, HasPermissionDirective
+    RequiredSeasonDirective, HasPermissionDirective, InternalDirective
   ],
   entryComponents: [ConfirmDialogComponent]
 })

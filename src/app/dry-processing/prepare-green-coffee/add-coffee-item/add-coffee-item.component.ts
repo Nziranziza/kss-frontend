@@ -57,7 +57,7 @@ export class AddCoffeeItemComponent extends BasicComponent implements OnInit, On
   // @ts-ignore
   @ViewChildren(DataTableDirective, {static: false})
   dtElements: QueryList<DataTableDirective>;
-  @ViewChild('supplier')  supplierDE: ElementRef;
+  @ViewChild('supplier') supplierDE: ElementRef;
   dtOptions: any = {};
   // @ts-ignore
   dtTriggerItem = new Subject();
@@ -73,6 +73,7 @@ export class AddCoffeeItemComponent extends BasicComponent implements OnInit, On
   orgId: any;
   @Input() data;
   selectedSupplier: string;
+  addToCartDisabled = true;
 
   constructor(private parchmentService: ParchmentService,
               private router: Router,
@@ -101,7 +102,8 @@ export class AddCoffeeItemComponent extends BasicComponent implements OnInit, On
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 10,
-      columns: [{}, {}, {}, {}, { class: 'none'
+      columns: [{}, {}, {}, {}, {
+        class: 'none'
       }, {}],
       searching: false,
       ordering: false,
@@ -137,13 +139,14 @@ export class AddCoffeeItemComponent extends BasicComponent implements OnInit, On
           this.organisations = data.content;
           this.isLoading = false;
         }
-      }, () => {}, () => {
+      }, () => {
+      }, () => {
         this.dryProcessingService.getOneGreenCoffee(this.orgId, this.data.id).subscribe((data) => {
           this.mixture = data.content;
           if (this.mixture.deliveryType === 'processing') {
             this.initialValue = this.mixture.mixture[0].supplier;
             this.selectedSupplier = this.mixture.mixture[0].supplier._id;
-            this.filterForm.controls.supplier.setValue( this.mixture.mixture[0].supplier._id);
+            this.filterForm.controls.supplier.setValue(this.mixture.mixture[0].supplier._id);
           } else {
             this.initialValue = '';
           }
@@ -151,7 +154,7 @@ export class AddCoffeeItemComponent extends BasicComponent implements OnInit, On
           this.filterForm.controls.transferType.setValue(this.transferType);
           this.filterForm.controls.transferType.disable();
         });
-      } );
+      });
     this.coffeeTypeService.all().subscribe((data) => {
       data.content.map((item) => {
         if (item.level === 'CWS') {
@@ -175,6 +178,37 @@ export class AddCoffeeItemComponent extends BasicComponent implements OnInit, On
       e.preventDefault();
       self.printNote($(this).attr('id'));
     });
+    $('.responsive-table').on('click', 'a.select-parchment', function(e) {
+      const data = $(this).attr('id').split('-');
+      e.preventDefault();
+      self.selectParchment(data[0], data[1], data[2]);
+      self.rerender();
+    });
+  }
+
+  selectParchment(deliveryId, itemId, parchmentId) {
+    const deliveryIndex = this.cartItem.findIndex(element => element._id === deliveryId);
+    const parchmentIndex = this.cartItem[deliveryIndex].items.parchments.findIndex(element => element._id === parchmentId);
+    if (this.cartItem[deliveryIndex].items.selectedQty === this.cartItem[deliveryIndex].items.amountToDeduct
+      && (!this.cartItem[deliveryIndex].items.parchments[parchmentIndex].selected)) {
+    } else if (this.cartItem[deliveryIndex].items.parchments[parchmentIndex].selected) {
+      this.cartItem[deliveryIndex].items.selectedQty =
+        this.cartItem[deliveryIndex].items.selectedQty - this.cartItem[deliveryIndex].items.parchments[parchmentIndex].qtyToDeduct;
+      delete this.cartItem[deliveryIndex].items.parchments[parchmentIndex].qtyToDeduct;
+      delete this.cartItem[deliveryIndex].items.parchments[parchmentIndex].selected;
+      this.addToCartDisabled = true;
+    } else {
+      const qty = this.cartItem[deliveryIndex].items.amountToDeduct <
+      this.cartItem[deliveryIndex].items.parchments[parchmentIndex].remainingQty ?
+        this.cartItem[deliveryIndex].items.amountToDeduct : this.cartItem[deliveryIndex].items.parchments[parchmentIndex].remainingQty;
+      this.cartItem[deliveryIndex].items.selectedQty =
+        this.cartItem[deliveryIndex].items.selectedQty ?
+          this.cartItem[deliveryIndex].items.selectedQty + qty : qty;
+      this.cartItem[deliveryIndex].items.parchments[parchmentIndex].qtyToDeduct = qty;
+      this.cartItem[deliveryIndex].items.parchments[parchmentIndex].selected = true;
+      const index = this.cartItem.findIndex(delivery => delivery.items.selectedQty !== delivery.items.amountToDeduct);
+      this.addToCartDisabled = index > -1;
+    }
   }
 
   ngAfterViewInit(): void {
@@ -193,7 +227,7 @@ export class AddCoffeeItemComponent extends BasicComponent implements OnInit, On
       }
       if (this.transferType === 'processing' && isUndefined(this.selectedSupplier)) {
         this.selectedSupplier = this.filter.supplier;
-      } else if  (this.transferType === 'processing' && !isUndefined(this.selectedSupplier)) {
+      } else if (this.transferType === 'processing' && !isUndefined(this.selectedSupplier)) {
         this.filter.supplier = this.selectedSupplier;
       }
       this.filter['org_id'.toString()] = this.authenticationService.getCurrentUser().info.org_id;
@@ -268,11 +302,25 @@ export class AddCoffeeItemComponent extends BasicComponent implements OnInit, On
         };
         const items = [];
         item.cartItem.map((value) => {
+          const parchments = [];
+          value.items.parchments.map((parchment) => {
+            if (parchment.selected) {
+              parchments.push(
+                {
+                  parchmentId: parchment.parchmentId,
+                  qtyToDeduct: parchment.qtyToDeduct,
+                  lotNumber: parchment.lotNumber
+                }
+              );
+            }
+          });
           const temp = {
             deliveryId: value._id,
             amountToDeduct: value.items.amountToDeduct,
-            itemId: value.items._id
+            itemId: value.items._id,
+            parchments
           };
+
           items.push(temp);
         });
         itm.items = items;

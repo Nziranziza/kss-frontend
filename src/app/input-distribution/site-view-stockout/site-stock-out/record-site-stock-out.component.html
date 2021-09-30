@@ -8,35 +8,50 @@
   <form [formGroup]="siteStockOutForm" (ngSubmit)="onSubmit()">
     <div class="row">
       <label class="control-label label-required" style="margin-left: 7px">&nbsp; Destination</label>
-      <div formGroupName="location">
-        <div class="col-xs-2" id="location-sector">
-          <div class="form-group">
-            <span class="">Sector</span>
-            <select class="form-control" formControlName="sect_id">
-              <option value=""></option>
-              <option *ngFor="let sector of sectors" value="{{sector.sect_id}}">{{sector.name}}</option>
-            </select>
-          </div>
-        </div>
-        <div class="col-xs-2" id="location-cell">
-          <div class="form-group">
-            <span class="">Cell</span>
-            <select class="form-control" formControlName="cell_id">
-              <option value=""></option>
-              <option *ngFor="let cell of cells" value="{{cell._id}}">{{cell.name}}</option>
-            </select>
-          </div>
-        </div>
-        <div class="col-xs-2" id="location-village">
-          <div class="form-group">
-            <span class="">Village</span>
-            <select class="form-control" formControlName="village_id">
-              <option value=""></option>
-              <option *ngFor="let village of villages" value="{{village._id}}">{{village.name}}</option>
-            </select>
-          </div>
-        </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-6">
+        <button class="btn btn-success btn-sm pull-right" (click)="addDestination()" type="button">
+          <i class="fa fa-plus"></i> destination
+        </button>
       </div>
+    </div>
+    <div *ngFor="let control of formDestination.controls; let i=index" formArrayName="destination">
+        <div class="row" [formGroupName]="i">
+          <div class="col-xs-2">
+            <div class="form-group">
+              <span class="">Sector</span>
+              <select class="form-control" formControlName="sect_id" (change)="onChangeSector(i)">
+                <option value=""></option>
+                <option *ngFor="let sector of sectors[i]" value="{{sector._id}}">{{sector.name}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-xs-2">
+            <div class="form-group">
+              <span class="">Cell</span>
+              <select class="form-control" formControlName="cell_id" (change)="onChangeCell(i)">
+                <option value=""></option>
+                <option *ngFor="let cell of cells[i]" value="{{cell._id}}">{{cell.name}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-xs-2">
+            <div class="form-group">
+              <span class="">Village</span>
+              <select class="form-control" formControlName="village_id">
+                <option value=""></option>
+                <option *ngFor="let village of villages[i]" value="{{village._id}}">{{village.name}}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group col-xs-1">
+            <button class="btn btn-danger btn-sm pull-left" type="button"
+                    (click)="removeDestination(i)" style="margin-top: 20px"> Remove
+            </button>
+          </div>
+        </div>
     </div>
     <div class="row">
       <div class="col-sm-6">

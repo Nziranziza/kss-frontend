@@ -32,12 +32,12 @@ export class DryProcessingService {
     return this.apiService.delete('/greencoffee/delete/item/' + id);
   }
 
-  getGreenCoffeeStockSummary(id: string) {
-    return this.apiService.get('/' + id);
+  getGreenCoffeeStockSummary(body: any) {
+    return this.apiService.post('/greencoffee/stock/summary', body);
   }
 
-  getGreenCoffee(id: string) {
-    return this.apiService.get('/greencoffee/list/' + id);
+  getGreenCoffee(body: string) {
+    return this.apiService.post('/greencoffee/list', body);
   }
 
   getOneGreenCoffee(orgId: string, id: string) {

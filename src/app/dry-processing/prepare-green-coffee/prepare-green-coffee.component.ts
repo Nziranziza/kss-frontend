@@ -43,7 +43,7 @@ export class PrepareGreenCoffeeComponent extends BasicComponent implements OnIni
   // @ts-ignore
   @ViewChildren(DataTableDirective, {static: false})
   dtElements: QueryList<DataTableDirective>;
-  @ViewChild('supplier')  supplier: any;
+  @ViewChild('supplier') supplier: any;
   dtOptions: any = {};
   // @ts-ignore
   dtTriggerItem = new Subject();
@@ -53,6 +53,7 @@ export class PrepareGreenCoffeeComponent extends BasicComponent implements OnIni
   parameters: any;
   summary: any;
   keyword = 'name';
+  addToCartDisabled = true;
   initialValue = '';
   transferType: string;
   selectedSupplier: string;
@@ -80,7 +81,8 @@ export class PrepareGreenCoffeeComponent extends BasicComponent implements OnIni
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 10,
-      columns: [{}, {}, {}, {}, { class: 'none'
+      columns: [{}, {}, {}, {}, {
+        class: 'none'
       }, {}],
       searching: false,
       ordering: false,
@@ -110,10 +112,10 @@ export class PrepareGreenCoffeeComponent extends BasicComponent implements OnIni
     this.initialSearchValue = this.filterForm.value;
     this.dryMillService.getSupplyingOrg(this.authenticationService.getCurrentUser().info.org_id)
       .subscribe(data => {
-      if (data) {
-        this.organisations = data.content;
-      }
-    });
+        if (data) {
+          this.organisations = data.content;
+        }
+      });
     this.coffeeTypeService.all().subscribe((data) => {
       data.content.map((item) => {
         if (item.level === 'CWS') {
@@ -136,6 +138,38 @@ export class PrepareGreenCoffeeComponent extends BasicComponent implements OnIni
       e.preventDefault();
       self.printNote($(this).attr('id'));
     });
+
+    $('.responsive-table').on('click', 'a.select-parchment', function(e) {
+      const data = $(this).attr('id').split('-');
+      e.preventDefault();
+      self.selectParchment(data[0], data[1], data[2]);
+      self.rerender();
+    });
+  }
+
+  selectParchment(deliveryId, itemId, parchmentId) {
+    const deliveryIndex = this.cartItem.findIndex(element => element._id === deliveryId);
+    const parchmentIndex = this.cartItem[deliveryIndex].items.parchments.findIndex(element => element._id === parchmentId);
+    if (this.cartItem[deliveryIndex].items.selectedQty === this.cartItem[deliveryIndex].items.amountToDeduct
+      && (!this.cartItem[deliveryIndex].items.parchments[parchmentIndex].selected)) {
+    } else if (this.cartItem[deliveryIndex].items.parchments[parchmentIndex].selected) {
+      this.cartItem[deliveryIndex].items.selectedQty =
+        this.cartItem[deliveryIndex].items.selectedQty - this.cartItem[deliveryIndex].items.parchments[parchmentIndex].qtyToDeduct;
+      delete this.cartItem[deliveryIndex].items.parchments[parchmentIndex].qtyToDeduct;
+      delete this.cartItem[deliveryIndex].items.parchments[parchmentIndex].selected;
+      this.addToCartDisabled = true;
+    } else {
+      const qty = this.cartItem[deliveryIndex].items.amountToDeduct <
+      this.cartItem[deliveryIndex].items.parchments[parchmentIndex].remainingQty ?
+        this.cartItem[deliveryIndex].items.amountToDeduct : this.cartItem[deliveryIndex].items.parchments[parchmentIndex].remainingQty;
+      this.cartItem[deliveryIndex].items.selectedQty =
+        this.cartItem[deliveryIndex].items.selectedQty ?
+          this.cartItem[deliveryIndex].items.selectedQty + qty : qty;
+      this.cartItem[deliveryIndex].items.parchments[parchmentIndex].qtyToDeduct = qty;
+      this.cartItem[deliveryIndex].items.parchments[parchmentIndex].selected = true;
+      const index = this.cartItem.findIndex(delivery => delivery.items.selectedQty !== delivery.items.amountToDeduct);
+      this.addToCartDisabled = index > -1;
+    }
   }
 
   ngAfterViewInit(): void {
@@ -154,7 +188,7 @@ export class PrepareGreenCoffeeComponent extends BasicComponent implements OnIni
       }
       if (this.transferType === 'processing' && isUndefined(this.selectedSupplier)) {
         this.selectedSupplier = this.filter.supplier;
-      } else if  (this.transferType === 'processing' && !isUndefined(this.selectedSupplier)) {
+      } else if (this.transferType === 'processing' && !isUndefined(this.selectedSupplier)) {
         this.filter.supplier = this.selectedSupplier;
       }
       this.filter['org_id'.toString()] = this.authenticationService.getCurrentUser().info.org_id;
@@ -170,19 +204,19 @@ export class PrepareGreenCoffeeComponent extends BasicComponent implements OnIni
       }
       this.dryMillService.prepareGreenCoffee(this.filter)
         .subscribe(data => {
-            this.cartItemInfo.totalKgs = 0;
-            this.cartItem = data.content;
-            this.cartItemInfo['addedToCart'.toString()] = false;
-            this.cartItemInfo['supplier'.toString()] = this.cartItem[0].originOrg;
-            this.loading = false;
-            this.cartItem.forEach(itm => this.cartItemInfo.totalKgs += (+itm.items.amountToDeduct));
-            this.cartItemInfo.coffeeGrade = this.filter.grade;
-            this.cartItemInfo['transferType'.toString()] = this.filter.transferType;
-            this.cartItemInfo.coffeeType = this.coffeeTypes.find(t => t._id === this.filter.type);
-            if (this.transferType === 'processing') {
-              this.filterForm.controls.transferType.disable();
-            }
-            this.rerender();
+          this.cartItemInfo.totalKgs = 0;
+          this.cartItem = data.content;
+          this.cartItemInfo['addedToCart'.toString()] = false;
+          this.cartItemInfo['supplier'.toString()] = this.cartItem[0].originOrg;
+          this.loading = false;
+          this.cartItem.forEach(itm => this.cartItemInfo.totalKgs += (+itm.items.amountToDeduct));
+          this.cartItemInfo.coffeeGrade = this.filter.grade;
+          this.cartItemInfo['transferType'.toString()] = this.filter.transferType;
+          this.cartItemInfo.coffeeType = this.coffeeTypes.find(t => t._id === this.filter.type);
+          if (this.transferType === 'processing') {
+            this.filterForm.controls.transferType.disable();
+          }
+          this.rerender();
         }, (err) => {
           this.setError(err.errors);
         });
@@ -214,45 +248,59 @@ export class PrepareGreenCoffeeComponent extends BasicComponent implements OnIni
 
   onSubmit() {
     if (this.cart.length !== 0) {
-        const payload = {
-          totalAmount: this.totalAmount,
-          deliveryType: this.transferType,
-          mixture: []
+      const payload = {
+        totalAmount: this.totalAmount,
+        deliveryType: this.transferType,
+        mixture: []
+      };
+      this.cart.map((item) => {
+        const itm = {
+          type: item.cartItemInfo.coffeeType._id,
+          grade: item.cartItemInfo.coffeeGrade,
+          totalKgs: item.cartItemInfo.totalKgs,
+          supplier: item.cartItemInfo.supplier._id,
+          items: []
         };
-        this.cart.map((item) => {
-          const itm = {
-            type: item.cartItemInfo.coffeeType._id,
-            grade: item.cartItemInfo.coffeeGrade,
-            totalKgs: item.cartItemInfo.totalKgs,
-            supplier: item.cartItemInfo.supplier._id,
-            items: []
-          };
-          const items = [];
-          item.cartItem.map((value) => {
-            const temp = {
-                deliveryId: value._id,
-                amountToDeduct: value.items.amountToDeduct,
-                itemId: value.items._id
-            };
-            items.push(temp);
+        const items = [];
+        item.cartItem.map((value) => {
+          const parchments = [];
+          value.items.parchments.map((parchment) => {
+            if (parchment.selected) {
+              parchments.push(
+                {
+                  parchmentId: parchment.parchmentId,
+                  qtyToDeduct: parchment.qtyToDeduct,
+                  lotNumber: parchment.lotNumber
+                }
+              );
+            }
           });
-          itm.items = items;
-          payload.mixture.push(itm);
+          const temp = {
+            deliveryId: value._id,
+            amountToDeduct: value.items.amountToDeduct,
+            itemId: value.items._id,
+            parchments
+          };
+
+          items.push(temp);
         });
-        payload['userId'.toString()] = this.authenticationService.getCurrentUser().info._id;
-        payload['org_id'.toString()] = this.authenticationService.getCurrentUser().info.org_id;
-        this.dryMillService.saveGreenCoffee(payload)
-          .subscribe(() => {
-              this.messageService.setMessage('Mixture successfully recorded');
-              this.setMessage('Mixture successfully recorded');
-              this.prepareGreenCoffeeService.resetCart();
-              this.resetSelection();
-              this.resetCart();
-              this.router.navigateByUrl('admin/drymill/green_coffee/mixtures');
-            },
-            (err) => {
-              this.errors = err.errors;
-            });
+        itm.items = items;
+        payload.mixture.push(itm);
+      });
+      payload['userId'.toString()] = this.authenticationService.getCurrentUser().info._id;
+      payload['org_id'.toString()] = this.authenticationService.getCurrentUser().info.org_id;
+      this.dryMillService.saveGreenCoffee(payload)
+        .subscribe(() => {
+            this.messageService.setMessage('Mixture successfully recorded');
+            this.setMessage('Mixture successfully recorded');
+            this.prepareGreenCoffeeService.resetCart();
+            this.resetSelection();
+            this.resetCart();
+            this.router.navigateByUrl('admin/drymill/green_coffee/mixtures');
+          },
+          (err) => {
+            this.errors = err.errors;
+          });
     } else {
       this.setError(['Please add at least one(1) item to cart']);
     }
@@ -296,6 +344,7 @@ export class PrepareGreenCoffeeComponent extends BasicComponent implements OnIni
       });
       this.rerender();
     }
+    console.log(this.cart);
     this.filterForm.controls.transferType.disable();
     this.prepareGreenCoffeeService.setCart(this.cart);
     this.resetSelection();

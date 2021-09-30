@@ -271,7 +271,7 @@ export class UserCreateComponent implements OnInit {
         /*If selected roles include district cash crop, unable location selection*/
         this.needLocation = !!selectedRoles.includes(6);
 
-        /*If selected roles include input distribution and user type is normal, unable site selection*/
+        /*If selected roles include input distribution and user type is normal, enable site selection*/
         if (selectedRoles.includes(8)) {
           if (this.selectedType === 2) {
             this.hasSite = true;
@@ -279,7 +279,7 @@ export class UserCreateComponent implements OnInit {
         } else {
           this.hasSite = false;
         }
-        /*If selected roles include input distribution and cws, unable site selection*/
+        /*If selected roles include input distribution and cws, enable site selection*/
         this.hasSite = !!(selectedRoles.includes(8) && selectedRoles.includes(1));
 
         this.userTypes = [];

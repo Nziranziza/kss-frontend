@@ -1,6 +1,6 @@
 import {Component, Inject, Injector, Input, OnInit, PLATFORM_ID} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthenticationService, AuthorisationService, LocationService, OrganisationService, SiteService} from '../../../core/services';
 import {MessageService} from '../../../core/services';
 import {HelperService} from '../../../core/helpers';
@@ -19,15 +19,14 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
   modal: NgbActiveModal;
   @Input() stock;
   siteStockOutForm: FormGroup;
-  provinces: any;
-  districts: any;
-  sectors: any;
-  cells: any;
-  villages: any;
+  sectors: any = [];
+  cells: any = [];
+  villages: any = [];
   currentDate: any;
   site: any;
   org: any;
   isUserCWSOfficer: any;
+  public destinationList: FormArray;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
@@ -51,28 +50,24 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
     this.currentDate = new Date();
     this.isUserCWSOfficer = this.authorisationService.isCWSUser();
     this.siteStockOutForm = this.formBuilder.group({
-      location: this.formBuilder.group({
-        prov_id: [''],
-        dist_id: [''],
-        sect_id: [''],
-        cell_id: [''],
-        village_id: ['']
-      }),
+      destination: new FormArray([]),
       totalQty: ['', Validators.required],
       date: [this.datePipe.transform(this.currentDate, 'yyyy-MM-dd'), Validators.required],
     });
     if (this.isUserCWSOfficer) {
       this.organisationService.get(this.authenticationService.getCurrentUser().info.org_id).subscribe(data => {
         this.org = data.content;
-        this.filterCustomSectors(this.org);
+        this.addDestination();
+        this.filterCustomSectors(this.org, 0);
       });
+
     } else {
       this.siteService.get(this.authenticationService.getCurrentUser().orgInfo.distributionSite).subscribe((site) => {
         this.site = site.content;
-        this.sectors = this.site.coveredAreas.coveredSectors;
+        this.addDestination();
+        this.filterCustomSectors(this.site, 0);
       });
     }
-    this.onChanges();
     this.initial();
   }
 
@@ -80,11 +75,15 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
     if (this.siteStockOutForm.valid) {
       const record = JSON.parse(JSON.stringify(this.siteStockOutForm.value));
       if (this.isUserCWSOfficer) {
-        record.location['prov_id'.toString()] = this.org.location.prov_id._id;
-        record.location['dist_id'.toString()] = this.org.location.dist_id._id;
+        record.destination.map((destination) => {
+          destination['prov_id'.toString()] = this.org.location.prov_id._id;
+          destination['dist_id'.toString()] = this.org.location.dist_id._id;
+        });
       } else {
-        record.location['prov_id'.toString()] = this.site.location.prov_id._id;
-        record.location['dist_id'.toString()] = this.site.location.dist_id._id;
+        record.destination.map((destination) => {
+          destination['prov_id'.toString()] = this.site.location.prov_id._id;
+          destination['dist_id'.toString()] = this.site.location.dist_id._id;
+        });
       }
       record.date = this.helper.getDate(this.siteStockOutForm.value.date);
       record['stockId'.toString()] = this.stock._id;
@@ -104,48 +103,84 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
     }
   }
 
-  onChanges() {
-    this.siteStockOutForm.controls.location.get('sect_id'.toString()).valueChanges.subscribe(
-      (value) => {
-        if (value !== '') {
-          if (this.isUserCWSOfficer) {
-            this.filterCustomCells(this.org);
-          } else {
-            this.locationService.getCells(value).subscribe((data) => {
-              this.cells = data;
-              this.villages = null;
-            });
-          }
-        }
-      }
-    );
-    this.siteStockOutForm.controls.location.get('cell_id'.toString()).valueChanges.subscribe(
-      (value) => {
-        if (value !== '') {
-
-          this.locationService.getVillages(value).subscribe((data) => {
-            this.villages = data;
-          });
-        }
-
-      }
-    );
+  createDestination(): FormGroup {
+    return this.formBuilder.group({
+        sect_id: ['', Validators.required],
+        cell_id: ['', Validators.required],
+        village_id: ['', Validators.required]
+      });
   }
 
-  filterCustomSectors(org: any) {
+  get formDestination() {
+    return this.siteStockOutForm.get('destination') as FormArray;
+  }
+
+  addDestination() {
+    (this.siteStockOutForm.controls.destination as FormArray).push(this.createDestination());
+    this.sectors.push(this.sectors[0]);
+  }
+
+  removeDestination(index: number) {
+    (this.siteStockOutForm.controls.destination as FormArray).removeAt(index);
+  }
+
+  getDestinationFormGroup(index): FormGroup {
+    this.destinationList = this.siteStockOutForm.get('destination') as FormArray;
+    return this.destinationList.controls[index] as FormGroup;
+  }
+
+  onChangeSector(index: number) {
+    const value = this.getDestinationFormGroup(index).controls.sect_id.value;
+    if (value !== '') {
+      if (this.isUserCWSOfficer) {
+        this.filterCustomCells(this.org, index);
+      } else {
+        this.locationService.getCells(value).toPromise().then(data => {
+          this.cells[index] = data;
+          this.villages[index] = [];
+        });
+      }
+    }
+  }
+
+  onChangeCell(index: number) {
+    const value = this.getDestinationFormGroup(index).controls.cell_id.value;
+    if (value !== '') {
+      if (this.isUserCWSOfficer) {
+        this.locationService.getVillages(value).toPromise().then(data => {
+          const sectorId = this.getDestinationFormGroup(index).controls.sect_id.value;
+          const i = this.org.coveredSectors.findIndex(element => element.sectorId._id === sectorId);
+          const sector = this.org.coveredSectors[i];
+          this.villages[index] = [];
+          data.map((village) => {
+            if (sector.coveredVillages.findIndex((vil) => village._id === vil.village_id) >= 0) {
+              this.villages[index].push(village);
+            }
+          });
+        });
+      } else {
+        this.locationService.getVillages(value).toPromise().then(data => {
+          this.villages[index] = data;
+        });
+      }
+    }
+  }
+
+
+  filterCustomSectors(org: any, index: number) {
     const temp = [];
     org.coveredSectors.map((sector) => {
       temp.push({
-        sect_id: sector.sectorId._id,
+        _id: sector.sectorId._id,
         name: sector.sectorId.name
       });
     });
-    this.sectors = temp;
+    this.sectors[index] = temp;
   }
 
-  filterCustomCells(org: any) {
+  filterCustomCells(org: any, index: number) {
     const temp = [];
-    const sectorId = this.siteStockOutForm.controls.location.get('sect_id'.toString()).value;
+    const sectorId = this.getDestinationFormGroup(index).controls.sect_id.value;
     const i = org.coveredSectors.findIndex(element => element.sectorId._id === sectorId);
     const sector = org.coveredSectors[i];
     sector.coveredCells.map((cell) => {
@@ -154,12 +189,10 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
         name: cell.name
       });
     });
-    this.cells = temp;
+    this.cells[index] = temp;
   }
 
+
   initial() {
-    this.locationService.getProvinces().subscribe((data) => {
-      this.provinces = data;
-    });
   }
 }

@@ -5,6 +5,5 @@
 export const environment = {
   production: false,
   api_url: 'http://localhost:9078/api'
-  // api_url: 'https://staging.bktechouse.rw/sks/api'
 };
 

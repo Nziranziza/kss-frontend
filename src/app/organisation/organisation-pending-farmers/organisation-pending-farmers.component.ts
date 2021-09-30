@@ -70,7 +70,7 @@ export class OrganisationPendingFarmersComponent implements OnInit, OnDestroy {
     };
     this.organisationService.getOrgPendingFarmers(this.orgId, this.parameters)
       .subscribe(data => {
-        this.farmers = data.content;
+        this.farmers = data.data;
         this.config = {
           itemsPerPage: this.parameters.length,
           currentPage: this.parameters.start + 1,
@@ -120,7 +120,7 @@ export class OrganisationPendingFarmersComponent implements OnInit, OnDestroy {
       this.parameters['search'.toString()] = this.filterForm.value;
       this.organisationService.getOrgPendingFarmers(this.orgId, this.parameters)
         .subscribe(data => {
-          this.farmers = data.content;
+          this.farmers = data.data;
           this.config = {
             itemsPerPage: this.parameters.length,
             currentPage: this.parameters.start + 1,
@@ -140,7 +140,7 @@ export class OrganisationPendingFarmersComponent implements OnInit, OnDestroy {
     delete this.parameters.search;
     this.organisationService.getOrgPendingFarmers(this.orgId, this.parameters)
       .subscribe(data => {
-        this.farmers = data.content;
+        this.farmers = data.data;
         this.config = {
           itemsPerPage: this.parameters.length,
           currentPage: this.parameters.start + 1,

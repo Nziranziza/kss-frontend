@@ -6,7 +6,75 @@
   </div>
 </div>
 
+<div class="row">
+  <div class="col-md-2 col-sm-3 col-xs-6" *ngFor="let production of summary">
+    <div class="info-box-content bg-yellow-gradient" style="margin-left: 0px">
+      <span class="info-box-text">{{ production.coffeeType }}</span>
+      <span class="progress-description" *ngFor="let item of production.grade | keyvalue">
+        Grade {{ item.key }} &nbsp;{{ item.value }}&#13199;
+      </span>
+    </div>
+  </div>
+</div>
+
+<div class="row filter-form" style="margin-bottom: 10px; margin-left: -15px; margin-top: 15px;">
+  <div class="col-xs-2">
+    <div class="ng-autocomplete">
+      <ng-autocomplete
+        #supplier
+        [data]="organisations"
+        [searchKeyword]="keyword"
+        (selected)='selectEvent($event)'
+        (inputCleared) = 'deselectEvent()'
+        [initialValue]="initialValue"
+        [placeHolder]="'Select supplier'"
+        [itemTemplate]="itemTemplate"
+        [notFoundTemplate]="notFoundTemplate">
+      </ng-autocomplete>
+
+      <ng-template #itemTemplate let-item>
+        <a [innerHTML]="item.name"></a>
+      </ng-template>
+
+      <ng-template #notFoundTemplate let-notFound>
+        <div [innerHTML]="notFound"></div>
+      </ng-template>
+    </div>
+  </div>
+  <form [formGroup]="filterForm" (ngSubmit)="onFilter()">
+    <div class="col-lg-1 col-md-2 col-sm-3 col-xs-6">
+      <select class="form-control" formControlName="type">
+        <option value="" [selected]="true"> all </option>
+        <option value="processing"> processing </option>
+        <option value="sold"> sold </option>
+      </select>
+    </div>
+    <ng-container formGroupName="date">
+      <div class="col-lg-1 col-md-1 col-sm-6">
+        <div class="form-group">
+          <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="from" class="form-control"
+                 placeholder="from date..">
+          <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+        </div>
+      </div>
+      <div class="col-lg-1 col-md-1 col-sm-6">
+        <div class="form-group">
+          <input [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" formControlName="to" class="form-control"
+                 placeholder="to..">
+          <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
+        </div>
+      </div>
+    </ng-container>
+    <div class="col-lg-2 col-md-2 col-sm-6">
+      <button class="btn btn-warning pull-right btn-margin" type="button" (click)="onClearFilter()">Clear</button>
+      <button class="btn btn-success pull-right btn-margin" type="submit"><i class="fa fa-search"></i> Search</button>
+    </div>
+  </form>
+</div>
+
+<app-list-warnings [warning]="warning"></app-list-warnings>
 <app-list-message [message]="message"></app-list-message>
+<app-list-errors [errorList]="errors"></app-list-errors>
 
 <div class="row">
   <div class="col-xs-12">
@@ -36,6 +104,7 @@
                   <td>Grade</td>
                   <td>Qty</td>
                   <td></td>
+                  <td></td>
                 </tr>
                 <tr *ngFor="let item of coffee.mixture"
                     style="font-style: oblique; font-size: 12px; background: transparent">
@@ -43,6 +112,16 @@
                   <td>{{ item?.type?.name }}</td>
                   <td>{{ item.grade }}</td>
                   <td>{{ item.totalKgs + ' &#13199; '}}</td>
+                  <td>
+                    <ng-container *ngFor="let itm of item.items; let i = index">
+                      <ng-container *ngFor="let parchment of itm.parchments; let i = index">
+                          <a type="button"
+                             class="btn btn-sm btn-link select-parchment selected-parchment" data-toggle="tooltip"
+                             title="{{'Qty : ' + parchment?.qtyToDeduct + '&#13199; ' }}"> {{ parchment.lotNumber }}
+                          </a>
+                      </ng-container>
+                    </ng-container>
+                  </td>
                   <td>
                     <a class="btn btn-default btn-margin btn-sm pull-right cancel-item"
                        type="button" id="{{coffee._id}}-{{item._id}}">
