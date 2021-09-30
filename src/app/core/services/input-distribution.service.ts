@@ -23,6 +23,10 @@ export class InputDistributionService {
     return this.apiService.post('/inputdispatch/record_dispatch', body);
   }
 
+  getDispatch(id: string): Observable<any> {
+    return this.apiService.get('/inputdispatch/dispatch/' + id);
+  }
+
   report(data: any): Observable<any> {
     return this.apiService.post('/distributionstats/plan?subRegions=true', data);
   }

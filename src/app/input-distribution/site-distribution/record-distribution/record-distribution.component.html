@@ -76,8 +76,8 @@
                             <option></option>
                             <ng-container *ngFor="let stock of stockOuts">
                               <option *ngIf="stock.inputId.inputType === 'Fertilizer'" value="{{stock._id}}">
-                                {{ stock.totalQuantity - stock.distributedQty }}
-                                Kg - {{ stock.created_at|date }} - {{ stock.location.cell_id.name }}
+                                {{ stock.totalQuantity - stock.distributedQty | number : '1.0-2'}}
+                                Kg - {{ stock.created_at|date }} {{ stock.destination ? getDestination( stock.destination) : ' - ' + stock.location.cell_id.name }}
                               </option>
                             </ng-container>
                           </select>

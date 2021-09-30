@@ -126,4 +126,12 @@ export class RecordDistributionComponent extends BasicComponent implements OnIni
       this.setError(this.helper.getFormValidationErrors(this.distributionForm));
     }
   }
+
+  getDestination(destinations) {
+    let str = '';
+    destinations.map ((dest) => {
+      str = str + ' - ' + dest.cell_id.name;
+    });
+    return str;
+  }
 }
