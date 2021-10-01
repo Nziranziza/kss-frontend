@@ -216,4 +216,8 @@ export class DispatchProgressComponent extends BasicComponent implements OnInit 
   exportReport() {
     this.excelService.exportAsExcelFile(this.printable, 'report');
   }
+
+  detailedReport() {
+    this.excelService.exportDetailedExcel();
+  }
 }

@@ -18,6 +18,14 @@ export class ApiService {
       .pipe(catchError(this.formatErrors));
   }
 
+  getBlob(path: string, params: HttpParams = new HttpParams()): Observable<any> {
+    const httpOptions = {
+      responseType: 'blob' as 'json',
+      params
+    };
+    return this.http.get(`${environment.api_url}${path}`, httpOptions);
+  }
+
   put(path: string, body: any): Observable<any> {
     return this.http.put(
       `${environment.api_url}${path}`, body
