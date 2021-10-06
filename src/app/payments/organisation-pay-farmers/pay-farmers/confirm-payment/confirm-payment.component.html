@@ -1,0 +1,73 @@
+<div class="row">
+  <div class="col-xs-12">
+    <h2 class="page-header">
+      <span style="font-size: 14px; font-weight: bold"> {{ org.orgName | uppercase }} </span>
+      <small class="pull-right">Date: {{ today }}</small>
+    </h2>
+  </div>
+</div>
+<app-list-errors [errorList]="errors"></app-list-errors>
+<app-list-message [message]="message"></app-list-message>
+<div class="row">
+  <div class="col-sm-12 col-md-6" *ngIf="!isCashPaymentMode">
+    <div class="table-responsive no-border" style="font-size: 13px">
+      <table class="table table-condensed">
+        <tbody>
+        <tr>
+          <th><label class="control-label">Payer account </label></th>
+          <td>
+            <form [formGroup]="selectPayerForm">
+              <div class="form-inline">
+                <select class="form-control" formControlName="paymentChannel">
+                  <option value="none">Select paying account</option>
+                  <option  *ngFor="let channel of orgPaymentChannels" value="{{channel.channelId}}">
+                    {{ channel.channelName }}
+                  </option>
+                </select>
+              </div>
+            </form>
+          </td>
+        </tr>
+        <tr>
+          <td>Payment channel</td>
+          <td>{{ payerAccount?.channelName }}</td>
+        </tr>
+        <tr *ngIf="payerAccount?.bankName">
+          <td>Payment bank account</td>
+          <td>{{ payerAccount?.bankName }}</td>
+        </tr>
+        <tr>
+          <td>Payer account</td>
+          <td>{{ payerAccount?.subscriptionNumber }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="col-sm-12 col-md-6">
+    <div class="table-responsive no-border" style="font-size: 13px">
+      <table class="table table-striped">
+        <tbody>
+        <tr>
+          <th style="width:50%">Total quantity:</th>
+          <td> {{ paymentSummary?.cherriesTotalQty }} &#13199;</td>
+        </tr>
+        <tr>
+          <th>Number of farmers:</th>
+          <td>{{ paymentSummary?.selectedFarmers }}</td>
+        </tr>
+        <tr>
+          <th>Amount to pay:</th>
+          <td>{{ paymentSummary?.totalAmountToPay }} Rwf</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12">
+    <button class="btn btn-success pull-right btn-margin" (click)="onPay()">Submit payment</button>
+    <button class="btn btn-success pull-right" (click)="onPrevious()">Previous</button>
+  </div>
+</div>

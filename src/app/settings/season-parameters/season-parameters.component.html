@@ -1,0 +1,33 @@
+<h3>
+  Seasons
+  <button class="btn btn-success pull-right" (click)="addSeason()" *appHasPermission="[0]" ><i class="fa fa-plus"></i> New season</button>
+</h3>
+<app-list-message [message]="message"></app-list-message>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-body table-responsive">
+        <table class="row-border hover table table-striped">
+          <thead>
+          <tr>
+            <th>Year</th>
+            <th>Season</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let season of seasons">
+            <td> {{ season.year }}</td>
+            <td> {{ season.season }}</td>
+            <td class="actions no-wrap text-right">
+              <button class="btn btn-info btn-margin pull-right" (click)="copySeason()" *ngIf="season.isCurrent && isTechouseUser"> Copy previous season</button>
+              <button class="btn btn-success btn-margin" (click)="editSeason(season)" *ngIf="season.isCurrent"> Edit</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+

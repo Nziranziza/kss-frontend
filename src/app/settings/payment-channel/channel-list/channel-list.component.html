@@ -1,0 +1,31 @@
+<h3>
+  Channels
+  <a class="btn btn-success pull-right" routerLink="/admin/payment-channel/create"><i class="fa fa-plus"></i> New channel</a>
+</h3>
+<app-list-message [message]="message"></app-list-message>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-body table-responsive">
+        <table class="hover table table-striped">
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody style="border-width: 1px">
+            <tr *ngFor="let channel of channels">
+              <td> {{ channel.channel }}</td>
+              <td>
+                <a class="btn btn-success btn-sm btn-margin pull-right" routerLink="/admin/payment-channel/edit/{{channel._id}}" *appHasPermission="[0]" style="margin-left: 10px;" >
+                  Edit
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

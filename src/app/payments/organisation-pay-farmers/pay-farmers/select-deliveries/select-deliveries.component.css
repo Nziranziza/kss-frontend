@@ -1,0 +1,11 @@
+table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > td:first-child:before, table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > th:first-child:before {
+  display: none;
+}
+
+.table>thead:first-child>tr:first-child>th {
+  display: table-cell !important;
+}
+
+table.dataTable.row-border tbody tr:first-child td {
+  display: table-cell !important;
+}

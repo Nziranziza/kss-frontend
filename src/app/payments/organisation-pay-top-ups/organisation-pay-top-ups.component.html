@@ -1,0 +1,53 @@
+<app-list-message [message]="message"></app-list-message>
+<app-list-errors [errorList]="errors"></app-list-errors>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="container custom-tabs">
+      <div class="row">
+        <div class="col-md-12" style="padding-right: 0px; padding-left: 0px; margin-top: 15px">
+          <div class="card" style="border: none !important;">
+            <ul class="nav nav-tabs" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#deposit" aria-controls="fertilizer" role="tab" data-toggle="tab">
+                  <span style=" font-weight: bolder">Deposit</span>
+                </a>
+              </li>
+            </ul>
+            <div class="tab-content">
+              <div role="tabpanel" class="tab-pane active" id="deposit">
+                <form [formGroup]="depositForm" (ngSubmit)="onSubmitDeposit()">
+                  <div class="row">
+                    <div class="col-xs-6">
+                      <div class="form-group">
+                        <label>
+                          <input type="radio" value="mtn" formControlName="wallet">
+                          <span>
+                              &nbsp;&nbsp;<img src="assets/dist/img/credit/mtn.png">
+                            </span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-xs-6">
+                      <div class="form-group">
+                        <label class="control-label label-required">Amount</label>
+                        <input type="text" formControlName="amount" class="form-control">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-xs-12">
+                      <button class="btn btn-success pull-right">Submit</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

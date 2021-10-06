@@ -1,0 +1,81 @@
+<h3>
+  Organisations
+  <a class="btn btn-success pull-right" routerLink="/admin/organisations/create" *appHasPermission="[[4,1],0]"><i
+    class="fa fa-plus"></i> New
+    organisation</a>
+</h3>
+<app-list-message [message]="message"></app-list-message>
+<app-list-errors [errorList]="errors"></app-list-errors>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-body table-responsive">
+        <app-loader *ngIf="loading"></app-loader>
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped">
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone number</th>
+            <th></th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <ng-container *ngFor="let organisation of organisations">
+            <tr *ngIf="organisation.organizationRole.indexOf(0) > -1 && isSuperAdmin">
+              <td> {{ organisation.organizationName }}</td>
+              <td> {{ organisation.email }}</td>
+              <td> {{ organisation.phone_number }}</td>
+              <td>
+                <span class="details-row-title">Genre : </span>
+                <span class="details-row-data">{{ organisation.genre.genre }}</span>
+                <span class="details-row-title">Street number : </span>
+                <span class="details-row-data">{{ organisation.streetNumber }}</span>
+              </td>
+              <td class="actions no-wrap text-right">
+                <a routerLink="/admin/organisations/{{organisation._id}}/users" *appHasPermission="[4,0,[8,1]]"
+                   class="btn btn-info btn-sm"><i
+                  class="fa fa-users"></i> Users</a>
+                <a class="btn btn-success btn-margin btn-sm" *appHasPermission="[[4,1],0]"
+                   [routerLink]="['edit/', organisation._id]"
+                   style="margin-left: 10px;"> Edit</a>
+              </td>
+            </tr>
+            <tr *ngIf="isNotSuperOrganisation(organisation) && organisation.status != 6">
+              <td> {{ organisation.organizationName }}</td>
+              <td> {{ organisation.email }}</td>
+              <td> {{ organisation.phone_number }}</td>
+              <td>
+                <span class="details-row-title">Genre : </span>
+                <span class="details-row-data">{{ organisation.genre.genre }}</span>
+                <span class="details-row-title">Street number : </span>
+                <span class="details-row-data">{{ organisation.streetNumber }}</span>
+              </td>
+              <td class="actions no-wrap text-right">
+                <a routerLink="/admin/organisations/{{organisation._id}}/farmers" class="btn btn-info btn-sm"
+                   *ngIf="isOrgCWS(organisation)"><i
+                  class="fa fa-users"></i> Farmers</a>
+                <a routerLink="/admin/cws-pending-farmers/{{organisation._id}}"
+                   class="btn btn-warning btn-margin btn-sm" *ngIf="isOrgCWS(organisation)"><i
+                  class="fa fa-users"></i> Pending farmers</a>
+                <a routerLink="/admin/organisations/{{organisation._id}}/users"
+                   *appHasPermission="[[4,1],0,[8,1],[1,1]]" class="btn btn-info btn-sm"
+                   style="margin-left: 10px"><i
+                  class="fa fa-users"></i> Users</a>
+                <a class="btn btn-success btn-margin btn-sm" *appHasPermission="[[4,1],0,6]"
+                   [routerLink]="['edit/', organisation._id]"
+                   style="margin-left: 10px;">Edit</a>
+                <button class="btn btn-default btn-margin btn-sm pull-right" *appHasPermission="[4,0]" (click)="deleteOrganisation(organisation._id)"
+                        type="button">
+                  <i class="fa fa-remove" aria-hidden="true"></i> Remove
+                </button>
+              </td>
+            </tr>
+          </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

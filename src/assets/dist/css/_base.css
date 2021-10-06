@@ -1,0 +1,449 @@
+.content-wrapper, .login-page {
+  background-color: white;
+}
+
+.login-box-body {
+  background-color: #f8f8ff;
+}
+
+.btn-margin {
+  margin-left: 10px;
+}
+
+.btn-custom-margin-top {
+  margin-top: 30px;
+}
+
+.btn-success {
+  background-color: #94c17d;
+  border-color: #94c17d;
+}
+
+.btn-warning {
+  background-color: #dca956;
+  border-color: #dca956;
+}
+
+.no-border > .table > tbody > tr > th, .no-border > .table > tfoot > tr > th, .no-border > .table > thead > tr > td, .no-border > .table > tbody > tr > td, .no-border > .table > tfoot > tr > td {
+  border-top: none;
+}
+
+.big-modal-dialog {
+  width: 80% !important;
+  height: auto;
+}
+
+html, body {
+  height: 100% !important;
+  color: #535658;
+  top: 0 !important;
+}
+
+.home {
+  min-height: 100%;
+  background: linear-gradient(rgba(41, 41, 41, 0.5), rgba(41, 41, 41, 0.5)), url("../img/sks/tea-plantation.jpg") no-repeat center center;
+  background-size: cover;
+}
+
+.label-required:after {
+  content: '*';
+  color: #ff0f0f;
+  padding-left: 5px;
+}
+
+.label-optional:after {
+  content: '(opt)';
+  color: #dca956;
+  font-size: 12px;
+  font-weight: 300;
+  position: absolute;
+}
+
+form .input-required .asterisk:before {
+  color: #ff0f0f;
+  content: "*";
+  position: relative;
+  margin-left: 5px;
+}
+
+form .input-required input,
+form .input-required select,
+form .input-required textarea {
+  width: 95%;
+}
+
+form .input-required {
+  display: flex;
+}
+
+.box {
+  border-top: 3px solid #7499b9;
+  margin-top: 10px;
+}
+
+.list-sub-header {
+  font-style: italic;
+  font-size: 6px;
+  color: #dedede;
+}
+
+input.ng-invalid.ng-touched {
+}
+
+.form-inline .owl-date-input {
+  margin-left: 10px;
+}
+
+@media (max-width: 800px) {
+  .form-inline .owl-date-input {
+    margin-left: 0px;
+  }
+}
+
+@media (max-width: 800px) {
+  .form-inline input {
+    margin: 10px 0;
+  }
+}
+
+div .wrapper {
+  background-color: #367fa9;
+}
+
+.skin-blue .wrapper {
+  background-color: #367fa9;
+}
+
+.skin-blue .sidebar-menu > li.active > a {
+  background: #49565b;
+}
+
+@media (min-width: 992px) {
+
+  .modal-lg {
+    width: 85% !important;
+    height: auto !important;
+  }
+
+  .modal-sm {
+    width: 65% !important;
+    height: auto !important;
+  }
+}
+
+.modal-content {
+  -webkit-border-radius: 5px !important;
+  -moz-border-radius: 5px !important;
+  border-radius: 5px !important;
+}
+
+.modal {
+  background: rgba(0, 0, 0, 0.0);
+}
+
+.modal-header {
+  border-bottom: none;
+}
+
+.spinner-container {
+  text-align: center;
+  vertical-align: middle;
+  display: table-cell;
+}
+
+.navbar-default .navbar-toggle {
+  color: #333333 !important;
+}
+
+.form-control {
+  border-radius: 3px;
+}
+
+fieldset {
+  width: auto !important;
+  padding: 10px !important;
+  margin: 15px !important;
+  border: 1px solid #d2d6de !important;
+  border-radius: 3px;
+
+}
+
+fieldset legend {
+  font-size: 14px;
+}
+
+h3 {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.box {
+  border-top: 1px solid #d2d6de;
+}
+
+.top-col-statistics {
+  padding-right: 0;
+  padding-left: 0;
+  margin-bottom: 15px;
+}
+
+/*------------------------------------------ custom pagination and sorting -------------------------------*/
+
+.custom-pagination .ngx-pagination {
+  padding: 5px;
+  align-items: center;
+  width: 48%;
+  float: right;
+}
+
+.custom-pagination .ngx-pagination li {
+  box-sizing: border-box;
+  display: inline-block;
+  min-width: 1.5em;
+  margin-left: 2px;
+  text-align: center;
+  text-decoration: none !important;
+  cursor: pointer;
+  *cursor: hand;
+  color: #333333 !important;
+  border: 1px solid transparent;
+  border-radius: 2px;
+}
+
+.custom-pagination .ngx-pagination li a, .custom-pagination .ngx-pagination li button {
+  color: #0a0a0a;
+  display: block;
+  padding: 0.5em 1em
+}
+
+.custom-pagination .ngx-pagination .current {
+  color: #333333 !important;
+  border: 1px solid #979797;
+  padding: 0.5em 1em;
+  background: white linear-gradient(to bottom, white 0%, gainsboro 100%);
+}
+
+.custom-pagination .ngx-pagination li:hover a, .custom-pagination .ngx-pagination li:hover button {
+  color: white !important;
+  background-color: #2d2d2d;
+  display: block;
+}
+
+.custom-pagination .ngx-pagination li:hover {
+  color: white !important;
+  background-color: #2d2d2d;
+}
+
+.custom-pagination .ngx-pagination .small-screen {
+  display: none;
+}
+
+.input-error {
+  color: #f25729;
+  font-size: 12px;
+}
+
+.cdk-overlay-container {
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  position: absolute;
+  z-index: 9999999 !important;
+}
+
+.cdk-global-overlay-wrapper, .cdk-overlay-container {
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  position: absolute;
+  z-index: 9999999 !important;
+}
+
+.fa-sort {
+  float: right;
+  color: #dddddd;
+}
+
+/*------------------------------------- custom tabs ----------------------------------*/
+
+.custom-tabs .nav-tabs {
+  border-bottom: 1px solid #dbdbdb;
+}
+
+.custom-tabs .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover {
+  border-width: 1px;
+}
+
+.custom-tabs .nav-tabs > li > a {
+  border: none;
+  color: #535658;
+  background: #f9f9f9;
+}
+
+.custom-tabs .nav-tabs > li.active > a, .nav-tabs > li > a:hover {
+  border: none;
+  color: #535658 !important;
+  background: #dbdbdb;
+}
+
+.custom-tabs .nav-tabs > li > a::after {
+  content: "";
+  background: #d2d6de;
+  height: 1px;
+  position: absolute;
+  width: 100%;
+  left: 0px;
+  bottom: -1px;
+  transition: all 250ms ease 0s;
+  transform: scale(0);
+}
+
+.custom-tabs .nav-tabs > li.active > a::after, .nav-tabs > li:hover > a::after {
+  transform: scale(1);
+}
+
+.custom-tabs .tab-nav > li > a::after {
+  background: #d2d6de none repeat scroll 0% 0%;
+  color: #fff;
+}
+
+.custom-tabs .tab-pane {
+  padding: 15px 0;
+}
+
+.custom-tabs .tab-content {
+  padding: 20px
+}
+
+.custom-tabs .nav-tabs > li {
+  width: 20%;
+  text-align: center;
+  margin-bottom: 0px;
+}
+
+.custom-tabs .card {
+  background: #FFF none repeat scroll 0% 0%;
+  margin-bottom: 30px;
+}
+
+@media all and (max-width: 724px) {
+  .custom-tabs .nav-tabs > li > a > span {
+  }
+
+  .custom-tabs .nav-tabs > li > a {
+    padding: 5px 5px;
+  }
+}
+
+/*------------------------------------ expendable dataTable --------------------------------------*/
+
+.details-row-title {
+  font-size: 12px !important;
+  font-weight: bolder;
+  margin-left: 25px;
+}
+
+.details-row-data {
+  font-size: 12px !important;
+}
+
+.details-row-title-sm {
+  font-size: 12px !important;
+  font-weight: bolder;
+  margin-left: 15px;
+}
+
+.details-row-data-sm {
+  font-size: 12px !important;
+}
+
+table.dataTable > tbody > tr.child {
+  background-color: #faf9f8;
+}
+
+table.dataTable > tbody > tr.child:hover {
+  background-color: #fffeee !important;
+}
+
+.btn-circle.btn-lg {
+  width: 50px;
+  height: 50px;
+  padding: 10px 16px;
+  font-size: 18px;
+  line-height: 1.33;
+  border-radius: 25px;
+}
+
+table.table-bordered.dataTable td:last-child, table.table-bordered.dataTable td:last-child {
+  min-width: 250px;
+}
+
+table.dataTable.dtr-inline.collapsed > tbody > tr.parent > td:first-child:before, table.dataTable.dtr-inline.collapsed > tbody > tr.parent > th:first-child:before {
+  content: '-';
+  background-color: white;
+  color: #333333;
+}
+
+table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > td:first-child:before, table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > th:first-child:before {
+  color: #333333 !important;
+  background-color: white;
+}
+
+/*----------------------------------------Alerts---------------------------------------------*/
+.alert {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+
+/*----------------------------------------Auto-complete--------------------------------------*/
+
+.ng-autocomplete {
+  width: 100%;
+}
+
+.ng-autocomplete ::ng-deep .autocomplete-container {
+  height: 34px;
+  box-shadow: none;
+}
+
+.ng-autocomplete ::ng-deep .autocomplete-container .input-container input {
+  height: 34px;
+  border: 1px solid #d2d6de;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #555;
+  background-color: #fff;
+  border-radius: 3px;
+}
+
+.ng-autocomplete ::ng-deep .autocomplete-container .suggestions-container ul li a {
+  color: #555;
+  background-color: #faf9f8;
+  border: 1px solid #ffffff;
+  padding: 6px 12px;
+  font-size: 12px;
+}
+
+
+.ng-autocomplete ::ng-deep .autocomplete-container .input-container .x i {
+  font-size: 14px;
+  font-weight: bolder;
+}
+
+.ng-autocomplete ::ng-deep .autocomplete-container .suggestions-container {
+  box-shadow: none;
+}
+
+.selected-parchment {
+  color: #fd7e14;
+  text-decoration: none;
+  font-weight: bold;
+}

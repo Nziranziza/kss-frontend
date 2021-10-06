@@ -1,0 +1,53 @@
+<div class="modal-header">
+  <i class="fa fa-times-circle close" style="font-size: 24px;" aria-label="Close" (click)="modal.dismiss()">
+  </i>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="col-xs-12">
+      <h3 class="page-header">
+        <i class="fa fa-square-o"></i> Site details
+      </h3>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-4 table-responsive">
+      <table style="width: 100%; margin-bottom: 15px">
+      <tr>
+        <td>
+          Site
+        </td>
+        <td>
+          <strong>{{ site.siteName }}</strong>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Allocated Qty
+        </td>
+        <td>
+          <strong>{{ site.allocatedQty }}</strong> &nbsp; &#13199;
+        </td>
+      </tr>
+      </table>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-4">
+      <p style="background: transparent; font-weight: bold">
+        Covered sectors
+      </p>
+      <div *ngFor="let sector of site.coveredAreas.coveredSectors">
+        <span style="font-size: 13px"> {{ sector?.name }}</span>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <p style="font-weight: bold">
+        Covered cws
+      </p>
+      <div *ngFor="let cws of site.coveredAreas.coveredCWS">
+        <span style="font-size: 13px"> {{ cws?.name }}</span>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,88 @@
+<div class="modal-header">
+  <i class="fa fa-times-circle close" style="font-size: 18px;" aria-label="Close" (click)="modal.dismiss()">
+  </i>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="col-sm-12">
+      <div style="margin: 15px">
+        <app-loader *ngIf="loading"></app-loader>
+      </div>
+    </div>
+  </div>
+  <app-list-errors [errorList]="errors"></app-list-errors>
+  <form [formGroup]="filterForm" (ngSubmit)="onSubmit()">
+    <div class="row">
+        <div formGroupName="date">
+          <div class="col-xs-3">
+            <div class="form-group">
+              <label class="control-label label-required">From date</label>
+              <input  [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="from" class="form-control">
+              <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+            </div>
+          </div>
+          <div class="col-xs-3">
+            <div class="form-group">
+              <label class="control-label label-required">to</label>
+              <input [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" formControlName="to" class="form-control">
+              <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
+            </div>
+          </div>
+          <div class="col-xs-3">
+            <div class="form-group" style="margin-top: 25px">
+            <button class="btn btn-success" type="submit"> Request</button>
+            </div>
+          </div>
+        </div>
+    </div>
+  </form>
+  <ng-container *ngIf="production">
+    <div class="row">
+      <div class="col-xs-12">
+        <h5 *ngIf="production.regionName">
+          <i class="fa fa-map-marker"></i> {{ production.regionName | uppercase }}
+        </h5>
+        <h5 *ngIf="production.organizationName">
+          <i class="fa fa-map-pin"></i> {{ production.organizationName | uppercase }}
+        </h5>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <h5>
+          <i class="fa fa-cart-plus"></i> Received cherries
+        </h5>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-3 col-sm-6 col-xs-12" *ngFor="let production of production.cherries">
+        <div class="info-box bg-green-gradient">
+          <div class="info-box-content">
+            <span class="info-box-text">{{ production.cherriesType }}</span>
+            <span class="info-box-text">{{ production.totalCherries }}&#13199;</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <h5>
+          <i class="fa fa-archive"></i> Produced parchments
+        </h5>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-3 col-sm-6 col-xs-12" *ngFor="let production of production.parchments">
+        <div class="info-box bg-yellow-gradient">
+          <div class="info-box-content">
+            <span class="info-box-text">{{ production.coffeeType }}</span>
+            <span class="progress-description" *ngFor="let item of production.grade | keyvalue">
+              Grade {{ item.key }} &nbsp;{{ item.value }}&#13199;
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>
+

@@ -1,0 +1,237 @@
+<div class="row">
+  <div class="col-xs-12">
+    <h3>
+      <a *appHasPermission="[0,[8,2],6,[1,1]]" class="btn btn-success btn-margin pull-right"
+         routerLink="/admin/farmers/create"><i
+        class="fa fa-plus"></i> New Farmer
+      </a>
+    </h3>
+  </div>
+</div>
+<app-list-message [message]="message"></app-list-message>
+<div class="row">
+  <div class="col-md-12">
+    <div class="box box-default">
+      <div class="box-header with-border">
+        <h3 class="box-title">{{org? org.organizationName : '' }} >> suppliers</h3>
+        <div class="box-tools pull-right">
+          <button type="button" class="btn btn-box-tool" data-target="#box-body" data-toggle="collapse"><i
+            class="fa fa-expand"></i>
+          </button>
+        </div>
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body collapse" id="box-body">
+        <div class="row">
+          <div class="col-sm-2 col-xs-6">
+            <p class="text-left">
+              <strong>SEASON: <span class="text-light-blue"> {{ currentSeason.season }} </span></strong>
+            </p>
+          </div>
+          <!-- /.col -->
+          <div class="col-sm-6 col-xs-12">
+            <div class="row">
+              <div class="col-sm-8">
+                <div class="row">
+                  <div class="col-sm-6">
+                    Organisation
+                  </div>
+                  <div class="col-sm-6">
+                    <strong>{{ org?.organizationName }}</strong><br>
+                  </div>
+                  <div class="col-sm-6">
+                    Email
+                  </div>
+                  <div class="col-sm-6">
+                    <strong>{{ org?.email }}</strong><br>
+                  </div>
+                  <div class="col-sm-6">
+                    Telephone
+                  </div>
+                  <div class="col-sm-6">
+                    {{ org?.phone_number }}<br>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                Location
+              </div>
+              <div class="col-sm-12">
+                <span class="details-row-title-sm" style="margin-left: 0px">Province </span> : <span
+                class="details-row-data-sm" *ngIf="org?.location.prov_id">{{ org?.location.prov_id.namek }}</span>
+                <span class="details-row-title-sm">District </span> : <span class="details-row-data-sm"
+                                                                            *ngIf="org?.location.dist_id">{{ org?.location.dist_id.name }}</span>
+                <span class="details-row-title-sm">Sector </span> : <span class="details-row-data-sm"
+                                                                          *ngIf="org?.location.sect_id">{{ org?.location.sect_id.name }}</span>
+                <span class="details-row-title-sm">Cell </span> : <span class="details-row-data-sm"
+                                                                        *ngIf="org?.location.cell_id">{{ org?.location.cell_id.name }}</span>
+                <span class="details-row-title-sm">Village </span> : <span class="details-row-data-sm"
+                                                                           *ngIf="org?.location.village_id">{{ org?.location.village_id.name }}</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <p>
+              Covered sectors
+            </p>
+            <div *ngFor="let area of orgCoveredArea">
+              <span class="details-row-title-sm" style="margin-left: 0px"> {{ area?.name }}</span>
+              <p *ngFor="let cell of area?.covCells" style="margin-left: 20px">
+                <span class="details-row-title-sm">{{ cell?.name }} : </span>
+                <span *ngFor="let village of cell?.covVillages"
+                      class="details-row-data-sm"> {{ village?.name }}, </span>
+              </p>
+            </div>
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- ./box-body -->
+      <div class="box-footer">
+        <div class="row">
+          <div class="col-sm-2 col-xs-4 top-col-statistics">
+            <div class="description-block border-right">
+              <h5 class="description-header text-green">{{ totalCost | number }} &nbsp;frw</h5>
+              <span class="description-text">TOTAL EXPENDITURE</span>
+            </div>
+            <!-- /.description-block -->
+          </div>
+          <div class="col-sm-2 col-xs-4 top-col-statistics">
+            <div class="description-block border-right">
+              <h5 class="description-header text-green">{{ owedAmount | number }} &nbsp;frw</h5>
+              <span class="description-text">OWED AMOUNT</span>
+            </div>
+            <!-- /.description-block -->
+          </div>
+          <div class="col-sm-2 col-xs-4 top-col-statistics">
+            <div class="description-block border-right">
+              <h5 class="description-header text-red">{{ cherriesTotalQty | number }} &#13199;</h5>
+              <span class="description-text">CHERRIES</span>
+            </div>
+            <!-- /.description-block -->
+          </div>
+          <div class="col-sm-2 col-xs-4 top-col-statistics">
+            <div class="description-block border-right">
+              <h5 class="description-header text-light-blue">{{ cwsSummary.totalParchments | number }} &#13199;</h5>
+              <span class="description-text">PRODUCED PARCHMENTS</span>
+            </div>
+            <!-- /.description-block -->
+          </div>
+          <div class="col-sm-2 col-xs-4 top-col-statistics">
+            <div class="description-block border-right">
+              <ng-container *ngIf="(cwsSummary.totalParchments && cwsSummary.expectedParchments) else completionZero ">
+                <i class="fa fa-caret-up"></i>&nbsp;
+                <span class="description-percentage text-green">{{ (cwsSummary.totalParchments / cwsSummary.expectedParchments) * 100 |  number:'1.0-1' }} % &nbsp; Completion</span>
+              </ng-container>
+              <ng-template #completionZero>
+                 <span class="description-percentage text-green">
+                <i class="fa fa-caret-up"></i>&nbsp; 0% Completion
+                 </span>
+              </ng-template>
+              <h5 class="description-header text-yellow">{{ cwsSummary.expectedParchments | number }} &#13199;</h5>
+              <span class="description-text">EXPECTED PARCHMENTS</span>
+            </div>
+            <!-- /.description-block -->
+          </div>
+          <div class="col-sm-2 col-xs-4 top-col-statistics">
+            <div class="description-block">
+              <button class="btn btn-link" (click)="showProduction()" style="text-decoration: none">
+                Production in Details <i class="fa fa-window-maximize"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.box-footer -->
+    </div>
+    <!-- /.box -->
+  </div>
+  <!-- /.col -->
+</div>
+<app-list-errors [errorList]="errors"></app-list-errors>
+<div class="row">
+  <div class="col-xs-12">
+    <form [formGroup]="filterForm" (ngSubmit)="onFilter()">
+      <div class="form-group pull-left">
+        <label class="control-label">Status</label> &nbsp;
+        <select class="form-control" formControlName="status">
+          <option value="supplied">All</option>
+          <option value="fully_paid">Fully paid</option>
+          <option value="partial_paid">Partial paid</option>
+          <option value="unpaid">Unpaid</option>
+          <option value="unapproved_delivery">Unapproved delivery</option>
+          <option value="unapproved_payment">Unapproved payment</option>
+        </select>
+      </div>
+      <div class="form-inline pull-right" style="margin-top: 25px;">
+        <ng-container formGroupName="date">
+          <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="from"
+                 class="form-control col-xs-3 col-sm-3 col-md-2 col-lg-2 owl-date-input" placeholder="from..">
+          <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+          <input [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" formControlName="to"
+                 class="form-control col-xs-3 col-sm-3 col-md-2 col-lg-2 owl-date-input" placeholder="to..">
+          <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
+        </ng-container>
+        <!--
+        <ng-container formGroupName="search">
+          <select class="form-control btn-margin" formControlName="searchBy" style="margin-right: 10px">
+            <option *ngFor="let field of searchFields" value="{{field.value}}">{{field.name}}</option>
+          </select>
+          <input type="text" formControlName="term" class="form-control" placeholder="search..">
+        </ng-container>
+        -->
+        <button class="btn btn-success pull-right btn-margin" type="button" (click)="exportAsXLSX()"><i
+          class="fa fa-file-excel-o"></i> Export
+        </button>
+        <button class="btn btn-warning pull-right btn-margin" type="button" (click)="onClearFilter()">Clear</button>
+        <button class="btn btn-success pull-right btn-margin" type="submit"><i class="fa fa-search"></i> Search
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-body table-responsive">
+        <app-loader *ngIf="loading"></app-loader>
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped">
+          <thead>
+          <tr>
+            <th>First name</th>
+            <th>Last name</th>
+            <th>National ID</th>
+            <th>Phone number</th>
+            <th>Reg number</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let farmer of suppliers; let i = index">
+            <td *ngIf="farmer.userInfo.type===2; else foreName"> {{ farmer.userInfo.groupName }}</td>
+            <ng-template #foreName>
+              <td> {{ farmer.userInfo.foreName }}</td>
+            </ng-template>
+            <td> {{ farmer.userInfo.surname }}</td>
+            <td> {{ farmer.userInfo.NID }}</td>
+            <td> {{ farmer.userInfo.phone_number }}</td>
+            <td> {{ farmer.userInfo.regNumber | uppercase}}</td>
+            <td>
+              <a appRequiredSeason routerLink="/admin/cherries/supply/select/{{farmer.userInfo._id}}/{{farmer.userInfo.regNumber}}"
+                 *appHasPermission="[[1,1]]" class="btn btn-success btn-margin pull-right btn-sm"
+                 style="margin-left: 10px;">
+                <i class="fa fa-cart-plus"></i> Supply </a>
+              <button class="btn btn-default btn-sm btn-margin pull-right details-button"
+                      (click)="viewDeliveries(farmer.userInfo.regNumber)">...
+              </button>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

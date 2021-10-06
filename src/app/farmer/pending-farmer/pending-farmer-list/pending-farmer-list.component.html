@@ -1,0 +1,78 @@
+<div class="row">
+  <div class="col-xs-12">
+    <h3>
+      {{ title }}
+      <div class="filter-form pull-right">
+        <form [formGroup]="filterForm" (ngSubmit)="onFilter()">
+          <div class="form-inline">
+            <select class="form-control" formControlName="searchBy" style="margin-right: 10px">
+              <option *ngFor="let field of searchFields" value="{{field.value}}">{{field.name}}</option>
+            </select>
+            <input type="text" formControlName="term" class="form-control" placeholder="search..">
+            <button class="btn btn-warning pull-right btn-margin" type="button" (click)="onClearFilter()">Clear</button>
+            <button class="btn btn-success pull-right btn-margin" type="submit"><i class="fa fa-search"></i> Search
+            </button>
+          </div>
+        </form>
+      </div>
+    </h3>
+    <app-list-errors [errorList]="errors"></app-list-errors>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-body table-responsive">
+        <table class="row-border hover table table-striped">
+          <thead>
+          <tr>
+            <th (click)="setOrder('foreName')">First name <i class="fa fa-sort sorting"></i></th>
+            <th (click)="setOrder('surname')">Last name <i class="fa fa-sort sorting"></i></th>
+            <th (click)="setOrder('NID')">National ID <i class="fa fa-sort sorting"></i></th>
+            <th (click)="setOrder('phone_number')">Phone number <i class="fa fa-sort sorting"></i></th>
+            <th (click)="setOrder('numberOfTrees')">Number of trees <i class="fa fa-sort sorting"></i></th>
+            <th (click)="setOrder('fertilizer_need')">Needed Fertilizer <i class="fa fa-sort sorting"></i></th>
+            <th (click)="setOrder('reason')">Missing info <i class="fa fa-sort sorting"></i></th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody *ngIf="showData">
+          <tr *ngFor="let farmer of (farmers | orderBy : order:reverse:'case-insensitive') | paginate: config">
+            <td> {{ farmer.foreName }}</td>
+            <td> {{ farmer.surname }}</td>
+            <td> {{ farmer.NID }}</td>
+            <td> {{ farmer.phone_number }}</td>
+            <td> {{ farmer.numberOfTrees }}</td>
+            <td> {{ farmer.fertilizer_need }}</td>
+            <td><span
+              *ngIf="farmer.reason !== undefined && farmer.reason.length > 0">{{ farmer.reason.join(', ') }}</span></td>
+            <td>
+              <a appRequiredSeason class="btn btn-success btn-sm pull-right" *ngIf="canApprove()"
+                 [routerLink]="['/admin/farmers/create', {id: farmer._id}]">Approve
+              </a>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <div style="width: 100%;  border-top: 1px solid #0a0a0a;" *ngIf="showData">
+          <div style=" clear: both; float: left; padding-top: 0.755em;">Showing {{(config.currentPage - 1)*
+            config.itemsPerPage + 1}} to {{config.currentPage* config.itemsPerPage}} of {{config.totalItems}} entries
+          </div>
+          <pagination-controls class="custom-pagination"
+                               [maxSize]="maxSize"
+                               [directionLinks]="directionLinks"
+                               [autoHide]="autoHide"
+                               [responsive]="responsive"
+                               [previousLabel]="labels.previousLabel"
+                               [nextLabel]="labels.nextLabel"
+                               [screenReaderPaginationLabel]="labels.screenReaderPaginationLabel"
+                               [screenReaderPageLabel]="labels.screenReaderPageLabel"
+                               [screenReaderCurrentLabel]="labels.screenReaderCurrentLabel"
+                               (pageChange)="onPageChange($event)">
+          </pagination-controls>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

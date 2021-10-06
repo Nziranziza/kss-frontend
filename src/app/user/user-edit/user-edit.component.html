@@ -1,0 +1,211 @@
+<h3>
+  {{org? org.organizationName : '' }} >> Edit user
+</h3>
+<app-list-errors [errorList]="errors" *ngIf="errors.length > 0"></app-list-errors>
+<form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-body">
+          <app-loader *ngIf="loading"></app-loader>
+          <div class="row">
+            <div class="col-xs-6">
+              <div class="form-group">
+                <label class="control-label label-required">First name</label>
+                <input type="text" formControlName="foreName" class="form-control">
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <div class="form-group">
+                <label class="control-label label-required">Last name</label>
+                <input type="text" formControlName="surname" class="form-control">
+              </div>
+            </div>
+            <div class="col-xs-6" *ngIf="!hideEmail">
+              <div class="form-group">
+                <label class="control-label label-required">Email</label>
+                <input type="text" formControlName="email" class="form-control">
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <div class="form-group">
+                <label class="control-label">NID</label>
+                <input type="text" formControlName="NID" class="form-control" (input)="onInputNID($event.target.value)">
+                <span class="input-error" *ngIf="invalidId">
+                  invalid nid
+                </span>
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <div class="form-group">
+                <label class="control-label label-required">Phone number</label>
+                <input type="text" formControlName="phone_number" class="form-control">
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <div class="form-group">
+                <label class="control-label label-required">Gender</label>
+                <div class="radio">
+                  <label>
+                    <input type="radio" formControlName="sex" value="m" checked="">
+                    Male
+                  </label>
+                </div>
+                <div class="radio">
+                  <label>
+                    <input type="radio" formControlName="sex" value="f" checked="">
+                    Female
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <div class="form-group">
+                <label class="control-label label-required">User type</label>
+                  <select class="form-control" formControlName="userType">
+                    <option value=""></option>
+                    <ng-container *ngFor="let type of userTypes">
+                      <option value="{{type.value}}">{{type.name}}</option>
+                    </ng-container>
+                  </select>
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <div class="form-group">
+                <label class="control-label">Status</label>
+                <select class="form-control" formControlName="status">
+                  <option *ngFor="let status of possibleStatuses" value="{{status.value}}">{{status.name}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-xs-6" *ngIf="!isFromSuperOrg">
+              <label class="control-label label-required">Roles</label>
+              <div class="checkbox" formArrayName="userRoles"
+                   *ngFor="let role of editForm.get('userRoles')['controls']; let i = index">
+                <label>
+                  <input type="checkbox" formControlName="{{i}}">
+                  {{orgPossibleRoles[i].name}}
+                </label>
+              </div>
+            </div>
+          </div>
+          <ng-container *ngIf="hasSite">
+             <fieldset class="location" style="margin: 15px 0px 15px !important; ">
+               <legend>
+                 <label class="control-label"> &nbsp; Site location </label>
+               </legend>
+               <div class="row" formGroupName="location">
+                 <div class="col-xs-4" *ngIf="showLocation.province">
+                   <div class="form-group">
+                     <span class="label-required">Province</span>
+                     <select class="form-control" formControlName="prov_id">
+                       <option value=""></option>
+                       <option *ngFor="let province of provinces" value="{{province._id}}">{{province.namee}}</option>
+                     </select>
+                   </div>
+                 </div>
+                 <div class="col-xs-4" *ngIf="showLocation.district">
+                   <div class="form-group">
+                     <span class="">District</span>
+                     <select class="form-control" formControlName="dist_id">
+                       <option value=""></option>
+                       <option *ngFor="let district of districts" value="{{district._id}}">{{district.name}}</option>
+                     </select>
+                   </div>
+                 </div>
+                 <div class="col-xs-4" *ngIf="showLocation.sector">
+                   <div class="form-group">
+                     <span class="">Sector</span>
+                     <select class="form-control" formControlName="sect_id">
+                       <option value=""></option>
+                       <option *ngFor="let sector of sectors" value="{{sector._id}}">{{sector.name}}</option>
+                     </select>
+                   </div>
+                 </div>
+               </div>
+               <div class="row">
+                 <div class="col-xs-4">
+                   <div class="form-group">
+                     <span class="">Site</span>
+                     <select class="form-control" formControlName="distributionSite">
+                       <option></option>
+                       <option *ngFor="let site of sites" value="{{site._id}}">{{site.siteName}}</option>
+                     </select>
+                   </div>
+                 </div>
+                 <div class="col-xs-4">
+                   <div class="form-group">
+                     <label class="control-label label-required">Account expiration date</label>
+                     <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="accountExpirationDate"
+                            class="form-control">
+                     <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+                   </div>
+                 </div>
+               </div>
+             </fieldset>
+          </ng-container>
+          <div class="row">
+            <fieldset class="location" *ngIf="needLocation">
+              <legend>
+                <label class="control-label label-required">&nbsp; Location</label></legend>
+              <div formGroupName="location">
+                <div class="col-xs-2" *ngIf="showLocation.province">
+                  <div class="form-group">
+                    <span class="">Province</span>
+                    <select class="form-control" formControlName="prov_id">
+                      <option value=""></option>
+                      <option *ngFor="let province of provinces" value="{{province._id}}">{{province.namee}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-xs-2" *ngIf="showLocation.district">
+                  <div class="form-group">
+                    <span class="">District</span>
+                    <select class="form-control" formControlName="dist_id">
+                      <option value=""></option>
+                      <option *ngFor="let district of districts" value="{{district._id}}">{{district.name}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-xs-2" *ngIf="showLocation.sector">
+                  <div class="form-group">
+                    <span class="">Sector</span>
+                    <select class="form-control" formControlName="sect_id">
+                      <option value=""></option>
+                      <option *ngFor="let sector of sectors" value="{{sector._id}}">{{sector.name}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-xs-2" *ngIf="showLocation.cell">
+                  <div class="form-group">
+                    <span class="">Cell</span>
+                    <select class="form-control" formControlName="cell_id">
+                      <option value=""></option>
+                      <option *ngFor="let cell of cells" value="{{cell._id}}">{{cell.name}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-xs-2" *ngIf="showLocation.village">
+                  <div class="form-group">
+                    <span class="">village</span>
+                    <select class="form-control" formControlName="village_id">
+                      <option value=""></option>
+                      <option *ngFor="let village of villages" value="{{village._id}}">{{village.name}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <a class="btn btn-warning btn-margin pull-right"
+         routerLink="/admin/organisations/{{organisationId}}/users">Cancel</a>
+      <button class="btn btn-success pull-right">Save</button>
+    </div>
+  </div>
+</form>

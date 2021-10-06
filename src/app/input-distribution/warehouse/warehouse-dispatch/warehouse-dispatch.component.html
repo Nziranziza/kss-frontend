@@ -1,0 +1,332 @@
+<app-list-message [message]="message"></app-list-message>
+<app-list-errors [errorList]="errors"></app-list-errors>
+<form [formGroup]="recordDispatchForm" (ngSubmit)="onSubmit()">
+  <div class="box">
+    <div class="box-header with-border">
+      <h3 class="box-title">Record Dispatch</h3>
+      <div class="box-tools pull-right">
+        <button type="button" class="btn btn-box-tool" data-target="#box-body" data-toggle="collapse"> <i class="fa fa-expand"></i>
+        </button>
+      </div>
+    </div>
+    <div class="box-body collapse" id="box-body">
+      <div class="row">
+        <ng-container formGroupName="location">
+          <div class="col-xs-2">
+            <div class="form-group">
+              <span class="">Province</span>
+              <select class="form-control" formControlName="prov_id">
+                <option value=""></option>
+                <option *ngFor="let province of provinces" value="{{province._id}}">{{province.namee}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-xs-2">
+            <div class="form-group">
+              <span class="">District</span>
+              <select class="form-control" formControlName="dist_id">
+                <option value=""></option>
+                <option *ngFor="let district of districts" value="{{district._id}}">{{district.name}}</option>
+              </select>
+            </div>
+          </div>
+        </ng-container>
+        <div class="col-xs-2">
+          <div class="form-group">
+            <label class="control-label label-required">Site</label>
+            <select class="form-control" formControlName="siteId">
+              <option value=""></option>
+              <option *ngFor="let site of sites" value="{{site._id}}">{{site.siteName}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <ng-container formGroupName="entries">
+        <div class="row">
+          <div class="col-xs-2">
+            <div class="form-group">
+              <label class="control-label label-required">Driver</label>
+              <input type="text" formControlName="driver" class="form-control">
+            </div>
+          </div>
+          <div class="col-xs-2">
+            <div class="form-group">
+              <label class="control-label label-required">Driver phone number</label>
+              <input type="text" formControlName="driverPhoneNumber" class="form-control">
+            </div>
+          </div>
+          <div class="col-xs-2">
+            <div class="form-group">
+              <label class="control-label label-required">Vehicle plate</label>
+              <input type="text" formControlName="vehiclePlate" class="form-control">
+            </div>
+          </div>
+          <div class="col-xs-2">
+            <div class="form-group">
+              <label class="control-label label-required">Vehicle model</label>
+              <input type="text" formControlName="vehicleModel" class="form-control">
+            </div>
+          </div>
+          <div class="col-xs-2">
+            <div class="form-group">
+              <label class="control-label label-required">Date</label>
+              <input [owlDateTimeTrigger]="dt0" [owlDateTime]="dt0" formControlName="date" class="form-control">
+              <owl-date-time [pickerType]="'calendar'" #dt0></owl-date-time>
+            </div>
+          </div>
+        </div>
+        <div class="row" style="margin-top: 15px; margin-bottom: 15px">
+          <div class="col-xs-4">
+            <label>
+              <input type="checkbox" [checked]="includeFertilizer" (change)="onIncludeFertilizer()"/> Fertilizer
+            </label>
+          </div>
+          <div class="col-xs-4">
+            <label>
+              <input type="checkbox" [checked]="includePesticide" (change)="onIncludePesticide()"/> Pesticide
+            </label>
+          </div>
+        </div>
+
+        <ng-container *ngIf="includeFertilizer">
+          <div class="row">
+            <div class="col-xs-6">
+              <button class="btn btn-success btn-sm pull-right" (click)="addPackageFertilizer()" type="button">
+                <i class="fa fa-plus"></i> Fertilizer package
+              </button>
+            </div>
+          </div>
+          <div *ngFor="let control of formPackageFertilizer.controls; let i=index" formArrayName="packageFertilizer">
+            <div class="row" [formGroupName]="i">
+              <div class="col-xs-2">
+                <div class="form-group">
+                  <span class="control-label label-required">Bag size (kg)</span>
+                  <select class="form-control" formControlName="bagSize" (change)="onChangePackageFertilizer(i)">
+                    <option *ngFor="let stock of fertilizerStocks" value="{{ stock.quantityPerItem }}">{{
+                      stock.quantityPerItem }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xs-2">
+                <div class="form-group">
+                  <span class="control-label label-required">Number of bags</span>
+                  <input type="text" formControlName="numberOfBags" class="form-control"
+                         (input)="onChangePackageFertilizer(i)">
+                </div>
+              </div>
+              <div class="col-xs-2">
+                <div class="form-group">
+                  <span class="control-label label-required"></span>
+                  <input type="text" formControlName="subTotal" class="form-control" readonly="readonly">
+                </div>
+              </div>
+              <div class="form-group col-xs-1">
+                <button class="btn btn-danger btn pull-left" type="button"
+                        (click)="removePackageFertilizer(i)" style="margin-top: 20px"> Remove
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-2">
+              <div class="form-group">
+                <span class="control-label label-required">Total qty fertilizer (kg)</span>
+                <input type="text" formControlName="totalQtyFertilizer" class="form-control" readonly="readonly">
+              </div>
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="includePesticide">
+          <div class="row">
+            <div class="col-xs-6">
+              <button class="btn btn-success btn-sm pull-right" (click)="addPackagePesticide()" type="button">
+                <i class="fa fa-plus"></i> Pesticide package
+              </button>
+            </div>
+          </div>
+          <div *ngFor="let control of formPackagePesticide.controls; let i=index" formArrayName="packagePesticide">
+            <div class="row" [formGroupName]="i">
+              <div class="col-xs-2">
+                <div class="form-group">
+                  <span class="control-label label-required">Pesticide type</span>
+                  <select class="form-control" formControlName="pesticideType" (change)="onChangePackagePesticide(i)">
+                    <option *ngFor="let stock of pesticideStocks" value="{{ stock.inputId._id }}">{{
+                      stock.inputId.inputName }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xs-2">
+                <div class="form-group">
+                  <span class="control-label label-required">Quantity (l)</span>
+                  <input type="text" formControlName="qty" class="form-control">
+                </div>
+              </div>
+              <div class="form-group col-xs-1">
+                <button class="btn btn-danger btn pull-left" type="button"
+                        (click)="removePackagePesticide(i)" style="margin-top: 20px"> Remove
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-2">
+              <div class="form-group">
+                <span class="control-label label-required">Total qty pesticide (l)</span>
+                <input type="text" formControlName="totalQtyPesticide" class="form-control" readonly="readonly">
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </ng-container>
+      <div class="row">
+        <div class="col-xs-12">
+          <button class="btn btn-success pull-right">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+<div class="row filter-form" style="margin-bottom: 10px; margin-left: -1px">
+  <form [formGroup]="filterForm" (ngSubmit)="onFilter()">
+    <ng-container formGroupName="search">
+      <div class="col-xs-1">
+        <select class="form-control" formControlName="searchBy">
+          <option *ngFor="let field of searchFields" value="{{field.value}}">{{field.name | titlecase}}</option>
+        </select>
+      </div>
+      <ng-container formGroupName="location" *ngIf="isFilterBySite">
+        <div class="col-xs-1">
+          <select class="form-control" formControlName="prov_id">
+            <option value="">select province</option>
+            <option *ngFor="let province of filterProvinces" value="{{province._id}}">{{province.namee | titlecase}}
+            </option>
+          </select>
+        </div>
+        <div class="col-xs-1">
+          <select class="form-control" formControlName="dist_id">
+            <option value="">select district</option>
+            <option *ngFor="let district of filterDistricts" value="{{district._id}}">{{district.name | titlecase}}
+            </option>
+          </select>
+        </div>
+      </ng-container>
+      <div class="col-xs-1" *ngIf="isFilterBySite">
+        <select class="form-control" formControlName="siteId">
+          <option value="">select site</option>
+          <option *ngFor="let site of filterSites" value="{{site._id}}">{{site.siteName | titlecase}}</option>
+        </select>
+      </div>
+      <div class="col-xs-2" *ngIf="!isFilterByType && !isFilterBySite">
+        <input type="text" formControlName="term" class="form-control" placeholder="term..">
+      </div>
+      <div class="col-xs-2" *ngIf="isFilterByType">
+        <select class="form-control" formControlName="term">
+          <option value="Fertilizer">Fertilizer</option>
+          <option value="Pesticide">Pesticide</option>
+        </select>
+      </div>
+    </ng-container>
+    <ng-container formGroupName="date">
+      <div class="col-xs-1">
+        <div class="form-group">
+          <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="from" class="form-control"
+                 placeholder="from date..">
+          <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+        </div>
+      </div>
+      <div class="col-xs-1">
+        <div class="form-group">
+          <input [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" formControlName="to" class="form-control"
+                 placeholder="to..">
+          <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
+        </div>
+      </div>
+    </ng-container>
+    <div class="col-xs-2">
+      <button class="btn btn-warning pull-right btn-margin" type="button" (click)="onClearFilter()">Clear</button>
+      <button class="btn btn-success pull-right btn-margin" type="submit"><i class="fa fa-search"></i> Search</button>
+    </div>
+  </form>
+</div>
+<app-list-warnings [warning]="warning"></app-list-warnings>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-body expendable-dataTable">
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped" id="responsive-table">
+          <thead>
+          <tr>
+            <th>Destination</th>
+            <th>Driver</th>
+            <th>Vehicle</th>
+            <th>Phone number</th>
+            <th></th>
+            <th>Date</th>
+            <th>Received</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let dispatch of inputDispatches">
+            <td>{{ dispatch.destinationSite.siteId.siteName }}</td>
+            <td>{{ dispatch.driverInfo.driver }}</td>
+            <td>{{ dispatch.driverInfo.vehiclePlate }}</td>
+            <td>{{ dispatch.driverInfo.driverPhoneNumber }}</td>
+            <td>
+              <table style="background: transparent; width: 750px;" class="pull-right">
+                <tr style="font-style: oblique; font-size: 12px; background: transparent; font-weight: bold">
+                  <td>Input</td>
+                  <td>Items</td>
+                  <td>Qty</td>
+                  <td>Total</td>
+                  <td>ReceivedQty</td>
+                  <td>Comment</td>
+                </tr>
+                <tr *ngFor="let entry of dispatch.entries"
+                    style="font-style: oblique; font-size: 12px; background: transparent">
+                  <td>{{ entry.inputId.inputName }}</td>
+                  <td>{{ entry.numberOfItems }}</td>
+                  <td>{{ entry.quantityPerItem }}</td>
+                  <td>{{ entry.numberOfItems * entry.quantityPerItem}}
+                    <app-quantity-unit [inputType]="entry.inputId.inputType"></app-quantity-unit>
+                  </td>
+                  <td>{{ entry.receivedQty }}
+                    <app-quantity-unit [inputType]="entry.inputId.inputType"></app-quantity-unit>
+                  </td>
+                  <td>{{ entry.dispatch_comments | lowercase }}</td>
+                </tr>
+              </table>
+            </td>
+            <td>{{ dispatch.date|date }}</td>
+            <td>
+              <ng-container *ngIf="dispatch.receivedBy; else confirm">
+                <span>&#10003;</span>
+                <span style="font-style: oblique; font-size: 11px;">&nbsp; by: &nbsp; {{ dispatch.receivedBy.foreName|lowercase }} &nbsp; {{ dispatch.receivedBy.surname|lowercase }}  </span>
+              </ng-container>
+              <ng-template #confirm>
+              </ng-template>
+            </td>
+            <td>
+              <button class="btn btn-info btn-margin btn-sm pull-right" (click)="printNote(dispatch._id)" type="button">
+                <i class="fa fa-print" aria-hidden="true"></i> Note
+              </button>
+              <button class="btn btn-default btn-margin btn-sm pull-right" (click)="cancelDispatch(dispatch._id)"
+                      type="button">
+                <i class="fa fa-remove" aria-hidden="true"></i> Cancel
+              </button>
+              <ng-container *ngIf="!dispatch.receivedBy">
+                <button appRequiredSeason (click)="editDistrubution(dispatch._id)"
+                        class="btn btn-success btn-margin pull-right btn-sm" style="margin-left: 10px;">
+                  Edit
+                </button>
+              </ng-container>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

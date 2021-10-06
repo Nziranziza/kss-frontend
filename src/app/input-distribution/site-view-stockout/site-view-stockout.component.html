@@ -1,0 +1,79 @@
+<app-list-message [message]="message"></app-list-message>
+<app-list-errors [errorList]="errors"></app-list-errors>
+<div class="box box-default" style="margin-top: 25px">
+  <div class="box-header with-border">
+    <h3 class="box-title">Available stocks</h3>
+    <div class="box-tools pull-right">
+      <button type="button" class="btn btn-box-tool" data-target="#box-body" data-toggle="collapse"><i
+        class="fa fa-expand"></i>
+      </button>
+    </div>
+  </div>
+  <div class="box-body collapse in" id="box-body" aria-expanded="true">
+    <table class="row-border hover table table-striped" style="margin-top: 15px">
+      <thead>
+      <tr>
+        <th>Stock</th>
+        <th>Name</th>
+        <th>Qty per item</th>
+        <th>Items</th>
+        <th>Total Qty</th>
+        <th>Available Qty</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let stock of stocks">
+        <td>{{ stock.inputId.inputType }}</td>
+        <td>{{ stock.inputId.inputName }}</td>
+        <td>{{ stock.quantityPerItem }}</td>
+        <td>{{ stock.items }}</td>
+        <td>{{ stock.items * stock.quantityPerItem }}</td>
+        <td>{{ stock.availableQty }}
+          <app-quantity-unit [inputType]="stock.inputId.inputType"></app-quantity-unit>
+        </td>
+        <td>
+          <button class="btn btn-success btn-margin btn-sm pull-right" (click)="stockOut(stock)"
+                  type="button">
+            Stock out
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="box" style="margin-top: 25px">
+  <h3 class="box-title">List stock-outs</h3>
+  <div class="box-body">
+    <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped">
+      <thead>
+      <tr>
+        <th>Type</th>
+        <th>Quantity</th>
+        <th>Distributed Qty</th>
+        <th>Returned Qty</th>
+        <th>Date</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let stockOut of stockOuts">
+        <td>{{ stockOut.inputId.inputName }}</td>
+        <td>{{ stockOut.totalQuantity }}
+          <app-quantity-unit [inputType]="stockOut.inputId.inputType"></app-quantity-unit>
+        </td>
+        <td>{{ stockOut.distributedQty }}</td>
+        <td>{{ stockOut.returnedQty }}</td>
+        <td>{{ stockOut.date|date }}</td>
+        <td>
+          <button class="btn btn-success btn-margin btn-sm pull-right" (click)="returnStockOut(stockOut._id)">
+            Return
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+

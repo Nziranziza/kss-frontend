@@ -1,0 +1,23 @@
+<div class="modal-header">
+  <i class="fa fa-times-circle close" style="font-size: 24px;" aria-label="Close" (click)="modal.dismiss()">
+  </i>
+</div>
+<div class="modal-body">
+  <app-list-message [message]="message"></app-list-message>
+  <app-list-errors [errorList]="errors"></app-list-errors>
+  <form [formGroup]="editInputForm" (ngSubmit)="onSubmit()">
+    <div class="row">
+      <div class="col-xs-3">
+        <div class="form-group">
+          <label class="control-label label-required">Input name</label>
+          <input type="text" formControlName="inputName" class="form-control">
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <button class="btn btn-success pull-right">Save</button>
+      </div>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,68 @@
+<h3>
+  Farmer requests
+</h3>
+<app-list-message [message]="message"></app-list-message>
+<app-list-errors [errorList]="errors"></app-list-errors>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-body">
+        <form [formGroup]="getFarmerRequestsForm" (ngSubmit)="onGetFarmerRequests()">
+          <div class="row" style="margin-top: 15px">
+            <div class="col-xs-6">
+              <div class="form-inline">
+                <label class="control-label">Farmer reg number</label>
+                <input type="text" formControlName="farmerRegNumber" class="form-control btn-margin">
+                <button class="btn btn-default"><i class="fa fa-search"></i> Search</button>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div class="row" style="margin-top: 30px">
+          <div class="col-xs-12 table-responsive">
+            <table class="table table-striped">
+              <thead>
+              <tr>
+                <th>Location</th>
+                <th>Trees</th>
+                <th>Fertilizer needed</th>
+                <th>Fertilizer allocated</th>
+                <th>Trees at distribution</th>
+                <th>Comments</th>
+                <th>Pe applied</th>
+                <th></th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let request of requests">
+                <td style="font-size: 11px">
+                  <span class="details-row-title-sm">Sector </span> : <span class="details-row-data-sm">{{ request.location.sect_id.name }}</span>
+                  <span class="details-row-title-sm">Cell </span> : <span class="details-row-data-sm">{{ request.location.cell_id.name }}</span>
+                  <span class="details-row-title-sm">Village </span> : <span class="details-row-data-sm">{{ request.location.village_id.name }}</span>
+                </td>
+                <td>{{ request.numberOfTrees }}</td>
+                <td>{{ request.fertilizer_need }} Kg</td>
+                <td>{{ request.fertilizer_allocate }} Kg</td>
+                <td>{{ request.treesAtDistribution }}</td>
+                <td>{{ request.update_comments }}</td>
+                <td>
+                <ng-container *ngIf="request.isPesticideApplied; else apply">
+                  <i class="fa fa-check-square" aria-hidden="true"></i>
+                </ng-container>
+                <ng-template  #apply>
+                </ng-template>
+                </td>
+                <td>
+                  <button class="btn btn-success btn-margin btn-sm pull-right" (click)="recordDistribution(request._id, documentId, request.inputApplicationId,  request.numberOfTrees)"> distribute Fe</button>
+                  <button class="btn btn-success btn-margin btn-sm pull-right" (click)="applyPesticide(request._id, documentId)"> apply Pe</button>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

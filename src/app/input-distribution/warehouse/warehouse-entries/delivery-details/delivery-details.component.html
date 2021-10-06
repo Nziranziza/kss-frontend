@@ -1,0 +1,88 @@
+<div class="modal-header">
+  <i class="fa fa-times-circle close" style="font-size: 24px;" aria-label="Close" (click)="modal.dismiss()">
+  </i>
+  <button class="btn btn-success btn-margin pull-left" (click)="exportAsXLSX()"><i class="fa fa-download"></i> Export
+  </button>
+</div>
+<div class="modal-body">
+  <app-list-errors [errorList]="errors"></app-list-errors>
+  <app-list-message [message]="message"></app-list-message>
+  <div class="row">
+    <div class="col-sm-12">
+      <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped">
+        <ng-container *ngIf="inputType === 'Fertilizer'; else pesticide">
+          <thead>
+          <tr>
+            <th></th>
+            <th>Items</th>
+            <th>Qty per item</th>
+            <th>Total Qty (&#13199;)</th>
+            <th>Driver</th>
+            <th>Vehicle plate</th>
+            <th>Supplier</th>
+            <th>Date</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let entry of deliveries">
+            <td>{{ entry.inputId.inputName }}</td>
+            <td>{{ entry.items }}</td>
+            <td>{{ entry.quantityPerItem }}</td>
+            <td>{{ entry.items * entry.quantityPerItem }}</td>
+            <td>{{ entry.driver }}</td>
+            <td>{{ entry.vehiclePlate }}</td>
+            <ng-container *ngIf="entry.supplier; else no_supplier">
+              <td>{{ entry.supplier.name }}</td>
+            </ng-container>
+            <ng-template #no_supplier>
+              <td></td>
+            </ng-template>
+            <td>{{ entry.warehouseEntryDate | date:'mediumDate':'GMT+2' }}</td>
+            <td>
+              <button class="btn btn-default btn-margin btn-sm pull-right" (click)="cancelEntry(entry._id)"
+                      type="button">
+                <i class="fa fa-remove" aria-hidden="true"></i> Cancel
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </ng-container>
+        <ng-template #pesticide>
+          <thead>
+          <tr>
+            <th></th>
+            <th>Quantity (&#8467;)</th>
+            <th>Driver</th>
+            <th>Vehicle plate</th>
+            <th>Supplier</th>
+            <th>Date</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let entry of deliveries">
+            <td>{{ entry.inputId.inputName }}</td>
+            <td>{{ entry.quantityPerItem }}</td>
+            <td>{{ entry.driver }}</td>
+            <td>{{ entry.vehiclePlate }}</td>
+            <ng-container *ngIf="entry.supplier; else no_supplier">
+              <td>{{ entry.supplier.name }}</td>
+            </ng-container>
+            <ng-template #no_supplier>
+              <td></td>
+            </ng-template>
+            <td>{{ entry.warehouseEntryDate | date:'mediumDate':'GMT+2' }}</td>
+            <td>
+              <button class="btn btn-default btn-margin btn-sm pull-right" (click)="cancelEntry(entry._id)"
+                      type="button">
+                <i class="fa fa-remove" aria-hidden="true"></i> Cancel
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </ng-template>
+      </table>
+    </div>
+  </div>
+</div>

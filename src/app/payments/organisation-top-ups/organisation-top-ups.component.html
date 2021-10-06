@@ -1,0 +1,55 @@
+<div class="row">
+  <div class="col-md-3 col-sm-6 col-xs-12">
+    <div class="info-box">
+      <span class="info-box-icon bg-light-blue"><i class="fa fa-bank"></i></span>
+      <div class="info-box-content bg-gray-light">
+        <span class="info-box-text">Available Balance</span>
+        <span class="info-box-number">{{ accountBalance | number}} Rwf</span>
+      </div>
+      <!-- /.info-box-content -->
+    </div>
+    <!-- /.info-box -->
+  </div>
+  <!-- /.col -->
+</div>
+<app-list-message [message]="message"></app-list-message>
+<div class="row">
+  <div class="col-xs-12">
+    <a class="btn btn-group btn-success pull-right btn-margin" routerLink="/admin/top-ups/pay/{{organisationId}}">
+      <i class="fa fa-credit-card"></i> Top up
+    </a>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-body table-responsive">
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped">
+          <thead>
+          <tr>
+            <th>Mode</th>
+            <th>Channel</th>
+            <th>Payer</th>
+            <th>Transaction number</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Date/Time</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let transaction of transactions">
+            <td> {{ transaction.mode }}</td>
+            <td> {{ transaction.channel }}</td>
+            <td> {{ transaction.payer }}</td>
+            <td> {{ transaction.transactionNumber }}</td>
+            <td> {{ transaction.amount }}</td>
+            <td> {{ transaction.status }}</td>
+            <td> {{ transaction.date }}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<router-outlet name="modal"></router-outlet>

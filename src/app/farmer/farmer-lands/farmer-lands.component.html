@@ -1,0 +1,27 @@
+<h3>
+  Lands
+</h3>
+<app-list-message [message]="message"></app-list-message>
+<div class="row">
+  <div class="col-xs-12 table-responsive">
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>Number of trees</th>
+        <th>Fertilizer needed</th>
+        <th>Fertilizer allocated</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let request of requests">
+        <td>{{ request.numberOfTrees }}</td>
+        <td>{{ request.fertilizer_need }} Kg</td>
+        <td>{{ request.fertilizer_allocate }} Kg</td>
+        <td></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+

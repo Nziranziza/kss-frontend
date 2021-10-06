@@ -1,0 +1,102 @@
+<div class="modal-header">
+  <i class="fa fa-times-circle close" style="font-size: 24px;" aria-label="Close" (click)="modal.dismiss()">
+  </i>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="col-xs-12">
+      <h3>
+        Record parchments
+      </h3>
+    </div>
+  </div>
+  <app-list-errors [errorList]="errors"></app-list-errors>
+  <form [formGroup]="recordParchmentForm" (ngSubmit)="onSubmit()">
+    <div class="row">
+      <div class="col-xs-3">
+        <div class="form-group">
+          <label class="control-label label-required">Coffee type</label>
+          <select class="form-control" formControlName="coffeeType">
+            <option *ngFor="let type of coffeeTypes" value="{{type._id}}"> {{ type.name }}</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-xs-3">
+        <div class="form-group">
+          <label class="control-label label-required">Grade</label>
+          <select class="form-control" formControlName="coffeeGrade">
+            <option value="A"> A</option>
+            <option value="B"> B</option>
+            <option value="C"> C</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-xs-3">
+        <div class="form-group">
+          <label class="control-label label-required">Delivery date</label>
+          <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="date" class="form-control">
+          <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+        </div>
+      </div>
+      <div class="col-xs-3">
+        <div class="form-group">
+          <label class="control-label label-required">Production date</label>
+          <input [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" formControlName="producedDate" class="form-control">
+          <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
+        </div>
+      </div>
+    </div>
+    <ng-container formGroupName="packaging">
+      <div class="row">
+        <div class="col-xs-6">
+          <button class="btn btn-success btn-sm pull-right" (click)="addPackage()" type="button">
+            <i class="fa fa-plus"></i> Packaging
+          </button>
+        </div>
+      </div>
+      <div *ngFor="let control of formPackage.controls; let i=index">
+        <div class="row" [formGroupName]="i">
+          <div class="col-xs-2">
+            <div class="form-group">
+              <span class="control-label label-required">Bag size (kg)</span>
+              <input type="text" formControlName="bagSize" class="form-control"
+                     (input)="onChangePackageSize(i)">
+            </div>
+          </div>
+          <div class="col-xs-2">
+            <div class="form-group">
+              <span class="control-label label-required">Number of bags</span>
+              <input type="text" formControlName="numberOfBags" class="form-control"
+                     (input)="onChangePackageQty(i)">
+            </div>
+          </div>
+          <div class="col-xs-2">
+            <div class="form-group">
+              <span class="control-label label-required"></span>
+              <input type="text" formControlName="subTotal" class="form-control" readonly="readonly">
+            </div>
+          </div>
+          <div class="form-group col-xs-1">
+            <button class="btn btn-danger btn pull-left" type="button"
+                    (click)="removePackage(i)" style="margin-top: 20px"> Remove
+            </button>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <div class="row">
+      <div class="col-xs-6">
+        <div class="form-group">
+          <label class="control-label label-required">Lot kgs</label>
+          <input type="text" formControlName="totalKgs" class="form-control" readonly="readonly">
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <a class="btn btn-warning btn-margin pull-right" (click)="modal.dismiss()">Cancel</a>
+        <button class="btn btn-success pull-right">Save</button>
+      </div>
+    </div>
+  </form>
+</div>

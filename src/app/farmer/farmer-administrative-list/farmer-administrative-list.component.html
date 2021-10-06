@@ -1,0 +1,160 @@
+<h3>
+  {{ title }}
+</h3>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-body">
+        <app-list-message [message]="message"></app-list-message>
+        <app-list-errors [errorList]="errors"></app-list-errors>
+        <form [formGroup]="filterForm">
+          <div class="row">
+            <div formGroupName="location">
+              <div class="col-xs-2" *ngIf="!isCurrentUserDCC">
+                <div class="form-group">
+                  <span class="">Province</span>
+                  <div class="input-group input-group-sm">
+                    <select class="form-control" formControlName="prov_id">
+                      <option value="" selected="selected">ALL PROVINCES</option>
+                      <option *ngFor="let province of provinces" value="{{province._id}}">{{province.namee}}</option>
+                    </select>
+                    <span class="input-group-btn">
+                      <button type="button" class="btn btn-default btn-flat" (click)="onSubmit('province')">
+                        <i class="fa fa-search"></i>
+                      </button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-2">
+                <div class="form-group">
+                  <span class="">District</span>
+                  <div class="input-group input-group-sm">
+                    <select class="form-control" formControlName="dist_id" disabled="true"
+                            *ngIf="isCurrentUserDCC; else enabled">
+                      <option value=""></option>
+                      <option *ngFor="let district of districts" value="{{district._id}}">{{district.name}}</option>
+                    </select>
+                    <ng-template #enabled>
+                      <select class="form-control" formControlName="dist_id">
+                        <option value=""></option>
+                        <option *ngFor="let district of districts" value="{{district._id}}">{{district.name}}</option>
+                      </select>
+                    </ng-template>
+                    <span class="input-group-btn">
+                      <button type="button" class="btn btn-default btn-flat" (click)="onSubmit('district')"
+                              [disabled]="!distId">
+                        <i class="fa fa-search"></i>
+                      </button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-2">
+                <div class="form-group">
+                  <span class="">Sector</span>
+                  <div class="input-group input-group-sm">
+                    <select class="form-control" formControlName="sect_id">
+                      <option value=""></option>
+                      <option *ngFor="let sector of sectors" value="{{sector._id}}">{{sector.name}}</option>
+                    </select>
+                    <span class="input-group-btn">
+                      <button type="button" class="btn btn-default btn-flat" (click)="onSubmit('sector')"
+                              [disabled]="!sectorId">
+                        <i class="fa fa-search"></i>
+                      </button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-2">
+                <div class="form-group">
+                  <span class="">Cell</span>
+                  <div class="input-group input-group-sm">
+                    <select class="form-control" formControlName="cell_id">
+                      <option value=""></option>
+                      <option *ngFor="let cell of cells" value="{{cell._id}}">{{cell.name}}</option>
+                    </select>
+                    <span class="input-group-btn">
+                      <button type="button" class="btn btn-default btn-flat" (click)="onSubmit('cell')"
+                              [disabled]="!cellId">
+                        <i class="fa fa-search"></i>
+                      </button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-2">
+                <div class="form-group">
+                  <span class="">Village</span>
+                  <div class="input-group input-group-sm">
+                    <select class="form-control" formControlName="village_id">
+                      <option value=""></option>
+                      <option *ngFor="let village of villages" value="{{village._id}}">{{village.name}}</option>
+                    </select>
+                    <span class="input-group-btn">
+                      <button type="button" class="btn btn-default btn-flat" (click)="onSubmit('village')"
+                              [disabled]="!villageId">
+                        <i class="fa fa-search"></i>
+                      </button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="box-body table-responsive">
+        <app-loader *ngIf="loading"></app-loader>
+        <table class="row-border hover table table-striped" *ngIf="showData">
+          <thead>
+          <tr>
+            <th (click)="setOrder('userInfo.foreName')">First name <i class="fa fa-sort sorting"></i></th>
+            <th (click)="setOrder('userInfo.surname')">Last name <i class="fa fa-sort sorting"></i></th>
+            <th (click)="setOrder('userInfo.NID')">National ID <i class="fa fa-sort sorting"></i></th>
+            <th (click)="setOrder('userInfo.phone_number')">Phone number <i class="fa fa-sort sorting"></i></th>
+            <th (click)="setOrder('userInfo.regNumber')">Reg number <i class="fa fa-sort sorting"></i></th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let farmer of (farmers | orderBy : order:reverse:'case-insensitive') | paginate: config">
+            <td *ngIf="farmer.userInfo.type===2; else foreName"> {{ farmer.userInfo.groupName }} </td>
+            <ng-template #foreName>
+              <td> {{ farmer.userInfo.foreName }} </td>
+            </ng-template>
+            <td> {{ farmer.userInfo.surname }}</td>
+            <td> {{ farmer.userInfo.NID }}</td>
+            <td> {{ farmer.userInfo.phone_number }}</td>
+            <td> {{ farmer.userInfo.regNumber | uppercase}}</td>
+            <td>
+              <a appRequiredSeason class="btn btn-success btn-margin pull-right btn-sm" routerLink="/admin/farmers/edit/{{farmer.request._id}}">
+                Edit</a>
+              <button class="btn btn-default btn-margin btn-sm pull-right details-button" (click)="viewDetails(farmer)">...</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <div style="width: 100%;  border-top: 1px solid #0a0a0a;" *ngIf="showData">
+          <div style=" clear: both; float: left; padding-top: 0.755em;">Showing {{(config.currentPage - 1)*
+            config.itemsPerPage + 1}} to {{config.currentPage* config.itemsPerPage}} of {{config.totalItems}} entries
+          </div>
+          <pagination-controls class="custom-pagination"
+                               [maxSize]="maxSize"
+                               [directionLinks]="directionLinks"
+                               [autoHide]="autoHide"
+                               [responsive]="responsive"
+                               [previousLabel]="labels.previousLabel"
+                               [nextLabel]="labels.nextLabel"
+                               [screenReaderPaginationLabel]="labels.screenReaderPaginationLabel"
+                               [screenReaderPageLabel]="labels.screenReaderPageLabel"
+                               [screenReaderCurrentLabel]="labels.screenReaderCurrentLabel"
+                               (pageChange)="onPageChange($event)">
+          </pagination-controls>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
