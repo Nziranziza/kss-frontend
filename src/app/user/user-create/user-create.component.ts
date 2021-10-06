@@ -201,22 +201,13 @@ export class UserCreateComponent implements OnInit {
       } else {
         this.userService.checkEmail(checkEmailBody).subscribe(data => {
             const response = data.content;
-            if (response.existsInCas) {
-              this.errors = ['User with this email already exists'];
-              return;
-            }
             if (response.existsInSns) {
               user['action'.toString()] = 'import';
             }
-
-            if (!(response.existsInCas || response.existsInSns)) {
+            if (!(response.existsInSns)) {
               if (checkNIDBody.nid !== '') {
                 this.userService.checkNID(checkNIDBody).subscribe(result => {
                     const res = result.content;
-                    if (res.existsInCas) {
-                      this.errors = ['User with this NID already exists'];
-                      return;
-                    }
                     if (res.existsInSns) {
                       user['action'.toString()] = 'import';
                     }

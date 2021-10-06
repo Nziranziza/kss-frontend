@@ -10,6 +10,9 @@ import {WarehouseService} from '../../../core/services';
 import {DatePipe} from '@angular/common';
 import {BasicComponent} from '../../../core/library';
 import {DataTableDirective} from 'angular-datatables';
+import {ParchmentEditComponent} from '../../../wet-processing/parchment/parchment-edit/parchment-edit.component';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {WarehouseDispatchEditComponent} from '../warehouse-dispatch-edit/warehouse-dispatch-edit.component';
 
 @Component({
   selector: 'app-warehouse-dispatch',
@@ -23,6 +26,7 @@ export class WarehouseDispatchComponent extends BasicComponent implements OnInit
               private warehouseService: WarehouseService,
               private router: Router, private confirmDialogService: ConfirmDialogService,
               private seasonService: SeasonService,
+              private modal: NgbModal,
               private wareHouseService: WarehouseService,
               private datePipe: DatePipe, private authenticationService: AuthenticationService,
               private inputDistributionService: InputDistributionService,
@@ -80,8 +84,6 @@ export class WarehouseDispatchComponent extends BasicComponent implements OnInit
         date: [this.datePipe.transform(this.currentDate, 'yyyy-MM-dd', 'GMT+2'), Validators.required],
         packageFertilizer: new FormArray([]),
         packagePesticide: new FormArray([]),
-        warehouseIdFertilizer: [''],
-        warehouseIdPesticide: [''],
         totalQtyPesticide: [0],
         totalQtyFertilizer: [0]
       }),
@@ -93,7 +95,7 @@ export class WarehouseDispatchComponent extends BasicComponent implements OnInit
     });
     this.dtOptions = {
       pagingType: 'full_numbers',
-      pageLength: 10,
+      pageLength: 25,
       columns: [{}, {}, {}, {}, {
         class: 'none'
       }, {}, {}, {}],
@@ -149,11 +151,6 @@ export class WarehouseDispatchComponent extends BasicComponent implements OnInit
   getPackageFertilizerFormGroup(index): FormGroup {
     this.packageFertilizer = this.recordDispatchForm.controls.entries.get('packageFertilizer') as FormArray;
     return this.packageFertilizer.controls[index] as FormGroup;
-  }
-
-  getPackagePesticideFormGroup(index): FormGroup {
-    this.packagePesticide = this.recordDispatchForm.controls.entries.get('packagePesticide') as FormArray;
-    return this.packagePesticide.controls[index] as FormGroup;
   }
 
   createPackageFertilizer(): FormGroup {
@@ -416,6 +413,13 @@ export class WarehouseDispatchComponent extends BasicComponent implements OnInit
     }
   }
 
+  editDistrubution(id: string) {
+    const modalRef = this.modal.open(WarehouseDispatchEditComponent, {size: 'lg'});
+    modalRef.componentInstance.id = id;
+    modalRef.result.then((message) => {
+      this.setMessage(message);
+    });
+  }
   onIncludePesticide() {
     this.includePesticide = !this.includePesticide;
     if (this.recordDispatchForm.value.entries.packagePesticide.length === 0) {

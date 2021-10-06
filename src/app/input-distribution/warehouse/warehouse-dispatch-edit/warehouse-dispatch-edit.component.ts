@@ -49,7 +49,7 @@ export class WarehouseDispatchEditComponent extends BasicComponent implements On
   // @ts-ignore
   dtTrigger: Subject = new Subject();
   loading = false;
-  includeFertilizer = true;
+  includeFertilizer = false;
   includePesticide = false;
   currentDate: any;
   packagePesticide: any;
@@ -73,8 +73,6 @@ export class WarehouseDispatchEditComponent extends BasicComponent implements On
         date: [this.datePipe.transform(this.currentDate, 'yyyy-MM-dd', 'GMT+2'), Validators.required],
         packageFertilizer: new FormArray([]),
         packagePesticide: new FormArray([]),
-        warehouseIdFertilizer: [''],
-        warehouseIdPesticide: [''],
         totalQtyPesticide: [0],
         totalQtyFertilizer: [0]
       }),
@@ -89,33 +87,41 @@ export class WarehouseDispatchEditComponent extends BasicComponent implements On
     this.getStocks(1);
     this.getCurrentSeason();
     this.inputDistributionService.getDispatch(this.id).subscribe(data => {
-      this.updateDispatchForm.patchValue(data.content);
       this.dispatch = data.content;
-      this.locationService.getDistricts(this.dispatch.distributionSite.location.prov_id).subscribe((districts) => {
+      this.locationService.getDistricts(this.dispatch.destinationSite.location.prov_id._id).subscribe((districts) => {
         this.districts = districts;
+        this.updateDispatchForm.controls.location.get('prov_id').setValue(this.dispatch.destinationSite.location.prov_id._id);
+        this.updateDispatchForm.controls.location.get('dist_id').setValue(this.dispatch.destinationSite.location.dist_id._id);
+        this.updateDispatchForm.controls.siteId.setValue(this.dispatch.destinationSite.siteId._id);
+        this.updateDispatchForm.controls.entries.get('driver').setValue(this.dispatch.driverInfo.driver);
+        this.updateDispatchForm.controls.entries.get('vehiclePlate').setValue(this.dispatch.driverInfo.vehiclePlate);
+        this.updateDispatchForm.controls.entries.get('vehicleModel').setValue(this.dispatch.driverInfo.vehicleModel);
+        this.updateDispatchForm.controls.entries.get('driverPhoneNumber').setValue(this.dispatch.driverInfo.driverPhoneNumber);
+        this.updateDispatchForm.controls.entries.get('date').setValue(this.dispatch.date);
       });
-      this.dispatch.enteries.package.forEach((item, i) => {
-        if (item.inputId.inputType === 'fertilizer') {
+      this.dispatch.entries.forEach((item) => {
+        let i = 0;
+        if (item.inputId.inputType === 'Fertilizer') {
+          this.includeFertilizer = true;
           this.addPackageFertilizer();
-          ((this.updateDispatchForm.get('entries') as FormArray).at(i) as FormGroup).get('bagSize')
+          i = (this.updateDispatchForm.controls.entries.get('packageFertilizer') as FormArray).length - 1;
+          ((this.updateDispatchForm.controls.entries.get('packageFertilizer') as FormArray).at(i) as FormGroup).get('bagSize')
             .setValue(item.quantityPerItem);
-          ((this.updateDispatchForm.get('entries') as FormArray).at(i) as FormGroup).get('numberOfBags')
+          ((this.updateDispatchForm.controls.entries.get('packageFertilizer') as FormArray).at(i) as FormGroup).get('numberOfBags')
             .setValue(item.numberOfItems);
-          ((this.updateDispatchForm.get('entries') as FormArray).at(i) as FormGroup).get('subTotal')
+          ((this.updateDispatchForm.controls.entries.get('packageFertilizer') as FormArray).at(i) as FormGroup).get('subTotal')
             .setValue(item.quantityPerItem * item.numberOfItems);
         }
-        if (item.inputId.inputType === 'pesticide') {
+        if (item.inputId.inputType === 'Pesticide') {
+          this.includePesticide = true;
           this.addPackagePesticide();
-          ((this.updateDispatchForm.get('entries') as FormArray).at(i) as FormGroup).get('pesticideType')
-            .setValue(item.pesticideType);
-          ((this.updateDispatchForm.get('entries') as FormArray).at(i) as FormGroup).get('qty')
-            .setValue(item.qty);
+          i = (this.updateDispatchForm.controls.entries.get('packagePesticide') as FormArray).length - 1;
+          ((this.updateDispatchForm.controls.entries.get('packagePesticide') as FormArray).at(i) as FormGroup).get('pesticideType')
+            .setValue(item.inputId._id);
+          ((this.updateDispatchForm.controls.entries.get('packagePesticide') as FormArray).at(i) as FormGroup).get('qty')
+            .setValue(item.quantityPerItem);
         }
       });
-      /*this.updateDispatchForm.controls.coffeeType.setValue(this.parchment.coffeeType._id);
-      this.updateDispatchForm.controls.coffeeGrade.setValue(this.parchment.coffeeGrade);
-      this.updateDispatchForm.controls.producedDate.setValue(this.parchment.producedDate);
-      this.updateDispatchForm.controls.date.setValue(this.parchment.cherriesSupplyDate);*/
     });
   }
 
@@ -146,11 +152,6 @@ export class WarehouseDispatchEditComponent extends BasicComponent implements On
   getPackageFertilizerFormGroup(index): FormGroup {
     this.packageFertilizer = this.updateDispatchForm.controls.entries.get('packageFertilizer') as FormArray;
     return this.packageFertilizer.controls[index] as FormGroup;
-  }
-
-  getPackagePesticideFormGroup(index): FormGroup {
-    this.packagePesticide = this.updateDispatchForm.controls.entries.get('packagePesticide') as FormArray;
-    return this.packagePesticide.controls[index] as FormGroup;
   }
 
   createPackageFertilizer(): FormGroup {

@@ -18,7 +18,8 @@ import { WarehouseDispatchEditComponent } from './warehouse-dispatch-edit/wareho
     OwlNativeDateTimeModule,
     DataTablesModule,
     WarehouseRoutingModule
-  ]
+  ],
+  entryComponents: [WarehouseDispatchEditComponent]
 })
 export class WarehouseModule {
 }

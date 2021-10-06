@@ -18,7 +18,7 @@ module.exports = shipit => {
       deployTo: '/var/www/html/sks-front-end',
       ignores: [],
       key: '~/.ssh/id_ed25519.pub',
-      servers: 'jrukundo@105.179.10.30:2202'
+      servers: 'jrukundo@105.179.3.110:2202'
     },
     production: {
       deployTo: '',
