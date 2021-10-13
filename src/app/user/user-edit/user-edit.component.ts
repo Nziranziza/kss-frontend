@@ -75,7 +75,7 @@ export class UserEditComponent implements OnInit {
       sex: ['', Validators.required],
       NID: [{value: '', disabled: true}],
       org_id: [''],
-      userType: [{value: '', disabled: (!(this.authorisationService.isTechouseAdmin() || this.authorisationService.isNaebAdmin())) }],
+      userType: [{value: '', disabled: (!this.authorisationService.isTechouseAdmin() && !this.authorisationService.isNaebAdmin()) }],
       userRoles: new FormArray([]),
       location: this.formBuilder.group({
         prov_id: [''],
@@ -86,14 +86,13 @@ export class UserEditComponent implements OnInit {
       }),
       accountExpirationDate: [''],
       distributionSite: [''],
-      status: [ {value: '', disabled: (!(this.authorisationService.isTechouseAdmin()))}]
+      status: [ {value: '', disabled: (!this.authorisationService.isTechouseAdmin() && !this.authorisationService.isNaebAdmin())}]
     });
     this.userService.userTypes().subscribe(data => {
       this.userTypes = Object.keys(data.content).map(key => {
         return {name: key, value: data.content[key]};
       });
     });
-
     this.isCWSAdmin = this.authorisationService.isCWSAdmin();
     this.organisationService.possibleRoles().subscribe(data => {
       this.possibleRoles = Object.keys(data.content).map(key => {
@@ -191,6 +190,7 @@ export class UserEditComponent implements OnInit {
         this.sites = dt.content;
       });
     }
+    // If user is a cws collector hide email field
     const usrType = currentUser.hasAccessTo[0].userType;
     this.hideEmail = +usrType === 13;
 

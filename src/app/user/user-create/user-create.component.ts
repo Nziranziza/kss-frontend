@@ -142,15 +142,12 @@ export class UserCreateComponent implements OnInit {
         reason: 'registration'
       };
       user['action'.toString()] = 'create';
+      // if user is a cws collector
       if (+user['userType'.toString()] === 13) {
         delete user.email;
         if (checkNIDBody.nid !== '') {
           this.userService.checkNID(checkNIDBody).subscribe(result => {
               const res = result.content;
-              if (res.existsInCas) {
-                this.errors = ['User with this NID already exists'];
-                return;
-              }
               if (res.existsInSns) {
                 user['action'.toString()] = 'import';
               }
@@ -238,7 +235,6 @@ export class UserCreateComponent implements OnInit {
             this.helper.cleanObject(user);
             this.helper.cleanObject(user.location);
             this.userService.save(user).subscribe(() => {
-
                 this.router.navigateByUrl('admin/organisations/' + this.organisationId + '/users');
               },
               (err) => {
@@ -263,7 +259,7 @@ export class UserCreateComponent implements OnInit {
         this.needLocation = !!selectedRoles.includes(6);
 
         /*If selected roles include input distribution and user type is normal, enable site selection*/
-        if (selectedRoles.includes(8)) {
+        if (selectedRoles.includes(8) && !selectedRoles.includes(1)) {
           if (this.selectedType === 2) {
             this.hasSite = true;
           }

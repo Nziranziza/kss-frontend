@@ -10,7 +10,7 @@ export class InternalDirective  implements OnInit {
   }
 
   ngOnInit() {
-    if (environment.production && environment.api_url === 'https://smartkungahara.rw/api') {
+    if (!(environment.production && environment.api_url === 'https://smartkungahara.rw/api')) {
       this.renderer.setStyle(this.el.nativeElement, 'display', 'none');
     }
   }

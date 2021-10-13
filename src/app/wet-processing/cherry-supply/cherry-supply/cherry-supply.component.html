@@ -13,7 +13,13 @@
     </div>
   </div>
 </div>
-<br/> <br/>
+<br/>
+<div class="alert alert-warning alert-dismissible">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+  <h4><i class="icon fa fa-warning"></i> Alert!</h4>
+  The <span style="font-weight: bolder">cherry deliveries</span> will be considered as yield of previous season <span style="font-weight: bolder"> 2021A&B Season </span>
+</div>
+<br/>
 <app-list-errors [errorList]="errors"></app-list-errors>
 <app-list-message [message]="message"></app-list-message>
 <form [formGroup]="recordCherryDeliveryForm" (ngSubmit)="onSaveSupply()">
@@ -42,7 +48,7 @@
   </div>
   <div class="row" style="margin-bottom: 15px;">
     <div class="col-xs-12">
-      <button appRequiredSeason class="btn btn-success pull-right">
+      <button appRequiredSeasonCherry class="btn btn-success pull-right">
         <i class="fa fa-shopping-cart"></i> add
       </button>
     </div>
@@ -52,7 +58,7 @@
 <div class="row" style="margin-bottom: 15px;">
   <div class="col-xs-12">
     <form [formGroup]="paySuppliesForm" (ngSubmit)="onSavePay()">
-      <button appRequiredSeason class="btn btn-success pull-right btn-margin">
+      <button appRequiredSeasonCherry class="btn btn-success pull-right btn-margin">
         <i class="fa fa-money"></i> pay
       </button>
       <div class="form-inline pull-right">

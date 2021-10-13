@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {AuthorisationService, ConfirmDialogService, FarmerService, MessageService} from '../../core/services';
+import {AuthenticationService, AuthorisationService, ConfirmDialogService, FarmerService, MessageService} from '../../core/services';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {SeasonService} from '../../core/services';
 import {EditSeasonComponent} from './edit-season/edit-season.component';
@@ -19,6 +19,7 @@ export class SeasonParametersComponent implements OnInit, OnDestroy {
               private farmerService: FarmerService,
               private confirmDialogService: ConfirmDialogService,
               private authorisationService: AuthorisationService,
+              private authenticationService: AuthenticationService,
               private modal: NgbModal) {
   }
 
@@ -26,12 +27,12 @@ export class SeasonParametersComponent implements OnInit, OnDestroy {
   id: string;
   errors = [];
   message: string;
-  isTechouseUser = false;
+  isTechouseAdmin = false;
 
   ngOnInit() {
     this.message = this.messageService.getMessage();
     this.getSeasons();
-    this.isTechouseUser = this.authorisationService.isTechouseUser();
+    this.isTechouseAdmin = this.authorisationService.isTechouseAdmin();
   }
 
   editSeason(season: any) {
@@ -61,7 +62,8 @@ export class SeasonParametersComponent implements OnInit, OnDestroy {
       res => {
         if (res) {
           const body = {
-            operatorEmail: 'rukjose@gmail.com'
+            operatorEmail: this.authenticationService.getCurrentUser().info.email,
+            userId: this.authenticationService.getCurrentUser().info._id
           };
           this.farmerService.copySeason(body)
             .subscribe((data) => {

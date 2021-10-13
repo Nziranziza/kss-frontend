@@ -22,6 +22,7 @@ import {ListWarningsComponent} from './layout';
 import {DownloaderComponent} from './layout';
 import {SpinnerComponent } from './layout';
 import {InternalDirective} from './directives/internal.directives';
+import {RequiredSeasonCherryDirective} from './directives/required-season-cherry';
 
 @NgModule({
   imports: [
@@ -35,7 +36,7 @@ import {InternalDirective} from './directives/internal.directives';
   declarations: [ListErrorsComponent, LoaderComponent,
     HomeHeaderComponent, HomeFooterComponent, ListMessageComponent,
     ConfirmDialogComponent, RequiredRolesDirective, InternalDirective, LoaderComponent,
-    RequiredSeasonDirective, HasPermissionDirective, QuantityUnitComponent, ListWarningsComponent, DownloaderComponent, SpinnerComponent],
+    RequiredSeasonDirective, RequiredSeasonCherryDirective, HasPermissionDirective, QuantityUnitComponent, ListWarningsComponent, DownloaderComponent, SpinnerComponent],
   exports: [
     CommonModule,
     FormsModule,
@@ -54,7 +55,7 @@ import {InternalDirective} from './directives/internal.directives';
     DownloaderComponent,
     MatIconModule, MatDialogModule,
     DataTablesModule, RequiredRolesDirective,
-    RequiredSeasonDirective, HasPermissionDirective, InternalDirective
+    RequiredSeasonDirective, HasPermissionDirective, InternalDirective, RequiredSeasonCherryDirective
   ],
   entryComponents: [ConfirmDialogComponent]
 })
