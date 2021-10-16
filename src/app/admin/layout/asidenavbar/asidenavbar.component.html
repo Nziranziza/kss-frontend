@@ -127,7 +127,7 @@
               <span>Reports</span>
             </a>
           </li>
-          <li appInternal routerLinkActive="active" *appHasPermission="[-1]">
+          <li appInternal routerLinkActive="active">
             <a routerLink="/admin/top-ups/payments/{{user.org_id}}">
               <i class="fa fa-circle-o"></i>
               <span>Top-ups</span>
@@ -158,13 +158,13 @@
           </li>
           <li routerLinkActive="active" *appHasPermission="[2]">
             <a routerLink="/admin/drymill/green_coffee/mixtures">
-              <i class="fa fa-circle-o" aria-hidden="true"></i>
+              <i class="fa fa-circle-thin" aria-hidden="true"></i>
               <span>Green coffee mixtures</span>
             </a>
           </li>
         </ul>
       </li>
-      <li class="header" *appHasPermission="[[8,2],[1,1]]">SITE</li>
+      <li class="header" *appHasPermission="[[8,2],[1,1]]">SITES</li>
       <li class="treeview" routerLinkActive="active" *appHasPermission="[[8,2]]">
         <a href="#">
           <i class="fa fa-users"></i><span>Farmers</span>
@@ -187,34 +187,37 @@
           </li>
         </ul>
       </li>
-      <li routerLinkActive="active" *appHasPermission="[[8,2],[1,1]]">
-        <a routerLink="/admin/input/site/distribution">
-          <i class="fa fa-tree" aria-hidden="true"></i>
-          <span>Distribute</span>
-        </a>
-      </li>
+
+      <ng-container *ngFor="let site of org.distributionSites">
       <li class="treeview" routerLinkActive="active" *appHasPermission="[[8,2],[1,1]]">
         <a href="#">
-          <i class="fa fa-file-text"></i> <span>Manage store</span>
+          <i class="fa fa-circle-o text-yellow"></i><span style="text-transform: uppercase; font-weight: bold;"> {{ site.siteName }}</span>
           <span class="pull-right-container">
             <i class="fa fa-angle-left pull-right"></i>
           </span>
         </a>
         <ul class="treeview-menu">
+            <li routerLinkActive="active" *appHasPermission="[[8,2],[1,1]]">
+              <a routerLink="/admin/input/site/distribution/{{site._id}}">
+                <i class="fa fa-circle-o" aria-hidden="true"></i>
+                <span>Distribute</span>
+              </a>
+            </li>
           <li routerLinkActive="active" *appHasPermission="[[8,2],[1,1]]">
-            <a routerLink="/admin/input/site/dispatches">
+            <a routerLink="/admin/input/site/dispatches/{{site._id}}">
               <i class="fa fa-circle-o"></i>
               <span>Entries</span>
             </a>
           </li>
           <li routerLinkActive="active" *appHasPermission="[[8,2],[1,1]]">
-            <a routerLink="/admin/input/site/stock-outs">
+            <a routerLink="/admin/input/site/stock-outs/{{site._id}}">
               <i class="fa fa-circle-o"></i>
               <span>Stock</span>
             </a>
           </li>
         </ul>
       </li>
+      </ng-container>
       <li class="header" *appHasPermission="[0,5,[4,10],[4,11],[4,12],[[8,1],1,'NOT'],[4,1],6]">INPUT DISTRIBUTION</li>
       <li routerLinkActive="active" *appHasPermission="[0,5,[4,10],[4,11],[4,12],[4,1],[4,2],[[8,1],1,'NOT'],6]">
 

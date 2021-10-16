@@ -18,6 +18,7 @@ export class RecordDistributionComponent extends BasicComponent implements OnIni
   @Input() requestId;
   @Input() regNumber;
   @Input() documentId;
+  @Input() siteId;
   @Input() inputApplicationId;
   @Input() numberOfTrees;
   distributionForm: FormGroup;
@@ -58,15 +59,13 @@ export class RecordDistributionComponent extends BasicComponent implements OnIni
       treesAtDistribution: ['', Validators.required],
       comment: ['7']
     });
-    const id = this.authenticationService.getCurrentUser().orgInfo.distributionSite;
-    this.inputDistributionService.getSiteStockOuts(id)
+    this.inputDistributionService.getSiteStockOuts(this.siteId)
       .subscribe((data) => {
         data.content.map((stock) => {
           if (stock.inputId.inputType === 'Fertilizer' && stock.returnedQty === 0) {
             this.stockOuts.push(stock);
           }
         });
-        console.log(this.stockOuts);
       });
   }
 
@@ -75,7 +74,7 @@ export class RecordDistributionComponent extends BasicComponent implements OnIni
       const record = JSON.parse(JSON.stringify(this.updateRequestForm.value));
       record['documentId'.toString()] = this.documentId;
       record['subDocumentId'.toString()] = this.requestId;
-      record['siteId'.toString()] = this.authenticationService.getCurrentUser().orgInfo.distributionSite;
+      record['siteId'.toString()] = this.siteId;
       record['comment'.toString()] = +record['comment'.toString()];
       this.inputDistributionService.updateRequestAtDistribution(record).subscribe(() => {
           this.modal.close('Successfully updated.');
@@ -119,7 +118,6 @@ export class RecordDistributionComponent extends BasicComponent implements OnIni
           (err) => {
             this.setError(err.errors);
           });
-
       }
 
     } else {

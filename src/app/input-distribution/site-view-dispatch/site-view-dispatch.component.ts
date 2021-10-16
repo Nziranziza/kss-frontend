@@ -7,6 +7,7 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Subject} from 'rxjs';
 import {BasicComponent} from '../../core/library';
 import {DataTableDirective} from 'angular-datatables';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-site-view-dispatch',
@@ -19,9 +20,12 @@ export class SiteViewDispatchComponent extends BasicComponent implements OnInit,
               private formBuilder: FormBuilder,
               private helper: HelperService,
               private messageService: MessageService,
+              private router: Router,
               private modal: NgbModal,
+              private route: ActivatedRoute,
               private authenticationService: AuthenticationService,
               private inputDistributionService: InputDistributionService) {
+
     super();
   }
 
@@ -32,6 +36,7 @@ export class SiteViewDispatchComponent extends BasicComponent implements OnInit,
   dtTrigger: Subject = new Subject();
   loading = false;
   table: any;
+  siteId: string;
 
   // @ts-ignore
   @ViewChild(DataTableDirective, {static: false})
@@ -45,6 +50,12 @@ export class SiteViewDispatchComponent extends BasicComponent implements OnInit,
         class: 'none'
       }, {}, {}],
       responsive: true
+    };
+    this.route.params.subscribe(params => {
+      this.siteId = params['siteId'.toString()];
+    });
+    this.router.routeReuseStrategy.shouldReuseRoute = () => {
+      return false;
     };
   }
 
@@ -76,18 +87,16 @@ export class SiteViewDispatchComponent extends BasicComponent implements OnInit,
 
   getSiteDispatches() {
     this.loading = true;
-    const id = this.authenticationService.getCurrentUser().orgInfo.distributionSite;
-    this.inputDistributionService.getSiteDispatches(id).subscribe((data) => {
-      this.loading = false;
-      this.dispatches = data.content;
-      this.rerender();
+    this.inputDistributionService.getSiteDispatches(this.siteId).subscribe((data) => {
+        this.loading = false;
+        this.dispatches = data.content;
+        this.rerender();
     });
   }
 
   ngAfterViewInit(): void {
     this.loading = true;
-    const id = this.authenticationService.getCurrentUser().orgInfo.distributionSite;
-    this.inputDistributionService.getSiteDispatches(id).subscribe((data) => {
+    this.inputDistributionService.getSiteDispatches(this.siteId).subscribe((data) => {
       this.loading = false;
       this.dtTrigger.next();
       this.dispatches = data.content;

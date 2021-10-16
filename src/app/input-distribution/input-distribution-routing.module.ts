@@ -23,15 +23,15 @@ const routes: Routes = [
         component: DistributionPlanComponent
       },
       {
-        path: 'input/site/distribution',
+        path: 'input/site/distribution/:siteId',
         component: SiteDistributionComponent
       },
       {
-        path: 'input/site/dispatches',
+        path: 'input/site/dispatches/:siteId',
         component: SiteViewDispatchComponent
       },
       {
-        path: 'input/site/stock-outs',
+        path: 'input/site/stock-outs/:siteId',
         component: SiteViewStockoutComponent
       }
     ]

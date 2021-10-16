@@ -27,7 +27,9 @@
           <div class="checkbox" formArrayName="pesticides"
                *ngFor="let pesticide of  distributionForm.get('pesticides')['controls']; let i = index">
             <label>
-              <input type="checkbox" formControlName="{{i}}"> {{ stocks[i].inputId.inputName }}
+              <input type="checkbox" formControlName="{{i}}"> {{stocks[i].inputId.inputName }} - {{ stocks[i].totalQuantity - stocks[i].distributedQty | number : '1.0-2'}}
+              l - {{ stocks[i].created_at|date }} {{ stocks[i].destination ? getDestination( stocks[i].destination) : ' - ' + stocks[i].location.cell_id.name }}
+
             </label>
           </div>
         </div>
