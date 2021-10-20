@@ -10,7 +10,6 @@ import {WarehouseService} from '../../../core/services';
 import {DatePipe} from '@angular/common';
 import {BasicComponent} from '../../../core/library';
 import {DataTableDirective} from 'angular-datatables';
-import {ParchmentEditComponent} from '../../../wet-processing/parchment/parchment-edit/parchment-edit.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {WarehouseDispatchEditComponent} from '../warehouse-dispatch-edit/warehouse-dispatch-edit.component';
 

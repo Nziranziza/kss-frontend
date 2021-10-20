@@ -27,7 +27,7 @@ export class UserEditComponent implements OnInit {
   sectors: any;
   cells: any;
   villages: any;
-  isFromSuperOrg = false;
+  isTechouseOrg = false;
   userNIDInfo = {};
   loading = false;
   editUser: any;
@@ -109,9 +109,11 @@ export class UserEditComponent implements OnInit {
       this.userService.get(params['id'.toString()]).subscribe(user => {
         this.organisationService.get(this.organisationId).subscribe(data => {
           this.org = data.content;
-          this.isSuperOrganisation(data.content);
+
+          this.isTechouseOrganisation(data.content);
           this.orgPossibleRoles = this.possibleRoles.filter(roles => data.content.organizationRole.includes(roles.value));
           this.orgPossibleRoles.map(role => {
+            // Initiate user roles
             if (user.content.userRoles.includes(role.value)) {
               const control = new FormControl(true);
               (this.editForm.controls.userRoles as FormArray).push(control);
@@ -130,9 +132,6 @@ export class UserEditComponent implements OnInit {
         this.isFullyEditable = !!this.editUser.fullyEditable;
         if (!this.isFullyEditable) {
           this.editForm.controls.email.disable();
-        }
-        if (this.editUser.distributionSite) {
-          this.hasSite = true;
         }
         const usr = user.content;
         if (usr.userRoles.includes(4)) {
@@ -194,8 +193,7 @@ export class UserEditComponent implements OnInit {
     const usrType = currentUser.hasAccessTo[0].userType;
     this.hideEmail = +usrType === 13;
 
-    this.hasSite = !!((currentUser.userRoles.includes(8) && currentUser.userRoles.includes(1)) ||
-      (currentUser.userRoles.includes(8) && usrType === 2));
+    this.hasSite = (currentUser.userRoles.includes(8) && usrType === 2) && !currentUser.userRoles.includes(1);
 
     currentUser.userRoles.forEach((role) => {
       this.userService.userPermissions(role).subscribe(dt => {
@@ -214,8 +212,8 @@ export class UserEditComponent implements OnInit {
     this.editForm.patchValue(currentUser, {emitEvent: false});
   }
 
-  isSuperOrganisation(organisation: any) {
-    this.isFromSuperOrg = organisation.organizationRole.indexOf(0) > -1;
+  isTechouseOrganisation(organisation: any) {
+    this.isTechouseOrg = organisation.organizationRole.indexOf(0) > -1;
   }
 
   onInputNID(nid: string) {
@@ -246,14 +244,8 @@ export class UserEditComponent implements OnInit {
           .map((checked, index) => checked ? this.orgPossibleRoles[index].value : null)
           .filter(value => value !== null);
         this.needLocation = !!selectedRoles.includes(6);
-        if (selectedRoles.includes(8)) {
-          if (this.selectedType === 2) {
-            this.hasSite = true;
-          }
-        } else {
-          this.hasSite = false;
-        }
-        this.hasSite = !!(selectedRoles.includes(8) && selectedRoles.includes(1));
+        this.hasSite = (selectedRoles.includes(8) && this.selectedType === 2) && !selectedRoles.includes(1);
+
         if (this.hasSite && this.editForm.controls.location.get('dist_id'.toString()).value) {
           const body = {
             searchBy: 'district',
@@ -286,9 +278,7 @@ export class UserEditComponent implements OnInit {
         this.hideEmail = +value === 13;
         if (+value === 2) {
           this.selectedType = +value;
-          this.hasSite = !!this.selectedRoles.includes(8);
-        } else {
-          this.hasSite = !!(this.selectedRoles.includes(8) && this.selectedRoles.includes(1));
+          this.hasSite = this.selectedRoles.includes(8) && !this.selectedRoles.includes(1);
         }
       }
     );
@@ -356,7 +346,7 @@ export class UserEditComponent implements OnInit {
       user['userRoles'.toString()] = selectedRoles;
       user['org_id'.toString()] = this.organisationId;
       user['id'.toString()] = this.id;
-      if (this.isFromSuperOrg) {
+      if (this.isTechouseOrg) {
         user['userRoles'.toString()] = [0];
       }
       if ((!(selectedRoles.includes(6)) && (!(selectedRoles.includes(8))))) {

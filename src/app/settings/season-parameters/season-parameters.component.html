@@ -20,7 +20,7 @@
             <td> {{ season.year }}</td>
             <td> {{ season.season }}</td>
             <td class="actions no-wrap text-right">
-              <button class="btn btn-info btn-margin pull-right" (click)="copySeason()" *ngIf="season.isCurrent && isTechouseAdmin"> Copy previous season</button>
+              <!--<button class="btn btn-info btn-margin pull-right" (click)="copySeason()" *ngIf="season.isCurrent && isTechouseAdmin"> Copy previous season</button>-->
               <button class="btn btn-success btn-margin" (click)="editSeason(season)" *ngIf="season.isCurrent"> Edit</button>
             </td>
           </tr>

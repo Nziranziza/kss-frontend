@@ -142,7 +142,7 @@
             <td> {{ supply.owedAmount }}</td>
             <td> {{ supply.created_at | date }}</td>
             <td>
-              <button class="btn btn-default btn-margin btn-sm pull-right" (click)="cancelSupply(supply._id)"
+              <button appRequiredSeasonCherry class="btn btn-default btn-margin btn-sm pull-right" (click)="cancelSupply(supply._id)"
                       type="button">
                 <i class="fa fa-remove" aria-hidden="true"></i> Cancel
               </button>

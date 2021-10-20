@@ -29,7 +29,7 @@ export class UserCreateComponent implements OnInit {
   hasSite = false;
   possibleRoles: any[];
   isCWSAdmin: any;
-  isFromSuperOrg = false;
+  isTechouseOrg = false;
   userNIDInfo = {};
   invalidId = false;
   org: any;
@@ -97,8 +97,8 @@ export class UserCreateComponent implements OnInit {
     this.onChanges();
   }
 
-  isSuperOrganisation(organisation: any) {
-    this.isFromSuperOrg = organisation.organizationRole.indexOf(0) > -1;
+  isTechouseOrganisation(organisation: any) {
+    this.isTechouseOrg = organisation.organizationRole.indexOf(0) > -1;
   }
 
   onInputNID(nid: string) {
@@ -156,7 +156,7 @@ export class UserCreateComponent implements OnInit {
               this.errors = err.errors;
             },
             () => {
-              if (this.isFromSuperOrg) {
+              if (this.isTechouseOrg) {
                 user['userRoles'.toString()] = [0];
               }
               delete user.location;
@@ -176,7 +176,7 @@ export class UserCreateComponent implements OnInit {
                 });
             });
         } else {
-          if (this.isFromSuperOrg) {
+          if (this.isTechouseOrg) {
             user['userRoles'.toString()] = [0];
           }
           delete user.location;
@@ -219,7 +219,7 @@ export class UserCreateComponent implements OnInit {
             this.errors = err.errors;
           },
           () => {
-            if (this.isFromSuperOrg) {
+            if (this.isTechouseOrg) {
               user['userRoles'.toString()] = [0];
             }
             if ((!(selectedRoles.includes(6)) && (!(selectedRoles.includes(8))))) {
@@ -255,19 +255,11 @@ export class UserCreateComponent implements OnInit {
           .map((checked, index) => checked ? this.orgPossibleRoles[index].value : null)
           .filter(value => value !== null);
 
-        /*If selected roles include district cash crop, unable location selection*/
+        /*If selected roles include district cash crop, enable location selection*/
         this.needLocation = !!selectedRoles.includes(6);
 
-        /*If selected roles include input distribution and user type is normal, enable site selection*/
-        if (selectedRoles.includes(8) && !selectedRoles.includes(1)) {
-          if (this.selectedType === 2) {
-            this.hasSite = true;
-          }
-        } else {
-          this.hasSite = false;
-        }
         /*If selected roles include input distribution and cws, enable site selection*/
-        this.hasSite = !!(selectedRoles.includes(8) && selectedRoles.includes(1));
+        this.hasSite = (selectedRoles.includes(8) && this.selectedType === 2) && !selectedRoles.includes(1);
 
         this.userTypes = [];
         selectedRoles.forEach((role) => {
@@ -282,15 +274,6 @@ export class UserCreateComponent implements OnInit {
                 this.userTypes.splice(index, 1);
               }
             }
-            /*
-              remove collector user type if cws is also an input distribution site
-                if (selectedRoles.includes(8) && selectedRoles.includes(1)) {
-                  const index = this.userTypes.findIndex(v => v.name === 'COFFEE_COLLECTOR');
-                  if (index > -1) {
-                    this.userTypes.splice(index, 1);
-                  }
-               }
-            */
           });
         });
         this.selectedRoles = selectedRoles;
@@ -298,12 +281,11 @@ export class UserCreateComponent implements OnInit {
     );
     this.createForm.controls['userType'.toString()].valueChanges.subscribe(
       (value) => {
+        // if is a collector
         this.hideEmail = +value === 13;
         if (+value === 2) {
           this.selectedType = +value;
-          this.hasSite = !!this.selectedRoles.includes(8);
-        } else {
-          this.hasSite = !!(this.selectedRoles.includes(8) && this.selectedRoles.includes(1));
+          this.hasSite = this.selectedRoles.includes(8) && !this.selectedRoles.includes(1);
         }
       }
     );
@@ -369,7 +351,7 @@ export class UserCreateComponent implements OnInit {
   getRoles() {
     this.organisationService.get(this.organisationId).subscribe(data => {
       this.org = data.content;
-      this.isSuperOrganisation(data.content);
+      this.isTechouseOrganisation(data.content);
       this.orgPossibleRoles = this.possibleRoles.filter(roles => data.content.organizationRole.includes(roles.value));
       this.orgPossibleRoles.map(() => {
         const control = new FormControl(false);

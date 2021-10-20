@@ -289,7 +289,7 @@
                   <td>{{ entry.inputId.inputName }}</td>
                   <td>{{ entry.numberOfItems }}</td>
                   <td>{{ entry.quantityPerItem }}</td>
-                  <td>{{ entry.numberOfItems * entry.quantityPerItem}}
+                  <td>{{ entry.numberOfItems * entry.quantityPerItem }}
                     <app-quantity-unit [inputType]="entry.inputId.inputType"></app-quantity-unit>
                   </td>
                   <td>{{ entry.receivedQty }}
@@ -299,7 +299,7 @@
                 </tr>
               </table>
             </td>
-            <td>{{ dispatch.date|date }}</td>
+            <td>{{ dispatch.date | date }}</td>
             <td>
               <ng-container *ngIf="dispatch.receivedBy; else confirm">
                 <span>&#10003;</span>
