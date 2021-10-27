@@ -165,21 +165,21 @@
         </ul>
       </li>
       <li class="header" *appHasPermission="[[8,2],[1,1]]">SITES</li>
-      <li class="treeview" routerLinkActive="active" *appHasPermission="[[8,2]]">
-        <a href="#">
+      <li class="treeview" routerLinkActive="active" *appHasPermission="[[[8,2], 1, 'NOT']]">
+        <a href="#"  routerLinkActive="active" *appHasPermission="[[[8,2], 1, 'NOT']]">
           <i class="fa fa-users"></i><span>Farmers</span>
           <span class="pull-right-container">
             <i class="fa fa-angle-left pull-right"></i>
           </span>
         </a>
-        <ul class="treeview-menu">
-          <li routerLinkActive="active" *appHasPermission="[[8,2]]">
+        <ul class="treeview-menu"  routerLinkActive="active">
+          <li routerLinkActive="active">
             <a routerLink="/admin/sites/{{siteId}}/farmers">
               <i class="fa fa-circle-o"></i>
               <span>Farmers</span>
             </a>
           </li>
-          <li routerLinkActive="active" *appHasPermission="[[8,2]]">
+          <li routerLinkActive="active">
             <a routerLink="/admin/sites/{{siteId}}/pending-farmers">
               <i class="fa fa-circle-o"></i>
               <span>Pending farmers</span>
@@ -187,7 +187,6 @@
           </li>
         </ul>
       </li>
-
       <ng-container *ngFor="let site of org.distributionSites">
       <li class="treeview" routerLinkActive="active" *appHasPermission="[[8,2],[1,1]]">
         <a href="#">

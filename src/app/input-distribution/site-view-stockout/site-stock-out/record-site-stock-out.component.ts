@@ -7,6 +7,7 @@ import {HelperService} from '../../../core/helpers';
 import {InputDistributionService} from '../../../core/services';
 import {DatePipe, isPlatformBrowser} from '@angular/common';
 import {BasicComponent} from '../../../core/library';
+import {ActivatedRoute} from '@angular/router';
 
 
 @Component({
@@ -38,6 +39,7 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
     private organisationService: OrganisationService,
     private messageService: MessageService,
     private locationService: LocationService,
+    private route: ActivatedRoute,
     private datePipe: DatePipe,
     private siteService: SiteService,
     private helper: HelperService, private inputDistributionService: InputDistributionService) {
@@ -93,6 +95,7 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
       record.date = this.helper.getDate(this.siteStockOutForm.value.date);
       record['stockId'.toString()] = this.stock._id;
       record['userId'.toString()] = this.authenticationService.getCurrentUser().info._id;
+      record['siteId'.toString()] = this.siteId;
       this.helper.cleanObject(record.location);
       this.inputDistributionService.recordStockOut(record).subscribe(() => {
           this.messageService.setMessage('Stock out recorded!');
@@ -175,7 +178,6 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
     const temp = [];
     org.coveredSectors.map((sector) => {
       if (this.isCWSDistributor) {
-        console.log(this.site.coveredAreas.coveredSectors);
         const position = this.site.coveredAreas.coveredSectors.findIndex(elem =>  elem.sect_id === sector.sectorId._id);
         if (position > -1) {
           temp.push({

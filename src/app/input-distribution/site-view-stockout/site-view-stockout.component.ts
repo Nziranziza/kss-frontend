@@ -7,19 +7,22 @@ import {constant} from '../../../environments/constant';
 import {RecordSiteStockOutComponent} from './site-stock-out/record-site-stock-out.component';
 import {DataTableDirective} from 'angular-datatables';
 import {ActivatedRoute, Router} from '@angular/router';
+import {ViewApplicationComponent} from './view-application/view-application.component';
+import {BasicComponent} from '../../core/library';
 
 @Component({
   selector: 'app-site-view-stockout',
   templateUrl: './site-view-stockout.component.html',
   styleUrls: ['./site-view-stockout.component.css']
 })
-export class SiteViewStockoutComponent implements OnInit, OnDestroy {
+export class SiteViewStockoutComponent extends BasicComponent implements OnInit, OnDestroy {
 
   constructor(private inputDistributionService: InputDistributionService,
               private messageService: MessageService,
               private router: Router,
               private route: ActivatedRoute,
               private authenticationService: AuthenticationService, private modal: NgbModal) {
+    super();
   }
 
   // @ts-ignore
@@ -90,6 +93,14 @@ export class SiteViewStockoutComponent implements OnInit, OnDestroy {
       });
       this.message = this.messageService.getMessage();
       this.messageService.clearMessage();
+    });
+  }
+
+  viewApplication(stockId: string) {
+    const modalRef = this.modal.open(ViewApplicationComponent, {size: 'lg'});
+    modalRef.componentInstance.stockOut = this.stockOuts.find(stock => stock._id === stockId);
+    modalRef.result.then((message) => {
+      this.setMessage(message);
     });
   }
 

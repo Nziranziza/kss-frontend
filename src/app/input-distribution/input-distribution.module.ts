@@ -17,10 +17,11 @@ import {SitesModule} from './sites/sites.module';
 import {EditRequestComponent} from './edit-request/edit-request.component';
 import {WarehouseModule} from './warehouse/warehouse.module';
 import {ConfirmDispatchComponent} from './site-view-dispatch/confirm-dispatch/confirm-dispatch.component';
-import {SiteViewStockoutComponent} from './site-view-stockout/site-view-stockout.component';
 import {DeliveryDetailsComponent} from './warehouse/warehouse-entries/delivery-details/delivery-details.component';
 import {DistributionReportModule} from '../reports/distribution-report/distribution-report.module';
 import { ApplyPesticideComponent } from './site-distribution/apply-pesticide/apply-pesticide.component';
+import { ViewApplicationComponent } from './site-view-stockout/view-application/view-application.component';
+import {SiteViewStockoutComponent} from './site-view-stockout/site-view-stockout.component';
 
 @NgModule({
   declarations: [DistributionPlanComponent,
@@ -32,7 +33,7 @@ import { ApplyPesticideComponent } from './site-distribution/apply-pesticide/app
     SiteViewDispatchComponent,
     EditRequestComponent,
     ConfirmDispatchComponent,
-    SiteViewStockoutComponent, ApplyPesticideComponent],
+    SiteViewStockoutComponent, ApplyPesticideComponent, ViewApplicationComponent],
   imports: [
     CommonModule,
     NgbModule, NgxPaginationModule, OrderModule,
@@ -46,7 +47,7 @@ import { ApplyPesticideComponent } from './site-distribution/apply-pesticide/app
     DistributionReportModule
   ],
   entryComponents: [RecordDistributionComponent, ConfirmDispatchComponent, ApplyPesticideComponent,
-    RecordSiteStockReturnComponent, RecordSiteStockOutComponent, DeliveryDetailsComponent]
+    RecordSiteStockReturnComponent, RecordSiteStockOutComponent, DeliveryDetailsComponent, ViewApplicationComponent]
 })
 export class InputDistributionModule {
 }

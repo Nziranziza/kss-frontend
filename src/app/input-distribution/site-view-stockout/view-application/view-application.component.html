@@ -1,0 +1,36 @@
+<div class="modal-header">
+  <i class="fa fa-times-circle close" style="font-size: 24px;" aria-label="Close" (click)="modal.dismiss()">
+  </i>
+</div>
+<div class="modal-body">
+  <app-list-errors [errorList]="errors"></app-list-errors>
+  <app-list-message [message]="message"></app-list-message>
+  <div class="row">
+    <div class="col-sm-12">
+      <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped">
+        <thead>
+        <tr>
+          <th>REG Number</th>
+          <th>Qty</th>
+          <th>Date</th>
+          <th>Approved Qty</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let recipient of stockOut.recipients">
+          <td>{{ recipient.regNumber }}</td>
+          <td>{{ recipient.quantity }}</td>
+          <td>{{ recipient.doneOn|date }}</td>
+          <td>{{ recipient.farmerApprovedQty ? recipient.farmerApprovedQty : 0  }}</td>
+          <td>
+            <button class="btn btn-default btn-margin btn-sm pull-right" (click)="cancelDistribution(recipient._id, recipient.regNumber)">
+              <i class="fa fa-remove" aria-hidden="true"></i> Cancel
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
