@@ -16,9 +16,7 @@ declare var $;
 })
 export class LoginComponent extends BasicComponent implements OnInit, OnDestroy {
 
-  errors: any;
   authForm: FormGroup;
-  message: string;
 
   constructor(
     private route: ActivatedRoute,
@@ -45,7 +43,7 @@ export class LoginComponent extends BasicComponent implements OnInit, OnDestroy 
         increaseArea: '20%' /* optional */
       });
     });
-    this.message = this.messageService.getMessage();
+    this.setMessage(this.messageService.getMessage());
     this.route.params
       .subscribe(params => {
         if (params.token !== undefined) {
@@ -57,7 +55,7 @@ export class LoginComponent extends BasicComponent implements OnInit, OnDestroy 
           const body = {};
           this.authenticationService.unlock(body, options).subscribe(data => {
             if (data) {
-              this.message = 'Account successfully unlocked!';
+              this.setMessage('Account successfully unlocked!');
             }
           },  err => {
             this.setWarning(err.errors);

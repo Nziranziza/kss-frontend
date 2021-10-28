@@ -100,6 +100,10 @@ export class SiteViewStockoutComponent extends BasicComponent implements OnInit,
     const modalRef = this.modal.open(ViewApplicationComponent, {size: 'lg'});
     modalRef.componentInstance.stockOut = this.stockOuts.find(stock => stock._id === stockId);
     modalRef.result.then((message) => {
+      this.inputDistributionService.getSiteStockOuts(this.siteId).subscribe((data) => {
+        this.stockOuts = data.content;
+        this.rerender();
+      });
       this.setMessage(message);
     });
   }

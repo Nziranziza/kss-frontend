@@ -22,7 +22,7 @@ export class ListWarningsComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    document.querySelector('.wrapper').scrollTo(0, 0);
+    document.querySelector('.wrapper, .home').scrollTo(0, 0);
     const warning = changes.warning.currentValue;
     this.isArray = isArray(warning);
     if (this.isArray) {

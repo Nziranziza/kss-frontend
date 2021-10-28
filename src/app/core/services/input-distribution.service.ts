@@ -51,8 +51,12 @@ export class InputDistributionService {
     return this.apiService.put('/inputapplication/record_stockreturn', body);
   }
 
-  recordDistribution(data: any): Observable<any> {
-    return this.apiService.post('/inputapplication/record_distribution', data);
+  cancelDistribution(data: any): Observable<any> {
+    return this.apiService.put('/inputapplication/cancel_distribution_and_update', data);
+  }
+
+  cancelPesticideDistribution(data: any): Observable<any> {
+    return this.apiService.put('/inputapplication/cancel_pesticide_distribution', data);
   }
 
   recordDistributionAndUpdate(data: any): Observable<any> {

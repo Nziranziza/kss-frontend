@@ -22,9 +22,10 @@
           <td>{{ recipient.regNumber }}</td>
           <td>{{ recipient.quantity }}</td>
           <td>{{ recipient.doneOn|date }}</td>
-          <td>{{ recipient.farmerApprovedQty ? recipient.farmerApprovedQty : 0  }}</td>
+          <td>{{ recipient.farmerApprovedQty }}</td>
           <td>
-            <button class="btn btn-default btn-margin btn-sm pull-right" (click)="cancelDistribution(recipient._id, recipient.regNumber)">
+            <button class="btn btn-default btn-margin btn-sm pull-right"
+                    (click)="cancelDistribution(stockOut._id, stockOut.inputId.inputType, recipient)">
               <i class="fa fa-remove" aria-hidden="true"></i> Cancel
             </button>
           </td>

@@ -7,6 +7,7 @@ import {isPlatformBrowser} from '@angular/common';
 import {BasicComponent} from '../../../core/library';
 import {Subject} from 'rxjs';
 import {DataTableDirective} from 'angular-datatables';
+import {constant} from '../../../../environments/constant';
 
 @Component({
   selector: 'app-view-application',
@@ -50,7 +51,40 @@ export class ViewApplicationComponent extends BasicComponent implements OnInit, 
     this.dtTrigger.next();
   }
 
-  cancelDistribution(recipientId, regNumber) {
+  cancelDistribution(stockId: string, inputType: string, recipient: any) {
+    console.log(inputType);
+    if (inputType === 'Fertilizer') {
+      const body = {
+        stockId,
+        quantity: recipient.quantity,
+        farmerRequestId: recipient.farmerRequestId
+      };
+      this.inputDistributionService.cancelDistribution(body).subscribe((data) => {
+          this.setMessage('Successful cancelled!');
+          this.stockOut.recipients = this.stockOut.recipients.filter((value) => {
+            return value.farmerRequestId !== recipient.farmerRequestId;
+          });
+        },
+        (err) => {
+          this.setError(err.errors);
+        });
+    }
+    if (inputType === 'Pesticide') {
+      const body = {
+        stockId,
+        quantity: recipient.quantity,
+        farmerRequestId: recipient.farmerRequestId
+      };
+      this.inputDistributionService.cancelPesticideDistribution(body).subscribe((data) => {
+          this.setMessage('Successful cancelled!');
+          this.stockOut.recipients = this.stockOut.recipients.filter((value) => {
+            return value.farmerRequestId !== recipient.farmerRequestId;
+          });
+        },
+        (err) => {
+          this.setError(err.errors);
+        });
+    }
   }
 
 }

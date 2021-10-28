@@ -20,7 +20,7 @@ export class ListMessageComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    document.querySelector('.wrapper').scrollTo(0, 0);
+    document.querySelector('.home, .wrapper').scrollTo(0, 0);
     const msg = changes.message.currentValue;
     this.notEmpty = (msg !== '' && !isUndefined(msg));
     if (this.notEmpty) {

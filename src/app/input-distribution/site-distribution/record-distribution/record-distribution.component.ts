@@ -95,7 +95,7 @@ export class RecordDistributionComponent extends BasicComponent implements OnIni
       record['farmerRequestId'.toString()] = this.requestId;
       record['regNumber'.toString()] = this.regNumber;
       record['comment'.toString()] = +record['comment'.toString()];
-      if (this.inputApplicationId) {
+      if (this.inputApplicationId.length) {
         this.confirmDialogService.openConfirmDialog('Farmer has already received fertilizer. ' +
           'do you want to give more.').afterClosed().subscribe(
           res => {
