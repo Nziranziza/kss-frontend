@@ -51,15 +51,15 @@ export class ExcelServicesService {
             view: window,
           })
         );
-        setTimeout(function () {
-          //delay revoking the ObjectURL
+        setTimeout(() => {
+          // delay revoking the ObjectURL
           window.URL.revokeObjectURL(data);
           link.remove();
         }, 100);
       });
-      return true
+      return true;
     } catch (error) {
-      console.log(error)
+      console.log(error);
       return false;
     }
   }

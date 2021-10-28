@@ -41,7 +41,7 @@ export class SiteViewStockoutComponent extends BasicComponent implements OnInit,
   ngOnInit() {
     this.dtOptions = {
       pagingType: 'full_numbers',
-      pageLength: 10
+      pageLength: 25
     };
     this.route.params.subscribe(params => {
       this.siteId = params['siteId'.toString()];
@@ -99,12 +99,14 @@ export class SiteViewStockoutComponent extends BasicComponent implements OnInit,
   viewApplication(stockId: string) {
     const modalRef = this.modal.open(ViewApplicationComponent, {size: 'lg'});
     modalRef.componentInstance.stockOut = this.stockOuts.find(stock => stock._id === stockId);
-    modalRef.result.then((message) => {
+    modalRef.result.finally(() => {
       this.inputDistributionService.getSiteStockOuts(this.siteId).subscribe((data) => {
         this.stockOuts = data.content;
         this.rerender();
       });
-      this.setMessage(message);
+      this.inputDistributionService.getStock(constant.stocks.SITE, this.siteId).subscribe((data) => {
+        this.stocks = data.content;
+      });
     });
   }
 

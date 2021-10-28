@@ -80,9 +80,7 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
 
   onSubmit() {
     if (this.siteStockOutForm.valid) {
-      console.log(this.siteStockOutForm.value);
       const record = JSON.parse(JSON.stringify(this.siteStockOutForm.value));
-      console.log(record);
       if (this.isCWSDistributor) {
         record.destination.map((destination) => {
           destination['prov_id'.toString()] = this.org.location.prov_id._id;
@@ -95,7 +93,6 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
         });
       }
       record.date = this.helper.getDate(this.siteStockOutForm.value.date);
-      console.log(this.stock);
       record.siteId = this.stock.siteId._id;
       record['stockId'.toString()] = this.stock._id;
       record['userId'.toString()] = this.authenticationService.getCurrentUser().info._id;
