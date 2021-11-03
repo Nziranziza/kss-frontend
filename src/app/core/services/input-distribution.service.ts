@@ -130,4 +130,12 @@ export class InputDistributionService {
       return this.apiService.get('/stock/?' + 'stockType=' + stock);
     }
   }
+
+  siteExport(): Observable<any> {
+    return this.apiService.get('/distributionstats/sitereport');
+  }
+
+  distributionExport(): Observable<any> {
+    return this.apiService.get('/distributionstats/distributionreport');
+  }
 }
