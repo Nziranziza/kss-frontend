@@ -68,7 +68,7 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
   parameters: any;
   downloadingAll = true;
   config: any;
-  autoHide = false;
+  autoHide = true;
   responsive = true;
   errors = [];
   labels: any = {
@@ -209,13 +209,23 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
     this.loading = true;
     this.organisationService.getFarmers(this.parameters)
       .subscribe(data => {
-        this.paginatedFarmers = data.data;
-        this.config = {
-          itemsPerPage: this.parameters.length,
-          currentPage: this.parameters.start + 1,
-          totalItems: data.recordsTotal
-        };
-        this.numberOfFarmers = data.recordsTotal;
+        if (data.data.length === 0) {
+          this.config = {
+            itemsPerPage: this.parameters.length,
+            currentPage: this.parameters.start + 1,
+            totalItems: 0
+          };
+          this.numberOfFarmers = 0;
+
+        } else {
+          this.paginatedFarmers = data.data;
+          this.config = {
+            itemsPerPage: this.parameters.length,
+            currentPage: this.parameters.start + 1,
+            totalItems: data.recordsTotal
+          };
+          this.numberOfFarmers = data.recordsTotal;
+        }
         this.showData = true;
         this.loading = false;
       });
