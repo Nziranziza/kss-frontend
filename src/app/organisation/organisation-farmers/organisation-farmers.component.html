@@ -8,6 +8,19 @@
       <button class="btn btn-success pull-right btn-margin" type="button" (click)="exportAsXLSX()" [disabled]="downloadingAll">
         <span *ngIf="downloadingAll"> Downloading... <br> </span><i class="fa fa-download"  *ngIf="!downloadingAll"></i> Export all farmers
       </button>
+      <div *appHasPermission="[0,[8,1],[1,1]]">
+        <ng-container *ngIf="showSetPinButton; else loadingSetPinStatus">
+          <a class="btn btn-success btn-margin pull-right" *ngIf="resetPin" (click)="enableResetPin(false)"><i
+            class="fa fa-check"></i>&nbsp; Disable Farmers Pin Reset 
+          </a>
+          <a class="btn btn-warning btn-margin pull-right" *ngIf="!resetPin" (click)="enableResetPin(true)"><i
+            class="fa fa-close"></i>&nbsp; Enable Farmers Pin Reset
+          </a>
+        </ng-container>
+        <ng-template #loadingSetPinStatus>
+          <app-spinner class="pull-right"></app-spinner>
+        </ng-template>
+      </div>
     </h3>
   </div>
 </div>
