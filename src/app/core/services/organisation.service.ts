@@ -111,4 +111,8 @@ export class OrganisationService {
     return this.apiService.delete('/organizations/certificates/delete/' + id);
   }
 
+  allowSetPinOrgUsers(body: any): Observable<any> {
+    return  this.apiService.post('/organizations/enable/set_pin/all', body);
+  }
+
 }
