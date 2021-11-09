@@ -86,6 +86,8 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
     {value: 'groupname', name: 'group name'},
     {value: 'phone_number', name: 'phone number'}
   ];
+  resetPin = true;
+  showSetPinButton = false;
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -133,6 +135,7 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
     this.orgCoveredArea = this.route.snapshot.data.orgCoveredAreaData;
     this.currentSeason = this.authenticationService.getCurrentSeason();
     this.getAllFarmers();
+    this.getSetPinStatus();
   }
 
   exportAsXLSX() {
@@ -275,6 +278,24 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
         });
         this.downloadingAll = false;
       });
+  }
+
+  getSetPinStatus() {
+    this.showSetPinButton = false;
+    this.organisationService.get(this.organisationId).subscribe(data => {
+      this.org = data.content;
+      this.resetPin = this.org.isPinResetAllowed;
+      this.showSetPinButton = true;
+    });
+  }
+
+  enableResetPin(status: boolean) {
+    this.organisationService.allowSetPinOrgUsers({
+      org_id: this.org._id,
+      status
+    }).subscribe(() => {
+      this.getSetPinStatus();
+    });
   }
 
   getNumberOfTrees = (requestInfo: any) => {
