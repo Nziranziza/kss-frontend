@@ -244,9 +244,14 @@
         </div>
       </div>
     </ng-container>
-    <div class="col-xs-2">
+    <div class="col-xs-3">
       <button class="btn btn-warning pull-right btn-margin" type="button" (click)="onClearFilter()">Clear</button>
       <button class="btn btn-success pull-right btn-margin" type="submit"><i class="fa fa-search"></i> Search</button>
+    </div>
+    <div class="col-xs-2">
+      <button class="btn btn-success pull-right btn-margin" type="button" (click)="exportAsXLSX()"><i
+        class="fa fa-download"></i> Export dispatches
+      </button>
     </div>
   </form>
 </div>
@@ -255,7 +260,7 @@
   <div class="col-xs-12">
     <div class="box">
       <div class="box-body expendable-dataTable">
-        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped" id="responsive-table">
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped responsive-table">
           <thead>
           <tr>
             <th>Destination</th>
@@ -283,6 +288,7 @@
                   <td>Total</td>
                   <td>ReceivedQty</td>
                   <td>Comment</td>
+                  <td></td>
                 </tr>
                 <tr *ngFor="let entry of dispatch.entries"
                     style="font-style: oblique; font-size: 12px; background: transparent">
@@ -296,6 +302,15 @@
                     <app-quantity-unit [inputType]="entry.inputId.inputType"></app-quantity-unit>
                   </td>
                   <td>{{ entry.dispatch_comments | lowercase }}</td>
+                  <td>
+                  <td>
+                  <ng-container *ngIf="!dispatch.receivedBy">
+                    <a appInternal class="btn btn-default btn-margin btn-sm pull-right cancel-entry"
+                       type="button" id="{{dispatch._id}}-{{entry._id}}">
+                      <i class="fa fa-remove" aria-hidden="true"></i>
+                    </a>
+                  </ng-container>
+                  </td>
                 </tr>
               </table>
             </td>
@@ -319,7 +334,7 @@
                 </button>
               </ng-container>
               <ng-container *ngIf="!dispatch.receivedBy">
-                <button appInternal (click)="editDistrubution(dispatch._id)"
+                <button appInternal (click)="editDistribution(dispatch._id)"
                         class="btn btn-success btn-margin pull-right btn-sm" style="margin-left: 10px;">
                   Edit
                 </button>

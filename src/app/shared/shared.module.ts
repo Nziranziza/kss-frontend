@@ -22,7 +22,8 @@ import {ListWarningsComponent} from './layout';
 import {DownloaderComponent} from './layout';
 import {SpinnerComponent } from './layout';
 import {InternalDirective} from './directives/internal.directives';
-import {RequiredSeasonCherryDirective} from './directives/required-season-cherry';
+import {RequiredSeasonCherryDirective} from './directives/required-season-cherry.directive';
+import {DebounceClickDirective} from './directives/DebounceClick.directive';
 
 @NgModule({
   imports: [
@@ -36,7 +37,9 @@ import {RequiredSeasonCherryDirective} from './directives/required-season-cherry
   declarations: [ListErrorsComponent, LoaderComponent,
     HomeHeaderComponent, HomeFooterComponent, ListMessageComponent,
     ConfirmDialogComponent, RequiredRolesDirective, InternalDirective, LoaderComponent,
-    RequiredSeasonDirective, RequiredSeasonCherryDirective, HasPermissionDirective, QuantityUnitComponent, ListWarningsComponent, DownloaderComponent, SpinnerComponent],
+    RequiredSeasonDirective, RequiredSeasonCherryDirective, HasPermissionDirective,
+    DebounceClickDirective,
+    QuantityUnitComponent, ListWarningsComponent, DownloaderComponent, SpinnerComponent],
   exports: [
     CommonModule,
     FormsModule,
