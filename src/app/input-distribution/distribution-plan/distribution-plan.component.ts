@@ -30,6 +30,7 @@ export class DistributionPlanComponent implements OnInit {
   totalFarmers = 0;
   totalTrees = 0;
   totalFertilizerNeeded = 0;
+  totalFertilizerAllocated = 0;
   totalNumberOfLands = 0;
   plans = [];
   organisations: any;
@@ -83,6 +84,7 @@ export class DistributionPlanComponent implements OnInit {
         this.loading = false;
         this.totalFarmers = 0;
         this.totalFertilizerNeeded = 0;
+        this.totalFertilizerAllocated = 0;
         this.totalTrees = 0;
         this.totalNumberOfLands = 0;
         if ((data.content.length !== 0) && (data.content)) {
@@ -91,6 +93,7 @@ export class DistributionPlanComponent implements OnInit {
             this.totalFarmers = this.totalFarmers + item.uniqueFarmersCount;
             this.totalFertilizerNeeded = this.totalFertilizerNeeded + item.totalFertilizerNeeded;
             this.totalTrees = this.totalTrees + item.totalNumberOfTrees;
+            this.totalFertilizerAllocated = this.totalFertilizerAllocated + item.totalFertilizerAllocated;
             this.totalNumberOfLands = this.totalNumberOfLands + item.totalNumberOfLands;
             if (filters.location.searchBy === 'all provinces') {
               temp['location'.toString()] = item.provName;
@@ -104,6 +107,7 @@ export class DistributionPlanComponent implements OnInit {
             temp['numberOfTrees'.toString()] = item.totalNumberOfTrees;
             temp['numberOfFarmers'.toString()] = item.uniqueFarmersCount;
             temp['fertilizerNeed'.toString()] = item.totalFertilizerNeeded;
+            temp['fertilizerAllocated'.toString()] = item.totalFertilizerAllocated;
             temp['totalNumberOfLands'.toString()] = item.totalNumberOfLands;
             this.plans.push(temp);
           });
