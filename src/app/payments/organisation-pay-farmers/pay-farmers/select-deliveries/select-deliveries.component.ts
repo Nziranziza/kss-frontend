@@ -46,6 +46,8 @@ export class SelectDeliveriesComponent extends BasicComponent implements OnInit,
   };
   allSelected = false;
   paymentChannels: any;
+  deliveryAmountToPayEdit: number;
+
 
   // @ts-ignore
   @ViewChild(DataTableDirective, {static: false})
@@ -273,4 +275,13 @@ export class SelectDeliveriesComponent extends BasicComponent implements OnInit,
     return (payments.findIndex((element) => !element.approval)) !== -1;
   }
 
+  changeValue(farmerId: number, deliveryId: number, property: string, event: any) {
+    this.deliveryAmountToPayEdit = event.target.textContent;
+    this.updateStatistics();
+  }
+  updateList(farmerId: number, deliveryId: number,  property: string, event: any) {
+    const deliveryAmountToPayEdit = parseInt(event.target.textContent);
+    this.suppliers[farmerId]['deliveries'][deliveryId][property] = deliveryAmountToPayEdit;
+    this.updateStatistics();
+  }
 }
