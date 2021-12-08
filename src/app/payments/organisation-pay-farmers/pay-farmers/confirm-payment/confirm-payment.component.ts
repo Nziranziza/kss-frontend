@@ -37,6 +37,7 @@ export class ConfirmPaymentComponent extends BasicComponent implements OnInit {
   paymentRequest: any;
   isCashPaymentMode: boolean;
   paymentList: any;
+  isLoading: boolean = false;
 
   ngOnInit() {
     this.paymentSummary = this.paymentProcessingService.getSelectionStatistics();
@@ -53,6 +54,7 @@ export class ConfirmPaymentComponent extends BasicComponent implements OnInit {
   }
 
   onPay() {
+    this.isLoading = true;
     this.paymentRequest = {...this.payerAccount, ...this.paymentList};
     /* if is not a cash payment mode */
     if (!this.isCashPaymentMode) {
@@ -67,11 +69,14 @@ export class ConfirmPaymentComponent extends BasicComponent implements OnInit {
         this.paymentRequest = {...payer, ...this.paymentList};
         this.paymentService.payCherries(this.paymentRequest).subscribe(() => {
             this.setMessage('Payment successfully initiated!');
+            this.isLoading = false;
           },
           (err) => {
             this.setError(err.errors);
+            this.isLoading = false;
           });
       } else {
+        this.isLoading = false;
         this.setError(['Please select the paying account!']);
         return;
       }
@@ -81,10 +86,12 @@ export class ConfirmPaymentComponent extends BasicComponent implements OnInit {
       };
       this.paymentRequest = {...payer, ...this.paymentList};
       this.paymentService.payCherries(this.paymentRequest).subscribe(() => {
-          this.messageService.setMessage('Payment successfully recorded!');
+          this.setMessage('Payment successfully recorded!');
+          this.isLoading = false;
         },
         (err) => {
           this.setError(err.errors);
+          this.isLoading = false;
         });
     }
   }

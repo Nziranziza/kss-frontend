@@ -4,7 +4,6 @@
   width: 100%;
   margin: 0px auto;
   height: 100%;
-  background: #fff;
 }
 
 .board .nav-tabs {
@@ -17,6 +16,8 @@
 
 .board > div.board-inner {
   background-size: 30%;
+  background-color: #fff;
+  margin: 10px 0;
 }
 
 .liner {
