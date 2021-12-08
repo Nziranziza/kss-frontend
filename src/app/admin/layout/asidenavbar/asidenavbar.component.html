@@ -101,7 +101,7 @@
           </li>
         </ul>
       </li>
-      <li  appInternal class="treeview" routerLinkActive="active" *appHasPermission="[1]">
+      <li class="treeview" routerLinkActive="active" *appHasPermission="[1]">
         <a href="#">
           <i class="fa fa-gg"></i> <span>Payments</span>
           <span class="pull-right-container">
@@ -109,7 +109,7 @@
           </span>
         </a>
         <ul class="treeview-menu">
-          <li appInternal routerLinkActive="active" *appHasPermission="[1]">
+          <li routerLinkActive="active" *appHasPermission="[1]">
             <a routerLink="/admin/pay-farmers">
               <i class="fa fa-circle-o"></i>
               <span>Pay farmers</span>
@@ -127,7 +127,7 @@
               <span>Reports</span>
             </a>
           </li>
-          <li appInternal routerLinkActive="active">
+          <li routerLinkActive="active">
             <a routerLink="/admin/top-ups/payments/{{user.org_id}}">
               <i class="fa fa-circle-o"></i>
               <span>Top-ups</span>

@@ -9,3 +9,11 @@ table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > td:first-child:b
 table.dataTable.row-border tbody tr:first-child td {
   display: table-cell !important;
 }
+
+.description-block{
+  padding: 20px 0 20px 0;
+}
+
+td > span{
+  padding: 10px;
+}
