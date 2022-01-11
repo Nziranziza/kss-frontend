@@ -59,4 +59,8 @@ export class SiteService {
   getSitePendingFarmers(body: any): Observable<any> {
     return this.apiService.post('/pendingfarmers/tempofarmer_by_site', body);
   }
+
+  delete(id: string): Observable<any> {
+    return this.apiService.delete('/site/' + id);
+  }
 }
