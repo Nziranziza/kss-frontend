@@ -1,4 +1,5 @@
 import {Directive, ElementRef, OnInit, Renderer2} from '@angular/core';
+import { environment } from '../../../environments/environment';
 
 @Directive({
   selector: '[appInternal]'
@@ -9,6 +10,9 @@ export class InternalDirective implements OnInit {
   }
 
   ngOnInit() {
-    this.renderer.setStyle(this.el.nativeElement, 'display', 'none');
+    if (!environment.production) {
+      console.log('here!');
+      this.renderer.setStyle(this.el.nativeElement, 'display', 'none');
+    }
   }
 }

@@ -87,7 +87,7 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
     {value: 'phone_number', name: 'phone number'}
   ];
   resetPin = true;
-  showSetPinButton = false;
+  showSetPinButton = true;
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -290,6 +290,7 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
   }
 
   enableResetPin(status: boolean) {
+    this.showSetPinButton = false;
     this.organisationService.allowSetPinOrgUsers({
       org_id: this.org._id,
       status

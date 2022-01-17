@@ -3,7 +3,7 @@
   <section class="sidebar" style="height: auto;">
     <!-- sidebar menu: : style can be found in sidebar.less -->
     <ul class="sidebar-menu tree" data-widget="tree">
-      <li class="header" *appHasPermission="[[4,1],[4,11],[4,12],roles.TEC_HOUSE,6,5,[8,1],[1,1]]">REGISTRATION</li>
+      <li class="header" *appHasPermission="[[4,1],[4,11],[4,12],0,6,5,[8,1],[1,1]]">REGISTRATION</li>
       <li routerLinkActive="active" *appHasPermission="[[4,1],[4,11],[4,12],0,6,5,[8,1],[1,1]]">
         <a routerLink="/admin/organisations">
           <i class="fa fa-university" aria-hidden="true"></i>
@@ -44,7 +44,7 @@
           </li>
         </ul>
       </li>
-      <li class="header" *appHasPermission="[1]">WET PROCESSING</li>
+      <li class="header" *appHasPermission="[1,[4,1],[4,11],[4,12],0,6]">WET PROCESSING</li>
       <li class="treeview" routerLinkActive="active" *appHasPermission="[1]">
         <a href="#">
           <i class="fa fa-users"></i> <span>Farmers</span>
@@ -87,13 +87,13 @@
               <span>Parchments</span>
             </a>
           </li>
-          <li appInternal routerLinkActive="active" *appHasPermission="[1]">
+          <li routerLinkActive="active" *appHasPermission="[1]">
             <a routerLink="/admin/cws/parchments/transfer/cart">
               <i class="fa fa-circle-o"></i>
               <span>Transfer parchments</span>
             </a>
           </li>
-          <li appInternal routerLinkActive="active" *appHasPermission="[1]">
+          <li routerLinkActive="active" *appHasPermission="[1]">
             <a routerLink="/admin/cws/parchments/transfer/history">
               <i class="fa fa-circle-o"></i>
               <span>Transfer history</span>
@@ -101,7 +101,19 @@
           </li>
         </ul>
       </li>
-      <li class="treeview" routerLinkActive="active" *appHasPermission="[1]">
+      <li routerLinkActive="active" *appHasPermission="[[4,1],[4,11],[4,12],0,6]">
+        <a routerLink="/admin/cherries/parchments/report">
+          <i class="fa fa-bar-chart-o"></i>
+          <span>Cherries supply</span>
+        </a>
+      </li>
+      <li routerLinkActive="active" *appHasPermission="[[4,1],[4,11],[4,12],0]">
+        <a routerLink="/admin/payment/reports">
+          <i class="fa fa-pie-chart"></i>
+          <span>Payments report</span>
+        </a>
+      </li>
+      <li class="treeview" routerLinkActive="active" *appHasPermission="[1]" appInternal>
         <a href="#">
           <i class="fa fa-gg"></i> <span>Payments</span>
           <span class="pull-right-container">
@@ -164,7 +176,7 @@
           </li>
         </ul>
       </li>
-      <li class="header" *appHasPermission="[[8,2],[1,1]]">SITES</li>
+      <li class="header" *appHasPermission="[[8,2],[8,1]]">SITES</li>
       <li class="treeview" routerLinkActive="active" *appHasPermission="[[[8,2], 1, 'NOT']]">
         <a href="#"  routerLinkActive="active" *appHasPermission="[[[8,2], 1, 'NOT']]">
           <i class="fa fa-users"></i><span>Farmers</span>
@@ -219,7 +231,6 @@
       </ng-container>
       <li class="header" *appHasPermission="[0,5,[4,10],[4,11],[4,12],[[8,1],1,'NOT'],[4,1],6]">INPUT DISTRIBUTION</li>
       <li routerLinkActive="active" *appHasPermission="[0,5,[4,10],[4,11],[4,12],[4,1],[4,2],[[8,1],1,'NOT'],6]">
-
         <a routerLink="/admin/sites">
           <i class="fa fa-square" aria-hidden="true"></i>
           <span>Sites</span>
@@ -233,7 +244,7 @@
       </li>
       <li class="treeview" routerLinkActive="active" *appHasPermission="[0,6,[4,1],[4,11],[4,12],5,8]">
         <a href="#">
-          <i class="fa fa-flag-o"></i> <span>Progress report</span>
+          <i class="fa fa-bar-chart-o"></i> <span>Input progress reports</span>
           <span class="pull-right-container">
             <i class="fa fa-angle-left pull-right"></i>
           </span>
@@ -292,18 +303,6 @@
             <a routerLink="/admin/report/farmers">
               <i class="fa fa-circle-o"></i>
               <span>Farmers</span>
-            </a>
-          </li>
-          <li routerLinkActive="active" *appHasPermission="[[4,1],[4,11],[4,12],0,6]">
-            <a routerLink="/admin/cherries/parchments/report">
-              <i class="fa fa-circle-o"></i>
-              <span>Cherries supply</span>
-            </a>
-          </li>
-          <li routerLinkActive="active" *appHasPermission="[[4,1],[4,11],[4,12],0]">
-            <a routerLink="/admin/payment/reports">
-              <i class="fa fa-circle-o"></i>
-              <span>Payments report</span>
             </a>
           </li>
         </ul>
