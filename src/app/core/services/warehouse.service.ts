@@ -36,6 +36,10 @@ export class WarehouseService {
     return this.apiService.put('/inputdispatch/remove', body);
   }
 
+  removeDispatchEntry(body: any) {
+    return this.apiService.put('/inputdispatch/remove/entry', body);
+  }
+
   printDeliveryNote(id: string): Observable<any> {
     return this.apiService.get('/inputdispatch/generate/delivery_note/' + id);
   }

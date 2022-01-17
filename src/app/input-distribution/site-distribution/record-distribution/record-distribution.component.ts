@@ -52,11 +52,11 @@ export class RecordDistributionComponent extends BasicComponent implements OnIni
     this.distributionForm = this.formBuilder.group({
       quantity: ['', Validators.required],
       stockOutId: [''],
-      treesAtDistribution: [this.numberOfTrees, [ Validators.required, Validators.min(0), Validators.max(10000) ]],
+      treesAtDistribution: [this.numberOfTrees, [ Validators.required, Validators.min(0), Validators.max(100000) ]],
       comment: ['7']
     });
     this.updateRequestForm = this.formBuilder.group({
-      treesAtDistribution: [this.numberOfTrees, [ Validators.required, Validators.min(0), Validators.max(10000) ]],
+      treesAtDistribution: [this.numberOfTrees, [ Validators.required, Validators.min(0), Validators.max(100000) ]],
       comment: ['7']
     });
     this.inputDistributionService.getSiteStockOuts(this.siteId)
