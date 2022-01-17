@@ -10,8 +10,7 @@ export class InternalDirective implements OnInit {
   }
 
   ngOnInit() {
-    if (!environment.production) {
-      console.log('here!');
+    if (environment.production) {
       this.renderer.setStyle(this.el.nativeElement, 'display', 'none');
     }
   }
