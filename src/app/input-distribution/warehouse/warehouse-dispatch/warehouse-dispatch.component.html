@@ -317,7 +317,7 @@
                     </tr>
                   </table>
                 </div>
-                <div class="col-sm-12" *ngIf="dispatch.receivedBy?.org_id"><br>
+                <div class="col-sm-12" *ngIf="dispatch.receivedBy"><br>
                   <h4><strong>Receiver Details</strong></h4>
                   <table style="background: transparent; width: 750px;">
                     <tr style="font-style: oblique; font-size: 12px; background: transparent; font-weight: bold">
@@ -328,7 +328,7 @@
                     <tr style="font-style: oblique; font-size: 12px; background: transparent">
                       <td>{{ dispatch.receivedBy?.foreName|lowercase }} &nbsp; {{ dispatch.receivedBy?.surname|lowercase }}</td>
                       <td>{{ dispatch.receivedBy?.phoneNumber }}</td>
-                      <td>{{ dispatch.receivedBy?.org_id?.organizationName }}</td>
+                      <td>{{ dispatch.receivedBy.org_id?.organizationName }}</td>
                     </tr>
                   </table>
                 </div>
