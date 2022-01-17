@@ -19,11 +19,12 @@ import {RequiredSeasonDirective} from './directives/required-season.directive';
 import {HasPermissionDirective} from './directives/has-permission.directive';
 import {QuantityUnitComponent} from './layout';
 import {ListWarningsComponent} from './layout';
-import {DownloaderComponent} from './layout';
+import {DownloadingComponent} from './layout';
 import {SpinnerComponent } from './layout';
 import {InternalDirective} from './directives/internal.directives';
 import {RequiredSeasonCherryDirective} from './directives/required-season-cherry.directive';
-import {DebounceClickDirective} from './directives/DebounceClick.directive';
+import {DebounceClickDirective} from './directives/debounce-click.directive';
+import { LoadingComponent } from './layout/loading/loading.component';
 
 @NgModule({
   imports: [
@@ -39,7 +40,7 @@ import {DebounceClickDirective} from './directives/DebounceClick.directive';
     ConfirmDialogComponent, RequiredRolesDirective, InternalDirective, LoaderComponent,
     RequiredSeasonDirective, RequiredSeasonCherryDirective, HasPermissionDirective,
     DebounceClickDirective,
-    QuantityUnitComponent, ListWarningsComponent, DownloaderComponent, SpinnerComponent],
+    QuantityUnitComponent, ListWarningsComponent, DownloadingComponent, SpinnerComponent, LoadingComponent],
   exports: [
     CommonModule,
     FormsModule,
@@ -55,7 +56,7 @@ import {DebounceClickDirective} from './directives/DebounceClick.directive';
     HomeFooterComponent,
     ConfirmDialogComponent,
     QuantityUnitComponent,
-    DownloaderComponent,
+    DownloadingComponent,
     MatIconModule, MatDialogModule,
     DataTablesModule, RequiredRolesDirective,
     RequiredSeasonDirective, HasPermissionDirective, InternalDirective, RequiredSeasonCherryDirective

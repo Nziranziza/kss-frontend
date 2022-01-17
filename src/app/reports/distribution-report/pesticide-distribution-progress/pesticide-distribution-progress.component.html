@@ -106,7 +106,7 @@
               class="fa fa-download"></i> Summary
             </button>
             <button type="button" class="btn btn-default pull-right" (click)="downloadDetails()" [disabled]="!downloadDetailedEnabled">
-              <app-downloader *ngIf="downloading"></app-downloader> Detailed xls
+              <app-downloading *ngIf="downloading"></app-downloading> Detailed xls
             </button>
           </div>
           <div class="col-xs-12" *ngIf="showData">

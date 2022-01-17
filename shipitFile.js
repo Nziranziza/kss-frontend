@@ -21,10 +21,10 @@ module.exports = shipit => {
       servers: 'jrukundo@105.179.3.110:2202'
     },
     production: {
-      deployTo: '',
+      deployTo: '~/smartkungahara.rw/sks-front-deployment',
       ignores: [],
-      key: '~/.ssh/id_rsa.pub',
-      servers: ''
+      key: '~/.ssh/id_ed25519.pub',
+      servers: 'fedeployer@10.10.76.198:22'
     }
   });
 };
