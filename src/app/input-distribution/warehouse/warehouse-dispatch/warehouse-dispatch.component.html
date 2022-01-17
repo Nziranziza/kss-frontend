@@ -275,29 +275,37 @@
             <td>{{ dispatch.driverInfo.vehiclePlate }}</td>
             <td>{{ dispatch.driverInfo.driverPhoneNumber }}</td>
             <td>
-              <table style="background: transparent; width: 750px;" class="pull-right">
-                <tr style="font-style: oblique; font-size: 12px; background: transparent; font-weight: bold">
-                  <td>Input</td>
-                  <td>Items</td>
-                  <td>Qty</td>
-                  <td>Total</td>
-                  <td>ReceivedQty</td>
-                  <td>Comment</td>
-                </tr>
-                <tr *ngFor="let entry of dispatch.entries"
-                    style="font-style: oblique; font-size: 12px; background: transparent">
-                  <td>{{ entry.inputId.inputName }}</td>
-                  <td>{{ entry.numberOfItems }}</td>
-                  <td>{{ entry.quantityPerItem }}</td>
-                  <td>{{ entry.numberOfItems * entry.quantityPerItem }}
-                    <app-quantity-unit [inputType]="entry.inputId.inputType"></app-quantity-unit>
-                  </td>
-                  <td>{{ entry.receivedQty }}
-                    <app-quantity-unit [inputType]="entry.inputId.inputType"></app-quantity-unit>
-                  </td>
-                  <td>{{ entry.dispatch_comments | lowercase }}</td>
-                </tr>
-              </table>
+              <div class="row pull-right" style="width: 100% !important; ">
+                <div class="col-sm-12">
+                  <h3>Product Details</h3>
+                  <table class="width: 100%">
+                    <tr style="font-style: oblique; font-size: 12px; background: transparent; font-weight: bold">
+                      <td>Input</td>
+                      <td>Items</td>
+                      <td>Qty</td>
+                      <td>Total</td>
+                      <td>ReceivedQty</td>
+                      <td>Comment</td>
+                    </tr>
+                    <tr *ngFor="let entry of dispatch.entries"
+                        style="font-style: oblique; font-size: 12px; background: transparent">
+                      <td>{{ entry.inputId.inputName }}</td>
+                      <td>{{ entry.numberOfItems }}</td>
+                      <td>{{ entry.quantityPerItem }}</td>
+                      <td>{{ entry.numberOfItems * entry.quantityPerItem }}
+                        <app-quantity-unit [inputType]="entry.inputId.inputType"></app-quantity-unit>
+                      </td>
+                      <td>{{ entry.receivedQty }}
+                        <app-quantity-unit [inputType]="entry.inputId.inputType"></app-quantity-unit>
+                      </td>
+                      <td>{{ entry.dispatch_comments | lowercase }}</td>
+                    </tr>
+                  </table>
+                </div>
+                <div class="col-sm-4">
+                  <h3>Receiver Details</h3>
+                </div>
+              </div>
             </td>
             <td>{{ dispatch.date | date }}</td>
             <td>
