@@ -485,6 +485,11 @@ export class WarehouseDispatchComponent extends BasicComponent implements OnInit
     modalRef.componentInstance.id = id;
     modalRef.result.then((message) => {
       this.setMessage(message);
+      this.warehouseService.getDispatches().subscribe((data) => {
+        this.inputDispatches = data.content;
+        this.createExcelData(this.inputDispatches);
+        this.rerender();
+      });
     });
   }
 

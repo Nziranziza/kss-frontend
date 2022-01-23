@@ -6,30 +6,55 @@
   <app-list-errors [errorList]="errors"></app-list-errors>
   <app-list-message [message]="message"></app-list-message>
   <div class="row">
-    <div class="col-sm-12">
+    <div class="col-xs-2">
+      <button class="btn btn-success pull-right btn-margin" type="button" (click)="exportAsXLSX()"><i
+        class="fa fa-download"></i> Export dispatches
+      </button>
+    </div>
+    <div class="col-sm-12" style="margin-top: 50px;">
       <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped">
         <thead>
         <tr>
           <th>REG Number</th>
-          <th>Qty</th>
+          <th>Farmer Name</th>
+          <th>Allocated Qty</th>
+          <th>Received Qty</th>
           <th>Date</th>
           <th>Approved Qty</th>
+          <th>Extra Fertilizer</th>
           <th></th>
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let recipient of stockOut.recipients">
-          <td>{{ recipient.regNumber }}</td>
-          <td>{{ recipient.quantity }}</td>
-          <td>{{ recipient.doneOn|date }}</td>
-          <td>{{ recipient.farmerApprovedQty }}</td>
-          <td>
-            <button class="btn btn-default btn-margin btn-sm pull-right"
-                    (click)="cancelDistribution(stockOut._id, stockOut.inputId.inputType, recipient)">
-              <i class="fa fa-remove" aria-hidden="true"></i> Cancel
-            </button>
-          </td>
-        </tr>
+        <ng-container *ngFor="let key of objectKeys(recipients)">
+          <ng-container *ngIf="key != 'undefined'">
+          <tr *ngFor="let recipient of recipients[key]; let i = index">
+            <td *ngIf="i==0; else other">
+                {{ recipient.regNumber }}
+            </td>
+            <ng-template #other>
+              <td style="color: white;">{{ key }}</td>
+            </ng-template>
+            <td *ngIf="i==0; else other">
+              {{ recipient.foreName? recipient.foreName: '' }} &nbsp; {{ recipient.surname ? recipient.surname: '' }}
+            </td>
+            <ng-template #other>
+              <td style="color: white;">{{ key }}</td>
+            </ng-template>
+            <td>{{ recipient.farmerAllocatedQty? recipient.farmerAllocatedQty: ''}}</td>
+            <td>{{ recipient.quantity }}</td>
+            <td>{{ recipient.doneOn|date }}</td>
+            <td>{{ recipient.farmerApprovedQty }}</td>
+            <td>{{ recipient.extra_fertilizer }}</td>
+            <td>
+              <button class="btn btn-default btn-margin btn-sm pull-right"
+                      (click)="cancelDistribution(stockOut._id, stockOut.input.inputType, recipient)">
+                <i class="fa fa-remove" aria-hidden="true"></i> Cancel
+              </button>
+            </td>
+          </tr>
+        </ng-container>
+        </ng-container>
         </tbody>
       </table>
     </div>
