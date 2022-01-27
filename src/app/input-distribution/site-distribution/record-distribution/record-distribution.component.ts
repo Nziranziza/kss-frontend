@@ -62,7 +62,7 @@ export class RecordDistributionComponent extends BasicComponent implements OnIni
     this.inputDistributionService.getSiteStockOuts(this.siteId)
       .subscribe((data) => {
         data.content.map((stock) => {
-          if (stock.inputId.inputType === 'Fertilizer' && stock.returnedQty === 0) {
+          if (stock.input.inputType === 'Fertilizer' && stock.returnedQty === 0) {
             this.stockOuts.push(stock);
           }
         });

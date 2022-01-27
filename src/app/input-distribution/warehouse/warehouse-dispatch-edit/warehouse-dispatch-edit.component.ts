@@ -289,15 +289,16 @@ export class WarehouseDispatchEditComponent extends BasicComponent implements On
           body.entries.push(el);
         });
       }
-      /*
-        this.inputDistributionService.recordDispatch(body)
-        .subscribe(() => {
-            this.setMessage('Dispatch recorded successfully!');
-            },
-          (err) => {
-            this.setError(err.errors);
-        });
-      */
+
+      this.inputDistributionService.editDispatch(body, this.id)
+      .subscribe(() => {
+          this.setMessage('Dispatch edited successfully!');
+          this.modal.dismiss();
+          },
+        (err) => {
+          this.setError(err.errors);
+      });
+      
     } else {
       this.setError(this.helper.getFormValidationErrors(this.updateDispatchForm));
     }

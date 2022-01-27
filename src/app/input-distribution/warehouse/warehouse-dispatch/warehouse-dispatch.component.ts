@@ -432,6 +432,9 @@ export class WarehouseDispatchComponent extends BasicComponent implements OnInit
         Alpha_cypermetrin_10_EC: item.entries.find(entry => entry.inputId.inputName === 'Alpha cypermetrin 10 EC') ?
           item.entries.find(entry => entry.inputId.inputName === 'Alpha cypermetrin 10 EC').totalQty : '',
         RECEIVED: item.receivedBy ? 'Received' : '',
+        RECEIVED_BY: item.receivedBy ? `${item.receivedBy.foreName} ${item.receivedBy.surname}`: '',
+        PHONE_NUMBER: item.receivedBy && item.receivedBy.phoneNumber ? item.receivedBy.phoneNumber: '' ,
+        CWS: item.receivedBy && item.receivedBy.org_id ? item.receivedBy.org_id.organizationName: '',
         DISPATCHED_ON: this.datePipe.transform(new Date(item.created_at), 'yyyy-MM-dd', 'GMT+2')
       };
       this.printDispatches.push(temp);
@@ -482,6 +485,11 @@ export class WarehouseDispatchComponent extends BasicComponent implements OnInit
     modalRef.componentInstance.id = id;
     modalRef.result.then((message) => {
       this.setMessage(message);
+      this.warehouseService.getDispatches().subscribe((data) => {
+        this.inputDispatches = data.content;
+        this.createExcelData(this.inputDispatches);
+        this.rerender();
+      });
     });
   }
 

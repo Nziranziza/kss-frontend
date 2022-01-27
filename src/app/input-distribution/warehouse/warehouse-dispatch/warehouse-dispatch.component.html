@@ -280,40 +280,60 @@
             <td>{{ dispatch.driverInfo.vehiclePlate }}</td>
             <td>{{ dispatch.driverInfo.driverPhoneNumber }}</td>
             <td>
-              <table style="background: transparent; width: 750px;" class="pull-right">
-                <tr style="font-style: oblique; font-size: 12px; background: transparent; font-weight: bold">
-                  <td>Input</td>A
-                  <td>Items</td>
-                  <td>Qty</td>
-                  <td>Total</td>
-                  <td>ReceivedQty</td>
-                  <td>Comment</td>
-                  <td></td>
-                </tr>
-                <tr *ngFor="let entry of dispatch.entries"
-                    style="font-style: oblique; font-size: 12px; background: transparent">
-                  <td>{{ entry.inputId.inputName }}</td>
-                  <td>{{ entry.numberOfItems }}</td>
-                  <td>{{ entry.quantityPerItem }}</td>
-                  <td>{{ entry.numberOfItems * entry.quantityPerItem }}
-                    <app-quantity-unit [inputType]="entry.inputId.inputType"></app-quantity-unit>
-                  </td>
-                  <td>{{ entry.receivedQty }}
-                    <app-quantity-unit [inputType]="entry.inputId.inputType"></app-quantity-unit>
-                  </td>
-                  <td>{{ entry.dispatch_comments | lowercase }}</td>
-                  <td>
-                  <td>
-                  <ng-container *ngIf="!dispatch.receivedBy">
-                    <a appInternal class="btn btn-default btn-margin btn-sm pull-right cancel-entry"
-                       type="button" id="{{dispatch._id}}-{{entry._id}}">
-                      <i class="fa fa-remove" aria-hidden="true"></i>
-                    </a>
-                  </ng-container>
-                  </td>
-                </tr>
-              </table>
-            </td>
+              <div class="row pull-right" style="width: 750px;">
+                <div class="col-sm-12">
+                  <h4><strong>Product Details</strong></h4>
+                  <table style="background: transparent; width: 100%;">
+                    <tr style="font-style: oblique; font-size: 12px; background: transparent; font-weight: bold">
+                      <td>Input</td>
+                      <td>Items</td>
+                      <td>Qty</td>
+                      <td>Total</td>
+                      <td>ReceivedQty</td>
+                      <td>Comment</td>
+                      <td></td>
+                    </tr>
+                    <tr *ngFor="let entry of dispatch.entries"
+                        style="font-style: oblique; font-size: 12px; background: transparent">
+                      <td>{{ entry.inputId.inputName }}</td>
+                      <td>{{ entry.numberOfItems }}</td>
+                      <td>{{ entry.quantityPerItem }}</td>
+                      <td>{{ entry.numberOfItems * entry.quantityPerItem }}
+                        <app-quantity-unit [inputType]="entry.inputId.inputType"></app-quantity-unit>
+                      </td>
+                      <td>{{ entry.receivedQty }}
+                        <app-quantity-unit [inputType]="entry.inputId.inputType"></app-quantity-unit>
+                      </td>
+                      <td>{{ entry.dispatch_comments | lowercase }}</td>
+                      <td>
+                      <td>
+                      <ng-container *ngIf="!dispatch.receivedBy">
+                        <a appInternal class="btn btn-default btn-margin btn-sm pull-right cancel-entry"
+                           type="button" id="{{dispatch._id}}-{{entry._id}}">
+                          <i class="fa fa-remove" aria-hidden="true"></i>
+                        </a>
+                      </ng-container>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <div class="col-sm-12" *ngIf="dispatch.receivedBy"><br>
+                  <h4><strong>Receiver Details</strong></h4>
+                  <table style="background: transparent; width: 750px;">
+                    <tr style="font-style: oblique; font-size: 12px; background: transparent; font-weight: bold">
+                      <td>Names</td>
+                      <td>Phone Number</td>
+                      <td>CWS</td>
+                    </tr>
+                    <tr style="font-style: oblique; font-size: 12px; background: transparent">
+                      <td>{{ dispatch.receivedBy?.foreName|lowercase }} &nbsp; {{ dispatch.receivedBy?.surname|lowercase }}</td>
+                      <td>{{ dispatch.receivedBy?.phoneNumber }}</td>
+                      <td>{{ dispatch.receivedBy.org_id?.organizationName }}</td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+     </td>
             <td>{{ dispatch.date | date }}</td>
             <td>
               <ng-container *ngIf="dispatch.receivedBy; else confirm">

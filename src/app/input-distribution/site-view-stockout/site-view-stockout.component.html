@@ -59,9 +59,9 @@
       </thead>
       <tbody>
       <tr *ngFor="let stockOut of stockOuts">
-        <td>{{ stockOut.inputId.inputName }}</td>
+        <td>{{ stockOut.input.inputName }}</td>
         <td>{{ stockOut.totalQuantity }}
-          <app-quantity-unit [inputType]="stockOut.inputId.inputType"></app-quantity-unit>
+          <app-quantity-unit [inputType]="stockOut.input.inputType"></app-quantity-unit>
         </td>
         <td>{{ stockOut.distributedQty }}</td>
         <td>{{ stockOut.returnedQty }}</td>
