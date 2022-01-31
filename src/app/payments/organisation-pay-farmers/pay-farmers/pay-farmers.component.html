@@ -1,38 +1,33 @@
 <div class="board">
   <!-- Navigation Area (Circular Tabs) -->
   <div class="board-inner" id="status-buttons">
-    <ul class="nav nav-tabs" id="myTab">
-      <div class="liner"></div>
-      <!-- circular user icon -->
-      <li>
-        <a routerLink="/admin/pay-farmers" role="tab"
-           routerLinkActive="active">
-        <span class="round-tabs one">
-            <i class="fa fa-cart-plus"></i>
-        </span>
-        </a>
-      </li>
-      <!-- circular tasks icon -->
-      <li>
-        <a routerLink="/admin/pay-farmers/preview-deliveries" role="tab"
-           routerLinkActive="active">
-        <span class="round-tabs two">
-            <i class="fa fa-list"></i>
-        </span>
-        </a>
-      </li>
-      <!-- circular home icon -->
-      <li>
-        <a routerLink="/admin/pay-farmers/confirm-payment" role="tab"
-           routerLinkActive="active">
-        <span class="round-tabs three">
-            <i class="fa fa-check"></i>
-        </span>
-        </a>
-      </li>
-    </ul>
+    <div id="msform">
+      <ul id="progressbar">
+        <li
+          routerLink="/admin/pay-farmers"
+          routerLinkActive="active"
+          id="prepare"
+        >
+          <strong>Prepare</strong>
+        </li>
+        <li
+          id="preview"
+          routerLink="/admin/pay-farmers/v/preview-deliveries"
+          routerLinkActive="active"
+        >
+          <strong>Preview</strong>
+        </li>
+        <li
+          id="confirm"
+          routerLink="/admin/pay-farmers/v/confirm-payment"
+          routerLinkActive="active"
+        >
+          <strong>Initiate</strong>
+        </li>
+      </ul>
+    </div>
   </div>
-  <!-- End Navigation Area (Circular Tabs) -->
+  <br />
   <!-- Content Area -->
   <div class="tab-content">
     <!-- Routed view  -->
@@ -40,4 +35,3 @@
   </div>
   <!-- End Content Area -->
 </div>
-

@@ -44,6 +44,7 @@ export class PreviewDeliveriesListComponent implements OnInit {
           surname: supplier.userInfo.surname,
           regNumber: supplier.userInfo.regNumber,
           userId: supplier.userInfo.userId,
+          paymentChannels: supplier.userInfo.paymentChannels,
           amount: this.getOwedAmount(supplier.deliveries),
           deliveries: this.getDeliveries(supplier.deliveries)
         };
@@ -103,7 +104,7 @@ export class PreviewDeliveriesListComponent implements OnInit {
   }
 
   onNext() {
-    this.router.navigateByUrl('admin/pay-farmers/confirm-payment');
+    this.router.navigateByUrl('admin/pay-farmers/v/confirm-payment');
   }
 
   onPrevious() {

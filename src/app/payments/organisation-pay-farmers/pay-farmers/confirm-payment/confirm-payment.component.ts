@@ -112,6 +112,6 @@ export class ConfirmPaymentComponent extends BasicComponent implements OnInit {
   }
 
   onPrevious() {
-    this.router.navigateByUrl('admin/pay-farmers/preview-deliveries');
+    this.router.navigateByUrl('admin/pay-farmers/v/preview-deliveries');
   }
 }

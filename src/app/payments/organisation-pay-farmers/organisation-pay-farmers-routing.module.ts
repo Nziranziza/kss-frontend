@@ -19,8 +19,8 @@ const routes: Routes = [
         component: PayFarmersComponent,
         children: [
           {path: '', component: SelectDeliveriesComponent},
-          {path: 'preview-deliveries', component: PreviewDeliveriesListComponent},
-          {path: 'confirm-payment', component: ConfirmPaymentComponent}
+          {path: 'v/preview-deliveries', component: PreviewDeliveriesListComponent},
+          {path: 'v/confirm-payment', component: ConfirmPaymentComponent}
         ]
       },
       {
