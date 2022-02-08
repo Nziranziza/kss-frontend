@@ -8,7 +8,7 @@
   <div class="row">
     <div class="col-xs-2">
       <button class="btn btn-success pull-right btn-margin" type="button" (click)="exportAsXLSX()"><i
-        class="fa fa-download"></i> Export dispatches
+        class="fa fa-download"></i> Export Farmer Distributions
       </button>
     </div>
     <div class="col-sm-12" style="margin-top: 50px;">
@@ -21,7 +21,7 @@
           <th>Received Qty</th>
           <th>Date</th>
           <th>Approved Qty</th>
-          <th>Extra Fertilizer</th>
+          <th *ngIf="stockOut.input.inputType == 'Fertilizer'">Additional Fertilizer</th>
           <th></th>
         </tr>
         </thead>
@@ -45,7 +45,7 @@
             <td>{{ recipient.quantity }}</td>
             <td>{{ recipient.doneOn|date }}</td>
             <td>{{ recipient.farmerApprovedQty }}</td>
-            <td>{{ recipient.extra_fertilizer }}</td>
+            <td *ngIf="stockOut.input.inputType == 'Fertilizer'">{{ recipient.extra_fertilizer }}</td>
             <td>
               <button class="btn btn-default btn-margin btn-sm pull-right"
                       (click)="cancelDistribution(stockOut._id, stockOut.input.inputType, recipient)">
