@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {AuthorisationService} from '../../../core/services';
-import {AuthenticationService} from '../../../core/services';
+import {AuthorisationService} from '../../../core';
+import {AuthenticationService} from '../../../core';
 import {Router} from '@angular/router';
 import {constant} from '../../../../environments/constant';
 
@@ -29,7 +29,6 @@ export class AsidenavbarComponent implements OnInit {
     this.parameters = this.authenticationService.getCurrentUser().parameters;
     this.user = this.authenticationService.getCurrentUser().info;
     this.org = this.authenticationService.getCurrentUser().orgInfo;
-
     this.siteId = this.authenticationService.getCurrentUser().orgInfo.distributionSite;
     this.roles = constant.roles;
   }

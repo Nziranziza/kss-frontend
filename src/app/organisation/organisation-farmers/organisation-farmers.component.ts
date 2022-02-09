@@ -6,14 +6,14 @@ import {
   OrganisationService,
   SiteService,
   UserService
-} from '../../core/services';
+} from '../../core';
 import {ActivatedRoute} from '@angular/router';
-import {Farmer} from '../../core/models';
+import {Farmer} from '../../core';
 import {FarmerDetailsComponent} from '../../farmer/farmer-details/farmer-details.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {AuthorisationService} from '../../core/services';
+import {AuthorisationService} from '../../core';
 import {isArray, isObject} from 'util';
-import {BasicComponent} from '../../core/library';
+import {BasicComponent} from '../../core';
 import {ParchmentReportDetailComponent} from '../../reports/parchment-report/parchment-report-detail/parchment-report-detail.component';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
