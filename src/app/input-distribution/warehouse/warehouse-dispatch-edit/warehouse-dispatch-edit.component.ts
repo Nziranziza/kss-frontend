@@ -292,8 +292,10 @@ export class WarehouseDispatchEditComponent extends BasicComponent implements On
 
       this.inputDistributionService.editDispatch(body, this.id)
       .subscribe(() => {
-          this.setMessage('Dispatch edited successfully!');
-          this.modal.dismiss();
+          this.setMessage("Dispatch edit successful!");
+          setTimeout(function () {
+            this.modal.dismiss();
+          }, 5000);
           },
         (err) => {
           this.setError(err.errors);
