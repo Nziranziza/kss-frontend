@@ -15,7 +15,8 @@ RUN sudo apt-get update && \
     sudo apt-get install -y nodejs && \
     sudo apt-get update -y && sudo apt upgrade -y && \
     sudo npm install express --save &&\
-    sudo npm -g install create-react-app
+    #sudo npm -g install create-react-app
+    sudo npm install - g @angular/cli
 
 RUN sudo npm install --global yarn
 RUN sudo apt-get update && \
@@ -34,6 +35,7 @@ COPY --chown=docker-deployer:docker-deployer ./package.json ./
 COPY --chown=docker-deployer:docker-deployer . .
 EXPOSE 5050
 
-RUN npm i --also=dev
-RUN npm run build
+RUN npm i 
+#RUN npm run build
+RUN ng build --configuration=staging
 RUN sudo service nginx restart
