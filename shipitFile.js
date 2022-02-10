@@ -17,13 +17,13 @@ module.exports = shipit => {
     staging: {
       deployTo: '/var/www/html/sks-front-end',
       ignores: [],
-      key: '~/.ssh/id_ed25519.pub',
+      key: '~/.ssh/id_rsa.pub',
       servers: 'jrukundo@105.179.3.110:2202'
     },
     production: {
       deployTo: '~/smartkungahara.rw/sks-front-deployment',
       ignores: [],
-      key: '~/.ssh/id_ed25519.pub',
+      key: '~/.ssh/id_rsa.pub',
       servers: 'fedeployer@10.10.76.198:22'
     }
   });
