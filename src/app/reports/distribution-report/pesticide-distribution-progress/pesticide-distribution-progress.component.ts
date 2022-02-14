@@ -282,6 +282,15 @@ export class PesticideDistributionProgressComponent extends BasicComponent imple
     });
   }
 
+  summarizeData(field: string){
+    let sum = 0;
+    for(let i = 0; i < this.distributionProgress.length; i++) {
+      console.log(this.distributionProgress[i][field])
+      sum += this.distributionProgress[i][field];
+    }
+    return sum;
+  }
+
   initial() {
     this.locationService.getProvinces().subscribe((data) => {
       this.provinces = data;
