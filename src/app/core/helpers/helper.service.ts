@@ -30,6 +30,10 @@ export class HelperService {
         Object.keys(controlErrors).forEach(keyError => {
           errors.push(key + ' field is ' + keyError);
         });
+      } else {
+        if (errors.length === 0) {
+          errors.push('Wrong or missing required information');
+        }
       }
     });
     return errors;

@@ -14,6 +14,8 @@ import {DataTableDirective} from 'angular-datatables';
 import {AddCoffeeItemComponent} from '../prepare-green-coffee/add-coffee-item/add-coffee-item.component';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {HelperService} from '../../core/helpers';
+import {EditCertificateComponent} from '../../organisation/organisation-settings/settings/edit-certificate/edit-certificate.component';
+import {AddResultsComponent} from './add-results/add-results.component';
 
 declare var $;
 
@@ -44,7 +46,7 @@ export class ListGreenCoffeeComponent extends BasicComponent implements OnInit, 
   // @ts-ignore
   @ViewChild(DataTableDirective, {static: false})
   dtElement: DataTableDirective;
-  @ViewChild('supplier')  supplier: any;
+  @ViewChild('supplier') supplier: any;
   greenCoffees = [];
   parameters: any;
   summary: any;
@@ -156,9 +158,9 @@ export class ListGreenCoffeeComponent extends BasicComponent implements OnInit, 
       this.loading = false;
       this.greenCoffees.forEach((coffee) => {
         coffee.mixture.forEach((item) => {
-        if (!this.checkOrg(item.supplier, this.organisations)) {
-          this.organisations.push(item.supplier);
-        }
+          if (!this.checkOrg(item.supplier, this.organisations)) {
+            this.organisations.push(item.supplier);
+          }
         });
       });
     }, (err) => {
@@ -217,4 +219,13 @@ export class ListGreenCoffeeComponent extends BasicComponent implements OnInit, 
       this.getGreenCoffeeList();
     });
   }
+
+  addResults(id: string) {
+    const modalRef = this.modal.open(AddResultsComponent, {size: 'sm'});
+    modalRef.componentInstance.id = id;
+    modalRef.result.finally(() => {
+      this.getGreenCoffeeList();
+    });
+  }
 }
+

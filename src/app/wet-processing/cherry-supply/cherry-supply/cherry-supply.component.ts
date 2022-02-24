@@ -4,7 +4,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {HelperService} from '../../../core/helpers';
 import {AuthenticationService, CherrySupplyService, ConfirmDialogService, UserService} from '../../../core/services';
 import {Subject} from 'rxjs';
-import {Location} from '@angular/common';
+import {DatePipe, Location} from '@angular/common';
 import {DataTableDirective} from 'angular-datatables';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {PaySingleFarmerComponent} from '../../../payments/organisation-pay-farmers/pay-single-farmer/pay-single-farmer.component';
@@ -20,6 +20,7 @@ export class CherrySupplyComponent implements OnInit, OnDestroy, AfterViewInit {
               private route: ActivatedRoute,
               private confirmDialogService: ConfirmDialogService,
               private userService: UserService,
+              private datePipe: DatePipe,
               private modal: NgbModal,
               private router: Router, private helper: HelperService,
               private location: Location, private authenticationService: AuthenticationService) {
@@ -39,16 +40,19 @@ export class CherrySupplyComponent implements OnInit, OnDestroy, AfterViewInit {
   regNumber: string;
   message: string;
   organisationId: string;
+  currentDate: any;
 
   // @ts-ignore
   @ViewChild(DataTableDirective, {static: false})
   dtElement: DataTableDirective;
 
   ngOnInit() {
+    this.currentDate = new Date();
     this.recordCherryDeliveryForm = this.formBuilder.group({
       cherriesQty: ['', Validators.required],
       cherriesType: ['standard', Validators.required],
-      unitPerKg: [this.authenticationService.getCurrentSeason().seasonParams.cherriesUnitPrice, Validators.required]
+      unitPerKg: [this.authenticationService.getCurrentSeason().seasonParams.cherriesUnitPrice, Validators.required],
+      cherriesSupplyDate: [this.datePipe.transform(this.currentDate, 'yyyy-MM-dd', 'Africa/Cairo'), Validators.required]
     });
     this.filterSuppliesForm = this.formBuilder.group({
       suppliesFilter: ['all', Validators.required],
@@ -71,6 +75,7 @@ export class CherrySupplyComponent implements OnInit, OnDestroy, AfterViewInit {
     this.route.params.subscribe(params => {
       this.regNumber = params['regNumber'.toString()];
     });
+    this.onChange();
   }
 
   onSaveSupply() {
@@ -180,6 +185,21 @@ export class CherrySupplyComponent implements OnInit, OnDestroy, AfterViewInit {
   draw(): void {
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
       this.dtTrigger.next();
+    });
+  }
+
+  onChange() {
+
+    this.recordCherryDeliveryForm.controls.cherriesType.valueChanges.subscribe((value) => {
+      if (value === 'flottant') {
+        this.recordCherryDeliveryForm.controls.unitPerKg
+          .patchValue(this.authenticationService.getCurrentSeason().seasonParams.floatingUnitPrice);
+      } else if (value === 'standard') {
+        this.recordCherryDeliveryForm.controls.unitPerKg
+          .patchValue(this.authenticationService.getCurrentSeason().seasonParams.cherriesUnitPrice);
+      } else {
+        this.recordCherryDeliveryForm.controls.unitPerKg.reset();
+      }
     });
   }
 
