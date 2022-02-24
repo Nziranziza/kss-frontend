@@ -85,16 +85,18 @@
           <thead>
           <tr>
             <th>Quantity</th>
-            <th></th>
+            <th>Delivery type</th>
+            <th>Output qty</th>
             <th>Date</th>
             <th></th>
-            <th></th>
+            <th style="min-width: 15%"></th>
           </tr>
           </thead>
           <tbody>
           <tr *ngFor="let coffee of greenCoffees">
             <td>{{ coffee.remainingQty + ' &#13199; '}}</td>
-            <td><span style="font-weight: bolder">{{ coffee.deliveryType }}</span></td>
+            <td>{{ coffee.deliveryType }}</td>
+            <td><span *ngIf="coffee.results">{{ coffee.results.quantity + ' &#13199; '}} </span></td>
             <td>{{ coffee.created_at | date }}</td>
             <td>
               <table style="background: transparent; width: 650px;" class="pull-right">

@@ -68,7 +68,7 @@ export class ListGreenCoffeeComponent extends BasicComponent implements OnInit, 
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 25,
-      columns: [{}, {}, {}, {
+      columns: [{}, {}, {}, {}, {
         class: 'none'
       }, {}],
       responsive: true
