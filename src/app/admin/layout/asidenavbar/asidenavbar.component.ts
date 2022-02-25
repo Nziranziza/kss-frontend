@@ -13,11 +13,11 @@ declare var $;
   providers: [AuthorisationService]
 })
 export class AsidenavbarComponent implements OnInit {
-  private siteId: string;
   parameters: any;
   user: any;
   org: any;
   roles: any;
+
   constructor(private router: Router, private authenticationService: AuthenticationService) {
   }
 
@@ -29,7 +29,6 @@ export class AsidenavbarComponent implements OnInit {
     this.parameters = this.authenticationService.getCurrentUser().parameters;
     this.user = this.authenticationService.getCurrentUser().info;
     this.org = this.authenticationService.getCurrentUser().orgInfo;
-    this.siteId = this.authenticationService.getCurrentUser().orgInfo.distributionSite;
     this.roles = constant.roles;
   }
 
