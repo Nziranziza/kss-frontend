@@ -113,10 +113,10 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
 
   createDestination(): FormGroup {
     return this.formBuilder.group({
-        sect_id: ['', Validators.required],
-        cell_id: ['', Validators.required],
-        village_id: ['', Validators.required]
-      });
+      sect_id: ['', Validators.required],
+      cell_id: ['', Validators.required],
+      village_id: ['', Validators.required]
+    });
   }
 
   get formDestination() {
@@ -129,7 +129,9 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
   }
 
   removeDestination(index: number) {
-    (this.siteStockOutForm.controls.destination as FormArray).removeAt(index);
+    if ((this.siteStockOutForm.controls.destination as FormArray).length > 1) {
+      (this.siteStockOutForm.controls.destination as FormArray).removeAt(index);
+    }
   }
 
   getDestinationFormGroup(index): FormGroup {
@@ -178,7 +180,7 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
     const temp = [];
     org.coveredSectors.map((sector) => {
       if (this.isCWSDistributor) {
-        const position = this.site.coveredAreas.coveredSectors.findIndex(elem =>  elem.sect_id === sector.sectorId._id);
+        const position = this.site.coveredAreas.coveredSectors.findIndex(elem => elem.sect_id === sector.sectorId._id);
         if (position > -1) {
           temp.push({
             _id: sector.sectorId._id,

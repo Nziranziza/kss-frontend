@@ -1,15 +1,15 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {BasicComponent} from '../../core/library';
+import {BasicComponent} from '../../core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {
   AuthenticationService,
   ConfirmDialogService, OrganisationService,
   ParchmentService,
   SeasonService,
-} from '../../core/services';
+} from '../../core';
 import {Router} from '@angular/router';
 import {DatePipe} from '@angular/common';
-import {HelperService} from '../../core/helpers';
+import {HelperService} from '../../core';
 import {Subject} from 'rxjs';
 import {DataTableDirective} from 'angular-datatables';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';

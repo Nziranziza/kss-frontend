@@ -7,12 +7,12 @@ import {
   MessageService,
   OrganisationService,
   ParchmentService
-} from '../../core/services';
+} from '../../core';
 import {Router} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {DatePipe} from '@angular/common';
-import {HelperService} from '../../core/helpers';
-import {BasicComponent} from '../../core/library';
+import {HelperService} from '../../core';
+import {BasicComponent} from '../../core';
 import {PrepareGreenCoffeeService} from '../../core/services/prepare-green-coffee.service';
 import {Subject} from 'rxjs';
 import {DataTableDirective} from 'angular-datatables';
@@ -87,12 +87,13 @@ export class PrepareGreenCoffeeComponent extends BasicComponent implements OnIni
       searching: false,
       ordering: false,
       paging: false,
-      dom: 't',
-      responsive: {
+      // dom: 't',
+      /*responsive: {
         details: {
           type: 'column'
         }
-      }
+      },*/
+      responsive: true
     };
     this.currentDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
     this.seasonStartingDate = this.datePipe.transform(this.authenticationService.getCurrentSeason().created_at, 'yyyy-MM-dd');

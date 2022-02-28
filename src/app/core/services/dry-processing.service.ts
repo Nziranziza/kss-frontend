@@ -20,6 +20,10 @@ export class DryProcessingService {
     return this.apiService.post('/greencoffee/update/' + id, body);
   }
 
+  uploadGreenCoffeeResults(body: any) {
+    return this.apiService.post('/greencoffee/upload/results', body);
+  }
+
   getSupplyingOrg(orgId: string) {
     return this.apiService.get('/dmparchment/suppliers/' + orgId);
   }
