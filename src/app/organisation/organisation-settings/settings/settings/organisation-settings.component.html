@@ -2,66 +2,131 @@
   <div class="col-xs-12">
     <div class="container custom-tabs">
       <div class="row">
-        <div class="col-md-12" style="padding-right: 0px; padding-left: 0px; margin-top: 15px">
-          <div class="card" style="border: none !important;">
+        <div
+          class="col-md-12"
+          style="padding-right: 0px; padding-left: 0px; margin-top: 15px"
+        >
+          <div class="card" style="border: none !important">
             <ul class="nav nav-tabs" role="tablist">
               <li role="presentation" *appHasPermission="[1]">
-                <a href="#payment-channels" aria-controls="payment-channels" role="tab" data-toggle="tab">
+                <a
+                  href="#payment-channels"
+                  aria-controls="payment-channels"
+                  role="tab"
+                  data-toggle="tab"
+                >
                   <span>Payment channels</span>
                 </a>
               </li>
-              <li role="presentation"  *appHasPermission="[1]" class="active">
-                <a href="#certificates" aria-controls="certificates" role="tab" data-toggle="tab">
+              <li role="presentation" *appHasPermission="[1]" class="active">
+                <a
+                  href="#certificates"
+                  aria-controls="certificates"
+                  role="tab"
+                  data-toggle="tab"
+                >
                   <span>Certificates</span>
+                </a>
+              </li>
+              <li role="presentation" *appHasPermission="[1]">
+                <a
+                  href="#user-manuals"
+                  aria-controls="user-manuals"
+                  role="tab"
+                  data-toggle="tab"
+                >
+                  <span>System User Manuals</span>
                 </a>
               </li>
             </ul>
             <div class="tab-content">
-              <div role="tabpanel" class="tab-pane" *appHasPermission="[1]" id="payment-channels">
+              <div
+                role="tabpanel"
+                class="tab-pane"
+                *appHasPermission="[1]"
+                id="payment-channels"
+              >
                 <app-list-message [message]="message"></app-list-message>
                 <app-list-errors [errorList]="errors"></app-list-errors>
                 <div class="row">
                   <div class="col-sm-12">
                     <table class="hover table table-striped">
                       <thead>
-                      <tr>
-                        <th>Channel name</th>
-                        <th>Subscription number </th>
-                        <th>Bank name</th>
-                        <th></th>
-                      </tr>
+                        <tr>
+                          <th>Channel name</th>
+                          <th>Subscription number</th>
+                          <th>Bank name</th>
+                          <th></th>
+                        </tr>
                       </thead>
                       <tbody style="border-width: 1px">
-                      <tr *ngFor="let channel of orgPaymentChannels">
-                        <td> {{ channel.channelName }}</td>
-                        <td> {{ channel.subscriptionNumber }}</td>
-                        <td> {{ channel.bankName }}</td>
-                        <td>
-                          <button class="btn btn-success btn-margin btn-sm" (click)="editOrgPaymentChannel(channel)"> Edit</button>
-                          <button class="btn btn-primary btn-margin btn-sm" (click)="changeChannelStatus(channel, 'enable')" *ngIf="channel.channelStatus !== 'ACTIVE'"> Enable</button>
-                          <button class="btn btn-warning btn-margin btn-sm" (click)="changeChannelStatus(channel, 'disable')" *ngIf="channel.channelStatus === 'ACTIVE'"> Disable</button>
-                        </td>
-                      </tr>
+                        <tr *ngFor="let channel of orgPaymentChannels">
+                          <td>{{ channel.channelName }}</td>
+                          <td>{{ channel.subscriptionNumber }}</td>
+                          <td>{{ channel.bankName }}</td>
+                          <td>
+                            <button
+                              class="btn btn-success btn-margin btn-sm"
+                              (click)="editOrgPaymentChannel(channel)"
+                            >
+                              Edit
+                            </button>
+                            <button
+                              class="btn btn-primary btn-margin btn-sm"
+                              (click)="changeChannelStatus(channel, 'enable')"
+                              *ngIf="channel.channelStatus !== 'ACTIVE'"
+                            >
+                              Enable
+                            </button>
+                            <button
+                              class="btn btn-warning btn-margin btn-sm"
+                              (click)="changeChannelStatus(channel, 'disable')"
+                              *ngIf="channel.channelStatus === 'ACTIVE'"
+                            >
+                              Disable
+                            </button>
+                          </td>
+                        </tr>
                       </tbody>
                     </table>
                   </div>
                 </div>
-                <form [formGroup]="addPaymentChannelForm" (ngSubmit)="onSubmitPaymentChannel()">
+                <form
+                  [formGroup]="addPaymentChannelForm"
+                  (ngSubmit)="onSubmitPaymentChannel()"
+                >
                   <div class="row">
                     <div class="col-xs-12">
-                      <button class="btn btn-success btn-sm" (click)="addPaymentChannel()" type="button"
-                              style="margin-bottom: 10px;">
+                      <button
+                        class="btn btn-success btn-sm"
+                        (click)="addPaymentChannel()"
+                        type="button"
+                        style="margin-bottom: 10px"
+                      >
                         <i class="fa fa-plus"></i> Payment channel
                       </button>
                     </div>
                   </div>
-                  <div *ngFor="let control of formPaymentChannel.controls; let i=index" formArrayName="paymentChannels">
+                  <div
+                    *ngFor="
+                      let control of formPaymentChannel.controls;
+                      let i = index
+                    "
+                    formArrayName="paymentChannels"
+                  >
                     <div class="row" [formGroupName]="i">
                       <div class="col-xs-2">
                         <div class="form-group">
                           <span class="label-required">Channel</span>
-                          <select class="form-control" formControlName="channelId" (change)="onChangePaymentChannel(i)">
-                            <option *ngFor="let channel of channels" value="{{channel._id}}">
+                          <select
+                            class="form-control"
+                            formControlName="channelId"
+                            (change)="onChangePaymentChannel(i)"
+                          >
+                            <option
+                              *ngFor="let channel of channels"
+                              value="{{ channel._id }}"
+                            >
                               {{ channel.channel }}
                             </option>
                           </select>
@@ -69,23 +134,39 @@
                       </div>
                       <div class="col-xs-3">
                         <div class="form-group">
-                          <span class="label-required"> Subscription number </span>
-                          <input class="form-control" formControlName="subscriptionNumber">
+                          <span class="label-required">
+                            Subscription number
+                          </span>
+                          <input
+                            class="form-control"
+                            formControlName="subscriptionNumber"
+                          />
                         </div>
                       </div>
                       <div class="col-xs-3">
                         <div class="form-group">
                           <span>Bank name (Optional)</span>
-                          <select class="form-control" formControlName="bankName">
-                            <option *ngFor="let bank of banks" value="{{ bank.name }}">
+                          <select
+                            class="form-control"
+                            formControlName="bankName"
+                          >
+                            <option
+                              *ngFor="let bank of banks"
+                              value="{{ bank.name }}"
+                            >
                               {{ bank.name }}
                             </option>
                           </select>
                         </div>
                       </div>
                       <div class="form-group col-xs-1">
-                        <button class="btn btn-danger btn-sm pull-left" type="button"
-                                (click)="removePaymentChannel(i)" style="margin-top: 20px"> Remove
+                        <button
+                          class="btn btn-danger btn-sm pull-left"
+                          type="button"
+                          (click)="removePaymentChannel(i)"
+                          style="margin-top: 20px"
+                        >
+                          Remove
                         </button>
                       </div>
                     </div>
@@ -100,25 +181,42 @@
               <div role="tabpanel" class="tab-pane active" id="certificates">
                 <app-list-message [message]="message"></app-list-message>
                 <app-list-errors [errorList]="errors"></app-list-errors>
-                <form [formGroup]="addCertificateForm" (ngSubmit)="onSubmitCertificate()">
+                <form
+                  [formGroup]="addCertificateForm"
+                  (ngSubmit)="onSubmitCertificate()"
+                >
                   <div class="row">
                     <div class="col-xs-3">
                       <div class="form-group">
                         <span class="label-required">Certificate name</span>
-                        <input class="form-control" formControlName="certificateName">
+                        <input
+                          class="form-control"
+                          formControlName="certificateName"
+                        />
                       </div>
                     </div>
                     <div class="col-xs-3">
                       <div class="form-group">
                         <span class="label-required">Issued by</span>
-                        <input class="form-control" formControlName="issuedBy">
+                        <input
+                          class="form-control"
+                          formControlName="issuedBy"
+                        />
                       </div>
                     </div>
                     <div class="col-xs-3">
                       <div class="form-group">
                         <span class="label-required">Coffee type</span>
-                        <select class="form-control" formControlName="coffeeType">
-                          <option *ngFor="let type of coffeeTypes" value="{{type._id}}"> {{ type.name }}</option>
+                        <select
+                          class="form-control"
+                          formControlName="coffeeType"
+                        >
+                          <option
+                            *ngFor="let type of coffeeTypes"
+                            value="{{ type._id }}"
+                          >
+                            {{ type.name }}
+                          </option>
                         </select>
                       </div>
                     </div>
@@ -127,37 +225,75 @@
                     <div class="col-xs-3">
                       <div class="form-group">
                         <span class="label-required">Issued date</span>
-                        <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="issuedDate"
-                               class="form-control col-xs-3 col-sm-3 col-md-2 col-lg-2 owl-date-input">
-                        <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+                        <input
+                          [owlDateTimeTrigger]="dt1"
+                          [owlDateTime]="dt1"
+                          formControlName="issuedDate"
+                          class="form-control col-xs-3 col-sm-3 col-md-2 col-lg-2 owl-date-input"
+                        />
+                        <owl-date-time
+                          [pickerType]="'calendar'"
+                          #dt1
+                        ></owl-date-time>
                       </div>
                     </div>
                     <div class="col-xs-3">
                       <div class="form-group">
                         <span>Expiration date</span>
-                        <input [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" formControlName="expirationDate"
-                               class="form-control col-xs-3 col-sm-3 col-md-2 col-lg-2 owl-date-input">
-                        <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
+                        <input
+                          [owlDateTimeTrigger]="dt2"
+                          [owlDateTime]="dt2"
+                          formControlName="expirationDate"
+                          class="form-control col-xs-3 col-sm-3 col-md-2 col-lg-2 owl-date-input"
+                        />
+                        <owl-date-time
+                          [pickerType]="'calendar'"
+                          #dt2
+                        ></owl-date-time>
                       </div>
                     </div>
                     <div class="col-xs-3">
                       <div class="form-group">
                         <span class="label-required">Upload certificate</span>
-                        <br>
-                        <span style="font-size: 10px; color: crimson">{{fileError}}</span>
-                        <input #fileInput type="file" (change)="fileChangeEvent($event)">
-                        <div style="margin-top: 10px;">
+                        <br />
+                        <span style="font-size: 10px; color: crimson">{{
+                          fileError
+                        }}</span>
+                        <input
+                          #fileInput
+                          type="file"
+                          (change)="fileChangeEvent($event)"
+                        />
+                        <div style="margin-top: 10px">
                           <ng-container *ngIf="isFileSaved; else elseTemplate">
-                            <img [src]="cardFileBase64" style="max-height: 100px; max-width: 100px;" *ngIf="isImage"/>
-                            <img src="./assets/dist/img/pdf-word-file.png" style="max-height: 100px; max-width: 100px;" *ngIf="!isImage"/>
-                            <button class="btn-link" (click)="removeFile()"
-                                    style=" text-decoration:none; margin-left: 10px; color: crimson">
+                            <img
+                              [src]="cardFileBase64"
+                              style="max-height: 100px; max-width: 100px"
+                              *ngIf="isImage"
+                            />
+                            <img
+                              src="./assets/dist/img/pdf-word-file.png"
+                              style="max-height: 100px; max-width: 100px"
+                              *ngIf="!isImage"
+                            />
+                            <button
+                              class="btn-link"
+                              (click)="removeFile()"
+                              style="
+                                text-decoration: none;
+                                margin-left: 10px;
+                                color: crimson;
+                              "
+                            >
                               <i class="fa fa-close"></i>&nbsp;Remove
                             </button>
                           </ng-container>
                           <ng-template #elseTemplate>
-                            <img src="./assets/dist/img/default-file.png"
-                                 class="img-responsive" style="max-height: 100px; max-width: 100px;"/>
+                            <img
+                              src="./assets/dist/img/default-file.png"
+                              class="img-responsive"
+                              style="max-height: 100px; max-width: 100px"
+                            />
                           </ng-template>
                         </div>
                       </div>
@@ -173,31 +309,84 @@
                   <div class="col-sm-12">
                     <table class="hover table table-striped">
                       <thead>
-                      <tr>
-                        <th>Certificate name</th>
-                        <th>Coffee type</th>
-                        <th>Issued date</th>
-                        <th>Issued by</th>
-                        <th>Expiration date</th>
-                        <th></th>
-                      </tr>
+                        <tr>
+                          <th>Certificate name</th>
+                          <th>Coffee type</th>
+                          <th>Issued date</th>
+                          <th>Issued by</th>
+                          <th>Expiration date</th>
+                          <th></th>
+                        </tr>
                       </thead>
                       <tbody style="border-width: 1px">
-                      <tr *ngFor="let certificate of certificates">
-                        <td> {{ certificate.name }}</td>
-                        <td> {{ certificate.coffeeType.name }}</td>
-                        <td> {{ certificate.issuedDate | date }}</td>
-                        <td> {{ certificate.issuedBy }}</td>
-                        <td> {{ certificate.expirationDate | date }}</td>
-                        <td>
-                          <button class="btn btn-default btn-margin btn-sm pull-right" *appHasPermission="[[4,1],0,[1,1]]" (click)="deleteCertificate(certificate._id)"
-                                  type="button">Remove
-                          </button>
-                          <a class="btn btn-success btn-margin btn-sm pull-right" *appHasPermission="[[4,1],0,[1,1]]"
-                             (click)="editCertificate(certificate._id)"
-                             style="margin-left: 10px;">Edit</a>
-                        </td>
-                      </tr>
+                        <tr *ngFor="let certificate of certificates">
+                          <td>{{ certificate.name }}</td>
+                          <td>{{ certificate.coffeeType.name }}</td>
+                          <td>{{ certificate.issuedDate | date }}</td>
+                          <td>{{ certificate.issuedBy }}</td>
+                          <td>{{ certificate.expirationDate | date }}</td>
+                          <td>
+                            <button
+                              class="btn btn-default btn-margin btn-sm pull-right"
+                              *appHasPermission="[[4, 1], 0, [1, 1]]"
+                              (click)="deleteCertificate(certificate._id)"
+                              type="button"
+                            >
+                              Remove
+                            </button>
+                            <a
+                              class="btn btn-success btn-margin btn-sm pull-right"
+                              *appHasPermission="[[4, 1], 0, [1, 1]]"
+                              (click)="editCertificate(certificate._id)"
+                              style="margin-left: 10px"
+                              >Edit</a
+                            >
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div role="tabpanel" class="tab-pane active" id="user-manuals">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <table class="hover table table-striped">
+                      <thead>
+                        <tr>
+                          <th>Manual</th>
+                          <th class="pull-right">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody style="border-width: 1px">
+                        <tr>
+                          <td>User Guide 1</td>
+                          <td>
+                            <a
+                              class="btn btn-success btn-margin btn-sm pull-right"
+                              *appHasPermission="[[4, 1], 0, [1, 1]]"
+                              style="margin-left: 10px"
+                              href="assets/resume.pdf"
+                              target="_blank"
+                              download="resume"
+                              >Download</a
+                            >
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>User Guide 1</td>
+                          <td>
+                            <a
+                              class="btn btn-success btn-margin btn-sm pull-right"
+                              *appHasPermission="[[4, 1], 0, [1, 1]]"
+                              style="margin-left: 10px"
+                              href="assets/resume.pdf"
+                              target="_blank"
+                              download="resume"
+                              >Download</a
+                            >
+                          </td>
+                        </tr>
                       </tbody>
                     </table>
                   </div>
@@ -210,4 +399,3 @@
     </div>
   </div>
 </div>
-
