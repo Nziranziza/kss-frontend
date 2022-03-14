@@ -287,6 +287,14 @@ export class FertilizerDistributionProgressComponent extends BasicComponent impl
     this.cells = temp;
   }
 
+  summarizeData(field: string){
+    let sum = 0;
+    for(let i = 0; i < this.distributionProgress.length; i++) {
+      sum += this.distributionProgress[i][field];
+    }
+    return sum;
+  }
+
   initial() {
     this.locationService.getProvinces().subscribe((data) => {
       this.provinces = data;

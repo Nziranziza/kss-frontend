@@ -127,6 +127,12 @@
                 <td> {{ location.distributed }}</td>
                 <td> {{ location.approved }}</td>
               </tr>
+              <tr>
+                <th> Total</th>
+                <th> {{ summarizeData('allocated') }}</th>
+                <th> {{ summarizeData('distributed') }}</th>
+                <th> {{ summarizeData('approved') }}</th>
+              </tr>
               </tbody>
             </table>
           </div>

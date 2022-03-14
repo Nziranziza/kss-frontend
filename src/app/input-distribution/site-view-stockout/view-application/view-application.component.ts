@@ -63,6 +63,7 @@ export class ViewApplicationComponent
       pageLength: 25,
     };
     this.recipients = this.groupBy(this.stockOut.recipients, 'regNumber');
+    console.log(this.recipients)
     if (this.objectKeys(this.recipients)[0] !== undefined) {
       this.createExcelData(this.stockOut.recipients);
     }
