@@ -50,6 +50,7 @@ export class ListGreenCoffeeComponent extends BasicComponent implements OnInit, 
   greenCoffees = [];
   parameters: any;
   summary: any;
+  results: any;
   orgId: string;
   filterForm: FormGroup;
   currentDate: any;
@@ -172,6 +173,10 @@ export class ListGreenCoffeeComponent extends BasicComponent implements OnInit, 
     this.dryProcessingService.getGreenCoffeeStockSummary(this.parameters).subscribe((data) => {
       this.summary = data.content;
     });
+    this.dryProcessingService.getGreenCoffeeResultSummary(this.parameters).subscribe((data) => {
+      this.results = data.content;
+    });
+
   }
 
   checkOrg(org: any, list: any) {

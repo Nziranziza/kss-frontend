@@ -12,12 +12,11 @@
         </div>
         <div class="col-sm-6">
           <br>
-          <span style="font-weight: bold;">{{ supplier?.userInfo.regNumber }}</span><br>
+          <span style="font-weight: bold;">{{ supplier?.userInfo["regNumber"] }}</span><br>
         </div>
       </div>
     </div>
-  </div>
-  <div class="row">
+
     <div class="col-xs-12">
       <div class="box">
         <div class="box-body" style="overflow: hidden">
@@ -25,33 +24,35 @@
             <thead>
             <tr>
               <th>CherriesQty (kg)</th>
-              <th>Unit price</th>
-              <th>Delivery approval</th>
-              <th>Paid amount (rwf)</th>
+              <th>Cherries type</th>
+              <th *ngIf="!isUserCeparOfficer">Unit price</th>
+              <th *ngIf="!isUserCeparOfficer">Delivery approval</th>
+              <th *ngIf="!isUserCeparOfficer">Paid amount (rwf)</th>
               <th>Recorded by</th>
-              <th>Payment status</th>
-              <th></th>
-              <th>Owed amount</th>
+              <th *ngIf="!isUserCeparOfficer">Payment status</th>
+              <th *ngIf="!isUserCeparOfficer"></th>
+              <th *ngIf="!isUserCeparOfficer">Owed amount</th>
               <th>Date</th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let supply of supplier?.deliveries">
               <td> {{ supply.cherriesQty }}</td>
-              <td> {{ supply.unitPerKg }}</td>
-              <td>
+              <td> {{ supply.cherriesType | titlecase}}
+              <td *ngIf="!isUserCeparOfficer"> {{ supply.unitPerKg }}</td>
+              <td *ngIf="!isUserCeparOfficer">
                 <ng-container *ngIf="supply.deliveryApproval; else notDelivered">approved</ng-container>
                 <ng-template #notDelivered> not approved</ng-template>
               </td>
-              <td> {{ supply.paidAmount }}</td>
+              <td *ngIf="!isUserCeparOfficer"> {{ supply.paidAmount }}</td>
               <td>
                 <ng-container *ngIf="supply.recordedBy">
                   <span style="font-size: 12px;"> {{ supply.recordedBy.foreName|titlecase }} &nbsp; {{ supply.recordedBy.surname|titlecase }}  </span>
                 </ng-container>
               </td>
-              <td><span style="color: #dca956">{{ (supply.paymentStatus.split("_")).join(" ") | lowercase }} </span>
+              <td *ngIf="!isUserCeparOfficer"><span style="color: #dca956">{{ (supply.paymentStatus.split("_")).join(" ") | lowercase }} </span>
               </td>
-              <td>
+              <td *ngIf="!isUserCeparOfficer">
                 <table style="background: transparent; width: 750px;" class="pull-right">
                   <tr style="font-size: 12px; background: transparent; font-weight: bold">
                     <td>Amount paid (rwf)</td>
@@ -67,7 +68,7 @@
                   </tr>
                 </table>
               </td>
-              <td> {{ supply.owedAmount }}</td>
+              <td *ngIf="!isUserCeparOfficer"> {{ supply.owedAmount }}</td>
               <td> {{ supply.created_at | date }}</td>
             </tr>
             </tbody>

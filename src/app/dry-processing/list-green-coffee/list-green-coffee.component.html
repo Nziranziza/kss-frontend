@@ -7,10 +7,27 @@
 </div>
 
 <div class="row">
+  <div class="col-md-1 col-sm-3 col-xs-12">
+    <span style="font-size: 14px; font-weight: bolder;">Parchments</span>
+  </div>
   <div class="col-md-2 col-sm-3 col-xs-6" *ngFor="let production of summary">
-    <div class="info-box-content bg-yellow-gradient" style="margin-left: 0px">
+    <div class="info-box-content bg-yellow-gradient" style="margin-left: 0;">
       <span class="info-box-text">{{ production.coffeeType }}</span>
       <span class="progress-description" *ngFor="let item of production.grade | keyvalue">
+        Grade {{ item.key }} &nbsp;{{ item.value }}&#13199;
+      </span>
+    </div>
+  </div>
+</div>
+
+<div class="row" style="margin-top: 15px;">
+  <div class="col-md-1 col-sm-3 col-xs-12">
+    <span style="font-size: 14px; font-weight: bolder;">Green coffee</span>
+  </div>
+  <div class="col-md-2 col-sm-3 col-xs-6" *ngFor="let result of results">
+    <div class="info-box-content bg-light-blue-gradient" style="margin-left: 0px">
+      <span class="info-box-text">{{ result.coffeeType }}</span>
+      <span class="progress-description" *ngFor="let item of result.grade | keyvalue">
         Grade {{ item.key }} &nbsp;{{ item.value }}&#13199;
       </span>
     </div>
