@@ -18,10 +18,11 @@ import {AddCoffeeItemComponent} from './prepare-green-coffee/add-coffee-item/add
 import {AddResultsComponent} from './list-green-coffee/add-results/add-results.component';
 import { ListCwsGreenCoffeeComponent } from './list-cws-green-coffee/list-cws-green-coffee.component';
 import { ShowResultsComponent } from './list-cws-green-coffee/show-results/show-results.component';
+import { GreenCoffeePrepareTransferComponent } from './green-coffee-prepare-transfer/green-coffee-prepare-transfer.component';
 
 @NgModule({
   declarations: [DmParchmentListDeliveriesComponent, PrepareGreenCoffeeComponent,
-    ListGreenCoffeeComponent, EditDeliveryItemComponent, AddCoffeeItemComponent, AddResultsComponent, ListCwsGreenCoffeeComponent, ShowResultsComponent],
+    ListGreenCoffeeComponent, EditDeliveryItemComponent, AddCoffeeItemComponent, AddResultsComponent, ListCwsGreenCoffeeComponent, ShowResultsComponent, GreenCoffeePrepareTransferComponent],
   imports: [
     CommonModule,
     DryProcessingRoutingModule, NgbModule, NgxPaginationModule, OrderModule,

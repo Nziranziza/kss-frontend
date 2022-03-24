@@ -1,35 +1,35 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {BasicComponent} from '../../../core';
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 
 import {
   AuthenticationService,
+  BasicComponent,
   CoffeeTypeService,
-  ConfirmDialogService, MessageService,
+  ConfirmDialogService,
+  HelperService,
+  MessageService,
   OrganisationService,
   ParchmentService
-} from '../../../core';
+} from '../../core';
 
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {ParchmentTransferService} from '../../core/services/parchment-transfer.service';
 import {DatePipe, formatDate} from '@angular/common';
-import {HelperService} from '../../../core';
-import {ParchmentTransferService} from '../../../core/services/parchment-transfer.service';
 
 declare var $;
 
 @Component({
-  selector: 'app-parchment-prepare-transfer-cart',
-  templateUrl: './parchment-prepare-transfer-cart.component.html',
-  styleUrls: ['./parchment-prepare-transfer-cart.component.css']
+  selector: 'app-green-coffee-prepare-transfer',
+  templateUrl: './green-coffee-prepare-transfer.component.html',
+  styleUrls: ['./green-coffee-prepare-transfer.component.css']
 })
-export class ParchmentPrepareTransferCartComponent extends BasicComponent implements OnInit, OnDestroy {
+export class GreenCoffeePrepareTransferComponent  extends BasicComponent implements OnInit, OnDestroy {
 
   filterForm: FormGroup;
   transferForm: FormGroup;
   cartItem = [];
   cart = [];
-  title = 'Prepare parchments transfer';
   organisations: any;
   coffeeTypes = [];
   initialSearchValue: any;
@@ -263,5 +263,5 @@ export class ParchmentPrepareTransferCartComponent extends BasicComponent implem
 
   ngOnDestroy(): void {
   }
-}
 
+}
