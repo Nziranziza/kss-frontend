@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {AuthorisationService} from '../../../core';
+import {AuthorisationService, DryProcessingService} from '../../../core';
 import {AuthenticationService} from '../../../core';
 import {Router} from '@angular/router';
 import {constant} from '../../../../environments/constant';
@@ -17,8 +17,12 @@ export class AsidenavbarComponent implements OnInit {
   user: any;
   org: any;
   roles: any;
+  hasGreenCoffee: false;
 
-  constructor(private router: Router, private authenticationService: AuthenticationService) {
+  constructor(private router: Router,
+              private authorisationService: AuthorisationService,
+              private dryProcessingService: DryProcessingService,
+              private authenticationService: AuthenticationService) {
   }
 
   ngOnInit() {
@@ -30,6 +34,11 @@ export class AsidenavbarComponent implements OnInit {
     this.user = this.authenticationService.getCurrentUser().info;
     this.org = this.authenticationService.getCurrentUser().orgInfo;
     this.roles = constant.roles;
+    if (this.authorisationService.isCWSAdmin()) {
+      this.dryProcessingService.cwsHasGreenCoffee(this.user.org_id).subscribe((data) => {
+        this.hasGreenCoffee = data.content.hasGreenCoffee;
+      });
+    }
   }
 
   onLogOut() {

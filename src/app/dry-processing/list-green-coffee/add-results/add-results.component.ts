@@ -2,7 +2,14 @@ import {Component, Inject, Injector, Input, OnInit, PLATFORM_ID} from '@angular/
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {PaymentService} from '../../../core/services/payment.service';
 import {ActivatedRoute} from '@angular/router';
-import {AuthenticationService, BasicComponent, CoffeeTypeService, DryProcessingService, HelperService} from '../../../core';
+import {
+  AuthenticationService,
+  AuthorisationService,
+  BasicComponent,
+  CoffeeTypeService,
+  DryProcessingService,
+  HelperService
+} from '../../../core';
 import {DatePipe, isPlatformBrowser} from '@angular/common';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 
@@ -19,6 +26,7 @@ export class AddResultsComponent extends BasicComponent implements OnInit {
               private injector: Injector,
               private datePipe: DatePipe,
               private authenticationService: AuthenticationService,
+              private authorizationService: AuthorisationService,
               private route: ActivatedRoute, private coffeeTypeService: CoffeeTypeService,
               private helper: HelperService, private dryProcessingService: DryProcessingService) {
 
@@ -53,7 +61,6 @@ export class AddResultsComponent extends BasicComponent implements OnInit {
     });
     this.organisationId = this.authenticationService.getCurrentUser().info.org_id;
     this.coffeeTypeService.all().subscribe((data) => {
-      console.log(data);
       data.content.map((item) => {
         if (item.level === 'DM') {
           item.category.map((el) => {

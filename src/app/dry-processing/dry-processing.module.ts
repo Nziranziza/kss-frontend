@@ -16,10 +16,12 @@ import {ListGreenCoffeeComponent} from './list-green-coffee/list-green-coffee.co
 import {EditDeliveryItemComponent} from './dm-parchment-list-deliveries/edit-delivery-item/edit-delivery-item.component';
 import {AddCoffeeItemComponent} from './prepare-green-coffee/add-coffee-item/add-coffee-item.component';
 import {AddResultsComponent} from './list-green-coffee/add-results/add-results.component';
+import { ListCwsGreenCoffeeComponent } from './list-cws-green-coffee/list-cws-green-coffee.component';
+import { ShowResultsComponent } from './list-cws-green-coffee/show-results/show-results.component';
 
 @NgModule({
   declarations: [DmParchmentListDeliveriesComponent, PrepareGreenCoffeeComponent,
-    ListGreenCoffeeComponent, EditDeliveryItemComponent, AddCoffeeItemComponent, AddResultsComponent],
+    ListGreenCoffeeComponent, EditDeliveryItemComponent, AddCoffeeItemComponent, AddResultsComponent, ListCwsGreenCoffeeComponent, ShowResultsComponent],
   imports: [
     CommonModule,
     DryProcessingRoutingModule, NgbModule, NgxPaginationModule, OrderModule,
@@ -32,7 +34,8 @@ import {AddResultsComponent} from './list-green-coffee/add-results/add-results.c
   entryComponents: [
     EditDeliveryItemComponent,
     AddCoffeeItemComponent,
-    AddResultsComponent
+    AddResultsComponent,
+    ShowResultsComponent
   ]
 })
 export class DryProcessingModule {

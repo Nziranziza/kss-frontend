@@ -6,34 +6,6 @@
   </div>
 </div>
 
-<div class="row">
-  <div class="col-md-1 col-sm-3 col-xs-12">
-    <span style="font-size: 14px; font-weight: bolder;">Parchments</span>
-  </div>
-  <div class="col-md-2 col-sm-3 col-xs-6" *ngFor="let production of summary">
-    <div class="info-box-content bg-yellow-gradient" style="margin-left: 0;">
-      <span class="info-box-text">{{ production.coffeeType }}</span>
-      <span class="progress-description" *ngFor="let item of production.grade | keyvalue">
-        Grade {{ item.key }} &nbsp;{{ item.value }}&#13199;
-      </span>
-    </div>
-  </div>
-</div>
-
-<div class="row" style="margin-top: 15px;">
-  <div class="col-md-1 col-sm-3 col-xs-12">
-    <span style="font-size: 14px; font-weight: bolder;">Green coffee</span>
-  </div>
-  <div class="col-md-2 col-sm-3 col-xs-6" *ngFor="let result of results">
-    <div class="info-box-content bg-light-blue-gradient" style="margin-left: 0px">
-      <span class="info-box-text">{{ result.coffeeType }}</span>
-      <span class="progress-description" *ngFor="let item of result.grade | keyvalue">
-        Grade {{ item.key }} &nbsp;{{ item.value }}&#13199;
-      </span>
-    </div>
-  </div>
-</div>
-
 <div class="row filter-form" style="margin-bottom: 10px; margin-left: -15px; margin-top: 15px;">
   <div class="col-xs-2">
     <div class="ng-autocomplete">
@@ -44,7 +16,7 @@
         (selected)='selectEvent($event)'
         (inputCleared) = 'deselectEvent()'
         [initialValue]="initialValue"
-        [placeHolder]="'Select supplier'"
+        [placeHolder]="'Select destination'"
         [itemTemplate]="itemTemplate"
         [notFoundTemplate]="notFoundTemplate">
       </ng-autocomplete>
@@ -59,13 +31,6 @@
     </div>
   </div>
   <form [formGroup]="filterForm" (ngSubmit)="onFilter()">
-    <div class="col-lg-1 col-md-2 col-sm-3 col-xs-6">
-      <select class="form-control" formControlName="type">
-        <option value="" [selected]="true"> all </option>
-        <option value="processing"> processing </option>
-        <option value="sold"> sold </option>
-      </select>
-    </div>
     <ng-container formGroupName="date">
       <div class="col-lg-1 col-md-1 col-sm-6">
         <div class="form-group">
@@ -104,10 +69,10 @@
             <th>Quantity</th>
             <th>Delivery type</th>
             <th>Output qty</th>
-            <th>Lot number</th>
+            <th>Lot number </th>
             <th>Date</th>
             <th></th>
-            <th style="min-width: 15%"></th>
+            <th></th>
           </tr>
           </thead>
           <tbody>
@@ -125,7 +90,6 @@
                   <td>Grade</td>
                   <td>Qty</td>
                   <td></td>
-                  <td></td>
                 </tr>
                 <tr *ngFor="let item of coffee.mixture"
                     style="font-style: oblique; font-size: 12px; background: transparent">
@@ -136,31 +100,19 @@
                   <td>
                     <ng-container *ngFor="let itm of item.items; let i = index">
                       <ng-container *ngFor="let parchment of itm.parchments; let i = index">
-                          <a type="button"
-                             class="btn btn-sm btn-link select-parchment selected-parchment" data-toggle="tooltip"
-                             title="{{'Qty : ' + parchment?.qtyToDeduct + '&#13199; ' }}"> {{ parchment.lotNumber }}
-                          </a>
+                        <a type="button"
+                           class="btn btn-sm btn-link select-parchment selected-parchment" data-toggle="tooltip"
+                           title="{{'Qty : ' + parchment?.qtyToDeduct + '&#13199; ' }}"> {{ parchment.lotNumber }}
+                        </a>
                       </ng-container>
                     </ng-container>
-                  </td>
-                  <td>
-                    <a class="btn btn-default btn-margin btn-sm pull-right cancel-item"
-                       type="button" id="{{coffee._id}}-{{item._id}}">
-                      <i class="fa fa-remove" aria-hidden="true"></i>
-                    </a>
                   </td>
                 </tr>
               </table>
             </td>
             <td>
-              <button class="btn btn-default btn-margin btn-sm pull-right" (click)="cancelGreenCoffee(coffee._id)" type="button">
-                <i class="fa fa-remove" aria-hidden="true"></i> cancel
-              </button>
-              <a class="btn btn- btn-primary btn-sm pull-right" style="margin-left: 10px;" (click)="addResults(coffee._id)">
+              <a class="btn btn- btn-primary btn-sm pull-right" *ngIf="coffee.results" style="margin-left: 10px;" (click)="showResults(coffee.organization._id, coffee._id)">
                 results
-              </a>
-              <a class="btn btn-success btn-margin btn-sm pull-right" style="margin-left: 10px;" (click)="addItem(coffee._id)">
-                add
               </a>
             </td>
           </tr>

@@ -48,6 +48,14 @@ export class DryProcessingService {
     return this.apiService.post('/greencoffee/list', body);
   }
 
+  getCWSGreenCoffee(body: string) {
+    return this.apiService.post('/greencoffee/list/by_cws', body);
+  }
+
+  cwsHasGreenCoffee(id: string) {
+    return this.apiService.get('/greencoffee/cws/has/processing/' + id);
+  }
+
   getGreenCoffeeGrades() {
     return this.apiService.get('/greencoffee/grades/list');
   }
