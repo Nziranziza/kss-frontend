@@ -5,15 +5,16 @@ import {
   ConfirmDialogService, DryProcessingService,
   MessageService,
   SeasonService,
-} from '../../core/services';
+} from '../../core';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {DatePipe} from '@angular/common';
 import {Subject} from 'rxjs';
-import {BasicComponent} from '../../core/library';
+import {BasicComponent} from '../../core';
 import {DataTableDirective} from 'angular-datatables';
 import {AddCoffeeItemComponent} from '../prepare-green-coffee/add-coffee-item/add-coffee-item.component';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {HelperService} from '../../core/helpers';
+import {HelperService} from '../../core';
+import {AddResultsComponent} from './add-results/add-results.component';
 
 declare var $;
 
@@ -44,10 +45,11 @@ export class ListGreenCoffeeComponent extends BasicComponent implements OnInit, 
   // @ts-ignore
   @ViewChild(DataTableDirective, {static: false})
   dtElement: DataTableDirective;
-  @ViewChild('supplier')  supplier: any;
+  @ViewChild('supplier') supplier: any;
   greenCoffees = [];
   parameters: any;
   summary: any;
+  results: any;
   orgId: string;
   filterForm: FormGroup;
   currentDate: any;
@@ -66,7 +68,7 @@ export class ListGreenCoffeeComponent extends BasicComponent implements OnInit, 
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 25,
-      columns: [{}, {}, {}, {
+      columns: [{}, {}, {}, {}, {}, {
         class: 'none'
       }, {}],
       responsive: true
@@ -156,9 +158,9 @@ export class ListGreenCoffeeComponent extends BasicComponent implements OnInit, 
       this.loading = false;
       this.greenCoffees.forEach((coffee) => {
         coffee.mixture.forEach((item) => {
-        if (!this.checkOrg(item.supplier, this.organisations)) {
-          this.organisations.push(item.supplier);
-        }
+          if (!this.checkOrg(item.supplier, this.organisations)) {
+            this.organisations.push(item.supplier);
+          }
         });
       });
     }, (err) => {
@@ -170,6 +172,10 @@ export class ListGreenCoffeeComponent extends BasicComponent implements OnInit, 
     this.dryProcessingService.getGreenCoffeeStockSummary(this.parameters).subscribe((data) => {
       this.summary = data.content;
     });
+    this.dryProcessingService.getGreenCoffeeResultSummary(this.parameters).subscribe((data) => {
+      this.results = data.content;
+    });
+
   }
 
   checkOrg(org: any, list: any) {
@@ -217,4 +223,13 @@ export class ListGreenCoffeeComponent extends BasicComponent implements OnInit, 
       this.getGreenCoffeeList();
     });
   }
+
+  addResults(id: string) {
+    const modalRef = this.modal.open(AddResultsComponent, {size: 'sm'});
+    modalRef.componentInstance.id = id;
+    modalRef.result.finally(() => {
+      this.getGreenCoffeeList();
+    });
+  }
 }
+

@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Router} from '@angular/router';
-import {AuthenticationService, ExcelServicesService, OrganisationService, OrganisationTypeService} from '../../core/services';
-import {HelperService} from '../../core/helpers';
-import {LocationService} from '../../core/services';
-import {ParchmentService} from '../../core/services';
-import {AuthorisationService} from '../../core/services';
-import {BasicComponent} from '../../core/library';
+import {FormArray, FormBuilder, FormGroup} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import {AuthenticationService, ExcelServicesService, OrganisationService, OrganisationTypeService} from '../../core';
+import {HelperService} from '../../core';
+import {LocationService} from '../../core';
+import {ParchmentService} from '../../core';
+import {AuthorisationService} from '../../core';
+import {BasicComponent} from '../../core';
 import {isUndefined} from 'util';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ParchmentReportDetailComponent} from './parchment-report-detail/parchment-report-detail.component';
@@ -77,6 +77,7 @@ export class ParchmentReportComponent extends BasicComponent implements OnInit {
               private authenticationService: AuthenticationService,
               private excelService: ExcelServicesService,
               private modal: NgbModal,
+              private route: ActivatedRoute,
               private datePipe: DatePipe,
               private router: Router, private organisationService: OrganisationService,
               private helper: HelperService, private organisationTypeService: OrganisationTypeService,
@@ -106,6 +107,14 @@ export class ParchmentReportComponent extends BasicComponent implements OnInit {
     };
     this.initial();
     this.onChanges();
+  }
+
+  get fromFilterDate() {
+    return this.filterForm.controls.date.get('from'.toString()).value;
+  }
+
+  get toFilterDate() {
+    return this.filterForm.controls.date.get('to'.toString()).value;
   }
 
   onSubmit(searchBy: string) {

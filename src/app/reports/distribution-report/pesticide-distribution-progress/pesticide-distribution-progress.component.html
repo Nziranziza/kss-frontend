@@ -117,6 +117,7 @@
                 <th>Location</th>
                 <th>Number of lands</th>
                 <th>Number of trees</th>
+                <th>Stockout Qty (L)</th>
                 <th>Applied</th>
                 <th>Number of Trees Applied</th>
                 <th>Approved</th>
@@ -127,9 +128,19 @@
                 <td> {{ location.name }}</td>
                 <td> {{ location.totalNumberOfLands }}</td>
                 <td> {{ location.totalNumberOfTrees }}</td>
+                <td> {{ location.totalStockOut }}</td>
                 <td> {{ location.totalApplied }}</td>
                 <td> {{ location.totalAppliedTrees}}</td>
                 <td> {{ location.totalApproved }}</td>
+              </tr>
+              <tr>
+                <th> Total</th>
+                <th> {{ summarizeData('totalNumberOfLands') }}</th>
+                <th> {{ summarizeData('totalNumberOfTrees') }}</th>
+                <th> {{ summarizeData('totalStockOut') }}</th>
+                <th> {{ summarizeData('totalApplied') }}</th>
+                <th> {{ summarizeData('totalAppliedTrees') }}</th>
+                <th> {{ summarizeData('totalApproved') }}</th>
               </tr>
               </tbody>
             </table>

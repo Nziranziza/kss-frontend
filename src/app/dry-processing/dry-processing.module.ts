@@ -13,12 +13,15 @@ import {FusionChartsModule} from 'angular-fusioncharts';
 import {GoogleChartsModule} from 'angular-google-charts';
 import {PrepareGreenCoffeeComponent} from './prepare-green-coffee/prepare-green-coffee.component';
 import {ListGreenCoffeeComponent} from './list-green-coffee/list-green-coffee.component';
-import { EditDeliveryItemComponent } from './dm-parchment-list-deliveries/edit-delivery-item/edit-delivery-item.component';
-import { AddCoffeeItemComponent } from './prepare-green-coffee/add-coffee-item/add-coffee-item.component';
+import {EditDeliveryItemComponent} from './dm-parchment-list-deliveries/edit-delivery-item/edit-delivery-item.component';
+import {AddCoffeeItemComponent} from './prepare-green-coffee/add-coffee-item/add-coffee-item.component';
+import {AddResultsComponent} from './list-green-coffee/add-results/add-results.component';
+import { ListCwsGreenCoffeeComponent } from './list-cws-green-coffee/list-cws-green-coffee.component';
+import { ShowResultsComponent } from './list-cws-green-coffee/show-results/show-results.component';
 
 @NgModule({
   declarations: [DmParchmentListDeliveriesComponent, PrepareGreenCoffeeComponent,
-    ListGreenCoffeeComponent, EditDeliveryItemComponent, AddCoffeeItemComponent],
+    ListGreenCoffeeComponent, EditDeliveryItemComponent, AddCoffeeItemComponent, AddResultsComponent, ListCwsGreenCoffeeComponent, ShowResultsComponent],
   imports: [
     CommonModule,
     DryProcessingRoutingModule, NgbModule, NgxPaginationModule, OrderModule,
@@ -30,7 +33,9 @@ import { AddCoffeeItemComponent } from './prepare-green-coffee/add-coffee-item/a
   ],
   entryComponents: [
     EditDeliveryItemComponent,
-    AddCoffeeItemComponent
+    AddCoffeeItemComponent,
+    AddResultsComponent,
+    ShowResultsComponent
   ]
 })
 export class DryProcessingModule {

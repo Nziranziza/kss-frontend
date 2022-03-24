@@ -39,9 +39,12 @@ export class OrganisationSuppliersComponent extends BasicComponent implements On
   cherriesTotalQty = 0;
   owedAmount = 0;
   totalCost = 0;
+  fromFilterDate: Date | string = '';
+  toFilterDate: Date | string = '';
   // @ts-ignore
   loading = false;
   isUserCWSOfficer = true;
+  isUserCeparOfficer = true;
   org: any;
   currentSeason: any;
   orgCoveredArea = [];
@@ -68,32 +71,38 @@ export class OrganisationSuppliersComponent extends BasicComponent implements On
   dtTrigger: Subject = new Subject();
 
   ngOnInit() {
+    this.seasonStartingTime = this.authenticationService.getCurrentSeason().created_at;
     this.route.params.subscribe(params => {
       this.organisationId = params['organisationId'.toString()];
     });
-    this.seasonStartingTime = this.authenticationService.getCurrentSeason().created_at;
-    this.parameters = {
-      status: 'supplied',
-      org_id: this.organisationId,
-      date: {
-        from: this.seasonStartingTime,
-        to: new Date()
-      }
-    };
+    this.route.queryParams.subscribe(params => {
+      this.toFilterDate = params['to'.toString()] ? new Date(params['to'.toString()])
+        : this.datePipe.transform(new Date(), 'yyyy-MM-dd', 'GMT+2');
+      this.fromFilterDate = params['from'.toString()] ? new Date(params['from'.toString()]) :
+        this.datePipe.transform(this.seasonStartingTime, 'yyyy-MM-dd', 'GMT+2');
+      this.parameters = {
+        status: 'supplied',
+        org_id: this.organisationId,
+        date: {
+          from: this.fromFilterDate,
+          to: this.toFilterDate
+        }
+      };
+    });
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 25
     };
+    this.isUserCeparOfficer = this.authorisationService.isCeparUser();
     this.filterForm = this.formBuilder.group({
-      status: ['supplied', Validators.required],
+      status: [{value: 'supplied', disabled: this.isUserCeparOfficer}, Validators.required],
       search: this.formBuilder.group({
         term: ['', Validators.minLength(3)],
         searchBy: ['forename']
       }),
       date: this.formBuilder.group({
-        from: [this.datePipe.transform(this.seasonStartingTime,
-          'yyyy-MM-dd', 'GMT+2'), Validators.required],
-        to: [this.datePipe.transform(new Date(), 'yyyy-MM-dd', 'GMT+2'), Validators.required],
+        from: [this.fromFilterDate, Validators.required],
+        to: [this.toFilterDate, Validators.required],
       })
     });
     this.subRegionFilter = {
@@ -101,9 +110,10 @@ export class OrganisationSuppliersComponent extends BasicComponent implements On
         searchBy: 'cws',
         cws_id: this.organisationId
       },
+
       date: {
-        from: this.seasonStartingTime,
-        to: new Date()
+        from: this.fromFilterDate ? this.fromFilterDate : this.seasonStartingTime,
+        to: this.toFilterDate ? this.toFilterDate : new Date()
       }
     };
     this.getSuppliers();
@@ -223,22 +233,36 @@ export class OrganisationSuppliersComponent extends BasicComponent implements On
     this.printable = [];
     this.suppliers.map((farmer) => {
       farmer.deliveries.map((delivery) => {
-        this.printable.push({
-          LastName: farmer.userInfo.surname,
-          FirstName: farmer.userInfo.foreName,
-          RegNumber: farmer.userInfo.regNumber,
-          PaymentStatus: delivery.paymentStatus,
-          PaidAmount: delivery.paidAmount,
-          DeliveryApproval: delivery.deliveryApproval,
-          Season: delivery.season.name,
-          CherriesType: delivery.cherriesType,
-          Qty: delivery.cherriesQty,
-          UnitPrice: delivery.unitPerKg,
-          OwedAmount: delivery.owedAmount,
-          RecordedBy: delivery.recordedBy ? delivery.recordedBy.foreName + ' ' + delivery.recordedBy.surname : '',
-          Date: this.datePipe.transform(delivery.created_at,
-            'yyyy-MM-dd', 'GMT+2')
-        });
+        if (!this.isUserCeparOfficer) {
+          this.printable.push({
+            LastName: farmer.userInfo.surname,
+            FirstName: farmer.userInfo.foreName,
+            RegNumber: farmer.userInfo.regNumber,
+            PaymentStatus: delivery.paymentStatus,
+            PaidAmount: delivery.paidAmount,
+            DeliveryApproval: delivery.deliveryApproval,
+            Season: delivery.season.name,
+            CherriesType: delivery.cherriesType,
+            Qty: delivery.cherriesQty,
+            UnitPrice: delivery.unitPerKg,
+            OwedAmount: delivery.owedAmount,
+            RecordedBy: delivery.recordedBy ? delivery.recordedBy.foreName + ' ' + delivery.recordedBy.surname : '',
+            Date: this.datePipe.transform(delivery.created_at,
+              'yyyy-MM-dd', 'GMT+2')
+          });
+        } else {
+            this.printable.push({
+            LastName: farmer.userInfo.surname,
+            FirstName: farmer.userInfo.foreName,
+            RegNumber: farmer.userInfo.regNumber,
+            Season: delivery.season.name,
+            CherriesType: delivery.cherriesType,
+            Qty: delivery.cherriesQty,
+            RecordedBy: delivery.recordedBy ? delivery.recordedBy.foreName + ' ' + delivery.recordedBy.surname : '',
+            Date: this.datePipe.transform(delivery.created_at,
+              'yyyy-MM-dd', 'GMT+2')
+          });
+        }
       });
     });
   }

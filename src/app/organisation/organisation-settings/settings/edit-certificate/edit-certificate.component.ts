@@ -6,7 +6,7 @@ import {HelperService} from '../../../../core/helpers';
 import {CoffeeTypeService, OrganisationService} from '../../../../core/services';
 import {ActivatedRoute} from '@angular/router';
 import {NgbActiveModal, NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {isPlatformBrowser} from '@angular/common';
+import {DatePipe, isPlatformBrowser} from '@angular/common';
 
 @Component({
   selector: 'app-edit-certificate-channel',
@@ -19,6 +19,7 @@ export class EditCertificateComponent extends BasicComponent implements OnInit {
               private paymentService: PaymentService,
               @Inject(PLATFORM_ID) private platformId: object,
               private injector: Injector,
+              private datePipe: DatePipe,
               private route: ActivatedRoute, private coffeeTypeService: CoffeeTypeService,
               private helper: HelperService, private organisationService: OrganisationService) {
 

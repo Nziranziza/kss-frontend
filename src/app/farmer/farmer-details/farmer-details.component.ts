@@ -17,12 +17,12 @@ export class FarmerDetailsComponent implements OnInit {
   requests: any;
   resetPin = true;
   showSetPinButton = false;
+  showProduction = false;
   body = {};
 
   graph = {
     type: 'ColumnChart',
-    data: [
-    ],
+    data: [],
     options: {
       colors: ['#94c17d'],
       height: '100%',
@@ -73,10 +73,16 @@ export class FarmerDetailsComponent implements OnInit {
       };
     }
     this.cherrySupplyService.getFarmerDeliveriesStats(this.body).subscribe((data) => {
-      this.graph.data = [];
-      data.content.map((season) => {
-        this.graph.data.push([season._id, season.suppliedQty]);
-      });
+      if (data.content.length > 0) {
+        this.graph.data = [];
+        data.content.map((season) => {
+          // @ts-ignore
+          this.graph.data.push([season._id, season.suppliedQty]);
+          this.showProduction = true;
+        });
+      } else {
+        this.showProduction = false;
+      }
     });
     this.getSetPinStatus();
   }
