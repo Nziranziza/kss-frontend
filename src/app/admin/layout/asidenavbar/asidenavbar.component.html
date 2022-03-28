@@ -73,9 +73,16 @@
           </li>
         </ul>
       </li>
+      <li routerLinkActive="active" *appHasPermission="[[4,1],[4,11],[4,12],0,6,5]">
+        <a routerLink="/admin/cherries/parchments/report">
+          <i class="fa fa-bar-chart-o"></i>
+          <span>Cherries supply</span>
+        </a>
+      </li>
       <li class="treeview" routerLinkActive="active" *appHasPermission="[1]">
         <a href="#">
-          <i class="fa fa-archive" aria-hidden="true"></i> <span>Parchments</span>
+          <i class="fa fa-archive" aria-hidden="true"></i>
+          <span>Parchments</span>
           <span class="pull-right-container">
             <i class="fa fa-angle-left pull-right"></i>
           </span>
@@ -101,18 +108,31 @@
           </li>
         </ul>
       </li>
-      <li routerLinkActive="active" *appHasPermission="[[4,1],[4,11],[4,12],0,6]">
-        <a routerLink="/admin/cherries/parchments/report">
-          <i class="fa fa-bar-chart-o"></i>
-          <span>Cherries supply</span>
-        </a>
-      </li>
       <li routerLinkActive="active" *appHasPermission="[[4,1],[4,11],[4,12],0]">
         <a routerLink="/admin/payment/reports">
           <i class="fa fa-pie-chart"></i>
           <span>Payments report</span>
         </a>
       </li>
+      <ng-container *ngIf="hasGreenCoffee">
+      <li class="treeview" routerLinkActive="active" *appHasPermission="[1]">
+        <a href="#">
+          <i class="fa fa-coffee"></i>
+          <span>Green coffee</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
+        </a>
+        <ul class="treeview-menu">
+          <li routerLinkActive="active" *appHasPermission="[1]">
+            <a routerLink="/admin/cws/greencoffee/list">
+              <i class="fa fa-circle-o" aria-hidden="true"></i>
+              <span>&nbsp;Green coffee</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      </ng-container>
       <li class="treeview" routerLinkActive="active" *appHasPermission="[1]" appInternal>
         <a href="#">
           <i class="fa fa-gg"></i> <span>Payments</span>

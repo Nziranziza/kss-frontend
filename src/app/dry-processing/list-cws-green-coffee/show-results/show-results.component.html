@@ -1,0 +1,57 @@
+<div class="modal-header">
+  <i class="fa fa-times-circle close" style="font-size: 24px;" aria-label="Close" (click)="modal.dismiss()">
+  </i>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="col-xs-12">
+      <h4 class="page-header">
+        Drying results
+      </h4>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-6 invoice-col">
+      <div class="row">
+        <div class="col-sm-6">
+          Date
+        </div>
+        <div class="col-sm-6">
+          <strong>{{ results?.date | date }}</strong><br>
+        </div>
+        <div class="col-sm-6">
+          Quantity
+        </div>
+        <div class="col-sm-6">
+          {{ results?.quantity + ' &#13199; ' }}<br>
+        </div>
+        <div class="col-sm-6">
+          Garde
+        </div>
+        <div class="col-sm-6">
+          {{ results?.grade }}<br>
+        </div>
+        <div class="col-sm-6">
+          Type
+        </div>
+        <div class="col-sm-6">
+          {{ results?.type.name }}<br>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6 invoice-col">
+      <div class="row">
+        <div class="col-sm-6">
+          Download results
+        </div>
+        <div class="col-sm-6">
+          <button class="btn btn-success btn-margin btn-sm" (click)="downloadResults()"
+                  type="button">
+            <i class="fa fa-download" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

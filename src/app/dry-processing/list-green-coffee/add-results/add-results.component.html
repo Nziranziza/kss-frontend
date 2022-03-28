@@ -10,7 +10,7 @@
   <app-list-errors [errorList]="errors"></app-list-errors>
   <form [formGroup]="uploadResultsForm" (ngSubmit)="onUploadResults()">
     <div class="row">
-      <div class="col-xs-4">
+      <div class="col-xs-2">
         <div class="form-group">
           <span class="label-required">Date</span>
           <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="date"
@@ -18,7 +18,7 @@
           <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
         </div>
       </div>
-      <div class="col-xs-4">
+      <div class="col-xs-2">
         <div class="form-group">
           <span class="label-required" *ngIf="!isFileSaved">Upload lab document</span>
           <span class="label-required" *ngIf="isFileSaved">Update lab document</span>
@@ -45,7 +45,23 @@
           </div>
         </div>
       </div>
-      <div class="col-xs-4">
+      <div class="col-xs-2">
+        <div class="form-group">
+          <span class="label-required">Coffee type</span>
+          <select class="form-control" formControlName="type">
+            <option *ngFor="let type of coffeeTypes" value="{{type._id}}"> {{ type.name }}</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-xs-2">
+        <div class="form-group">
+          <span class="label-required">Grade</span>
+          <select class="form-control" formControlName="grade">
+            <option *ngFor="let grade of grades" value="{{grade.value}}"> {{ grade.name }}</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-xs-2">
         <div class="form-group">
           <span class="label-required">Quantity</span>
           <input class="form-control" type="number" formControlName="quantity" min="0">

@@ -2,7 +2,14 @@ import {Component, Inject, Injector, Input, OnInit, PLATFORM_ID} from '@angular/
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {PaymentService} from '../../../core/services/payment.service';
 import {ActivatedRoute} from '@angular/router';
-import {AuthenticationService, BasicComponent, CoffeeTypeService, DryProcessingService, HelperService} from '../../../core';
+import {
+  AuthenticationService,
+  AuthorisationService,
+  BasicComponent,
+  CoffeeTypeService,
+  DryProcessingService,
+  HelperService
+} from '../../../core';
 import {DatePipe, isPlatformBrowser} from '@angular/common';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 
@@ -19,6 +26,7 @@ export class AddResultsComponent extends BasicComponent implements OnInit {
               private injector: Injector,
               private datePipe: DatePipe,
               private authenticationService: AuthenticationService,
+              private authorizationService: AuthorisationService,
               private route: ActivatedRoute, private coffeeTypeService: CoffeeTypeService,
               private helper: HelperService, private dryProcessingService: DryProcessingService) {
 
@@ -36,7 +44,9 @@ export class AddResultsComponent extends BasicComponent implements OnInit {
   isImage = false;
   isFileSaved: boolean;
   cardFileBase64: any;
+  coffeeTypes = [];
   @Input() id;
+  grades = [];
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -45,10 +55,22 @@ export class AddResultsComponent extends BasicComponent implements OnInit {
     this.uploadResultsForm = this.formBuilder.group({
       date: [this.datePipe.transform(new Date(), 'yyyy-MM-dd'), Validators.required],
       file: ['', Validators.required],
-      quantity: ['', Validators.required]
+      quantity: ['', Validators.required],
+      grade: ['', Validators.required],
+      type: ['', Validators.required]
     });
     this.organisationId = this.authenticationService.getCurrentUser().info.org_id;
+    this.coffeeTypeService.all().subscribe((data) => {
+      data.content.map((item) => {
+        if (item.level === 'DM') {
+          item.category.map((el) => {
+            this.coffeeTypes.push(el);
+          });
+        }
+      });
+    });
     this.getGreenCoffeeResults(this.id);
+    this.getGrades();
   }
 
   getGreenCoffeeResults(id: string) {
@@ -56,7 +78,9 @@ export class AddResultsComponent extends BasicComponent implements OnInit {
       if (data.content.results) {
         this.results = {
           date: data.content.results.date,
-          quantity: data.content.results.quantity
+          quantity: data.content.results.quantity,
+          grade: data.content.results.grade,
+          type: data.content.results.type._id
         };
         this.cardFileBase64 = data.content.results.file;
         this.isFileSaved = true;
@@ -135,6 +159,14 @@ export class AddResultsComponent extends BasicComponent implements OnInit {
 
       reader.readAsDataURL(file);
       this.isFileSaved = true;
+    });
+  }
+
+  getGrades() {
+    this.dryProcessingService.getGreenCoffeeGrades().subscribe((data) => {
+      Object.keys(data.content).map(key => {
+        this.grades.push({name: key, value: key});
+      });
     });
   }
 }
