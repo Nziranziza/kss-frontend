@@ -1,6 +1,8 @@
 <h3>
   Coffee types
-  <a class="btn btn-success pull-right" routerLink="/admin/coffee-type/create"><i class="fa fa-plus"></i> New coffee type</a>
+  <a class="btn btn-success pull-right" routerLink="/admin/coffee-type/create"
+    ><i class="fa fa-plus"></i> New coffee type</a
+  >
 </h3>
 <app-list-message [message]="message"></app-list-message>
 <div class="row">
@@ -9,18 +11,35 @@
       <div class="box-body table-responsive">
         <table class="hover table table-striped">
           <thead>
-          <tr>
-            <th>Category</th>
-            <th>Level</th>
-          </tr>
+            <tr>
+              <th>Category</th>
+              <th>Level</th>
+              <th class="pull-right">#</th>
+            </tr>
           </thead>
           <tbody style="border-width: 1px">
-          <ng-container *ngFor="let type of coffeeTypes">
-            <tr *ngFor="let category of type.category">
-              <td> {{ category.name }}</td>
-              <td> {{ type.level }}</td>
-            </tr>
-          </ng-container>
+            <ng-container *ngFor="let type of coffeeTypes">
+              <tr *ngFor="let category of type.category">
+                <td>{{ category.name }}</td>
+                <td>{{ type.level }}</td>
+                <td>
+                  <a
+                    class="btn btn-danger btn-sm btn-margin pull-right"
+                    (click)="openDeleteModal(category)"
+                    style="margin-left: 10px"
+                  >
+                    <i class="fa fa-trash"></i>
+                  </a>
+                  <a
+                    class="btn btn-success btn-sm btn-margin pull-right"
+                    routerLink="/admin/coffee-type/edit/{{ category._id }}"
+                    style="margin-left: 10px"
+                  >
+                    Edit
+                  </a>
+                </td>
+              </tr>
+            </ng-container>
           </tbody>
         </table>
       </div>
