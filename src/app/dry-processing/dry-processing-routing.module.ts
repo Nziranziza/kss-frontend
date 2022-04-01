@@ -5,6 +5,8 @@ import {AdminGuard} from '../core/services/guards/admin.guard';
 import {DmParchmentListDeliveriesComponent} from './dm-parchment-list-deliveries/dm-parchment-list-deliveries.component';
 import {PrepareGreenCoffeeComponent} from './prepare-green-coffee/prepare-green-coffee.component';
 import {ListGreenCoffeeComponent} from './list-green-coffee/list-green-coffee.component';
+import {GreenCoffeePrepareTransferComponent} from './green-coffee-prepare-transfer/green-coffee-prepare-transfer.component';
+import {GreenCoffeeListTransfersComponent} from './green-coffee-list-transfers/green-coffee-list-transfers.component';
 
 const routes: Routes = [
   {
@@ -23,6 +25,14 @@ const routes: Routes = [
       {
         path: 'drymill/green_coffee/mixtures',
         component: ListGreenCoffeeComponent
+      },
+      {
+        path: 'drymill/green_coffee/transfer',
+        component: GreenCoffeePrepareTransferComponent
+      },
+      {
+        path: 'drymill/green_coffee/list/transfers',
+        component: GreenCoffeeListTransfersComponent
       },
     ]
   }
