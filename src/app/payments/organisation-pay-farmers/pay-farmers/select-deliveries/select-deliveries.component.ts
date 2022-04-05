@@ -226,7 +226,7 @@ export class SelectDeliveriesComponent extends BasicComponent implements OnInit,
   onNext() {
     this.paymentProcessingService.setSelectionFilter(this.filterForm.getRawValue());
     this.paymentProcessingService.setSelectedDeliveries(this.suppliers);
-    this.router.navigateByUrl('admin/pay-farmers/v/preview-deliveries');
+    this.router.navigateByUrl('admin/pay-farmers/preview-deliveries');
   }
 
   rerender(): void {
