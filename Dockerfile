@@ -33,6 +33,6 @@ COPY --chown=docker-deployer:docker-deployer ./package.json ./
 COPY --chown=docker-deployer:docker-deployer . .
 EXPOSE 5050
 
-RUN npm i 
-RUN ng build --prod --aot --configuration=staging
+RUN npm i
+RUN ng build --prod --aot
 RUN sudo service nginx restart
