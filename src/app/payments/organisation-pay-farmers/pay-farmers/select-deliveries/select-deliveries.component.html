@@ -115,7 +115,7 @@
                   <th></th>
                   <th>CherriesQty (kg)</th>
                   <th>Unit Price</th>
-                  <th>Delivery Approval</th>
+                  <!-- <th>Delivery Approval</th> -->
                   <th>Paid Amount (rwf)</th>
                   <th>Amount To Pay</th>
                   <!-- <th>Date</th> -->
@@ -133,10 +133,10 @@
                   </td>
                   <td> {{ supply.cherriesQty }}</td>
                   <td> {{ supply.unitPerKg }}</td>
-                  <td>
+                  <!-- <td>
                     <ng-container *ngIf="supply.deliveryApproval; else notDelivered">approved</ng-container>
                     <ng-template #notDelivered> not approved</ng-template>
-                  </td>
+                  </td> -->
                   <td> {{ supply.paidAmount }}</td>
                   <td>
                     <span (keyup)="changeValue(i, t, 'owedAmount', $event)" (blur)="updateList(i, t, 'owedAmount', $event)" contenteditable="true">{{ supply.owedAmount }}</span>
