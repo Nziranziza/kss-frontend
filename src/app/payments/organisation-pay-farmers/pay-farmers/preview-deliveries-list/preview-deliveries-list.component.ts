@@ -44,6 +44,7 @@ export class PreviewDeliveriesListComponent implements OnInit {
           surname: supplier.userInfo.surname,
           regNumber: supplier.userInfo.regNumber,
           userId: supplier.userInfo.userId,
+          paymentChannels: supplier.userInfo.paymentChannels,
           amount: this.getOwedAmount(supplier.deliveries),
           deliveries: this.getDeliveries(supplier.deliveries)
         };
