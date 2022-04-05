@@ -15,10 +15,11 @@ import {DataTablesModule} from 'angular-datatables';
 import {SiteFarmersComponent} from './site-farmers/site-farmers.component';
 import {SitePendingFarmersComponent} from './site-pending-farmers/site-pending-farmers.component';
 import {SiteDetailsComponent} from './site-details/site-details.component';
+import { DeleteSiteModal } from './delete-site-modal/delete-site-modal-component';
 
 @NgModule({
   declarations: [SiteListComponent, SiteCreateComponent,
-    SiteEditComponent, SiteFarmersComponent, SitePendingFarmersComponent, SiteDetailsComponent],
+    SiteEditComponent, SiteFarmersComponent, SitePendingFarmersComponent, SiteDetailsComponent, DeleteSiteModal],
   imports: [
     CommonModule,
     OrganisationRoutingModule,
@@ -31,7 +32,7 @@ import {SiteDetailsComponent} from './site-details/site-details.component';
     SitesRoutingModule,
     DataTablesModule
   ],
-  entryComponents: [SiteDetailsComponent]
+  entryComponents: [SiteDetailsComponent, DeleteSiteModal]
 })
 export class SitesModule {
 }

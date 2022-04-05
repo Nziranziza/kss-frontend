@@ -39,9 +39,9 @@
                     <span class="">Province</span>
                     <div class="input-group input-group-sm">
                       <select class="form-control" formControlName="prov_id">
-                        <option value="all provinces" selected="selected">All provinces</option>
-                        <option value="all districts">All districts</option>
-                        <option value="all cws">All cws</option>
+                        <option value="all provinces" selected="selected">ALL PROVINCES</option>
+                        <option value="all districts">ALL DISTRICTS</option>
+                        <option value="all cws">ALL CWS</option>
                         <option *ngFor="let province of provinces" value="{{province._id}}">{{province.namee}}</option>
                       </select>
                       <span class="input-group-btn">
@@ -59,13 +59,13 @@
                       <select class="form-control" formControlName="dist_id" disabled="true"
                               *ngIf="isCurrentUserDCC; else enabled">
                         <option value=""></option>
-                        <option value="all cws" *ngIf="showDistrictAllCWS">All cws</option>
+                        <option value="all cws" *ngIf="showDistrictAllCWS">ALL CWS</option>
                         <option *ngFor="let district of districts" value="{{district._id}}">{{district.name}}</option>
                       </select>
                       <ng-template #enabled>
                         <select class="form-control" formControlName="dist_id">
                           <option value=""></option>
-                          <option value="all cws" *ngIf="showDistrictAllCWS">All cws</option>
+                          <option value="all cws" *ngIf="showDistrictAllCWS">ALL CWS</option>
                           <option *ngFor="let district of districts" value="{{district._id}}">{{district.name}}</option>
                         </select>
                       </ng-template>
@@ -157,14 +157,20 @@
                       <th>Cherries (Kg)</th>
                       <th>Parchments (Kg)</th>
                       <th>Expected Parchments (Kg)</th>
+                      <th></th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr  *ngFor="let dt of graph1.data">
+                    <tr  *ngFor="let dt of graph1.data; let i = index">
                       <td>{{ dt[0] }}</td>
                       <td>{{ dt[1] }}</td>
                       <td>{{ dt[2] }}</td>
                       <td>{{ dt[3] }}</td>
+                      <td>
+                        <a routerLink="/admin/cws-suppliers/{{this.regionIds[i]}}"
+                           [queryParams]="{ from: this.fromFilterDate , to: this.toFilterDate}" class="btn btn-info btn-sm">
+                          <i class="fa fa-users"></i> Suppliers</a>
+                      </td>
                     </tr>
                     </tbody>
                   </table>

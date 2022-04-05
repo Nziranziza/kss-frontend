@@ -75,7 +75,7 @@
                           <select class="form-control" formControlName="stockOutId">
                             <option></option>
                             <ng-container *ngFor="let stock of stockOuts">
-                              <option *ngIf="stock.inputId.inputType === 'Fertilizer'" value="{{stock._id}}">
+                              <option *ngIf="stock.input.inputType === 'Fertilizer'" value="{{stock._id}}">
                                 {{ stock.totalQuantity - stock.distributedQty | number : '1.0-2'}}
                                 Kg - {{ stock.created_at|date }} {{ stock.destination ? getDestination( stock.destination) : ' - ' + stock.location.cell_id.name }}
                               </option>
@@ -92,8 +92,8 @@
                       <div class="col-sm-3">
                         <div class="form-group">
                           <span class="control-label label-required">Trees at distribution</span> &nbsp; &nbsp;
-                          <input type="text" formControlName="treesAtDistribution" class="form-control"
-                                 placeholder="">
+                          <input type="number" formControlName="treesAtDistribution" class="form-control"
+                                 min="0" max="100000" placeholder="">
                         </div>
                       </div>
                       <div class="col-sm-3">

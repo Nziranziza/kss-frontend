@@ -41,8 +41,8 @@
                   <span class="details-row-title-sm">Village </span> : <span class="details-row-data-sm">{{ request.location.village_id.name }}</span>
                 </td>
                 <td>{{ request.numberOfTrees }}</td>
-                <td>{{ request.fertilizer_need }} Kg</td>
-                <td>{{ request.fertilizer_allocate }} Kg</td>
+                <td>{{ request.fertilizer_need | number : '1.0-2' }} Kg</td>
+                <td>{{ request.fertilizer_allocate | number : '1.0-2' }} Kg</td>
                 <td>{{ request.treesAtDistribution }}</td>
                 <td>{{ request.update_comments }}</td>
                 <td>

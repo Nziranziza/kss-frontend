@@ -15,12 +15,16 @@ export class InputDistributionService {
     return this.apiService.post('/site/distribution/farmer_requests', regNumber);
   }
 
-  getFarmerRequestsAsCWS(orgId: any, regNumber: any): Observable<any> {
-    return this.apiService.get('/coffeefarmers/farmer_in_cws/' + orgId + '/' + regNumber);
+  getFarmerRequestsAsCWS(orgId: any, regNumber: any, siteId: string): Observable<any> {
+    return this.apiService.get('/coffeefarmers/farmer_in_cws/' + orgId + '/' + regNumber + '/' + siteId);
   }
 
   recordDispatch(body: any): Observable<any> {
     return this.apiService.post('/inputdispatch/record_dispatch', body);
+  }
+
+  editDispatch(body: any, id: string): Observable<any> {
+    return this.apiService.put('/dispatches/' + id, body);
   }
 
   getDispatch(id: string): Observable<any> {
@@ -51,8 +55,12 @@ export class InputDistributionService {
     return this.apiService.put('/inputapplication/record_stockreturn', body);
   }
 
-  recordDistribution(data: any): Observable<any> {
-    return this.apiService.post('/inputapplication/record_distribution', data);
+  cancelDistribution(data: any): Observable<any> {
+    return this.apiService.put('/inputapplication/cancel_distribution_and_update', data);
+  }
+
+  cancelPesticideDistribution(data: any): Observable<any> {
+    return this.apiService.put('/inputapplication/cancel_pesticide_distribution', data);
   }
 
   recordDistributionAndUpdate(data: any): Observable<any> {
@@ -125,5 +133,13 @@ export class InputDistributionService {
     } else {
       return this.apiService.get('/stock/?' + 'stockType=' + stock);
     }
+  }
+
+  siteExport(): Observable<any> {
+    return this.apiService.get('/distributionstats/sitereport');
+  }
+
+  distributionExport(): Observable<any> {
+    return this.apiService.get('/distributionstats/distributionreport');
   }
 }

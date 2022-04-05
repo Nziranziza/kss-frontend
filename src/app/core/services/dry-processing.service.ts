@@ -20,6 +20,10 @@ export class DryProcessingService {
     return this.apiService.post('/greencoffee/update/' + id, body);
   }
 
+  uploadGreenCoffeeResults(body: any) {
+    return this.apiService.post('/greencoffee/upload/results', body);
+  }
+
   getSupplyingOrg(orgId: string) {
     return this.apiService.get('/dmparchment/suppliers/' + orgId);
   }
@@ -36,8 +40,24 @@ export class DryProcessingService {
     return this.apiService.post('/greencoffee/stock/summary', body);
   }
 
+  getGreenCoffeeResultSummary(body: any) {
+    return this.apiService.post('/greencoffee/results/stock/summary', body);
+  }
+
   getGreenCoffee(body: string) {
     return this.apiService.post('/greencoffee/list', body);
+  }
+
+  getCWSGreenCoffee(body: string) {
+    return this.apiService.post('/greencoffee/list/by_cws', body);
+  }
+
+  cwsHasGreenCoffee(id: string) {
+    return this.apiService.get('/greencoffee/cws/has/processing/' + id);
+  }
+
+  getGreenCoffeeGrades() {
+    return this.apiService.get('/greencoffee/grades/list');
   }
 
   getOneGreenCoffee(orgId: string, id: string) {

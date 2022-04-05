@@ -17,6 +17,7 @@ export class ApplyPesticideComponent extends BasicComponent implements OnInit {
   @Input() requestId;
   @Input() regNumber;
   @Input() documentId;
+  @Input() siteId;
   distributionForm: FormGroup;
   errors: string [];
   message: string;
@@ -38,10 +39,9 @@ export class ApplyPesticideComponent extends BasicComponent implements OnInit {
     this.distributionForm = this.formBuilder.group({
       pesticides: new FormArray([])
     });
-    const id = this.authenticationService.getCurrentUser().orgInfo.distributionSite;
-    this.inputDistributionService.getSiteStockOuts(id).subscribe((data) => {
+    this.inputDistributionService.getSiteStockOuts(this.siteId).subscribe((data) => {
       data.content.map((stock) => {
-        if (stock.inputId.inputType === 'Pesticide' && stock.returnedQty === 0) {
+        if (stock.input.inputType === 'Pesticide' && stock.returnedQty === 0) {
           const control = new FormControl(false);
           this.stocks.push(stock);
           (this.distributionForm.controls.pesticides as FormArray).push(control);
@@ -58,7 +58,7 @@ export class ApplyPesticideComponent extends BasicComponent implements OnInit {
       const record = JSON.parse(JSON.stringify(this.distributionForm.value));
       record['documentId'.toString()] = this.documentId;
       record['farmerRequestId'.toString()] = this.requestId;
-      record['siteId'.toString()] = this.authenticationService.getCurrentUser().orgInfo.distributionSite;
+      record['siteId'.toString()] = this.siteId;
       record['pesticides'.toString()] = selectedPesticide;
       record['regNumber'.toString()] = this.regNumber;
       record.pesticides.map((value, i) => {
@@ -76,5 +76,13 @@ export class ApplyPesticideComponent extends BasicComponent implements OnInit {
     } else {
       this.setError(this.helper.getFormValidationErrors(this.distributionForm));
     }
+  }
+
+  getDestination(destinations) {
+    let str = '';
+    destinations.map ((dest) => {
+      str = str + ' - ' + dest.cell_id.name;
+    });
+    return str;
   }
 }

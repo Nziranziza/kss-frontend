@@ -6,14 +6,14 @@ import {
   OrganisationService,
   SiteService,
   UserService
-} from '../../core/services';
+} from '../../core';
 import {ActivatedRoute} from '@angular/router';
-import {Farmer} from '../../core/models';
+import {Farmer} from '../../core';
 import {FarmerDetailsComponent} from '../../farmer/farmer-details/farmer-details.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {AuthorisationService} from '../../core/services';
+import {AuthorisationService} from '../../core';
 import {isArray, isObject} from 'util';
-import {BasicComponent} from '../../core/library';
+import {BasicComponent} from '../../core';
 import {ParchmentReportDetailComponent} from '../../reports/parchment-report/parchment-report-detail/parchment-report-detail.component';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
@@ -68,7 +68,7 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
   parameters: any;
   downloadingAll = true;
   config: any;
-  autoHide = false;
+  autoHide = true;
   responsive = true;
   errors = [];
   labels: any = {
@@ -86,6 +86,8 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
     {value: 'groupname', name: 'group name'},
     {value: 'phone_number', name: 'phone number'}
   ];
+  resetPin = true;
+  showSetPinButton = true;
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -133,6 +135,7 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
     this.orgCoveredArea = this.route.snapshot.data.orgCoveredAreaData;
     this.currentSeason = this.authenticationService.getCurrentSeason();
     this.getAllFarmers();
+    this.getSetPinStatus();
   }
 
   exportAsXLSX() {
@@ -209,13 +212,23 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
     this.loading = true;
     this.organisationService.getFarmers(this.parameters)
       .subscribe(data => {
-        this.paginatedFarmers = data.data;
-        this.config = {
-          itemsPerPage: this.parameters.length,
-          currentPage: this.parameters.start + 1,
-          totalItems: data.recordsTotal
-        };
-        this.numberOfFarmers = data.recordsTotal;
+        if (data.data.length === 0) {
+          this.config = {
+            itemsPerPage: this.parameters.length,
+            currentPage: this.parameters.start + 1,
+            totalItems: 0
+          };
+          this.numberOfFarmers = 0;
+
+        } else {
+          this.paginatedFarmers = data.data;
+          this.config = {
+            itemsPerPage: this.parameters.length,
+            currentPage: this.parameters.start + 1,
+            totalItems: data.recordsTotal
+          };
+          this.numberOfFarmers = data.recordsTotal;
+        }
         this.showData = true;
         this.loading = false;
       });
@@ -265,6 +278,25 @@ export class OrganisationFarmersComponent extends BasicComponent implements OnIn
         });
         this.downloadingAll = false;
       });
+  }
+
+  getSetPinStatus() {
+    this.showSetPinButton = false;
+    this.organisationService.get(this.organisationId).subscribe(data => {
+      this.org = data.content;
+      this.resetPin = this.org.isPinResetAllowed;
+      this.showSetPinButton = true;
+    });
+  }
+
+  enableResetPin(status: boolean) {
+    this.showSetPinButton = false;
+    this.organisationService.allowSetPinOrgUsers({
+      org_id: this.org._id,
+      status
+    }).subscribe(() => {
+      this.getSetPinStatus();
+    });
   }
 
   getNumberOfTrees = (requestInfo: any) => {

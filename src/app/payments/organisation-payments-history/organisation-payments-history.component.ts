@@ -1,13 +1,13 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {AuthenticationService, AuthorisationService, ConfirmDialogService, MessageService, OrganisationService} from '../../core/services';
-import {BasicComponent} from '../../core/library';
+import {AuthenticationService, AuthorisationService, ConfirmDialogService, MessageService, OrganisationService} from '../../core';
+import {BasicComponent} from '../../core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {DatePipe} from '@angular/common';
 import {PaymentService} from '../../core/services/payment.service';
 import {PaymentHistoryDetailsComponent} from './payment-history-details/payment-history-details.component';
-import {HelperService} from '../../core/helpers';
+import {HelperService} from '../../core';
 
 @Component({
   selector: 'app-organisation-payments-history',
@@ -56,7 +56,7 @@ export class OrganisationPaymentsHistoryComponent extends BasicComponent impleme
   };
   searchFields = [
     {value: 'reg_number', name: 'registration number'},
-    {value: 'nid', name: 'NID'},
+    {value: 'nid', name: 'nid'},
     {value: 'foreName', name: 'first name/group name'},
     {value: 'surname', name: 'last name'}
   ];

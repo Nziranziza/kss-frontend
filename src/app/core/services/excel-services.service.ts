@@ -33,29 +33,34 @@ export class ExcelServicesService {
     this.saveAsExcelFile(excelBuffer, excelFileName);
   }
 
-  public exportDetailedExcel() {
-    this.apiService.getBlob("/distributionstats/bireport").subscribe((x) => {
-      // Create a new Blob
-      var newBlob = new Blob([x], { type: EXCEL_TYPE });
+  public async exportDetailedExcel() {
+    try {
+      this.apiService.getBlob("/distributionstats/bireport").subscribe((x) => {
+        // Create a new Blob
+        var newBlob = new Blob([x], { type: EXCEL_TYPE });
 
-      const data = window.URL.createObjectURL(newBlob);
+        const data = window.URL.createObjectURL(newBlob);
 
-      var link = document.createElement("a");
-      link.href = data;
-      link.download =  `bi-report-${new Date().toJSON().slice(0, 10)}`;
-      link.dispatchEvent(
-        new MouseEvent("click", {
-          bubbles: true,
-          cancelable: true,
-          view: window,
-        })
-      );
-
-      setTimeout(function () {
-        //delay revoking the ObjectURL
-        window.URL.revokeObjectURL(data);
-        link.remove();
-      }, 100);
-    });
+        var link = document.createElement("a");
+        link.href = data;
+        link.download = `bi-report-${new Date().toJSON().slice(0, 10)}`;
+        link.dispatchEvent(
+          new MouseEvent("click", {
+            bubbles: true,
+            cancelable: true,
+            view: window,
+          })
+        );
+        setTimeout(() => {
+          // delay revoking the ObjectURL
+          window.URL.revokeObjectURL(data);
+          link.remove();
+        }, 100);
+      });
+      return true;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
   }
 }

@@ -18,6 +18,10 @@ export class CherrySupplyService {
     return this.apiService.get('/cherrysupply/farmer_supply/list/' + orgId + '/' + regNumber);
   }
 
+  getFarmerDeliveriesStats(data: any) {
+    return this.apiService.post('/cherrysupply/farmer_supply/stats', data);
+  }
+
   report(data: any) {
     return this.apiService.post('/cwsstats/cherrysupply/', data);
   }

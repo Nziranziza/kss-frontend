@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {BasicComponent} from '../../../core/library';
+import {BasicComponent} from '../../../core';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 
 import {
@@ -8,12 +8,12 @@ import {
   ConfirmDialogService, MessageService,
   OrganisationService,
   ParchmentService
-} from '../../../core/services';
+} from '../../../core';
 
 import {Router} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {DatePipe, formatDate} from '@angular/common';
-import {HelperService} from '../../../core/helpers';
+import {HelperService} from '../../../core';
 import {ParchmentTransferService} from '../../../core/services/parchment-transfer.service';
 
 declare var $;

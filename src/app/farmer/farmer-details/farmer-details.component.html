@@ -44,7 +44,7 @@
           {{ farmer?.userInfo.regNumber }}<br>
         </div>
       </div>
-      <div class="row" *ngIf="farmer.userInfo.type===2">
+      <div class="row" *ngIf="farmer.userInfo.type==2">
         <div class="col-sm-6">
           Group name
         </div>
@@ -65,7 +65,19 @@
         </div>
       </div>
     </div>
-    <div class="col-sm-8" *appHasPermission="[0,[8,1],[1,1]]">
+    <div class="col-sm-4">
+      <div class="pull-left" style="margin-left: 15px; font-size: 14px" *ngIf="showProduction">
+        <google-chart #chart
+                      [type]="graph.type"
+                      [data]="graph.data"
+                      [options]="graph.options"
+                      [width]="graph.width"
+                      [columnNames]="graph.columnNames"
+                      [height]="graph.height">
+        </google-chart>
+      </div>
+    </div>
+    <div class="col-sm-4" *appHasPermission="[0,[8,1],[1,1]]">
       <ng-container *ngIf="showSetPinButton; else loadingSetPinStatus">
         <a class="btn btn-success btn-margin pull-right" *ngIf="!resetPin" (click)="enableResetPin(true)"><i
           class="fa fa-check"></i>&nbsp; Enable pin reset

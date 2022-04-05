@@ -10,7 +10,7 @@
     <form [formGroup]="filterForm" (ngSubmit)="onSubmit()">
       <div class="form-inline pull-right">
         <ng-container formGroupName="date">
-          <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="from"
+          <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" [min]="seasonStartingTime" formControlName="from"
                  class="form-control owl-date-input" placeholder="From.." style="width: 150px">
           <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
 

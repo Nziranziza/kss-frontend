@@ -14,10 +14,9 @@ RUN sudo apt-get update && \
     curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash - && \
     sudo apt-get install -y nodejs && \
     sudo apt-get update -y && sudo apt upgrade -y && \
-    sudo npm install express --save &&\
-    sudo npm -g install create-react-app
+    sudo npm install -g @angular/cli
 
-RUN sudo npm install --global yarn
+
 RUN sudo apt-get update && \
     sudo apt-get install nginx -y && \
     sudo service nginx restart
@@ -34,6 +33,6 @@ COPY --chown=docker-deployer:docker-deployer ./package.json ./
 COPY --chown=docker-deployer:docker-deployer . .
 EXPOSE 5050
 
-RUN npm i --also=dev
-RUN npm run build
+RUN npm i 
+RUN ng build --prod --aot --configuration=staging
 RUN sudo service nginx restart

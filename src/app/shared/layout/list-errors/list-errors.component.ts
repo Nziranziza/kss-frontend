@@ -18,6 +18,7 @@ export class ListErrorsComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    document.querySelector('.wrapper, .home').scrollTo(0, 0);
     const errors = changes.errorList.currentValue;
     this.isArray = isArray(errors);
     if (this.isArray) {

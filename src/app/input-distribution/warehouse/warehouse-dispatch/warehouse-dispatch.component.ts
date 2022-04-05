@@ -2,7 +2,13 @@ import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {HelperService} from '../../../core/helpers';
-import {AuthenticationService, ConfirmDialogService, InputDistributionService, SeasonService} from '../../../core/services';
+import {
+  AuthenticationService,
+  ConfirmDialogService,
+  ExcelServicesService,
+  InputDistributionService,
+  SeasonService
+} from '../../../core/services';
 import {SiteService} from '../../../core/services';
 import {LocationService} from '../../../core/services';
 import {Subject} from 'rxjs';
@@ -10,9 +16,11 @@ import {WarehouseService} from '../../../core/services';
 import {DatePipe} from '@angular/common';
 import {BasicComponent} from '../../../core/library';
 import {DataTableDirective} from 'angular-datatables';
-import {ParchmentEditComponent} from '../../../wet-processing/parchment/parchment-edit/parchment-edit.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {WarehouseDispatchEditComponent} from '../warehouse-dispatch-edit/warehouse-dispatch-edit.component';
+import DateTimeFormat = Intl.DateTimeFormat;
+
+declare var $;
 
 @Component({
   selector: 'app-warehouse-dispatch',
@@ -27,6 +35,7 @@ export class WarehouseDispatchComponent extends BasicComponent implements OnInit
               private router: Router, private confirmDialogService: ConfirmDialogService,
               private seasonService: SeasonService,
               private modal: NgbModal,
+              private excelService: ExcelServicesService,
               private wareHouseService: WarehouseService,
               private datePipe: DatePipe, private authenticationService: AuthenticationService,
               private inputDistributionService: InputDistributionService,
@@ -52,6 +61,7 @@ export class WarehouseDispatchComponent extends BasicComponent implements OnInit
   includePesticide = false;
   currentDate: any;
   isFilterByType = false;
+  printDispatches = [];
   searchFields = [
     {value: 'no_filter', name: 'search by...'},
     {value: 'input_type', name: 'input type'},
@@ -116,12 +126,38 @@ export class WarehouseDispatchComponent extends BasicComponent implements OnInit
         to: ['']
       })
     });
+    const self = this;
+    $('.responsive-table').on('click', 'a.cancel-entry', function(e) {
+      const data = $(this).attr('id').split('-');
+      e.preventDefault();
+      self.cancelDispatchEntry(data[0], data[1]);
+    });
     this.initial();
     this.getDispatches();
     this.onChanges();
     this.getStocks(1);
     this.addPackageFertilizer();
     this.getCurrentSeason();
+  }
+
+  cancelDispatchEntry(dispatchId: string, subDocumentId: string) {
+    this.confirmDialogService.openConfirmDialog('Are you sure you want to cancel this item? ' +
+      'action cannot be undone').afterClosed().subscribe(
+      res => {
+        if (res) {
+          const body = {
+            dispatchId,
+            subDocumentId
+          };
+          this.wareHouseService.removeDispatchEntry(body).subscribe(() => {
+            this.setMessage('Dispatch entry successfully cancelled!');
+            this.getDispatches();
+          }, (err) => {
+            this.setError(this.errors = err.errors);
+            window.scroll(0, 0);
+          });
+        }
+      });
   }
 
   get formPackageFertilizer() {
@@ -297,6 +333,7 @@ export class WarehouseDispatchComponent extends BasicComponent implements OnInit
       delete filter.search.location;
       this.warehouseService.filterDispatches(filter).subscribe((data) => {
         this.inputDispatches = data.content;
+        this.createExcelData(this.inputDispatches);
         this.rerender();
       }, (err) => {
         if (err.status === 404) {
@@ -312,6 +349,7 @@ export class WarehouseDispatchComponent extends BasicComponent implements OnInit
     this.filterForm.controls.search.get('searchBy').setValue('no_filter');
     this.warehouseService.getDispatches().subscribe((data) => {
       this.inputDispatches = data.content;
+      this.createExcelData(this.inputDispatches);
       this.rerender();
     });
   }
@@ -366,6 +404,7 @@ export class WarehouseDispatchComponent extends BasicComponent implements OnInit
             this.setMessage('Dispatch recorded successfully!');
             this.warehouseService.getDispatches().subscribe((data) => {
               this.inputDispatches = data.content;
+              this.createExcelData(this.inputDispatches);
               this.rerender();
             });
             this.recordDispatchForm.reset();
@@ -379,13 +418,41 @@ export class WarehouseDispatchComponent extends BasicComponent implements OnInit
     }
   }
 
+  createExcelData(dispatches) {
+    dispatches.map((item) => {
+      const temp = {
+        SITE_NAME: item.destinationSite.siteId.siteName,
+        PROVINCE: item.destinationSite.location.prov_id.namek,
+        DISTRICT: item.destinationSite.location.dist_id.name,
+        SECTOR: item.destinationSite.location.sect_id.name,
+        NPK_22_6_12_3S: item.entries.find(entry => entry.inputId.inputName === 'NPK 22-6-12+3S') ?
+          item.entries.find(entry => entry.inputId.inputName === 'NPK 22-6-12+3S').totalQty : '',
+        Agropy_EWS_PLUS: item.entries.find(entry => entry.inputId.inputName === 'Agropy EWC PLUS') ?
+          item.entries.find(entry => entry.inputId.inputName === 'Agropy EWC PLUS').totalQty : '',
+        Alpha_cypermetrin_10_EC: item.entries.find(entry => entry.inputId.inputName === 'Alpha cypermetrin 10 EC') ?
+          item.entries.find(entry => entry.inputId.inputName === 'Alpha cypermetrin 10 EC').totalQty : '',
+        RECEIVED: item.receivedBy ? 'Received' : '',
+        RECEIVED_BY: item.receivedBy ? `${item.receivedBy.foreName} ${item.receivedBy.surname}`: '',
+        PHONE_NUMBER: item.receivedBy && item.receivedBy.phoneNumber ? item.receivedBy.phoneNumber: '' ,
+        CWS: item.receivedBy && item.receivedBy.org_id ? item.receivedBy.org_id.organizationName: '',
+        DISPATCHED_ON: this.datePipe.transform(new Date(item.created_at), 'yyyy-MM-dd', 'GMT+2')
+      };
+      this.printDispatches.push(temp);
+    });
+  }
+
   getDispatches() {
     this.loading = true;
     this.warehouseService.getDispatches().subscribe((data) => {
       this.loading = false;
       this.inputDispatches = data.content;
+      this.createExcelData(this.inputDispatches);
       this.dtTrigger.next();
     });
+  }
+
+  exportAsXLSX() {
+    this.excelService.exportAsExcelFile(this.printDispatches, 'dispatches');
   }
 
   printNote(id: string) {
@@ -413,13 +480,19 @@ export class WarehouseDispatchComponent extends BasicComponent implements OnInit
     }
   }
 
-  editDistrubution(id: string) {
+  editDistribution(id: string) {
     const modalRef = this.modal.open(WarehouseDispatchEditComponent, {size: 'lg'});
     modalRef.componentInstance.id = id;
     modalRef.result.then((message) => {
       this.setMessage(message);
+      this.warehouseService.getDispatches().subscribe((data) => {
+        this.inputDispatches = data.content;
+        this.createExcelData(this.inputDispatches);
+        this.rerender();
+      });
     });
   }
+
   onIncludePesticide() {
     this.includePesticide = !this.includePesticide;
     if (this.recordDispatchForm.value.entries.packagePesticide.length === 0) {
@@ -459,6 +532,7 @@ export class WarehouseDispatchComponent extends BasicComponent implements OnInit
             this.inputDispatches = this.inputDispatches.filter((value) => {
               return value._id !== id;
             });
+            this.createExcelData(this.inputDispatches);
           }, (err) => {
             this.setError(this.errors = err.errors);
             window.scroll(0, 0);

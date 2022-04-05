@@ -50,9 +50,10 @@ export class EditFarmerRequestComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.isUserCWSOfficer = this.authorisationService.isCWSUser();
     this.isUserSiteManager = this.authorisationService.isSiteManager();
     this.isUserDistrictCashCrop = this.authorisationService.isDistrictCashCropOfficer();
-    if (this.isUserDistrictCashCrop || this.isUserSiteManager) {
+    if (this.isUserSiteManager || this.isUserDistrictCashCrop || this.isUserCWSOfficer) {
       this.disableDistId = true;
       this.disableProvId = true;
     }
@@ -72,14 +73,8 @@ export class EditFarmerRequestComponent implements OnInit {
       fertilizer_allocate: this.land.fertilizer_allocate,
       location: {}
     };
-    if (this.isUserDistrictCashCrop || this.isUserSiteManager) {
-      this.disableDistId = true;
-      this.disableProvId = true;
-    }
+
     this.currentSeason = this.authenticationService.getCurrentSeason();
-    this.isUserCWSOfficer = this.authorisationService.isCWSUser();
-    this.isUserSiteManager = this.authorisationService.isSiteManager();
-    this.isUserDistrictCashCrop = this.authorisationService.isDistrictCashCropOfficer();
     temp.location['prov_id'.toString()] = this.land.location.prov_id._id;
     temp.location['dist_id'.toString()] = this.land.location.dist_id._id;
     temp.location['sect_id'.toString()] = this.land.location.sect_id._id;
@@ -97,7 +92,7 @@ export class EditFarmerRequestComponent implements OnInit {
         data.content.coveredSectors.map((sector) => {
           this.sectors.push({
             _id: sector.sectorId._id,
-            name: sector.name
+            name: sector.sectorId.name
           });
         });
       });
@@ -238,7 +233,6 @@ export class EditFarmerRequestComponent implements OnInit {
       request['subDocumentId'.toString()] = this.land._id;
       request['userId'.toString()] = this.authenticationService.getCurrentUser().info._id;
       request['updated_by'.toString()] = this.authenticationService.getCurrentUser().info._id;
-      delete request.location;
       this.farmerService.updateFarmerRequest(request).subscribe(() => {
           this.setMessage('request successfully updated!');
         },

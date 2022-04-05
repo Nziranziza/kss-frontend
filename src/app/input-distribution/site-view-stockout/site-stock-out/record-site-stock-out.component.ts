@@ -7,6 +7,8 @@ import {HelperService} from '../../../core/helpers';
 import {InputDistributionService} from '../../../core/services';
 import {DatePipe, isPlatformBrowser} from '@angular/common';
 import {BasicComponent} from '../../../core/library';
+import {ActivatedRoute} from '@angular/router';
+
 
 @Component({
   selector: 'app-record-site-stock-out',
@@ -24,8 +26,9 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
   villages: any = [];
   currentDate: any;
   site: any;
+  @Input() siteId;
   org: any;
-  isUserCWSOfficer: any;
+  isCWSDistributor: any;
   public destinationList: FormArray;
 
   constructor(
@@ -36,6 +39,7 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
     private organisationService: OrganisationService,
     private messageService: MessageService,
     private locationService: LocationService,
+    private route: ActivatedRoute,
     private datePipe: DatePipe,
     private siteService: SiteService,
     private helper: HelperService, private inputDistributionService: InputDistributionService) {
@@ -48,13 +52,16 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
 
   ngOnInit(): void {
     this.currentDate = new Date();
-    this.isUserCWSOfficer = this.authorisationService.isCWSUser();
+    this.isCWSDistributor = this.authorisationService.isCWSDistributer();
     this.siteStockOutForm = this.formBuilder.group({
       destination: new FormArray([]),
       totalQty: ['', Validators.required],
       date: [this.datePipe.transform(this.currentDate, 'yyyy-MM-dd'), Validators.required],
     });
-    if (this.isUserCWSOfficer) {
+    if (this.isCWSDistributor) {
+      this.siteService.get(this.siteId).subscribe((site) => {
+        this.site = site.content;
+      });
       this.organisationService.get(this.authenticationService.getCurrentUser().info.org_id).subscribe(data => {
         this.org = data.content;
         this.addDestination();
@@ -74,7 +81,7 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
   onSubmit() {
     if (this.siteStockOutForm.valid) {
       const record = JSON.parse(JSON.stringify(this.siteStockOutForm.value));
-      if (this.isUserCWSOfficer) {
+      if (this.isCWSDistributor) {
         record.destination.map((destination) => {
           destination['prov_id'.toString()] = this.org.location.prov_id._id;
           destination['dist_id'.toString()] = this.org.location.dist_id._id;
@@ -86,6 +93,7 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
         });
       }
       record.date = this.helper.getDate(this.siteStockOutForm.value.date);
+      record.siteId = this.stock.siteId._id;
       record['stockId'.toString()] = this.stock._id;
       record['userId'.toString()] = this.authenticationService.getCurrentUser().info._id;
       this.helper.cleanObject(record.location);
@@ -105,10 +113,10 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
 
   createDestination(): FormGroup {
     return this.formBuilder.group({
-        sect_id: ['', Validators.required],
-        cell_id: ['', Validators.required],
-        village_id: ['', Validators.required]
-      });
+      sect_id: ['', Validators.required],
+      cell_id: ['', Validators.required],
+      village_id: ['', Validators.required]
+    });
   }
 
   get formDestination() {
@@ -121,7 +129,9 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
   }
 
   removeDestination(index: number) {
-    (this.siteStockOutForm.controls.destination as FormArray).removeAt(index);
+    if ((this.siteStockOutForm.controls.destination as FormArray).length > 1) {
+      (this.siteStockOutForm.controls.destination as FormArray).removeAt(index);
+    }
   }
 
   getDestinationFormGroup(index): FormGroup {
@@ -132,7 +142,7 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
   onChangeSector(index: number) {
     const value = this.getDestinationFormGroup(index).controls.sect_id.value;
     if (value !== '') {
-      if (this.isUserCWSOfficer) {
+      if (this.isCWSDistributor) {
         this.filterCustomCells(this.org, index);
       } else {
         this.locationService.getCells(value).toPromise().then(data => {
@@ -146,7 +156,7 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
   onChangeCell(index: number) {
     const value = this.getDestinationFormGroup(index).controls.cell_id.value;
     if (value !== '') {
-      if (this.isUserCWSOfficer) {
+      if (this.isCWSDistributor) {
         this.locationService.getVillages(value).toPromise().then(data => {
           const sectorId = this.getDestinationFormGroup(index).controls.sect_id.value;
           const i = this.org.coveredSectors.findIndex(element => element.sectorId._id === sectorId);
@@ -166,14 +176,23 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
     }
   }
 
-
   filterCustomSectors(org: any, index: number) {
     const temp = [];
     org.coveredSectors.map((sector) => {
-      temp.push({
-        _id: sector.sectorId._id,
-        name: sector.sectorId.name
-      });
+      if (this.isCWSDistributor) {
+        const position = this.site.coveredAreas.coveredSectors.findIndex(elem => elem.sect_id === sector.sectorId._id);
+        if (position > -1) {
+          temp.push({
+            _id: sector.sectorId._id,
+            name: sector.sectorId.name
+          });
+        }
+      } else {
+        temp.push({
+          _id: sector.sectorId._id,
+          name: sector.sectorId.name
+        });
+      }
     });
     this.sectors[index] = temp;
   }

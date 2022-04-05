@@ -8,6 +8,19 @@
       <button class="btn btn-success pull-right btn-margin" type="button" (click)="exportAsXLSX()" [disabled]="downloadingAll">
         <span *ngIf="downloadingAll"> Downloading... <br> </span><i class="fa fa-download"  *ngIf="!downloadingAll"></i> Export all farmers
       </button>
+      <div *appHasPermission="[0,[8,1],[1,1]]">
+        <ng-container *ngIf="showSetPinButton; else loadingSetPinStatus">
+          <a class="btn btn-warning btn-margin pull-right" *ngIf="resetPin" (click)="enableResetPin(false)"><i
+            class="fa fa-check"></i>&nbsp; Disable Farmers Pin Reset
+          </a>
+          <a class="btn btn-success btn-margin pull-right" *ngIf="!resetPin" (click)="enableResetPin(true)"><i
+            class="fa fa-check"></i>&nbsp; Enable Farmers Pin Reset
+          </a>
+        </ng-container>
+        <ng-template #loadingSetPinStatus>
+          <app-downloading class="pull-right"></app-downloading>
+        </ng-template>
+      </div>
     </h3>
   </div>
 </div>
@@ -215,7 +228,7 @@
                  routerLink="/admin/farmers/edit/{{farmer.request._id}}"  *appHasPermission="[[4,1],0,[8,1],[1,1]]">
                 Edit
               </a>
-              <a appRequiredSeason routerLink="/admin/cherries/supply/select/{{farmer.userInfo._id}}/{{farmer.userInfo.regNumber}}"
+              <a appRequiredSeasonCherry routerLink="/admin/cherries/supply/select/{{farmer.userInfo._id}}/{{farmer.userInfo.regNumber}}"
                  *appHasPermission="[[1,1]]" class="btn btn-success btn-margin pull-right btn-sm"
                  style="margin-left: 10px;">
                 <i class="fa fa-cart-plus"></i> Supply

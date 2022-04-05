@@ -1,38 +1,43 @@
 <div class="row">
-  <div class="col-sm-2 col-xs-4 top-col-statistics">
-    <div class="description-block border-right">
-      <h5 class="description-header text-green">{{ statistics?.totalCost | number }} &nbsp;frw</h5>
-      <span class="description-text">TOTAL COST</span>
+  <div class="col-md-3 col-sm-6 col-xs-12 my-auto">
+    <div class="info-box">
+      <div class="description-block border-right">
+        <h5 class="description-header text-green">{{ statistics?.totalCost | number }} &nbsp;frw</h5>
+        <span class="description-text">TOTAL COST</span>
+      </div>
     </div>
-    <!-- /.description-block -->
   </div>
-  <div class="col-sm-2 col-xs-4 top-col-statistics">
-    <div class="description-block border-right">
-      <h5 class="description-header text-green">{{ statistics?.owedAmount | number }} &nbsp;frw</h5>
-      <span class="description-text">OWED AMOUNT</span>
+  <div class="col-md-2 col-sm-6 col-xs-12 my-auto">
+    <div class="info-box">
+      <div class="description-block border-right">
+        <h5 class="description-header text-green">{{ statistics?.owedAmount | number }} &nbsp;frw</h5>
+        <span class="description-text">OWED AMOUNT</span>
+      </div>
     </div>
-    <!-- /.description-block -->
   </div>
-  <div class="col-sm-2 col-xs-4 top-col-statistics">
-    <div class="description-block border-right">
-      <h5 class="description-header text-red">{{ statistics?.cherriesTotalQty | number }} &#13199;</h5>
-      <span class="description-text">CHERRIES</span>
+  <div class="col-md-2 col-sm-6 col-xs-12 my-auto">
+    <div class="info-box">
+      <div class="description-block border-right">
+        <h5 class="description-header text-red">{{ statistics?.cherriesTotalQty | number }} &#13199;</h5>
+        <span class="description-text">CHERRIES</span>
+      </div>
     </div>
-    <!-- /.description-block -->
   </div>
-  <div class="col-sm-2 col-xs-4 top-col-statistics">
-    <div class="description-block border-right">
-      <h5 class="description-header text-red">{{ statistics?.totalAmountToPay | number }} frw</h5>
-      <span class="description-text">AMOUNT TO PAY</span>
+  <div class="col-md-2 col-sm-6 col-xs-12 my-auto">
+    <div class="info-box">
+      <div class="description-block border-right">
+        <h5 class="description-header text-red">{{ statistics?.totalAmountToPay | number }} frw</h5>
+        <span class="description-text">AMOUNT TO PAY</span>
+      </div>
     </div>
-    <!-- /.description-block -->
   </div>
-  <div class="col-sm-2 col-xs-4 top-col-statistics">
-    <div class="description-block border-right">
-      <h5 class="description-header text-red">{{ statistics?.selectedFarmers | number }}</h5>
-      <span class="description-text">SELECTED FARMERS</span>
+  <div class="col-md-3 col-sm-6 col-xs-12 my-auto">
+    <div class="info-box">
+      <div class="description-block border-right">
+        <h5 class="description-header text-red">{{ statistics?.selectedFarmers | number }}</h5>
+        <span class="description-text">SELECTED FARMERS</span>
+      </div>
     </div>
-    <!-- /.description-block -->
   </div>
 </div>
 <app-list-warnings [warning]="warning"></app-list-warnings>
@@ -73,9 +78,9 @@
 </div>
 <div class="row">
   <div class="col-xs-12">
-    <div class="box" style="overflow: auto">
-      <div class="box-body">
-        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped">
+    <div class="box" style="overflow: auto" >
+      <div class="box-body table-responsive no-border" style="font-size: 1.2rem">
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-bordered table-responsive-lg table-striped text-center">
           <thead>
           <tr>
             <th>
@@ -86,7 +91,7 @@
             <th>Phone number</th>
             <th>Reg number</th>
             <th class="all"></th>
-            <th></th>
+            <!-- <th></th> -->
           </tr>
           </thead>
           <tbody>
@@ -109,11 +114,11 @@
                 <tr style="font-size: 12px; background: transparent; font-weight: bold">
                   <th></th>
                   <th>CherriesQty (kg)</th>
-                  <th>Unit price</th>
-                  <th>Delivery approval</th>
-                  <th>Paid amount (rwf)</th>
-                  <th>Owed amount</th>
-                  <th>Date</th>
+                  <th>Unit Price</th>
+                  <th>Delivery Approval</th>
+                  <th>Paid Amount (rwf)</th>
+                  <th>Amount To Pay</th>
+                  <!-- <th>Date</th> -->
                 </tr>
                 <ng-container *ngFor="let supply of farmer.deliveries; let t = index">
                 <tr style="font-size: 12px; background: transparent">
@@ -133,13 +138,15 @@
                     <ng-template #notDelivered> not approved</ng-template>
                   </td>
                   <td> {{ supply.paidAmount }}</td>
-                  <td> {{ supply.owedAmount }}</td>
-                  <td> {{ supply.created_at | date }}</td>
+                  <td>
+                    <span (keyup)="changeValue(i, t, 'owedAmount', $event)" (blur)="updateList(i, t, 'owedAmount', $event)" contenteditable="true">{{ supply.owedAmount }}</span>
+                  </td>
+                  <!-- <td> {{ supply.created_at | date }}</td> -->
                 </tr>
                 </ng-container>
               </table>
             </td>
-            <td></td>
+            <!-- <td></td> -->
           </tr>
         </table>
       </div>

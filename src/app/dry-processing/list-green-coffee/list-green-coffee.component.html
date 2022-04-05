@@ -7,10 +7,27 @@
 </div>
 
 <div class="row">
+  <div class="col-md-1 col-sm-3 col-xs-12">
+    <span style="font-size: 14px; font-weight: bolder;">Parchments</span>
+  </div>
   <div class="col-md-2 col-sm-3 col-xs-6" *ngFor="let production of summary">
-    <div class="info-box-content bg-yellow-gradient" style="margin-left: 0px">
+    <div class="info-box-content bg-yellow-gradient" style="margin-left: 0;">
       <span class="info-box-text">{{ production.coffeeType }}</span>
       <span class="progress-description" *ngFor="let item of production.grade | keyvalue">
+        Grade {{ item.key }} &nbsp;{{ item.value }}&#13199;
+      </span>
+    </div>
+  </div>
+</div>
+
+<div class="row" style="margin-top: 15px;">
+  <div class="col-md-1 col-sm-3 col-xs-12">
+    <span style="font-size: 14px; font-weight: bolder;">Green coffee</span>
+  </div>
+  <div class="col-md-2 col-sm-3 col-xs-6" *ngFor="let result of results">
+    <div class="info-box-content bg-light-blue-gradient" style="margin-left: 0px">
+      <span class="info-box-text">{{ result.coffeeType }}</span>
+      <span class="progress-description" *ngFor="let item of result.grade | keyvalue">
         Grade {{ item.key }} &nbsp;{{ item.value }}&#13199;
       </span>
     </div>
@@ -85,16 +102,20 @@
           <thead>
           <tr>
             <th>Quantity</th>
-            <th></th>
+            <th>Delivery type</th>
+            <th>Output qty</th>
+            <th>Lot number</th>
             <th>Date</th>
             <th></th>
-            <th></th>
+            <th style="min-width: 15%"></th>
           </tr>
           </thead>
           <tbody>
           <tr *ngFor="let coffee of greenCoffees">
             <td>{{ coffee.remainingQty + ' &#13199; '}}</td>
-            <td><span style="font-weight: bolder">{{ coffee.deliveryType }}</span></td>
+            <td>{{ coffee.deliveryType }}</td>
+            <td><span *ngIf="coffee.results">{{ coffee.results.quantity + ' &#13199; '}} </span></td>
+            <td>{{ coffee.lotNumber }}</td>
             <td>{{ coffee.created_at | date }}</td>
             <td>
               <table style="background: transparent; width: 650px;" class="pull-right">
@@ -135,8 +156,11 @@
               <button class="btn btn-default btn-margin btn-sm pull-right" (click)="cancelGreenCoffee(coffee._id)" type="button">
                 <i class="fa fa-remove" aria-hidden="true"></i> cancel
               </button>
+              <a class="btn btn- btn-primary btn-sm pull-right" style="margin-left: 10px;" (click)="addResults(coffee._id)">
+                results
+              </a>
               <a class="btn btn-success btn-margin btn-sm pull-right" style="margin-left: 10px;" (click)="addItem(coffee._id)">
-                <i class="fa fa-plus" aria-hidden="true"></i> add
+                add
               </a>
             </td>
           </tr>

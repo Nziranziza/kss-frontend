@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup} from '@angular/forms';
+import {FormBuilder, FormGroup} from '@angular/forms';
 import {Subject} from 'rxjs';
 
 import {
@@ -285,6 +285,14 @@ export class FertilizerDistributionProgressComponent extends BasicComponent impl
       });
     });
     this.cells = temp;
+  }
+
+  summarizeData(field: string){
+    let sum = 0;
+    for(let i = 0; i < this.distributionProgress.length; i++) {
+      sum += this.distributionProgress[i][field];
+    }
+    return sum;
   }
 
   initial() {

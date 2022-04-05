@@ -18,6 +18,7 @@ export class RecordDistributionComponent extends BasicComponent implements OnIni
   @Input() requestId;
   @Input() regNumber;
   @Input() documentId;
+  @Input() siteId;
   @Input() inputApplicationId;
   @Input() numberOfTrees;
   distributionForm: FormGroup;
@@ -51,22 +52,20 @@ export class RecordDistributionComponent extends BasicComponent implements OnIni
     this.distributionForm = this.formBuilder.group({
       quantity: ['', Validators.required],
       stockOutId: [''],
-      treesAtDistribution: [this.numberOfTrees, Validators.required],
+      treesAtDistribution: [this.numberOfTrees, [ Validators.required, Validators.min(0), Validators.max(100000) ]],
       comment: ['7']
     });
     this.updateRequestForm = this.formBuilder.group({
-      treesAtDistribution: ['', Validators.required],
+      treesAtDistribution: [this.numberOfTrees, [ Validators.required, Validators.min(0), Validators.max(100000) ]],
       comment: ['7']
     });
-    const id = this.authenticationService.getCurrentUser().orgInfo.distributionSite;
-    this.inputDistributionService.getSiteStockOuts(id)
+    this.inputDistributionService.getSiteStockOuts(this.siteId)
       .subscribe((data) => {
         data.content.map((stock) => {
-          if (stock.inputId.inputType === 'Fertilizer' && stock.returnedQty === 0) {
+          if (stock.input.inputType === 'Fertilizer' && stock.returnedQty === 0) {
             this.stockOuts.push(stock);
           }
         });
-        console.log(this.stockOuts);
       });
   }
 
@@ -75,7 +74,7 @@ export class RecordDistributionComponent extends BasicComponent implements OnIni
       const record = JSON.parse(JSON.stringify(this.updateRequestForm.value));
       record['documentId'.toString()] = this.documentId;
       record['subDocumentId'.toString()] = this.requestId;
-      record['siteId'.toString()] = this.authenticationService.getCurrentUser().orgInfo.distributionSite;
+      record['siteId'.toString()] = this.siteId;
       record['comment'.toString()] = +record['comment'.toString()];
       this.inputDistributionService.updateRequestAtDistribution(record).subscribe(() => {
           this.modal.close('Successfully updated.');
@@ -96,7 +95,7 @@ export class RecordDistributionComponent extends BasicComponent implements OnIni
       record['farmerRequestId'.toString()] = this.requestId;
       record['regNumber'.toString()] = this.regNumber;
       record['comment'.toString()] = +record['comment'.toString()];
-      if (this.inputApplicationId) {
+      if (this.inputApplicationId.length) {
         this.confirmDialogService.openConfirmDialog('Farmer has already received fertilizer. ' +
           'do you want to give more.').afterClosed().subscribe(
           res => {
@@ -119,7 +118,6 @@ export class RecordDistributionComponent extends BasicComponent implements OnIni
           (err) => {
             this.setError(err.errors);
           });
-
       }
 
     } else {

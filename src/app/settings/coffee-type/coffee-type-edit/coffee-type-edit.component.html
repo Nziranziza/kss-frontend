@@ -1,0 +1,34 @@
+<h3>
+    Edit coffee type
+  </h3>
+  <app-list-errors [errorList]="errors"></app-list-errors>
+  <form [formGroup]="createForm" (ngSubmit)="onSubmit()">
+    <div class="box">
+      <div class="box-body">
+        <div class="row">
+          <div class="col-xs-6">
+            <div class="form-group">
+              <label class="control-label label-required">Edit Category Name</label>
+              <input type="text" formControlName="category" class="form-control">
+            </div>
+          </div>
+          <!-- <div class="col-xs-6">
+            <div class="form-group">
+              <label class="control-label label-required">Level</label>
+              <select class="form-control" formControlName="level">
+                <option value="cws">CWS</option>
+                <option value="dm">Dry mill</option>
+              </select>
+            </div>
+          </div> -->
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <a class="btn btn-warning btn-margin pull-right" routerLink="/admin/coffee-type/list">Cancel</a>
+        <button class="btn btn-success pull-right">Save</button>
+      </div>
+    </div>
+  </form>
+  

@@ -1,7 +1,7 @@
 <h3>
   {{ title }}
-  <button class="btn btn-success btn-margin pull-right" (click)="exportReport()"><i class="fa fa-download"></i> Export</button>
-  <button class="btn btn-success btn-margin pull-right" (click)="detailedReport()"><i class="fa fa-download"></i> Country Level Progress Report</button>
+  <button class="btn btn-success btn-margin pull-right" (click)="siteExport()" *appHasPermission="[5, 4, 0]"><i class="fa fa-download"></i> Sites/CWS Report</button>
+  <button class="btn btn-success btn-margin pull-right" (click)="distributionExport()" *appHasPermission="[5, 4, 0]"><i class="fa fa-download"></i> Administrative Report</button>
 </h3>
 <app-list-errors [errorList]="errors"></app-list-errors>
 <app-list-message [message]="message"></app-list-message>

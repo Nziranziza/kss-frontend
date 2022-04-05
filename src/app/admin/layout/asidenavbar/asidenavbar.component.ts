@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {AuthorisationService} from '../../../core/services';
-import {AuthenticationService} from '../../../core/services';
+import {AuthorisationService, DryProcessingService} from '../../../core';
+import {AuthenticationService} from '../../../core';
 import {Router} from '@angular/router';
 import {constant} from '../../../../environments/constant';
 
@@ -13,11 +13,16 @@ declare var $;
   providers: [AuthorisationService]
 })
 export class AsidenavbarComponent implements OnInit {
-  private siteId: string;
   parameters: any;
   user: any;
+  org: any;
   roles: any;
-  constructor(private router: Router, private authenticationService: AuthenticationService) {
+  hasGreenCoffee: false;
+
+  constructor(private router: Router,
+              private authorisationService: AuthorisationService,
+              private dryProcessingService: DryProcessingService,
+              private authenticationService: AuthenticationService) {
   }
 
   ngOnInit() {
@@ -27,8 +32,13 @@ export class AsidenavbarComponent implements OnInit {
     });
     this.parameters = this.authenticationService.getCurrentUser().parameters;
     this.user = this.authenticationService.getCurrentUser().info;
-    this.siteId = this.authenticationService.getCurrentUser().orgInfo.distributionSite;
+    this.org = this.authenticationService.getCurrentUser().orgInfo;
     this.roles = constant.roles;
+    if (this.authorisationService.isCWSAdmin()) {
+      this.dryProcessingService.cwsHasGreenCoffee(this.user.org_id).subscribe((data) => {
+        this.hasGreenCoffee = data.content.hasGreenCoffee;
+      });
+    }
   }
 
   onLogOut() {

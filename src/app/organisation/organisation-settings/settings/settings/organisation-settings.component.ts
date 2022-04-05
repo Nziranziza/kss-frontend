@@ -1,9 +1,9 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {BasicComponent} from '../../../../core/library';
+import {BasicComponent} from '../../../../core';
 import {PaymentService} from '../../../../core/services/payment.service';
-import {HelperService} from '../../../../core/helpers';
-import {CoffeeTypeService, ConfirmDialogService, OrganisationService} from '../../../../core/services';
+import {HelperService} from '../../../../core';
+import {CoffeeTypeService, ConfirmDialogService, OrganisationService} from '../../../../core';
 import {ActivatedRoute} from '@angular/router';
 import {EditPaymentChannelComponent} from '../edit-payment-channel/edit-payment-channel.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';

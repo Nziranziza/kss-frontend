@@ -35,7 +35,7 @@ export class OrganisationPendingFarmersComponent implements OnInit, OnDestroy {
   showData = false;
   org: any;
   config: any;
-  autoHide = false;
+  autoHide = true;
   responsive = true;
   labels: any = {
     previousLabel: 'Previous',
@@ -70,12 +70,20 @@ export class OrganisationPendingFarmersComponent implements OnInit, OnDestroy {
     };
     this.organisationService.getOrgPendingFarmers(this.orgId, this.parameters)
       .subscribe(data => {
-        this.farmers = data.data;
-        this.config = {
-          itemsPerPage: this.parameters.length,
-          currentPage: this.parameters.start + 1,
-          totalItems: data.recordsTotal
-        };
+        if (!data.data) {
+          this.config = {
+            itemsPerPage: this.parameters.length,
+            currentPage: this.parameters.start + 1,
+            totalItems: 0
+          };
+       } else {
+          this.farmers = data.data;
+          this.config = {
+            itemsPerPage: this.parameters.length,
+            currentPage: this.parameters.start + 1,
+            totalItems: data.recordsTotal
+          };
+        }
         this.showData = true;
       });
     this.filterForm = this.formBuilder.group({

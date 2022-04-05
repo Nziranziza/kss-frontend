@@ -6,5 +6,5 @@ export * from './list-warnings/list-warnings.component';
 export * from './loader/loader.component';
 export * from './confirm-dialog/confirm-dialog.component';
 export * from './quantity-unit/quantity-unit.component';
-export * from './downloader/downloader.component';
+export * from './downloading/downloading.component';
 export * from './spinner/spinner.component';

@@ -16,6 +16,7 @@ import {AddFarmerRequestComponent} from './farmer-edit/add-farmer-request/add-fa
 import {FarmerNeedApprovalListComponent} from './farmer-need-approval-list/farmer-need-approval-list.component';
 import {PendingFarmerListComponent} from './pending-farmer/pending-farmer-list/pending-farmer-list.component';
 import {FarmerAdministrativeListComponent} from './farmer-administrative-list/farmer-administrative-list.component';
+import {GoogleChartsModule} from 'angular-google-charts';
 
 @NgModule({
   declarations: [FarmerListComponent, FarmerDetailsComponent, FarmerCreateComponent,
@@ -25,7 +26,7 @@ import {FarmerAdministrativeListComponent} from './farmer-administrative-list/fa
   imports: [
     CommonModule,
     FarmerRoutingModule,
-    SharedModule, NgbModule, NgxPaginationModule, OrderModule
+    SharedModule, NgbModule, NgxPaginationModule, OrderModule, GoogleChartsModule
   ],
   exports: [FarmerDetailsComponent],
   entryComponents: [FarmerDetailsComponent, AddFarmerRequestComponent,

@@ -8,7 +8,7 @@
       <a href="#profile" aria-controls="Profile" role="tab"
          data-toggle="tab"><span>Edit Profile</span></a>
     </li>
-    <li appInternal role="presentation" class="" *appHasPermission="[0,1]">
+    <li role="presentation" class="">
       <a href="#payment-channels" aria-controls="payment-channels" role="tab"
          data-toggle="tab"><span>Payment channels</span></a>
     </li>
@@ -146,7 +146,7 @@
         </div>
       </form>
     </div>
-    <div role="tabpanel" *appHasPermission="[0,1]" class="tab-pane" id="payment-channels">
+    <div role="tabpanel"  class="tab-pane" id="payment-channels">
       <app-list-message [message]="message"></app-list-message>
       <app-list-errors [errorList]="errors"></app-list-errors>
       <div class="row">
