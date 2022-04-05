@@ -61,6 +61,7 @@ export class PreviewDeliveriesListComponent implements OnInit {
       return results;
     }, []);
 
+    console.log(this.paymentList)
     this.paymentRequest = {
       totalAmountPaid: this.totalAmountPaid,
       org_id: this.organisationId,

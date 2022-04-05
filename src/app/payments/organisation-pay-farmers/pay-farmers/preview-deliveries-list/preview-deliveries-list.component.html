@@ -16,7 +16,7 @@
           <tr *ngFor="let farmer of paymentList; let i = index">
             <td> {{ farmer.foreName }}</td>
             <td> {{ farmer.surname }}</td>
-            <td> {{ farmer.paymentChannels && farmer.paymentChannels.subscriptionCode ? farmer.paymentChannels.subscriptionCode: ''}}</td>
+            <td> {{ farmer.subscriptionNumber }}</td>
             <td> {{ farmer.regNumber | uppercase}}</td>
             <td> {{ farmer.amount }}</td>
           </tr>
