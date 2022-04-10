@@ -17,3 +17,16 @@ table.dataTable.row-border tbody tr:first-child td {
 td > span{
   padding: 10px;
 }
+
+.stats__amount {
+	font-size: 24px;
+	font-weight: bold;
+	line-height: 1.2;
+}
+
+.stats__caption {
+}
+
+.purple-text {
+  color: #3c8dbc;
+}

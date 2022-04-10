@@ -44,6 +44,7 @@ export class PreviewDeliveriesListComponent implements OnInit {
           surname: supplier.userInfo.surname,
           regNumber: supplier.userInfo.regNumber,
           userId: supplier.userInfo.userId,
+          paymentChannels: supplier.userInfo.paymentChannels,
           amount: this.getOwedAmount(supplier.deliveries),
           deliveries: this.getDeliveries(supplier.deliveries)
         };
@@ -60,6 +61,7 @@ export class PreviewDeliveriesListComponent implements OnInit {
       return results;
     }, []);
 
+    console.log(this.paymentList)
     this.paymentRequest = {
       totalAmountPaid: this.totalAmountPaid,
       org_id: this.organisationId,
