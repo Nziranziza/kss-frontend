@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {ApiService} from './api.service';
+import {Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -36,6 +37,14 @@ export class DryProcessingService {
     return this.apiService.delete('/greencoffee/delete/item/' + id);
   }
 
+  cancelTransfer(id: string) {
+    return this.apiService.delete('/greencoffee/delete/transfer/' + id);
+  }
+
+  cancelTransferItem(id: string) {
+    return this.apiService.delete('/greencoffe/delete/transfer/item/' + id);
+  }
+
   getGreenCoffeeStockSummary(body: any) {
     return this.apiService.post('/greencoffee/stock/summary', body);
   }
@@ -44,11 +53,11 @@ export class DryProcessingService {
     return this.apiService.post('/greencoffee/results/stock/summary', body);
   }
 
-  getGreenCoffee(body: string) {
+  getGreenCoffee(body: any) {
     return this.apiService.post('/greencoffee/list', body);
   }
 
-  getCWSGreenCoffee(body: string) {
+  getCWSGreenCoffee(body: any) {
     return this.apiService.post('/greencoffee/list/by_cws', body);
   }
 
@@ -63,4 +72,25 @@ export class DryProcessingService {
   getOneGreenCoffee(orgId: string, id: string) {
     return this.apiService.get('/greencoffee/find/' + orgId + '/' + id);
   }
+
+  prepareGreenCoffeeTransfer(body: any) {
+    return this.apiService.post('/greencoffee/prepare/transfer', body);
+  }
+
+  transferGreenCoffee(body: any) {
+    return this.apiService.post('/greencoffee/transfer', body);
+  }
+
+  printDeliveryNote(id: string): Observable<any> {
+    return this.apiService.get('/greencoffee/download/deliveries/note/' + id);
+  }
+
+  getTransferHistory(body: any): Observable<any> {
+    return this.apiService.post('/greencoffee/transfers/list', body);
+  }
+
+  getTransfersSummary(body: any): Observable<any> {
+    return this.apiService.post('/greencoffee/transfers/summary', body);
+  }
+
 }
