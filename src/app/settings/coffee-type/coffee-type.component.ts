@@ -18,9 +18,18 @@ export class CoffeeTypeComponent implements OnInit {
 
   message: string;
   coffeeTypes: any;
+  dtOptions: any = {};
 
   ngOnInit() {
     this.getAllCoffeeTypes();
+    this.dtOptions = {
+      pagingType: 'full_numbers',
+      pageLength: 25,
+      columns: [{}, {}, {}, {
+        class: 'none'
+      }, {}, {}],
+      responsive: true
+    };
   }
 
   getAllCoffeeTypes(): void {

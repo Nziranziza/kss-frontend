@@ -2,40 +2,40 @@
   <div class="col-md-3 col-sm-6 col-xs-12 my-auto">
     <div class="info-box">
       <div class="description-block border-right">
-        <h5 class="description-header text-green">{{ statistics?.totalCost | number }} &nbsp;frw</h5>
-        <span class="description-text">TOTAL COST</span>
+        <h5 class="stats__amount purple-text">{{ statistics?.totalCost | number }} &nbsp;RWF</h5>
+        <span class="stats__caption">Total Cost</span>
       </div>
     </div>
   </div>
   <div class="col-md-2 col-sm-6 col-xs-12 my-auto">
     <div class="info-box">
       <div class="description-block border-right">
-        <h5 class="description-header text-green">{{ statistics?.owedAmount | number }} &nbsp;frw</h5>
-        <span class="description-text">OWED AMOUNT</span>
+        <h5 class="stats__amount purple-text">{{ statistics?.owedAmount | number }} &nbsp;RWF</h5>
+        <span class="stats__caption">Owed Amount</span>
       </div>
     </div>
   </div>
   <div class="col-md-2 col-sm-6 col-xs-12 my-auto">
     <div class="info-box">
       <div class="description-block border-right">
-        <h5 class="description-header text-red">{{ statistics?.cherriesTotalQty | number }} &#13199;</h5>
-        <span class="description-text">CHERRIES</span>
+        <h5 class="stats__amount text-red">{{ statistics?.cherriesTotalQty | number }} &#13199;</h5>
+        <span class="stats__caption">Cherries</span>
       </div>
     </div>
   </div>
   <div class="col-md-2 col-sm-6 col-xs-12 my-auto">
     <div class="info-box">
       <div class="description-block border-right">
-        <h5 class="description-header text-red">{{ statistics?.totalAmountToPay | number }} frw</h5>
-        <span class="description-text">AMOUNT TO PAY</span>
+        <h5 class="stats__amount text-red">{{ statistics?.totalAmountToPay | number }} RWF</h5>
+        <span class="stats__caption">Amount to Pay</span>
       </div>
     </div>
   </div>
   <div class="col-md-3 col-sm-6 col-xs-12 my-auto">
     <div class="info-box">
       <div class="description-block border-right">
-        <h5 class="description-header text-red">{{ statistics?.selectedFarmers | number }}</h5>
-        <span class="description-text">SELECTED FARMERS</span>
+        <h5 class="stats__amount text-red">{{ statistics?.selectedFarmers | number }}</h5>
+        <span class="stats__caption">Selected Farmers</span>
       </div>
     </div>
   </div>
@@ -107,7 +107,7 @@
               <td> {{ farmer.userInfo.foreName }}</td>
             </ng-template>
             <td> {{ farmer.userInfo.surname }}</td>
-            <td> {{ farmer.userInfo.phone_number }}</td>
+            <td> {{ farmer.userInfo.paymentChannels && farmer.userInfo.paymentChannels.subscriptionCode ? farmer.userInfo.paymentChannels.subscriptionCode: ''}}</td>
             <td> {{ farmer.userInfo.regNumber | uppercase}}</td>
             <td>
               <table style="background: transparent; width: auto" class="pull-left">
@@ -115,7 +115,7 @@
                   <th></th>
                   <th>CherriesQty (kg)</th>
                   <th>Unit Price</th>
-                  <th>Delivery Approval</th>
+                  <!-- <th>Delivery Approval</th> -->
                   <th>Paid Amount (rwf)</th>
                   <th>Amount To Pay</th>
                   <!-- <th>Date</th> -->
@@ -133,10 +133,10 @@
                   </td>
                   <td> {{ supply.cherriesQty }}</td>
                   <td> {{ supply.unitPerKg }}</td>
-                  <td>
+                  <!-- <td>
                     <ng-container *ngIf="supply.deliveryApproval; else notDelivered">approved</ng-container>
                     <ng-template #notDelivered> not approved</ng-template>
-                  </td>
+                  </td> -->
                   <td> {{ supply.paidAmount }}</td>
                   <td>
                     <span (keyup)="changeValue(i, t, 'owedAmount', $event)" (blur)="updateList(i, t, 'owedAmount', $event)" contenteditable="true">{{ supply.owedAmount }}</span>
@@ -155,6 +155,6 @@
 </div>
 <div class="row">
   <div class="col-xs-12">
-    <button class="btn btn-success pull-right" (click)="onNext()">Save & continue</button>
+    <button class="btn btn-primary pull-right" (click)="onNext()">Save & continue</button>
   </div>
 </div>
