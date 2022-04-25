@@ -1,12 +1,12 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {AuthenticationService, OrganisationService} from '../../core/services';
+import {AuthenticationService, OrganisationService} from '../../core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {ConfirmDialogService} from '../../core/services';
+import {ConfirmDialogService} from '../../core';
 import {Subject} from 'rxjs';
-import {MessageService} from '../../core/services';
-import {AuthorisationService} from '../../core/services';
-import {SiteService} from '../../core/services';
-import {BasicComponent} from '../../core/library';
+import {MessageService} from '../../core';
+import {AuthorisationService} from '../../core';
+import {SiteService} from '../../core';
+import {BasicComponent} from '../../core';
 import {DataTableDirective} from 'angular-datatables';
 
 @Component({
@@ -107,6 +107,14 @@ export class OrganisationListComponent extends BasicComponent implements OnInit,
         dist_id: this.authenticationService.getCurrentUser().info.location.dist_id
       };
       this.siteService.getZone(body).subscribe(data => {
+        if (data) {
+          this.organisations = data.content;
+          this.dtTrigger.next();
+          this.loading = false;
+        }
+      });
+    } else if (this.authorisationService.isPartner()) {
+      this.organisationService.getPartners(this.authenticationService.getCurrentUser().info.org_id).subscribe(data => {
         if (data) {
           this.organisations = data.content;
           this.dtTrigger.next();

@@ -37,7 +37,9 @@ export class OrganisationCreateComponent implements OnInit {
   selectedCoveredVillages = [];
   selectedCoveredCells = [];
   selectedRoles: any;
+  selectedPartners: any;
   coveredSectorsList: FormArray;
+  partners: any[];
 
   ngOnInit() {
     this.createForm = this.formBuilder.group({
@@ -54,6 +56,7 @@ export class OrganisationCreateComponent implements OnInit {
         village_id: [''],
       }),
       organizationRole: new FormArray([]),
+      organizationPartner: new FormArray([]),
       coveredSectors: new FormArray([]),
       contractStartingDate: [''],
       contractEndingDate: [''],
@@ -61,6 +64,15 @@ export class OrganisationCreateComponent implements OnInit {
 
     this.organisationTypeService.all().subscribe(data => {
       this.genres = data.content;
+    });
+    this.organisationService.getOrgByRoles({roles: [11]}).subscribe(data => {
+      if (data) {
+        this.partners = data.content;
+        this.partners.map(() => {
+          const control = new FormControl(false);
+          (this.createForm.controls.organizationPartner as FormArray).push(control);
+        });
+      }
     });
     this.organisationService.possibleRoles().subscribe(data => {
       this.possibleRoles = Object.keys(data.content).map(key => {
@@ -80,9 +92,13 @@ export class OrganisationCreateComponent implements OnInit {
       const selectedRoles = this.createForm.value.organizationRole
         .map((checked, index) => checked ? this.possibleRoles[index].value : null)
         .filter(value => value !== null);
+      const selectedPartners = this.createForm.value.organizationPartner
+        .map((checked, index) => checked ? this.partners[index]._id : null)
+        .filter(value => value !== null);
       const val = this.createForm.value;
       const org = JSON.parse(JSON.stringify(val));
       org['organizationRole'.toString()] = selectedRoles;
+      org['organizationPartner'.toString()] = selectedPartners;
       if (!(selectedRoles.includes(1) || selectedRoles.includes(2))) {
         delete org.location;
       }
@@ -259,6 +275,14 @@ export class OrganisationCreateComponent implements OnInit {
         /* organisation has expiration date if is a distribution site but not a cws  */
         this.hasExpiration = this.selectedRoles.includes(8) && (!this.selectedRoles.includes(1));
       });
+
+    this.createForm.controls['organizationPartner'.toString()].valueChanges.subscribe(
+      (data) => {
+        this.selectedPartners = data
+          .map((checked, index) => checked ? this.partners[index]._id : null)
+          .filter(value => value !== null);
+      });
+
     this.createForm.controls.location.get('prov_id'.toString()).valueChanges.subscribe(
       (value) => {
         if (value !== '') {
@@ -308,6 +332,11 @@ export class OrganisationCreateComponent implements OnInit {
   initial() {
     this.locationService.getProvinces().subscribe((data) => {
       this.provinces = data;
+    });
+    this.organisationService.getOrgByRoles({roles: [11]}).subscribe(data => {
+      if (data) {
+        this.partners = data.content;
+      }
     });
   }
 }

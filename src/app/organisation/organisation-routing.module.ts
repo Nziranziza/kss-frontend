@@ -21,7 +21,7 @@ const routes: Routes = [
       {
         path: 'organisations',
         component: OrganisationListComponent,
-        data: {permissions: [0, 4, 6, 8, 5, 1]},
+        data: {permissions: [0, 4, 6, 8, 5, 1, 11]},
         canActivate: [AuthorisationGuardService]
       }, {
         path: 'organisations/create',

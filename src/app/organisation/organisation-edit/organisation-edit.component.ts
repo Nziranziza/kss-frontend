@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {AuthenticationService, AuthorisationService, OrganisationService, OrganisationTypeService} from '../../core/services';
-import {HelperService} from '../../core/helpers';
-import {LocationService} from '../../core/services';
-import {MessageService} from '../../core/services';
-import {BasicComponent} from '../../core/library';
+import {AuthenticationService, AuthorisationService, OrganisationService, OrganisationTypeService} from '../../core';
+import {HelperService} from '../../core';
+import {LocationService} from '../../core';
+import {MessageService} from '../../core';
+import {BasicComponent} from '../../core';
 
 @Component({
   selector: 'app-organisation-edit',
@@ -27,6 +27,7 @@ export class OrganisationEditComponent extends BasicComponent implements OnInit 
   errors: any;
   genres: any[];
   possibleRoles: any[];
+  partners: any[];
   provinces: any;
   districts: any;
   sectors: any;
@@ -35,6 +36,7 @@ export class OrganisationEditComponent extends BasicComponent implements OnInit 
   villages: any;
   needLocation = false;
   selectedRoles: any;
+  selectedPartners: any;
   id: string;
   coverVillages = false;
   disableProvId = false;
@@ -68,6 +70,7 @@ export class OrganisationEditComponent extends BasicComponent implements OnInit 
         village_id: [''],
       }),
       organizationRole: new FormArray([]),
+      organizationPartner: new FormArray([]),
       coveredSectors: new FormArray([]),
       contractStartingDate: [''],
       contractEndingDate: [''],
@@ -90,6 +93,19 @@ export class OrganisationEditComponent extends BasicComponent implements OnInit 
             } else {
               const control = new FormControl(false);
               (this.editForm.controls.organizationRole as FormArray).push(control);
+            }
+          });
+        });
+        this.organisationService.getOrgByRoles({roles: [11]}).subscribe(partners => {
+          this.partners = partners.content;
+          this.partners.map(partner => {
+            if (data.content.organizationPartner &&
+              data.content.organizationPartner.findIndex(p => p._id === partner._id ) !== -1) {
+              const control = new FormControl(true);
+              (this.editForm.controls.organizationPartner as FormArray).push(control);
+            } else {
+              const control = new FormControl(false);
+              (this.editForm.controls.organizationPartner as FormArray).push(control);
             }
           });
         });
@@ -284,14 +300,16 @@ export class OrganisationEditComponent extends BasicComponent implements OnInit 
       const selectedRoles = this.editForm.value.organizationRole
         .map((checked, index) => checked ? this.possibleRoles[index].value : null)
         .filter(value => value !== null);
+      const selectedPartners = this.editForm.value.organizationPartner
+        .map((checked, index) => checked ? this.partners[index]._id : null)
+        .filter(value => value !== null);
       const val = this.editForm.value;
       const org = JSON.parse(JSON.stringify(val));
       org['organizationRole'.toString()] = selectedRoles;
+      org['organizationPartner'.toString()] = selectedPartners;
       if (!(selectedRoles.includes(1) || selectedRoles.includes(2))) {
         delete org.location;
       } else if (this.authorisationService.isDistrictCashCropOfficer()) {
-        console.log('here!');
-        console.log(this.organisation);
         org['location'.toString()]['prov_id'.toString()] = this.organisation.location.prov_id ? this.organisation.location.prov_id._id : '';
         org['location'.toString()]['dist_id'.toString()] = this.organisation.location.dist_id ? this.organisation.location.dist_id._id : '';
       }
@@ -344,6 +362,13 @@ export class OrganisationEditComponent extends BasicComponent implements OnInit 
   }
 
   onChanges() {
+    this.editForm.controls['organizationPartner'.toString()].valueChanges.subscribe(
+      (data) => {
+        this.selectedPartners = data
+          .map((checked, index) => checked ? this.partners[index]._id : null)
+          .filter(value => value !== null);
+        console.log(this.selectedPartners);
+      });
     this.editForm.controls['organizationRole'.toString()].valueChanges.subscribe(
       (data) => {
         this.selectedRoles = data

@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {AuthenticationService, SiteService} from '../core/services';
-import {HelperService} from '../core/helpers';
-import {MessageService} from '../core/services';
+import {AuthenticationService, SiteService} from '../core';
+import {HelperService} from '../core';
+import {MessageService} from '../core';
 
 @Component({
   selector: 'app-profile',

@@ -2,12 +2,12 @@ import {Component, Inject, Injector, Input, OnInit, PLATFORM_ID} from '@angular/
 import {NgbActiveModal, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {isPlatformBrowser} from '@angular/common';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {UserService} from '../../../core/services';
-import {HelperService} from '../../../core/helpers';
-import {AuthenticationService, FarmerService} from '../../../core/services';
+import {LocationService, UserService} from '../../../core';
+import {HelperService} from '../../../core';
+import {AuthenticationService, FarmerService} from '../../../core';
 import {isUndefined} from 'util';
 import {PaymentService} from '../../../core/services/payment.service';
-import {BasicComponent} from '../../../core/library';
+import {BasicComponent} from '../../../core';
 
 @Component({
   selector: 'app-edit-farmer-profile',
@@ -21,6 +21,11 @@ export class EditFarmerProfileComponent extends BasicComponent implements OnInit
   editFarmerProfileForm: FormGroup;
   addPaymentChannelsForm: FormGroup;
   editPaymentChannelForm: FormGroup;
+  provinces: any;
+  districts: any;
+  sectors: any;
+  cells: any;
+  villages: any;
   isGroup = false;
   loading = false;
   showEditPaymentChannelForm = false;
@@ -36,7 +41,9 @@ export class EditFarmerProfileComponent extends BasicComponent implements OnInit
     @Inject(PLATFORM_ID) private platformId: object,
     private editPaymentChannelModal: NgbModal, private authenticationService: AuthenticationService,
     private injector: Injector, private formBuilder: FormBuilder, private userService: UserService,
-    private helper: HelperService, private farmerService: FarmerService,
+    private helper: HelperService,
+    private locationService: LocationService,
+    private farmerService: FarmerService,
     private paymentService: PaymentService) {
     super();
     if (isPlatformBrowser(this.platformId)) {
@@ -57,12 +64,25 @@ export class EditFarmerProfileComponent extends BasicComponent implements OnInit
         firstName: [''],
         lastName: [''],
         phone: ['']
-      })
+      }),
+      location: this.formBuilder.group({
+        prov_id: [''],
+        dist_id: [''],
+        sect_id: [''],
+        cell_id: [''],
+        village_id: [''],
+      }),
+      familySize: [''],
     });
 
     this.addPaymentChannelsForm = this.formBuilder.group({
       paymentChannels: new FormArray([])
     });
+
+    this.locationService.getProvinces().subscribe((data) => {
+      this.provinces = data;
+    });
+
     this.editPaymentChannelForm = this.formBuilder.group({
       channelId: [{value: '', disabled: true}, Validators.required],
       subscriptionCode: ['', Validators.required],
@@ -72,10 +92,12 @@ export class EditFarmerProfileComponent extends BasicComponent implements OnInit
     if (!isUndefined(this.farmer.type)) {
       this.farmer.type = this.farmer.type.toString();
     }
-    this.editFarmerProfileForm.patchValue(this.farmer);
+    this.initial();
+    this.editFarmerProfileForm.patchValue(this.farmer, {emitEvent: false});
     this.getPaymentChannels();
     this.addPaymentChannel();
     this.getCoffeeFarmerPaymentChannels();
+    this.onChanges();
   }
 
   onChangeType() {
@@ -238,7 +260,9 @@ export class EditFarmerProfileComponent extends BasicComponent implements OnInit
     const result = this.channels.find((channel) => {
       return channel._id === id;
     });
-    return result.channel;
+    if (result) {
+      return result.channel;
+    }
   }
 
   getCoffeeFarmerPaymentChannels() {
@@ -271,5 +295,65 @@ export class EditFarmerProfileComponent extends BasicComponent implements OnInit
       (err) => {
         this.setError(err.errors);
       });
+  }
+
+  onChanges() {
+    this.editFarmerProfileForm.controls.location.get('prov_id'.toString()).valueChanges.subscribe(
+      (value) => {
+        if (value !== '') {
+          this.locationService.getDistricts(value).subscribe((data) => {
+            this.districts = data;
+            this.sectors = null;
+            this.cells = null;
+            this.villages = null;
+          });
+        }
+      }
+    );
+    this.editFarmerProfileForm.controls.location.get('dist_id'.toString()).valueChanges.subscribe(
+      (value) => {
+        if (value !== '') {
+          this.locationService.getSectors(value).subscribe((data) => {
+            this.sectors = data;
+            this.cells = null;
+            this.villages = null;
+          });
+        }
+      }
+    );
+    this.editFarmerProfileForm.controls.location.get('sect_id'.toString()).valueChanges.subscribe(
+      (value) => {
+        if (value !== '') {
+          this.locationService.getCells(value).subscribe((data) => {
+            this.cells = data;
+            this.villages = null;
+          });
+        }
+      }
+    );
+    this.editFarmerProfileForm.controls.location.get('cell_id'.toString()).valueChanges.subscribe(
+      (value) => {
+        if (value !== '') {
+          this.locationService.getVillages(value).subscribe((data) => {
+            this.villages = data;
+          });
+        }
+      }
+    );
+  }
+
+  initial() {
+    this.locationService.getDistricts(this.farmer.location.prov_id).subscribe((districts) => {
+      this.districts = districts;
+    });
+    this.locationService.getSectors(this.farmer.location.dist_id).subscribe((sectors) => {
+      this.sectors = sectors;
+    });
+    this.locationService.getCells(this.farmer.location.sect_id).subscribe((cells) => {
+      this.cells = cells;
+    });
+    this.locationService.getVillages(this.farmer.location.cell_id).subscribe((villages) => {
+      this.villages = villages;
+    });
   }
 }

@@ -3,36 +3,49 @@
   <div class="container">
     <div class="row">
       <div class="col-xs-12">
+        <div class="img" style="padding-top: 80px;">
+          <img src="assets/dist/img/sks/logo-sks-coffee@2x.png" class="img-responsive sks-logo">
+        </div>
+      </div>
+      <div class="col-xs-12">
+        <div class="logo-title">
+          <span>
+            Coffee
+          </span>
+        </div>
+      </div>
+      <div class="col-xs-12">
         <div class="login-box">
           <div class="login-box-body">
-            <p class="login-box-msg">Sign in</p>
+            <p class="login-box-msg">Please provide your credentials to login</p>
             <app-list-errors [errorList]="errors"></app-list-errors>
             <app-list-message [message]="message"></app-list-message>
             <app-list-warnings [warning]="warning"></app-list-warnings>
             <form [formGroup]="authForm" (ngSubmit)="onSubmit()">
               <div class="form-group has-feedback">
                 <input type="text" formControlName="email" class="form-control"
-                       placeholder="email"/>
+                       placeholder="Email"/>
                 <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
               </div>
               <div class="form-group has-feedback">
                 <input type="password" formControlName="password" class="form-control"
-                       placeholder="password"/>
+                       placeholder="*********************"/>
                 <span class="glyphicon glyphicon-lock form-control-feedback"></span>
               </div>
               <div class="row">
                 <div class="col-xs-8">
                 </div>
                 <!-- /.col -->
-                <div class="col-xs-4">
-                  <!--<button type="submit" [disabled]="loading" class="btn btn-primary btn-block btn-flat" (click)="login()">Sign In</button>-->
-                  <button class="btn btn-primary btn-block btn-flat" type="submit">Sign In
+                <div class="col-xs-12">
+                  <button class="btn btn-primary btn-block btn-flat action-button" type="submit">Login
                   </button>
                 </div>
                 <!-- /.col -->
               </div>
             </form>
-            <a routerLink="/auth/request-reset">Forgot password</a><br>
+            <p class="login-box-link">
+              <a routerLink="/auth/request-reset">Did you forget password?</a>
+            </p>
           </div>
           <!-- /.login-box-body -->
         </div>

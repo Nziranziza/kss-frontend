@@ -3,6 +3,12 @@
   <div class="container">
     <div class="row">
       <div class="col-xs-12">
+        <div class="img" style="padding-top: 80px;">
+          <img src="assets/dist/img/sks/logo-sks-coffee.png" class="img-responsive sks-logo">
+        </div>
+      </div>
+
+      <div class="col-xs-12">
         <div class="login-box">
           <div class="login-box-body">
             <app-list-errors [errorList]="errors"></app-list-errors>
@@ -15,17 +21,17 @@
                 <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
               </div>
               <div class="row">
-                <div class="col-xs-8">
-                </div>
                 <!-- /.col -->
-                <div class="col-xs-4">
-                  <button class="btn btn-primary btn-block btn-flat" type="submit">Submit
+                <div class="col-xs-12">
+                  <button class="btn btn-primary btn-block btn-flat action-button" type="submit">Submit
                   </button>
                 </div>
                 <!-- /.col -->
               </div>
             </form>
-            <a routerLink="/login">Sign in</a><br>
+            <p class="login-box-link">
+              <a routerLink="/login">Sign in</a><br>
+            </p>
           </div>
           <!-- /.login-box-body -->
         </div>
