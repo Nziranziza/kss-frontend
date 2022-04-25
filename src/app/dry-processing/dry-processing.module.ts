@@ -23,7 +23,10 @@ import { GreenCoffeeListTransfersComponent } from './green-coffee-list-transfers
 
 @NgModule({
   declarations: [DmParchmentListDeliveriesComponent, PrepareGreenCoffeeComponent,
-    ListGreenCoffeeComponent, EditDeliveryItemComponent, AddCoffeeItemComponent, AddResultsComponent, ListCwsGreenCoffeeComponent, ShowResultsComponent, GreenCoffeePrepareTransferComponent, GreenCoffeeListTransfersComponent],
+    ListGreenCoffeeComponent, EditDeliveryItemComponent,
+    AddCoffeeItemComponent,
+    AddResultsComponent, ListCwsGreenCoffeeComponent, ShowResultsComponent,
+    GreenCoffeePrepareTransferComponent, GreenCoffeeListTransfersComponent],
   imports: [
     CommonModule,
     DryProcessingRoutingModule, NgbModule, NgxPaginationModule, OrderModule,

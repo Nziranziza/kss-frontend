@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {AuthenticationService, OrganisationService, UserService} from '../../../../core/services';
+import {AuthenticationService, OrganisationService, UserService} from '../../../../core';
 import {DatePipe} from '@angular/common';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Subject} from 'rxjs';
@@ -7,8 +7,8 @@ import {Router} from '@angular/router';
 import {DataTableDirective} from 'angular-datatables';
 import {PaymentProcessingService} from '../../../../core/services/payment-processing.service';
 import {PaymentService} from '../../../../core/services/payment.service';
-import {BasicComponent} from '../../../../core/library';
-import {HelperService} from '../../../../core/helpers';
+import {BasicComponent} from '../../../../core';
+import {HelperService} from '../../../../core';
 
 @Component({
   selector: 'app-select-deliveries',
@@ -281,7 +281,7 @@ export class SelectDeliveriesComponent extends BasicComponent implements OnInit,
   }
   updateList(farmerId: number, deliveryId: number,  property: string, event: any) {
     const deliveryAmountToPayEdit = parseInt(event.target.textContent);
-    this.suppliers[farmerId]['deliveries'][deliveryId][property] = deliveryAmountToPayEdit;
+    this.suppliers[farmerId].deliveries[deliveryId][property] = deliveryAmountToPayEdit;
     this.updateStatistics();
   }
 }

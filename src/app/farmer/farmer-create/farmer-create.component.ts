@@ -1,15 +1,15 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {AuthenticationService, ConfirmDialogService, FarmerService, OrganisationService, SiteService} from '../../core/services';
-import {LocationService} from '../../core/services';
-import {UserService} from '../../core/services';
-import {MessageService} from '../../core/services';
-import {HelperService} from '../../core/helpers';
+import {AuthenticationService, ConfirmDialogService, FarmerService, OrganisationService, SiteService} from '../../core';
+import {LocationService} from '../../core';
+import {UserService} from '../../core';
+import {MessageService} from '../../core';
+import {HelperService} from '../../core';
 import {isArray, isUndefined} from 'util';
-import {AuthorisationService} from '../../core/services';
+import {AuthorisationService} from '../../core';
 import {Location} from '@angular/common';
-import {BasicComponent} from '../../core/library';
+import {BasicComponent} from '../../core';
 
 @Component({
   selector: 'app-farmer-create',
@@ -24,6 +24,11 @@ export class FarmerCreateComponent extends BasicComponent implements OnInit, OnD
   sectors: any = [];
   cells: any = [];
   villages: any = [];
+  addressProvinces: any;
+  addressDistricts: any;
+  addressSectors: any;
+  addressCells: any;
+  addressVillages: any;
   requestIndex = 0;
   farmer: any;
   createFromPending = false;
@@ -80,7 +85,15 @@ export class FarmerCreateComponent extends BasicComponent implements OnInit, OnD
         phone: ['']
       }),
       /* paymentChannels: new FormArray([]), */
-      requests: new FormArray([])
+      requests: new FormArray([]),
+      location: this.formBuilder.group({
+        prov_id: [''],
+        dist_id: [''],
+        sect_id: [''],
+        cell_id: [''],
+        village_id: [''],
+      }),
+      familySize: ['']
     });
     this.currentSeason = this.authenticationService.getCurrentSeason();
     this.isUserCWSOfficer = this.authorisationService.isCWSUser();
@@ -98,6 +111,10 @@ export class FarmerCreateComponent extends BasicComponent implements OnInit, OnD
           this.id = params.id;
         }
       });
+    this.locationService.getProvinces().subscribe((data) => {
+      this.addressProvinces = data;
+    });
+
     if (this.authenticationService.getCurrentUser().orgInfo.distributionSite) {
       this.siteService.get(this.authenticationService.getCurrentUser().orgInfo.distributionSite).subscribe((site) => {
         this.site = site.content;
@@ -197,6 +214,7 @@ export class FarmerCreateComponent extends BasicComponent implements OnInit, OnD
     /* this.addPaymentChannel(); */
     this.setMessage(this.messageService.getMessage());
     this.onChangeType();
+    this.onChanges();
   }
 
   onSubmit() {
@@ -217,6 +235,8 @@ export class FarmerCreateComponent extends BasicComponent implements OnInit, OnD
           farmer['foreName'.toString()] = temp.foreName;
           farmer['sex'.toString()] = temp.sex;
           farmer['NID'.toString()] = temp.NID;
+          farmer['location'.toString()] = temp.location;
+          farmer['familySize'.toString()] = temp.familySize;
         } else {
           farmer['groupName'.toString()] = temp.groupName;
           farmer['groupContactPerson'.toString()] = temp.groupContactPerson;
@@ -271,6 +291,8 @@ export class FarmerCreateComponent extends BasicComponent implements OnInit, OnD
           farmer['foreName'.toString()] = temp.foreName;
           farmer['sex'.toString()] = temp.sex;
           farmer['NID'.toString()] = temp.NID;
+          farmer['location'.toString()] = temp.location;
+          farmer['familySize'.toString()] = temp.familySize;
         } else {
           farmer['groupName'.toString()] = temp.groupName;
           farmer['groupContactPerson'.toString()] = temp.groupContactPerson;
@@ -557,6 +579,52 @@ export class FarmerCreateComponent extends BasicComponent implements OnInit, OnD
       }
     }
   }
+
+  onChanges() {
+    this.createForm.controls.location.get('prov_id'.toString()).valueChanges.subscribe(
+      (value) => {
+        if (value !== '') {
+          this.locationService.getDistricts(value).subscribe((data) => {
+            this.addressDistricts = data;
+            this.addressSectors = null;
+            this.addressCells = null;
+            this.addressVillages = null;
+          });
+        }
+      }
+    );
+    this.createForm.controls.location.get('dist_id'.toString()).valueChanges.subscribe(
+      (value) => {
+        if (value !== '') {
+          this.locationService.getSectors(value).subscribe((data) => {
+            this.addressSectors = data;
+            this.addressCells = null;
+            this.addressVillages = null;
+          });
+        }
+      }
+    );
+    this.createForm.controls.location.get('sect_id'.toString()).valueChanges.subscribe(
+      (value) => {
+        if (value !== '') {
+          this.locationService.getCells(value).subscribe((data) => {
+            this.addressCells = data;
+            this.addressVillages = null;
+          });
+        }
+      }
+    );
+    this.createForm.controls.location.get('cell_id'.toString()).valueChanges.subscribe(
+      (value) => {
+        if (value !== '') {
+          this.locationService.getVillages(value).subscribe((data) => {
+            this.addressVillages = data;
+          });
+        }
+      }
+    );
+  }
+
 
   get formPaymentChannel() {
     return this.createForm.controls.paymentChannels as FormArray;

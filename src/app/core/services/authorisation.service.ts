@@ -31,6 +31,11 @@ export class AuthorisationService {
     return !!(this.authenticationService.getCurrentUser().parameters.type === 1);
   }
 
+  isPartner() {
+    this.userRoles = this.authenticationService.getCurrentUser().parameters.role;
+    return !!this.userRoles.includes(11);
+  }
+
   isCWSUser() {
     this.userRoles = this.authenticationService.getCurrentUser().parameters.role;
     return !!this.userRoles.includes(1);
@@ -76,7 +81,6 @@ export class AuthorisationService {
 
   isTechouseAdmin() {
     this.userRoles = this.authenticationService.getCurrentUser().parameters.role;
-
     return !!(this.userRoles.includes(0) && +this.authenticationService.getCurrentUser().parameters.type === 1);
   }
 
@@ -113,5 +117,10 @@ export class AuthorisationService {
   isDistrictCashCropOfficer() {
     this.userRoles = this.authenticationService.getCurrentUser().parameters.role;
     return !!this.userRoles.includes(6);
+  }
+
+  isSWAdmin() {
+    this.userRoles = this.authenticationService.getCurrentUser().parameters.role;
+    return !!(this.userRoles.includes(9) && +this.authenticationService.getCurrentUser().parameters.type === 1);
   }
 }

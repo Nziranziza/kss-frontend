@@ -77,7 +77,7 @@ export class GreenCoffeePrepareTransferComponent  extends BasicComponent impleme
     });
 
     this.initialSearchValue = this.filterForm.value;
-    this.organisationService.getOrgsByRoles({roles: [9]} ).subscribe(data => {
+    this.organisationService.getOrgByRoles({roles: [9]} ).subscribe(data => {
       if (data) {
         this.organisations = data.content;
       }
@@ -163,7 +163,7 @@ export class GreenCoffeePrepareTransferComponent  extends BasicComponent impleme
               this.greenCoffeeTransferService.resetCart();
               this.resetSelection();
               this.resetCart();
-              this.router.navigateByUrl('admin/drymill/green_coffee/transfer/history');
+              this.router.navigateByUrl('admin/drymill/green_coffee/list/transfers');
             },
             (err) => {
               this.errors = err.errors;

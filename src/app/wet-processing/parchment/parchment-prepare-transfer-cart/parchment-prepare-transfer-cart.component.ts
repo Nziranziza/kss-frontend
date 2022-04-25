@@ -80,7 +80,7 @@ export class ParchmentPrepareTransferCartComponent extends BasicComponent implem
     });
 
     this.initialSearchValue = this.filterForm.value;
-    this.organisationService.getOrgsByRoles({roles: [2]} ).subscribe(data => {
+    this.organisationService.getOrgByRoles({roles: [2]} ).subscribe(data => {
       if (data) {
         this.organisations = data.content;
       }

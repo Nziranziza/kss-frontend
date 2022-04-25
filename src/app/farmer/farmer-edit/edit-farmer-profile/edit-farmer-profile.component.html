@@ -8,7 +8,7 @@
       <a href="#profile" aria-controls="Profile" role="tab"
          data-toggle="tab"><span>Edit Profile</span></a>
     </li>
-    <li role="presentation" class="">
+    <li role="presentation" class="" appInternal>
       <a href="#payment-channels" aria-controls="payment-channels" role="tab"
          data-toggle="tab"><span>Payment channels</span></a>
     </li>
@@ -33,6 +33,25 @@
           <div class="col-xs-12">
             <div class="box">
               <div class="box-body">
+                <div class="row">
+                  <div class="col-xs-6">
+                    <div class="form-group">
+                      <label class="control-label label-required">Type</label>
+                      <div class="radio">
+                        <label>
+                          <input type="radio" formControlName="type" value="1">
+                          Individual
+                        </label>
+                      </div>
+                      <div class="radio">
+                        <label>
+                          <input type="radio" formControlName="type" value="2">
+                          Group
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 <div class="row">
                   <section id="personal" *ngIf="!isGroup">
                     <div class="col-xs-6">
@@ -80,6 +99,12 @@
                         <input type="text" formControlName="phone_number" class="form-control">
                       </div>
                     </div>
+                    <div class="col-xs-6">
+                      <div class="form-group">
+                        <label class="control-label">Family size</label>
+                        <input type="number" formControlName="familySize" class="form-control" min="0">
+                      </div>
+                    </div>
                   </section>
                   <section id="group" *ngIf="isGroup">
                     <div class="col-xs-6">
@@ -89,23 +114,6 @@
                       </div>
                     </div>
                   </section>
-                  <div class="col-xs-6">
-                    <div class="form-group">
-                      <label class="control-label label-required">Type</label>
-                      <div class="radio">
-                        <label>
-                          <input type="radio" formControlName="type" value="1">
-                          Individual
-                        </label>
-                      </div>
-                      <div class="radio">
-                        <label>
-                          <input type="radio" formControlName="type" value="2">
-                          Group
-                        </label>
-                      </div>
-                    </div>
-                  </div>
                 </div>
                 <div class="row">
                   <fieldset class="location" *ngIf="isGroup">
@@ -132,6 +140,55 @@
                       </div>
                     </div>
                   </fieldset>
+                </div>
+                <div class="row">
+                  <div formGroupName="location">
+                    <div class="col-xs-2">
+                      <div class="form-group">
+                        <label class="control-label">Province</label>
+                        <select class="form-control" formControlName="prov_id">
+                          <option value=""></option>
+                          <option *ngFor="let province of provinces" value="{{province._id}}">{{province.namee}}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-xs-2">
+                      <div class="form-group">
+                        <label class="control-label">District</label>
+                        <select class="form-control" formControlName="dist_id">
+                          <option value=""></option>
+                          <option *ngFor="let district of districts" value="{{district._id}}">{{district.name}}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-xs-2">
+                      <div class="form-group">
+                        <label class="control-label">Sector</label>
+                        <select class="form-control" formControlName="sect_id">
+                          <option value=""></option>
+                          <option *ngFor="let sector of sectors" value="{{sector._id}}">{{sector.name}}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-xs-2">
+                      <div class="form-group">
+                        <label class="control-label">Cell</label>
+                        <select class="form-control" formControlName="cell_id">
+                          <option value=""></option>
+                          <option *ngFor="let cell of cells" value="{{cell._id}}">{{cell.name}}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-xs-2">
+                      <div class="form-group">
+                        <label class="control-label">Village</label>
+                        <select class="form-control" formControlName="village_id">
+                          <option value=""></option>
+                          <option *ngFor="let village of villages" value="{{village._id}}">{{village.name}}</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

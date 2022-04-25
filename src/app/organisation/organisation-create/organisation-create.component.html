@@ -40,6 +40,18 @@
             </div>
           </div>
           <div class="col-xs-6">
+            <label class="control-label label-required">Partners</label>
+            <ng-container *ngIf="createForm.get('organizationPartner')['controls'].length">
+              <div class="checkbox" formArrayName="organizationPartner"
+                   *ngFor="let partner of createForm.get('organizationPartner')['controls']; let i = index">
+                <label *ngIf="partners[i].organizationName">
+                  <input type="checkbox" formControlName="{{i}}">
+                  {{ partners[i].organizationName | uppercase }}
+                </label>
+              </div>
+            </ng-container>
+          </div>
+          <div class="col-xs-6">
             <label class="control-label label-required">Roles</label>
             <ng-container *ngIf="createForm.get('organizationRole')['controls'].length">
               <div class="checkbox" formArrayName="organizationRole"
