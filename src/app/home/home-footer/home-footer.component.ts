@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {PrivacyPoliceComponent} from '../privacy-police/privacy-police.component';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-home-footer',
@@ -7,8 +9,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeFooterComponent implements OnInit {
 
-  constructor() { }
+  constructor(private modal: NgbModal) { }
 
   ngOnInit() {
+  }
+
+  privacyPolice() {
+    this.modal.open(PrivacyPoliceComponent, {size: 'sm'});
   }
 }
