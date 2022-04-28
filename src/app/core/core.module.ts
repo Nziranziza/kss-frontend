@@ -9,7 +9,7 @@ import {
   FarmerService,
   JwtService,
   OrganisationService,
-  OrganisationTypeService
+  OrganisationTypeService,
 } from './services';
 
 import {HelperService} from './helpers';
@@ -23,6 +23,7 @@ import {AdminGuard} from './services/guards/admin.guard';
 import {CoveredAreaResolverService} from './services/resolvers/covered-area-resolver.service';
 import {SharedDataService} from './services/shared-data.service';
 import {PaymentService} from './services/payment.service';
+import {FarmService} from './services/farm.services';
 
 @NgModule({
   imports: [
@@ -35,6 +36,7 @@ import {PaymentService} from './services/payment.service';
     OrganisationService,
     HelperService,
     FarmerService,
+    FarmService,
     ConfirmDialogService,
     OrganisationTypeService,
     CookieService,
@@ -46,6 +48,7 @@ import {PaymentService} from './services/payment.service';
     CookieService,
     PaymentService,
     CoveredAreaResolverService,
+    FarmService
     /*{provide: ErrorHandler, useClass: ErrorCustomHandler}*/
   ],
   declarations: []

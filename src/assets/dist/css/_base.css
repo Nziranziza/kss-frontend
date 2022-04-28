@@ -48,7 +48,7 @@
 }
 .home .logo-title {
   color: #4F210D;
-  font-size: 50px;
+  font-size: 52px;
   font-weight: bolder;
   margin-top: -55px;
   width: 427px;
@@ -65,14 +65,19 @@
   color: #4F210D;
 }
 
-.action-button {
+.login-box .action-button {
   background-color: #4F210D;
   color: #ffffff;
   text-transform: uppercase;
   border-color: #4F210D;
 }
 
-.action-button:hover {
+.login-box .action-button:hover, .login-box .action-button:active{
+  background-color: #4F210D;
+  border-color: #4F210D;
+}
+
+.login-box .action-button:hover {
   background-color: #4F210D;
   border-color: #4F210D;
 }
@@ -85,9 +90,16 @@
   margin-top: 30px;
 }
 
-.btn-success {
-  background-color: #94c17d;
-  border-color: #94c17d;
+.btn-success, .btn-default {
+  background-color: #ffffff;
+  border-color: #4F210D;
+  color: #4F210D;
+}
+
+.btn-success:hover, .btn-default:hover {
+  background-color: #4F210D1F;
+  border-color: #4F210D;
+  color: #4F210D !important;
 }
 
 .btn-warning {
@@ -106,7 +118,7 @@
 
 html, body {
   height: 100% !important;
-  color: #535658;
+  color: #3f1903;
   top: 0 !important;
 }
 
@@ -182,14 +194,6 @@ div .wrapper {
   background-color: #4F210D1F;
 }
 
-.skin-blue .sidebar-menu > li.active > a {
-  background: #4F210D1F;
-}
-
-.skin-blue .sidebar-menu>li>.treeview-menu {
-  background: #d9d6c8 !important;
-}
-
 @media (min-width: 992px) {
 
   .modal-lg {
@@ -233,11 +237,6 @@ div .wrapper {
 .skin-blue .main-header .logo
 {
   background-color: #4F210D;
-}
-
-
-.sidebar-menu[_ngcontent-c3] > li.header[_ngcontent-c3], .sidebar-menu[_ngcontent-c3] > li[_ngcontent-c3] {
-  background-color: #E1A33E;
 }
 
 .form-control {
@@ -478,6 +477,14 @@ table.dataTable.dtr-inline.collapsed > tbody > tr.parent > td:first-child:before
 table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > td:first-child:before, table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > th:first-child:before {
   color: #333333 !important;
   background-color: white;
+}
+
+.table-striped>tbody>tr:nth-of-type(odd) {
+  background-color: #f9f6f1;
+}
+
+.table-striped>tbody>tr:nth-of-type(odd):hover {
+  background-color: white !important;
 }
 
 /*----------------------------------------Alerts---------------------------------------------*/

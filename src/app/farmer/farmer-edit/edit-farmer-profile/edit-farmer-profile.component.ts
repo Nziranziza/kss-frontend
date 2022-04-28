@@ -173,7 +173,7 @@ export class EditFarmerProfileComponent extends BasicComponent implements OnInit
       }
       this.helper.cleanObject(body);
       this.farmerService.updateFarmerProfile(body).subscribe(() => {
-          this.modal.dismiss();
+          this.setMessage('Profile successfully updated!');
         },
         (err) => {
           this.setError(err.errors);
@@ -343,17 +343,19 @@ export class EditFarmerProfileComponent extends BasicComponent implements OnInit
   }
 
   initial() {
-    this.locationService.getDistricts(this.farmer.location.prov_id).subscribe((districts) => {
-      this.districts = districts;
-    });
-    this.locationService.getSectors(this.farmer.location.dist_id).subscribe((sectors) => {
-      this.sectors = sectors;
-    });
-    this.locationService.getCells(this.farmer.location.sect_id).subscribe((cells) => {
-      this.cells = cells;
-    });
-    this.locationService.getVillages(this.farmer.location.cell_id).subscribe((villages) => {
-      this.villages = villages;
-    });
+    if (this.farmer.location) {
+      this.locationService.getDistricts(this.farmer.location.prov_id).subscribe((districts) => {
+        this.districts = districts;
+      });
+      this.locationService.getSectors(this.farmer.location.dist_id).subscribe((sectors) => {
+        this.sectors = sectors;
+      });
+      this.locationService.getCells(this.farmer.location.sect_id).subscribe((cells) => {
+        this.cells = cells;
+      });
+      this.locationService.getVillages(this.farmer.location.cell_id).subscribe((villages) => {
+        this.villages = villages;
+      });
+    }
   }
 }
