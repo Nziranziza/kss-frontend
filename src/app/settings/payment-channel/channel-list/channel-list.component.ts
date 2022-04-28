@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
 import {Subject} from 'rxjs';
-import {BasicComponent} from '../../../core/library';
+import {BasicComponent} from '../../../core';
 import {PaymentService} from '../../../core/services/payment.service';
 
 @Component({
@@ -39,6 +39,4 @@ export class ChannelListComponent extends BasicComponent implements OnInit, Afte
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
   }
-
-
 }

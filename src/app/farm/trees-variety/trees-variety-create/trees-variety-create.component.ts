@@ -1,16 +1,15 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import {BasicComponent, HelperService} from '../../../core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
-import {HelperService} from '../../../core';
 import {PaymentService} from '../../../core/services/payment.service';
-import {BasicComponent} from '../../../core';
 
 @Component({
-  selector: 'app-channel',
-  templateUrl: './channel.component.html',
-  styleUrls: ['./channel.component.css']
+  selector: 'app-trees-variety-create',
+  templateUrl: './trees-variety-create.component.html',
+  styleUrls: ['./trees-variety-create.component.css']
 })
-export class ChannelComponent extends BasicComponent implements OnInit {
+export class TreesVarietyCreateComponent extends BasicComponent implements OnInit {
 
   createForm: FormGroup;
 
@@ -21,14 +20,16 @@ export class ChannelComponent extends BasicComponent implements OnInit {
 
   ngOnInit() {
     this.createForm = this.formBuilder.group({
-      channel: ['', Validators.required]
+      name: ['', Validators.required],
+      description: ['', Validators.required],
+      acronym: ['', Validators.required],
     });
   }
 
   onSubmit() {
     if (this.createForm.valid) {
-      const channel = this.createForm.value;
-      this.paymentService.createChannel(channel).subscribe((response) => {
+      const variety = this.createForm.value;
+      this.paymentService.createChannel(variety).subscribe((response) => {
         this.setMessage(response.message);
       }, (err) => {
         this.setError(err.errors);

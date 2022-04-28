@@ -20,4 +20,5 @@ export * from './season.service';
 export * from './site.service';
 export * from './user.service';
 export * from './warehouse.service';
+export * from './farm.services';
 
