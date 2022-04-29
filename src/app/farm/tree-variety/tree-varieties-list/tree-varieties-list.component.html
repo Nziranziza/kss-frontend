@@ -1,0 +1,40 @@
+<h3>
+  Trees varieties
+  <a class="btn btn-success pull-right" routerLink="/admin/coffee-type/create"
+  ><i class="fa fa-plus"></i> Tree variety</a
+  >
+</h3>
+<app-list-message [message]="message"></app-list-message>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-body expendable-dataTable">
+        <table
+          datatable
+          [dtOptions]="dtOptions"
+          class="row-border hover table table-striped"
+          id="responsive-table"
+        >
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Acronym</th>
+            <th class="pull-right">#</th>
+          </tr>
+          </thead>
+          <tbody style="border-width: 1px">
+          <ng-container *ngFor="let variety of varieties">
+            <tr>
+              <td>{{ variety.name }}</td>
+              <td>{{ variety.description }}</td>
+              <td>{{ variety.acronym }}</td>
+              <td></td>
+            </tr>
+          </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

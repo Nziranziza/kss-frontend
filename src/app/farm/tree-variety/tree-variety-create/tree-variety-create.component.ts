@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {BasicComponent, HelperService} from '../../../core';
+import {BasicComponent, FarmService, HelperService} from '../../../core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
-import {PaymentService} from '../../../core/services/payment.service';
 
 @Component({
   selector: 'app-trees-variety-create',
@@ -14,7 +13,7 @@ export class TreesVarietyCreateComponent extends BasicComponent implements OnIni
   createForm: FormGroup;
 
   constructor(private formBuilder: FormBuilder,
-              private router: Router, private paymentService: PaymentService, private helper: HelperService) {
+              private router: Router, private farmService: FarmService, private helper: HelperService) {
     super();
   }
 
@@ -29,7 +28,7 @@ export class TreesVarietyCreateComponent extends BasicComponent implements OnIni
   onSubmit() {
     if (this.createForm.valid) {
       const variety = this.createForm.value;
-      this.paymentService.createChannel(variety).subscribe((response) => {
+      this.farmService.createTreesVariety(variety).subscribe((response) => {
         this.setMessage(response.message);
       }, (err) => {
         this.setError(err.errors);
