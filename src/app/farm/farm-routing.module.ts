@@ -1,14 +1,10 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {AdminComponent} from '../admin/admin/admin.component';
-import {FarmerListComponent} from './farmer-list/farmer-list.component';
-import {FarmerCreateComponent} from './farmer-create/farmer-create.component';
-import {FarmerEditComponent} from './farmer-edit/farmer-edit.component';
-import {FarmerLandsComponent} from './farmer-lands/farmer-lands.component';
-import {FarmerNeedApprovalListComponent} from './farmer-need-approval-list/farmer-need-approval-list.component';
 import {AdminGuard} from '../core/services/guards/admin.guard';
-import {PendingFarmerListComponent} from './pending-farmer/pending-farmer-list/pending-farmer-list.component';
-import {FarmerAdministrativeListComponent} from './farmer-administrative-list/farmer-administrative-list.component';
+import {TreeVarietiesListComponent} from './tree-variety/tree-varieties-list/tree-varieties-list.component';
+import {TreeVarietyCreateComponent} from './tree-variety/tree-variety-create/tree-variety-create.component';
+import {TreeVarietyEditComponent} from './tree-variety/tree-variety-edit/tree-variety-edit.component';
 
 const routes: Routes = [
   {
@@ -17,31 +13,17 @@ const routes: Routes = [
     canActivateChild: [AdminGuard],
     children: [
       {
-        path: 'farmers/list',
-        component: FarmerListComponent
+        path: 'farm/tree-varieties/list',
+        component: TreeVarietiesListComponent
       },
       {
-        path: 'pending-farmers',
-        component: PendingFarmerListComponent
+        path: 'farm/tree-varieties/create',
+        component: TreeVarietyCreateComponent,
       },
       {
-        path: 'farmers/administrative/list',
-        component: FarmerAdministrativeListComponent
+        path: 'farm/tree-varieties/edit/:id',
+        component: TreeVarietyEditComponent,
       },
-      {
-        path: 'farmers/need-approval/list',
-        component: FarmerNeedApprovalListComponent
-      },
-      {
-        path: 'farmers/edit/:id',
-        component: FarmerEditComponent,
-      }, {
-        path: 'farmers/create',
-        component: FarmerCreateComponent,
-      }, {
-        path: 'farmers/:farmerId/lands',
-        component: FarmerLandsComponent
-      }
     ]
   }
 ];
@@ -50,5 +32,5 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class FarmerRoutingModule {
+export class FarmRoutingModule {
 }

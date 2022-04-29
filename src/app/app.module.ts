@@ -27,19 +27,14 @@ import {WarehouseModule} from './input-distribution/warehouse/warehouse.module';
 import {DatePipe} from '@angular/common';
 import {PaymentsModule} from './payments/payments.module';
 import {OrganisationPayFarmersModule} from './payments/organisation-pay-farmers/organisation-pay-farmers.module';
-import { TreesVarietyListComponent } from './farm/trees-variety/trees-variety-list/trees-variety-list.component';
-import { TreesVarietyCreateComponent } from './farm/trees-variety/trees-variety-create/trees-variety-create.component';
-import { TreesVarietyEditComponent } from './farm/trees-variety/trees-variety-edit/trees-variety-edit.component';
+import {FarmModule} from './farm/farm.module';
 
 /*import {DataService} from './data.service';
   import {HttpClientInMemoryWebApiModule} from 'angular-in-memory-web-api';*/
 
 @NgModule({
   declarations: [
-    AppComponent,
-    TreesVarietyListComponent,
-    TreesVarietyCreateComponent,
-    TreesVarietyEditComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
@@ -48,6 +43,7 @@ import { TreesVarietyEditComponent } from './farm/trees-variety/trees-variety-ed
     AppRoutingModule,
     CoreModule,
     SharedModule,
+    FarmModule,
     AdminModule,
     HomeModule,
     OrganisationModule,

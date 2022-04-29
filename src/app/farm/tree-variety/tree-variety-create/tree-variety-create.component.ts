@@ -4,11 +4,11 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 
 @Component({
-  selector: 'app-trees-variety-create',
-  templateUrl: './trees-variety-create.component.html',
-  styleUrls: ['./trees-variety-create.component.css']
+  selector: 'app-tree-variety-create',
+  templateUrl: './tree-variety-create.component.html',
+  styleUrls: ['./tree-variety-create.component.css']
 })
-export class TreesVarietyCreateComponent extends BasicComponent implements OnInit {
+export class TreeVarietyCreateComponent extends BasicComponent implements OnInit {
 
   createForm: FormGroup;
 
@@ -28,7 +28,7 @@ export class TreesVarietyCreateComponent extends BasicComponent implements OnIni
   onSubmit() {
     if (this.createForm.valid) {
       const variety = this.createForm.value;
-      this.farmService.createTreesVariety(variety).subscribe((response) => {
+      this.farmService.createTreeVariety(variety).subscribe((response) => {
         this.setMessage(response.message);
       }, (err) => {
         this.setError(err.errors);

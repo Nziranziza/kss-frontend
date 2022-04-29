@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TreesVarietyCreateComponent } from './trees-variety-create.component';
+import { TreeVarietyCreateComponent } from './tree-variety-create.component';
 
 describe('TreesVarietyCreateComponent', () => {
-  let component: TreesVarietyCreateComponent;
-  let fixture: ComponentFixture<TreesVarietyCreateComponent>;
+  let component: TreeVarietyCreateComponent;
+  let fixture: ComponentFixture<TreeVarietyCreateComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TreesVarietyCreateComponent ]
+      declarations: [ TreeVarietyCreateComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TreesVarietyCreateComponent);
+    fixture = TestBed.createComponent(TreeVarietyCreateComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

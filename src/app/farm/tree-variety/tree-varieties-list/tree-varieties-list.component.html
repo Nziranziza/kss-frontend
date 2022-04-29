@@ -1,6 +1,6 @@
 <h3>
-  Trees varieties
-  <a class="btn btn-success pull-right" routerLink="/admin/coffee-type/create"
+  Tree varieties
+  <a class="btn btn-success pull-right" routerLink="/admin/farm/tree-varieties/create"
   ><i class="fa fa-plus"></i> Tree variety</a
   >
 </h3>
@@ -29,7 +29,11 @@
               <td>{{ variety.name }}</td>
               <td>{{ variety.description }}</td>
               <td>{{ variety.acronym }}</td>
-              <td></td>
+              <td>
+                <a class="btn btn-success btn-sm btn-margin pull-right" routerLink="/admin/farm/tree-varieties/edit/{{variety._id}}" *appHasPermission="[[4,1], 0]" style="margin-left: 10px;" >
+                  Edit
+                </a>
+              </td>
             </tr>
           </ng-container>
           </tbody>

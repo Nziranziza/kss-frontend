@@ -153,20 +153,6 @@
               <span>History</span>
             </a>
           </li>
-          <!--
-            <li routerLinkActive="active" *appHasPermission="[1]">
-              <a routerLink="/admin/payment/reports">
-                <i class="fa fa-circle-o"></i>
-                <span>Reports</span>
-              </a>
-            </li>
-            <li routerLinkActive="active">
-              <a routerLink="/admin/top-ups/payments/{{user.org_id}}">
-                <i class="fa fa-circle-o"></i>
-                <span>Top-ups</span>
-              </a>
-            </li>
-          -->
         </ul>
       </li>
       <li class="header" *appHasPermission="[2]">DRY PROCESSING</li>
@@ -377,6 +363,12 @@
             <a routerLink="/admin/coffee-type/list">
               <i class="fa fa-circle-o"></i>
               <span>Coffee types</span>
+            </a>
+          </li>
+          <li routerLinkActive="active" *appHasPermission="[[4,1],[4,11],0]">
+            <a routerLink="/admin/farm/tree-varieties/list">
+              <i class="fa fa-circle-o"></i>
+              <span>Tree varieties</span>
             </a>
           </li>
         </ul>

@@ -3,11 +3,11 @@ import {BasicComponent, FarmService} from '../../../core';
 import {Subject} from 'rxjs';
 
 @Component({
-  selector: 'app-trees-variety',
-  templateUrl: './trees-variety-list.component.html',
-  styleUrls: ['./trees-variety-list.component.css']
+  selector: 'app-tree-variety',
+  templateUrl: './tree-varieties-list.component.html',
+  styleUrls: ['./tree-varieties-list.component.css']
 })
-export class TreesVarietyListComponent extends BasicComponent implements OnInit, AfterViewInit, OnDestroy {
+export class TreeVarietiesListComponent extends BasicComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(private farmService: FarmService) { super();
   }
@@ -22,11 +22,11 @@ export class TreesVarietyListComponent extends BasicComponent implements OnInit,
       pagingType: 'full_numbers',
       pageLength: 10
     };
-    this.getTreesVarieties();
+    this.getTreeVarieties();
   }
 
-  getTreesVarieties() {
-    this.farmService.listTreesVarieties().subscribe((data) => {
+  getTreeVarieties() {
+    this.farmService.listTreeVarieties().subscribe((data) => {
       this.varieties = data.content;
     });
   }
