@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
-import {BasicComponent, FarmService} from '../../../core';
+import {BasicComponent, ConfirmDialogService, FarmService, MessageService} from '../../../core';
 import {Subject} from 'rxjs';
 
 @Component({
@@ -9,7 +9,10 @@ import {Subject} from 'rxjs';
 })
 export class TreeVarietiesListComponent extends BasicComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  constructor(private farmService: FarmService) { super();
+  constructor(private farmService: FarmService,
+              private  confirmDialogService: ConfirmDialogService,
+              private messageService: MessageService) {
+    super();
   }
 
   varieties: any;
@@ -22,13 +25,25 @@ export class TreeVarietiesListComponent extends BasicComponent implements OnInit
       pagingType: 'full_numbers',
       pageLength: 10
     };
+    this.setMessage(this.messageService.getMessage());
     this.getTreeVarieties();
   }
 
   getTreeVarieties() {
     this.farmService.listTreeVarieties().subscribe((data) => {
-      this.varieties = data.content;
+      this.varieties = data.data;
     });
+  }
+
+  deleteVariety(id: string): void {
+    this.confirmDialogService.openConfirmDialog('Are you sure you want to delete this variety?').afterClosed().subscribe(
+      res => {
+        if (res) {
+          const body = {
+            id
+          };
+        }
+      });
   }
 
   ngAfterViewInit(): void {
@@ -37,5 +52,6 @@ export class TreeVarietiesListComponent extends BasicComponent implements OnInit
 
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
+    this.messageService.clearMessage();
   }
 }

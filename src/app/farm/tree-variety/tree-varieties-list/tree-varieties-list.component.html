@@ -20,7 +20,7 @@
             <th>Name</th>
             <th>Description</th>
             <th>Acronym</th>
-            <th class="pull-right">#</th>
+            <th></th>
           </tr>
           </thead>
           <tbody style="border-width: 1px">
@@ -30,6 +30,10 @@
               <td>{{ variety.description }}</td>
               <td>{{ variety.acronym }}</td>
               <td>
+                <button class="btn btn-default btn-margin btn-sm pull-right" *appHasPermission="[4,0]" (click)="deleteVariety(variety._id)"
+                        type="button">
+                  <i class="fa fa-remove" aria-hidden="true"></i> Remove
+                </button>
                 <a class="btn btn-success btn-sm btn-margin pull-right" routerLink="/admin/farm/tree-varieties/edit/{{variety._id}}" *appHasPermission="[[4,1], 0]" style="margin-left: 10px;" >
                   Edit
                 </a>

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {BasicComponent, FarmService, HelperService} from '../../../core';
+import {BasicComponent, FarmService, HelperService, MessageService} from '../../../core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 
@@ -13,6 +13,7 @@ export class TreeVarietyCreateComponent extends BasicComponent implements OnInit
   createForm: FormGroup;
 
   constructor(private formBuilder: FormBuilder,
+              private messageService: MessageService,
               private router: Router, private farmService: FarmService, private helper: HelperService) {
     super();
   }
@@ -29,7 +30,8 @@ export class TreeVarietyCreateComponent extends BasicComponent implements OnInit
     if (this.createForm.valid) {
       const variety = this.createForm.value;
       this.farmService.createTreeVariety(variety).subscribe((response) => {
-        this.setMessage(response.message);
+        this.messageService.setMessage(response.message);
+        this.router.navigateByUrl('admin/farm/tree-varieties/list');
       }, (err) => {
         this.setError(err.errors);
       });

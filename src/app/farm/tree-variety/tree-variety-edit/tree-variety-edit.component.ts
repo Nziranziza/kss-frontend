@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {BasicComponent, FarmService, HelperService} from '../../../core';
+import {BasicComponent, FarmService, HelperService, MessageService} from '../../../core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 
@@ -16,6 +16,7 @@ export class TreeVarietyEditComponent extends BasicComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
               private router: Router,
+              private messageService: MessageService,
               private farmService: FarmService,
               private helper: HelperService) {
     super();
@@ -32,16 +33,17 @@ export class TreeVarietyEditComponent extends BasicComponent implements OnInit {
       acronym: ['', Validators.required],
     });
 
-    this.farmService.getTreeVariety(this.id).subscribe((data) => {
-      this.editForm.patchValue(data.content);
+    this.farmService.getTreeVariety(this.id).subscribe((response) => {
+      this.editForm.patchValue(response.data);
     });
   }
 
   onSubmit() {
     if (this.editForm.valid) {
       const variety = this.editForm.value;
-      this.farmService.createTreeVariety(variety).subscribe((response) => {
-        this.setMessage(response.message);
+      this.farmService.updateTreeVariety(this.id, variety).subscribe((response) => {
+        this.messageService.setMessage(response.message);
+        this.router.navigateByUrl('admin/farm/tree-varieties/list');
       }, (err) => {
         this.setError(err.errors);
       });

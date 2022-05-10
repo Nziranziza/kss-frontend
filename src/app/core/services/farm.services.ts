@@ -20,11 +20,19 @@ export class FarmService {
   }
 
   getTreeVariety(id: string): Observable<any> {
-    return this.apiService.get('/v1.1/farm/tree-varieties' + id);
+    return this.apiService.get('/v1.1/farm/tree-varieties/' + id);
+  }
+
+  deleteTreeVariety(id: string): Observable<any> {
+    return this.apiService.delete('/v1.1/farm/tree-varieties/' + id);
   }
 
   updateTreeVariety(id: string, body: any): Observable<any> {
-    return this.apiService.put('/v1.1/farm/tree-varieties/update' + id, body);
+    return this.apiService.put('/v1.1/farm/tree-varieties/update/' + id, body);
+  }
+
+  validateUPI(body: any) {
+    return this.apiService.post('/v1.1/farm/lands/validate/upi', body);
   }
 
 }

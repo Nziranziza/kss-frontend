@@ -47,6 +47,7 @@ export class OrganisationEditComponent extends BasicComponent implements OnInit 
   selectedCoveredVillages = [[]];
   selectedCoveredCells = [[]];
   coveredSectorsList: FormArray;
+  showPartners = false;
   hasExpiration = false;
   isUserDCC = false;
 
@@ -99,13 +100,16 @@ export class OrganisationEditComponent extends BasicComponent implements OnInit 
         this.organisationService.getOrgByRoles({roles: [11]}).subscribe(partners => {
           this.partners = partners.content;
           this.partners.map(partner => {
-            if (data.content.organizationPartner &&
-              data.content.organizationPartner.findIndex(p => p._id === partner._id ) !== -1) {
-              const control = new FormControl(true);
-              (this.editForm.controls.organizationPartner as FormArray).push(control);
-            } else {
-              const control = new FormControl(false);
-              (this.editForm.controls.organizationPartner as FormArray).push(control);
+            if (partner._id !== this.id) {
+              if (data.content.organizationPartner &&
+                data.content.organizationPartner.findIndex(p => p._id === partner._id) !== -1) {
+                const control = new FormControl(true);
+                (this.editForm.controls.organizationPartner as FormArray).push(control);
+              } else {
+                const control = new FormControl(false);
+                (this.editForm.controls.organizationPartner as FormArray).push(control);
+              }
+              this.showPartners = true;
             }
           });
         });
