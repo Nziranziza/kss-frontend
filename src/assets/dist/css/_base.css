@@ -96,6 +96,17 @@
   color: #4F210D;
 }
 
+.btn-action{
+  background-color: #4F210D;
+  border-color: #ffffff;
+  color: #ffffff;
+}
+
+.btn-action-no-border{
+  background-color: transparent;
+  border: none;
+}
+
 .btn-success:hover, .btn-default:hover {
   background-color: #4F210D1F;
   border-color: #4F210D;
