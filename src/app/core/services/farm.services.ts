@@ -11,20 +11,28 @@ export class FarmService {
   constructor(private apiService: ApiService) {
   }
 
-  createTreesVariety(body: any): Observable<any> {
-    return this.apiService.post('/v1.1/farm/trees-variety', body);
+  createTreeVariety(body: any): Observable<any> {
+    return this.apiService.post('/v1.1/farm/tree-varieties/create', body);
   }
 
-  listTreesVarieties(): Observable<any> {
-    return this.apiService.get('/v1.1/farm/trees-variety');
+  listTreeVarieties(): Observable<any> {
+    return this.apiService.get('/v1.1/farm/tree-varieties/list');
   }
 
-  getTreesVariety(id: string): Observable<any> {
-    return this.apiService.get('/v1.1/farm/trees-variety/' + id);
+  getTreeVariety(id: string): Observable<any> {
+    return this.apiService.get('/v1.1/farm/tree-varieties/' + id);
   }
 
-  updateTreesVariety(id: string, body: any): Observable<any> {
-    return this.apiService.post('/v1.1/farm/trees-variety' + id, body);
+  deleteTreeVariety(id: string): Observable<any> {
+    return this.apiService.delete('/v1.1/farm/tree-varieties/' + id);
+  }
+
+  updateTreeVariety(id: string, body: any): Observable<any> {
+    return this.apiService.put('/v1.1/farm/tree-varieties/update/' + id, body);
+  }
+
+  validateUPI(body: any) {
+    return this.apiService.post('/v1.1/farm/lands/validate/upi', body);
   }
 
 }

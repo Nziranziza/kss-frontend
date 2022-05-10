@@ -1,20 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import {BasicComponent, HelperService} from '../../../core';
+import {BasicComponent, FarmService, HelperService, MessageService} from '../../../core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
-import {PaymentService} from '../../../core/services/payment.service';
 
 @Component({
-  selector: 'app-trees-variety-create',
-  templateUrl: './trees-variety-create.component.html',
-  styleUrls: ['./trees-variety-create.component.css']
+  selector: 'app-tree-variety-create',
+  templateUrl: './tree-variety-create.component.html',
+  styleUrls: ['./tree-variety-create.component.css']
 })
-export class TreesVarietyCreateComponent extends BasicComponent implements OnInit {
+export class TreeVarietyCreateComponent extends BasicComponent implements OnInit {
 
   createForm: FormGroup;
 
   constructor(private formBuilder: FormBuilder,
-              private router: Router, private paymentService: PaymentService, private helper: HelperService) {
+              private messageService: MessageService,
+              private router: Router, private farmService: FarmService, private helper: HelperService) {
     super();
   }
 
@@ -29,8 +29,9 @@ export class TreesVarietyCreateComponent extends BasicComponent implements OnIni
   onSubmit() {
     if (this.createForm.valid) {
       const variety = this.createForm.value;
-      this.paymentService.createChannel(variety).subscribe((response) => {
-        this.setMessage(response.message);
+      this.farmService.createTreeVariety(variety).subscribe((response) => {
+        this.messageService.setMessage(response.message);
+        this.router.navigateByUrl('admin/farm/tree-varieties/list');
       }, (err) => {
         this.setError(err.errors);
       });

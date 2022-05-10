@@ -1,10 +1,10 @@
 import {Component, Inject, Injector, Input, OnInit, PLATFORM_ID} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {InputDistributionService} from '../../../core/services';
-import {HelperService} from '../../../core/helpers';
+import {InputDistributionService} from '../../../core';
+import {HelperService} from '../../../core';
 import {isPlatformBrowser} from '@angular/common';
-import {BasicComponent} from '../../../core/library';
+import {BasicComponent} from '../../../core';
 
 @Component({
   selector: 'app-edit-supplier',

@@ -40,7 +40,7 @@
                 </select>
               </div>
             </div>
-            <div class="col-xs-6" *ngIf="!isSuperOrg">
+            <div class="col-xs-6" *ngIf="!isSuperOrg && showPartners">
               <label class="control-label label-required">Partners</label>
               <div class="checkbox" formArrayName="organizationPartner"
                    *ngFor="let partner of editForm.get('organizationPartner')['controls']; let i = index">
