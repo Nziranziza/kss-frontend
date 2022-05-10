@@ -274,7 +274,11 @@
             <div class="col-xs-2">
               <div class="form-group">
                 <div class="">
-                  <select class="form-control" formControlName="prov_id" disabled>
+                  <select
+                    class="form-control"
+                    formControlName="prov_id"
+                    disabled
+                  >
                     <option value="" selected="selected">ALL PROVINCES</option>
                     <option
                       *ngFor="let province of provinces"
@@ -463,7 +467,18 @@
               <td>-</td>
               <td>-</td>
               <td>-</td>
-              <td>-</td>
+              <td>
+                <button
+                  *ngIf="farmer.userInfo.active === true; else inactive"
+                  class="btn btn-success btn-sm btn-margin"
+                  type="button"
+                >
+                  Active
+                </button>
+                <ng-template #inactive>
+                  
+                </ng-template>
+              </td>
               <td class="text-center">
                 <button
                   appRequiredSeason

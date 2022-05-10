@@ -105,6 +105,16 @@
                         <input type="number" formControlName="familySize" class="form-control" min="0">
                       </div>
                     </div>
+                    <div class="col-xs-6">
+                      <div class="form-group">
+                        <label class="control-label">Status</label>
+                        <select class="form-control" formControlName="active">
+                          <option value=""></option>
+                          <option value="true">Active</option>
+                          <option value="false">Inactive</option>
+                        </select>
+                      </div>
+                    </div>
                   </section>
                   <section id="group" *ngIf="isGroup">
                     <div class="col-xs-6">
