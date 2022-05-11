@@ -6,7 +6,6 @@ import {AuthenticationService, FarmerService, OrganisationService, SiteService} 
 import {isPlatformBrowser} from '@angular/common';
 import {LocationService} from '../../../core';
 import {AuthorisationService} from '../../../core';
-import {invalid} from '../../../../assets/bower_components/moment/moment';
 
 @Component({
   selector: 'app-edit-farmer-request',
@@ -41,6 +40,7 @@ export class EditFarmerRequestComponent implements OnInit {
   upi: any;
   validCalculations = true;
 
+
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
     private injector: Injector, private formBuilder: FormBuilder, private locationService: LocationService,
@@ -74,18 +74,30 @@ export class EditFarmerRequestComponent implements OnInit {
         cell_id: ['', Validators.required],
         village_id: ['', Validators.required]
       }),
-      upiNumber: ['', Validators.required],
-      landOwnerNames: ['', Validators.required],
-      longitudeCoordinate: ['', Validators.required],
-      latitudeCoordinate: ['', Validators.required],
+      upiNumber: [''],
+      landOwner: [''],
+      longitudeCoordinate: [''],
+      latitudeCoordinate: [''],
+      active: [''],
       certificates: new FormArray([]),
       treeAges: new FormArray([])
     });
     const temp = {
       numberOfTrees: this.land.numberOfTrees,
       fertilizer_allocate: this.land.fertilizer_allocate,
+      landOwner: this.land.landOwner,
+      upiNumber: this.land.upiNumber,
+      certificates: this.land.certificates,
+      treeAges: this.land.treeAges,
+      longitudeCoordinate: this.land.longitudeCoordinate,
+      latitudeCoordinate: this.land.latitudeCoordinate,
+      active: this.land.active,
       location: {}
     };
+
+    temp.certificates.map((certificate) => {
+      this.addCertificate();
+    });
 
     this.currentSeason = this.authenticationService.getCurrentSeason();
     temp.location['prov_id'.toString()] = this.land.location.prov_id._id;
@@ -97,9 +109,19 @@ export class EditFarmerRequestComponent implements OnInit {
       this.org = data.content;
     });
     this.farmService.listTreeVarieties().subscribe((data) => {
-      this.treeVarieties = data.data;
-      this.createAgeRanges();
-    });
+        this.treeVarieties = data.data;
+        this.createAgeRanges();
+        this.editFarmerRequestForm.controls.treeAges.patchValue(this.land.treeAges);
+        this.land.treeAges.map((age, i) => {
+          age.varieties.map((variety, v) => {
+            if (variety.number > 0) {
+              this.formTreeVarieties(i).at(v).get('selected').setValue(true);
+            }
+          });
+        });
+      }
+    );
+
     this.initial();
     this.locationService.getDistricts(this.land.location.prov_id._id).subscribe((districts) => {
       this.districts = districts;
@@ -136,14 +158,13 @@ export class EditFarmerRequestComponent implements OnInit {
       this.villages = villages;
     });
     this.editFarmerRequestForm.patchValue(temp, {emitEvent: false});
-    this.addCertificate();
     this.onChanges();
   }
 
   createCertificate(): FormGroup {
     return this.formBuilder.group({
-      name: ['', Validators.required],
-      identificationNumber: ['', Validators.required]
+      name: [''],
+      identificationNumber: ['']
     });
   }
 
@@ -155,19 +176,26 @@ export class EditFarmerRequestComponent implements OnInit {
     return this.formTreeAges.at(i).get('varieties') as FormArray;
   }
 
+  addTreeVariety(i: number) {
+    this.formTreeVarieties(i).push(this.formBuilder.group({
+      selected: [false],
+      number: [0]
+    }));
+  }
+
   createAgeRanges() {
     this.ranges.forEach((range, i) => {
       this.formTreeAges.push(
         this.formBuilder.group({
-          [range]: range,
-          numOfTrees: [0, Validators.required],
+          range,
+          numOfTrees: [0],
           varieties: new FormArray([])
         }));
       this.treeVarieties.forEach((variety, t) => {
         this.formTreeVarieties(i).push(
           this.formBuilder.group({
-            [variety._id]: [false, Validators.required],
-            number: [0, Validators.required]
+            selected: [false],
+            number: [0]
           }));
       });
     });
@@ -301,6 +329,14 @@ export class EditFarmerRequestComponent implements OnInit {
     });
   }
 
+  updateList(i: number, v: number) {
+    if (this.formTreeVarieties(i).at(v).get('number').value !== 0) {
+      this.formTreeVarieties(i).at(v).get('selected').setValue(true);
+    } else {
+      this.formTreeVarieties(i).at(v).get('selected').setValue(false);
+    }
+  }
+
   getLocationInput(field: string) {
     return this.editFarmerRequestForm.controls.location.get(field);
   }
@@ -314,6 +350,13 @@ export class EditFarmerRequestComponent implements OnInit {
       request['subDocumentId'.toString()] = this.land._id;
       request['userId'.toString()] = this.authenticationService.getCurrentUser().info._id;
       request['updated_by'.toString()] = this.authenticationService.getCurrentUser().info._id;
+      this.helper.cleanObject(request);
+      request.treeAges.map((range) => {
+        range.varieties.map((variety, index) => {
+          variety.varietyId = this.treeVarieties[index]._id;
+          delete variety.selected;
+        });
+      });
       this.farmerService.updateFarmerRequest(request).subscribe(() => {
           this.setMessage('request successfully updated!');
         },
@@ -371,10 +414,10 @@ export class EditFarmerRequestComponent implements OnInit {
       };
       this.farmService.validateUPI(body).subscribe((data) => {
         this.upi = data.data;
-        this.editFarmerRequestForm.controls.landOwnerNames.setValue(this.upi.representative.surname +
+        this.editFarmerRequestForm.controls.landOwner.setValue(this.upi.representative.surname +
           ' ' + this.upi.representative.foreNames);
       }, (error) => {
-        this.editFarmerRequestForm.controls.landOwnerNames.reset();
+        this.editFarmerRequestForm.controls.landOwner.reset();
         this.setError(['UPI not found']);
       });
     }
@@ -387,7 +430,6 @@ export class EditFarmerRequestComponent implements OnInit {
       const sumAllNumber = range.varieties.map(item => item.number).reduce((prev, curr) => prev + curr, 0);
       return range.numOfTrees !== sumAllNumber;
     });
-    console.log(found);
     return !((found !== -1) || (numberOfTrees !== sumAllNumOfTrees));
   }
 
