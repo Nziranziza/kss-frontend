@@ -139,7 +139,7 @@
                   </td> -->
                   <td> {{ supply.paidAmount }}</td>
                   <td>
-                    <span (keyup)="changeValue(i, t, 'owedAmount', $event)" (blur)="updateList(i, t, 'owedAmount', $event)" contenteditable="true">{{ supply.owedAmount }}</span>
+                    <span  (blur)="updateList(i, t, 'owedAmount', $event)" contenteditable="true">{{ supply.owedAmount }}</span>
                   </td>
                   <!-- <td> {{ supply.created_at | date }}</td> -->
                 </tr>

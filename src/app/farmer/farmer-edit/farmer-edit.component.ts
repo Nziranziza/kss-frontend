@@ -7,17 +7,17 @@ import {
   OrganisationService,
   SiteService,
   UserService
-} from '../../core/services';
-import {LocationService} from '../../core/services';
+} from '../../core';
+import {LocationService} from '../../core';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {EditFarmerRequestComponent} from './edit-farmer-request/edit-farmer-request.component';
 import {AddFarmerRequestComponent} from './add-farmer-request/add-farmer-request.component';
-import {MessageService} from '../../core/services';
+import {MessageService} from '../../core';
 import {Location} from '@angular/common';
 import {EditFarmerProfileComponent} from './edit-farmer-profile/edit-farmer-profile.component';
 import {EditRequestComponent} from '../../input-distribution/edit-request/edit-request.component';
-import {AuthorisationService} from '../../core/services';
-import {BasicComponent} from '../../core/library';
+import {AuthorisationService} from '../../core';
+import {BasicComponent} from '../../core';
 
 @Component({
   selector: 'app-farmer-edit',

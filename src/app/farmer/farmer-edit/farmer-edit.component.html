@@ -113,6 +113,9 @@
         <tr>
           <th>Season</th>
           <th>Location</th>
+          <th>Land owner</th>
+          <th>UPI number</th>
+          <th>Status</th>
           <th>Number of trees</th>
           <th>Fertilizer needed</th>
           <th>Fertilizer allocated</th>
@@ -132,6 +135,10 @@
             <span class="details-row-title-sm">Cell </span> : <span class="details-row-data-sm">{{ request.location.cell_id.name }}</span>
             <span class="details-row-title-sm">Village </span> : <span class="details-row-data-sm">{{ request.location.village_id.name }}</span>
           </td>
+          <td>{{ request.landOwner | titlecase }}</td>
+          <td>{{ request.upiNumber }}</td>
+          <td> <ng-container *ngIf="request.active!== 0, else inactive"><span style="color: green">Active</span></ng-container>
+            <ng-template #inactive><span style="color: #b21717">Inactive</span></ng-template></td>
           <td>{{ request.numberOfTrees }}</td>
           <td>{{ request.fertilizer_need |  number:'1.0-1' }} Kg</td>
           <td>{{ request.fertilizer_allocate |  number:'1.0-1' }} Kg</td>
