@@ -476,14 +476,14 @@
                   Active
                 </button>
                 <ng-template #inactive>
-                  
+
                 </ng-template>
               </td>
               <td class="text-center">
                 <button
                   appRequiredSeason
                   class="btn btn-action-no-border btn-margin details-button"
-                  *appHasPermission="[[4, 1], 0, [8, 1], [1, 1]]"
+                  *appHasPermission="[[4, 1], 0, [8, 1], [1, 1], [1, 14]]"
                   routerLink="/admin/farmers/edit/{{ farmer.request._id }}"
                 >
                   <em class="fa fa-pencil"></em>
@@ -494,7 +494,7 @@
                     farmer.userInfo._id
                   }}/{{ farmer.userInfo.regNumber }}"
                   class="btn btn-action-no-border btn-margin"
-                  *appHasPermission="[[1, 1]]"
+                  *appHasPermission="[[1, 1], [1, 14]]"
                 >
                   <em class="fa fa-cart-plus"></em> Supply
                 </button>

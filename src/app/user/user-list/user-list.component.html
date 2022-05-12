@@ -1,6 +1,6 @@
 <h3>
   {{org? org.organizationName : '' }}  >>  Users
-  <a class="btn btn-success pull-right" *appHasPermission="[[4,1],0,[8,1],[1,1]]" routerLink="/admin/organisations/{{organisationId}}/users/create"><i class="fa fa-plus"></i> New user</a>
+  <a class="btn btn-success pull-right" *appHasPermission="[[4,1],0,[8,1],[1,1],[11,1]]" routerLink="/admin/organisations/{{organisationId}}/users/create"><i class="fa fa-plus"></i> New user</a>
 </h3>
 <app-list-message [message]="message"></app-list-message>
 <div class="row">
@@ -36,7 +36,7 @@
                 Edit
               </a>
               <ng-container *ngIf="currentUser.info._id != user._id">
-                <a class="btn btn-success btn-sm btn-margin" routerLink="/admin/organisations/{{organisationId}}/users/edit/{{user._id}}" *appHasPermission="[[8,1],[1,1]]" style="margin-left: 10px;" >
+                <a class="btn btn-success btn-sm btn-margin" routerLink="/admin/organisations/{{organisationId}}/users/edit/{{user._id}}" *appHasPermission="[[8,1],[1,1],[11,1]]" style="margin-left: 10px;" >
                   Edit
                 </a>
               </ng-container>

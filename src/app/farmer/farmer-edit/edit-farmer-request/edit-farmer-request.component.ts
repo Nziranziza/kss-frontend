@@ -85,19 +85,20 @@ export class EditFarmerRequestComponent implements OnInit {
     const temp = {
       numberOfTrees: this.land.numberOfTrees,
       fertilizer_allocate: this.land.fertilizer_allocate,
-      landOwner: this.land.landOwner,
-      upiNumber: this.land.upiNumber,
-      certificates: this.land.certificates,
-      treeAges: this.land.treeAges,
-      longitudeCoordinate: this.land.longitudeCoordinate,
-      latitudeCoordinate: this.land.latitudeCoordinate,
-      active: this.land.active,
+      landOwner: this.land.landOwner ? this.land.landOwner : '',
+      upiNumber: this.land.upiNumber ? this.land.upiNumber : '',
+      certificates: this.land.certificates ? this.land.certificates : [],
+      treeAges: this.land.treeAges ? this.land.treeAges  : [] ,
+      longitudeCoordinate: this.land.longitudeCoordinate ? this.land.longitudeCoordinate : '',
+      latitudeCoordinate: this.land.latitudeCoordinate ? this.land.latitudeCoordinate : '',
+      active: this.land.active ? this.land.active : '',
       location: {}
     };
-
-    temp.certificates.map((certificate) => {
-      this.addCertificate();
-    });
+    if (temp.certificates) {
+      temp.certificates.map((certificate) => {
+        this.addCertificate();
+      });
+    }
 
     this.currentSeason = this.authenticationService.getCurrentSeason();
     temp.location['prov_id'.toString()] = this.land.location.prov_id._id;
@@ -111,14 +112,16 @@ export class EditFarmerRequestComponent implements OnInit {
     this.farmService.listTreeVarieties().subscribe((data) => {
         this.treeVarieties = data.data;
         this.createAgeRanges();
-        this.editFarmerRequestForm.controls.treeAges.patchValue(this.land.treeAges);
-        this.land.treeAges.map((age, i) => {
-          age.varieties.map((variety, v) => {
-            if (variety.number > 0) {
-              this.formTreeVarieties(i).at(v).get('selected').setValue(true);
-            }
+        if (this.land.treeAges) {
+          this.editFarmerRequestForm.controls.treeAges.patchValue(this.land.treeAges);
+          this.land.treeAges.map((age, i) => {
+            age.varieties.map((variety, v) => {
+              if (variety.number > 0) {
+                this.formTreeVarieties(i).at(v).get('selected').setValue(true);
+              }
+            });
           });
-        });
+        }
       }
     );
 
