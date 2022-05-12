@@ -5,26 +5,25 @@ import {
   Input,
   OnInit,
   PLATFORM_ID,
-} from "@angular/core";
-import { NgbActiveModal, NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { isPlatformBrowser } from "@angular/common";
-import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { LocationService, UserService } from "../../../core";
-import { HelperService } from "../../../core";
-import { AuthenticationService, FarmerService } from "../../../core";
-import { isUndefined } from "util";
-import { PaymentService } from "../../../core/services/payment.service";
-import { BasicComponent } from "../../../core";
+} from '@angular/core';
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { isPlatformBrowser } from '@angular/common';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { LocationService, UserService } from '../../../core';
+import { HelperService } from '../../../core';
+import { AuthenticationService, FarmerService } from '../../../core';
+import { isUndefined } from 'util';
+import { PaymentService } from '../../../core/services/payment.service';
+import { BasicComponent } from '../../../core';
 
 @Component({
-  selector: "app-edit-farmer-profile",
-  templateUrl: "./edit-farmer-profile.component.html",
-  styleUrls: ["./edit-farmer-profile.component.css"],
+  selector: 'app-edit-farmer-profile',
+  templateUrl: './edit-farmer-profile.component.html',
+  styleUrls: ['./edit-farmer-profile.component.css'],
 })
 export class EditFarmerProfileComponent
   extends BasicComponent
-  implements OnInit
-{
+  implements OnInit {
   modal: NgbActiveModal;
   @Input() farmer;
   editFarmerProfileForm: FormGroup;
@@ -65,27 +64,27 @@ export class EditFarmerProfileComponent
 
   ngOnInit() {
     this.editFarmerProfileForm = this.formBuilder.group({
-      phone_number: [""],
-      groupName: [""],
-      NID: [""],
-      foreName: [""],
-      surname: [""],
-      sex: [""],
-      type: ["", Validators.required],
+      phone_number: [''],
+      groupName: [''],
+      NID: [''],
+      foreName: [''],
+      surname: [''],
+      sex: [''],
+      type: ['', Validators.required],
       groupContactPerson: this.formBuilder.group({
-        firstName: [""],
-        lastName: [""],
-        phone: [""],
+        firstName: [''],
+        lastName: [''],
+        phone: [''],
       }),
       location: this.formBuilder.group({
-        prov_id: [""],
-        dist_id: [""],
-        sect_id: [""],
-        cell_id: [""],
-        village_id: [""],
+        prov_id: [''],
+        dist_id: [''],
+        sect_id: [''],
+        cell_id: [''],
+        village_id: [''],
       }),
-      familySize: [""],
-      active: [""],
+      familySize: [''],
+      active: [''],
     });
 
     this.addPaymentChannelsForm = this.formBuilder.group({
@@ -97,11 +96,13 @@ export class EditFarmerProfileComponent
     });
 
     this.editPaymentChannelForm = this.formBuilder.group({
-      channelId: [{ value: "", disabled: true }, Validators.required],
-      subscriptionCode: ["", Validators.required],
+      channelId: [{ value: '', disabled: true }, Validators.required],
+      subscriptionCode: ['', Validators.required],
     });
     this.onChangeType();
-    this.farmer.sex = this.farmer.sex.toLowerCase();
+    if (!isUndefined(this.farmer.sex)) {
+      this.farmer.sex = this.farmer.sex.toLowerCase();
+    }
     if (this.farmer.location) {
       this.farmer.location.prov_id = this.farmer.location.prov_id._id;
       this.farmer.location.dist_id = this.farmer.location.dist_id._id;
@@ -111,15 +112,16 @@ export class EditFarmerProfileComponent
     }
     if (!isUndefined(this.farmer.type)) {
       this.farmer.type = this.farmer.type.toString();
+      this.editFarmerProfileForm.controls.type.setValue(this.farmer.type);
     }
     this.initial();
     this.editFarmerProfileForm.patchValue(this.farmer, { emitEvent: false });
     if (this.farmer.active) {
       this.farmer.active
-        ? this.editFarmerProfileForm.get("active".toString()).patchValue("true")
+        ? this.editFarmerProfileForm.get('active'.toString()).patchValue('true')
         : this.editFarmerProfileForm
-            .get("active".toString())
-            .patchValue("false");
+            .get('active'.toString())
+            .patchValue('false');
     }
 
     this.getPaymentChannels();
@@ -130,7 +132,7 @@ export class EditFarmerProfileComponent
 
   onChangeType() {
     this.editFarmerProfileForm
-      .get("type".toString())
+      .get('type'.toString())
       .valueChanges.subscribe((value) => {
         if (+value === 2) {
           this.isGroup = true;
@@ -144,7 +146,7 @@ export class EditFarmerProfileComponent
   onAddChannel() {
     if (this.addPaymentChannelsForm.valid) {
       const paymentChannel = this.addPaymentChannelsForm.value;
-      paymentChannel["userId".toString()] = this.farmer._id;
+      paymentChannel['userId'.toString()] = this.farmer._id;
       paymentChannel.paymentChannels.map((channel) => {
         channel.paymentChannel = +channel.paymentChannel;
       });
@@ -159,19 +161,19 @@ export class EditFarmerProfileComponent
         }
       );
     } else {
-      this.setError(["missing required data"]);
+      this.setError(['missing required data']);
     }
   }
   onEditChannel() {
     if (this.editPaymentChannelForm.valid) {
       let channel: {};
       channel = this.editPaymentChannelForm.value;
-      channel["channelId".toString()] = this.selectedChannel._id;
-      channel["userId".toString()] = this.farmer._id;
-      channel["action".toString()] = "edit";
+      channel['channelId'.toString()] = this.selectedChannel._id;
+      channel['userId'.toString()] = this.farmer._id;
+      channel['action'.toString()] = 'edit';
       this.farmerService.editFarmerPaymentChannel(channel).subscribe(
         () => {
-          this.setMessage("channel successfully updated!");
+          this.setMessage('channel successfully updated!');
           this.getCoffeeFarmerPaymentChannels();
           this.showEditPaymentChannelForm = false;
         },
@@ -189,7 +191,7 @@ export class EditFarmerProfileComponent
   onSubmit() {
     if (this.editFarmerProfileForm.valid) {
       const body = JSON.parse(JSON.stringify(this.editFarmerProfileForm.value));
-      body["userId".toString()] = this.farmer._id;
+      body['userId'.toString()] = this.farmer._id;
       if (+body.type === 1) {
         delete body.groupName;
         delete body.groupContactPerson;
@@ -210,7 +212,7 @@ export class EditFarmerProfileComponent
       this.helper.cleanObject(body);
       this.farmerService.updateFarmerProfile(body).subscribe(
         () => {
-          this.setMessage("Profile successfully updated!");
+          this.setMessage('Profile successfully updated!');
         },
         (err) => {
           this.setError(err.errors);
@@ -293,8 +295,8 @@ export class EditFarmerProfileComponent
 
   createPaymentChannel(): FormGroup {
     return this.formBuilder.group({
-      paymentChannel: ["", Validators.required],
-      subscriptionCode: ["", Validators.required],
+      paymentChannel: ['', Validators.required],
+      subscriptionCode: ['', Validators.required],
     });
   }
 
@@ -339,12 +341,12 @@ export class EditFarmerProfileComponent
       channelId: channel._id,
       subscriptionCode: channel.subscriptionCode,
     };
-    chl["userId".toString()] = this.farmer._id;
-    chl["action".toString()] = "delete";
+    chl['userId'.toString()] = this.farmer._id;
+    chl['action'.toString()] = 'delete';
     this.farmerService.editFarmerPaymentChannel(chl).subscribe(
       () => {
         this.getCoffeeFarmerPaymentChannels();
-        this.setMessage("channel status successfully deleted");
+        this.setMessage('channel status successfully deleted');
       },
       (err) => {
         this.setError(err.errors);
@@ -354,9 +356,9 @@ export class EditFarmerProfileComponent
 
   onChanges() {
     this.editFarmerProfileForm.controls.location
-      .get("prov_id".toString())
+      .get('prov_id'.toString())
       .valueChanges.subscribe((value) => {
-        if (value !== "") {
+        if (value !== '') {
           this.locationService.getDistricts(value).subscribe((data) => {
             this.districts = data;
             this.sectors = null;
@@ -366,9 +368,9 @@ export class EditFarmerProfileComponent
         }
       });
     this.editFarmerProfileForm.controls.location
-      .get("dist_id".toString())
+      .get('dist_id'.toString())
       .valueChanges.subscribe((value) => {
-        if (value !== "") {
+        if (value !== '') {
           this.locationService.getSectors(value).subscribe((data) => {
             this.sectors = data;
             this.cells = null;
@@ -377,9 +379,9 @@ export class EditFarmerProfileComponent
         }
       });
     this.editFarmerProfileForm.controls.location
-      .get("sect_id".toString())
+      .get('sect_id'.toString())
       .valueChanges.subscribe((value) => {
-        if (value !== "") {
+        if (value !== '') {
           this.locationService.getCells(value).subscribe((data) => {
             this.cells = data;
             this.villages = null;
@@ -387,9 +389,9 @@ export class EditFarmerProfileComponent
         }
       });
     this.editFarmerProfileForm.controls.location
-      .get("cell_id".toString())
+      .get('cell_id'.toString())
       .valueChanges.subscribe((value) => {
-        if (value !== "") {
+        if (value !== '') {
           this.locationService.getVillages(value).subscribe((data) => {
             this.villages = data;
           });
