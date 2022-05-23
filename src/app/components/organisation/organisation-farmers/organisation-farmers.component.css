@@ -1,0 +1,18 @@
+.background-search {
+  min-height: 210px;
+  padding: 2%;
+}
+
+.btn-action {
+  width: 200px !important;
+}
+
+.vcenter {
+  display: inline-block;
+  vertical-align: middle;
+  float: none;
+}
+
+.box-footer {
+  background-color: transparent;
+}

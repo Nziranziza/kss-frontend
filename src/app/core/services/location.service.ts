@@ -33,4 +33,24 @@ export class LocationService {
   getCoveredVillages(id: string): Observable<any> {
     return this.apiService.get('/organizations/villages/list/' + id);
   }
+
+  getProvinceByName(name: string) {
+    return this.apiService.get('/v1.1/zoning/provinces/' + name);
+  }
+
+  getDistrictByName(name: string) {
+    return this.apiService.get('/v1.1/zoning/districts/one/' + name);
+  }
+
+  getSectorByName(name: string, id: string) {
+    return this.apiService.get('/v1.1/zoning/sectors/' + name + '/'  + id);
+  }
+
+  getCellByName(name: string, id: string) {
+    return this.apiService.get('/v1.1/zoning/cells/' + name + '/'  + id);
+  }
+
+  getVillageByName(name: string, id: string) {
+    return this.apiService.get('/v1.1/zoning/villages/' + name + '/'  + id);
+  }
 }

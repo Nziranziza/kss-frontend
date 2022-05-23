@@ -1,9 +1,8 @@
-.content-wrapper, .login-page {
-  background-color: white;
-}
+/* || START LOGIN PAGES */
 
 .login-box {
   width: 427px;
+  margin: 4% auto;
 }
 
 .login-box-body {
@@ -32,47 +31,7 @@
   font-size: 21px;
 }
 
-.sks-logo {
-  width: 26%;
-  height: auto;
-  margin: 0 auto;
-}
-
-.skin-blue .sidebar a {
-  color: #4F210D !important;
-}
-
-.login-box {
-  margin: 4% auto;
-
-}
-.home .logo-title {
-  color: #4F210D;
-  font-size: 52px;
-  font-weight: bolder;
-  margin-top: -55px;
-  width: 427px;
-  padding-left: 48%
-}
-
-
-.login-box input.form-control {
-  border: 2px solid #4F210D !important;
-  border-radius: 3px !important;
-}
-
-.login-box-link a, login-box-link:hover{
-  color: #4F210D;
-}
-
-.login-box .action-button {
-  background-color: #4F210D;
-  color: #ffffff !important;
-  text-transform: uppercase;
-  border-color: #4F210D;
-}
-
-.login-box .action-button:active{
+.login-box .action-button:active {
   background-color: #4F210D;
   border-color: #4F210D;
   color: #ffffff !important;
@@ -83,6 +42,77 @@
   border-color: #4F210D;
   color: #ffffff !important;
 }
+
+.login-box input.form-control {
+  border: 2px solid #4F210D !important;
+  border-radius: 3px !important;
+}
+
+.login-box-link a, login-box-link:hover {
+  color: #4F210D;
+}
+
+.login-box .action-button {
+  background-color: #4F210D;
+  color: #ffffff !important;
+  text-transform: uppercase;
+  border-color: #4F210D;
+}
+
+/* || END LOGIN PAGES */
+
+
+
+/* -------------- main wrappers --------------------------*/
+
+/* -------------- end main wrappers ----------------------*/
+.content-wrapper, .login-page {
+  background-color: white;
+}
+
+
+.skin-blue .sidebar a {
+  color: #4F210D !important;
+}
+
+
+.home .logo {
+  background-image: url("../img/sks/logo-sks-coffee@2x.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  text-align: center;
+  min-height: 150px;
+}
+
+.home > .container {
+  min-height: 740px;
+}
+
+.profile-label {
+  display: inline;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  vertical-align: baseline;
+}
+
+.profile-text {
+  margin-left: 15px;
+}
+
+
+.home .logo .text span {
+  color: #4F210D;
+  font-size: 2vw;
+  font-weight: bolder;
+}
+
+.home .logo-title .text {
+  width: min-content;
+  margin: 0 auto;
+}
+
 
 .btn-margin {
   margin-left: 10px;
@@ -96,19 +126,20 @@
   display: inline-block;
   margin-left: 10px;
 }
+
 .btn-success, .btn-default {
   background-color: #ffffff;
   border-color: #4F210D;
   color: #4F210D;
 }
 
-.btn-action{
+.btn-action {
   background-color: #4F210D;
   border-color: #ffffff;
   color: #ffffff;
 }
 
-.btn-action-no-border{
+.btn-action-no-border {
   background-color: transparent;
   border: none;
 }
@@ -150,7 +181,7 @@
   color: #367fa9 !important;
 }
 
-.btn-primary:hover{
+.btn-primary:hover {
   background-color: #4F210D1F;
   border-color: #367fa9;
   color: #367fa9 !important;
@@ -161,7 +192,8 @@
   border-color: #00acd6;
   color: #00acd6 !important;
 }
-.btn-info:hover{
+
+.btn-info:hover {
   background-color: #4F210D1F;
   border-color: #00acd6;
   color: #00acd6 !important;
@@ -241,6 +273,7 @@ input.ng-invalid.ng-touched {
   .form-inline input {
     margin: 10px 0;
   }
+
   .form-inline .owl-date-input {
     margin-left: 0px;
   }
@@ -294,8 +327,7 @@ div .wrapper {
 
 .skin-blue .main-header .navbar,
 .skin-blue .main-header li.user-header,
-.skin-blue .main-header .logo
-{
+.skin-blue .main-header .logo {
   background-color: #4F210D;
 }
 
@@ -498,13 +530,13 @@ h3 {
 }
 
 .details-row-title-sm {
-  font-size: 12px !important;
+  font-size: 14px !important;
   font-weight: bolder;
   margin-left: 15px;
 }
 
 .details-row-data-sm {
-  font-size: 12px !important;
+  font-size: 14px !important;
 }
 
 table.dataTable > tbody > tr.child {
@@ -539,11 +571,11 @@ table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > td:first-child:b
   background-color: white;
 }
 
-.table-striped>tbody>tr:nth-of-type(odd) {
+.table-striped > tbody > tr:nth-of-type(odd) {
   background-color: #f9f6f1;
 }
 
-.table-striped>tbody>tr:nth-of-type(odd):hover {
+.table-striped > tbody > tr:nth-of-type(odd):hover {
   background-color: white !important;
 }
 

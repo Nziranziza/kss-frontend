@@ -1,0 +1,202 @@
+<div class="row">
+  <div class="col-xs-12">
+    <h5 class="page-header">
+      Profile
+    </h5>
+  </div>
+</div>
+<app-list-message [message]="message"></app-list-message>
+<div class="row">
+  <div class="col-sm-12">
+    <button class="btn btn-default btn-margin pull-right" (click)="editProfile(farmer.userInfo)">
+      <i class="fa fa-pencil"></i> Profile
+    </button>
+    <div *appHasPermission="[0,[8,1],[1,1]]">
+      <ng-container *ngIf="showSetPinButton; else loadingSetPinStatus">
+        <a class="btn btn-success btn-margin pull-right" *ngIf="!resetPin" (click)="enableResetPin(true)"><i
+          class="fa fa-check"></i>&nbsp; Enable pin reset
+        </a>
+        <a class="btn btn-warning btn-margin pull-right" *ngIf="resetPin" (click)="enableResetPin(false)"><i
+          class="fa fa-close"></i>&nbsp; Disable pin reset
+        </a>
+      </ng-container>
+      <ng-template #loadingSetPinStatus>
+        <app-spinner class="pull-right"></app-spinner>
+      </ng-template>
+    </div>
+  </div>
+</div>
+<div class="row aligned-row">
+  <div class="col-sm-4 invoice-col">
+    <div class="row text-muted well well-sm no-shadow" style="margin: 10px auto;">
+      <div class="col-sm-12">
+        <i class="fa fa-user" style="margin-bottom: 15px;"></i>
+      </div>
+      <div class="col-sm-6">
+        <span class="profile-label">REG number</span>
+      </div>
+      <div class="col-sm-6">
+        <span class="profile-text">{{ farmer?.userInfo.regNumber | uppercase }}</span>
+      </div>
+      <div class="col-sm-6">
+        <span class="profile-label">Status</span>
+      </div>
+      <div class="col-sm-6">
+        <span class="profile-text">
+           <ng-container *ngIf="farmer?.userInfo.active!== 0, else inactive"><span style="color: green; font-weight: bold">active</span>
+            </ng-container>
+            <ng-template #inactive><span style="color: #b21717; font-weight: bold">inactive</span></ng-template>
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-4 invoice-col" >
+    <div class="row text-muted well well-sm no-shadow" style="margin: 10px auto;" *ngIf="farmerType===2">
+      <div class="col-sm-12">
+        <i class="fa fa-id-card-o" style="margin-bottom: 15px;"></i>
+      </div>
+      <div class="col-sm-6">
+        <span class="profile-label"> Group name </span>
+      </div>
+      <div class="col-sm-6">
+        <span class="profile-text">{{ farmer?.userInfo.groupName }}</span>
+      </div>
+      <div class="col-sm-6">
+        <span class="profile-label">Phone number</span>
+      </div>
+      <div class="col-sm-6">
+        <span class="profile-text">{{ farmer?.userInfo.phone_number }}</span>
+      </div>
+    </div>
+    <div class="row text-muted well well-sm no-shadow" style="margin: 10px auto;" *ngIf="farmerType===1">
+      <div class="col-sm-12">
+        <i class="fa fa-id-card-o" style="margin-bottom: 15px;"></i>
+      </div>
+      <div class="col-sm-6">
+        <span class="profile-label">First name</span>
+      </div>
+      <div class="col-sm-6">
+        <span class="profile-text">{{ farmer?.userInfo.foreName | titlecase }}</span>
+      </div>
+      <div class="col-sm-6">
+        <span class="profile-label">Last name</span>
+      </div>
+      <div class="col-sm-6">
+        <span class="profile-text">{{ farmer?.userInfo.surname }} </span>
+      </div>
+      <div class="col-sm-6">
+        <span class="profile-label">NID</span>
+      </div>
+      <div class="col-sm-6">
+        <span class="profile-text">{{ farmer?.userInfo.NID }} </span>
+      </div>
+      <div class="col-sm-6">
+        <span class="profile-label">Phone number </span>
+      </div>
+      <div class="col-sm-6">
+        <span class="profile-text">{{ farmer?.userInfo.phone_number }}</span>
+      </div>
+      <div class="col-sm-6">
+        <span class="profile-label">Family size</span>
+      </div>
+      <div class="col-sm-6">
+        <span class="profile-text">{{ farmer?.userInfo.familySize }}</span>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-4 invoice-col">
+    <div class="row text-muted well well-sm no-shadow" style="margin: 10px auto;">
+      <div class="col-sm-12">
+        <i class="fa fa-map-marker" style="margin-bottom: 15px;"></i>
+      </div>
+      <div class="col-sm-6">
+        <span class="profile-label">Location</span>
+      </div>
+      <div class="col-sm-6">
+        <span class="details-row-title-sm">Province </span> : <span
+        class="details-row-data-sm">{{ farmer?.userInfo.location?.prov_id.namek }}</span>
+        <br/>
+        <span class="details-row-title-sm">District </span> : <span
+        class="details-row-data-sm">{{ farmer?.userInfo.location?.dist_id.name }}</span>
+        <br/>
+        <span class="details-row-title-sm">Sector </span> : <span
+        class="details-row-data-sm">{{ farmer?.userInfo.location?.sect_id.name }}</span>
+        <br/>
+        <span class="details-row-title-sm">Cell </span> : <span
+        class="details-row-data-sm">{{ farmer?.userInfo.location?.cell_id.name }}</span>
+        <br/>
+        <span class="details-row-title-sm">Village </span> : <span
+        class="details-row-data-sm">{{ farmer?.userInfo.location?.village_id.name }}</span>
+      </div>
+    </div>
+  </div>
+</div>
+<br/> <br/>
+<ng-container>
+  <h5 class="page-header">
+    Lands
+  </h5>
+  <button class="btn btn-success btn-circle btn-lg pull-right" (click)="addRequest(farmer.request._id)" type="button"><i
+    class="fa fa-plus"></i></button>
+  <div class="row">
+    <div class="col-xs-12 table-responsive">
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th>Season</th>
+          <th>Location</th>
+          <th>Land owner</th>
+          <th>UPI number</th>
+          <th>Status</th>
+          <th>Number of trees</th>
+          <th>Fertilizer needed</th>
+          <th>Fertilizer allocated</th>
+          <th>Trees at distribution</th>
+          <th>Comment</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let request of requests;">
+          <td>{{farmer.request.season.name}}</td>
+          <td>
+            <span class="details-row-title-sm" style="margin-left: 0">Province </span> : <span
+            class="details-row-data-sm" *ngIf="request.location.prov_id">{{ request.location.prov_id.namek }}</span>
+            <span class="details-row-title-sm">District </span> : <span
+            class="details-row-data-sm">{{ request.location.dist_id.name }}</span>
+            <span class="details-row-title-sm">Sector </span> : <span
+            class="details-row-data-sm">{{ request.location.sect_id.name }}</span><br/>
+            <span class="details-row-title-sm">Cell </span> : <span
+            class="details-row-data-sm">{{ request.location.cell_id.name }}</span>
+            <span class="details-row-title-sm">Village </span> : <span
+            class="details-row-data-sm">{{ request.location.village_id.name }}</span>
+          </td>
+          <td>{{ request.landOwner | titlecase }}</td>
+          <td>{{ request.upiNumber }}</td>
+          <td>
+            <ng-container *ngIf="request.active!== 0, else inactive"><span style="color: green">active</span>
+            </ng-container>
+            <ng-template #inactive><span style="color: #b21717">inactive</span></ng-template>
+          </td>
+          <td>{{ request.numberOfTrees }}</td>
+          <td>{{ request.fertilizer_need |  number:'1.0-1' }} Kg</td>
+          <td>{{ request.fertilizer_allocate |  number:'1.0-1' }} Kg</td>
+          <td style="color: #F3A700">{{ request?.treesAtDistribution }} &nbsp; &nbsp;</td>
+          <td>{{ request.update_comments }}</td>
+          <td>
+            <button class="btn btn-warning btn-margin btn-sm pull-right" (click)="cancelRequest(request)"
+                    *ngIf="!(isUserSiteManager || isCWSOfficer)">Delete
+            </button>
+            <button class="btn btn-primary btn-margin btn-sm pull-right" (click)="editRequest(request)">Edit</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</ng-container>
+<div class="row">
+  <div class="col-xs-12">
+    <a class="pull-right btn btn-margin btn-warning" (click)="onCancel()">Cancel</a>
+  </div>
+</div>
