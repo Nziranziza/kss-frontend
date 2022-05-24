@@ -17,6 +17,7 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {isArray, isObject} from 'util';
 import {ParchmentReportDetailComponent} from '../../reports/parchment-report/parchment-report-detail/parchment-report-detail.component';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {isEmptyObject} from 'jquery';
 
 @Component({
   selector: 'app-organisation-farmers',
@@ -105,6 +106,7 @@ export class OrganisationFarmersComponent
   cells: any;
   villages: any;
   searchLocationBy = 'farm';
+  filter: any;
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
@@ -206,32 +208,42 @@ export class OrganisationFarmersComponent
 
       const location = filter.searchByLocation;
 
-      // if no
-      if (location.prov_id === '') {
-        filter.searchByLocation.filterBy = 'all provinces';
-      } else {
-        if (location.village_id !== '') {
-          filter.searchByLocation.filterBy = 'village';
-          filter.searchByLocation.village_id = location.village_id;
-        } else if (location.cell_id !== '') {
-          filter.searchByLocation.filterBy = 'cell';
-          filter.searchByLocation.cell_id = location.cell_id;
-        } else if (location.sect_id !== '') {
-          filter.searchByLocation.filterBy = 'sector';
-          filter.searchByLocation.sect_id = location.sect_id;
-        } else if (location.dist_id !== '') {
-          filter.searchByLocation.filterBy = 'district';
-          filter.searchByLocation.dist_id = location.dist_id;
-        } else if (location.prov_id !== '') {
-          filter.searchByLocation.filterBy = 'province';
-          filter.searchByLocation.prov_id = location.prov_id;
+      if (location) {
+        if (location.prov_id === '') {
+          filter.searchByLocation.filterBy = 'provinces';
         } else {
-          delete filter.searchByLocation;
+          if (this.searchLocationBy === 'farm') {
+            location.prov_id = this.org.location.prov_id._id;
+            location.dist_id = this.org.location.dist_id._id;
+          }
+          if (location.village_id !== '') {
+            filter.searchByLocation.filterBy = 'village';
+            filter.searchByLocation.village_id = location.village_id;
+          } else if (location.cell_id !== '') {
+            filter.searchByLocation.filterBy = 'cell';
+            filter.searchByLocation.cell_id = location.cell_id;
+          } else if (location.sect_id !== '') {
+            filter.searchByLocation.filterBy = 'sector';
+            filter.searchByLocation.sect_id = location.sect_id;
+          } else if (location.dist_id !== '') {
+            if (this.searchLocationBy !== 'farm') {
+              filter.searchByLocation.filterBy = 'district';
+              filter.searchByLocation.dist_id = location.dist_id;
+            } else {
+              delete filter.searchByLocation;
+            }
+          } else if (location.prov_id !== '') {
+            filter.searchByLocation.filterBy = 'province';
+            filter.searchByLocation.prov_id = location.prov_id;
+          } else {
+            delete filter.searchByLocation;
+          }
         }
+        this.helper.cleanObject(filter.searchByLocation);
       }
-
-      this.helper.cleanObject(filter.searchByLocation);
-      this.parameters['search'.toString()] = filter;
+      if (!isEmptyObject(filter)) {
+        this.parameters['search'.toString()] = filter;
+      }
       this.organisationService.getFarmers(this.parameters).subscribe(
         (data) => {
           this.paginatedFarmers = data.data;
@@ -439,6 +451,13 @@ export class OrganisationFarmersComponent
             this.cells = null;
             this.villages = null;
           });
+        } else {
+          if (this.searchLocationBy !== 'farm') {
+            this.districts = null;
+            this.sectors = null;
+          }
+          this.cells = null;
+          this.villages = null;
         }
       }
     );
@@ -454,6 +473,12 @@ export class OrganisationFarmersComponent
             this.cells = null;
             this.villages = null;
           });
+        } else {
+          if (this.searchLocationBy !== 'farm') {
+            this.sectors = null;
+          }
+          this.cells = null;
+          this.villages = null;
         }
       }
     );
@@ -469,6 +494,9 @@ export class OrganisationFarmersComponent
           }
           this.villages = null;
         });
+      } else {
+        this.cells = null;
+        this.villages = null;
       }
     });
     this.filterForm.controls.searchByLocation

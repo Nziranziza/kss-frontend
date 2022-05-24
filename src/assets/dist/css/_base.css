@@ -19,7 +19,7 @@
 
 .login-box-body .action-button {
   color: #E1A33E;
-  font-size: 20px;
+  font-size: 16px;
   font-weight: bolder;
 }
 
@@ -28,7 +28,7 @@
   text-align: center;
   margin-top: 20px;
   margin-bottom: 20px;
-  font-size: 21px;
+  font-size: 16px;
 }
 
 .login-box .action-button:active {
@@ -61,11 +61,6 @@
 
 /* || END LOGIN PAGES */
 
-
-
-/* -------------- main wrappers --------------------------*/
-
-/* -------------- end main wrappers ----------------------*/
 .content-wrapper, .login-page {
   background-color: white;
 }
@@ -134,6 +129,12 @@
 }
 
 .btn-action {
+  background-color: #4F210D;
+  border-color: #ffffff;
+  color: #ffffff;
+}
+
+.btn-action:hover, .btn-action:active, .btn-action:focus, .btn-action:visited{
   background-color: #4F210D;
   border-color: #ffffff;
   color: #ffffff;
