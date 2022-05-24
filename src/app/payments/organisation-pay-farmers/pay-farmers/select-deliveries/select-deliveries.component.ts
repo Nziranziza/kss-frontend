@@ -62,7 +62,7 @@ export class SelectDeliveriesComponent extends BasicComponent implements OnInit,
         from: this.seasonStartingTime,
         to: new Date()
       },
-      paymentChannel: 4
+      paymentChannel: 2
     };
 
     this.dtOptions = {
@@ -74,7 +74,7 @@ export class SelectDeliveriesComponent extends BasicComponent implements OnInit,
 
     this.filterForm = this.formBuilder.group({
       status: ['both', Validators.required],
-      paymentChannel: [4, Validators.required],
+      paymentChannel: [2, Validators.required],
       search: this.formBuilder.group({
         term: ['', Validators.minLength(3)],
         searchBy: ['forename']
@@ -111,10 +111,10 @@ export class SelectDeliveriesComponent extends BasicComponent implements OnInit,
     this.parameters.date.to = this.datePipe.transform(new Date(),
       'yyyy-MM-dd', 'GMT+2');
     delete this.parameters.search;
-    this.parameters.paymentChannel = 4;
+    this.parameters.paymentChannel = 2;
     this.parameters.status = 'both';
     this.filterForm.controls.status.setValue('both');
-    this.filterForm.controls.paymentChannel.setValue(4);
+    this.filterForm.controls.paymentChannel.setValue(2);
     this.updateSuppliers();
   }
 

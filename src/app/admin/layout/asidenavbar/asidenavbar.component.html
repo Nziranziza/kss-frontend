@@ -97,7 +97,7 @@
           <li routerLinkActive="active" *appHasPermission="[1]">
             <a routerLink="/admin/cws/parchments/transfer/cart">
               <i class="fa fa-circle-o"></i>
-              <span>Transfer parchments</span>
+              <span>Transfer</span>
             </a>
           </li>
           <li routerLinkActive="active" *appHasPermission="[1]">
@@ -187,13 +187,25 @@
           <li routerLinkActive="active" *appHasPermission="[2]">
             <a routerLink="/admin/drymill/prepare/green_coffee">
               <i class="fa fa-circle-o" aria-hidden="true"></i>
-              <span>Prepare green coffee</span>
+              <span>Prepare</span>
             </a>
           </li>
           <li routerLinkActive="active" *appHasPermission="[2]">
             <a routerLink="/admin/drymill/green_coffee/mixtures">
               <i class="fa fa-circle-thin" aria-hidden="true"></i>
-              <span>Green coffee mixtures</span>
+              <span>Mixtures</span>
+            </a>
+          </li>
+          <li routerLinkActive="active" *appHasPermission="[2]">
+            <a routerLink="/admin/drymill/green_coffee/transfer">
+              <i class="fa fa-circle-thin" aria-hidden="true"></i>
+              <span>Transfer</span>
+            </a>
+          </li>
+          <li routerLinkActive="active" *appHasPermission="[2]">
+            <a routerLink="/admin/drymill/green_coffee/list/transfers">
+              <i class="fa fa-circle-thin" aria-hidden="true"></i>
+              <span>Transfer history</span>
             </a>
           </li>
         </ul>

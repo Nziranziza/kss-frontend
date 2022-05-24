@@ -11,13 +11,13 @@
   margin-bottom: 0;
   box-sizing: border-box;
   border-bottom: 0px solid #ddd;
-
 }
 
 .board > div.board-inner {
   background-size: 30%;
   background-color: #fff;
   margin: 10px 0;
+  padding: 1%;
 }
 
 .liner {
@@ -31,8 +31,10 @@
   top: 50%;
   z-index: 1;
 }
-
-.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+/* 
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:hover,
+.nav-tabs > li.active > a:focus {
   color: #555555;
   cursor: default;
   border: 0;
@@ -62,12 +64,11 @@ li.active span.round-tabs.one {
   background: #fff !important;
   border: 2px solid #ddd;
   color: #94c17d;
-
 }
 
 span.round-tabs.two {
   color: #dca956;
-  border: 2px solid #dca956;;
+  border: 2px solid #dca956;
 }
 
 li.active span.round-tabs.two {
@@ -127,7 +128,6 @@ li.active span.round-tabs.five {
   border: 5px solid transparent;
   border-bottom-color: #ddd;
   transition: 0.1s ease-in-out;
-
 }
 
 .nav-tabs > li.active:after {
@@ -139,7 +139,6 @@ li.active span.round-tabs.five {
   bottom: 0px;
   border: 10px solid transparent;
   border-bottom-color: #ddd;
-
 }
 
 .nav-tabs > li a {
@@ -157,25 +156,25 @@ li.active span.round-tabs.five {
 /* active buttons */
 #status-buttons a.active span.round-tabs.one {
   background: #94c17d;
-  color: #fff
+  color: #fff;
 }
 
 #status-buttons a.active span.round-tabs.two {
   background: #dca956;
-  color: #fff
+  color: #fff;
 }
 
 #status-buttons a.active span.round-tabs.three {
   background: #3c8dbc;
-  color: #fff
+  color: #fff;
 }
 
 #status-buttons a.active span.round-tabs.four {
   background: #f1685e;
-  color: #fff
+  color: #fff;
 }
 
-@media ( max-width: 585px ) {
+@media (max-width: 585px) {
   .board {
     width: 100%;
     height: auto !important;
@@ -199,4 +198,107 @@ li.active span.round-tabs.five {
     position: absolute;
     left: 35%;
   }
+} */
+
+/***************************************
+PAYMENT PROGRESS BAR STYLE
+***************************************/
+
+html {
+  height: 100%
+}
+
+#msform {
+  text-align: center;
+  position: relative;
+  margin-top: 20px
+}
+
+.purple-text {
+  color: #3c8dbc;
+  font-weight: normal
+}
+
+.steps {
+  font-size: 25px;
+  color: gray;
+  margin-bottom: 10px;
+  font-weight: normal;
+  text-align: right
+}
+
+.fieldlabels {
+  color: gray;
+  text-align: left
+}
+
+#progressbar {
+  margin-bottom: 30px;
+  overflow: hidden;
+  color: lightgrey
+}
+
+#progressbar .active {
+  color: #3c8dbc
+}
+
+#progressbar li {
+  list-style-type: none;
+  font-size: 15px;
+  width: 33%;
+  float: left;
+  position: relative;
+  font-weight: 400
+}
+
+#progressbar #prepare:before {
+  font-family: FontAwesome;
+  content: "\f03a"
+}
+
+#progressbar #preview:before {
+  font-family: FontAwesome;
+  content: "\f007"
+}
+
+#progressbar #confirm:before {
+  font-family: FontAwesome;
+  content: "\f00c"
+}
+
+#progressbar li:before {
+  width: 50px;
+  height: 50px;
+  line-height: 45px;
+  display: block;
+  font-size: 20px;
+  color: #ffffff;
+  background: lightgray;
+  border-radius: 50%;
+  margin: 0 auto 10px auto;
+  padding: 2px
+}
+
+#progressbar li:after {
+  content: '';
+  width: 100%;
+  height: 2px;
+  background: lightgray;
+  position: absolute;
+  left: 0;
+  top: 25px;
+  z-index: -1
+}
+
+#progressbar li.active:before,
+#progressbar li.active:after {
+  background: #3c8dbc
+}
+
+.progress {
+  height: 20px
+}
+
+.progress-bar {
+  background-color: #3c8dbc
 }

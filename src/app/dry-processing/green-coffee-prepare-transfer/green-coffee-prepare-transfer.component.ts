@@ -4,18 +4,17 @@ import {
   AuthenticationService,
   BasicComponent,
   CoffeeTypeService,
-  ConfirmDialogService,
+  ConfirmDialogService, DryProcessingService,
   HelperService,
   MessageService,
-  OrganisationService,
-  ParchmentService
+  OrganisationService
 } from '../../core';
 
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {ParchmentTransferService} from '../../core/services/parchment-transfer.service';
-import {DatePipe, formatDate} from '@angular/common';
+import {DatePipe} from '@angular/common';
+import {GreenCoffeeTransferService} from '../../core/services/green-coffee-transfer.service';
 
 declare var $;
 
@@ -37,11 +36,11 @@ export class GreenCoffeePrepareTransferComponent  extends BasicComponent impleme
   seasonStartingDate: string;
   cartItemInfo: any;
   currentDate: any;
-  totalAmountToTransfer = 0;
+  totalQtyToTransfer = 0;
   itemIndex: number;
   certificates = [];
 
-  constructor(private parchmentService: ParchmentService,
+  constructor(private dryProcessingService: DryProcessingService,
               private router: Router,
               private formBuilder: FormBuilder,
               private coffeeTypeService: CoffeeTypeService,
@@ -49,7 +48,7 @@ export class GreenCoffeePrepareTransferComponent  extends BasicComponent impleme
               private organisationService: OrganisationService,
               private modal: NgbModal,
               private messageService: MessageService,
-              private parchmentTransferService: ParchmentTransferService,
+              private greenCoffeeTransferService: GreenCoffeeTransferService,
               private datePipe: DatePipe,
               private helper: HelperService,
               private authenticationService: AuthenticationService) {
@@ -69,51 +68,32 @@ export class GreenCoffeePrepareTransferComponent  extends BasicComponent impleme
         from: [this.seasonStartingDate],
         to: [this.currentDate]
       }),
-      amount: [null, Validators.required]
+      quantity: [null, Validators.required]
     });
     this.resetSelection();
     this.cartItem.forEach(itm => this.cartItemInfo.totalKgs += itm.totalKgs);
     this.transferForm = this.formBuilder.group({
       destOrgId: ['', Validators.required],
-      transferType: ['', Validators.required],
-      appliedCertificates: new FormArray([])
     });
 
     this.initialSearchValue = this.filterForm.value;
-    this.organisationService.getOrgsByRoles({roles: [2]} ).subscribe(data => {
+    this.organisationService.getOrgsByRoles({roles: [9]} ).subscribe(data => {
       if (data) {
         this.organisations = data.content;
-      }
-    });
-    this.organisationService.orgCertificates(this.authenticationService.getCurrentUser().info.org_id).subscribe(data => {
-      if (data) {
-        const date1 = formatDate(new Date(), 'yyyy-MM-dd', 'en_US');
-        this.certificates = data.content.filter((el) => {
-          if (el.expirationDate) {
-            const date2 = formatDate(el.expirationDate, 'yyyy-MM-dd', 'en_US');
-            return date2 >= date1;
-          } else {
-            return true;
-          }
-        });
-        this.certificates.map(() => {
-          const control = new FormControl({value: ''});
-          (this.transferForm.controls.appliedCertificates as FormArray).push(control);
-        });
       }
     });
 
     this.coffeeTypeService.all().subscribe((data) => {
       data.content.map((item) => {
-        if (item.level === 'CWS') {
+        if (item.level === 'DM') {
           item.category.map((el) => {
             this.coffeeTypes.push(el);
           });
         }
       });
     });
-    this.cart = this.parchmentTransferService.getCart();
-    this.getTotalAmountToTransfer();
+    this.cart = this.greenCoffeeTransferService.getCart();
+    this.getTotalQtyToTransfer();
     this.onChange();
   }
 
@@ -125,17 +105,17 @@ export class GreenCoffeePrepareTransferComponent  extends BasicComponent impleme
       this.itemIndex = this.cart.findIndex(item => (item.cartItemInfo.coffeeGrade === this.filter.grade
         && item.cartItemInfo.coffeeType._id === this.filter.type));
       this.filter = this.helper.cleanObject(this.filter);
-      if (this.itemIndex !== -1 && this.filter.amount) {
-        this.filter.amount = +this.filter.amount + this.cart[this.itemIndex].cartItemInfo.totalKgs;
-        this.totalAmountToTransfer -= this.cart[this.itemIndex].cartItemInfo.totalKgs;
+      if (this.itemIndex !== -1 && this.filter.quantity) {
+        this.filter.quantity = +this.filter.quantity + this.cart[this.itemIndex].cartItemInfo.totalKgs;
+        this.totalQtyToTransfer -= this.cart[this.itemIndex].cartItemInfo.totalKgs;
       }
-      this.parchmentService.collectParchments(this.filter)
+      this.dryProcessingService.prepareGreenCoffeeTransfer(this.filter)
         .subscribe(data => {
           this.cartItemInfo.totalKgs = 0;
           this.cartItem = data.content;
           this.cartItemInfo['addedToCart'.toString()] = false;
           this.loading = false;
-          this.cartItem.forEach(itm => this.cartItemInfo.totalKgs += (+itm.amountToTransfer));
+          this.cartItem.forEach(itm => this.cartItemInfo.totalKgs += (+itm.qtyToTransfer));
           this.cartItemInfo.coffeeGrade = this.filter.grade;
           this.cartItemInfo.coffeeType = this.coffeeTypes.find(t => t._id === this.filter.type);
         }, (err) => {
@@ -150,47 +130,40 @@ export class GreenCoffeePrepareTransferComponent  extends BasicComponent impleme
     if (this.cart.length !== 0) {
       if (this.transferForm.valid) {
         let payload = {
-          totalAmountToTransfer: this.totalAmountToTransfer,
+          totalQtyToTransfer: this.totalQtyToTransfer,
           items: [],
-          appliedCertificates: []
         };
-
-        const selectedCertificates = this.transferForm.value.appliedCertificates
-          .map((checked, index) => checked ? this.certificates[index]._id : null)
-          .filter(value => value !== null);
-
         const items = [];
         this.cart.map((item) => {
           const itm = {
             type: item.cartItemInfo.coffeeType._id,
             grade: item.cartItemInfo.coffeeGrade,
             totalKgs: item.cartItemInfo.totalKgs,
-            parchments: []
+            coffees: []
           };
-          const parchments = [];
+          const coffees = [];
           item.cartItem.map((lot) => {
-            parchments.push({
-              parchmentId: lot._id,
+            coffees.push({
+              coffeeId: lot._id,
               lotNumber: lot.lotNumber,
-              amountToTransfer: lot.amountToTransfer
+              quantityToTransfer: lot.qtyToTransfer
             });
           });
-          itm.parchments = parchments;
+          itm.coffees = coffees;
           items.push(itm);
         });
         payload.items = items;
         payload = {...payload, ...this.transferForm.value};
-        payload.appliedCertificates = selectedCertificates;
         payload['userId'.toString()] = this.authenticationService.getCurrentUser().info._id;
         payload['originOrgId'.toString()] = this.authenticationService.getCurrentUser().info.org_id;
-        this.parchmentService.transfer(payload)
+        this.dryProcessingService.transferGreenCoffee(payload)
           .subscribe(() => {
               this.messageService.setMessage('Transfer successfully recorded');
               this.setMessage('Transfer successfully recorded');
-              this.parchmentTransferService.resetCart();
+              this.greenCoffeeTransferService.resetCart();
               this.resetSelection();
               this.resetCart();
-              this.router.navigateByUrl('admin/cws/parchments/transfer/history');
+              this.router.navigateByUrl('admin/drymill/green_coffee/transfer/history');
             },
             (err) => {
               this.errors = err.errors;
@@ -211,9 +184,9 @@ export class GreenCoffeePrepareTransferComponent  extends BasicComponent impleme
   }
 
   cancelCartItem(i: number) {
-    this.totalAmountToTransfer -= this.cart[i].cartItemInfo.totalKgs;
+    this.totalQtyToTransfer -= this.cart[i].cartItemInfo.totalKgs;
     this.cart.splice(i, 1);
-    this.parchmentTransferService.setCart(this.cart);
+    this.greenCoffeeTransferService.setCart(this.cart);
   }
 
   onChange() {
@@ -230,13 +203,13 @@ export class GreenCoffeePrepareTransferComponent  extends BasicComponent impleme
       if (this.itemIndex !== -1) {
         this.cart.splice(this.itemIndex, 1);
       }
-      this.totalAmountToTransfer += this.cartItemInfo.totalKgs;
+      this.totalQtyToTransfer += this.cartItemInfo.totalKgs;
       this.cart.push({
         cartItemInfo: JSON.parse(JSON.stringify(this.cartItemInfo)),
         cartItem: JSON.parse(JSON.stringify(this.cartItem)),
       });
     }
-    this.parchmentTransferService.setCart(this.cart);
+    this.greenCoffeeTransferService.setCart(this.cart);
     this.resetSelection();
   }
 
@@ -256,9 +229,9 @@ export class GreenCoffeePrepareTransferComponent  extends BasicComponent impleme
     this.cart = [];
   }
 
-  getTotalAmountToTransfer() {
-    this.cart.forEach(itm => this.totalAmountToTransfer += (+itm.cartItemInfo.totalKgs));
-    return this.totalAmountToTransfer;
+  getTotalQtyToTransfer() {
+    this.cart.forEach(itm => this.totalQtyToTransfer += (+itm.cartItemInfo.totalKgs));
+    return this.totalQtyToTransfer;
   }
 
   ngOnDestroy(): void {
