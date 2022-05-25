@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {
   AuthenticationService,
   ExcelServicesService,
@@ -18,6 +18,8 @@ import {isArray, isObject} from 'util';
 import {ParchmentReportDetailComponent} from '../../reports/parchment-report/parchment-report-detail/parchment-report-detail.component';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {isEmptyObject} from 'jquery';
+import {Subject} from 'rxjs';
+import {DataTableDirective} from 'angular-datatables';
 
 @Component({
   selector: 'app-organisation-farmers',
@@ -66,6 +68,9 @@ export class OrganisationFarmersComponent
     totalNumberOfLands: 0,
     uniqueFarmersCount: 0,
   };
+  dtOptions: any = {};
+  // @ts-ignore
+  dtTrigger: Subject = new Subject();
   subRegionFilter: any;
   seasonStartingTime: string;
   filterForm: FormGroup;
@@ -107,6 +112,9 @@ export class OrganisationFarmersComponent
   villages: any;
   searchLocationBy = 'farm';
   filter: any;
+  // @ts-ignore
+  @ViewChild(DataTableDirective, {static: false})
+  dtElement: DataTableDirective;
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
@@ -201,13 +209,10 @@ export class OrganisationFarmersComponent
     if (this.filterForm.valid) {
       this.loading = true;
       const filter = JSON.parse(JSON.stringify(this.filterForm.value));
-
       if (filter.searchByTerm.term === '') {
         delete filter.searchByTerm;
       }
-
       const location = filter.searchByLocation;
-
       if (location) {
         if (location.prov_id === '') {
           filter.searchByLocation.filterBy = 'provinces';
@@ -243,6 +248,8 @@ export class OrganisationFarmersComponent
       }
       if (!isEmptyObject(filter)) {
         this.parameters['search'.toString()] = filter;
+      } else {
+        delete this.parameters.search;
       }
       this.organisationService.getFarmers(this.parameters).subscribe(
         (data) => {
@@ -263,7 +270,7 @@ export class OrganisationFarmersComponent
   }
 
   onClearFilter() {
-    this.filterForm.controls.term.reset();
+    this.filterForm.controls.term.setValue('', {emitEvent: false});
     delete this.parameters.search;
     this.organisationService.getFarmers(this.parameters).subscribe((data) => {
       this.paginatedFarmers = data.data;
@@ -447,6 +454,8 @@ export class OrganisationFarmersComponent
             this.districts = data;
             if (this.searchLocationBy !== 'farm') {
               this.sectors = null;
+              this.filterForm.controls.searchByLocation
+                .get('sect_id'.toString()).setValue('', {emitEvent: false});
             }
             this.cells = null;
             this.villages = null;
@@ -455,10 +464,18 @@ export class OrganisationFarmersComponent
           if (this.searchLocationBy !== 'farm') {
             this.districts = null;
             this.sectors = null;
+            this.filterForm.controls.searchByLocation
+              .get('dist_id'.toString()).setValue('', {emitEvent: false});
+            this.filterForm.controls.searchByLocation
+              .get('sect_id'.toString()).setValue('', {emitEvent: false});
           }
           this.cells = null;
           this.villages = null;
         }
+        this.filterForm.controls.searchByLocation
+          .get('cell_id'.toString()).setValue('', {emitEvent: false});
+        this.filterForm.controls.searchByLocation
+          .get('village_id'.toString()).setValue('', {emitEvent: false});
       }
     );
     this.filterForm.controls.searchByLocation.get('dist_id'.toString()).valueChanges.subscribe(
@@ -469,16 +486,28 @@ export class OrganisationFarmersComponent
               this.filterCustomSectors();
             } else {
               this.sectors = data;
+              this.filterForm.controls.searchByLocation
+                .get('sect_id'.toString()).setValue('', {emitEvent: false});
             }
             this.cells = null;
             this.villages = null;
+            this.filterForm.controls.searchByLocation
+              .get('cell_id'.toString()).setValue('', {emitEvent: false});
+            this.filterForm.controls.searchByLocation
+              .get('village_id'.toString()).setValue('', {emitEvent: false});
           });
         } else {
           if (this.searchLocationBy !== 'farm') {
             this.sectors = null;
+            this.filterForm.controls.searchByLocation
+              .get('sect_id'.toString()).setValue('', {emitEvent: false});
           }
           this.cells = null;
           this.villages = null;
+          this.filterForm.controls.searchByLocation
+            .get('cell_id'.toString()).setValue('', {emitEvent: false});
+          this.filterForm.controls.searchByLocation
+            .get('village_id'.toString()).setValue('', {emitEvent: false});
         }
       }
     );
@@ -493,10 +522,16 @@ export class OrganisationFarmersComponent
             this.cells = data;
           }
           this.villages = null;
+          this.filterForm.controls.searchByLocation
+            .get('village_id'.toString()).setValue('', {emitEvent: false});
         });
       } else {
         this.cells = null;
         this.villages = null;
+        this.filterForm.controls.searchByLocation
+          .get('cell_id'.toString()).setValue('', {emitEvent: false});
+        this.filterForm.controls.searchByLocation
+          .get('village_id'.toString()).setValue('', {emitEvent: false});
       }
     });
     this.filterForm.controls.searchByLocation
@@ -506,8 +541,12 @@ export class OrganisationFarmersComponent
         this.locationService.getVillages(value).subscribe((data) => {
           if (this.searchLocationBy === 'farm') {
             this.filterCustomVillages(data);
+            this.filterForm.controls.searchByLocation
+              .get('village_id'.toString()).setValue('', {emitEvent: false});
           } else {
             this.villages = data;
+            this.filterForm.controls.searchByLocation
+              .get('village_id'.toString()).setValue('', {emitEvent: false});
           }
         });
       }

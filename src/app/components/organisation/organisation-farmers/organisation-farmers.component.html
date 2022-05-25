@@ -412,7 +412,7 @@
     <div class="box">
       <div class="box-body table-responsive">
         <app-loader *ngIf="loading"></app-loader>
-        <table class="row-border hover table table-striped" aria-describedby="">
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped" aria-describedby="">
           <thead>
           <tr>
             <th>Date Added</th>
@@ -444,7 +444,7 @@
           <tbody *ngIf="showData">
           <tr
             *ngFor="
-                let farmer of farmers
+                let farmer of paginatedFarmers
                   | orderBy: order:reverse:'case-insensitive'
                   | paginate: config
               "
