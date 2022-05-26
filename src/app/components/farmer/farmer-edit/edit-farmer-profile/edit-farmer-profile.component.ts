@@ -104,11 +104,11 @@ export class EditFarmerProfileComponent
       this.farmer.sex = this.farmer.sex.toLowerCase();
     }
     if (this.farmer.location) {
-      this.farmer.location.prov_id = this.farmer.location.prov_id._id;
-      this.farmer.location.dist_id = this.farmer.location.dist_id._id;
-      this.farmer.location.sect_id = this.farmer.location.sect_id._id;
-      this.farmer.location.cell_id = this.farmer.location.cell_id._id;
-      this.farmer.location.village_id = this.farmer.location.village_id._id;
+      this.farmer.location.prov_id = this.farmer.location.prov_id ? this.farmer.location.prov_id._id : '';
+      this.farmer.location.dist_id = this.farmer.location.dist_id ? this.farmer.location.dist_id._id : '';
+      this.farmer.location.sect_id = this.farmer.location.sect_id ? this.farmer.location.sect_id._id : '';
+      this.farmer.location.cell_id = this.farmer.location.cell_id ? this.farmer.location.cell_id._id : '';
+      this.farmer.location.village_id = this.farmer.location.village_id ? this.farmer.location.village_id._id : '';
     }
     if (!isUndefined(this.farmer.type)) {
       this.farmer.type = this.farmer.type.toString();

@@ -38,7 +38,7 @@ export class EditFarmerRequestComponent implements OnInit {
   isUserDistrictCashCrop = false;
   site: any;
   upi: any;
-  validCalculations = true;
+  validForm = true;
   province: any;
   district: any;
   sector: any;
@@ -261,15 +261,15 @@ export class EditFarmerRequestComponent implements OnInit {
     this.editFarmerRequestForm.controls.treeAges.valueChanges.subscribe(
       (value) => {
         if (value !== null) {
-          this.validCalculations = this.validateNumbers(value);
-          this.save = this.validCalculations;
+          this.validForm = this.validateNumbers(value);
+          this.save = this.validForm;
         }
       });
     this.editFarmerRequestForm.controls.numberOfTrees.valueChanges.subscribe(
       (value) => {
         if (value !== null) {
-          this.validCalculations = this.validateNumbers(this.editFarmerRequestForm.controls.treeAges.value);
-          this.save = this.validCalculations;
+          this.validForm = this.validateNumbers(this.editFarmerRequestForm.controls.treeAges.value);
+          this.save = this.validForm;
         }
       });
     this.editFarmerRequestForm.controls.location.get('dist_id'.toString()).valueChanges.subscribe(

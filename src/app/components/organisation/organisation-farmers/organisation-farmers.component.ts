@@ -126,6 +126,10 @@ export class OrganisationFarmersComponent
       draw: 1,
       org_id: this.organisationId,
     };
+    this.dtOptions = {
+      pagingType: 'full_numbers',
+      pageLength: 25
+    };
     this.seasonStartingTime =
       this.authenticationService.getCurrentSeason().created_at;
     this.filterForm = this.formBuilder.group({

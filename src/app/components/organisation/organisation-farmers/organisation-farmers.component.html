@@ -384,13 +384,14 @@
                 class="form-control"
                 placeholder="search.."
               />
-              <!-- <button
-            class="btn btn-warning pull-right btn-margin"
-            type="button"
-            (click)="onClearFilter()"
-          >
-            Clear
-          </button> -->
+            <!--
+              <button
+              class="btn btn-warning pull-right btn-margin"
+              type="button"
+              (click)="onClearFilter()">
+              Clear
+              </button>
+            -->
             </div>
           </div>
           <br/>
@@ -412,7 +413,7 @@
     <div class="box">
       <div class="box-body table-responsive">
         <app-loader *ngIf="loading"></app-loader>
-        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped" aria-describedby="">
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped">
           <thead>
           <tr>
             <th>Date Added</th>

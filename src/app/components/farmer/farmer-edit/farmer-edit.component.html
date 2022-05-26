@@ -94,13 +94,13 @@
         <span class="profile-label">Phone number </span>
       </div>
       <div class="col-sm-6">
-        <span class="profile-text">{{ farmer?.userInfo.phone_number }}</span>
+        <span class="profile-text">{{ farmer?.userInfo?.phone_number }}</span>
       </div>
       <div class="col-sm-6">
         <span class="profile-label">Family size</span>
       </div>
       <div class="col-sm-6">
-        <span class="profile-text">{{ farmer?.userInfo.familySize }}</span>
+        <span class="profile-text">{{ farmer?.userInfo?.familySize }}</span>
       </div>
     </div>
   </div>
@@ -114,19 +114,19 @@
       </div>
       <div class="col-sm-6">
         <span class="details-row-title-sm">Province </span> : <span
-        class="details-row-data-sm">{{ farmer?.userInfo.location?.prov_id.namek }}</span>
+        class="details-row-data-sm">{{ farmer?.userInfo.location?.prov_id?.namek }}</span>
         <br/>
         <span class="details-row-title-sm">District </span> : <span
-        class="details-row-data-sm">{{ farmer?.userInfo.location?.dist_id.name }}</span>
+        class="details-row-data-sm">{{ farmer?.userInfo.location?.dist_id?.name }}</span>
         <br/>
         <span class="details-row-title-sm">Sector </span> : <span
-        class="details-row-data-sm">{{ farmer?.userInfo.location?.sect_id.name }}</span>
+        class="details-row-data-sm">{{ farmer?.userInfo.location?.sect_id?.name }}</span>
         <br/>
         <span class="details-row-title-sm">Cell </span> : <span
-        class="details-row-data-sm">{{ farmer?.userInfo.location?.cell_id.name }}</span>
+        class="details-row-data-sm">{{ farmer?.userInfo.location?.cell_id?.name }}</span>
         <br/>
         <span class="details-row-title-sm">Village </span> : <span
-        class="details-row-data-sm">{{ farmer?.userInfo.location?.village_id.name }}</span>
+        class="details-row-data-sm">{{ farmer?.userInfo.location?.village_id?.name }}</span>
       </div>
     </div>
   </div>
@@ -161,15 +161,15 @@
           <td>{{farmer.request.season.name}}</td>
           <td>
             <span class="details-row-title-sm" style="margin-left: 0">Province </span> : <span
-            class="details-row-data-sm" *ngIf="request.location.prov_id">{{ request.location.prov_id.namek }}</span>
+            class="details-row-data-sm" *ngIf="request.location?.prov_id">{{ request.location?.prov_id?.namek }}</span>
             <span class="details-row-title-sm">District </span> : <span
-            class="details-row-data-sm">{{ request.location.dist_id.name }}</span>
+            class="details-row-data-sm">{{ request.location?.dist_id?.name }}</span>
             <span class="details-row-title-sm">Sector </span> : <span
-            class="details-row-data-sm">{{ request.location.sect_id.name }}</span><br/>
+            class="details-row-data-sm">{{ request.location?.sect_id?.name }}</span><br/>
             <span class="details-row-title-sm">Cell </span> : <span
-            class="details-row-data-sm">{{ request.location.cell_id.name }}</span>
+            class="details-row-data-sm">{{ request.location?.cell_id?.name }}</span>
             <span class="details-row-title-sm">Village </span> : <span
-            class="details-row-data-sm">{{ request.location.village_id.name }}</span>
+            class="details-row-data-sm">{{ request.location?.village_id?.name }}</span>
           </td>
           <td>{{ request.landOwner | titlecase }}</td>
           <td>{{ request.upiNumber }}</td>

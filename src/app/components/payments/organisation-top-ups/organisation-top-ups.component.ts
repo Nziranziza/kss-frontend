@@ -1,8 +1,8 @@
 import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
-import {BasicComponent} from '../../../core/library';
+import {BasicComponent} from '../../../core';
 import {Subject} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
-import {AuthorisationService, ConfirmDialogService, MessageService, OrganisationService} from '../../../core/services';
+import {AuthorisationService, ConfirmDialogService, MessageService, OrganisationService} from '../../../core';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
