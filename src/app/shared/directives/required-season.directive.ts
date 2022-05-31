@@ -1,5 +1,5 @@
 import {Directive, ElementRef, OnInit, Renderer2} from '@angular/core';
-import {AuthenticationService} from '../../core/services';
+import {AuthenticationService} from '../../core';
 
 @Directive({
   selector: '[appRequiredSeason]'
