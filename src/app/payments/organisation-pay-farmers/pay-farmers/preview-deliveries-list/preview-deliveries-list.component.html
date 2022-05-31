@@ -16,7 +16,7 @@
           <tr *ngFor="let farmer of paymentList; let i = index">
             <td> {{ farmer.foreName }}</td>
             <td> {{ farmer.surname }}</td>
-            <td> {{ farmer.phone_number }}</td>
+            <td> {{ farmer.subscriptionNumber }}</td>
             <td> {{ farmer.regNumber | uppercase}}</td>
             <td> {{ farmer.amount }}</td>
           </tr>
@@ -27,7 +27,7 @@
 </div>
 <div class="row">
   <div class="col-xs-12">
-    <button class="btn btn-success pull-right btn-margin" (click)="onNext()">Continue</button>
+    <button class="btn btn-primary pull-right btn-margin" (click)="onNext()">Continue</button>
     <button class="btn btn-success pull-right" (click)="onPrevious()">Previous</button>
   </div>
 </div>

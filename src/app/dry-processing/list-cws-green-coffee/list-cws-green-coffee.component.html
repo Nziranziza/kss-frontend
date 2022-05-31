@@ -77,7 +77,7 @@
           </thead>
           <tbody>
           <tr *ngFor="let coffee of greenCoffees">
-            <td>{{ coffee.remainingQty + ' &#13199; '}}</td>
+            <td>{{ coffee.totalAmount + ' &#13199; '}}</td>
             <td>{{ coffee.deliveryType }}</td>
             <td><span *ngIf="coffee.results">{{ coffee.results.quantity + ' &#13199; '}} </span></td>
             <td>{{ coffee.lotNumber }}</td>

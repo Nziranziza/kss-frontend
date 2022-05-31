@@ -26,7 +26,7 @@ import {PaymentService} from './services/payment.service';
 
 @NgModule({
   imports: [
-    CommonModule, BrowserAnimationsModule, SharedModule, MatDialogModule
+    CommonModule, BrowserAnimationsModule, MatDialogModule
   ],
   providers: [
     ApiService,

@@ -33,53 +33,67 @@ export class CoffeeTypeEditComponent implements OnInit {
     this.getCategory();
 
     this.createForm = this.formBuilder.group({
-      category: ["", Validators.required],
+      _id: ["", Validators.required],
+      name: ["", Validators.required],
+      category: new FormArray([]),
+      level: ["", Validators.required],
     });
-    // this.addCategory();
+  }
+
+  createCategory(): FormGroup {
+    return this.formBuilder.group({
+      name: ["", Validators.required],
+      _id: [""],
+    });
+  }
+
+  get formCategory() {
+    return this.createForm.get("category") as FormArray;
+  }
+
+  addCategory(element, index) {
+    (this.createForm.controls.category as FormArray).push(
+      this.createCategory()
+    );
+    (this.createForm.controls.category as FormArray)
+      .at(index)
+      .get("name")
+      .setValue(element.name);
+    (this.createForm.controls.category as FormArray)
+      .at(index)
+      .get("_id")
+      .setValue(element._id);
+  }
+
+  removeCategory(index: number) {
+    (this.createForm.controls.category as FormArray).removeAt(index);
+  }
+
+  getCategoryFormGroup(index): FormGroup {
+    this.category = this.createForm.get("category") as FormArray;
+    return this.category.controls[index] as FormGroup;
   }
 
   getCategory() {
     this.coffeeTypeService.one(this.id).subscribe((data) => {
       if (data && data.content) {
         this.coffeeType = data.content;
-        this.createForm.controls["category"].setValue(
-          this.coffeeType.category[0].name
+        this.createForm.controls["_id"].setValue(this.coffeeType._id);
+        this.createForm.controls["name"].setValue(this.coffeeType.name);
+        this.createForm.controls["level"].setValue(
+          this.coffeeType.level.toLowerCase(),
+          { onlySelf: true }
         );
+        this.coffeeType.category.forEach((value, index) => {
+          this.addCategory(value, index);
+        });
       }
     });
   }
 
-  // createCategory(): FormGroup {
-  //   return this.formBuilder.group({
-  //     name: ['', Validators.required]
-  //   });
-  // }
-
-  // get formCategory() {
-  //   return this.createForm.get('category') as FormArray;
-  // }
-
-  // addCategory() {
-  //   (this.createForm.controls.category as FormArray).push(this.createCategory());
-  // }
-
-  // removeCategory(index: number) {
-  //   (this.createForm.controls.category as FormArray).removeAt(index);
-  // }
-
-  // getCategoryFormGroup(index): FormGroup {
-  //   this.category = this.createForm.get('category') as FormArray;
-  //   return this.category.controls[index] as FormGroup;
-  // }
-
   onSubmit() {
     if (this.createForm.valid) {
-      const body = {
-        _id: this.coffeeType._id,
-        category_id: this.coffeeType.category[0]._id,
-        name: this.createForm.get("category").value,
-      };
-      this.coffeeTypeService.update(body).subscribe(
+      this.coffeeTypeService.update(this.createForm.value).subscribe(
         () => {
           this.router.navigateByUrl("admin/coffee-type/list");
         },
