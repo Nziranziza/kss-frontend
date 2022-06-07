@@ -48,7 +48,7 @@ import {FarmService} from './services';
     CookieService,
     PaymentService,
     CoveredAreaResolverService,
-    FarmService
+    FarmService,
     /*{provide: ErrorHandler, useClass: ErrorCustomHandler}*/
   ],
   declarations: []

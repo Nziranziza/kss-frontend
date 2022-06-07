@@ -17,14 +17,13 @@ import {FarmerNeedApprovalListComponent} from './farmer-need-approval-list/farme
 import {PendingFarmerListComponent} from './pending-farmer/pending-farmer-list/pending-farmer-list.component';
 import {FarmerAdministrativeListComponent} from './farmer-administrative-list/farmer-administrative-list.component';
 import {GoogleChartsModule} from 'angular-google-charts';
-import { FarmerGroupCreateComponent } from './groups/farmer-group-create/farmer-group-create.component';
-import { FarmerGroupListComponent } from './groups/farmer-group-list/farmer-group-list.component';
 
 @NgModule({
   declarations: [FarmerListComponent, FarmerDetailsComponent, FarmerCreateComponent,
     FarmerEditComponent, FarmerLandsComponent,
     EditFarmerProfileComponent, EditFarmerRequestComponent, PendingFarmerListComponent,
-    AddFarmerRequestComponent, FarmerNeedApprovalListComponent, FarmerAdministrativeListComponent, FarmerGroupCreateComponent, FarmerGroupListComponent],
+    AddFarmerRequestComponent, FarmerNeedApprovalListComponent,
+    FarmerAdministrativeListComponent],
   imports: [
     CommonModule,
     FarmerRoutingModule,

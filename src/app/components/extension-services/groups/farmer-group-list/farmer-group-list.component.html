@@ -1,0 +1,47 @@
+<h3>
+  Groups
+  <a class="btn btn-success pull-right" routerLink="/admin/farmers/group/create"><i
+    class="fa fa-plus"></i> Add a farmers group </a>
+</h3>
+<app-list-message [message]="message"></app-list-message>
+<app-list-errors [errorList]="errors"></app-list-errors>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-body table-responsive">
+        <app-loader *ngIf="loading"></app-loader>
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped">
+          <thead>
+          <tr>
+            <th>Group name</th>
+            <th>Group leader names</th>
+            <th>Group leader contact</th>
+            <th>Address</th>
+            <th>Group size</th>
+            <th>Training attendance rate</th>
+            <th>status</th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <ng-container *ngFor="let group of groups">
+            <tr>
+              <td> {{ group.groupName }}</td>
+              <td> {{ group.leaderName }}</td>
+              <td> {{ group.leaderPhoneNumber }}</td>
+              <td> </td>
+              <td> </td>
+              <td> </td>
+              <td class="actions no-wrap text-right">
+                <a class="btn btn-success btn-margin btn-sm" [routerLink]="['edit/', group._id]"
+                   style="margin-left: 10px;"> Edit
+                </a>
+              </td>
+            </tr>
+          </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

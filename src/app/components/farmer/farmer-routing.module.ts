@@ -9,8 +9,8 @@ import {FarmerNeedApprovalListComponent} from './farmer-need-approval-list/farme
 import {AdminGuard} from '../../core/guards/admin.guard';
 import {PendingFarmerListComponent} from './pending-farmer/pending-farmer-list/pending-farmer-list.component';
 import {FarmerAdministrativeListComponent} from './farmer-administrative-list/farmer-administrative-list.component';
-import {FarmerGroupCreateComponent} from './groups/farmer-group-create/farmer-group-create.component';
-import {FarmerGroupListComponent} from './groups/farmer-group-list/farmer-group-list.component';
+import {FarmerGroupCreateComponent} from '../extension-services/groups/farmer-group-create/farmer-group-create.component';
+import {FarmerGroupListComponent} from '../extension-services/groups/farmer-group-list/farmer-group-list.component';
 
 const routes: Routes = [
   {

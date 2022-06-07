@@ -28,6 +28,7 @@ import {DatePipe} from '@angular/common';
 import {PaymentsModule} from './components/payments/payments.module';
 import {OrganisationPayFarmersModule} from './components/payments/organisation-pay-farmers/organisation-pay-farmers.module';
 import {FarmModule} from './components/farm/farm.module';
+import {ExtensionServicesModule} from './components/extension-services/extension-services.module';
 
 /*import {DataService} from './data.service';
   import {HttpClientInMemoryWebApiModule} from 'angular-in-memory-web-api';*/
@@ -48,6 +49,7 @@ import {FarmModule} from './components/farm/farm.module';
     HomeModule,
     OrganisationModule,
     FarmerModule,
+    ExtensionServicesModule,
     ReportModule,
     ProfileModule,
     RouterModule,
