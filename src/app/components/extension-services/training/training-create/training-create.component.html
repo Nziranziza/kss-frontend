@@ -1,0 +1,75 @@
+<h3>
+  Training Management > <span style="font-weight: bold"> Add a Training </span>
+</h3>
+<app-list-errors [errorList]="errors"></app-list-errors>
+<form [formGroup]="createForm" (ngSubmit)="onSubmit()">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-body">
+          <div class="col-xs-6">
+            <div class="form-group">
+              <label class="control-label label-required">Training Name</label>
+              <input
+                type="text"
+                formControlName="groupName"
+                class="form-control"
+              />
+            </div>
+          </div>
+          <div class="col-xs-6" formGroupName="location">
+            <div class="form-group">
+              <label class="control-label label-required"
+                >Training Description</label
+              >
+              <input
+                type="text"
+                formControlName="groupName"
+                class="form-control"
+              />
+            </div>
+          </div>
+
+          <div class="col-xs-6">
+            <div class="form-group">
+              <label class="control-label label-required">Associated GAP</label>
+              <input
+                type="text"
+                formControlName="groupName"
+                class="form-control"
+              />
+            </div>
+          </div>
+          <div class="col-xs-6" formGroupName="location">
+            <div class="form-group">
+              <label class="control-label label-required">Attach files</label>
+              <input
+                type="file"
+                formControlName="groupName"
+                class="form-control"
+                style="
+                  height: 223px;
+                  background: #ffffff 0% 0% no-repeat padding-box;
+                  border: 3px dashed #bcbcbc;
+                  border-radius: 7px;
+                  opacity: 1;
+                "
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-3"></div>
+    <div class="col-xs-6">
+      <a
+        class="btn btn-warning btn-margin"
+        routerLink="/admin/farmers/group/list"
+        style="width: 250px; height: 50px; margin-right:10px" >Cancel</a
+      >
+      <button class="btn btn-success" style="width: 250px; height: 50px;">Add Training</button>
+    </div>
+  </div>
+</form>

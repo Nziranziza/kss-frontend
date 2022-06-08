@@ -6,6 +6,6 @@ export const environment = {
   production: false,
   staging: false,
   local: true,
-  api_url: 'http://localhost:9078/api'
+  api_url: 'https://staging.smartkungahara.rw/core/api'
 };
 

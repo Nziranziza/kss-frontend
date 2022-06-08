@@ -13,6 +13,8 @@ import { GapListComponent } from './gaps/gap-list/gap-list.component';
 import { GapCreateComponent } from './gaps/gap-create/gap-create.component';
 import { GapDeleteModal } from './gaps/gap-delete-modal/gap-delete-modal.component';
 import { GapEditComponent } from './gaps/gap-edit/gap-edit.component';
+import { TrainingListComponent } from './training/training-list/training-list.component';
+import { TrainingCreateComponent } from './training/training-create/training-create.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +24,8 @@ import { GapEditComponent } from './gaps/gap-edit/gap-edit.component';
     GapCreateComponent,
     GapEditComponent,
     GapDeleteModal,
+    TrainingListComponent,
+    TrainingCreateComponent
   ],
   imports: [
     CommonModule,
