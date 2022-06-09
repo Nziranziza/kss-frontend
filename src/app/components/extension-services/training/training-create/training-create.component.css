@@ -1,0 +1,82 @@
+.training-file-input {
+  height: 223px;
+  width: 100%;
+  background: #ffffff 0% 0% no-repeat padding-box;
+  border: 3px dashed #bcbcbc;
+  border-radius: 7px;
+  opacity: 1;
+}
+
+.training-file-input-icon {
+  position: relative;
+  top: 20%;
+  left: 45%;
+  width: 52px;
+  height: 71px;
+  margin: auto;
+  opacity: 1;
+}
+
+.training-file-input-text {
+  position: relative;
+  top: 30%;
+  height: 19px;
+  margin: auto;
+  text-align: center;
+  font: normal normal normal 15px/14px Montserrat;
+  letter-spacing: 0px;
+  color: #6e6e6e;
+  opacity: 1;
+}
+
+.training-file-list {
+  height: auto;
+  background: #4f210d22 0% 0% no-repeat padding-box;
+  opacity: 1;
+  border: 1px;
+  border-radius: 7px;
+  padding: 10px;
+  font: normal normal 600 13px/14px Montserrat;
+}
+
+.training-modal-title {
+  height: 20px;
+  /* UI Properties */
+  text-align: center;
+  font: normal normal bold 30px/34px Helvetica Neue;
+  letter-spacing: 0px;
+  color: #4f210d;
+  opacity: 1;
+}
+
+.dark-modal .modal-content {
+  background-color: #292b2c;
+  color: white;
+}
+
+.dark-modal .close {
+  color: white;
+}
+
+.light-blue-backdrop {
+  background-color: #5cb3fd;
+}
+
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background: #F6F6F6 0% 0% no-repeat padding-box;
+}
+
+tr:nth-child(odd) {
+  background-color: #fff;
+}

@@ -1,3 +1,95 @@
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title training-modal-title" id="modal-basic-title">
+      Verify and Confirm
+    </h4>
+    <button
+      type="button"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <i class="fa fa-times" aria-hidden="true" style="color: red"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="box">
+      <div class="box-body">
+        <h3>Training details</h3>
+        <div class="row">
+          <div class="col-xs-6">
+            <div style="margin-bottom: 10px">
+              <label class="control-label label-required">Training Name</label>
+              <input
+                type="text"
+                formControlName="trainingName"
+                class="form-control"
+                disabled
+                value="name ...."
+              />
+            </div>
+            <div>
+              <label class="control-label label-required">Associated GAP</label>
+              <input
+                type="text"
+                class="form-control"
+                disabled
+                value="name ...."
+              />
+            </div>
+          </div>
+          <div class="col-xs-6">
+            <div>
+              <label class="control-label label-required"
+                >Training Description</label
+              >
+              <input
+                type="text"
+                formControlName="description"
+                class="form-control"
+                disabled
+                value="name ...."
+                style="height: 100px"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="box-body">
+        <h3>Files</h3>
+
+        <table>
+          <tr>
+            <th>#</th>
+            <th>Filename</th>
+            <th>File Size</th>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>file.txt</td>
+            <td>200KB</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>file.pdf Chang</td>
+            <td>10KB</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-outline-dark"
+      (click)="modal.close('Save click')"
+    >
+      Confirm
+    </button>
+  </div>
+</ng-template>
 <h3>
   Training Management > <span style="font-weight: bold"> Add a Training </span>
 </h3>
@@ -12,19 +104,19 @@
               <label class="control-label label-required">Training Name</label>
               <input
                 type="text"
-                formControlName="groupName"
+                formControlName="trainingName"
                 class="form-control"
               />
             </div>
           </div>
-          <div class="col-xs-6" formGroupName="location">
+          <div class="col-xs-6">
             <div class="form-group">
               <label class="control-label label-required"
                 >Training Description</label
               >
               <input
                 type="text"
-                formControlName="groupName"
+                formControlName="description"
                 class="form-control"
               />
             </div>
@@ -35,41 +127,81 @@
               <label class="control-label label-required">Associated GAP</label>
               <input
                 type="text"
-                formControlName="groupName"
+                formControlName="associatedGap"
                 class="form-control"
               />
             </div>
           </div>
-          <div class="col-xs-6" formGroupName="location">
+          <div class="col-xs-6">
             <div class="form-group">
               <label class="control-label label-required">Attach files</label>
+              <label for="file-input" class="training-file-input">
+                <img
+                  src="assets/dist/img/sks/ico_export.svg"
+                  class="training-file-input-icon"
+                />
+                <div class="training-file-input-text">
+                  Click or Drag PDF File to this area to upload
+                </div>
+              </label>
               <input
+                id="file-input"
                 type="file"
-                formControlName="groupName"
+                multiple
+                formControlName="trainingFiles"
                 class="form-control"
-                style="
-                  height: 223px;
-                  background: #ffffff 0% 0% no-repeat padding-box;
-                  border: 3px dashed #bcbcbc;
-                  border-radius: 7px;
-                  opacity: 1;
-                "
+                style="display: none"
+                (change)="onFileSelected($event)"
+                accept="application/pdf"
               />
+              <div class="training-file-list">
+                Attached file(s) to upload <br /><br />
+                <div
+                  *ngFor="let file of files; let i = index"
+                  style="padding-bottom: 6px"
+                >
+                  <span style="width: 75%; float: left">
+                    <img
+                      src="assets/dist/img/sks/ico_attach.svg"
+                      style="margin-right: 5px"
+                    />
+                    {{ file.name }}
+                  </span>
+                  <span style="margin-left: 40px; width: 12%; float: left">
+                    {{ file.size }}
+                  </span>
+                  <i
+                    class="fa fa-times"
+                    aria-hidden="true"
+                    (click)="removeSelectedFile(index)"
+                    style="color: red"
+                  ></i>
+                  <br />
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="row">
-    <div class="col-xs-3"></div>
-    <div class="col-xs-6">
-      <a
-        class="btn btn-warning btn-margin"
-        routerLink="/admin/farmers/group/list"
-        style="width: 250px; height: 50px; margin-right:10px" >Cancel</a
+  <div>
+    <div style="width: 50%; float: center; margin-left: 25%">
+      <button
+        type="button"
+        class="btn btn-success"
+        style="width: 250px; height: 50px; margin-right: 10px"
       >
-      <button class="btn btn-success" style="width: 250px; height: 50px;">Add Training</button>
+        Cancel
+      </button>
+      <button
+        type="button"
+        class="btn btn-success"
+        (click)="open(content)"
+        style="width: 250px; height: 50px"
+      >
+        Add Training
+      </button>
     </div>
   </div>
 </form>
