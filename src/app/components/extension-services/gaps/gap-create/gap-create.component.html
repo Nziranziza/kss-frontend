@@ -1,0 +1,171 @@
+<div class="title-bar">
+  <h3>GAP > <b> Add Gap</b></h3>
+</div>
+<app-list-message [message]="message"></app-list-message>
+<app-list-errors [errorList]="errors"></app-list-errors>
+<div class="row">
+  <div class="col-sm-12 gap-box">
+    <form [formGroup]="createForm" (ngSubmit)="onSubmit()">
+      <div class="row">
+        <div class="col-xs-6">
+          <div class="form-group">
+            <label class="control-label">Gap Name</label>
+            <input
+              type="text"
+              formControlName="name"
+              class="form-control"
+              placeholder=""
+            />
+          </div>
+        </div>
+        <div class="col-xs-6">
+          <div class="form-group">
+            <label class="control-label">Gap Description</label>
+            <input
+              type="text"
+              formControlName="description"
+              class="form-control"
+              placeholder=""
+            />
+          </div>
+        </div>
+        <div class="col-xs-12">
+          <fieldset style="margin-right: 0 !important">
+            <legend>
+              <label class="control-label">&nbsp; Adoption Methods</label>
+            </legend>
+            <div
+              *ngFor="let control of formCategory.controls; let i = index"
+              formArrayName="questions"
+              class="question-section"
+            >
+              <div class="row" [formGroupName]="i">
+                <div class="col-xs-4">
+                  <div class="form-group">
+                    <label class="control-label">Adoption Title</label>
+                    <input
+                      type="text"
+                      formControlName="question"
+                      class="form-control"
+                      placeholder=""
+                    />
+                  </div>
+                </div>
+                <div class="col-xs-4">
+                  <div class="form-group">
+                    <label class="control-label">Adoption Description</label>
+                    <input
+                      type="text"
+                      formControlName="question"
+                      class="form-control"
+                      placeholder=""
+                    />
+                  </div>
+                </div>
+                <div class="col-xs-2">
+                  <div class="form-group">
+                    <label class="control-label">Method Approach</label>
+                    <select
+                      class="form-control"
+                      formControlName="answerType"
+                      (change)="onAdoptionMethodSelected(i)"
+                    >
+                      <option value=""></option>
+                      <option
+                        *ngFor="let approach of approachs"
+                        value="{{ approach.id }}"
+                      >
+                        {{ approach.name }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group col-xs-2">
+                  <button
+                    class="btn btn-danger btn-sm pull-left btn-custom-margin-top"
+                    type="button"
+                    (click)="removeQuestion(i)"
+                  >
+                    Remove
+                  </button>
+                </div>
+                <div
+                  class="form-group col-sm-12"
+                  *ngIf="adoptionOptionsVisible == true"
+                >
+                  <div class="row">
+                    <div class="col-xs-5">
+                      <div class="form-group">
+                        <label class="control-label"
+                          >Add Adoption Options</label
+                        >
+                        <input
+                          type="text"
+                          formControlName="answer"
+                          class="form-control"
+                          placeholder=""
+                        />
+                      </div>
+                    </div>
+                    <div class="col-xs-1 text-center">
+                      <button
+                        class="btn btn-success btn-sm btn-custom-margin-top"
+                        type="button"
+                        (click)="addOption(i)"
+                      >
+                        <em class="fa fa-plus"></em>
+                      </button>
+                    </div>
+                    <div class="col-xs-6">
+                      <div class="adoption-options">
+                        <div class="col-sm-12 text-center">
+                          <h3>Adoption options</h3>
+                        </div>
+                        <table class="row-border hover table">
+                          <thead>
+                            <tr>
+                              <th>Option number</th>
+                              <th>Option</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <ng-container
+                              *ngFor="let option of options; let i = index"
+                            >
+                              <tr>
+                                <td>{{ i + 1 }}</td>
+                                <td>{{ option }}</td>
+                              </tr>
+                            </ng-container>
+                          </tbody>
+                        </table>
+                        <div class="col-sm-12 text-center">
+                          <p *ngIf="options.length === 0">
+                            No options added yet!
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+        <div class="col-xs-12 text-center">
+          <button
+            class="btn btn-success add-btn btn-sm btn-custom-margin-top"
+            type="button"
+            (click)="addQuestion()"
+          >
+            <em class="fa fa-plus"></em> Add Adoption
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="col-xs-12 text-center">
+    <button class="btn btn-success" (click)="onSubmit()">Save</button>
+    <a class="btn btn-warning btn-margin" routerLink="/admin/gaps/list">Cancel</a>
+  </div>
+</div>
