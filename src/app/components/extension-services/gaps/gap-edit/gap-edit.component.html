@@ -15,6 +15,7 @@
             }"
           >
             <label class="control-label">Gap Name</label>
+            <input type="hidden" formControlName="_id" class="form-control" />
             <input
               type="text"
               formControlName="name"
@@ -83,6 +84,11 @@
                   >
                     <label class="control-label">Adoption Title</label>
                     <input
+                      type="hidden"
+                      formControlName="_id"
+                      class="form-control"
+                    />
+                    <input
                       type="text"
                       formControlName="question"
                       class="form-control"
@@ -137,7 +143,7 @@
                 </div>
                 <div
                   class="form-group col-sm-12"
-                  *ngIf="adoptionOptionsVisible == true"
+                  *ngIf="answerType(i).value === 'multiple_choice'"
                 >
                   <div class="col-sm-12 text-center">
                     <p>Add Options</p>
@@ -157,6 +163,11 @@
                           style="width: 60%; margin: auto"
                         >
                           <input
+                            type="hidden"
+                            formControlName="_id"
+                            class="form-control"
+                          />
+                          <input
                             type="text"
                             formControlName="answer"
                             class="form-control"
@@ -173,6 +184,7 @@
                         </div>
                       </div>
                     </div>
+                    <br />
                   </div>
                   <div class="col-xs-12 text-center">
                     <button
@@ -201,7 +213,10 @@
     </form>
   </div>
   <div class="col-xs-12 text-right" style="margin-top: 10px">
-    <a class="btn btn-warning btn-margin btn-lg" routerLink="/admin/gaps/list" style="margin-right: 20px;"
+    <a
+      class="btn btn-warning btn-margin btn-lg"
+      routerLink="/admin/gaps/list"
+      style="margin-right: 20px"
       >Cancel</a
     >
     <button

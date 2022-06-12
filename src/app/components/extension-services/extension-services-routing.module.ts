@@ -6,6 +6,7 @@ import { FarmerGroupCreateComponent } from './groups/farmer-group-create/farmer-
 import { FarmerGroupListComponent } from './groups/farmer-group-list/farmer-group-list.component';
 import { GapListComponent } from './gaps/gap-list/gap-list.component';
 import { GapCreateComponent } from './gaps/gap-create/gap-create.component';
+import { GapEditComponent } from './gaps/gap-edit/gap-edit.component';
 
 const routes: Routes = [
   {
@@ -28,6 +29,10 @@ const routes: Routes = [
       {
         path: 'gaps/create',
         component: GapCreateComponent,
+      },
+      {
+        path: 'gaps/edit/:id',
+        component: GapEditComponent,
       },
     ],
   },

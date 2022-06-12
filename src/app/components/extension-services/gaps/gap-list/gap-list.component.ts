@@ -1,13 +1,14 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {
   BasicComponent,
+  Gap,
+  GapService,
   MessageService,
-  // OrganisationService,
-  // SiteService
 } from '../../../../core';
-// import {ActivatedRoute, Router} from '@angular/router';
 import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { GapDeleteModal } from '../gap-delete-modal/gap-delete-modal.component';
 
 @Component({
   selector: 'app-gap-list',
@@ -17,22 +18,15 @@ import { DataTableDirective } from 'angular-datatables';
 export class GapListComponent
   extends BasicComponent
   implements OnInit, OnDestroy {
-  constructor(private messageService: MessageService) {
+  constructor(
+    private messageService: MessageService,
+    private gapService: GapService,
+    private modal: NgbModal
+  ) {
     super();
   }
 
-  groups = [
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {}
-  ];
+  gaps: Gap[] = [];
 
   maxSize = 5;
   directionLinks = true;
@@ -72,11 +66,24 @@ export class GapListComponent
 
   getGroups(): void {
     this.loading = true;
+    this.gapService.all().subscribe((data) => {
+      this.gaps = data.data;
+      this.loading = false;
+    });
+
     this.config = {
       itemsPerPage: 10,
       currentPage: 0 + 1,
-      totalItems: this.groups.length,
+      totalItems: this.gaps.length,
     };
+  }
+
+  openDeleteModal(gap: Gap) {
+    const modalRef = this.modal.open(GapDeleteModal);
+    modalRef.componentInstance.gap = gap;
+    modalRef.result.finally(() => {
+      this.getGroups();
+    });
   }
 
   onPageChange(event) {

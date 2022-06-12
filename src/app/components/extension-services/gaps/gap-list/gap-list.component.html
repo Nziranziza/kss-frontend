@@ -35,7 +35,7 @@
   <div class="col-xs-12">
     <div class="box">
       <div class="box-header">
-        <h6>Showing 1 t0 10 of 300 entries</h6>
+        <!-- <h6>Showing 1 t0 10 of 300 entries</h6> -->
       </div>
       <div class="box-body table-responsive">
         <app-loader *ngIf="loading"></app-loader>
@@ -56,31 +56,32 @@
             </tr>
           </thead>
           <tbody>
-            <ng-container *ngFor="let group of groups | paginate: config">
+            <ng-container *ngFor="let gap of gaps | paginate: config">
               <tr>
-                <td>yy/mm/dd - 00:00</td>
-                <td>Pruning</td>
-                <td>Cool group</td>
-                <td>5</td>
+                <td>{{ gap.createdAt }}</td>
+                <td>{{ gap.name }}</td>
+                <td>{{ gap.description }}</td>
+                <td>{{ gap.questions.length }}</td>
                 <td>Active</td>
                 <td>
                   <button
                     appRequiredSeason
                     class="btn btn-action-no-border btn-margin details-button"
-                    routerLink="/admin/gaps/create"
                   >
-                    <em class="fa fa-pencil"></em>
+                    <em class="fa fa-eye"></em>
                   </button>
                   <button
                     appRequiredSeason
+                    (click)="openDeleteModal(gap)"
                     class="btn btn-action-no-border btn-margin"
                   >
                     <em class="fa fa-trash"></em>
                   </button>
                   <button
                     class="btn btn-action-no-border btn-margin btn-sm details-button"
+                    routerLink="/admin/gaps/edit/{{ gap._id }}"
                   >
-                    <em class="fa fa-eye"></em>
+                    <em class="fa fa-pencil"></em>
                   </button>
                 </td>
               </tr>
