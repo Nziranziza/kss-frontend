@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {BasicComponent} from '../../../../../core/library';
+import {BasicComponent} from '../../../../../core';
 import {PaymentProcessingService} from '../../../../../core/services/payment-processing.service';
-import {AuthenticationService, MessageService, OrganisationService} from '../../../../../core/services';
+import {AuthenticationService, MessageService, OrganisationService} from '../../../../../core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {DatePipe} from '@angular/common';
 import {PaymentService} from '../../../../../core/services/payment.service';
-import {HelperService} from '../../../../../core/helpers';
+import {HelperService} from '../../../../../core';
 
 @Component({
   selector: 'app-confirm-payment',

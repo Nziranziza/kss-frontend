@@ -402,7 +402,7 @@ export class EditFarmerRequestComponent implements OnInit {
     const i = org.coveredSectors.findIndex(element => element.sectorId._id === sectorId);
     const sector = org.coveredSectors[i];
     sector.coveredVillages.map((village) => {
-      if (villages.findIndex(el => el._id === village._id)) {
+      if (villages.findIndex(el => el._id === village.village_id)) {
         temp.push({
           _id: village.village_id,
           name: village.name

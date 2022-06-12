@@ -7,12 +7,12 @@ import {
   ExcelServicesService, FarmerService, LocationService,
   OrganisationService,
   OrganisationTypeService
-} from '../../../core/services';
-import {HelperService} from '../../../core/helpers';
-import {Farmer} from '../../../core/models';
+} from '../../../core';
+import {HelperService} from '../../../core';
+import {Farmer} from '../../../core';
 import {FarmerDetailsComponent} from '../farmer-details/farmer-details.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {BasicComponent} from '../../../core/library';
+import {BasicComponent} from '../../../core';
 
 @Component({
   selector: 'app-farmer-administrative-list',
@@ -59,10 +59,11 @@ export class FarmerAdministrativeListComponent extends BasicComponent implements
               private authorisationService: AuthorisationService,
               private authenticationService: AuthenticationService,
               private excelService: ExcelServicesService,
+              private locationService: LocationService,
               private farmerService: FarmerService,
               private modal: NgbModal,
               private helper: HelperService, private organisationTypeService: OrganisationTypeService,
-              private locationService: LocationService) {
+  ) {
     super();
     this.parameters = {
       length: 25,

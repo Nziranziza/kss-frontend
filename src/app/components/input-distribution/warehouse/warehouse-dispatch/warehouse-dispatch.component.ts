@@ -8,13 +8,13 @@ import {
   ExcelServicesService,
   InputDistributionService,
   SeasonService
-} from '../../../../core/services';
-import {SiteService} from '../../../../core/services';
-import {LocationService} from '../../../../core/services';
+} from '../../../../core';
+import {SiteService} from '../../../../core';
+import {LocationService} from '../../../../core';
 import {Subject} from 'rxjs';
-import {WarehouseService} from '../../../../core/services';
+import {WarehouseService} from '../../../../core';
 import {DatePipe} from '@angular/common';
-import {BasicComponent} from '../../../../core/library';
+import {BasicComponent} from '../../../../core';
 import {DataTableDirective} from 'angular-datatables';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {WarehouseDispatchEditComponent} from '../warehouse-dispatch-edit/warehouse-dispatch-edit.component';

@@ -3,10 +3,10 @@ import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthenticationService, AuthorisationService, LocationService, OrganisationService, SiteService} from '../../../../core';
 import {MessageService} from '../../../../core';
-import {HelperService} from '../../../../core/helpers';
-import {InputDistributionService} from '../../../../core/services';
+import {HelperService} from '../../../../core';
+import {InputDistributionService} from '../../../../core';
 import {DatePipe, isPlatformBrowser} from '@angular/common';
-import {BasicComponent} from '../../../../core/library';
+import {BasicComponent} from '../../../../core';
 import {ActivatedRoute} from '@angular/router';
 
 

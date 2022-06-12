@@ -61,11 +61,12 @@ export class FarmerCreateComponent extends BasicComponent implements OnInit, OnD
               private farmerService: FarmerService,
               private userService: UserService,
               private organisationService: OrganisationService,
+              private locationService: LocationService,
               private siteService: SiteService,
               private confirmDialogService: ConfirmDialogService,
               private authenticationService: AuthenticationService,
               private authorisationService: AuthorisationService,
-              private locationService: LocationService, private messageService: MessageService,
+              private messageService: MessageService,
               private helperService: HelperService, private location: Location) {
     super();
   }
