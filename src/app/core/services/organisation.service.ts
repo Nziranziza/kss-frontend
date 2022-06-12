@@ -19,6 +19,10 @@ export class OrganisationService {
     return this.apiService.get('/organizations/' + id);
   }
 
+  getServices(id: string): Observable<any> {
+    return this.apiService.get('/v1.1/organizations/get/services/' + id);
+  }
+
   getCwsSummary(id: string): Observable<any> {
     return this.apiService.get('/cwsstats/summary/cws/' + id);
   }

@@ -73,6 +73,14 @@ export class AuthenticationService {
     this.cookieService.set('user', JSON.stringify(user));
   }
 
+  setServices(services: any) {
+
+    this.cookieService.set('services', JSON.stringify(services));
+  }
+  getServices() {
+    return JSON.parse(this.cookieService.get('services'));
+  }
+
   isSeasonSet() {
     return this.cookieService.check('current-season');
   }

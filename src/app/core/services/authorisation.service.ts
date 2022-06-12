@@ -25,7 +25,7 @@ export class AuthorisationService {
 
   hasServices(services: string[]): boolean {
     let hasService = false;
-    const orgServices = this.authenticationService.getCurrentUser().orgInfo.services;
+    const orgServices = this.authenticationService.getServices();
     services.forEach((service) => {
       // tslint:disable-next-line:triple-equals
       if (orgServices.findIndex((el) => el.serviceName == service)) {

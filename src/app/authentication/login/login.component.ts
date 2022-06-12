@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {AuthenticationService, BasicComponent} from '../../core';
+import {AuthenticationService, BasicComponent, OrganisationService} from '../../core';
 import {MessageService} from '../../core/services';
 import {HttpHeaders} from '@angular/common/http';
 import {AuthorisationService} from '../../core/services';
@@ -25,6 +25,7 @@ export class LoginComponent extends BasicComponent implements OnInit, OnDestroy 
     private formBuilder: FormBuilder,
     private messageService: MessageService,
     private authorisationService: AuthorisationService,
+    private organisationService: OrganisationService,
     private seasonService: SeasonService
   ) {
     super();
@@ -87,11 +88,17 @@ export class LoginComponent extends BasicComponent implements OnInit, OnDestroy 
                 this.authenticationService.setCurrentSeason(item);
               }
             });
-            this.afterLogInRedirect();
           });
         },
         err => {
           this.setError(err.errors);
+        }, () => {
+          this.organisationService.getServices(this.authenticationService.getCurrentUser().info.org_id).subscribe((servicesDt) => {
+            const services = servicesDt.data;
+            this.authenticationService.setServices(services);
+          }, () => {},  () => {
+            this.afterLogInRedirect();
+          });
         });
 
     } else {

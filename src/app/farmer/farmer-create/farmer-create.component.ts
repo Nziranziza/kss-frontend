@@ -1,15 +1,15 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {AuthenticationService, ConfirmDialogService, FarmerService, OrganisationService, SiteService} from '../../core/services';
-import {LocationService} from '../../core/services';
-import {UserService} from '../../core/services';
-import {MessageService} from '../../core/services';
-import {HelperService} from '../../core/helpers';
+import {AuthenticationService, ConfirmDialogService, FarmerService, OrganisationService, SiteService} from '../../core';
+import {LocationService} from '../../core';
+import {UserService} from '../../core';
+import {MessageService} from '../../core';
+import {HelperService} from '../../core';
 import {isArray, isUndefined} from 'util';
-import {AuthorisationService} from '../../core/services';
+import {AuthorisationService} from '../../core';
 import {Location} from '@angular/common';
-import {BasicComponent} from '../../core/library';
+import {BasicComponent} from '../../core';
 
 @Component({
   selector: 'app-farmer-create',
