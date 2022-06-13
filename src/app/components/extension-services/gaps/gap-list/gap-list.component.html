@@ -1,0 +1,110 @@
+<div class="title-bar">
+  <h3>GAP Management</h3>
+  <a class="btn btn-success pull-right" routerLink="/admin/gaps/create"
+    ><i class="fa fa-plus"></i> Add a GAP
+  </a>
+</div>
+<app-list-message [message]="message"></app-list-message>
+<app-list-errors [errorList]="errors"></app-list-errors>
+<div class="row">
+  <div class="col-sm-12 stats-section">
+    <div class="row">
+      <div class="col-sm-12 text-center stats-title">
+        Good Agriculture Practices Summary
+      </div>
+      <div class="col-sm-4">
+        <div class="text-center stats-box">
+          <h3>GAP Added</h3>
+          <h1>000</h1>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="text-center stats-box">
+          <h3>GAP Added</h3>
+          <h1>000</h1>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="text-center stats-box">
+          <h3>GAP Added</h3>
+          <h1>000</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-header">
+        <!-- <h6>Showing 1 t0 10 of 300 entries</h6> -->
+      </div>
+      <div class="box-body table-responsive">
+        <app-loader *ngIf="loading"></app-loader>
+        <table
+          datatable
+          [dtOptions]="dtOptions"
+          [dtTrigger]="dtTrigger"
+          class="row-border hover table table-striped"
+        >
+          <thead>
+            <tr>
+              <th>Date Added</th>
+              <th>GAP Name</th>
+              <th>GAP Description</th>
+              <th>Observations/Adoption</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let gap of gaps | paginate: config">
+              <tr>
+                <td>{{ gap.createdAt }}</td>
+                <td>{{ gap.name }}</td>
+                <td>{{ gap.description }}</td>
+                <td>{{ gap.questions.length }}</td>
+                <td>Active</td>
+                <td>
+                  <button
+                    appRequiredSeason
+                    class="btn btn-action-no-border btn-margin details-button"
+                  >
+                    <em class="fa fa-eye"></em>
+                  </button>
+                  <button
+                    appRequiredSeason
+                    (click)="openDeleteModal(gap)"
+                    class="btn btn-action-no-border btn-margin"
+                  >
+                    <em class="fa fa-trash"></em>
+                  </button>
+                  <button
+                    class="btn btn-action-no-border btn-margin btn-sm details-button"
+                    routerLink="/admin/gaps/edit/{{ gap._id }}"
+                  >
+                    <em class="fa fa-pencil"></em>
+                  </button>
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-footer" style="width: 100%" *ngIf="showData">
+        <pagination-controls
+          class="custom-pagination"
+          [maxSize]="maxSize"
+          [directionLinks]="directionLinks"
+          [autoHide]="autoHide"
+          [responsive]="responsive"
+          [previousLabel]="labels.previousLabel"
+          [nextLabel]="labels.nextLabel"
+          [screenReaderPaginationLabel]="labels.screenReaderPaginationLabel"
+          [screenReaderPageLabel]="labels.screenReaderPageLabel"
+          [screenReaderCurrentLabel]="labels.screenReaderCurrentLabel"
+          (pageChange)="onPageChange($event)"
+        >
+        </pagination-controls>
+      </div>
+    </div>
+  </div>
+</div>

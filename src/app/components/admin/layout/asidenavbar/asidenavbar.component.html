@@ -220,6 +220,22 @@
           </li>
         </ul>
       </li>
+      <li class="treeview" routerLinkActive="active" *appHasPermission="[1]">
+        <a href="#">
+          <i class="fa fa-users"></i> <span>Gap Management</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
+        </a>
+        <ul class="treeview-menu">
+          <li routerLinkActive="active" *appHasPermission="[1]">
+            <a routerLink="/admin/gaps/list">
+              <i class="fa fa-circle-o"></i>
+              <span>Gaps</span>
+            </a>
+          </li>
+        </ul>
+      </li>
       <li routerLinkActive="active" *appHasPermission="[[4,1],[4,11],[4,12],0,6,5]">
         <a routerLink="/admin/cherries/parchments/report">
           <i class="fa fa-bar-chart-o"></i>

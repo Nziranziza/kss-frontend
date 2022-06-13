@@ -8,21 +8,22 @@ import {
   PLATFORM_ID,
 } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { BasicComponent } from '../../../../core/library';
-import { CoffeeTypeService } from 'src/app/core';
+import { BasicComponent, Gap, GapService } from 'src/app/core';
+
+
 
 @Component({
-  selector: 'coffee-type-delete-modal',
-  templateUrl: './coffee-type-delete-modal-component.html',
+  selector: 'gap-delete-modal',
+  templateUrl: './gap-delete-modal.component.html',
 })
-export class DeleteTypeModal extends BasicComponent implements OnInit {
+export class GapDeleteModal extends BasicComponent implements OnInit {
   modal: NgbActiveModal;
-  @Input() category;
+  @Input() gap: Gap;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
     private injector: Injector,
-    private coffeeTypeService: CoffeeTypeService
+    private gapService: GapService
   ) {
     super();
     if (isPlatformBrowser(this.platformId)) {
@@ -30,8 +31,8 @@ export class DeleteTypeModal extends BasicComponent implements OnInit {
     }
   }
 
-  delete(categoryId) {
-    this.coffeeTypeService.delete(categoryId).subscribe(
+  delete(gapId: string) {
+    this.gapService.delete(gapId).subscribe(
       (data) => {
         this.setMessage(data.message);
         this.modal.dismiss();
