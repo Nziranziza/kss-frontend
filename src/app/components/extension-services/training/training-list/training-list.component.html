@@ -1,12 +1,43 @@
 <h3>
-  Trainings 
-  <a class="btn btn-success pull-right" routerLink="/admin/training/create"
-  style="margin-left: 10px" ><i class="fa fa-calendar"></i> Schedule a Training
-  </a>
-  <a class="btn btn-success pull-right" routerLink="/admin/training/create"
-    ><i class="fa fa-plus"></i> Add a Training
-  </a>
+  <div class="row">
+    <div class="col-sm-8"> Training Management </div>
+    <div class="col-sm-2">
+      <a class="btn btn-success pull-right" routerLink="/admin/training/create"
+        ><i class="fa fa-plus"></i> Add a Training
+      </a>
+    </div>
+    <div class="col-sm-2">
+      <a
+        class="btn btn-success pull-left"
+        routerLink="/admin/training/create"
+        ><i class="fa fa-calendar"></i> Scheduled Training
+      </a>
+    </div>
+  </div>
 </h3>
+<div class="col-sm-12 stats-section">
+  <div class="row">
+    <div class="col-sm-12 text-center stats-title">Training Summary</div>
+    <div class="col-sm-4">
+      <div class="text-center stats-box">
+        <h3>Trainings Added</h3>
+        <h1>000</h1>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="text-center stats-box middle-box">
+        <h3>Scheduled Trainings</h3>
+        <h1>000</h1>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="text-center stats-box third-box">
+        <h3>Trainings Given</h3>
+        <h1>000</h1>
+      </div>
+    </div>
+  </div>
+</div>
 <app-list-message [message]="message"></app-list-message>
 <app-list-errors [errorList]="errors"></app-list-errors>
 <div class="row">

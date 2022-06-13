@@ -13,36 +13,6 @@
   border: 1px solid #00a843;
 }
 
-.stats-section {
-  background: transparent linear-gradient(180deg, #e8d7c1 0%, #ffffff 100%) 0%
-    0% no-repeat padding-box;
-  opacity: 1;
-}
-
-.stats-title {
-  text-align: center;
-  padding: 1%;
-  font: normal normal bold 20px/25px;
-  font-size: 25px;
-  letter-spacing: 0px;
-  color: #000000;
-  opacity: 1;
-}
-
-.stats-box {
-  margin: 0 1% 0 1%;
-  padding: 1%;
-  width: 94%;
-  background: #ffffff 0% 0% no-repeat padding-box;
-  border-radius: 3px;
-  opacity: 1;
-}
-
-.stats-box > h1,
-h3 {
-  font-weight: bold;
-}
-
 .box{
     margin-top: 50px;
 }
