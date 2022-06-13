@@ -1,43 +1,15 @@
 <h3>
   <div class="row">
-    <div class="col-sm-8"> Training Management </div>
-    <div class="col-sm-2">
-      <a class="btn btn-success pull-right" routerLink="/admin/training/create"
-        ><i class="fa fa-plus"></i> Add a Training
-      </a>
-    </div>
+    <div class="col-sm-10"> Scheduled Training </div>
     <div class="col-sm-2">
       <a
         class="btn btn-success pull-left"
-        routerLink="/admin/training/schedule/list"
-        ><i class="fa fa-calendar"></i> Scheduled Training
+        routerLink="/admin/training/schedule/create"
+        ><i class="fa fa-calendar"></i> Schedule a Training
       </a>
     </div>
   </div>
 </h3>
-<div class="col-sm-12 stats-section">
-  <div class="row">
-    <div class="col-sm-12 text-center stats-title">Training Summary</div>
-    <div class="col-sm-4">
-      <div class="text-center stats-box">
-        <h3>Trainings Added</h3>
-        <h1>000</h1>
-      </div>
-    </div>
-    <div class="col-sm-4">
-      <div class="text-center stats-box middle-box">
-        <h3>Scheduled Trainings</h3>
-        <h1>000</h1>
-      </div>
-    </div>
-    <div class="col-sm-4">
-      <div class="text-center stats-box third-box">
-        <h3>Trainings Given</h3>
-        <h1>000</h1>
-      </div>
-    </div>
-  </div>
-</div>
 <app-list-message [message]="message"></app-list-message>
 <app-list-errors [errorList]="errors"></app-list-errors>
 <div class="row">
@@ -54,10 +26,11 @@
           <thead>
             <tr>
               <th>Date Added</th>
-              <th>Title</th>
-              <th>Description</th>
-              <th>Associated GAP</th>
-              <th>Attachments</th>
+              <th>Training Module Title</th>
+              <th>Date/Time of the training</th>
+              <th>Location of the training</th>
+              <th>Trainer</th>
+              <th>Trainees</th>
               <th>Status</th>
               <th>Actions</th>
             </tr>
@@ -65,6 +38,7 @@
           <tbody>
             <ng-container *ngFor="let training of trainings">
               <tr>
+                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>

@@ -1,0 +1,302 @@
+<h3>
+  Training Management >
+  <span style="font-weight: bold"> Schedule a Training</span>
+</h3>
+<app-list-errors [errorList]="errors"></app-list-errors>
+<form [formGroup]="createTraining" (ngSubmit)="onSubmit()">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-body">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label class="control-label label-required"
+                >Select Training Module</label
+              >
+              <input
+                type="text"
+                formControlName="trainingName"
+                class="form-control"
+              />
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label class="control-label label-required">Select Trainer</label>
+              <input
+                type="text"
+                formControlName="trainingName"
+                class="form-control"
+              />
+            </div>
+          </div>
+          <div class="col-sm-12" formGroupName="location">
+            <div class="row">
+              <div class="col-xs-2" id="location-province">
+                <div class="form-group">
+                  <label class="control-label">Province</label>
+                  <select class="form-control" formControlName="prov_id">
+                    <option value=""></option>
+                    <option
+                      *ngFor="let province of locationProvinces"
+                      value="{{ province._id }}"
+                    >
+                      {{ province.namee | titlecase }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xs-2" id="location-district">
+                <div class="form-group">
+                  <label class="control-label">District</label>
+                  <select class="form-control" formControlName="dist_id">
+                    <option value=""></option>
+                    <option
+                      *ngFor="let district of locationDistricts"
+                      value="{{ district._id }}"
+                    >
+                      {{ district.name | titlecase }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xs-2" id="location-sector">
+                <div class="form-group">
+                  <label class="control-label">Sector</label>
+                  <select class="form-control" formControlName="sect_id">
+                    <option value=""></option>
+                    <option
+                      *ngFor="let sector of locationSectors"
+                      value="{{ sector._id }}"
+                    >
+                      {{ sector.name | titlecase }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xs-2" id="location-cell">
+                <div class="form-group">
+                  <label class="control-label">Cell</label>
+                  <select class="form-control" formControlName="cell_id">
+                    <option value=""></option>
+                    <option
+                      *ngFor="let cell of locationCells"
+                      value="{{ cell._id }}"
+                    >
+                      {{ cell.name | titlecase }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xs-2" id="location-village">
+                <div class="form-group">
+                  <label class="control-label">Village</label>
+                  <select class="form-control" formControlName="village_id">
+                    <option value=""></option>
+                    <option
+                      *ngFor="let village of locationVillages"
+                      value="{{ village._id }}"
+                    >
+                      {{ village.name | titlecase }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xs-2" id="venue">
+                <div class="form-group">
+                  <label class="control-label">Venue</label>
+                  <input
+                    type="text"
+                    formControlName="venue"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-7">
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label class="control-label label-required"
+                    >Starting Date and Time of the training</label
+                  >
+                  <input
+                    type="text"
+                    formControlName="trainingName"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label class="control-label label-required"
+                    >End Date and Time of the training</label
+                  >
+                  <input
+                    type="text"
+                    formControlName="trainingName"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-5">
+            <div class="form-group">
+              <label class="control-label label-required">Description</label>
+              <input
+                type="text"
+                formControlName="trainingName"
+                class="form-control"
+              />
+            </div>
+          </div>
+
+          <div class="col-sm-6">
+            <fieldset style="margin: 0px -3px 0px -3px !important">
+              <legend style="width: 13em">
+                <label class="control-label">&nbsp; TRAINEES SELECTION </label>
+              </legend>
+              <div class="row">
+                <div class="col-xs-3" id="location-sector">
+                  <div class="form-group">
+                    <label class="control-label">Sector</label>
+                    <select class="form-control" formControlName="sect_id">
+                      <option value=""></option>
+                      <option
+                        *ngFor="let sector of locationSectors"
+                        value="{{ sector._id }}"
+                      >
+                        {{ sector.name | titlecase }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-xs-3" id="location-cell">
+                  <div class="form-group">
+                    <label class="control-label">Cell</label>
+                    <select class="form-control" formControlName="cell_id">
+                      <option value=""></option>
+                      <option
+                        *ngFor="let cell of locationCells"
+                        value="{{ cell._id }}"
+                      >
+                        {{ cell.name | titlecase }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-xs-3" id="location-village">
+                  <div class="form-group">
+                    <label class="control-label">Village</label>
+                    <select class="form-control" formControlName="village_id">
+                      <option value=""></option>
+                      <option
+                        *ngFor="let village of locationVillages"
+                        value="{{ village._id }}"
+                      >
+                        {{ village.name | titlecase }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-xs-3" id="location-village">
+                  <div class="form-group">
+                    <label class="control-label">Farmer Group</label>
+                    <select class="form-control" formControlName="village_id">
+                      <option value=""></option>
+                      <option
+                        *ngFor="let village of locationVillages"
+                        value="{{ village._id }}"
+                      >
+                        {{ village.name | titlecase }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <table class="row-border hover table table-striped">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Farmer Names</th>
+                    <th>Contacts</th>
+                    <th>Status</th>
+                    <th>
+                      Selection
+                      <span style="float: right">
+                        <input
+                          type="checkbox"
+                          (click)="selectAllResults($event.target.checked)"
+                          [(ngModel)]="allResultsSelected"
+                          [ngModelOptions]="{ standalone: true }"
+                        />
+                      </span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+              <button
+                type="button"
+                class="btn btn-warning"
+                style="width: 100%"
+                (click)="addMembersToGroup()"
+              >
+                ADD SELECTED TO THE GROUP
+              </button>
+            </fieldset>
+          </div>
+
+          <div class="col-sm-6">
+            <fieldset style="margin: 0px -3px 0px -3px !important">
+              <legend style="width: 13em">
+                <label class="control-label">&nbsp; SELECTED TRAINEES </label>
+              </legend>
+              <div class="text-center stats-box">
+                <h6>TOTAL TO BE TRAINED</h6>
+                <h4>000</h4>
+              </div>
+              <table class="row-border hover table table-striped">
+                <thead>
+                  <tr>
+                    <th>Reg. Number</th>
+                    <th>Farmer Names</th>
+                    <th>Contact</th>
+                    <th>Status</th>
+                    <th>
+                      Selection
+                      <span style="float: right">
+                        <input
+                          type="checkbox"
+                          (click)="selectAllResults($event.target.checked)"
+                          [(ngModel)]="allResultsSelected"
+                          [ngModelOptions]="{ standalone: true }"
+                        />
+                      </span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+              <button
+                type="button"
+                class="btn btn-danger pull-right"
+                style="width: 35%"
+                (click)="addMembersToGroup()"
+              >
+                <i class="fa fa-trash" style="color: red"></i>
+                REMOVE SELECTED
+              </button>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
