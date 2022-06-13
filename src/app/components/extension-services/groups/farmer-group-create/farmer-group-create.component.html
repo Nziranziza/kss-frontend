@@ -2,11 +2,12 @@
   Create a farmers group
 </h3>
 <app-list-errors [errorList]="errors"></app-list-errors>
-<form [formGroup]="createForm" (ngSubmit)="onSubmit()">
+
   <div class="row">
     <div class="col-xs-12">
       <div class="box">
         <div class="box-body">
+          <form [formGroup]="createForm">
           <div class="col-xs-6">
             <div class="form-group">
               <label class="control-label label-required">Group name</label>
@@ -92,6 +93,7 @@
               <input type="text" formControlName="description" class="form-control">
             </div>
           </div>
+          </form>
           <div class="row">
             <div class="col-xs-6">
               <fieldset style=" margin-right: 0 !important;">
@@ -212,13 +214,13 @@
                     </td>
                     <td>{{ item.userInfo.phone_number }}</td>
                     <td>
-                       <input type="checkbox" (click)="selectResultsItem($event.target.checked, i)"
+                       <input type="checkbox" (click)="selectResultsItem($event.target.checked, i)" *ngIf="notInGroupMembers(i)"
                               [(ngModel)]="searchResults[i].selected" [ngModelOptions]="{standalone: true}">
                     </td>
                   </tr>
                   </tbody>
                 </table>
-                <button type="button" class="btn btn-warning" style="width: 100%" (click)="" )>
+                <button type="button" class="btn btn-warning" style="width: 100%" (click)="addMembersToGroup()">
                   ADD SELECTED TO THE GROUP
                 </button>
               </fieldset>
@@ -231,7 +233,7 @@
                 <div class="col-sm-12 text-center">
                   <label class="control-label">TOTAL GROUP FARMERS</label>
                   <br />
-                  <label class="control-label">000</label>
+                  <label class="control-label">{{ groupMembers?.length }}</label>
                 </div>
                 <table class="row-border hover table table-striped">
                   <thead>
@@ -240,20 +242,35 @@
                     <th>Names</th>
                     <th>Location</th>
                     <th>Phone number</th>
-                    <th>Selection</th>
+                    <th>Selection
+                      <span style="float: right;">
+                         <input type="checkbox" (click)="selectAllMembers($event.target.checked)"
+                                [(ngModel)]="allMembersSelected" [ngModelOptions]="{standalone: true}">
+                      </span>
+                    </th>
                   </tr>
                   </thead>
                   <tbody>
-                  <tr *ngFor="let item of groupMembers">
+                  <tr *ngFor="let item of groupMembers; let t = index">
+                    <td> {{ item.userInfo.regNumber }}</td>
+                    <td>
+                      <ng-container *ngIf="item.type === 2; else gnames">
+                        {{ item.userInfo.groupName }}
+                      </ng-container>
+                      <ng-template #gnames>
+                        {{ item.userInfo.surname + ' ' + item.userInfo.foreName }}
+                      </ng-template>
+                    </td>
                     <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>{{ item.userInfo.phone_number }}</td>
+                    <td>
+                      <input type="checkbox" (click)="selectMember($event.target.checked, t)"
+                             [(ngModel)]="groupMembers[t].selected" [ngModelOptions]="{standalone: true}">
+                    </td>
                   </tr>
                   </tbody>
                 </table>
-                <button type="button" class="btn btn-danger" style="float: right;">
+                <button type="button" class="btn btn-danger" style="float: right;" (click)="removeMembersToGroup()">
                   <i class="fa fa-trash"></i>&nbsp;Remove selected
                 </button>
               </fieldset>
@@ -266,7 +283,7 @@
   <div class="row">
     <div class="col-xs-12">
       <a class="btn btn-warning btn-margin pull-right" routerLink="/admin/farmers/group/list">Cancel</a>
-      <button class="btn btn-success pull-right">Save</button>
+      <button type="button" class="btn btn-success pull-right" (click)="onSubmit()">Save</button>
     </div>
   </div>
-</form>
+

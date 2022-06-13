@@ -9,6 +9,7 @@ import {
   OrganisationService
 } from '../../../../core';
 import {isEmptyObject} from 'jquery';
+import {GroupService} from '../../../../core/services/extension-services';
 
 @Component({
   selector: 'app-farmer-group-create',
@@ -20,6 +21,7 @@ export class FarmerGroupCreateComponent extends BasicComponent implements OnInit
   constructor(private formBuilder: FormBuilder,
               private router: Router, private organisationService: OrganisationService,
               private messageService: MessageService,
+              private groupService: GroupService,
               private authenticationService: AuthenticationService,
               protected locationService: LocationService,
               private helper: HelperService) {
@@ -34,11 +36,10 @@ export class FarmerGroupCreateComponent extends BasicComponent implements OnInit
   loading = false;
   org: any;
   searchResults: any;
-  selectedResults: any[];
   allResultsSelected: boolean;
+  allMembersSelected: boolean;
   searchByLocation = true;
-  groupMembers: any[];
-  selectedGroupMembers: any[];
+  groupMembers = [];
   searchFields = [
     {value: 'reg_number', name: 'registration number'},
     {value: 'nid', name: 'NID'},
@@ -89,6 +90,23 @@ export class FarmerGroupCreateComponent extends BasicComponent implements OnInit
 
   onSubmit() {
     if (this.createForm.valid) {
+      const value = JSON.parse(JSON.stringify(this.createForm.value));
+      value.applicationId = 1;
+      const members = [];
+      this.groupMembers.map((member) => {
+        members.push(member.userInfo._id);
+      });
+      value.members = members;
+      this.groupService.create(value).subscribe(
+        (data) => {
+          console.log(data);
+          this.loading = false;
+        },
+        (err) => {
+          this.loading = false;
+          this.errors = err.errors;
+        }
+      );
     } else {
       this.errors = this.helper.getFormValidationErrors(this.createForm);
     }
@@ -112,6 +130,53 @@ export class FarmerGroupCreateComponent extends BasicComponent implements OnInit
     if (!isChecked) {
       this.allResultsSelected = false;
     }
+  }
+
+  selectAllMembers(isChecked: boolean) {
+    if (isChecked) {
+      this.groupMembers.forEach((item) => {
+        item.selected = true;
+      });
+    } else {
+      this.groupMembers.forEach((item) => {
+        item.selected = false;
+      });
+    }
+    this.allMembersSelected = isChecked;
+  }
+
+  selectMember(isChecked: boolean, i: number) {
+    this.groupMembers[i].selected = true;
+    if (!isChecked) {
+      this.allMembersSelected = isChecked;
+    }
+  }
+
+  notInGroupMembers(i: number) {
+    const index = this.groupMembers.findIndex(el => el.userInfo._id
+      === this.searchResults[i].userInfo._id);
+    if (index !== -1) {
+      this.searchResults[i].selected = false;
+    }
+    return index === -1;
+  }
+
+  addMembersToGroup() {
+    this.searchResults.forEach((item) => {
+      if (item.selected) {
+        item.selected = false;
+        this.groupMembers.push(JSON.parse(JSON.stringify(item)));
+      }
+    });
+  }
+
+  removeMembersToGroup() {
+    this.groupMembers.forEach((item) => {
+      console.log(this.groupMembers);
+      if (item.selected) {
+        this.groupMembers = this.groupMembers.filter( el => el.userInfo._id != item.userInfo._id);
+      }
+    });
   }
 
   onFilter() {
@@ -227,5 +292,4 @@ export class FarmerGroupCreateComponent extends BasicComponent implements OnInit
       }
     });
   }
-
 }
