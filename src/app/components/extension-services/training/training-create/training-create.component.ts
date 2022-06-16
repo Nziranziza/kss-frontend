@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { TrainingService } from "../../../../core";
+import { TrainingService, GapService } from "../../../../core";
 import { MessageService } from "../../../../core";
 import { HelperService } from "../../../../core";
 import { BasicComponent } from "../../../../core";
@@ -20,7 +20,10 @@ export class TrainingCreateComponent
   constructor(
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
-    private trainingService: TrainingService
+    private trainingService: TrainingService,
+    private gapService: GapService,
+    private helperService: HelperService,
+    private messageService: MessageService
   ) {
     super();
   }
@@ -28,17 +31,27 @@ export class TrainingCreateComponent
   ngOnDestroy(): void {}
 
   ngOnInit() {
+    this.getGaps();
     this.createTraining = this.formBuilder.group({
-      trainingName: [""],
-      description: [""],
-      associatedGap: [""],
-      trainingFiles: [""],
+      trainingName: ["", Validators.required],
+      description: ["", Validators.required],
+      adoptionGap: ["", Validators.required],
     });
   }
 
+  get trainingName() {
+    return this.createTraining.get("trainingName");
+  }
+  get description() {
+    return this.createTraining.get("description");
+  }
+  get adoptionGap() {
+    return this.createTraining.get("adoptionGap");
+  }
   files: any[] = [];
+  materials: any[] = [];
   results: any[] = [];
-  fileData: any = [];
+  gaps: any[] = [];
 
   onFileSelected(event) {
     for (let file of event.target.files) {
@@ -49,51 +62,68 @@ export class TrainingCreateComponent
         file: file,
         size: Math.round(file.size / 1024) + " " + "KB",
       });
-      console.log(file);
-      this.fileData = event.target.files;
-      console.log(this.fileData[0]);
     }
   }
-  handleUpload(files: FileList) {
-    let filesToUpload = files.item(0);
-    this.trainingService.uploadAllMaterial({ files: filesToUpload }).subscribe(
-      (data) => {
-        console.log(data);
-        this.loading = false;
-      },
-      (err) => {
-        this.loading = false;
-        this.errors = err.errors;
-      }
-    );
+
+  getGaps(): void {
+    this.loading = true;
+    this.gapService.all().subscribe((data) => {
+      this.gaps = data.data;
+      this.loading = false;
+    });
   }
-  // handlefileSyllabus(files: FileList) {
-  //   this.fileSyllabus = files.item(0);
-  //   this.tradeDetailsService.fileUpload(this.fileSyllabus).subscribe((result: any) => {
-  //     this.syllabusFileName = result.renameFile
-  //     console.log(result.renameFile);
-  //   });
-  // }
 
-  onFileUpload() {
-    let files: FileList = this.fileData;
-
-    for (let i = 0; i < files.length; i++) {
-      const formData = new FormData();
-      console.log(files.item(i));
-      formData.append("file", files.item(i));
-      this.trainingService.uploadMaterial(formData).subscribe(
-        (data) => {
-          console.log(data);
-          this.results.push(data);
-          this.loading = false;
+  private readBase64(file): Promise<any> {
+    const reader = new FileReader();
+    return new Promise((resolve, reject) => {
+      reader.addEventListener(
+        "load",
+        () => {
+          resolve(reader.result);
         },
-        (err) => {
-          this.loading = false;
-          console.log(err);
-          this.errors = err.errors;
-        }
+        false
       );
+      reader.addEventListener(
+        "error",
+        (event) => {
+          reject(event);
+        },
+        false
+      );
+
+      reader.readAsDataURL(file);
+    });
+  }
+  async onFileUpload(content) {
+    if (this.createTraining.valid) {
+      for (let i = 0; i < this.files.length; i++) {
+        let data = await this.readBase64(this.files[i].file).then((data) => {
+          return data;
+        });
+        this.materials.push(data);
+      }
+      this.modalService.open(content, { ariaLabelledBy: "modal-basic-title" });
+      this.trainingService
+        .uploadMaterial({ materials: this.materials })
+        .subscribe(
+          (data) => {
+            this.results = data.data;
+            this.loading = false;
+          },
+          (err) => {
+            this.loading = false;
+            this.errors = err.errors;
+            console.log(err);
+          }
+        );
+    } else {
+      if (
+        this.helperService.getFormValidationErrors(this.createTraining).length > 0
+      ) {
+        this.setError(
+          this.helperService.getFormValidationErrors(this.createTraining)
+        );
+      }
     }
   }
 
@@ -109,8 +139,8 @@ export class TrainingCreateComponent
     value.materials = materials;
     this.trainingService.create(value).subscribe(
       (data) => {
-        console.log(data);
         this.loading = false;
+        this.setMessage("Training successfully created.");
       },
       (err) => {
         this.loading = false;

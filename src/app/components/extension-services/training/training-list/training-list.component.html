@@ -1,6 +1,6 @@
 <h3>
   <div class="row">
-    <div class="col-sm-8"> Training Management </div>
+    <div class="col-sm-8">Training Management</div>
     <div class="col-sm-2">
       <a class="btn btn-success pull-right" routerLink="/admin/training/create"
         ><i class="fa fa-plus"></i> Add a Training
@@ -63,26 +63,53 @@
             </tr>
           </thead>
           <tbody>
-            <ng-container *ngFor="let training of trainings">
-              <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td class="actions no-wrap text-right">
-                  <a
-                    class="btn btn-success btn-margin btn-sm"
-                    [routerLink]="['edit/', group._id]"
-                    style="margin-left: 10px"
-                  >
-                    Edit
-                  </a>
-                </td>
-              </tr>
-            </ng-container>
+            <tr *ngFor="let training of trainings | paginate: config">
+              <td>{{ training.createdAt | date: "short" }}</td>
+              <td>{{ training.trainingName }}</td>
+              <td>{{ training.description }}</td>
+              <td>{{ training.adoptionGap }}</td>
+              <td>{{ training.materials.length }} files</td>
+              <td>Active</td>
+              <td>
+                <button
+                  appRequiredSeason
+                  class="btn btn-action-no-border btn-margin details-button"
+                >
+                  <em class="fa fa-eye"></em>
+                </button>
+                <button
+                  appRequiredSeason
+                  (click)="openDeleteModal(gap)"
+                  class="btn btn-action-no-border btn-margin"
+                >
+                  <em class="fa fa-trash"></em>
+                </button>
+                <button
+                  class="btn btn-action-no-border btn-margin btn-sm details-button"
+                  routerLink="/admin/gaps/edit/{{ training._id }}"
+                >
+                  <em class="fa fa-pencil"></em>
+                </button>
+              </td>
+            </tr>
           </tbody>
         </table>
+      </div>
+      <div class="table-footer" style="width: 100%" *ngIf="showData">
+        <pagination-controls
+          class="custom-pagination"
+          [maxSize]="maxSize"
+          [directionLinks]="directionLinks"
+          [autoHide]="autoHide"
+          [responsive]="responsive"
+          [previousLabel]="labels.previousLabel"
+          [nextLabel]="labels.nextLabel"
+          [screenReaderPaginationLabel]="labels.screenReaderPaginationLabel"
+          [screenReaderPageLabel]="labels.screenReaderPageLabel"
+          [screenReaderCurrentLabel]="labels.screenReaderCurrentLabel"
+          (pageChange)="onPageChange($event)"
+        >
+        </pagination-controls>
       </div>
     </div>
   </div>

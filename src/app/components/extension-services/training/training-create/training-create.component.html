@@ -1,13 +1,19 @@
 <ng-template #ccontent let-modal>
   <div class="modal-body text-center">
-    <i
-      class="fa fa-check"
-      style="color: #00a513; font-size:4.5em"
-    ></i>
+    <i class="fa fa-check" style="color: #00a513; font-size: 4.5em"></i>
     <br />
     Thank you Training <br />
     <span style="font-weight: bold"> “ Pruning “ </span> <br />
-    has been added
+    has been added <br />
+
+    <button
+      type="button"
+      class="btn btn-success pull-center"
+      routerLink="/admin/training/list"
+      (click)="modal.dismiss()"
+    >
+      OK
+    </button>
   </div>
 </ng-template>
 
@@ -25,21 +31,15 @@
           <div class="col-xs-6">
             <div style="margin-bottom: 10px">
               <label class="control-label label-required">Training Name</label>
-              <input
-                type="text"
-                class="form-control"
-                disabled
-                value="name ...."
-              />
+              <div class="confirm-text-box confirm-text">
+                {{ createTraining.value.trainingName }}
+              </div>
             </div>
             <div>
               <label class="control-label label-required">Associated GAP</label>
-              <input
-                type="text"
-                class="form-control"
-                disabled
-                value="name ...."
-              />
+              <div class="confirm-text-box confirm-text">
+                {{ createTraining.value.adoptionGap }}
+              </div>
             </div>
           </div>
           <div class="col-xs-6">
@@ -47,39 +47,33 @@
               <label class="control-label label-required"
                 >Training Description</label
               >
-              <input
-                type="text"
-                class="form-control"
-                disabled
-                value="name ...."
-                style="height: 100px"
-              />
+              <div class="confirm-text-box confirm-text">
+                {{ createTraining.value.description }}
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="box">
+    <div class="box" class="background: #EDEAE8 0% 0% no-repeat padding-box">
       <div class="box-body">
         <h3>Files</h3>
-
         <table>
-          <tr>
-            <th>#</th>
-            <th>Filename</th>
-            <th>File Size</th>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>file.txt</td>
-            <td>200KB</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>file.pdf Chang</td>
-            <td>10KB</td>
-          </tr>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Filename</th>
+              <th>File Size</th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let file of files; let i = index">
+            <tr>
+              <td>{{ i + 1 }}</td>
+              <td>{{ file.name }}</td>
+              <td>{{ file.size }}</td>
+            </tr>
+          </tbody>
         </table>
       </div>
     </div>
@@ -100,7 +94,7 @@
         <button
           type="button"
           class="btn btn-outline-dark pull-right"
-          (click)="modal.dismiss(); open(ccontent)"
+          (click)="modal.dismiss(); onSubmit(); open(ccontent)"
         >
           Confirm
         </button>
@@ -124,7 +118,23 @@
                 type="text"
                 formControlName="trainingName"
                 class="form-control"
+                [ngClass]="{
+                  'has-error':
+                    trainingName.invalid &&
+                    (trainingName.dirty || trainingName.touched)
+                }"
               />
+              <div
+                *ngIf="
+                  trainingName.invalid &&
+                  (trainingName.dirty || trainingName.touched)
+                "
+                class="alert"
+              >
+                <div *ngIf="trainingName.errors['required']" style="color: red">
+                  *Training Name is required.
+                </div>
+              </div>
             </div>
           </div>
           <div class="col-sm-6">
@@ -136,18 +146,55 @@
                 type="text"
                 formControlName="description"
                 class="form-control"
+                [ngClass]="{
+                  'has-error':
+                    description.invalid &&
+                    (description.dirty || description.touched)
+                }"
               />
+              <div
+                *ngIf="
+                  description.invalid &&
+                  (description.dirty || description.touched)
+                "
+                class="alert"
+              >
+                <div *ngIf="description.errors['required']" style="color: red">
+                  *Description is required.
+                </div>
+              </div>
             </div>
           </div>
 
           <div class="col-sm-6">
             <div class="form-group">
               <label class="control-label label-required">Associated GAP</label>
-              <input
-                type="text"
-                formControlName="associatedGap"
+              <select
                 class="form-control"
-              />
+                formControlName="adoptionGap"
+                [ngClass]="{
+                  'has-error':
+                    adoptionGap.invalid &&
+                    (adoptionGap.dirty || adoptionGap.touched)
+                }"
+              >
+                <option value="" disabled selected>select gap</option>
+                <option *ngFor="let gap of gaps" value="{{ gap._id }}">
+                  {{ gap.name | titlecase }}
+                </option>
+              </select>
+
+              <div
+                *ngIf="
+                  adoptionGap.invalid &&
+                  (adoptionGap.dirty || adoptionGap.touched)
+                "
+                class="alert"
+              >
+                <div *ngIf="adoptionGap.errors['required']" style="color: red">
+                  *Associated Gap is required.
+                </div>
+              </div>
             </div>
           </div>
           <div class="col-sm-6">
@@ -166,14 +213,11 @@
                 id="file-input"
                 type="file"
                 multiple
-                formControlName="trainingFiles"
                 class="form-control"
                 style="display: none"
                 (change)="onFileSelected($event)"
                 accept="application/pdf"
               />
-              <input type="file" accept=".pdf" class="form-control" id="fileSyllabus" name="fileSyllabus" tmFocus ngModel
-                #fileSyllabus="ngModel" required (change)="handleUpload($event.target.files)">
               <div class="training-file-list">
                 Attached file(s) to upload <br /><br />
                 <div
@@ -205,9 +249,7 @@
       </div>
     </div>
   </div>
-  <div class="row">
-    <div class="col-sm-3"></div>
-    <div class="col-sm-3">
+  <div class="text-center">
       <button
         type="button"
         class="btn btn-success"
@@ -216,17 +258,12 @@
       >
         Cancel
       </button>
-    </div>
-    <div class="col-sm-3">
       <button
         type="button"
         class="btn btn-success"
-        (click)="open(content); onFileUpload()"
+        (click)="onFileUpload(content)"
         style="width: 250px; height: 50px"
       >
-        Add Training
-      </button>
-    </div>
-    <div class="col-sm-3"></div>
+        Add Training </button>
   </div>
 </form>

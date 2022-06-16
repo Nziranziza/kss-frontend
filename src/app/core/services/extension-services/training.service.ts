@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {ApiService} from '../api.service';
+import { Training } from '../../models';
 
 @Injectable({
   providedIn: 'root'
@@ -13,9 +14,9 @@ export class TrainingService {
     return this.apiService.post('/v1.1/trainings', body);
   }
   uploadMaterial(body: any){
-    return this.apiService.post('/thirdparty/organizations/map/excel', body);
+    return this.apiService.post('/v1.1/trainings/materials', body);
   }
-  uploadAllMaterial(body: any){
-    return this.apiService.post('/thirdparty/organizations/map/excel', body);
+  all(){
+    return this.apiService.get('/v1.1/trainings');
   }
 }
