@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {environment} from '../../../environments/environment';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 
@@ -36,6 +36,29 @@ export class ApiService {
     return this.http.post(
       `${environment.api_url}${path}`, body
     ).pipe(catchError(this.formatErrors));
+  }
+
+  postFormData(path: string, files: File): Observable<any> {
+    const HttpUploadOptions = {
+      headers: new HttpHeaders({ "Content-Type": "multipart/form-data"})
+    }
+    return this.http.post(
+      `${environment.api_url}${path}`, files, HttpUploadOptions
+    ).pipe(catchError(this.formatErrors));
+  }
+
+  fileUpload(path: string, syllabusFile: File, ): Observable<string> {
+    const body: FormData = new FormData();
+    body.append('File', syllabusFile, syllabusFile.name);
+    const httpOptions = {
+      headers: new HttpHeaders({
+       
+      })
+    };
+    return this.http.post<string>(`${environment.api_url}${path}`, body, httpOptions).pipe(
+
+      catchError(this.formatErrors)
+    );
   }
 
   delete(path): Observable<any> {

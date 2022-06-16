@@ -172,6 +172,8 @@
                 (change)="onFileSelected($event)"
                 accept="application/pdf"
               />
+              <input type="file" accept=".pdf" class="form-control" id="fileSyllabus" name="fileSyllabus" tmFocus ngModel
+                #fileSyllabus="ngModel" required (change)="handleUpload($event.target.files)">
               <div class="training-file-list">
                 Attached file(s) to upload <br /><br />
                 <div
@@ -219,7 +221,7 @@
       <button
         type="button"
         class="btn btn-success"
-        (click)="open(content)"
+        (click)="open(content); onFileUpload()"
         style="width: 250px; height: 50px"
       >
         Add Training
