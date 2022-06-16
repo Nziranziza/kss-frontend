@@ -40,6 +40,7 @@ export class FarmerGroupCreateComponent extends BasicComponent implements OnInit
   allMembersSelected: boolean;
   searchByLocation = true;
   groupMembers = [];
+  time: any;
   searchFields = [
     {value: 'reg_number', name: 'registration number'},
     {value: 'nid', name: 'NID'},
@@ -48,6 +49,15 @@ export class FarmerGroupCreateComponent extends BasicComponent implements OnInit
     {value: 'groupname', name: 'group name'},
     {value: 'phone_number', name: 'phone number'},
   ];
+  days = [
+    {value: 1, name: 'monday'},
+    {value: 2, name: 'tuesday'},
+    {value: 3, name: 'wednesday'},
+    {value: 4, name: 'thursday'},
+    {value: 5, name: 'friday'},
+    {value: 6, name: 'saturday'},
+    {value: 7, name: 'sunday'}
+  ];
 
   ngOnInit() {
     this.createForm = this.formBuilder.group({
@@ -55,7 +65,10 @@ export class FarmerGroupCreateComponent extends BasicComponent implements OnInit
       leaderNames: [''],
       leaderPhoneNumber: [''],
       description: [''],
-      meetingSchedule: [''],
+      meetingSchedule: this.formBuilder.group({
+        meetingDay: [''],
+        meetingTime: [''],
+      }),
       location: this.formBuilder.group({
         prov_id: [''],
         dist_id: [''],
@@ -91,7 +104,8 @@ export class FarmerGroupCreateComponent extends BasicComponent implements OnInit
   onSubmit() {
     if (this.createForm.valid) {
       const value = JSON.parse(JSON.stringify(this.createForm.value));
-      value.applicationId = 1;
+      value.org_id = this.authenticationService.getCurrentUser().info.org_id;
+      value.meetingSchedule.meetingDay = +  value.meetingSchedule.meetingDay;
       const members = [];
       this.groupMembers.map((member) => {
         members.push(member.userInfo._id);
@@ -99,7 +113,6 @@ export class FarmerGroupCreateComponent extends BasicComponent implements OnInit
       value.members = members;
       this.groupService.create(value).subscribe(
         (data) => {
-          console.log(data);
           this.loading = false;
         },
         (err) => {
@@ -172,7 +185,6 @@ export class FarmerGroupCreateComponent extends BasicComponent implements OnInit
 
   removeMembersToGroup() {
     this.groupMembers.forEach((item) => {
-      console.log(this.groupMembers);
       if (item.selected) {
         this.groupMembers = this.groupMembers.filter( el => el.userInfo._id != item.userInfo._id);
       }

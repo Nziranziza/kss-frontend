@@ -3,7 +3,7 @@ import {
   AuthenticationService,
   AuthorisationService,
   BasicComponent,
-  ConfirmDialogService, MessageService,
+  ConfirmDialogService, GroupService, MessageService,
   OrganisationService,
   SiteService
 } from '../../../../core';
@@ -18,9 +18,9 @@ import {DataTableDirective} from 'angular-datatables';
 })
 export class FarmerGroupListComponent extends BasicComponent implements OnInit, OnDestroy {
 
-  constructor(private organService: OrganisationService, private siteService: SiteService,
-              private router: Router, private  confirmDialogService: ConfirmDialogService,
+  constructor(
               private authorisationService: AuthorisationService,
+              private groupService: GroupService,
               private route: ActivatedRoute,
               private authenticationService: AuthenticationService, private messageService: MessageService) {
     super();
@@ -35,7 +35,7 @@ export class FarmerGroupListComponent extends BasicComponent implements OnInit, 
   dtElement: DataTableDirective;
 
   ngOnInit() {
-    this.getGroups();
+    this.listGroups();
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 25
@@ -49,8 +49,15 @@ export class FarmerGroupListComponent extends BasicComponent implements OnInit, 
   }
 
 
-  getGroups(): void {
+  listGroups(): void {
     this.loading = true;
-    }
+    const body = {
+      reference: this.authenticationService.getCurrentUser().info.org_id
+    };
+
+    this.groupService.list(body).subscribe((data) => {
+      this.groups = data.data;
+    });
+  }
 
 }

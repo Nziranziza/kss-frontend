@@ -12,4 +12,7 @@ export class GroupService {
   create(body: any) {
     return this.apiService.post('/v1.1/groups', body);
   }
+  list(body: any) {
+    return this.apiService.post('/v1.1/groups/reference', body);
+  }
 }
