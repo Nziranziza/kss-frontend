@@ -1,0 +1,116 @@
+<h3>
+  <div class="row">
+    <div class="col-sm-8">Training Management</div>
+    <div class="col-sm-2">
+      <a class="btn btn-success pull-right" routerLink="/admin/training/create"
+        ><i class="fa fa-plus"></i> Add a Training
+      </a>
+    </div>
+    <div class="col-sm-2">
+      <a
+        class="btn btn-success pull-left"
+        routerLink="/admin/training/schedule/list"
+        ><i class="fa fa-calendar"></i> Scheduled Training
+      </a>
+    </div>
+  </div>
+</h3>
+<div class="col-sm-12 stats-section">
+  <div class="row">
+    <div class="col-sm-12 text-center stats-title">Training Summary</div>
+    <div class="col-sm-4">
+      <div class="text-center stats-box">
+        <h3>Trainings Added</h3>
+        <h1>{{ trainings.length }}</h1>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="text-center stats-box middle-box">
+        <h3>Scheduled Trainings</h3>
+        <h1>000</h1>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="text-center stats-box third-box">
+        <h3>Trainings Given</h3>
+        <h1>000</h1>
+      </div>
+    </div>
+  </div>
+</div>
+<app-list-message [message]="message"></app-list-message>
+<app-list-errors [errorList]="errors"></app-list-errors>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-body table-responsive">
+        <app-loader *ngIf="loading"></app-loader>
+        <table
+          datatable
+          [dtOptions]="dtOptions"
+          [dtTrigger]="dtTrigger"
+          class="row-border hover table table-striped"
+        >
+          <thead>
+            <tr>
+              <th>Date Added</th>
+              <th>Title</th>
+              <th>Description</th>
+              <th>Associated GAP</th>
+              <th>Attachments</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let training of trainings | paginate: config">
+              <td>{{ training.createdAt | date: "short" }}</td>
+              <td>{{ training.trainingName }}</td>
+              <td>{{ training.description }}</td>
+              <td>{{ training.adoptionGap }}</td>
+              <td>{{ training.materials.length }} files</td>
+              <td>Active</td>
+              <td>
+                <button
+                  appRequiredSeason
+                  class="btn btn-action-no-border btn-margin details-button"
+                >
+                  <em class="fa fa-eye"></em>
+                </button>
+                <button
+                  appRequiredSeason
+                  (click)="openDeleteModal(training)"
+                  class="btn btn-action-no-border btn-margin"
+                >
+                  <em class="fa fa-trash"></em>
+                </button>
+                <button
+                  class="btn btn-action-no-border btn-margin btn-sm details-button"
+                  routerLink="/admin/training/edit/{{ training._id }}"
+                >
+                  <em class="fa fa-pencil"></em>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-footer" style="width: 100%" *ngIf="showData">
+        <pagination-controls
+          class="custom-pagination"
+          [maxSize]="maxSize"
+          [directionLinks]="directionLinks"
+          [autoHide]="autoHide"
+          [responsive]="responsive"
+          [previousLabel]="labels.previousLabel"
+          [nextLabel]="labels.nextLabel"
+          [screenReaderPaginationLabel]="labels.screenReaderPaginationLabel"
+          [screenReaderPageLabel]="labels.screenReaderPageLabel"
+          [screenReaderCurrentLabel]="labels.screenReaderCurrentLabel"
+          (pageChange)="onPageChange($event)"
+        >
+        </pagination-controls>
+      </div>
+    </div>
+  </div>
+</div>
