@@ -11,6 +11,7 @@ import { TrainingCreateComponent } from './training/training-create/training-cre
 import { TrainingListComponent } from './training/training-list/training-list.component';
 import { TrainingSchedulingCreateComponent } from './training/training-scheduling-create/training-scheduling-create.component';
 import { TrainingSchedulingListComponent } from './training/training-scheduling-list/training-scheduling-list.component';
+import { TrainingEditComponent } from './training/training-edit/training-edit.component';
 
 const routes: Routes = [
   {
@@ -45,6 +46,10 @@ const routes: Routes = [
       {
         path: 'training/list',
         component: TrainingListComponent
+      },
+      {
+        path: 'training/edit/:id',
+        component: TrainingEditComponent
       },
       { 
         path: 'training/schedule/create',

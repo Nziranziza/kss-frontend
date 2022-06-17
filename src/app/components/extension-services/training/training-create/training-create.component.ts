@@ -52,6 +52,7 @@ export class TrainingCreateComponent
   materials: any[] = [];
   results: any[] = [];
   gaps: any[] = [];
+  loading = false;
 
   onFileSelected(event) {
     for (let file of event.target.files) {
@@ -96,6 +97,7 @@ export class TrainingCreateComponent
   }
   async onFileUpload(content) {
     if (this.createTraining.valid) {
+      this.loading = true;
       for (let i = 0; i < this.files.length; i++) {
         let data = await this.readBase64(this.files[i].file).then((data) => {
           return data;
@@ -118,7 +120,8 @@ export class TrainingCreateComponent
         );
     } else {
       if (
-        this.helperService.getFormValidationErrors(this.createTraining).length > 0
+        this.helperService.getFormValidationErrors(this.createTraining).length >
+        0
       ) {
         this.setError(
           this.helperService.getFormValidationErrors(this.createTraining)

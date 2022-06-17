@@ -5,6 +5,8 @@ import { MessageService } from "../../../../core";
 import { BasicComponent } from "../../../../core";
 import {Subject} from 'rxjs';
 import {DataTableDirective} from 'angular-datatables';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { TrainingDeleteModal } from '../training-delete-modal/training-delete-modal.component';
 @Component({
   selector: 'app-training-list',
   templateUrl: './training-list.component.html',
@@ -15,7 +17,8 @@ implements OnInit, OnDestroy {
 
   constructor(
     private messageService: MessageService,
-    private trainingService: TrainingService
+    private trainingService: TrainingService, 
+    private modal: NgbModal
   ) {
     super();
   }
@@ -66,6 +69,14 @@ implements OnInit, OnDestroy {
       totalItems: this.trainings.length,
     };
     
+  }
+
+  openDeleteModal(training: Training) {
+    const modalRef = this.modal.open(TrainingDeleteModal);
+    modalRef.componentInstance.training = training;
+    modalRef.result.finally(() => {
+      this.getGroups();
+    });
   }
   
 }

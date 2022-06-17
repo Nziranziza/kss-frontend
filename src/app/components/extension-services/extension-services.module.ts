@@ -17,6 +17,8 @@ import { TrainingListComponent } from './training/training-list/training-list.co
 import { TrainingCreateComponent } from './training/training-create/training-create.component';
 import { TrainingSchedulingCreateComponent } from './training/training-scheduling-create/training-scheduling-create.component';
 import { TrainingSchedulingListComponent } from './training/training-scheduling-list/training-scheduling-list.component';
+import { TrainingEditComponent } from './training/training-edit/training-edit.component';
+import { TrainingDeleteModal } from './training/training-delete-modal/training-delete-modal.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,9 @@ import { TrainingSchedulingListComponent } from './training/training-scheduling-
     TrainingListComponent,
     TrainingCreateComponent,
     TrainingSchedulingCreateComponent,
-    TrainingSchedulingListComponent
+    TrainingSchedulingListComponent,
+    TrainingEditComponent,
+    TrainingDeleteModal
   ],
   imports: [
     CommonModule,
@@ -41,6 +45,6 @@ import { TrainingSchedulingListComponent } from './training/training-scheduling-
     NgxPaginationModule,
     OrderModule,
   ],
-  entryComponents: [GapDeleteModal],
+  entryComponents: [GapDeleteModal, TrainingDeleteModal],
 })
 export class ExtensionServicesModule {}

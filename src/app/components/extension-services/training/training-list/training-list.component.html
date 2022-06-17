@@ -79,14 +79,14 @@
                 </button>
                 <button
                   appRequiredSeason
-                  (click)="openDeleteModal(gap)"
+                  (click)="openDeleteModal(training)"
                   class="btn btn-action-no-border btn-margin"
                 >
                   <em class="fa fa-trash"></em>
                 </button>
                 <button
                   class="btn btn-action-no-border btn-margin btn-sm details-button"
-                  routerLink="/admin/gaps/edit/{{ training._id }}"
+                  routerLink="/admin/training/edit/{{ training._id }}"
                 >
                   <em class="fa fa-pencil"></em>
                 </button>

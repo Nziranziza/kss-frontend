@@ -1,14 +1,14 @@
 <ng-template #ccontent let-modal>
-  <div class="modal-body text-center">
+  <div class="modal-body text-center" style="font-size: 1.5em">
     <i class="fa fa-check" style="color: #00a513; font-size: 4.5em"></i>
     <br />
     Thank you Training <br />
-    <span style="font-weight: bold"> “ Pruning “ </span> <br />
+    <span style="font-weight: bold"> “ {{ createTraining.value.trainingName }} “ </span> <br />
     has been added <br />
 
     <button
       type="button"
-      class="btn btn-success pull-center"
+      class="btn btn-success btn-lg pull-center"
       routerLink="/admin/training/list"
       (click)="modal.dismiss()"
     >
@@ -57,7 +57,8 @@
     </div>
 
     <div class="box" class="background: #EDEAE8 0% 0% no-repeat padding-box">
-      <div class="box-body">
+      <app-loader *ngIf="loading"></app-loader>
+      <div class="box-body" *ngIf="!loading">
         <h3>Files</h3>
         <table>
           <thead>
@@ -67,6 +68,7 @@
               <th>File Size</th>
             </tr>
           </thead>
+
           <tbody *ngFor="let file of files; let i = index">
             <tr>
               <td>{{ i + 1 }}</td>
@@ -83,7 +85,7 @@
       <div class="col-sm-3">
         <button
           type="button"
-          class="btn btn-outline-dark pull-left"
+          class="btn btn-danger btn-lg pull-left"
           (click)="modal.dismiss()"
         >
           Cancel
@@ -92,11 +94,19 @@
       <div class="col-sm-6"></div>
       <div class="col-sm-3">
         <button
-          type="button"
-          class="btn btn-outline-dark pull-right"
+          class="btn btn-secondary btn-lg submit"
           (click)="modal.dismiss(); onSubmit(); open(ccontent)"
+          [disabled]="loading"
         >
-          Confirm
+          <span *ngIf="!loading; else other_content">Confirm</span>
+          <ng-template #other_content>
+            <div class="loader">
+              <div class="line"></div>
+              <div class="line"></div>
+              <div class="line"></div>
+              <div class="line"></div>
+            </div>
+          </ng-template>
         </button>
       </div>
     </div>
@@ -250,20 +260,21 @@
     </div>
   </div>
   <div class="text-center">
-      <button
-        type="button"
-        class="btn btn-success"
-        style="width: 250px; height: 50px; margin-right: 10px"
-        routerLink="/admin/training/list"
-      >
-        Cancel
-      </button>
-      <button
-        type="button"
-        class="btn btn-success"
-        (click)="onFileUpload(content)"
-        style="width: 250px; height: 50px"
-      >
-        Add Training </button>
+    <button
+      type="button"
+      class="btn btn-success"
+      style="width: 250px; height: 50px; margin-right: 10px"
+      routerLink="/admin/training/list"
+    >
+      Cancel
+    </button>
+    <button
+      type="button"
+      class="btn btn-success"
+      (click)="onFileUpload(content)"
+      style="width: 250px; height: 50px"
+    >
+      Add Training
+    </button>
   </div>
 </form>
