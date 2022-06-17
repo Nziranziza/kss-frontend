@@ -1,39 +1,45 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
-import {HelperService, LocationService, MessageService, OrganisationService, OrganisationTypeService} from '../../../../core';
+import {
+  AuthenticationService,
+  BasicComponent,
+  HelperService, LocationService,
+  MessageService,
+  OrganisationService
+} from '../../../../core';
 import {isEmptyObject} from 'jquery';
+import {GroupService} from '../../../../core/services/extension-services';
 
 @Component({
   selector: 'app-farmer-group-create',
   templateUrl: './farmer-group-create.component.html',
   styleUrls: ['./farmer-group-create.component.css']
 })
-export class FarmerGroupCreateComponent implements OnInit {
+export class FarmerGroupCreateComponent extends BasicComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
               private router: Router, private organisationService: OrganisationService,
               private messageService: MessageService,
-              private helper: HelperService, private organisationTypeService: OrganisationTypeService,
-              private locationService: LocationService) {
+              private groupService: GroupService,
+              private authenticationService: AuthenticationService,
+              protected locationService: LocationService,
+              private helper: HelperService) {
+    super(locationService, organisationService);
   }
 
   createForm: FormGroup;
   errors: any;
   provinces: any;
   filterForm: FormGroup;
-  districts: any;
-  sectors: any;
-  cells: any;
-  villages: any;
-  coveredSectors: any;
   parameters: any;
-  coveredCells: any;
-  coveredVillages: any;
-  searchLocationBy = 'farmer';
-  paginatedFarmers: any;
   loading = false;
   org: any;
+  searchResults: any;
+  allResultsSelected: boolean;
+  allMembersSelected: boolean;
+  searchByLocation = true;
+  groupMembers = [];
   searchFields = [
     {value: 'reg_number', name: 'registration number'},
     {value: 'nid', name: 'NID'},
@@ -46,8 +52,8 @@ export class FarmerGroupCreateComponent implements OnInit {
   ngOnInit() {
     this.createForm = this.formBuilder.group({
       groupName: [''],
-      groupLeaderName: [''],
-      groupLeaderPhoneNumber: [''],
+      leaderNames: [''],
+      leaderPhoneNumber: [''],
       description: [''],
       meetingSchedule: [''],
       location: this.formBuilder.group({
@@ -62,10 +68,11 @@ export class FarmerGroupCreateComponent implements OnInit {
       length: 10,
       start: 0,
       draw: 1,
-      org_id: null
+      org_id: this.authenticationService.getCurrentUser().info.org_id
     };
 
     this.filterForm = this.formBuilder.group({
+      searchOption: ['location'],
       searchByLocation: this.formBuilder.group({
         searchBy: ['farmer_location'],
         sect_id: [''],
@@ -77,46 +84,124 @@ export class FarmerGroupCreateComponent implements OnInit {
         searchBy: ['reg_number'],
       }),
     });
-    this.initial();
+    this.basicInit(this.authenticationService.getCurrentUser().info.org_id);
     this.onChanges();
   }
 
   onSubmit() {
     if (this.createForm.valid) {
+      const value = JSON.parse(JSON.stringify(this.createForm.value));
+      value.applicationId = 1;
+      const members = [];
+      this.groupMembers.map((member) => {
+        members.push(member.userInfo._id);
+      });
+      value.members = members;
+      this.groupService.create(value).subscribe(
+        (data) => {
+          console.log(data);
+          this.loading = false;
+        },
+        (err) => {
+          this.loading = false;
+          this.errors = err.errors;
+        }
+      );
     } else {
       this.errors = this.helper.getFormValidationErrors(this.createForm);
     }
+  }
+
+  selectAllResults(isChecked: boolean) {
+    if (isChecked) {
+      this.searchResults.forEach((item) => {
+        item.selected = true;
+      });
+    } else {
+      this.searchResults.forEach((item) => {
+        item.selected = false;
+      });
+    }
+    this.allResultsSelected = isChecked;
+  }
+
+  selectResultsItem(isChecked: boolean, i: number) {
+    this.searchResults[i].selected = isChecked;
+    if (!isChecked) {
+      this.allResultsSelected = false;
+    }
+  }
+
+  selectAllMembers(isChecked: boolean) {
+    if (isChecked) {
+      this.groupMembers.forEach((item) => {
+        item.selected = true;
+      });
+    } else {
+      this.groupMembers.forEach((item) => {
+        item.selected = false;
+      });
+    }
+    this.allMembersSelected = isChecked;
+  }
+
+  selectMember(isChecked: boolean, i: number) {
+    this.groupMembers[i].selected = true;
+    if (!isChecked) {
+      this.allMembersSelected = isChecked;
+    }
+  }
+
+  notInGroupMembers(i: number) {
+    const index = this.groupMembers.findIndex(el => el.userInfo._id
+      === this.searchResults[i].userInfo._id);
+    if (index !== -1) {
+      this.searchResults[i].selected = false;
+    }
+    return index === -1;
+  }
+
+  addMembersToGroup() {
+    this.searchResults.forEach((item) => {
+      if (item.selected) {
+        item.selected = false;
+        this.groupMembers.push(JSON.parse(JSON.stringify(item)));
+      }
+    });
+  }
+
+  removeMembersToGroup() {
+    this.groupMembers.forEach((item) => {
+      console.log(this.groupMembers);
+      if (item.selected) {
+        this.groupMembers = this.groupMembers.filter( el => el.userInfo._id != item.userInfo._id);
+      }
+    });
   }
 
   onFilter() {
     if (this.filterForm.valid) {
       this.loading = true;
       const filter = JSON.parse(JSON.stringify(this.filterForm.value));
+      delete filter.searchOption;
       if (filter.searchByTerm.term === '') {
         delete filter.searchByTerm;
       }
       const location = filter.searchByLocation;
       if (location) {
-          if (location.village_id !== '') {
-            filter.searchByLocation.filterBy = 'village';
-            filter.searchByLocation.village_id = location.village_id;
-          } else if (location.cell_id !== '') {
-            filter.searchByLocation.filterBy = 'cell';
-            filter.searchByLocation.cell_id = location.cell_id;
-          } else if (location.sect_id !== '') {
-            filter.searchByLocation.filterBy = 'sector';
-            filter.searchByLocation.sect_id = location.sect_id;
-          } else if (location.dist_id !== '') {
-            if (this.searchLocationBy !== 'farm') {
-              filter.searchByLocation.filterBy = 'district';
-              filter.searchByLocation.dist_id = location.dist_id;
-            } else {
-              delete filter.searchByLocation;
-            }
-          } else {
-            delete filter.searchByLocation;
-          }
+        if (location.village_id !== '') {
+          filter.searchByLocation.filterBy = 'village';
+          filter.searchByLocation.village_id = location.village_id;
+        } else if (location.cell_id !== '') {
+          filter.searchByLocation.filterBy = 'cell';
+          filter.searchByLocation.cell_id = location.cell_id;
+        } else if (location.sect_id !== '') {
+          filter.searchByLocation.filterBy = 'sector';
+          filter.searchByLocation.sect_id = location.sect_id;
+        } else {
+          delete filter.searchByLocation;
         }
+      }
       this.helper.cleanObject(filter.searchByLocation);
 
       if (!isEmptyObject(filter)) {
@@ -126,7 +211,7 @@ export class FarmerGroupCreateComponent implements OnInit {
       }
       this.organisationService.getFarmers(this.parameters).subscribe(
         (data) => {
-          this.paginatedFarmers = data.data;
+          this.searchResults = data.data;
           this.loading = false;
         },
         (err) => {
@@ -137,49 +222,74 @@ export class FarmerGroupCreateComponent implements OnInit {
     }
   }
 
-  onClearFilter() {
-    this.filterForm.controls.term.setValue('', {emitEvent: false});
-    delete this.parameters.search;
-    this.organisationService.getFarmers(this.parameters).subscribe((data) => {
-      this.paginatedFarmers = data.data;
-    });
-  }
-
-  getFarmers(): void {
-    this.loading = true;
-    this.organisationService.getFarmers(this.parameters).subscribe((data) => {
-      if (data.data.length === 0) {
-      } else {
-        this.paginatedFarmers = data.data;
-      }
-      this.loading = false;
-    });
-  }
   onChanges() {
+    this.createForm.controls.location.get('prov_id'.toString()).valueChanges.subscribe(
+      (value) => {
+        this.locationChangeProvince(this.createForm, value);
+      }
+    );
+    this.createForm.controls.location.get('dist_id'.toString()).valueChanges.subscribe(
+      (value) => {
+        this.locationChangDistrict(this.createForm, value);
+      }
+    );
     this.createForm.controls.location.get('sect_id'.toString()).valueChanges.subscribe(
       (value) => {
-        if (value !== '') {
-          this.locationService.getCells(value).subscribe((data) => {
-            this.cells = data;
-            this.villages = null;
-          });
-        }
+        this.locationChangSector(this.createForm, value);
       }
     );
     this.createForm.controls.location.get('cell_id'.toString()).valueChanges.subscribe(
       (value) => {
-        if (value !== '') {
-          this.locationService.getVillages(value).subscribe((data) => {
-            this.villages = data;
-          });
-        }
+        this.locationChangCell(this.createForm, value);
       }
     );
-  }
+    this.filterForm.controls.searchByLocation
+      .get('sect_id'.toString())
+      .valueChanges.subscribe((value) => {
+      if (value !== '') {
+        this.locationService.getCells(value).subscribe((data) => {
+          this.basicCoveredCells = this.filterZoningCells(this.basicOrg.coveredSectors, value);
+          this.basicCoveredVillages = null;
+          this.filterForm.controls.searchByLocation
+            .get('village_id'.toString()).setValue('', {emitEvent: false});
+        });
+      } else {
+        this.basicCoveredCells = null;
+        this.basicCoveredVillages = null;
+        this.filterForm.controls.searchByLocation
+          .get('cell_id'.toString()).setValue('', {emitEvent: false});
+        this.filterForm.controls.searchByLocation
+          .get('village_id'.toString()).setValue('', {emitEvent: false});
+      }
+    });
+    this.filterForm.controls.searchOption
+      .valueChanges.subscribe((value) => {
+      if (value !== '' && value === 'location') {
+        this.searchByLocation = true;
+        this.filterForm.controls.searchByTerm.get('term').setValue('');
+      } else {
+        this.filterForm.controls.searchByLocation
+          .get('sect_id'.toString()).setValue('', {emitEvent: false});
+        this.filterForm.controls.searchByLocation
+          .get('cell_id'.toString()).setValue('', {emitEvent: false});
+        this.filterForm.controls.searchByLocation
+          .get('village_id'.toString()).setValue('', {emitEvent: false});
+        this.searchByLocation = false;
+      }
+    });
+    this.filterForm.controls.searchByLocation
+      .get('cell_id'.toString())
+      .valueChanges.subscribe((value) => {
+      if (value !== '') {
+        this.locationService.getVillages(value).subscribe((data) => {
+          const id = this.filterForm.controls.searchByLocation
+            .get('sect_id'.toString()).value;
+          this.basicCoveredVillages = this.filterZoningVillages(this.basicOrg.coveredSectors, id, data);
+          this.filterForm.controls.searchByLocation
+            .get('village_id'.toString()).setValue('', {emitEvent: false});
 
-  initial() {
-    this.locationService.getProvinces().subscribe((data) => {
-      this.provinces = data;
+        });
+      }
     });
   }
 }

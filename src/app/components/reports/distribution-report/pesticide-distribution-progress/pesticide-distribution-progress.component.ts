@@ -8,10 +8,10 @@ import {
   OrganisationService,
   OrganisationTypeService,
   SiteService
-} from '../../../../core/services';
+} from '../../../../core';
 import {Router} from '@angular/router';
-import {HelperService} from '../../../../core/helpers';
-import {BasicComponent} from '../../../../core/library';
+import {HelperService} from '../../../../core';
+import {BasicComponent} from '../../../../core';
 
 @Component({
   selector: 'app-pesticide-distribution-progress',

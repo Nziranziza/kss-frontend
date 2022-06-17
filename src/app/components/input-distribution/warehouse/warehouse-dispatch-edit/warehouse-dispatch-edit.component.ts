@@ -10,9 +10,9 @@ import {
 } from '../../../../core/services';
 import {Router} from '@angular/router';
 import {DatePipe, isPlatformBrowser} from '@angular/common';
-import {HelperService} from '../../../../core/helpers';
+import {HelperService} from '../../../../core';
 import {Subject} from 'rxjs';
-import {BasicComponent} from '../../../../core/library';
+import {BasicComponent} from '../../../../core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({

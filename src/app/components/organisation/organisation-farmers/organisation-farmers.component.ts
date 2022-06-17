@@ -9,7 +9,7 @@ import {
   Farmer,
   AuthorisationService,
   BasicComponent,
-  LocationService, FarmerService, HelperService,
+  FarmerService, HelperService, LocationService,
 } from '../../../core';
 import {ActivatedRoute} from '@angular/router';
 import {FarmerDetailsComponent} from '../../farmer/farmer-details/farmer-details.component';
@@ -35,14 +35,14 @@ export class OrganisationFarmersComponent
     private authenticationService: AuthenticationService,
     private excelService: ExcelServicesService,
     private siteService: SiteService,
+    protected locationService: LocationService,
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
     private messageService: MessageService,
     private modal: NgbModal,
     private helper: HelperService,
     private farmerService: FarmerService,
-    private authorisationService: AuthorisationService,
-    private locationService: LocationService,
+    private authorisationService: AuthorisationService
   ) {
     super();
   }
@@ -412,10 +412,10 @@ export class OrganisationFarmersComponent
             .get('prov_id'.toString())
             .patchValue(this.org.location.prov_id._id);
           if (this.searchLocationBy === 'farm') {
-            this.filterCustomSectors();
             this.filterForm.controls.searchByLocation
               .get('dist_id'.toString())
               .patchValue(this.org.location.dist_id._id, {emitEvent: false});
+            this.sectors = this.filterZoningSectors( this.org.coveredSectors);
           } else {
             this.filterForm.controls.searchByLocation
               .get('dist_id'.toString())
@@ -440,7 +440,7 @@ export class OrganisationFarmersComponent
           .get('prov_id'.toString()).disable({emitEvent: false});
         this.filterForm.controls.searchByLocation
           .get('dist_id'.toString()).disable({emitEvent: false});
-        this.filterCustomSectors();
+        this.sectors = this.filterZoningSectors(this.org.coveredSectors);
       } else {
         this.searchLocationBy = 'farmer';
         this.filterForm.controls.searchByLocation
@@ -487,7 +487,7 @@ export class OrganisationFarmersComponent
         if (value !== '') {
           this.locationService.getSectors(value).subscribe((data) => {
             if (this.searchLocationBy === 'farm') {
-              this.filterCustomSectors();
+              this.sectors = this.filterZoningSectors( this.org.coveredSectors);
             } else {
               this.sectors = data;
               this.filterForm.controls.searchByLocation
@@ -521,7 +521,7 @@ export class OrganisationFarmersComponent
       if (value !== '') {
         this.locationService.getCells(value).subscribe((data) => {
           if (this.searchLocationBy === 'farm') {
-            this.filterCustomCells(value);
+            this.cells = this.filterZoningCells(this.org.coveredSectors, value);
           } else {
             this.cells = data;
           }
@@ -544,7 +544,9 @@ export class OrganisationFarmersComponent
       if (value !== '') {
         this.locationService.getVillages(value).subscribe((data) => {
           if (this.searchLocationBy === 'farm') {
-            this.filterCustomVillages(data);
+            const id = this.filterForm.controls.searchByLocation
+              .get('sect_id'.toString()).value;
+            this.villages = this.filterZoningVillages(this.org.coveredSectors, id,  data);
             this.filterForm.controls.searchByLocation
               .get('village_id'.toString()).setValue('', {emitEvent: false});
           } else {
@@ -555,46 +557,5 @@ export class OrganisationFarmersComponent
         });
       }
     });
-  }
-
-  filterCustomSectors() {
-    const temp = [];
-    this.org.coveredSectors.map((sector) => {
-      temp.push({
-        _id: sector.sectorId._id,
-        name: sector.sectorId.name
-      });
-    });
-    this.sectors = temp;
-  }
-
-  filterCustomCells(id: string) {
-    const temp = [];
-    const i = this.org.coveredSectors.findIndex(element => element.sectorId._id === id);
-    const sector = this.org.coveredSectors[i];
-    sector.coveredCells.map((cell) => {
-      temp.push({
-        _id: cell.cell_id,
-        name: cell.name
-      });
-    });
-    this.cells = temp;
-  }
-
-  filterCustomVillages(villages: any) {
-    const temp = [];
-    const id = this.filterForm.controls.searchByLocation
-      .get('sect_id'.toString()).value;
-    const i = this.org.coveredSectors.findIndex(element => element.sectorId._id === id);
-    const sector = this.org.coveredSectors[i];
-    sector.coveredVillages.map((village) => {
-      if (villages.findIndex(el => el._id === village._id)) {
-        temp.push({
-          _id: village.village_id,
-          name: village.name
-        });
-      }
-    });
-    this.villages = temp;
   }
 }

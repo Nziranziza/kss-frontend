@@ -236,6 +236,21 @@
           </li>
         </ul>
       </li>
+      <li class="treeview" *appHasPermission="[1]">  <a href="#">
+        <i class="fa fa-television"></i> <span>Training Management</span>
+        <span class="pull-right-container">
+          <i class="fa fa-angle-left pull-right"></i>
+        </span>
+      </a>
+      <ul class="treeview-menu">
+        <li routerLinkActive="active" *appHasPermission="[1]">
+          <a routerLink="/admin/training/list">
+            <i class="fa fa-circle-o"></i>
+            <span>Trainings</span>
+          </a>
+        </li>
+      </ul> 
+    </li>
       <li routerLinkActive="active" *appHasPermission="[[4,1],[4,11],[4,12],0,6,5]">
         <a routerLink="/admin/cherries/parchments/report">
           <i class="fa fa-bar-chart-o"></i>

@@ -1,5 +1,4 @@
 import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
 import {ApiService} from '../api.service';
 
 @Injectable({
@@ -9,5 +8,8 @@ import {ApiService} from '../api.service';
 export class GroupService {
 
   constructor(private apiService: ApiService) {
+  }
+  create(body: any) {
+    return this.apiService.post('/v1.1/groups', body);
   }
 }
