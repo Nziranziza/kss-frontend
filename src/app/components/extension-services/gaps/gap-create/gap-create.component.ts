@@ -17,9 +17,14 @@ export class GapCreateComponent
   implements OnInit, OnDestroy {
   createForm: FormGroup;
   approachs = [
-    { id: 'text_input', name: 'text_input' },
-    { id: 'percentage_input', name: 'percentage_input' },
+    { id: 'mark_input', name: 'Marks Input' },
+    { id: 'percentage_input', name: 'Percentage Input' },
     { id: 'multiple_choice', name: 'multiple_choice' },
+    { id: 'multiple_choice_single', name: 'Multiple Choice - Single' },
+    {
+      id: 'multiple_choice_select_apply',
+      name: 'Multiple Choice - All that Apply',
+    },
   ];
   loading = false;
   adoptionOptionsVisible = false;
@@ -55,6 +60,38 @@ export class GapCreateComponent
 
   questionTitle(index: number) {
     return this.formCategory.at(index).get('question');
+  }
+
+  checkIfWeightMatch(index: number, aIndex: number) {
+    const marks = this.formCategory.at(index).get('marks').value;
+    const answers = (this.formCategory.at(index).get('answers') as FormArray)
+      .controls;
+
+    console.log(marks);
+    console.log(answers);
+
+    let sum = 0;
+    for (const answer of answers) {
+      sum = sum + (answer as FormGroup).controls.weight.value;
+    }
+    console.log(sum);
+    if (sum === marks) {
+      console.log(true);
+      return true;
+    } else {
+      console.log(false);
+      return false;
+    }
+  }
+
+  weight(index: number, aIndex: number){
+    const answers = (this.formCategory.at(index).get('answers') as FormArray).controls;
+    const answer = answers[aIndex] as FormGroup;
+    return answer.controls.weight;
+  }
+  
+  marks(index: number) {
+    return this.formCategory.at(index).get('marks');
   }
 
   answerType(index: number) {
@@ -102,12 +139,14 @@ export class GapCreateComponent
       question: ['Is user practising pruning', Validators.required],
       answerType: ['', Validators.required],
       answers: new FormArray([]),
+      marks: [100],
     });
   }
 
   createAnswer(): FormGroup {
     return this.formBuilder.group({
       answer: [''],
+      weight: [0],
     });
   }
 
