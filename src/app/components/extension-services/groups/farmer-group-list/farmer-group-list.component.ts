@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {
   AuthenticationService,
   AuthorisationService,
@@ -26,22 +26,20 @@ export class FarmerGroupListComponent extends BasicComponent implements OnInit, 
     super();
   }
   groups = [];
-  dtOptions: any = {};
   loading = false;
+  dtOptions: DataTables.Settings = {};
   // @ts-ignore
   dtTrigger: Subject = new Subject();
-  // @ts-ignore
-  @ViewChild(DataTableDirective, {static: false})
-  dtElement: DataTableDirective;
 
   ngOnInit() {
     this.listGroups();
     this.dtOptions = {
       pagingType: 'full_numbers',
-      pageLength: 25
+      pageLength: 10
     };
     this.setMessage(this.messageService.getMessage());
   }
+
 
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
@@ -57,6 +55,7 @@ export class FarmerGroupListComponent extends BasicComponent implements OnInit, 
 
     this.groupService.list(body).subscribe((data) => {
       this.groups = data.data;
+      this.dtTrigger.next();
     });
   }
 

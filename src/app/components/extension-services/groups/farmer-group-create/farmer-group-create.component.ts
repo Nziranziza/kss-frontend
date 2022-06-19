@@ -114,6 +114,8 @@ export class FarmerGroupCreateComponent extends BasicComponent implements OnInit
       this.groupService.create(value).subscribe(
         (data) => {
           this.loading = false;
+          this.messageService.setMessage('Group successfully created!');
+          this.router.navigateByUrl('admin/farmers/group/list');
         },
         (err) => {
           this.loading = false;
