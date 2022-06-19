@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {MatDialog} from '@angular/material';
-import {ConfirmDialogComponent} from '../../shared/layout';
+import {ConfirmDialogComponent} from '../../shared/layouts';
 
 
 @Injectable({

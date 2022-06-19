@@ -1,0 +1,16 @@
+.well {
+  border: 1px solid #ffffff;
+  border-radius: 10px;
+  color: #0f0f0f;
+  height: 100%;
+}
+
+.well i {
+  color: #4F210D;
+  font-size: large;
+}
+
+.aligned-row {
+  display: flex;
+  flex-flow: row wrap;
+}

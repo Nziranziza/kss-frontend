@@ -1,0 +1,18 @@
+.title-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title-bar .btn {
+  width: 138px;
+  height: 30px;
+  align-items: center;
+  background-color: #00a843;
+  color: white;
+  border: 1px solid #00a843;
+}
+
+.box{
+    margin-top: 50px;
+}

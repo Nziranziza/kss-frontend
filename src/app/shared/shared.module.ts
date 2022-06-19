@@ -9,22 +9,22 @@ import {
   HomeFooterComponent,
   ListMessageComponent
 
-} from './layout';
+} from './layouts';
 import {MatDialogModule, MatIconModule} from '@angular/material';
-import {ConfirmDialogComponent} from './layout';
+import {ConfirmDialogComponent} from './layouts';
 import {DataTablesModule} from 'angular-datatables';
 import {RequiredRolesDirective} from './directives/required-roles.directive';
-import {LoaderComponent} from './layout';
+import {LoaderComponent} from './layouts';
 import {RequiredSeasonDirective} from './directives/required-season.directive';
 import {HasPermissionDirective} from './directives/has-permission.directive';
-import {QuantityUnitComponent} from './layout';
-import {ListWarningsComponent} from './layout';
-import {DownloadingComponent} from './layout';
-import {SpinnerComponent } from './layout';
+import {QuantityUnitComponent} from './layouts';
+import {ListWarningsComponent} from './layouts';
+import {DownloadingComponent} from './layouts';
+import {SpinnerComponent } from './layouts';
 import {InternalDirective} from './directives/internal.directives';
 import {RequiredSeasonCherryDirective} from './directives/required-season-cherry.directive';
 import {DebounceClickDirective} from './directives/debounce-click.directive';
-import { LoadingComponent } from './layout/loading/loading.component';
+import { LoadingComponent } from './layouts/loading/loading.component';
 
 @NgModule({
   imports: [

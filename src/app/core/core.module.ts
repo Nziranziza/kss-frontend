@@ -19,11 +19,11 @@ import {CookieService} from 'ngx-cookie-service';
 import {MessageService} from './services';
 import {InputDistributionService} from './services';
 import {WarehouseService} from './services';
-import {AdminGuard} from './services/guards/admin.guard';
-import {CoveredAreaResolverService} from './services/resolvers/covered-area-resolver.service';
+import {AdminGuard} from './guards/admin.guard';
+import {CoveredAreaResolverService} from './resolvers/covered-area-resolver.service';
 import {SharedDataService} from './services/shared-data.service';
 import {PaymentService} from './services/payment.service';
-import {FarmService} from './services/farm.services';
+import {FarmService} from './services';
 
 @NgModule({
   imports: [
@@ -48,7 +48,7 @@ import {FarmService} from './services/farm.services';
     CookieService,
     PaymentService,
     CoveredAreaResolverService,
-    FarmService
+    FarmService,
     /*{provide: ErrorHandler, useClass: ErrorCustomHandler}*/
   ],
   declarations: []
