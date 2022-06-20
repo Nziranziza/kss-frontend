@@ -35,7 +35,7 @@ import {ExtensionServicesModule} from './components/extension-services/extension
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,
