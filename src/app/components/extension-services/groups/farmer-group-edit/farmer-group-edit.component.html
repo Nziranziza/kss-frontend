@@ -215,7 +215,7 @@
                 <tr *ngFor="let item of searchResults; let i = index">
                   <td>{{ i + 1 }}</td>
                   <td>
-                    <ng-container *ngIf="item.type === 2; else names">
+                    <ng-container *ngIf="item.userInfo.groupName; else names">
                       {{ item.userInfo.groupName }}
                     </ng-container>
                     <ng-template #names>
@@ -265,7 +265,7 @@
                 <tr *ngFor="let item of groupMembers; let t = index">
                   <td> {{ item.userInfo.regNumber }}</td>
                   <td>
-                    <ng-container *ngIf="item.type === 2; else gnames">
+                    <ng-container *ngIf="item.userInfo.groupName; else gnames">
                       {{ item.userInfo.groupName }}
                     </ng-container>
                     <ng-template #gnames>
