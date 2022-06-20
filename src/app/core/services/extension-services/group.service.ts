@@ -15,4 +15,10 @@ export class GroupService {
   list(body: any) {
     return this.apiService.post('/v1.1/groups/reference', body);
   }
+  post(body: any) {
+    return this.apiService.put('/v1.1/groups', body);
+  }
+  get(id: string) {
+    return this.apiService.get('/v1.1/groups' + id );
+  }
 }

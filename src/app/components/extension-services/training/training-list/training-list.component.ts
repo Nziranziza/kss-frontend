@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { TrainingService, Training } from "../../../../core";
-import { MessageService } from "../../../../core";
+import { TrainingService, Training } from '../../../../core';
+import { MessageService } from '../../../../core';
 // import { HelperService } from "../../../../core";
-import { BasicComponent } from "../../../../core";
+import { BasicComponent } from '../../../../core';
 import {Subject} from 'rxjs';
 import {DataTableDirective} from 'angular-datatables';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -17,12 +17,10 @@ implements OnInit, OnDestroy {
 
   constructor(
     private messageService: MessageService,
-    private trainingService: TrainingService, 
+    private trainingService: TrainingService,
     private modal: NgbModal
   ) {
     super();
-  }
-  ngOnDestroy(): void {
   }
 
   trainings: Training[] = [];
@@ -68,7 +66,6 @@ implements OnInit, OnDestroy {
       currentPage: 0 + 1,
       totalItems: this.trainings.length,
     };
-    
   }
 
   openDeleteModal(training: Training) {
@@ -78,5 +75,7 @@ implements OnInit, OnDestroy {
       this.getGroups();
     });
   }
-  
+
+  ngOnDestroy(): void {
+  }
 }

@@ -106,7 +106,7 @@ export class TrainingEditComponent
         console.log(err);
       }
     );
-    
+
   }
 
   getGaps(): void {
@@ -146,7 +146,7 @@ export class TrainingEditComponent
     this.trainingService.update(value, this.id).subscribe(
       (data) => {
         this.loading = false;
-        this.setMessage("Training successfully Edited.");
+        this.setMessage('Training successfully Edited.');
         this.router.navigateByUrl('admin/training/list');
       },
       (err) => {
