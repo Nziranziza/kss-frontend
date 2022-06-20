@@ -19,6 +19,9 @@ export class GroupService {
     return this.apiService.put('/v1.1/groups', body);
   }
   get(id: string) {
-    return this.apiService.get('/v1.1/groups' + id );
+    return this.apiService.get('/v1.1/groups/' + id );
+  }
+  update(id: string, body: any) {
+    return this.apiService.put('/v1.1/groups/' + id,  body);
   }
 }

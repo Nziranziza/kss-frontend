@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {
   AuthenticationService,
   BasicComponent,
@@ -8,7 +8,7 @@ import {
   HelperService,
   LocationService,
   MessageService,
-  OrganisationService
+  OrganisationService, UserService
 } from '../../../../core';
 import {isEmptyObject} from 'jquery';
 
@@ -22,6 +22,8 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
               private router: Router, private organisationService: OrganisationService,
               private messageService: MessageService,
+              private route: ActivatedRoute,
+              private userService: UserService,
               private groupService: GroupService,
               private authenticationService: AuthenticationService,
               protected locationService: LocationService,
@@ -42,6 +44,7 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
   searchByLocation = true;
   groupMembers = [];
   time: any;
+  id: string;
   searchFields = [
     {value: 'reg_number', name: 'registration number'},
     {value: 'nid', name: 'NID'},
@@ -98,6 +101,34 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
         searchBy: ['reg_number'],
       }),
     });
+    this.route.params.subscribe(params => {
+      this.id = params['id'.toString()];
+      this.groupService.get(params['id'.toString()]).subscribe(data => {
+        const members = data.data.members;
+        members.map((member) => {
+          const item = {userInfo: {
+              regNumber: '',
+              groupName: '',
+              foreName: '',
+              surname: '',
+              phone_number: '',
+              _id: member.userId,
+            },
+            selected: true
+          };
+          item.userInfo.regNumber = member.regNumber;
+          if (member.groupName) {
+            item.userInfo.groupName = member.groupName;
+          } else {
+            item.userInfo.foreName  = member.firstName ;
+            item.userInfo.surname = member.lastName;
+          }
+          item.userInfo.phone_number = member.phoneNumber;
+          this.groupMembers.push(item);
+        });
+        this.editForm.patchValue(data.data);
+      });
+    });
     this.basicInit(this.authenticationService.getCurrentUser().info.org_id);
     this.onChanges();
   }
@@ -106,16 +137,16 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
     if (this.editForm.valid) {
       const value = JSON.parse(JSON.stringify(this.editForm.value));
       value.org_id = this.authenticationService.getCurrentUser().info.org_id;
-      value.meetingSchedule.meetingDay = +  value.meetingSchedule.meetingDay;
+      value.meetingSchedule.meetingDay = + value.meetingSchedule.meetingDay;
       const members = [];
       this.groupMembers.map((member) => {
         members.push(member.userInfo._id);
       });
       value.members = members;
-      this.groupService.create(value).subscribe(
+      this.groupService.update(this.id, value).subscribe(
         (data) => {
           this.loading = false;
-          this.messageService.setMessage('Group successfully created!');
+          this.messageService.setMessage('Group successfully updated!');
           this.router.navigateByUrl('admin/farmers/group/list');
         },
         (err) => {
