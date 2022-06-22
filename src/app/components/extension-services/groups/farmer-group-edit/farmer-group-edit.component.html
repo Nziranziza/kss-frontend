@@ -1,13 +1,12 @@
 <h3>
-  Create a farmers group
+  Edit a farmers group
 </h3>
 <app-list-errors [errorList]="errors"></app-list-errors>
-
 <div class="row">
   <div class="col-xs-12">
     <div class="box">
       <div class="box-body">
-        <form [formGroup]="createForm">
+        <form [formGroup]="editForm">
           <div class="col-xs-6">
             <div class="form-group">
               <label class="control-label label-required">Group name</label>
@@ -216,7 +215,7 @@
                 <tr *ngFor="let item of searchResults; let i = index">
                   <td>{{ i + 1 }}</td>
                   <td>
-                    <ng-container *ngIf="item.type === 2; else names">
+                    <ng-container *ngIf="item.userInfo.groupName; else names">
                       {{ item.userInfo.groupName }}
                     </ng-container>
                     <ng-template #names>
@@ -266,7 +265,7 @@
                 <tr *ngFor="let item of groupMembers; let t = index">
                   <td> {{ item.userInfo.regNumber }}</td>
                   <td>
-                    <ng-container *ngIf="item.type === 2; else gnames">
+                    <ng-container *ngIf="item.userInfo.groupName; else gnames">
                       {{ item.userInfo.groupName }}
                     </ng-container>
                     <ng-template #gnames>
@@ -298,4 +297,3 @@
     <button type="button" class="btn btn-success pull-right" (click)="onSubmit()">Save</button>
   </div>
 </div>
-

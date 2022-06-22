@@ -1,6 +1,6 @@
 <h3>
   Groups
-  <a class="btn btn-success" routerLink="/admin/farmers/group/create"><i
+  <a class="btn btn-success" style="float: right" routerLink="/admin/farmers/group/create"><i
     class="fa fa-plus"></i> Add a farmers group </a>
 </h3>
 <app-list-message [message]="message"></app-list-message>
@@ -27,13 +27,28 @@
           <ng-container *ngFor="let group of groups">
             <tr>
               <td> {{ group.groupName }}</td>
-              <td> {{ group.leaderName }}</td>
+              <td> {{ group.leaderNames }}</td>
               <td> {{ group.leaderPhoneNumber }}</td>
+              <td> <span style="text-transform: capitalize; font-size: 11px">
+                {{ group.location.prov_id.namek }} >
+                {{ group.location.dist_id.name }} >
+                {{ group.location.sect_id.name }} >
+                {{ group.location.cell_id.name }} >
+                {{ group.location.village_id.name }}
+              </span>
+              </td>
+              <td> {{ group.members.length }} </td>
               <td> </td>
-              <td> </td>
-              <td> </td>
+              <td>
+                <span class="profile-text">
+                <ng-container *ngIf="!group.active, else inactive"><span
+                style="color: green; font-weight: bold">active</span>
+                </ng-container>
+                <ng-template #inactive><span style="color: #b21717; font-weight: bold">inactive</span></ng-template>
+                </span>
+              </td>
               <td class="actions no-wrap text-right">
-                <a class="btn btn-success btn-margin btn-sm" [routerLink]="['edit/', group._id]"
+                <a class="btn btn-success btn-margin btn-sm" [routerLink]="['/admin/farmers/group/edit', group._id]"
                    style="margin-left: 10px;"> Edit
                 </a>
               </td>

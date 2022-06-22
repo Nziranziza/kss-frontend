@@ -21,7 +21,7 @@
     <div class="col-sm-4">
       <div class="text-center stats-box">
         <h3>Trainings Added</h3>
-        <h1>000</h1>
+        <h1>{{ trainings.length }}</h1>
       </div>
     </div>
     <div class="col-sm-4">
@@ -96,7 +96,8 @@
         </table>
       </div>
       <div class="table-footer" style="width: 100%" *ngIf="showData">
-        <pagination-controls
+        <!--
+          <pagination-controls
           class="custom-pagination"
           [maxSize]="maxSize"
           [directionLinks]="directionLinks"
@@ -107,9 +108,9 @@
           [screenReaderPaginationLabel]="labels.screenReaderPaginationLabel"
           [screenReaderPageLabel]="labels.screenReaderPageLabel"
           [screenReaderCurrentLabel]="labels.screenReaderCurrentLabel"
-          (pageChange)="onPageChange($event)"
-        >
-        </pagination-controls>
+          (pageChange)="onPageChange($event)">
+          </pagination-controls>
+        -->
       </div>
     </div>
   </div>

@@ -1,26 +1,29 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {
   AuthenticationService,
   BasicComponent,
-  HelperService, LocationService,
+  GroupService,
+  HelperService,
+  LocationService,
   MessageService,
-  OrganisationService
+  OrganisationService, UserService
 } from '../../../../core';
 import {isEmptyObject} from 'jquery';
-import {GroupService} from '../../../../core/services/extension-services';
 
 @Component({
-  selector: 'app-farmer-group-create',
-  templateUrl: './farmer-group-create.component.html',
-  styleUrls: ['./farmer-group-create.component.css']
+  selector: 'app-farmer-group-edit',
+  templateUrl: './farmer-group-edit.component.html',
+  styleUrls: ['./farmer-group-edit.component.css']
 })
-export class FarmerGroupCreateComponent extends BasicComponent implements OnInit {
+export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
               private router: Router, private organisationService: OrganisationService,
               private messageService: MessageService,
+              private route: ActivatedRoute,
+              private userService: UserService,
               private groupService: GroupService,
               private authenticationService: AuthenticationService,
               protected locationService: LocationService,
@@ -28,7 +31,7 @@ export class FarmerGroupCreateComponent extends BasicComponent implements OnInit
     super(locationService, organisationService);
   }
 
-  createForm: FormGroup;
+  editForm: FormGroup;
   errors: any;
   provinces: any;
   filterForm: FormGroup;
@@ -41,6 +44,7 @@ export class FarmerGroupCreateComponent extends BasicComponent implements OnInit
   searchByLocation = true;
   groupMembers = [];
   time: any;
+  id: string;
   searchFields = [
     {value: 'reg_number', name: 'registration number'},
     {value: 'nid', name: 'NID'},
@@ -60,7 +64,7 @@ export class FarmerGroupCreateComponent extends BasicComponent implements OnInit
   ];
 
   ngOnInit() {
-    this.createForm = this.formBuilder.group({
+    this.editForm = this.formBuilder.group({
       groupName: [''],
       leaderNames: [''],
       leaderPhoneNumber: [''],
@@ -78,7 +82,7 @@ export class FarmerGroupCreateComponent extends BasicComponent implements OnInit
       })
     });
     this.parameters = {
-      length: 10,
+      length: 35,
       start: 0,
       draw: 1,
       org_id: this.authenticationService.getCurrentUser().info.org_id
@@ -97,24 +101,52 @@ export class FarmerGroupCreateComponent extends BasicComponent implements OnInit
         searchBy: ['reg_number'],
       }),
     });
+    this.route.params.subscribe(params => {
+      this.id = params['id'.toString()];
+      this.groupService.get(params['id'.toString()]).subscribe(data => {
+        const members = data.data.members;
+        members.map((member) => {
+          const item = {userInfo: {
+              regNumber: '',
+              groupName: '',
+              foreName: '',
+              surname: '',
+              phone_number: '',
+              _id: member.userId,
+            },
+            selected: true
+          };
+          item.userInfo.regNumber = member.regNumber;
+          if (member.groupName) {
+            item.userInfo.groupName = member.groupName;
+          } else {
+            item.userInfo.foreName  = member.firstName ;
+            item.userInfo.surname = member.lastName;
+          }
+          item.userInfo.phone_number = member.phoneNumber;
+          this.groupMembers.push(item);
+        });
+        this.editForm.patchValue(data.data);
+      });
+    });
     this.basicInit(this.authenticationService.getCurrentUser().info.org_id);
     this.onChanges();
   }
 
   onSubmit() {
-    if (this.createForm.valid) {
-      const value = JSON.parse(JSON.stringify(this.createForm.value));
+    if (this.editForm.valid) {
+      const value = JSON.parse(JSON.stringify(this.editForm.value));
       value.org_id = this.authenticationService.getCurrentUser().info.org_id;
-      value.meetingSchedule.meetingDay = +  value.meetingSchedule.meetingDay;
+      value.meetingSchedule.meetingDay = + value.meetingSchedule.meetingDay;
       const members = [];
       this.groupMembers.map((member) => {
         members.push(member.userInfo._id);
       });
       value.members = members;
-      this.groupService.create(value).subscribe(
+      this.groupService.update(this.id, value).subscribe(
         (data) => {
           this.loading = false;
-          this.messageService.setMessage('Group successfully created!');
+          this.messageService.setMessage('Group successfully updated!');
           this.router.navigateByUrl('admin/farmers/group/list');
         },
         (err) => {
@@ -123,7 +155,7 @@ export class FarmerGroupCreateComponent extends BasicComponent implements OnInit
         }
       );
     } else {
-      this.errors = this.helper.getFormValidationErrors(this.createForm);
+      this.errors = this.helper.getFormValidationErrors(this.editForm);
     }
   }
 
@@ -237,24 +269,24 @@ export class FarmerGroupCreateComponent extends BasicComponent implements OnInit
   }
 
   onChanges() {
-    this.createForm.controls.location.get('prov_id'.toString()).valueChanges.subscribe(
+    this.editForm.controls.location.get('prov_id'.toString()).valueChanges.subscribe(
       (value) => {
-        this.locationChangeProvince(this.createForm, value);
+        this.locationChangeProvince(this.editForm, value);
       }
     );
-    this.createForm.controls.location.get('dist_id'.toString()).valueChanges.subscribe(
+    this.editForm.controls.location.get('dist_id'.toString()).valueChanges.subscribe(
       (value) => {
-        this.locationChangDistrict(this.createForm, value);
+        this.locationChangDistrict(this.editForm, value);
       }
     );
-    this.createForm.controls.location.get('sect_id'.toString()).valueChanges.subscribe(
+    this.editForm.controls.location.get('sect_id'.toString()).valueChanges.subscribe(
       (value) => {
-        this.locationChangSector(this.createForm, value);
+        this.locationChangSector(this.editForm, value);
       }
     );
-    this.createForm.controls.location.get('cell_id'.toString()).valueChanges.subscribe(
+    this.editForm.controls.location.get('cell_id'.toString()).valueChanges.subscribe(
       (value) => {
-        this.locationChangCell(this.createForm, value);
+        this.locationChangCell(this.editForm, value);
       }
     );
     this.filterForm.controls.searchByLocation

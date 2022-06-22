@@ -3,19 +3,18 @@ import { TrainingService, Training } from '../../../../core';
 import { MessageService } from '../../../../core';
 // import { HelperService } from "../../../../core";
 import { BasicComponent } from '../../../../core';
-import { Subject } from 'rxjs';
-import { DataTableDirective } from 'angular-datatables';
+import {Subject} from 'rxjs';
+import {DataTableDirective} from 'angular-datatables';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TrainingDeleteModal } from '../training-delete-modal/training-delete-modal.component';
 @Component({
   selector: 'app-training-list',
   templateUrl: './training-list.component.html',
-  styleUrls: ['./training-list.component.css'],
+  styleUrls: ['./training-list.component.css']
 })
-export class TrainingListComponent
-  extends BasicComponent
-  implements OnInit, OnDestroy
-{
+export class TrainingListComponent extends BasicComponent
+implements OnInit, OnDestroy {
+
   constructor(
     private messageService: MessageService,
     private trainingService: TrainingService,
@@ -43,7 +42,7 @@ export class TrainingListComponent
   // @ts-ignore
   dtTrigger: Subject = new Subject();
   // @ts-ignore
-  @ViewChild(DataTableDirective, { static: false })
+  @ViewChild(DataTableDirective, {static: false})
   dtElement: DataTableDirective;
 
   ngOnInit() {
@@ -54,8 +53,6 @@ export class TrainingListComponent
     };
     this.setMessage(this.messageService.getMessage());
   }
-
-  ngOnDestroy(): void {}
 
   getGroups(): void {
     this.loading = true;
@@ -77,5 +74,8 @@ export class TrainingListComponent
     modalRef.result.finally(() => {
       this.getGroups();
     });
+  }
+
+  ngOnDestroy(): void {
   }
 }

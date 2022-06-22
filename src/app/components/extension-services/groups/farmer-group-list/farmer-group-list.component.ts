@@ -1,9 +1,9 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {
   AuthenticationService,
   AuthorisationService,
   BasicComponent,
-  ConfirmDialogService, MessageService,
+  ConfirmDialogService, GroupService, MessageService,
   OrganisationService,
   SiteService
 } from '../../../../core';
@@ -18,30 +18,28 @@ import {DataTableDirective} from 'angular-datatables';
 })
 export class FarmerGroupListComponent extends BasicComponent implements OnInit, OnDestroy {
 
-  constructor(private organService: OrganisationService, private siteService: SiteService,
-              private router: Router, private  confirmDialogService: ConfirmDialogService,
+  constructor(
               private authorisationService: AuthorisationService,
+              private groupService: GroupService,
               private route: ActivatedRoute,
               private authenticationService: AuthenticationService, private messageService: MessageService) {
     super();
   }
   groups = [];
-  dtOptions: any = {};
   loading = false;
+  dtOptions: DataTables.Settings = {};
   // @ts-ignore
   dtTrigger: Subject = new Subject();
-  // @ts-ignore
-  @ViewChild(DataTableDirective, {static: false})
-  dtElement: DataTableDirective;
 
   ngOnInit() {
-    this.getGroups();
+    this.listGroups();
     this.dtOptions = {
       pagingType: 'full_numbers',
-      pageLength: 25
+      pageLength: 10
     };
     this.setMessage(this.messageService.getMessage());
   }
+
 
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
@@ -49,8 +47,16 @@ export class FarmerGroupListComponent extends BasicComponent implements OnInit, 
   }
 
 
-  getGroups(): void {
+  listGroups(): void {
     this.loading = true;
-    }
+    const body = {
+      reference: this.authenticationService.getCurrentUser().info.org_id
+    };
+
+    this.groupService.list(body).subscribe((data) => {
+      this.groups = data.data;
+      this.dtTrigger.next();
+    });
+  }
 
 }
