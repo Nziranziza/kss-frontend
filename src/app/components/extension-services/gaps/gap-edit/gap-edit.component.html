@@ -7,7 +7,7 @@
   <div class="col-sm-12 gap-box">
     <form [formGroup]="createForm" (ngSubmit)="onSubmit()">
       <div class="row">
-        <div class="col-xs-6">
+        <div class="col-xs-4">
           <div
             class="form-group"
             [ngClass]="{
@@ -33,7 +33,7 @@
             </div>
           </div>
         </div>
-        <div class="col-xs-6">
+        <div class="col-xs-4">
           <div
             class="form-group"
             [ngClass]="{
@@ -49,6 +49,45 @@
               class="form-control"
               placeholder=""
             />
+            <div
+              *ngIf="
+                description.invalid &&
+                (description.dirty || description.touched)
+              "
+              class="alert"
+            >
+              <div *ngIf="description.errors['required']" style="color: red">
+                *Description is required.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-4">
+          <div
+            class="form-group"
+            [ngClass]="{
+              'has-error':
+                description.invalid &&
+                (description.dirty || description.touched)
+            }"
+          >
+            <label class="control-label">Gap Status</label>
+            <select
+              class="form-control"
+              formControlName="status"
+            >
+              <option value=""></option>
+              <option
+                value="active"
+              >
+                Active
+              </option>
+              <option
+                value="inactive"
+              >
+                Deactivated
+              </option>
+            </select>
             <div
               *ngIf="
                 description.invalid &&

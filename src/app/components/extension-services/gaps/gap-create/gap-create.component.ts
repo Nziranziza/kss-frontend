@@ -20,9 +20,10 @@ export class GapCreateComponent
     { id: 'mark_input', name: 'Marks Input' },
     { id: 'percentage_input', name: 'Percentage Input' },
     { id: 'multiple_choice', name: 'multiple_choice' },
-    { id: 'multiple_choice_single', name: 'Multiple Choice - Single' },
+    { id: 'multiple_single', name: 'Multiple Choice - Single' },
+    { id: 'yes_no', name: 'Yes/No' },
     {
-      id: 'multiple_choice_select_apply',
+      id: 'multiple_all_apply',
       name: 'Multiple Choice - All that Apply',
     },
   ];
@@ -84,12 +85,13 @@ export class GapCreateComponent
     }
   }
 
-  weight(index: number, aIndex: number){
-    const answers = (this.formCategory.at(index).get('answers') as FormArray).controls;
+  weight(index: number, aIndex: number) {
+    const answers = (this.formCategory.at(index).get('answers') as FormArray)
+      .controls;
     const answer = answers[aIndex] as FormGroup;
     return answer.controls.weight;
   }
-  
+
   marks(index: number) {
     return this.formCategory.at(index).get('marks');
   }

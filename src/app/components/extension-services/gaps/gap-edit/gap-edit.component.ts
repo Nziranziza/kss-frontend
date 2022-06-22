@@ -21,6 +21,12 @@ export class GapEditComponent
     { id: 'text_input', name: 'text_input' },
     { id: 'percentage_input', name: 'percentage_input' },
     { id: 'multiple_choice', name: 'multiple_choice' },
+    { id: 'multiple_single', name: 'Multiple Choice - Single' },
+    { id: 'yes_no', name: 'Yes/No' },
+    {
+      id: 'multiple_all_apply',
+      name: 'Multiple Choice - All that Apply',
+    },
   ];
   loading = false;
   adoptionOptionsVisible = false;
