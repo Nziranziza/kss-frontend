@@ -12,7 +12,6 @@ import { TrainingListComponent } from './training/training-list/training-list.co
 import { TrainingSchedulingCreateComponent } from './training/training-scheduling-create/training-scheduling-create.component';
 import { TrainingSchedulingListComponent } from './training/training-scheduling-list/training-scheduling-list.component';
 import { TrainingEditComponent } from './training/training-edit/training-edit.component';
-import {FarmerGroupEditComponent} from './groups/farmer-group-edit/farmer-group-edit.component';
 import { ScheduleFarmVisitComponent } from './farm-visit/schedule-farm-visit/schedule-farm-visit.component';
 import { EditFarmVisitComponent } from './farm-visit/edit-farm-visit/edit-farm-visit.component';
 import { DeleteFarmVisitComponent } from './farm-visit/delete-farm-visit/delete-farm-visit.component';
@@ -30,10 +29,6 @@ const routes: Routes = [
         component: FarmerGroupCreateComponent,
       },
       {
-        path: 'farmers/group/edit/:id',
-        component: FarmerGroupEditComponent,
-      },
-      {
         path: 'farmers/group/list',
         component: FarmerGroupListComponent,
       },
@@ -49,7 +44,7 @@ const routes: Routes = [
         path: 'gaps/edit/:id',
         component: GapEditComponent,
       },
-      {
+      { 
         path: 'training/create',
         component: TrainingCreateComponent
       },
@@ -88,10 +83,8 @@ const routes: Routes = [
     ],
   },
 ];
-
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class ExtensionServicesRoutingModule {
-}
+export class ExtensionServicesRoutingModule {}
