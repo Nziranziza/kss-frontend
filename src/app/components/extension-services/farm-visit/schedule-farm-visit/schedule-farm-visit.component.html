@@ -1,0 +1,269 @@
+<ng-template #ccontent let-modal>
+  <div class="modal-body text-center" style="font-size: 1.5em">
+    <i class="fa fa-check" style="color: #00a513; font-size: 4.5em"></i>
+    <br />
+    Schedule to Visit <br />
+    <span style="font-weight: bold"> “ {{ scheduleVisit.value.farm }} “ </span>
+    <br />
+    has been added and the farm owner will be notified via SMS <br />
+
+    <button
+      type="button"
+      class="btn btn-success btn-lg pull-center"
+      routerLink="/admin/farm/visit/list"
+      (click)="modal.dismiss()"
+    >
+      OK
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4
+      class="modal-title training-modal-title text-center"
+      id="modal-basic-title"
+    >
+      Verify and Confirm
+    </h4>
+  </div>
+  <div class="modal-body">
+    <div class="box">
+      <div class="box-body box-confirm">
+        <div class="row">
+          <div class="col-xs-12">
+            <div style="margin-bottom: 10px">
+              <label class="control-label label-required">Farm to visit</label>
+              <div class="confirm-text-box confirm-text">Hello</div>
+            </div>
+            <div style="margin-bottom: 10px">
+              <label class="control-label label-required"
+                >GAP to be covered during the visit</label
+              >
+              <div class="confirm-text-box confirm-text">
+                Hello <br />
+                Hello
+              </div>
+            </div>
+            <div style="margin-bottom: 10px">
+              <label class="control-label label-required"
+                >Agronomist who will visit</label
+              >
+              <div class="confirm-text-box confirm-text">Hello</div>
+            </div>
+            <div style="margin-bottom: 10px">
+              <label class="control-label label-required"
+                >Date and Time of the visit</label
+              >
+              <div class="confirm-text-box confirm-text">Hello</div>
+            </div>
+            <div style="margin-bottom: 10px">
+              <label class="control-label label-required"
+                >Visit Description</label
+              >
+              <div class="confirm-text-box confirm-text">
+                Hello <br /><br /><br />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div class="row">
+      <div class="col-sm-3">
+        <button
+          type="button"
+          class="btn btn-danger btn-lg pull-left"
+          (click)="modal.dismiss()"
+        >
+          Cancel
+        </button>
+      </div>
+      <div class="col-sm-6"></div>
+      <div class="col-sm-3">
+        <button
+          class="btn btn-secondary btn-lg submit"
+          (click)="modal.dismiss(); open(ccontent)"
+          [disabled]="loading"
+        >
+          <span *ngIf="!loading; else other_content">Confirm</span>
+          <ng-template #other_content>
+            <div class="loader">
+              <div class="line"></div>
+              <div class="line"></div>
+              <div class="line"></div>
+              <div class="line"></div>
+            </div>
+          </ng-template>
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<h3>Farm Visits > <span style="font-weight: bold"> Schedule a Visit </span></h3>
+<app-list-errors [errorList]="errors"></app-list-errors>
+<form [formGroup]="scheduleVisit" (ngSubmit)="onSubmit()">
+  <div class="box">
+    <div class="row">
+      <br />
+      <div class="col-sm-8 col-centered">
+        <div class="form-group">
+          <label class="control-label label-required">Select a group </label>
+          <select class="form-control" formControlName="farmerGroup">
+            <option value="" disabled selected>select group</option>
+            <option *ngFor="let group of farmerGroups" value="{{ group._id }}">
+              {{ group.groupName | titlecase }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="col-sm-8 col-centered">
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <fieldset style="margin: 0px -3px 0px -3px !important">
+                <legend style="width: 13em">
+                  <label class="control-label">&nbsp; SELECT FARM </label>
+                </legend>
+                <table class="row-border hover table table-striped" style="margin-top: -20px">
+                  <thead>
+                    <tr>
+                      <th>Farmer</th>
+                      <th>Farm</th>
+                      <th>UPI</th>
+                      <th>Status</th>
+                      <th>Selection</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </fieldset>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <fieldset style="margin: 0px -3px 0px -3px !important">
+              <legend style="width: 13em">
+                <label class="control-label">&nbsp; FARM DETAILS </label>
+              </legend>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-8 col-centered">
+        <div class="form-group">
+          <label class="control-label label-required"
+            >Select a GAP to be covered during the visit</label
+          >
+          <select class="form-control" formControlName="farm">
+            <option value="" disabled selected>select gap</option>
+            <option value="none">none</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-sm-8 col-centered">
+        <div class="form-group">
+          <label class="control-label label-required"
+            >Select an agronomist who will visit the farm</label
+          >
+          <select class="form-control" formControlName="farm">
+            <option value="" disabled selected>select agronomist</option>
+            <option value="none">none</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-sm-8 col-centered">
+        <p style="font-weight: bold">Date and time of the visit</p>
+        <br />
+        <ng-container formGroupName="date">
+          <div class="col-sm-10 col-centered">
+            <div class="form-group">
+              <label class="control-label label-required">Select Date</label>
+              <input
+                [owlDateTimeTrigger]="dt1"
+                [owlDateTime]="dt1"
+                formControlName="visitDate"
+                class="form-control"
+                placeholder="Dd/mm/yyyy"
+              />
+              <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+      <div class="col-sm-8 col-centered">
+        <div
+          class="row text-center"
+          style="padding-left: 10%; padding-right: 10%"
+        >
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label class="control-label label-required">Starts</label>
+              <input
+                atp-time-picker
+                formControlName="startTime"
+                class="form-control"
+                placeholder="00:00"
+              />
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label class="control-label label-required">Ends</label>
+              <input
+                atp-time-picker
+                formControlName="endTime"
+                class="form-control"
+                placeholder="00:00"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-8 col-centered">
+        <div class="form-group">
+          <label class="control-label label-required">Visit Description</label>
+          <input
+            type="text"
+            formControlName="description"
+            class="form-control"
+            style="height: 100px"
+          />
+        </div>
+      </div>
+    </div>
+    <br />
+    <div class="text-center">
+      <button
+        type="button"
+        class="btn"
+        style="
+          width: 250px;
+          height: 50px;
+          margin-right: 10px;
+          background-color: #bababa;
+          color: #ffffff;
+        "
+        routerLink="/admin/farm/visit/list"
+      >
+        Cancel
+      </button>
+      <button
+        type="button btn-primary"
+        class="btn"
+        (click)="open(content)"
+        style="
+          width: 250px;
+          height: 50px;
+          background-color: #4f210d;
+          color: #ffffff;
+        "
+      >
+        Add Training
+      </button>
+    </div>
+    <br />
+  </div>
+</form>

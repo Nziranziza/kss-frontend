@@ -106,7 +106,6 @@ export class TrainingEditComponent
         console.log(err);
       }
     );
-
   }
 
   getGaps(): void {
