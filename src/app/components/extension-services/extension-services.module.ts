@@ -14,10 +14,17 @@ import { GapDeleteModal } from './gaps/gap-delete-modal/gap-delete-modal.compone
 import { GapEditComponent } from './gaps/gap-edit/gap-edit.component';
 import { TrainingListComponent } from './training/training-list/training-list.component';
 import { TrainingCreateComponent } from './training/training-create/training-create.component';
+import { TrainingSchedulingCreateComponent } from './training/training-scheduling-create/training-scheduling-create.component';
+import { TrainingSchedulingListComponent } from './training/training-scheduling-list/training-scheduling-list.component';
 import { TrainingEditComponent } from './training/training-edit/training-edit.component';
 import { TrainingDeleteModal } from './training/training-delete-modal/training-delete-modal.component';
-import { FarmerGroupEditComponent } from './groups/farmer-group-edit/farmer-group-edit.component';
-
+import { TrainingViewComponent } from './training/training-view/training-view.component';
+import { ScheduleFarmVisitComponent } from './farm-visit/schedule-farm-visit/schedule-farm-visit.component';
+import { EditFarmVisitComponent } from './farm-visit/edit-farm-visit/edit-farm-visit.component';
+import { DeleteFarmVisitComponent } from './farm-visit/delete-farm-visit/delete-farm-visit.component';
+import { ViewFarmVisitComponent } from './farm-visit/view-farm-visit/view-farm-visit.component';
+import { FarmVisitListComponent } from './farm-visit/farm-visit-list/farm-visit-list.component';
+import { AmazingTimePickerModule } from 'amazing-time-picker'; 
 @NgModule({
   declarations: [
     FarmerGroupListComponent,
@@ -28,9 +35,16 @@ import { FarmerGroupEditComponent } from './groups/farmer-group-edit/farmer-grou
     GapDeleteModal,
     TrainingListComponent,
     TrainingCreateComponent,
+    TrainingSchedulingCreateComponent,
+    TrainingSchedulingListComponent,
     TrainingEditComponent,
     TrainingDeleteModal,
-    FarmerGroupEditComponent
+    TrainingViewComponent,
+    ScheduleFarmVisitComponent,
+    EditFarmVisitComponent,
+    DeleteFarmVisitComponent,
+    ViewFarmVisitComponent,
+    FarmVisitListComponent
   ],
   imports: [
     CommonModule,
@@ -41,6 +55,7 @@ import { FarmerGroupEditComponent } from './groups/farmer-group-edit/farmer-grou
     NgbModule,
     NgxPaginationModule,
     OrderModule,
+    AmazingTimePickerModule,
   ],
   entryComponents: [GapDeleteModal, TrainingDeleteModal],
 })

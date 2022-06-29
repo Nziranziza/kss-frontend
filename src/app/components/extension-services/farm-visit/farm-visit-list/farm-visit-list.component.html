@@ -1,0 +1,68 @@
+<div class="title-bar">
+  <h3>Farms Visits</h3>
+  <a class="btn btn-success pull-right" routerLink="/admin/farm/visit/create"
+    ><i class="fa fa-plus"></i> Schedule a Farm Visit
+  </a>
+</div>
+<app-list-message [message]="message"></app-list-message>
+<app-list-errors [errorList]="errors"></app-list-errors>
+<div class="row">
+  <div class="col-sm-12 stats-section">
+    <div class="row">
+      <div class="col-sm-12 text-center stats-title">
+        Visits Summary
+      </div>
+      <div class="col-sm-4">
+        <div class="text-center stats-box">
+          <h3>Scheduled Visits</h3>
+          <h1>000</h1>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="text-center stats-box middle-box">
+          <h3>Visited Farms</h3>
+          <h1>000</h1>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="text-center stats-box third-box">
+          <h3>Canceled Visits</h3>
+          <h1>000</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-header">
+        <!-- <h6>Showing 1 t0 10 of 300 entries</h6> -->
+      </div>
+      <div class="box-body table-responsive">
+        <app-loader *ngIf="loading"></app-loader>
+        <table
+          datatable
+          [dtOptions]="dtOptions"
+          [dtTrigger]="dtTrigger"
+          class="row-border hover table table-striped"
+        >
+          <thead>
+            <tr>
+              <th>Date Added</th>
+              <th>Farm to visit</th>
+              <th>Visit Description</th>
+              <th>GAP to be Covered</th>
+              <th>Visitor</th>
+              <th>Date and Time of the visit</th>
+              <th>Status</th>
+              <th>Score</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>

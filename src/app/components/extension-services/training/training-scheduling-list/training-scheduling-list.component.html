@@ -1,0 +1,63 @@
+<h3>
+  <div class="row">
+    <div class="col-sm-10"> Scheduled Training </div>
+    <div class="col-sm-2">
+      <a
+        class="btn btn-success pull-left"
+        routerLink="/admin/training/schedule/create"
+        ><i class="fa fa-calendar"></i> Schedule a Training
+      </a>
+    </div>
+  </div>
+</h3>
+<app-list-message [message]="message"></app-list-message>
+<app-list-errors [errorList]="errors"></app-list-errors>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-body table-responsive">
+        <app-loader *ngIf="loading"></app-loader>
+        <table
+          datatable
+          [dtOptions]="dtOptions"
+          [dtTrigger]="dtTrigger"
+          class="row-border hover table table-striped"
+        >
+          <thead>
+            <tr>
+              <th>Date Added</th>
+              <th>Training Module Title</th>
+              <th>Date/Time of the training</th>
+              <th>Location of the training</th>
+              <th>Trainer</th>
+              <th>Trainees</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let training of trainings">
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="actions no-wrap text-right">
+                  <a
+                    class="btn btn-success btn-margin btn-sm"
+                    [routerLink]="['edit/', group._id]"
+                    style="margin-left: 10px"
+                  >
+                    Edit
+                  </a>
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
