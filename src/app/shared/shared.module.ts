@@ -25,6 +25,7 @@ import {InternalDirective} from './directives/internal.directives';
 import {RequiredSeasonCherryDirective} from './directives/required-season-cherry.directive';
 import {DebounceClickDirective} from './directives/debounce-click.directive';
 import { LoadingComponent } from './layouts/loading/loading.component';
+import {InlineErrorsComponent} from './layouts/inline-errors/inline-errors.component';
 
 @NgModule({
   imports: [
@@ -40,7 +41,9 @@ import { LoadingComponent } from './layouts/loading/loading.component';
     ConfirmDialogComponent, RequiredRolesDirective, InternalDirective, LoaderComponent,
     RequiredSeasonDirective, RequiredSeasonCherryDirective, HasPermissionDirective,
     DebounceClickDirective,
-    QuantityUnitComponent, ListWarningsComponent, DownloadingComponent, SpinnerComponent, LoadingComponent],
+    QuantityUnitComponent, ListWarningsComponent,
+    InlineErrorsComponent,
+    DownloadingComponent, SpinnerComponent, LoadingComponent],
   exports: [
     CommonModule,
     FormsModule,
@@ -48,6 +51,7 @@ import { LoadingComponent } from './layouts/loading/loading.component';
     HttpClientModule,
     RouterModule,
     ListErrorsComponent,
+    InlineErrorsComponent,
     ListMessageComponent,
     ListWarningsComponent,
     SpinnerComponent,
@@ -59,7 +63,7 @@ import { LoadingComponent } from './layouts/loading/loading.component';
     DownloadingComponent,
     MatIconModule, MatDialogModule,
     DataTablesModule, RequiredRolesDirective,
-    RequiredSeasonDirective, HasPermissionDirective, InternalDirective, RequiredSeasonCherryDirective
+    RequiredSeasonDirective, HasPermissionDirective, InternalDirective, RequiredSeasonCherryDirective, InlineErrorsComponent, InlineErrorsComponent
   ],
   entryComponents: [ConfirmDialogComponent]
 })

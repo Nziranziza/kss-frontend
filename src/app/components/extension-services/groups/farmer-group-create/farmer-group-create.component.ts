@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {
   AuthenticationService,
@@ -70,7 +70,7 @@ export class FarmerGroupCreateComponent extends BasicComponent implements OnInit
         meetingTime: [''],
       }),
       location: this.formBuilder.group({
-        prov_id: [''],
+        prov_id: ['', Validators.required],
         dist_id: [''],
         sect_id: [''],
         cell_id: [''],
