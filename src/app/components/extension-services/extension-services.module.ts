@@ -13,19 +13,21 @@ import { GapListComponent } from './gaps/gap-list/gap-list.component';
 import { GapCreateComponent } from './gaps/gap-create/gap-create.component';
 import { GapDeleteModal } from './gaps/gap-delete-modal/gap-delete-modal.component';
 import { GapEditComponent } from './gaps/gap-edit/gap-edit.component';
-import { TrainingListComponent } from './training/training-list/training-list.component';
-import { TrainingCreateComponent } from './training/training-create/training-create.component';
-import { TrainingSchedulingCreateComponent } from './training/training-scheduling-create/training-scheduling-create.component';
-import { TrainingSchedulingListComponent } from './training/training-scheduling-list/training-scheduling-list.component';
-import { TrainingEditComponent } from './training/training-edit/training-edit.component';
-import { TrainingDeleteModal } from './training/training-delete-modal/training-delete-modal.component';
-import { TrainingViewComponent } from './training/training-view/training-view.component';
-import { ScheduleFarmVisitComponent } from './farm-visit/schedule-farm-visit/schedule-farm-visit.component';
-import { EditFarmVisitComponent } from './farm-visit/edit-farm-visit/edit-farm-visit.component';
-import { DeleteFarmVisitComponent } from './farm-visit/delete-farm-visit/delete-farm-visit.component';
-import { ViewFarmVisitComponent } from './farm-visit/view-farm-visit/view-farm-visit.component';
-import { FarmVisitListComponent } from './farm-visit/farm-visit-list/farm-visit-list.component';
-import { AmazingTimePickerModule } from 'amazing-time-picker'; 
+import { TrainingListComponent } from './trainings/training-list/training-list.component';
+import { TrainingCreateComponent } from './trainings/training-create/training-create.component';
+import { TrainingSchedulingCreateComponent } from './schedules/training-scheduling-create/training-scheduling-create.component';
+import { TrainingSchedulingListComponent } from './schedules/training-scheduling-list/training-scheduling-list.component';
+import { TrainingEditComponent } from './trainings/training-edit/training-edit.component';
+import { TrainingDeleteModal } from './trainings/training-delete-modal/training-delete-modal.component';
+import { TrainingViewComponent } from './trainings/training-view/training-view.component';
+import { ScheduleFarmVisitComponent } from './farm-visits/schedule-farm-visit/schedule-farm-visit.component';
+import { EditFarmVisitComponent } from './farm-visits/edit-farm-visit/edit-farm-visit.component';
+import { DeleteFarmVisitComponent } from './farm-visits/delete-farm-visit/delete-farm-visit.component';
+import { ViewFarmVisitComponent } from './farm-visits/view-farm-visit/view-farm-visit.component';
+import { FarmVisitListComponent } from './farm-visits/farm-visit-list/farm-visit-list.component';
+import { AmazingTimePickerModule } from 'amazing-time-picker';
+import { TrainingScheduleViewComponent } from './schedules/training-schedule-view/training-schedule-view.component';
+import { TrainingScheduleEditComponent } from './schedules/training-schedule-edit/training-schedule-edit.component'; 
 @NgModule({
   declarations: [
     FarmerGroupListComponent,
@@ -45,7 +47,9 @@ import { AmazingTimePickerModule } from 'amazing-time-picker';
     EditFarmVisitComponent,
     DeleteFarmVisitComponent,
     ViewFarmVisitComponent,
-    FarmVisitListComponent
+    FarmVisitListComponent,
+    TrainingScheduleViewComponent,
+    TrainingScheduleEditComponent
   ],
   imports: [
     CommonModule,
