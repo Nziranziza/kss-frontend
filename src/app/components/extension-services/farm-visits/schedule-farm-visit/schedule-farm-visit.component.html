@@ -109,18 +109,21 @@
   <div class="box">
     <div class="row">
       <br />
-      <div class="col-sm-8 col-centered">
+      <div class="col-sm-10 col-centered">
         <div class="form-group">
           <label class="control-label label-required">Select a group </label>
           <select class="form-control" formControlName="farmerGroup">
             <option value="" disabled selected>select group</option>
-            <option *ngFor="let group of farmerGroups" value="{{ group._id }}">
+            <option
+              *ngFor="let group of farmerGroups"
+              value="{{ group.groupName }}"
+            >
               {{ group.groupName | titlecase }}
             </option>
           </select>
         </div>
       </div>
-      <div class="col-sm-8 col-centered">
+      <div class="col-sm-10 col-centered">
         <div class="row">
           <div class="col-sm-6">
             <div class="form-group">
@@ -128,17 +131,38 @@
                 <legend style="width: 13em">
                   <label class="control-label">&nbsp; SELECT FARM </label>
                 </legend>
-                <table class="row-border hover table table-striped" style="margin-top: -20px">
+                <table
+                  class="row-border hover table table-striped"
+                  style="margin-top: -20px"
+                >
                   <thead>
                     <tr>
                       <th>Farmer</th>
-                      <th>Farm</th>
                       <th>UPI</th>
-                      <th>Status</th>
                       <th>Selection</th>
                     </tr>
                   </thead>
-                  <tbody></tbody>
+                  <tbody>
+                    <tr *ngFor="let farm of farmList">
+                      <td>{{ farm.farmer }}</td>
+                      <td>{{ farm.upi }}</td>
+                      <td>
+                        <button
+                          appRequiredSeason
+                          class="btn btn-action-no-border btn-margin details-button"
+                        >
+                          <em class="fa fa-eye"></em>
+                        </button>
+                        <input
+                          type="checkbox"
+                          class="pull-right"
+                          (click)="selectTrainee($event.target.checked, i)"
+                          [(ngModel)]="farm.selected"
+                          [ngModelOptions]="{ standalone: true }"
+                        />
+                      </td>
+                    </tr>
+                  </tbody>
                 </table>
               </fieldset>
             </div>
@@ -152,7 +176,7 @@
           </div>
         </div>
       </div>
-      <div class="col-sm-8 col-centered">
+      <div class="col-sm-10 col-centered">
         <div class="form-group">
           <label class="control-label label-required"
             >Select a GAP to be covered during the visit</label
@@ -160,21 +184,29 @@
           <select class="form-control" formControlName="farm">
             <option value="" disabled selected>select gap</option>
             <option value="none">none</option>
+            <option *ngFor="let gap of gaps" value="{{ gap._id }}">
+              {{ gap.name | titlecase }}
+            </option>
           </select>
         </div>
       </div>
-      <div class="col-sm-8 col-centered">
+      <div class="col-sm-10 col-centered">
         <div class="form-group">
           <label class="control-label label-required"
             >Select an agronomist who will visit the farm</label
           >
           <select class="form-control" formControlName="farm">
             <option value="" disabled selected>select agronomist</option>
-            <option value="none">none</option>
+            <option
+              *ngFor="let agro of agronomist; let i = index"
+              value="{{ agro._id }}"
+            >
+              {{ agro.foreName + " " + agro.surname | titlecase }}
+            </option>
           </select>
         </div>
       </div>
-      <div class="col-sm-8 col-centered">
+      <div class="col-sm-10 col-centered">
         <p style="font-weight: bold">Date and time of the visit</p>
         <br />
         <ng-container formGroupName="date">
@@ -193,7 +225,7 @@
           </div>
         </ng-container>
       </div>
-      <div class="col-sm-8 col-centered">
+      <div class="col-sm-10 col-centered">
         <div
           class="row text-center"
           style="padding-left: 10%; padding-right: 10%"
@@ -222,7 +254,7 @@
           </div>
         </div>
       </div>
-      <div class="col-sm-8 col-centered">
+      <div class="col-sm-10 col-centered">
         <div class="form-group">
           <label class="control-label label-required">Visit Description</label>
           <input
@@ -261,7 +293,7 @@
           color: #ffffff;
         "
       >
-        Add Training
+        Schedule A Visit
       </button>
     </div>
     <br />

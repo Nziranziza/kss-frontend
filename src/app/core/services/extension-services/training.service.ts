@@ -29,8 +29,10 @@ export class TrainingService {
     console.log(id);
     return this.apiService.post("/v1.1/groups/attendance/" + id, body);
   }
-
   scheduleTraining(body: any) {
     return this.apiService.post("/v1.1/schedules", body);
+  }
+  allSchedule(id: any) {
+    return this.apiService.get("/v1.1/schedules/org/" + id);
   }
 }

@@ -1,0 +1,63 @@
+<div class="modal-body">
+  <div class="box">
+    <div class="box-body">
+      <h3>Training details</h3>
+      <div class="row">
+        <div class="col-xs-6">
+          <div style="margin-bottom: 10px">
+            <label class="control-label label-required">Training Name</label>
+            <div class="confirm-text-box confirm-text">
+              {{ createTraining.value.trainingName }}
+            </div>
+          </div>
+          <div>
+            <label class="control-label label-required">Associated GAP</label>
+            <div class="confirm-text-box confirm-text">
+              {{ createTraining.value.adoptionGap }}
+            </div>
+          </div>
+          <div>
+            <label class="control-label label-required">Status</label>
+            <div class="confirm-text-box confirm-text">
+              {{ createTraining.value.status }}
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-6">
+          <div>
+            <label class="control-label label-required"
+              >Training Description</label
+            >
+            <div class="confirm-text-box confirm-text">
+              {{ createTraining.value.description }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="box" class="background: #EDEAE8 0% 0% no-repeat padding-box">
+    <app-loader *ngIf="loading"></app-loader>
+    <div class="box-body" *ngIf="!loading">
+      <h3>Files</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Filename</th>
+            <th>File Size</th>
+          </tr>
+        </thead>
+
+        <tbody *ngFor="let file of files; let i = index">
+          <tr>
+            <td>{{ i + 1 }}</td>
+            <td>{{ file.name }}</td>
+            <td>{{ file.size }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

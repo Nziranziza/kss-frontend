@@ -296,6 +296,7 @@
                         formControlName="trainingStartDate"
                         class="form-control"
                         placeholder="Dd/mm/yyyy"
+                        [min]="today"
                       />
                       <owl-date-time
                         [pickerType]="'calendar'"
@@ -328,6 +329,7 @@
                         formControlName="trainingEndDate"
                         class="form-control"
                         placeholder="Dd/mm/yyyy"
+                        [min]="scheduleTraining.value.trainingStartDate"
                       />
                       <owl-date-time
                         [pickerType]="'calendar'"
