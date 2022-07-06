@@ -36,6 +36,7 @@ export class TrainingCreateComponent
       trainingName: ["", Validators.required],
       description: ["", Validators.required],
       adoptionGap: ["", Validators.required],
+      status: [""],
     });
   }
 
@@ -47,6 +48,9 @@ export class TrainingCreateComponent
   }
   get adoptionGap() {
     return this.createTraining.get("adoptionGap");
+  }
+  get status() {
+    return this.createTraining.get("status");
   }
   files: any[] = [];
   materials: any[] = [];

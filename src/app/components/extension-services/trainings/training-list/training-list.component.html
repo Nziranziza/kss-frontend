@@ -74,6 +74,7 @@
                 <button
                   appRequiredSeason
                   class="btn btn-action-no-border btn-margin details-button"
+                  routerLink="/admin/training/details/{{ training._id }}"
                 >
                   <em class="fa fa-eye"></em>
                 </button>
@@ -96,8 +97,7 @@
         </table>
       </div>
       <div class="table-footer" style="width: 100%" *ngIf="showData">
-        <!--
-          <pagination-controls
+        <pagination-controls
           class="custom-pagination"
           [maxSize]="maxSize"
           [directionLinks]="directionLinks"
@@ -108,9 +108,9 @@
           [screenReaderPaginationLabel]="labels.screenReaderPaginationLabel"
           [screenReaderPageLabel]="labels.screenReaderPageLabel"
           [screenReaderCurrentLabel]="labels.screenReaderCurrentLabel"
-          (pageChange)="onPageChange($event)">
-          </pagination-controls>
-        -->
+          (pageChange)="onPageChange($event)"
+        >
+        </pagination-controls>
       </div>
     </div>
   </div>
