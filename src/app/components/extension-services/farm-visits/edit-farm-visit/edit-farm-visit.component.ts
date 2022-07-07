@@ -9,7 +9,7 @@ import {
   VisitService,
 } from "src/app/core";
 import { IDropdownSettings } from "ng-multiselect-dropdown";
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-edit-farm-visit',
@@ -27,6 +27,7 @@ export class EditFarmVisitComponent implements OnInit {
     private userService: UserService,
     private visitService: VisitService,
     private router: Router,
+    private route: ActivatedRoute,
   ) {}
   loading: Boolean = false;
   farmerGroups: any[] = [];
@@ -40,8 +41,13 @@ export class EditFarmVisitComponent implements OnInit {
   viewDetailsClicked: Boolean;
   farmDetails;
   farmerGroupId;
+  id: string;
+  visits: any[] = [];
 
   ngOnInit() {
+    this.route.params.subscribe((params) => {
+      this.id = params["id".toString()];
+    });
     this.scheduleVisit = this.formBuilder.group({
       farmerGroup: ["", Validators.required],
       farm: ["", Validators.required],
@@ -56,6 +62,7 @@ export class EditFarmVisitComponent implements OnInit {
       startTime: "00:00",
       endTime: "00:00",
     });
+    this.getVisits();
 
     this.gapDropdownSettings = {
       singleSelection: false,
@@ -71,7 +78,31 @@ export class EditFarmVisitComponent implements OnInit {
     this.getAgronomists();
     this.onChanges();
   }
-
+  getVisits() {
+    this.visitService.one(this.id).subscribe((data) => {
+      this.visits = data.data;
+      this.farmList = data.data.farms;
+      console.log(this.visits);
+      this.scheduleVisit.controls.startTime.setValue(
+        data.data.expectedDuration.from
+      );
+      this.scheduleVisit.controls.endTime.setValue(
+        data.data.expectedDuration.to
+      );
+      this.scheduleVisit.controls.farmerGroup.setValue(
+        data.data.groupId
+      );
+      this.scheduleVisit.controls.adoptionGap.setValue(
+        data.data.gaps
+      );
+      this.scheduleVisit.controls.description.setValue(
+        data.data.description
+      );
+      this.scheduleVisit.controls.farm.setValue(
+        data.data.visitor
+      );
+    });
+  }
   getFarmerGroup() {
     this.loading = true;
     console.log(this.authenticationService.getCurrentUser());

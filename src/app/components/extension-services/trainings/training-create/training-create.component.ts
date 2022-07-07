@@ -38,13 +38,14 @@ export class TrainingCreateComponent
       trainingName: ["", Validators.required],
       description: ["", Validators.required],
       adoptionGap: [[], Validators.required],
-      status: [""],
+      status: ["active"],
     });
     this.gapDropdownSettings = {
       singleSelection: false,
       idField: "_id",
       textField: "name",
       selectAllText: "Select All",
+      enableCheckAll: false,
       unSelectAllText: "UnSelect All",
       itemsShowLimit: 6,
       allowSearchFilter: true,
@@ -65,9 +66,16 @@ export class TrainingCreateComponent
   }
 
   onGapSelect(item: any) {
+    console.log(item);
+    if(item._id === ''){
+      this.gapDropdownSettings.singleSelection = true;
+    }
     console.log(this.createTraining.get("adoptionGap".toString()).value);
   }
   onDeGapSelect(item: any) {
+    if(item._id === ''){
+      this.gapDropdownSettings.singleSelection = false;
+    }
     let gapSelected = this.createTraining.get("adoptionGap".toString());
     let gapOptions = gapSelected.value.filter(data => data._id !== item._id);
     gapSelected.setValue(gapOptions, { emitEvent: false });
@@ -99,7 +107,14 @@ export class TrainingCreateComponent
   getGaps(): void {
     this.loading = true;
     this.gapService.all().subscribe((data) => {
-      this.gaps = data.data;
+      let newData :any[] = [{
+        _id : "",
+        name: "Not Applied"
+      }];
+      data.data.forEach(data => { 
+        newData.push({_id: data._id, name: data.name});
+      });
+      this.gaps = newData;
       this.loading = false;
     });
   }

@@ -62,6 +62,7 @@ export class ScheduleFarmVisitComponent implements OnInit {
       singleSelection: false,
       idField: "_id",
       textField: "name",
+      enableCheckAll: false,
       selectAllText: "Select All",
       unSelectAllText: "UnSelect All",
       itemsShowLimit: 6,
@@ -159,7 +160,14 @@ export class ScheduleFarmVisitComponent implements OnInit {
   getGaps(): void {
     this.loading = true;
     this.gapService.all().subscribe((data) => {
-      this.gaps = data.data;
+      let newData :any[] = [{
+        _id : "",
+        name: "Not Applied"
+      }];
+      data.data.forEach(data => { 
+        newData.push({_id: data._id, name: data.name});
+      });
+      this.gaps = newData;
       this.loading = false;
     });
   }
