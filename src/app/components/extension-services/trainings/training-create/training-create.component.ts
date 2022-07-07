@@ -5,6 +5,7 @@ import { TrainingService, GapService } from "../../../../core";
 import { MessageService } from "../../../../core";
 import { HelperService } from "../../../../core";
 import { BasicComponent } from "../../../../core";
+import { IDropdownSettings } from "ng-multiselect-dropdown";
 
 @Component({
   selector: "app-training-create",
@@ -27,6 +28,7 @@ export class TrainingCreateComponent
   ) {
     super();
   }
+  gapDropdownSettings: IDropdownSettings = {};
 
   ngOnDestroy(): void {}
 
@@ -35,9 +37,18 @@ export class TrainingCreateComponent
     this.createTraining = this.formBuilder.group({
       trainingName: ["", Validators.required],
       description: ["", Validators.required],
-      adoptionGap: ["", Validators.required],
+      adoptionGap: [[], Validators.required],
       status: [""],
     });
+    this.gapDropdownSettings = {
+      singleSelection: false,
+      idField: "_id",
+      textField: "name",
+      selectAllText: "Select All",
+      unSelectAllText: "UnSelect All",
+      itemsShowLimit: 6,
+      allowSearchFilter: true,
+    };
   }
 
   get trainingName() {
@@ -52,6 +63,21 @@ export class TrainingCreateComponent
   get status() {
     return this.createTraining.get("status");
   }
+
+  onGapSelect(item: any) {
+    console.log(this.createTraining.get("adoptionGap".toString()).value);
+  }
+  onDeGapSelect(item: any) {
+    let gapSelected = this.createTraining.get("adoptionGap".toString());
+    let gapOptions = gapSelected.value.filter(data => data._id !== item._id);
+    gapSelected.setValue(gapOptions, { emitEvent: false });
+  }
+  onGapSelectAll(items: any) {
+    let gapSelected = this.createTraining.get("adoptionGap".toString());
+    gapSelected.setValue(items, { emitEvent: false });
+    console.log(this.createTraining.get("adoptionGap".toString()).value);
+  }
+
   files: any[] = [];
   materials: any[] = [];
   results: any[] = [];
@@ -136,6 +162,10 @@ export class TrainingCreateComponent
 
   onSubmit() {
     const value = JSON.parse(JSON.stringify(this.createTraining.value));
+    let adoptionGap = [];
+    value.adoptionGap.forEach((adoption) => {
+      adoptionGap.push(adoption._id);
+    });
     let materials = [];
     this.files.map((file, index) => {
       materials.push({
@@ -143,10 +173,17 @@ export class TrainingCreateComponent
         url: this.results[index],
       });
     });
-    value.materials = materials;
-    this.trainingService.create(value).subscribe(
+
+    let data = {
+      trainingName: value.trainingName,
+      adoptionGaps: adoptionGap,
+      description: value.description,
+      materials: materials,
+    }
+    this.trainingService.create(data).subscribe(
       (data) => {
         this.loading = false;
+        console.log(data);
         this.setMessage("Training successfully created.");
       },
       (err) => {

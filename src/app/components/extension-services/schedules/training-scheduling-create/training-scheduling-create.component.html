@@ -1,3 +1,40 @@
+<ng-template #ccontent let-modal>
+  <div class="modal-body text-center" style="font-size: 1.5em">
+    <i class="fa fa-check" style="color: #00a513; font-size: 4.5em"></i>
+    <br />
+    Thank you Training <br />
+    <span style="font-weight: bold">
+      “ {{ scheduleTraining.value.description }} “
+    </span>
+    <br />
+    has been Scheduled <br />
+
+    <button
+      type="button"
+      class="btn btn-success btn-lg pull-center"
+      routerLink="/admin/training/schedule/list"
+      (click)="modal.dismiss()"
+    >
+      OK
+    </button>
+    <button
+      type="button"
+      class="btn btn-success btn-lg pull-center"
+      (click)="sendMessage(); modal.dismiss()"
+      [disabled]="loading"
+    >
+      <span *ngIf="!loading; else other_content">Send Message</span>
+      <ng-template #other_content>
+        <div class="loader">
+          <div class="line"></div>
+          <div class="line"></div>
+          <div class="line"></div>
+          <div class="line"></div>
+        </div>
+      </ng-template>
+    </button>
+  </div>
+</ng-template>
 <ng-template #content let-modal>
   <div class="modal-header">
     <h4
@@ -136,7 +173,7 @@
       <div class="col-sm-3">
         <button
           class="btn btn-secondary btn-lg submit"
-          (click)="onSubmit(); modal.dismiss('cancel click')"
+          (click)="onSubmit(); modal.dismiss('cancel click'); open(ccontent)"
           [disabled]="loading"
         >
           <span *ngIf="!loading; else other_content">Confirm</span>
@@ -200,7 +237,7 @@
             <div class="row">
               <div class="col-xs-2" id="location-province">
                 <div class="form-group">
-                  <label class="control-label">Province</label>
+                  <label class="control-label label-required">Province</label>
                   <select class="form-control" formControlName="prov_id">
                     <option value=""></option>
                     <option
@@ -214,7 +251,7 @@
               </div>
               <div class="col-xs-2" id="location-district">
                 <div class="form-group">
-                  <label class="control-label">District</label>
+                  <label class="control-label label-required">District</label>
                   <select class="form-control" formControlName="dist_id">
                     <option value=""></option>
                     <option
@@ -228,7 +265,7 @@
               </div>
               <div class="col-xs-2" id="location-sector">
                 <div class="form-group">
-                  <label class="control-label">Sector</label>
+                  <label class="control-label label-required">Sector</label>
                   <select class="form-control" formControlName="sect_id">
                     <option value=""></option>
                     <option
@@ -242,7 +279,7 @@
               </div>
               <div class="col-xs-2" id="location-cell">
                 <div class="form-group">
-                  <label class="control-label">Cell</label>
+                  <label class="control-label label-required">Cell</label>
                   <select class="form-control" formControlName="cell_id">
                     <option value=""></option>
                     <option
@@ -256,7 +293,7 @@
               </div>
               <div class="col-xs-2" id="location-village">
                 <div class="form-group">
-                  <label class="control-label">Village</label>
+                  <label class="control-label label-required">Village</label>
                   <select class="form-control" formControlName="village_id">
                     <option value=""></option>
                     <option
@@ -270,7 +307,7 @@
               </div>
               <div class="col-xs-2" id="venue">
                 <div class="form-group">
-                  <label class="control-label">Venue</label>
+                  <label class="control-label label-required">Venue</label>
                   <input
                     type="text"
                     formControlName="venue"
@@ -364,7 +401,7 @@
           <div class="col-sm-6">
             <fieldset style="margin: 0px -3px 0px -3px !important">
               <legend style="width: 13em">
-                <label class="control-label">&nbsp; TRAINEES SELECTION </label>
+                <label class="control-label label-required">&nbsp; TRAINEES SELECTION </label>
               </legend>
               <form
                 [formGroup]="filterForm"
@@ -588,7 +625,7 @@
                 style="width: 100%"
                 (click)="addSelectedToBeTrained()"
               >
-               ADD SELECTED TO BE TRAINED
+                ADD SELECTED TO BE TRAINED
               </button>
             </fieldset>
           </div>
@@ -613,7 +650,13 @@
                   </tr>
                   <tr *ngFor="let trainee of selectedTrainees; let i = index">
                     <td>{{ i + 1 }}</td>
-                    <td>{{ trainee.firstName + " " + trainee.lastName }}</td>
+                    <td>
+                      {{
+                        trainee.firstName
+                          ? trainee.firstName + " " + trainee.lastName
+                          : trainee.groupContactPersonNames
+                      }}
+                    </td>
                     <td>{{ trainee.phoneNumber }}</td>
                     <td>{{ trainee.attendance }}</td>
                     <td>

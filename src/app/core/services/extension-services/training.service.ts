@@ -35,4 +35,10 @@ export class TrainingService {
   allSchedule(id: any) {
     return this.apiService.get("/v1.1/schedules/org/" + id);
   }
+  getSchedule(id: any) {
+    return this.apiService.get("/v1.1/schedules/" + id);
+  }
+  sendMessage(id: any) {
+    return this.apiService.get("/v1.1/schedules/invite/" + id);
+  }
 }

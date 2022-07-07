@@ -58,6 +58,7 @@ export class TrainingSchedulingCreateComponent
   trainers: any[] = [];
   farmers: any[] = [];
   farmerGroups: any[] = [];
+  successDatails;
 
   ngOnInit() {
     this.getGroups();
@@ -147,17 +148,12 @@ export class TrainingSchedulingCreateComponent
       })
       .subscribe((data) => {
         this.farmerGroups = data.data;
-        console.log(this.farmerGroups);
         this.loading = false;
       });
   }
 
   getFarmers() {
     this.loading = true;
-    console.log(
-      this.filterForm.controls.searchByLocation.get("farmerGroup".toString())
-        .value
-    );
     this.trainingService
       .getFarmersByGroup(
         this.filterForm.controls.searchByLocation.get("farmerGroup".toString())
@@ -170,7 +166,6 @@ export class TrainingSchedulingCreateComponent
       .subscribe((data) => {
         this.trainees = data.data;
         this.addContacts();
-        console.log(data);
         this.loading = false;
       });
   }
@@ -189,9 +184,8 @@ export class TrainingSchedulingCreateComponent
     let arrayControl = this.editContactForm.get("contacts") as FormArray;
     let traineData = arrayControl.at(index);
     this.trainees[index].contact = traineData.value.contact;
+    this.trainees[index].phoneNumber = traineData.value.contact;
     this.trainees[index].editMode = false;
-    console.log(this.authenticationService.getCurrentUser().info);
-    console.log(traineData.value.groupId);
     let data = {
       userId: traineData.value.userId,
       phoneNumber: traineData.value.contact.toString(),
@@ -200,7 +194,6 @@ export class TrainingSchedulingCreateComponent
         name: this.authenticationService.getCurrentUser().info.surname,
       },
     };
-    console.log(data);
     this.userService
       .updateMemberContact(traineData.value.groupId, data)
       .subscribe((data) => {
@@ -267,8 +260,7 @@ export class TrainingSchedulingCreateComponent
   }
 
   addSelectedToBeTrained() {
-    this.selectedTrainees = this.trainees.filter((item) => item.selected);
-    console.log(this.selectedTrainees);
+     this.trainees.filter((item) => item.selected).map((item) => this.selectedTrainees.push(item));
   }
 
   onChanges() {
@@ -370,6 +362,7 @@ export class TrainingSchedulingCreateComponent
   }
 
   onSubmit() {
+    this.loading = true;
     const data = {
       trainingId:
         this.trainings[this.scheduleTraining.value.trainingModule]._id,
@@ -387,11 +380,11 @@ export class TrainingSchedulingCreateComponent
       ).value,
       description: this.scheduleTraining.value.description,
       location: {
-        provId: this.scheduleTraining.value.location.prov_id,
-        distId: this.scheduleTraining.value.location.dist_id,
-        sectId: this.scheduleTraining.value.location.sect_id,
-        cellId: this.scheduleTraining.value.location.cell_id,
-        villageId: this.scheduleTraining.value.location.village_id,
+        prov_id: this.scheduleTraining.value.location.prov_id,
+        dist_id: this.scheduleTraining.value.location.dist_id,
+        sect_id: this.scheduleTraining.value.location.sect_id,
+        cell_id: this.scheduleTraining.value.location.cell_id,
+        village_id: this.scheduleTraining.value.location.village_id,
       },
       venueName: this.scheduleTraining.value.location.venue,
       startTime:
@@ -410,10 +403,20 @@ export class TrainingSchedulingCreateComponent
         };
       }),
     };
-    console.log(data);
     this.trainingService.scheduleTraining(data).subscribe((data) => {
-      console.log(data);
-      this.router.navigateByUrl('admin/training/schedule/list');
+      this.successDatails = data.data;
+      this.loading = false;
+    });
+  }
+
+  sendMessage() {
+    this.loading = true;
+    console.log(this.successDatails);
+    let data = this.successDatails._id;
+    console.log(data);
+    this.trainingService.sendMessage(data).subscribe((data) => {
+      this.router.navigateByUrl("admin/training/schedule/list");
+      this.loading = false;
     });
   }
 }

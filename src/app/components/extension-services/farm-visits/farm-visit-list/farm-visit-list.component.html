@@ -1,21 +1,23 @@
-<div class="title-bar">
-  <h3>Farms Visits</h3>
-  <a class="btn btn-success pull-right" routerLink="/admin/farm/visit/create"
-    ><i class="fa fa-plus"></i> Schedule a Farm Visit
-  </a>
-</div>
+<h3>
+  <div class="row">
+    <div class="col-sm-10">Farms Visits</div>
+    <div class="col-sm-2">
+      <a class="btn btn-success pull-left" routerLink="/admin/farm/visit/create"
+        ><i class="fa fa-calendar"></i> Schedule a Farm Visit
+      </a>
+    </div>
+  </div>
+</h3>
 <app-list-message [message]="message"></app-list-message>
 <app-list-errors [errorList]="errors"></app-list-errors>
 <div class="row">
   <div class="col-sm-12 stats-section">
     <div class="row">
-      <div class="col-sm-12 text-center stats-title">
-        Visits Summary
-      </div>
+      <div class="col-sm-12 text-center stats-title">Visits Summary</div>
       <div class="col-sm-4">
         <div class="text-center stats-box">
           <h3>Scheduled Visits</h3>
-          <h1>000</h1>
+          <h1>{{ visits.length }}</h1>
         </div>
       </div>
       <div class="col-sm-4">
@@ -53,16 +55,68 @@
               <th>GAP to be Covered</th>
               <th>Visitor</th>
               <th>Date and Time of the visit</th>
-              <th>Status</th>
               <th>Score</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
+            <tr *ngFor="let visit of visits | paginate: config">
+              <td>{{ visit.createdAt | date: "short" }}</td>
+              <td>
+                {{
+                  visit.farms[0].owner.firstName
+                    ? visit.farms[0].owner.firstName +
+                      " " +
+                      visit.farms[0].owner.lastName
+                    : visit.farms[0].owner.groupName
+                }}
+              </td>
+              <td>{{ visit.description }}</td>
+              <td>{{ visit.gaps.length }} gaps</td>
+              <td></td>
+              <td>{{ visit.date | date: "short" }}</td>
+              <td></td>
+              <td>
+                <button
+                  appRequiredSeason
+                  class="btn btn-action-no-border btn-margin details-button"
+                  routerLink="/admin/farm/visit/details/{{ visit._id }}"
+                >
+                  <em class="fa fa-eye"></em>
+                </button>
+                <button
+                  appRequiredSeason
+                  class="btn btn-action-no-border btn-margin"
+                >
+                  <em class="fa fa-close"></em>
+                </button>
+                <button
+                  class="btn btn-action-no-border btn-margin btn-sm details-button"
+                  routerLink="/admin/farm/visit/edit/{{ visit._id }}"
+                >
+                  <em class="fa fa-pencil"></em>
+                </button>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
-
+      <div class="table-footer" style="width: 100%" *ngIf="showData">
+        <pagination-controls
+          class="custom-pagination"
+          [maxSize]="maxSize"
+          [directionLinks]="directionLinks"
+          [autoHide]="autoHide"
+          [responsive]="responsive"
+          [previousLabel]="labels.previousLabel"
+          [nextLabel]="labels.nextLabel"
+          [screenReaderPaginationLabel]="labels.screenReaderPaginationLabel"
+          [screenReaderPageLabel]="labels.screenReaderPageLabel"
+          [screenReaderCurrentLabel]="labels.screenReaderCurrentLabel"
+          (pageChange)="onPageChange($event)"
+        >
+        </pagination-controls>
+      </div>
     </div>
   </div>
 </div>

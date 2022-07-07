@@ -1,3 +1,37 @@
+<ng-template #content let-modal>
+  <div class="modal-body text-center" style="font-size: 1.5em">
+    <i class="fa fa-check" style="color: #00a513; font-size: 4.5em"></i>
+    <br />
+    Are you sure you want to send <br />
+    Schedule for {{ schedule.trainingId.trainingName }}
+    <br />
+    sms again <br />
+
+    <button
+      type="button"
+      class="btn btn-success btn-lg pull-center"
+      (click)="modal.dismiss()"
+    >
+      cancel
+    </button>
+    <button
+      type="button"
+      class="btn btn-success btn-lg pull-center"
+      (click)="sendMessage(); modal.dismiss()"
+      [disabled]="loading"
+    >
+      <span *ngIf="!loading; else other_content">Send Message</span>
+      <ng-template #other_content>
+        <div class="loader">
+          <div class="line"></div>
+          <div class="line"></div>
+          <div class="line"></div>
+          <div class="line"></div>
+        </div>
+      </ng-template>
+    </button>
+  </div>
+</ng-template>
 <h3>
   <div class="row">
     <div class="col-sm-10"> Scheduled Training </div>
@@ -48,7 +82,7 @@
                 <button
                   appRequiredSeason
                   class="btn btn-action-no-border btn-margin details-button"
-                  routerLink="/admin/training/schedule/view"
+                  routerLink="/admin/training/schedule/view/{{ schedule._id }}"
                 >
                   <em class="fa fa-eye"></em>
                 </button>
@@ -60,8 +94,15 @@
                   <em class="fa fa-close"></em>
                 </button>
                 <button
+                  appRequiredSeason
+                  (click)="open(content); selectedSchedule(schedule)"
+                  class="btn btn-action-no-border btn-margin"
+                >
+                  <em class="fa fa-envelope-o"></em>
+                </button>
+                <button
                   class="btn btn-action-no-border btn-margin btn-sm details-button"
-                  routerLink="/admin/training/schedule/edit"
+                  routerLink="/admin/training/schedule/edit/{{ schedule._id }}"
                 >
                   <em class="fa fa-pencil"></em>
                 </button>
