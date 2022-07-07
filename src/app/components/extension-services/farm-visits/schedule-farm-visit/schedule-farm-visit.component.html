@@ -210,7 +210,10 @@
                 </h4>
                 <div *ngIf="farmDetails.treeAges[0]">
                   <div class="row" style="margin-top: 70px">
-                    <div class="col-sm-3">
+                    <div
+                      class="col-sm-3"
+                      *ngIf="farmDetails.treeAges[0].numOfTrees"
+                    >
                       <img
                         src="https://cdn2.iconfinder.com/data/icons/coffee-5/512/coffee_tree-512.png"
                         width="40px"
@@ -218,7 +221,10 @@
                         style="position: absolute; bottom: 0"
                       />
                     </div>
-                    <div class="col-sm-3">
+                    <div
+                      class="col-sm-3"
+                      *ngIf="farmDetails.treeAges[1]numOfTrees"
+                    >
                       <img
                         src="https://cdn2.iconfinder.com/data/icons/coffee-5/512/coffee_tree-512.png"
                         width="50px"
@@ -226,7 +232,10 @@
                         style="position: absolute; bottom: 0"
                       />
                     </div>
-                    <div class="col-sm-3">
+                    <div
+                      class="col-sm-3"
+                      *ngIf="farmDetails.treeAges[2].numOfTrees"
+                    >
                       <img
                         src="https://cdn2.iconfinder.com/data/icons/coffee-5/512/coffee_tree-512.png"
                         width="60px"
@@ -234,7 +243,10 @@
                         style="position: absolute; bottom: 0"
                       />
                     </div>
-                    <div class="col-sm-3">
+                    <div
+                      class="col-sm-3"
+                      *ngIf="farmDetails.treeAges[3].numOfTrees"
+                    >
                       <img
                         src="https://cdn2.iconfinder.com/data/icons/coffee-5/512/coffee_tree-512.png"
                         width="70px"
@@ -242,7 +254,10 @@
                         style="position: absolute; bottom: 0"
                       />
                     </div>
-                    <div class="col-sm-3">
+                    <div
+                      class="col-sm-3"
+                      *ngIf="farmDetails.treeAges[0].numOfTrees"
+                    >
                       <span style="color: green"> 0-3 </span>
                       --
                       <label>
@@ -254,7 +269,10 @@
                       </label>
                       T
                     </div>
-                    <div class="col-sm-3">
+                    <div
+                      class="col-sm-3"
+                      *ngIf="farmDetails.treeAges[1].numOfTrees"
+                    >
                       <span style="color: green"> 4-10 </span>
                       --
                       <label>
@@ -266,7 +284,10 @@
                       </label>
                       T
                     </div>
-                    <div class="col-sm-3">
+                    <div
+                      class="col-sm-3"
+                      *ngIf="farmDetails.treeAges[2].numOfTrees"
+                    >
                       <span style="color: green"> 11-15 </span>
                       --
                       <label>
@@ -278,7 +299,10 @@
                       </label>
                       T
                     </div>
-                    <div class="col-sm-3">
+                    <div
+                      class="col-sm-3"
+                      *ngIf="farmDetails.treeAges[3].numOfTrees"
+                    >
                       <span style="color: green"> 16-20 </span>
                       --
                       <label>
@@ -292,7 +316,10 @@
                     </div>
                   </div>
                   <div class="row" style="margin-top: 100px">
-                    <div class="col-sm-4">
+                    <div
+                      class="col-sm-4"
+                      *ngIf="farmDetails.treeAges[4].numOfTrees"
+                    >
                       <img
                         src="https://cdn2.iconfinder.com/data/icons/coffee-5/512/coffee_tree-512.png"
                         width="80px"
@@ -300,7 +327,10 @@
                         style="position: absolute; bottom: 0"
                       />
                     </div>
-                    <div class="col-sm-4">
+                    <div
+                      class="col-sm-4"
+                      *ngIf="farmDetails.treeAges[5].numOfTrees"
+                    >
                       <img
                         src="https://cdn2.iconfinder.com/data/icons/coffee-5/512/coffee_tree-512.png"
                         width="90px"
@@ -308,7 +338,10 @@
                         style="position: absolute; bottom: 0"
                       />
                     </div>
-                    <div class="col-sm-4">
+                    <div
+                      class="col-sm-4"
+                      *ngIf="farmDetails.treeAges[6].numOfTrees"
+                    >
                       <img
                         src="https://cdn2.iconfinder.com/data/icons/coffee-5/512/coffee_tree-512.png"
                         width="95px"
@@ -316,8 +349,11 @@
                         style="position: absolute; bottom: 0"
                       />
                     </div>
-                    <div class="col-sm-4">
-                      <span style="color: green"> 21-15 </span>
+                    <div
+                      class="col-sm-4"
+                      *ngIf="farmDetails.treeAges[4].numOfTrees"
+                    >
+                      <span style="color: green"> 21-24 </span>
                       --
                       <label>
                         {{
@@ -328,7 +364,10 @@
                       </label>
                       T
                     </div>
-                    <div class="col-sm-4">
+                    <div
+                      class="col-sm-4"
+                      *ngIf="farmDetails.treeAges[5].numOfTrees"
+                    >
                       <span style="color: green"> 25-30 </span>
                       --
                       <label>
@@ -340,7 +379,10 @@
                       </label>
                       T
                     </div>
-                    <div class="col-sm-4">
+                    <div
+                      class="col-sm-4"
+                      *ngIf="farmDetails.treeAges[6].numOfTrees"
+                    >
                       <span style="color: green"> 31+ </span>
                       --
                       <label>
