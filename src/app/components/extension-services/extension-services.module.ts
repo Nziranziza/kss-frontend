@@ -6,6 +6,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { OrderModule } from 'ngx-order-pipe';
 import { GoogleChartsModule } from 'angular-google-charts';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { FarmerGroupListComponent } from './groups/farmer-group-list/farmer-group-list.component';
 import { FarmerGroupCreateComponent } from './groups/farmer-group-create/farmer-group-create.component';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
@@ -61,6 +62,7 @@ import { TrainingScheduleEditComponent } from './schedules/training-schedule-edi
     NgxPaginationModule,
     OrderModule,
     AmazingTimePickerModule,
+    NgMultiSelectDropDownModule,
   ],
   entryComponents: [GapDeleteModal, TrainingDeleteModal],
 })

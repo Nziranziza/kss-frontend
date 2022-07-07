@@ -15,7 +15,6 @@
                     trainingName.invalid &&
                     (trainingName.dirty || trainingName.touched)
                 }"
-                value="trainingName"
               />
               <div
                 *ngIf="
@@ -62,20 +61,16 @@
           <div class="col-sm-6">
             <div class="form-group">
               <label class="control-label label-required">Associated GAP</label>
-              <select
-                class="form-control"
+
+              <ng-multiselect-dropdown
                 formControlName="adoptionGap"
-                [ngClass]="{
-                  'has-error':
-                    adoptionGap.invalid &&
-                    (adoptionGap.dirty || adoptionGap.touched)
-                }"
+                [placeholder]="'select gap'"
+                [settings]="gapDropdownSettings"
+                [data]="gaps"
+                [(ngModel)]="createTraining.value.adoptionGap"
+                (onSelect)="onGapSelect($event)"
               >
-                <option value="" disabled selected>select gap</option>
-                <option *ngFor="let gap of gaps" value="{{ gap._id }}">
-                  {{ gap.name | titlecase }}
-                </option>
-              </select>
+              </ng-multiselect-dropdown>
 
               <div
                 *ngIf="
@@ -89,40 +84,19 @@
                 </div>
               </div>
             </div>
+            <div class="form-group">
+              <label class="control-label label-required">Status</label>
+              <select class="form-control" formControlName="status">
+                <option value="" disabled selected>select status</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+              </select>
+            </div>
           </div>
           <div class="col-sm-6">
             <div class="form-group">
               <label class="control-label label-required">Attach files</label>
-              <br />
-
-              <div class="training-file-list">
-                Attached file(s) <br /><br />
-                <div
-                  *ngFor="let file of results; let i = index"
-                  style="padding-bottom: 6px"
-                >
-                  <span style="width: 75%; float: left">
-                    <img
-                      src="assets/dist/img/sks/ico_attach.svg"
-                      style="margin-right: 5px"
-                    />
-                    {{ file.fileName }}
-                  </span>
-                  <span style="margin-left: 40px; width: 12%; float: left">
-                    .pdf
-                  </span>
-                  <i
-                    class="fa fa-times"
-                    aria-hidden="true"
-                    (click)="removeSelectedFile(index)"
-                    style="color: red"
-                  ></i>
-                  <br />
-                </div>
-              </div>
-              <br />
-              <app-loader *ngIf="loading"></app-loader>
-              <label for="file-input" class="training-file-input" *ngIf="!loading">
+              <label for="file-input" class="training-file-input">
                 <img
                   src="assets/dist/img/sks/ico_export.svg"
                   class="training-file-input-icon"
@@ -140,6 +114,31 @@
                 (change)="onFileSelected($event)"
                 accept="application/pdf"
               />
+              <div class="training-file-list">
+                Attached file(s) to upload <br /><br />
+                <div
+                  *ngFor="let file of files; let i = index"
+                  style="padding-bottom: 6px"
+                >
+                  <span style="width: 75%; float: left">
+                    <img
+                      src="assets/dist/img/sks/ico_attach.svg"
+                      style="margin-right: 5px"
+                    />
+                    {{ file.name }}
+                  </span>
+                  <span style="margin-left: 40px; width: 12%; float: left">
+                    {{ file.size }}
+                  </span>
+                  <i
+                    class="fa fa-times"
+                    aria-hidden="true"
+                    (click)="removeSelectedFile(index)"
+                    style="color: red"
+                  ></i>
+                  <br />
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -156,20 +155,12 @@
       Cancel
     </button>
     <button
-      class="btn btn-success submit"
-      (click)="onSubmit()"
-      style="width: 250px; height: 50px; margin-right: 10px"
-      [disabled]="loading"
+      type="button"
+      class="btn btn-success"
+      (click)="onFileUpload(content)"
+      style="width: 250px; height: 50px"
     >
-      <span *ngIf="!loading; else other_content">Modify Training</span>
-      <ng-template #other_content>
-        <div class="loader">
-          <div class="line"></div>
-          <div class="line"></div>
-          <div class="line"></div>
-          <div class="line"></div>
-        </div>
-      </ng-template>
+      Add Training
     </button>
   </div>
 </form>

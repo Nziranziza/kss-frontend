@@ -72,11 +72,11 @@ const routes: Routes = [
         component: TrainingSchedulingListComponent,
       },
       {
-        path: "training/schedule/edit",
+        path: "training/schedule/edit/:id",
         component: TrainingScheduleEditComponent,
       },
       {
-        path: "training/schedule/view",
+        path: "training/schedule/view/:id",
         component: TrainingScheduleViewComponent,
       },
       {
