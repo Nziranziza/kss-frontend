@@ -21,6 +21,9 @@ export class GroupService {
   get(id: string) {
     return this.apiService.get('/v1.1/groups/' + id );
   }
+  delete(id: string) {
+    return this.apiService.delete('/v1.1/groups/' + id );
+  }
   update(id: string, body: any) {
     return this.apiService.put('/v1.1/groups/' + id,  body);
   }

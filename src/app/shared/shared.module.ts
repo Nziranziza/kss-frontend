@@ -11,7 +11,6 @@ import {
 
 } from './layouts';
 import {MatDialogModule, MatIconModule} from '@angular/material';
-import {ConfirmDialogComponent} from './layouts';
 import {DataTablesModule} from 'angular-datatables';
 import {RequiredRolesDirective} from './directives/required-roles.directive';
 import {LoaderComponent} from './layouts';
@@ -26,6 +25,8 @@ import {RequiredSeasonCherryDirective} from './directives/required-season-cherry
 import {DebounceClickDirective} from './directives/debounce-click.directive';
 import { LoadingComponent } from './layouts/loading/loading.component';
 import {InlineErrorsComponent} from './layouts/inline-errors/inline-errors.component';
+import { ConfirmModalComponent } from './layouts';
+import { SuccessModalComponent } from './layouts';
 
 @NgModule({
   imports: [
@@ -38,12 +39,12 @@ import {InlineErrorsComponent} from './layouts/inline-errors/inline-errors.compo
   ],
   declarations: [ListErrorsComponent, LoaderComponent,
     HomeHeaderComponent, HomeFooterComponent, ListMessageComponent,
-    ConfirmDialogComponent, RequiredRolesDirective, InternalDirective, LoaderComponent,
+    RequiredRolesDirective, InternalDirective, LoaderComponent,
     RequiredSeasonDirective, RequiredSeasonCherryDirective, HasPermissionDirective,
     DebounceClickDirective,
     QuantityUnitComponent, ListWarningsComponent,
     InlineErrorsComponent,
-    DownloadingComponent, SpinnerComponent, LoadingComponent],
+    DownloadingComponent, SpinnerComponent, LoadingComponent, ConfirmModalComponent, ConfirmModalComponent, SuccessModalComponent],
   exports: [
     CommonModule,
     FormsModule,
@@ -58,14 +59,18 @@ import {InlineErrorsComponent} from './layouts/inline-errors/inline-errors.compo
     HomeHeaderComponent,
     LoaderComponent,
     HomeFooterComponent,
-    ConfirmDialogComponent,
+    ConfirmModalComponent,
+    SuccessModalComponent,
     QuantityUnitComponent,
     DownloadingComponent,
     MatIconModule, MatDialogModule,
     DataTablesModule, RequiredRolesDirective,
-    RequiredSeasonDirective, HasPermissionDirective, InternalDirective, RequiredSeasonCherryDirective, InlineErrorsComponent, InlineErrorsComponent
+    RequiredSeasonDirective,
+    HasPermissionDirective, InternalDirective,
+    RequiredSeasonCherryDirective,
+    InlineErrorsComponent, InlineErrorsComponent
   ],
-  entryComponents: [ConfirmDialogComponent]
+  entryComponents: [ConfirmModalComponent, SuccessModalComponent]
 })
 export class SharedModule {
 }
