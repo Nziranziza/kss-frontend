@@ -13,8 +13,6 @@ import {
 } from './services';
 
 import {HelperService} from './helpers';
-import {MatDialogModule} from '@angular/material';
-import {SharedModule} from '../shared';
 import {CookieService} from 'ngx-cookie-service';
 import {MessageService} from './services';
 import {InputDistributionService} from './services';
@@ -24,10 +22,12 @@ import {CoveredAreaResolverService} from './resolvers/covered-area-resolver.serv
 import {SharedDataService} from './services/shared-data.service';
 import {PaymentService} from './services/payment.service';
 import {FarmService} from './services';
+import {ConfirmDialogComponent} from './services/layouts/confirm-dialog/confirm-dialog.component';
+import {MatDialogModule, MatIconModule} from '@angular/material';
 
 @NgModule({
   imports: [
-    CommonModule, BrowserAnimationsModule, SharedModule, MatDialogModule
+    CommonModule, BrowserAnimationsModule, MatDialogModule, MatIconModule
   ],
   providers: [
     ApiService,
@@ -51,7 +51,8 @@ import {FarmService} from './services';
     FarmService,
     /*{provide: ErrorHandler, useClass: ErrorCustomHandler}*/
   ],
-  declarations: []
+  declarations: [ConfirmDialogComponent],
+  entryComponents: [ConfirmDialogComponent]
 })
 export class CoreModule {
 }

@@ -9,7 +9,9 @@ import {
   OrganisationService
 } from '../../../../core';
 import {isEmptyObject} from 'jquery';
-import {GroupService} from '../../../../core/services/extension-services';
+import {GroupService} from '../../../../core';
+import {SuccessModalComponent} from '../../../../shared';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-farmer-group-create',
@@ -21,6 +23,7 @@ export class FarmerGroupCreateComponent extends BasicComponent implements OnInit
   constructor(private formBuilder: FormBuilder,
               private router: Router, private organisationService: OrganisationService,
               private messageService: MessageService,
+              private modal: NgbModal,
               private groupService: GroupService,
               private authenticationService: AuthenticationService,
               protected locationService: LocationService,
@@ -112,10 +115,9 @@ export class FarmerGroupCreateComponent extends BasicComponent implements OnInit
       });
       value.members = members;
       this.groupService.create(value).subscribe(
-        (data) => {
+        (results) => {
           this.loading = false;
-          this.messageService.setMessage('Group successfully created!');
-          this.router.navigateByUrl('admin/farmers/group/list');
+          this.success(results.data.data.groupName);
         },
         (err) => {
           this.loading = false;
@@ -304,6 +306,16 @@ export class FarmerGroupCreateComponent extends BasicComponent implements OnInit
 
         });
       }
+    });
+  }
+
+  success(name) {
+    const modalRef = this.modal.open(SuccessModalComponent, { ariaLabelledBy: 'modal-basic-title' });
+    modalRef.componentInstance.message = 'has been added';
+    modalRef.componentInstance.title = 'Thank you Group';
+    modalRef.componentInstance.name = name;
+    modalRef.result.finally(() => {
+      this.router.navigateByUrl('admin/farmers/group/list');
     });
   }
 }

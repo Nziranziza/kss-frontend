@@ -1,0 +1,16 @@
+<div class="modal-body text-center" style="font-size: 1.5em">
+  <i class="fa fa-check" style="color: #00a513; font-size: 4.5em"></i>
+  <br />
+  {{ title }} <br />
+  <span style="font-weight: bold">
+      “ {{ name }} “
+    </span>
+  <br />
+  {{ message }} <br />
+  <button
+    type="button"
+    class="btn btn-success btn-lg pull-center"
+    (click)="close()" >
+    Ok
+  </button>
+</div>

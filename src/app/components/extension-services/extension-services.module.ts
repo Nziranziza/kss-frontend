@@ -28,11 +28,13 @@ import { ViewFarmVisitComponent } from './farm-visits/view-farm-visit/view-farm-
 import { FarmVisitListComponent } from './farm-visits/farm-visit-list/farm-visit-list.component';
 import { AmazingTimePickerModule } from 'amazing-time-picker';
 import { TrainingScheduleViewComponent } from './schedules/training-schedule-view/training-schedule-view.component';
-import { TrainingScheduleEditComponent } from './schedules/training-schedule-edit/training-schedule-edit.component'; 
+import { TrainingScheduleEditComponent } from './schedules/training-schedule-edit/training-schedule-edit.component';
+import {FarmerGroupEditComponent} from './groups/farmer-group-edit/farmer-group-edit.component';
 @NgModule({
   declarations: [
     FarmerGroupListComponent,
     FarmerGroupCreateComponent,
+    FarmerGroupEditComponent,
     GapListComponent,
     GapCreateComponent,
     GapEditComponent,
