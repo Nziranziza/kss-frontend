@@ -72,7 +72,7 @@
               class="question-section"
             >
               <div class="row" [formGroupName]="i">
-                <div class="col-xs-4">
+                <div class="col-xs-3">
                   <div
                     class="form-group"
                     [ngClass]="{
@@ -90,7 +90,7 @@
                     />
                   </div>
                 </div>
-                <div class="col-xs-4">
+                <div class="col-xs-3">
                   <div class="form-group">
                     <label class="control-label">Adoption Description</label>
                     <input
@@ -110,7 +110,7 @@
                         (answerType(i).dirty || answerType(i).touched)
                     }"
                   >
-                    <label class="control-label">Method Approach</label>
+                    <label class="control-label">Rating Approach</label>
                     <select
                       class="form-control"
                       formControlName="answerType"
@@ -126,7 +126,18 @@
                     </select>
                   </div>
                 </div>
-                <div class="form-group col-xs-1">
+                <div class="col-xs-2">
+                  <div class="form-group">
+                    <label class="control-label">Adoption Marks</label>
+                    <input
+                      type="number"
+                      formControlName="marks"
+                      class="form-control"
+                      placeholder=""
+                    />
+                  </div>
+                </div>
+                <div class="col-xs-1">
                   <button
                     class="btn btn-danger btn-sm pull-right btn-custom-margin-top"
                     type="button"
@@ -135,10 +146,7 @@
                     Remove
                   </button>
                 </div>
-                <div
-                  class="form-group col-sm-12"
-                  *ngIf="adoptionOptionsVisible == true"
-                >
+                <div class="col-sm-12"  *ngIf="answerType(i).value === 'multiple_choice'">
                   <div class="col-sm-12 text-center">
                     <p>Add Options</p>
                   </div>
@@ -150,21 +158,50 @@
                     "
                     formArrayName="answers"
                   >
-                    <div class="row" [formGroupName]="x">
-                      <div class="col-xs-12 text-center">
-                        <div
-                          class="form-group"
-                          style="width: 60%; margin: auto"
-                        >
+                    <div class="col-xs-12" [formGroupName]="x">
+                      <div class="col-xs-7 vcenter">
+                        <label class="control-label">Option</label>
+                        <div class="form-group">
                           <input
                             type="text"
                             formControlName="answer"
                             class="form-control"
                             placeholder=""
-                            style="width: 90%; display: inline"
                           />
+                        </div>
+                      </div>
+                      <div class="col-xs-4 vcenter">
+                        <div class="form-group">
+                          <label class="control-label">Option Weight</label>
+                          <input
+                            type="number"
+                            formControlName="weight"
+                            class="form-control"
+                            placeholder=""
+                          />
+                          <div
+                            *ngIf="
+                              !checkIfWeightMatch(i, x) && weight(i, x).touched
+                            "
+                            class="alert"
+                          >
+                            <div
+                              *ngIf="!checkIfWeightMatch(i)"
+                              style="color: red"
+                            >
+                              Adoption Weight should add up to
+                              {{ marks(i).value }}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-xs-1 vcenter">
+                        <div class="form-group">
+                          <label class="control-label" style="color: white"
+                            >.</label
+                          >
                           <button
-                            class="btn btn-danger btn-sm inline-btn"
+                            class="btn btn-danger btn-sm inline-btn form-control"
                             type="button"
                             (click)="removeQuestionAnswer(i, x)"
                           >
@@ -201,7 +238,10 @@
     </form>
   </div>
   <div class="col-xs-12 text-right" style="margin-top: 10px">
-    <a class="btn btn-warning btn-margin btn-lg" routerLink="/admin/gaps/list" style="margin-right: 20px;"
+    <a
+      class="btn btn-warning btn-margin btn-lg"
+      routerLink="/admin/gaps/list"
+      style="margin-right: 20px"
       >Cancel</a
     >
     <button

@@ -187,21 +187,16 @@
           <div class="col-sm-6">
             <div class="form-group">
               <label class="control-label label-required">Associated GAP</label>
-              <select
-                class="form-control"
+
+              <ng-multiselect-dropdown
                 formControlName="adoptionGap"
-                [ngClass]="{
-                  'has-error':
-                    adoptionGap.invalid &&
-                    (adoptionGap.dirty || adoptionGap.touched)
-                }"
+                [placeholder]="'select gap'"
+                [settings]="gapDropdownSettings"
+                [data]="gaps"
+                [(ngModel)]="createTraining.value.adoptionGap"
+                (onSelect)="onGapSelect($event)"
               >
-                <option value="" disabled selected>select gap</option>
-                <option value="none">none</option>
-                <option *ngFor="let gap of gaps" value="{{ gap._id }}">
-                  {{ gap.name | titlecase }}
-                </option>
-              </select>
+              </ng-multiselect-dropdown>
 
               <div
                 *ngIf="
@@ -217,43 +212,14 @@
             </div>
             <div class="form-group">
               <label class="control-label label-required">Status</label>
-              <select
-                class="form-control"
-                formControlName="status"
-              >
-                <option value="" disabled selected>select status</option>
-                <option value="active" >Active</option>
-                <option value="inactive" >Inactive</option>
+              <select class="form-control" formControlName="status">
+                <option value="" disabled>select status</option>
+                <option value="active" selected>Active</option>
+                <option value="inactive">Inactive</option>
               </select>
             </div>
           </div>
           <div class="col-sm-6">
-            <div class="form-group">
-              <label class="control-label label-required"
-                >Training Description</label
-              >
-              <input
-                type="text"
-                formControlName="description"
-                class="form-control"
-                [ngClass]="{
-                  'has-error':
-                    description.invalid &&
-                    (description.dirty || description.touched)
-                }"
-              />
-              <div
-                *ngIf="
-                  description.invalid &&
-                  (description.dirty || description.touched)
-                "
-                class="alert"
-              >
-                <div *ngIf="description.errors['required']" style="color: red">
-                  *Description is required.
-                </div>
-              </div>
-            </div>
             <div class="form-group">
               <label class="control-label label-required">Attach files</label>
               <label for="file-input" class="training-file-input">

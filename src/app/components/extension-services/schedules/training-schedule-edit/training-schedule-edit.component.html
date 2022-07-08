@@ -1,8 +1,3 @@
-<h3>
-  Training Management >
-  <span style="font-weight: bold"> Edit a Training</span>
-</h3>
-<app-list-errors [errorList]="errors"></app-list-errors>
 <form [formGroup]="scheduleTraining" (ngSubmit)="onSubmit()">
   <div class="row">
     <div class="col-xs-12">
@@ -432,7 +427,7 @@
                 style="width: 100%"
                 (click)="addSelectedToBeTrained()"
               >
-               ADD SELECTED TO BE TRAINED
+                ADD SELECTED TO BE TRAINED
               </button>
             </fieldset>
           </div>
@@ -457,7 +452,13 @@
                   </tr>
                   <tr *ngFor="let trainee of selectedTrainees; let i = index">
                     <td>{{ i + 1 }}</td>
-                    <td>{{ trainee.firstName + " " + trainee.lastName }}</td>
+                    <td>
+                      {{
+                        trainee.firstName
+                          ? trainee.firstName + " " + trainee.lastName
+                          : trainee.groupContactPersonNames
+                      }}
+                    </td>
                     <td>{{ trainee.phoneNumber }}</td>
                     <td>{{ trainee.attendance }}</td>
                     <td>

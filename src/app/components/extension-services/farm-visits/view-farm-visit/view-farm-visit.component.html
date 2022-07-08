@@ -1,168 +1,61 @@
-<h3>Farm Visits > <span style="font-weight: bold"> Schedule a Visit </span></h3>
-<app-list-errors [errorList]="errors"></app-list-errors>
-<form [formGroup]="scheduleVisit" (ngSubmit)="onSubmit()">
+<div class="modal-body">
+  <h3>Visit Details</h3>
   <div class="box">
-    <div class="row">
-      <br />
-      <div class="col-sm-10 col-centered">
-        <div class="form-group">
-          <label class="control-label label-required">Select a group </label>
-          <select class="form-control" formControlName="farmerGroup">
-            <option value="" disabled selected>select group</option>
-            <option *ngFor="let group of farmerGroups" value="{{ group.groupName }}">
-              {{ group.groupName | titlecase }}
-            </option>
-          </select>
-        </div>
-      </div>
-      <div class="col-sm-10 col-centered">
-        <div class="row">
-          <div class="col-sm-6">
-            <div class="form-group">
-              <fieldset style="margin: 0px -3px 0px -3px !important">
-                <legend style="width: 13em">
-                  <label class="control-label">&nbsp; SELECT FARM </label>
-                </legend>
-                <table class="row-border hover table table-striped" style="margin-top: -20px">
-                  <thead>
-                    <tr>
-                      <th>Farmer</th>
-                      <th>UPI</th>
-                      <th>Selection</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr *ngFor="let farm of farmList">
-                      <td>{{ farm.farmer }}</td>
-                      <td>{{ farm.upi }}</td>
-                      <td> s </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </fieldset>
+    <div class="box-body box-confirm">
+      <div class="row">
+        <div class="col-xs-12">
+          <div style="margin-bottom: 10px">
+            <label class="control-label label-required">Farm to visit</label>
+            <div
+              class="confirm-text-box confirm-text"
+              *ngFor="let farms of visits.farms"
+            >
+              <span> {{ farms.upiNumber }} </span>
             </div>
           </div>
-          <div class="col-sm-6">
-            <fieldset style="margin: 0px -3px 0px -3px !important">
-              <legend style="width: 13em">
-                <label class="control-label">&nbsp; FARM DETAILS </label>
-              </legend>
-            </fieldset>
-          </div>
-        </div>
-      </div>
-      <div class="col-sm-10 col-centered">
-        <div class="form-group">
-          <label class="control-label label-required"
-            >Select a GAP to be covered during the visit</label
-          >
-          <select class="form-control" formControlName="farm">
-            <option value="" disabled selected>select gap</option>
-            <option value="none">none</option>
-          </select>
-        </div>
-      </div>
-      <div class="col-sm-10 col-centered">
-        <div class="form-group">
-          <label class="control-label label-required"
-            >Select an agronomist who will visit the farm</label
-          >
-          <select class="form-control" formControlName="farm">
-            <option value="" disabled selected>select agronomist</option>
-            <option value="none">none</option>
-          </select>
-        </div>
-      </div>
-      <div class="col-sm-10 col-centered">
-        <p style="font-weight: bold">Date and time of the visit</p>
-        <br />
-        <ng-container formGroupName="date">
-          <div class="col-sm-10 col-centered">
-            <div class="form-group">
-              <label class="control-label label-required">Select Date</label>
-              <input
-                [owlDateTimeTrigger]="dt1"
-                [owlDateTime]="dt1"
-                formControlName="visitDate"
-                class="form-control"
-                placeholder="Dd/mm/yyyy"
-              />
-              <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+          <div style="margin-bottom: 10px">
+            <label class="control-label label-required"
+              >GAP to be covered during the visit</label
+            >
+            <div
+              class="confirm-text-box confirm-text"
+              *ngFor="let gaps of visits.gaps"
+            >
+              {{ gaps }}
             </div>
           </div>
-        </ng-container>
-      </div>
-      <div class="col-sm-10 col-centered">
-        <div
-          class="row text-center"
-          style="padding-left: 10%; padding-right: 10%"
-        >
-          <div class="col-sm-6">
-            <div class="form-group">
-              <label class="control-label label-required">Starts</label>
-              <input
-                atp-time-picker
-                formControlName="startTime"
-                class="form-control"
-                placeholder="00:00"
-              />
+          <div style="margin-bottom: 10px">
+            <label class="control-label label-required"
+              >Agronomist who will visit</label
+            >
+            <div class="confirm-text-box confirm-text">
+              {{ visits.visitor }}
             </div>
           </div>
-          <div class="col-sm-6">
-            <div class="form-group">
-              <label class="control-label label-required">Ends</label>
-              <input
-                atp-time-picker
-                formControlName="endTime"
-                class="form-control"
-                placeholder="00:00"
-              />
+          <div style="margin-bottom: 10px">
+            <label class="control-label label-required"
+              >Date and Time of the visit</label
+            >
+            <div class="confirm-text-box confirm-text">
+              From :
+              {{
+                visits.expectedDuration ? visits.expectedDuration.from : ""
+              }}
+              <br /> To :
+              {{ visits.expectedDuration ? visits.expectedDuration.to : "" }}
             </div>
           </div>
-        </div>
-      </div>
-      <div class="col-sm-10 col-centered">
-        <div class="form-group">
-          <label class="control-label label-required">Visit Description</label>
-          <input
-            type="text"
-            formControlName="description"
-            class="form-control"
-            style="height: 100px"
-          />
+          <div style="margin-bottom: 10px">
+            <label class="control-label label-required"
+              >Visit Description</label
+            >
+            <div class="confirm-text-box confirm-text">
+              {{ visits.description }} <br />
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    <br />
-    <div class="text-center">
-      <button
-        type="button"
-        class="btn"
-        style="
-          width: 250px;
-          height: 50px;
-          margin-right: 10px;
-          background-color: #bababa;
-          color: #ffffff;
-        "
-        routerLink="/admin/farm/visit/list"
-      >
-        Cancel
-      </button>
-      <button
-        type="button btn-primary"
-        class="btn"
-        (click)="open(content)"
-        style="
-          width: 250px;
-          height: 50px;
-          background-color: #4f210d;
-          color: #ffffff;
-        "
-      >
-        Schedule A Visit
-      </button>
-    </div>
-    <br />
   </div>
-</form>
+  <h3>Observation Details</h3>
+</div>

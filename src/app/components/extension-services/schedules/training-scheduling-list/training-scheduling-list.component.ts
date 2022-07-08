@@ -9,7 +9,6 @@ import { BasicComponent } from "../../../../core";
 import { Subject } from "rxjs";
 import { DataTableDirective } from "angular-datatables";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-// import { DeleteModal } from '../training-delete-modal/training-delete-modal.component';
 
 @Component({
   selector: "app-training-scheduling-list",
@@ -21,11 +20,13 @@ export class TrainingSchedulingListComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private trainingService: TrainingService,
     private modal: NgbModal,
-    private authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService,
+    private modalService: NgbModal,
   ) {}
   ngOnDestroy(): void {}
 
   schedules: any[] = [];
+  schedule;
   maxSize = 5;
   directionLinks = true;
   showData = true;
@@ -58,7 +59,9 @@ export class TrainingSchedulingListComponent implements OnInit, OnDestroy {
   getSchedules(): void {
     this.loading = true;
     this.trainingService
-      .allSchedule(this.authenticationService.getCurrentUser().info.org_id)
+      .allSchedule(
+        this.authenticationService.getCurrentUser().info.org_id,
+      )
       .subscribe((data) => {
         this.schedules = data.data;
         console.log(this.schedules);
@@ -72,11 +75,21 @@ export class TrainingSchedulingListComponent implements OnInit, OnDestroy {
     };
   }
 
-  // openDeleteModal(training: Training) {
-  //   const modalRef = this.modal.open(TrainingDeleteModal);
-  //   modalRef.componentInstance.training = training;
-  //   modalRef.result.finally(() => {
-  //     this.getGroups();
-  //   });
-  // }
+  open(content) {
+    this.modalService.open(content, { size: "sm", windowClass: "modal-sm" });
+  }
+
+  selectedSchedule(schedule){
+    this.schedule = schedule;
+  }
+
+  sendMessage() {
+    this.loading = true;
+    console.log(this.schedule);
+    let data = this.schedule._id;
+    console.log(data);
+    this.trainingService.sendMessage(data).subscribe((data) => {
+      this.loading = false;
+    });
+  }
 }
