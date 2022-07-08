@@ -206,6 +206,22 @@
       <li class="header" *appHasPermission="[1]">EXTENSION SERVICES</li>
       <li class="treeview" routerLinkActive="active" *appHasPermission="[1]">
         <a href="#">
+          <i class="fa fa-map"></i> <span>Farm Visit</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
+        </a>
+        <ul class="treeview-menu">
+          <li routerLinkActive="active" *appHasPermission="[1]">
+            <a routerLink="/admin/farm/visit/list">
+              <i class="fa fa-circle-o"></i>
+              <span>Visits</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      <li class="treeview" routerLinkActive="active" *appHasPermission="[1]">
+        <a href="#">
           <i class="fa fa-users"></i> <span>Farmers groups</span>
           <span class="pull-right-container">
             <i class="fa fa-angle-left pull-right"></i>
@@ -247,6 +263,12 @@
           <a routerLink="/admin/training/list">
             <i class="fa fa-circle-o"></i>
             <span>Trainings</span>
+          </a>
+        </li>
+        <li routerLinkActive="active" *appHasPermission="[1]">
+          <a routerLink="/admin/training/schedule/list">
+            <i class="fa fa-circle-o"></i>
+            <span>Scheduled Trainings</span>
           </a>
         </li>
       </ul> 

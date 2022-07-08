@@ -2,7 +2,6 @@
   Create a farmers group
 </h3>
 <app-list-errors [errorList]="errors"></app-list-errors>
-
 <div class="row">
   <div class="col-xs-12">
     <div class="box">
@@ -24,6 +23,12 @@
                     <option *ngFor="let province of locationProvinces"
                             value="{{province._id}}">{{province.namee | titlecase}}</option>
                   </select>
+                  <app-inline-errors *ngIf="createForm.controls.location.get('prov_id').invalid &&
+                   (createForm.controls.location.get('prov_id'.toString()).dirty
+                   || createForm.controls.location.get('prov_id'.toString()).touched)"
+                                     [errors]="createForm.controls.location.get('prov_id'.toString()).errors"
+                                     [label]="'province'">
+                  </app-inline-errors>
                 </div>
               </div>
               <div class="col-xs-2" id="location-district">

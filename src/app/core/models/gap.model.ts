@@ -11,9 +11,11 @@ export interface Question {
   question: string;
   answerType: string;
   answers: Array<Answer>;
+  marks: number;
 }
 
 export interface Answer {
   _id: string;
   answer: string;
+  weight: number;
 }

@@ -25,6 +25,20 @@ export class TrainingService {
   uploadMaterial(body: any) {
     return this.apiService.post("/v1.1/trainings/materials", body);
   }
-  
-
+  getFarmersByGroup(id: string, body: any) {
+    console.log(id);
+    return this.apiService.post("/v1.1/groups/attendance/" + id, body);
+  }
+  scheduleTraining(body: any) {
+    return this.apiService.post("/v1.1/schedules", body);
+  }
+  allSchedule(id: any) {
+    return this.apiService.get("/v1.1/schedules/org/" + id);
+  }
+  getSchedule(id: any) {
+    return this.apiService.get("/v1.1/schedules/" + id);
+  }
+  sendMessage(id: any) {
+    return this.apiService.get("/v1.1/schedules/invite/" + id);
+  }
 }

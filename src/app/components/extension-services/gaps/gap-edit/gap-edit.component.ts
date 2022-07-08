@@ -21,6 +21,12 @@ export class GapEditComponent
     { id: 'text_input', name: 'text_input' },
     { id: 'percentage_input', name: 'percentage_input' },
     { id: 'multiple_choice', name: 'multiple_choice' },
+    { id: 'multiple_single', name: 'Multiple Choice - Single' },
+    { id: 'yes_no', name: 'Yes/No' },
+    {
+      id: 'multiple_all_apply',
+      name: 'Multiple Choice - All that Apply',
+    },
   ];
   loading = false;
   adoptionOptionsVisible = false;
@@ -77,6 +83,7 @@ export class GapEditComponent
     questions.at(index).get('_id').setValue(element._id);
     questions.at(index).get('question').setValue(element.question);
     questions.at(index).get('answerType').setValue(element.answerType);
+    questions.at(index).get('marks').setValue(element.marks);
 
     element.answers.forEach((value, aindex) => {
       this.addAnswers(value, index, aindex);
@@ -92,6 +99,7 @@ export class GapEditComponent
     answers.push(this.createAnswer());
     answers.at(aIndex).get('_id').setValue(element._id);
     answers.at(aIndex).get('answer').setValue(element.answer);
+    answers.at(aIndex).get('weight').setValue(element.weight);
   }
 
   get name() {
@@ -140,10 +148,11 @@ export class GapEditComponent
 
   createQuestion(): FormGroup {
     return this.formBuilder.group({
-      _id: [ Validators.required],
+      _id: [Validators.required],
       question: ['Is user practising pruning', Validators.required],
       answerType: ['', Validators.required],
       answers: new FormArray([]),
+      marks: [],
     });
   }
 
@@ -151,6 +160,7 @@ export class GapEditComponent
     return this.formBuilder.group({
       _id: [],
       answer: [''],
+      weight: [],
     });
   }
 
@@ -200,6 +210,36 @@ export class GapEditComponent
 
   onCancel() {
     // this.location.back();
+  }
+
+  checkIfWeightMatch(index: number, aIndex: number) {
+    const marks = this.formCategory.at(index).get('marks').value;
+    const answers = (this.formCategory.at(index).get('answers') as FormArray)
+      .controls;
+
+    let sum = 0;
+    for (const answer of answers) {
+      sum = sum + (answer as FormGroup).controls.weight.value;
+    }
+    console.log(sum);
+    if (sum === marks) {
+      console.log(true);
+      return true;
+    } else {
+      console.log(false);
+      return false;
+    }
+  }
+
+  weight(index: number, aIndex: number) {
+    const answers = (this.formCategory.at(index).get('answers') as FormArray)
+      .controls;
+    const answer = answers[aIndex] as FormGroup;
+    return answer.controls.weight;
+  }
+
+  marks(index: number) {
+    return this.formCategory.at(index).get('marks');
   }
 
   initial() {}

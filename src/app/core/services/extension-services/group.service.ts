@@ -24,4 +24,8 @@ export class GroupService {
   update(id: string, body: any) {
     return this.apiService.put('/v1.1/groups/' + id,  body);
   }
+
+  getByName(body: any) {
+    return this.apiService.post('/v1.1/groups/search', body);
+  }
 }

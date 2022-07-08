@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
+import { IDropdownSettings } from "ng-multiselect-dropdown";
 import { TrainingService, GapService, Training } from "../../../../core";
 import { MessageService } from "../../../../core";
 import { BasicComponent } from "../../../../core";
@@ -18,6 +19,7 @@ export class TrainingEditComponent
   closeResult = "";
   id: string;
   training: Training;
+  gapDropdownSettings: IDropdownSettings = {};
   constructor(
     private formBuilder: FormBuilder,
     private trainingService: TrainingService,
@@ -37,7 +39,19 @@ export class TrainingEditComponent
       trainingName: ["", Validators.required],
       description: ["", Validators.required],
       adoptionGap: ["", Validators.required],
+      status: ["active", Validators.required],
     });
+
+    this.gapDropdownSettings = {
+      singleSelection: false,
+      idField: "_id",
+      textField: "name",
+      selectAllText: "Select All",
+      enableCheckAll: false,
+      unSelectAllText: "UnSelect All",
+      itemsShowLimit: 6,
+      allowSearchFilter: true,
+    };
 
     this.route.params.subscribe((params) => {
       this.id = params["id".toString()];
@@ -106,13 +120,19 @@ export class TrainingEditComponent
         console.log(err);
       }
     );
-
   }
 
   getGaps(): void {
     this.loading = true;
     this.gapService.all().subscribe((data) => {
-      this.gaps = data.data;
+      let newData :any[] = [{
+        _id : "",
+        name: "Not Applied"
+      }];
+      data.data.forEach(data => { 
+        newData.push({_id: data._id, name: data.name});
+      });
+      this.gaps = newData;
       this.loading = false;
     });
   }
