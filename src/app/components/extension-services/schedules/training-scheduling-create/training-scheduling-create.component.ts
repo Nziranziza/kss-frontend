@@ -374,6 +374,7 @@ export class TrainingSchedulingCreateComponent
           this.trainers[this.scheduleTraining.value.trainer].surname,
         phoneNumber:
           this.trainers[this.scheduleTraining.value.trainer].phoneNumber,
+        organisationName: this.authenticationService.getCurrentUser().orgInfo.orgName,
       },
       groupId: this.filterForm.controls.searchByLocation.get(
         "farmerGroup".toString()
