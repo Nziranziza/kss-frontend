@@ -15,6 +15,7 @@ import { Router } from '@angular/router';
 import { HelperService } from '../../../../core';
 import { isUndefined } from 'util';
 import { BasicComponent } from '../../../../core';
+import { ChartType } from 'angular-google-charts';
 
 @Component({
   selector: 'app-dispatch-progress',
@@ -44,7 +45,7 @@ export class DispatchProgressComponent
   siteTotalAllocated = 0;
   siteTotalDispatched = 0;
   graph = {
-    type: 'ColumnChart',
+    type: ChartType.ColumnChart,
     data: [],
     options: {
       colors: ['#367fa9', '#f0a732'],

@@ -5,7 +5,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {NgxPaginationModule} from 'ngx-pagination';
 import {OrderModule} from 'ngx-order-pipe';
 import {SharedModule} from '../../shared';
-import {OwlDateTimeModule, OwlNativeDateTimeModule} from 'ng-pick-datetime';
+import {OwlDateTimeModule, OwlNativeDateTimeModule} from 'ng-pick-datetime-ex';
 import {FusionChartsModule} from 'angular-fusioncharts';
 import {GoogleChartsModule} from 'angular-google-charts';
 import {AutocompleteLibModule} from 'angular-ng-autocomplete';

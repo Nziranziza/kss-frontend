@@ -13,6 +13,8 @@ import {
 import {HelperService} from '../../../core';
 import {isUndefined} from 'util';
 import {BasicComponent} from '../../../core';
+import { ChartType } from 'angular-google-charts';
+
 
 @Component({
   selector: 'app-farmers-approval-progress',
@@ -35,7 +37,7 @@ export class FarmersApprovalProgressComponent extends BasicComponent implements 
   zoneTotalApproved = 0;
   zoneTotalPending = 0;
   graph = {
-    type: 'ColumnChart',
+    type: ChartType.ColumnChart,
     data: [],
     options: {
       colors: ['#367fa9', '#f0a732']

@@ -1,4 +1,4 @@
-import {NgModule} from '@angular/core';
+import {CUSTOM_ELEMENTS_SCHEMA, NgModule, NO_ERRORS_SCHEMA} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FarmerRoutingModule} from './farmer-routing.module';
 import {FarmerListComponent} from './farmer-list/farmer-list.component';

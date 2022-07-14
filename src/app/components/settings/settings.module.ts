@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import {NgModule} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SettingsRoutingModule } from './settings-routing.module';
 import { SeasonParametersComponent } from './season-parameters/season-parameters.component';
@@ -39,6 +39,6 @@ import { ChannelEditComponent } from './payment-channel/channel-edit/channel-edi
     EditSupplierComponent,
     EditInputComponent,
     DeleteTypeModal,
-  ],
+  ]
 })
 export class SettingsModule {}

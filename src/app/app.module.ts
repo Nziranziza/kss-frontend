@@ -18,7 +18,7 @@ import {OrganisationTypeModule} from './components/organisation-type/organisatio
 import {CherrySupplyModule} from './components/wet-processing/cherry-supply/cherry-supply.module';
 import {SettingsModule} from './components/settings/settings.module';
 import {ParchmentModule} from './components/wet-processing/parchment/parchment.module';
-import {OwlDateTimeModule, OwlNativeDateTimeModule} from 'ng-pick-datetime';
+import {OwlDateTimeModule, OwlNativeDateTimeModule} from 'ng-pick-datetime-ex';
 import {ErrorPagesModule} from './components/error-pages/error-pages.module';
 import {DryProcessingModule} from './components/dry-processing/dry-processing.module';
 import {InputDistributionModule} from './components/input-distribution/input-distribution.module';

@@ -11,7 +11,7 @@ import {OrganisationPendingFarmersComponent} from './organisation-pending-farmer
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {NgxPaginationModule} from 'ngx-pagination';
 import {OrderModule} from 'ngx-order-pipe';
-import {OwlDateTimeModule, OwlNativeDateTimeModule} from 'ng-pick-datetime';
+import {OwlDateTimeModule, OwlNativeDateTimeModule} from 'ng-pick-datetime-ex';
 import {OrganisationSuppliersComponent} from './organisation-suppliers/organisation-suppliers.component';
 import {SupplierDeliveriesComponent} from './organisation-suppliers/supplier-deliveries/supplier-deliveries.component';
 import {OrganisationSettingsComponent} from './organisation-settings/settings/settings/organisation-settings.component';

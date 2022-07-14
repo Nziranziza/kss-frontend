@@ -42,8 +42,7 @@
               "src/assets/plugins/input-mask/jquery.inputmask.date.extensions.js",
               "src/assets/plugins/input-mask/jquery.inputmask.extensions.js",
               "src/assets/dist/js/demo.js"
-            ],
-            "es5BrowserSupport": true
+            ]
           },
           "configurations": {
             "production": {
