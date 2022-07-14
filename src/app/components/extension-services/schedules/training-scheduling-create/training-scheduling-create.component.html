@@ -1,0 +1,724 @@
+<ng-template #ccontent let-modal>
+  <div class="modal-body text-center" style="font-size: 1.5em">
+    <i class="fa fa-check" style="color: #00a513; font-size: 4.5em"></i>
+    <br />
+    Thank you Training <br />
+    <span style="font-weight: bold">
+      “ {{ scheduleTraining.value.description }} “
+    </span>
+    <br />
+    has been Scheduled <br />
+
+    <button
+      type="button"
+      class="btn btn-success btn-lg pull-center"
+      routerLink="/admin/training/schedule/list"
+      (click)="modal.dismiss()"
+    >
+      OK
+    </button>
+    <button
+      type="button"
+      class="btn btn-success btn-lg pull-center"
+      (click)="sendMessage(); modal.dismiss()"
+      [disabled]="loading"
+    >
+      <span *ngIf="!loading; else other_content">Send Message</span>
+      <ng-template #other_content>
+        <div class="loader">
+          <div class="line"></div>
+          <div class="line"></div>
+          <div class="line"></div>
+          <div class="line"></div>
+        </div>
+      </ng-template>
+    </button>
+  </div>
+</ng-template>
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4
+      class="modal-title training-modal-title text-center"
+      id="modal-basic-title"
+    >
+      Verify and Confirm
+    </h4>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="box-confirm">
+          <div class="box-body">
+            <h4 class="text-center">Scheduled Training details</h4>
+            <label class="control-label label-required"
+              >Selected Training</label
+            >
+            <div class="confirm-text-box confirm-text">
+              {{
+                trainings[scheduleTraining.value.trainingModule].trainingName
+              }}
+            </div>
+            <label class="control-label label-required">Description</label>
+            <div class="confirm-text-box confirm-text confirm-text-area">
+              {{ scheduleTraining.value.description }}
+            </div>
+
+            <label class="control-label label-required"
+              >Training Location address</label
+            >
+            <div class="row">
+              <div class="col-sm-6">
+                <label class="control-label"> Province </label>
+                <div class="confirm-text-box confirm-text">
+                  {{ scheduleTraining.value.location.prov_id }}
+                </div>
+                <label class="control-label"> Sector </label>
+                <div class="confirm-text-box confirm-text">
+                  {{ scheduleTraining.value.location.sect_id }}
+                </div>
+                <label class="control-label"> Village </label>
+                <div class="confirm-text-box confirm-text">
+                  {{ scheduleTraining.value.location.village_id }}
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <label class="control-label label-required"> District </label>
+                <div class="confirm-text-box confirm-text">
+                  {{ scheduleTraining.value.location.dist_id }}
+                </div>
+                <label class="control-label"> Cell </label>
+                <div class="confirm-text-box confirm-text">
+                  {{ scheduleTraining.value.location.cell_id }}
+                </div>
+                <label class="control-label"> Venue </label>
+                <div class="confirm-text-box confirm-text">
+                  {{ scheduleTraining.value.location.venue }}
+                </div>
+              </div>
+            </div>
+            <label class="control-label">Training Date & Time</label>
+            <div class="row">
+              <div class="col-sm-6">
+                <label class="control-label"> From </label>
+                <div class="confirm-text-box confirm-text">
+                  {{
+                    scheduleTraining.value.trainingStartDate +
+                      "T" +
+                      scheduleTraining.value.startTime
+                  }}
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <label class="control-label"> To </label>
+                <div class="confirm-text-box confirm-text">
+                  {{
+                    scheduleTraining.value.trainingEndDate +
+                      "T" +
+                      scheduleTraining.value.endTime
+                  }}
+                </div>
+              </div>
+            </div>
+            <div class="control-label text-center"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="box-confirm">
+          <label class="control-label label-required">Trainer</label>
+          <div class="confirm-text-box confirm-text" style="margin-right: 20px">
+            {{
+              trainers[scheduleTraining.value.trainer].foreName +
+                " " +
+                trainers[scheduleTraining.value.trainer].surname
+            }}
+          </div>
+          <br />
+          <h3 class="text-center">
+            Trainees ( Total: {{ selectedTrainees.length }} )
+          </h3>
+          <table class="row-border hover table table-striped">
+            <thead>
+              <tr>
+                <th>Reg. Number</th>
+                <th>Farmer Names</th>
+                <th>Contact</th>
+                <th>Status</th>
+              </tr>
+              <tr *ngFor="let trainee of selectedTrainees; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>{{ trainee.firstName + " " + trainee.lastName }}</td>
+                <td>{{ trainee.phoneNumber }}</td>
+                <td>{{ trainee.attendance }}</td>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div class="row">
+      <div class="col-sm-3">
+        <button
+          type="button"
+          class="btn btn-danger btn-lg pull-left"
+          (click)="modal.dismiss()"
+        >
+          Cancel
+        </button>
+      </div>
+      <div class="col-sm-6"></div>
+      <div class="col-sm-3">
+        <button
+          class="btn btn-secondary btn-lg submit"
+          (click)="onSubmit(); modal.dismiss('cancel click'); open(ccontent)"
+          [disabled]="loading"
+        >
+          <span *ngIf="!loading; else other_content">Confirm</span>
+          <ng-template #other_content>
+            <div class="loader">
+              <div class="line"></div>
+              <div class="line"></div>
+              <div class="line"></div>
+              <div class="line"></div>
+            </div>
+          </ng-template>
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<h3>
+  Training Management >
+  <span style="font-weight: bold"> Schedule a Training</span>
+</h3>
+<app-list-errors [errorList]="errors"></app-list-errors>
+<form [formGroup]="scheduleTraining" (ngSubmit)="onSubmit()">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-body">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label class="control-label label-required"
+                >Select Training Module</label
+              >
+              <select class="form-control" formControlName="trainingModule">
+                <option value="" disabled selected>
+                  select training module
+                </option>
+                <option
+                  *ngFor="let training of trainings; let i = index"
+                  value="{{ i }}"
+                >
+                  {{ training.trainingName | titlecase }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label class="control-label label-required">Select Trainer</label>
+              <select class="form-control" formControlName="trainer">
+                <option value=""></option>
+                <option
+                  *ngFor="let trainer of trainers; let i = index"
+                  value="{{ i }}"
+                >
+                  {{ trainer.foreName + " " + trainer.surname | titlecase }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="col-sm-12" formGroupName="location">
+            <div class="row">
+              <div class="col-xs-2" id="location-province">
+                <div class="form-group">
+                  <label class="control-label label-required">Province</label>
+                  <select class="form-control" formControlName="prov_id">
+                    <option value=""></option>
+                    <option
+                      *ngFor="let province of locationProvinces"
+                      value="{{ province._id }}"
+                    >
+                      {{ province.namee | titlecase }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xs-2" id="location-district">
+                <div class="form-group">
+                  <label class="control-label label-required">District</label>
+                  <select class="form-control" formControlName="dist_id">
+                    <option value=""></option>
+                    <option
+                      *ngFor="let district of locationDistricts"
+                      value="{{ district._id }}"
+                    >
+                      {{ district.name | titlecase }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xs-2" id="location-sector">
+                <div class="form-group">
+                  <label class="control-label label-required">Sector</label>
+                  <select class="form-control" formControlName="sect_id">
+                    <option value=""></option>
+                    <option
+                      *ngFor="let sector of locationSectors"
+                      value="{{ sector._id }}"
+                    >
+                      {{ sector.name | titlecase }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xs-2" id="location-cell">
+                <div class="form-group">
+                  <label class="control-label label-required">Cell</label>
+                  <select class="form-control" formControlName="cell_id">
+                    <option value=""></option>
+                    <option
+                      *ngFor="let cell of locationCells"
+                      value="{{ cell._id }}"
+                    >
+                      {{ cell.name | titlecase }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xs-2" id="location-village">
+                <div class="form-group">
+                  <label class="control-label label-required">Village</label>
+                  <select class="form-control" formControlName="village_id">
+                    <option value=""></option>
+                    <option
+                      *ngFor="let village of locationVillages"
+                      value="{{ village._id }}"
+                    >
+                      {{ village.name | titlecase }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xs-2" id="venue">
+                <div class="form-group">
+                  <label class="control-label label-required">Venue</label>
+                  <input
+                    type="text"
+                    formControlName="venue"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-7">
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label class="control-label label-required"
+                    >Starting Date and Time of the training</label
+                  >
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <input
+                        [owlDateTimeTrigger]="dt1"
+                        [owlDateTime]="dt1"
+                        formControlName="trainingStartDate"
+                        class="form-control"
+                        placeholder="Dd/mm/yyyy"
+                        [min]="today"
+                      />
+                      <owl-date-time
+                        [pickerType]="'calendar'"
+                        #dt1
+                      ></owl-date-time>
+                    </div>
+                    <div class="col-sm-6">
+                      <input
+                        [owlDateTimeTrigger]="dt2"
+                        class="form-control"
+                        formControlName="startTime"
+                        [owlDateTime]="dt2"
+                      />
+                      <owl-date-time
+                        [pickerType]="'timer'"
+                        #dt2
+                      ></owl-date-time>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label class="control-label label-required"
+                    >End Date and Time of the training</label
+                  >
+
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <input
+                        [owlDateTimeTrigger]="dt3"
+                        [owlDateTime]="dt3"
+                        formControlName="trainingEndDate"
+                        class="form-control"
+                        placeholder="Dd/mm/yyyy"
+                        [min]="scheduleTraining.value.trainingStartDate"
+                      />
+                      <owl-date-time
+                        [pickerType]="'calendar'"
+                        #dt3
+                      ></owl-date-time>
+                    </div>
+                    <div class="col-sm-6">
+                      <input
+                        [owlDateTimeTrigger]="dt4"
+                        class="form-control"
+                        formControlName="endTime"
+                        [owlDateTime]="dt4"
+                      />
+                      <owl-date-time
+                        [pickerType]="'timer'"
+                        #dt4
+                      ></owl-date-time>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-5">
+            <div class="form-group">
+              <label class="control-label label-required">Description</label>
+              <input
+                type="text"
+                formControlName="description"
+                class="form-control"
+              />
+            </div>
+          </div>
+
+          <div class="col-sm-6">
+            <fieldset style="margin: 0px -3px 0px -3px !important">
+              <legend style="width: 13em">
+                <label class="control-label label-required"
+                  >&nbsp; TRAINEES SELECTION
+                </label>
+              </legend>
+              <form
+                [formGroup]="filterForm"
+                (ngSubmit)="onFilter()"
+                style="text-align: center"
+              >
+                <div class="row" formGroupName="searchByLocation">
+                  <div class="col-xs-3" id="location-sector">
+                    <div class="form-group">
+                      <label class="control-label">Sector</label>
+                      <select class="form-control" formControlName="sect_id">
+                        <option value=""></option>
+                        <option
+                          *ngFor="let sector of basicCoveredSectors"
+                          value="{{ sector._id }}"
+                        >
+                          {{ sector.name | titlecase }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-xs-3" id="location-cell">
+                    <div class="form-group">
+                      <label class="control-label">Cell</label>
+                      <select class="form-control" formControlName="cell_id">
+                        <option value=""></option>
+                        <option
+                          *ngFor="let cell of basicCoveredCells"
+                          value="{{ cell._id }}"
+                        >
+                          {{ cell.name | titlecase }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-xs-3" id="location-village">
+                    <div class="form-group">
+                      <label class="control-label">Village</label>
+                      <select class="form-control" formControlName="village_id">
+                        <option value=""></option>
+                        <option
+                          *ngFor="let village of basicCoveredVillages"
+                          value="{{ village._id }}"
+                        >
+                          {{ village.name | titlecase }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="col-xs-3">
+                    <div class="form-group">
+                      <label class="control-label">Farmer Group</label>
+                      <select
+                        class="form-control"
+                        formControlName="farmerGroup"
+                      >
+                        <option value=""></option>
+                        <option
+                          *ngFor="let group of farmerGroups"
+                          value="{{ group._id }}"
+                        >
+                          {{ group.groupName | titlecase }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </form>
+              <form [formGroup]="editContactForm">
+                <div *ngIf="trainees.length > 0">
+                  <table class="row-border hover table table-striped">
+                    <thead>
+                      <tr
+                        class="font: normal normal medium 9px/10px Helvetica Neue;"
+                      >
+                        <th>#</th>
+                        <th>Farmer Names</th>
+                        <th>Contacts</th>
+                        <th>Status</th>
+                        <th>Selection</th>
+                      </tr>
+                      <tr *ngFor="let trainee of trainees; let i = index">
+                        <td>{{ i + 1 }}</td>
+                        <td
+                          style="
+                            font: normal normal normal 12px/14px Helvetica Neue;
+                          "
+                        >
+                          {{ trainee.firstName + " " + trainee.lastName }}
+                        </td>
+                        <td
+                          style="
+                            font: normal normal normal 12px/14px Helvetica Neue;
+                          "
+                        >
+                          <div formArrayName="contacts">
+                            <div class="row" *ngIf="trainee.phoneNumber">
+                              <div class="col-xs-8" formGroupName="{{ i }}">
+                                <span *ngIf="!trainee.editMode">
+                                  {{ trainee.phoneNumber }}
+                                </span>
+                                <span *ngIf="trainee.editMode">
+                                  <input
+                                    type="number"
+                                    style="height: 23px; width: 95%"
+                                    formControlName="contact"
+                                /></span>
+                              </div>
+                              <div class="col-xs-3">
+                                <span *ngIf="!trainee.editMode">
+                                  <button
+                                    class="btn btn-primary btn-xs"
+                                    (click)="addContact(i)"
+                                  >
+                                    <i class="fa fa-edit"></i>
+                                  </button>
+                                </span>
+                                <span *ngIf="trainee.editMode">
+                                  <button
+                                    class="btn btn-success btn-xs"
+                                    (click)="cancelEditContact(i)"
+                                    style="margin-right: 3px"
+                                  >
+                                    <i class="fa fa-remove"></i>
+                                  </button>
+                                  <button
+                                    class="btn btn-success btn-xs"
+                                    (click)="submitContact(i)"
+                                  >
+                                    <i class="fa fa-check"></i></button
+                                ></span>
+                              </div>
+                            </div>
+                            <div class="row" *ngIf="!trainee.phoneNumber">
+                              <div class="col-xs-8" formGroupName="{{ i }}">
+                                <span
+                                  *ngIf="!trainee.editMode"
+                                  style="color: #ff0000"
+                                >
+                                  Add a phone number
+                                </span>
+                                <span *ngIf="trainee.editMode">
+                                  <input
+                                    type="number"
+                                    style="height: 23px; width: 95%"
+                                    formControlName="contact"
+                                /></span>
+                              </div>
+                              <div class="col-xs-3">
+                                <span *ngIf="!trainee.editMode">
+                                  <button
+                                    class="btn btn-primary btn-xs"
+                                    (click)="addContact(i)"
+                                  >
+                                    <i class="fa fa-plus"></i>
+                                  </button>
+                                </span>
+                                <span *ngIf="trainee.editMode">
+                                  <button
+                                    class="btn btn-primary btn-xs"
+                                    (click)="cancelEditContact(i)"
+                                    style="margin-right: 3px"
+                                  >
+                                    <i class="fa fa-remove"></i>
+                                  </button>
+                                  <button
+                                    class="btn btn-success btn-xs"
+                                    (click)="submitContact(i)"
+                                  >
+                                    <i class="fa fa-check"></i></button
+                                ></span>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+
+                        <td
+                          style="
+                            font: normal normal bold 10px/14px Helvetica Neue;
+                          "
+                        >
+                          <span *ngIf="trainee.attendance === 'attended'">
+                            {{ trainee.attendance }}
+                          </span>
+                          <span
+                            *ngIf="trainee.attendance !== 'attended'"
+                            style="color: #ff0000"
+                          >
+                            {{ trainee.attendance }}
+                          </span>
+                        </td>
+                        <td>
+                          <input
+                            type="checkbox"
+                            *ngIf="trainee.attendance === 'attended'"
+                            disabled
+                            class="pull-right"
+                            (click)="selectTrainee($event.target.checked, i)"
+                            [(ngModel)]="trainee.selected"
+                            [ngModelOptions]="{ standalone: true }"
+                          />
+                          <input
+                            type="checkbox"
+                            *ngIf="trainee.attendance !== 'attended'"
+                            class="pull-right"
+                            (click)="selectTrainee($event.target.checked, i)"
+                            [(ngModel)]="trainee.selected"
+                            [ngModelOptions]="{ standalone: true }"
+                          />
+                        </td>
+                      </tr>
+                    </thead>
+                    <tbody></tbody>
+                  </table>
+                </div>
+              </form>
+              <button
+                type="button"
+                class="btn btn-warning"
+                style="width: 100%"
+                (click)="addSelectedToBeTrained()"
+              >
+                ADD SELECTED TO BE TRAINED
+              </button>
+            </fieldset>
+          </div>
+
+          <div class="col-sm-6">
+            <fieldset style="margin: 0px -3px 0px -3px !important">
+              <legend style="width: 13em">
+                <label class="control-label">&nbsp; SELECTED TRAINEES </label>
+              </legend>
+              <div class="text-center stats-box">
+                <h6>TOTAL TO BE TRAINED</h6>
+                <h4>{{ selectedTrainees.length }}</h4>
+              </div>
+              <table class="row-border hover table table-striped">
+                <thead>
+                  <tr>
+                    <th>Reg. Number</th>
+                    <th>Farmer Names</th>
+                    <th>Contact</th>
+                    <th>Status</th>
+                    <th>Selection</th>
+                  </tr>
+                  <tr *ngFor="let trainee of selectedTrainees; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>
+                      {{
+                        trainee.firstName
+                          ? trainee.firstName + " " + trainee.lastName
+                          : trainee.groupContactPersonNames
+                      }}
+                    </td>
+                    <td>{{ trainee.phoneNumber }}</td>
+                    <td>{{ trainee.attendance }}</td>
+                    <td>
+                      <input
+                        type="checkbox"
+                        class="pull-right"
+                        (click)="selectTrainee($event.target.checked, i)"
+                        [(ngModel)]="trainee.selected"
+                        [ngModelOptions]="{ standalone: true }"
+                      />
+                    </td>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+              <button
+                type="button"
+                class="btn btn-danger pull-right"
+                style="width: 35%"
+              >
+                <i class="fa fa-trash" style="color: red"></i>
+                REMOVE SELECTED
+              </button>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-3"></div>
+    <div class="col-sm-3">
+      <button
+        type="button"
+        class="btn btn-success"
+        style="width: 250px; height: 50px; margin-right: 10px"
+        routerLink="/admin/training/schedule/list"
+      >
+        CANCEL
+      </button>
+    </div>
+    <div class="col-sm-3">
+      <button
+        type="button"
+        class="btn btn-success"
+        (click)="open(content)"
+        style="width: 250px; height: 50px"
+      >
+        SCHEDULE A TRAINING
+      </button>
+    </div>
+    <div class="col-sm-3"></div>
+  </div>
+</form>

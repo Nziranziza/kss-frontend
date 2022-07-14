@@ -1,0 +1,294 @@
+<ng-template #ccontent let-modal>
+  <div class="modal-body text-center" style="font-size: 1.5em">
+    <i class="fa fa-check" style="color: #00a513; font-size: 4.5em"></i>
+    <br />
+    Thank you Training <br />
+    <span style="font-weight: bold">
+      “ {{ createTraining.value.trainingName }} “
+    </span>
+    <br />
+    has been added <br />
+    <button
+      type="button"
+      class="btn btn-success btn-lg pull-center"
+      routerLink="/admin/training/list"
+      (click)="modal.dismiss()"
+    >
+      OK
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title training-modal-title" id="modal-basic-title">
+      Verify and Confirm
+    </h4>
+  </div>
+  <div class="modal-body">
+    <div class="box">
+      <div class="box-body">
+        <h3>Training details</h3>
+        <div class="row">
+          <div class="col-xs-6">
+            <div style="margin-bottom: 10px">
+              <label class="control-label label-required">Training Name</label>
+              <div class="confirm-text-box confirm-text">
+                {{ createTraining.value.trainingName }}
+              </div>
+            </div>
+            <div>
+              <label class="control-label label-required">Associated GAP</label>
+              <div class="confirm-text-box confirm-text">
+                <li *ngFor="let gaps of createTraining.value.adoptionGap; let i = index">
+                  {{ gaps.name }}
+                </li>
+              </div>
+            </div>
+            <div>
+              <label class="control-label label-required">Status</label>
+              <div class="confirm-text-box confirm-text">
+                {{ createTraining.value.status }}
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-6">
+            <div>
+              <label class="control-label label-required"
+                >Training Description</label
+              >
+              <div class="confirm-text-box confirm-text">
+                {{ createTraining.value.description }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="box" class="background: #EDEAE8 0% 0% no-repeat padding-box">
+      <app-loader *ngIf="loading"></app-loader>
+      <div class="box-body" *ngIf="!loading">
+        <h3>Files</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Filename</th>
+              <th>File Size</th>
+            </tr>
+          </thead>
+
+          <tbody *ngFor="let file of files; let i = index">
+            <tr>
+              <td>{{ i + 1 }}</td>
+              <td>{{ file.name }}</td>
+              <td>{{ file.size }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div class="row">
+      <div class="col-sm-3">
+        <button
+          type="button"
+          class="btn btn-danger btn-lg pull-left"
+          (click)="modal.dismiss()"
+        >
+          Cancel
+        </button>
+      </div>
+      <div class="col-sm-6"></div>
+      <div class="col-sm-3">
+        <button
+          class="btn btn-secondary btn-lg submit"
+          (click)="modal.dismiss(); onSubmit(); open(ccontent)"
+          [disabled]="loading"
+        >
+          <span *ngIf="!loading; else other_content">Confirm</span>
+          <ng-template #other_content>
+            <div class="loader">
+              <div class="line"></div>
+              <div class="line"></div>
+              <div class="line"></div>
+              <div class="line"></div>
+            </div>
+          </ng-template>
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<h3>
+  Training Management > <span style="font-weight: bold"> Add a Training </span>
+</h3>
+<app-list-message [message]="message"></app-list-message>
+<app-list-errors [errorList]="errors"></app-list-errors>
+<form [formGroup]="createTraining" (ngSubmit)="onSubmit()">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-body">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label class="control-label label-required">Training Name</label>
+              <input
+                type="text"
+                formControlName="trainingName"
+                class="form-control"
+                [ngClass]="{
+                  'has-error':
+                    trainingName.invalid &&
+                    (trainingName.dirty || trainingName.touched)
+                }"
+              />
+              <div
+                *ngIf="
+                  trainingName.invalid &&
+                  (trainingName.dirty || trainingName.touched)
+                "
+                class="alert"
+              >
+                <div *ngIf="trainingName.errors['required']" style="color: red">
+                  *Training Name is required.
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label class="control-label label-required"
+                >Training Description</label
+              >
+              <input
+                type="text"
+                formControlName="description"
+                class="form-control"
+                [ngClass]="{
+                  'has-error':
+                    description.invalid &&
+                    (description.dirty || description.touched)
+                }"
+              />
+              <div
+                *ngIf="
+                  description.invalid &&
+                  (description.dirty || description.touched)
+                "
+                class="alert"
+              >
+                <div *ngIf="description.errors['required']" style="color: red">
+                  *Description is required.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label class="control-label label-required">Associated GAP</label>
+
+              <ng-multiselect-dropdown
+                formControlName="adoptionGap"
+                [settings]="gapDropdownSettings"
+                [data]="gaps"
+                [(ngModel)]="createTraining.value.adoptionGap"
+                (onSelect)="onGapSelect($event)"
+              >
+              </ng-multiselect-dropdown>
+
+              <div
+                *ngIf="
+                  adoptionGap.invalid &&
+                  (adoptionGap.dirty || adoptionGap.touched)
+                "
+                class="alert"
+              >
+                <div *ngIf="adoptionGap.errors['required']" style="color: red">
+                  *Associated Gap is required.
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label label-required">Status</label>
+              <select class="form-control" formControlName="status">
+                <option value="" disabled>select status</option>
+                <option value="active" selected>Active</option>
+                <option value="inactive">Inactive</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label class="control-label label-required">Attach files</label>
+              <label for="file-input" class="training-file-input">
+                <img
+                  src="assets/dist/img/sks/ico_export.svg"
+                  class="training-file-input-icon"
+                />
+                <div class="training-file-input-text">
+                  Click or Drag PDF File to this area to upload
+                </div>
+              </label>
+              <input
+                id="file-input"
+                type="file"
+                multiple
+                class="form-control"
+                style="display: none"
+                (change)="onFileSelected($event)"
+                accept="application/pdf"
+              />
+              <div class="training-file-list">
+                Attached file(s) to upload <br /><br />
+                <div
+                  *ngFor="let file of files; let i = index"
+                  style="padding-bottom: 6px"
+                >
+                  <span style="width: 75%; float: left">
+                    <img
+                      src="assets/dist/img/sks/ico_attach.svg"
+                      style="margin-right: 5px"
+                    />
+                    {{ file.name }}
+                  </span>
+                  <span style="margin-left: 40px; width: 12%; float: left">
+                    {{ file.size }}
+                  </span>
+                  <i
+                    class="fa fa-times"
+                    aria-hidden="true"
+                    (click)="removeSelectedFile(index)"
+                    style="color: red"
+                  ></i>
+                  <br />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="text-center">
+    <button
+      type="button"
+      class="btn btn-success"
+      style="width: 250px; height: 50px; margin-right: 10px"
+      routerLink="/admin/training/list"
+    >
+      Cancel
+    </button>
+    <button
+      type="button"
+      class="btn btn-success"
+      (click)="onFileUpload(content)"
+      style="width: 250px; height: 50px"
+    >
+      Add Training
+    </button>
+  </div>
+</form>

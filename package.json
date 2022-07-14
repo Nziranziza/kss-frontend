@@ -44,6 +44,7 @@
     "moment": "~2.29.4",
     "moment-timezone": "~0.5.34",
     "ng-bootstrap-to-bootstrap-3": "^0.7.0",
+    "ng-multiselect-dropdown": "~0.3.2",
     "ng-pick-datetime-ex": "^12.0.2",
     "ngx-cookie-service": "~12.0.3",
     "ngx-order-pipe": "~2.2.0",
