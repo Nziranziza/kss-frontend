@@ -11,7 +11,7 @@ RUN sudo apt-get update && \
     DEBIAN_FRONTEND=noninteractive sudo apt-get install -y tzdata && \
     sudo apt-get update && \
     sudo apt-get install -y curl apt-transport-https ca-certificates build-essential && \
-    curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash - && \
+    curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash - && \
     sudo apt-get install -y nodejs && \
     sudo apt-get update -y && sudo apt upgrade -y && \
     sudo npm install -g @angular/cli
