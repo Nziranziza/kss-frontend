@@ -23,7 +23,8 @@ import {SharedDataService} from './services/shared-data.service';
 import {PaymentService} from './services/payment.service';
 import {FarmService} from './services';
 import {ConfirmDialogComponent} from './services/layouts/confirm-dialog/confirm-dialog.component';
-import {MatDialogModule, MatIconModule} from '@angular/material';
+import {MatIconModule} from '@angular/material/icon';
+import {MatDialogModule} from '@angular/material/dialog';
 
 @NgModule({
   imports: [

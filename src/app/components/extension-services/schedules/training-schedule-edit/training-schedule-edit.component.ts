@@ -61,7 +61,7 @@ export class TrainingScheduleEditComponent
   farmerGroups: any[] = [];
   successDatails;
   id: string;
-  scheduleData;
+  scheduleData: any;
 
   ngOnInit() {
     this.getGroups();

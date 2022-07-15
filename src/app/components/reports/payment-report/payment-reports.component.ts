@@ -1,10 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {BasicComponent} from '../../../core/library';
+import {BasicComponent} from '../../../core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {HelperService} from '../../../core/helpers';
-import {AuthenticationService, AuthorisationService} from '../../../core/services';
+import {HelperService} from '../../../core';
+import {AuthenticationService, AuthorisationService} from '../../../core';
 import {PaymentService} from '../../../core/services/payment.service';
 import {DatePipe} from '@angular/common';
+import {ChartType} from 'angular-google-charts';
 
 @Component({
   selector: 'app-payment-reports',
@@ -31,7 +32,7 @@ export class PaymentReportsComponent extends BasicComponent implements OnInit {
   };
   paymentPartitionsGraph = {
     title: 'Payment Partitions',
-    type: 'PieChart',
+    type: ChartType.PieChart,
     data: [
       ['Ikofi', 0],
       ['Cash', 0],
@@ -48,7 +49,7 @@ export class PaymentReportsComponent extends BasicComponent implements OnInit {
   };
   channelsGraph = {
     title: 'Payment Channels',
-    type: 'ColumnChart',
+    type: ChartType.ColumnChart,
     data: [
       ['Ikofi', 0, 0, 0, 0],
       ['Cash', 0, 0, 0, 0],

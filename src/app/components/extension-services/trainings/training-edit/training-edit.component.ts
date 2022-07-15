@@ -1,8 +1,9 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { IDropdownSettings } from "ng-multiselect-dropdown";
-import { TrainingService, GapService, Training } from "../../../../core";
+import { TrainingService, GapService, Training, HelperService } from "../../../../core";
 import { MessageService } from "../../../../core";
 import { BasicComponent } from "../../../../core";
 
@@ -26,10 +27,19 @@ export class TrainingEditComponent
     private gapService: GapService,
     private router: Router,
     private route: ActivatedRoute,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private modalService: NgbModal, 
+    private helperService: HelperService
   ) {
     super();
   }
+
+  results: any[] = [];
+  gaps: any[] = [];
+  files: any[] = [];
+  materials: any[] = [];
+  loading = false;
+  dataReturned: any[] = [];
 
   ngOnDestroy(): void {}
 
@@ -71,10 +81,8 @@ export class TrainingEditComponent
     return this.createTraining.get("adoptionGap");
   }
 
-  results: any[] = [];
-  gaps: any[] = [];
-  loading = false;
-  dataReturned: any[] = [];
+ 
+  
 
   getTraining() {
     this.trainingService.one(this.id).subscribe((data) => {
@@ -87,7 +95,7 @@ export class TrainingEditComponent
           this.training.description
         );
         this.createTraining.controls.adoptionGap.setValue(
-          this.training.adoptionGap
+          this.training.adoptionGaps
         );
         this.results = this.training.materials;
       }
@@ -135,6 +143,48 @@ export class TrainingEditComponent
       this.gaps = newData;
       this.loading = false;
     });
+  }
+
+  onGapSelect(item: any) {
+    console.log(item);
+    if (item._id === '') {
+      this.gapDropdownSettings.singleSelection = true;
+    }
+    console.log(this.createTraining.get('adoptionGap'.toString()).value);
+  }
+  
+  async onFileUpload() {
+    if (this.createTraining.valid) {
+      this.loading = true;
+      for (let i = 0; i < this.files.length; i++) {
+        const data = await this.readBase64(this.files[i].file).then((data) => {
+          return data;
+        });
+        this.materials.push(data);
+      }
+      this.trainingService
+        .uploadMaterial({ materials: this.materials })
+        .subscribe(
+          (data) => {
+            this.results = data.data;
+            this.loading = false;
+          },
+          (err) => {
+            this.loading = false;
+            this.errors = err.errors;
+            console.log(err);
+          }
+        );
+    } else {
+      if (
+        this.helperService.getFormValidationErrors(this.createTraining).length >
+        0
+      ) {
+        this.setError(
+          this.helperService.getFormValidationErrors(this.createTraining)
+        );
+      }
+    }
   }
 
   private readBase64(file): Promise<any> {

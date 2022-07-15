@@ -10,7 +10,8 @@ import {
   ListMessageComponent
 
 } from './layouts';
-import {MatDialogModule, MatIconModule} from '@angular/material';
+import { MatIconModule} from '@angular/material/icon';
+import {MatDialogModule } from '@angular/material/dialog';
 import {DataTablesModule} from 'angular-datatables';
 import {RequiredRolesDirective} from './directives/required-roles.directive';
 import {LoaderComponent} from './layouts';
@@ -27,6 +28,8 @@ import { LoadingComponent } from './layouts/loading/loading.component';
 import {InlineErrorsComponent} from './layouts/inline-errors/inline-errors.component';
 import { ConfirmModalComponent } from './layouts';
 import { SuccessModalComponent } from './layouts';
+import {GoogleChartsModule} from 'angular-google-charts';
+import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/compiler';
 
 @NgModule({
   imports: [

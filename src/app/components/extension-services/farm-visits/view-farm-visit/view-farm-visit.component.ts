@@ -16,7 +16,7 @@ implements OnInit, OnDestroy
 createTraining: FormGroup;
 closeResult = "";
 id: string;
-visits: any[] = [];
+visits: any;
 constructor(
   private visitService: VisitService,
   private route: ActivatedRoute,
@@ -36,7 +36,7 @@ ngOnInit() {
 }
 
 results: any[] = [];
-gaps: any[] = [];
+gaps: any;
 loading = false;
 dataReturned: any[] = [];
 

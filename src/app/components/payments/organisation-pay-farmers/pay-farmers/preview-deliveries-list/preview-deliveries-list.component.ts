@@ -2,9 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {PaymentProcessingService} from '../../../../../core/services/payment-processing.service';
 import {Subject} from 'rxjs';
-import {AuthenticationService} from '../../../../../core/services';
-import {HelperService} from '../../../../../core/helpers';
-import {isArray} from 'util';
+import {AuthenticationService} from '../../../../../core';
+import {HelperService} from '../../../../../core';
+import {isArray} from 'rxjs/internal-compatibility';
 
 @Component({
   selector: 'app-preview-deliveries-list',

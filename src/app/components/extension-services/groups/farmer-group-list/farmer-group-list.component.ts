@@ -1,19 +1,16 @@
-import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   AuthenticationService,
   AuthorisationService,
   BasicComponent,
-  ConfirmDialogService, GroupService, MessageService,
-  OrganisationService,
-  SiteService, Training
+  GroupService, MessageService,
 } from '../../../../core';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {Subject} from 'rxjs';
-import {DataTableDirective} from 'angular-datatables';
-import {TrainingDeleteModal} from '../../trainings/training-delete-modal/training-delete-modal.component';
+
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {ConfirmModalComponent} from '../../../../shared/layouts/confirm-modal/confirm-modal.component';
-import {error} from 'protractor';
+import {ConfirmModalComponent} from '../../../../shared';
+
 
 @Component({
   selector: 'app-farmer-group-list',

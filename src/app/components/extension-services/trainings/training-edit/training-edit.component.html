@@ -64,7 +64,6 @@
 
               <ng-multiselect-dropdown
                 formControlName="adoptionGap"
-                [placeholder]="'select gap'"
                 [settings]="gapDropdownSettings"
                 [data]="gaps"
                 [(ngModel)]="createTraining.value.adoptionGap"
@@ -157,7 +156,7 @@
     <button
       type="button"
       class="btn btn-success"
-      (click)="onFileUpload(content)"
+      (click)="onFileUpload()"
       style="width: 250px; height: 50px"
     >
       Add Training

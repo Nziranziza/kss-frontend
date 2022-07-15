@@ -15,15 +15,17 @@ import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
   templateUrl: "./training-scheduling-list.component.html",
   styleUrls: ["./training-scheduling-list.component.css"],
 })
-export class TrainingSchedulingListComponent implements OnInit, OnDestroy {
+export class TrainingSchedulingListComponent 
+extends BasicComponent implements OnInit, OnDestroy {
   constructor(
     private messageService: MessageService,
     private trainingService: TrainingService,
     private modal: NgbModal,
     private authenticationService: AuthenticationService,
     private modalService: NgbModal,
-  ) {}
-  ngOnDestroy(): void {}
+  ) {
+    super();
+  }
 
   schedules: any[] = [];
   schedule;
@@ -56,6 +58,11 @@ export class TrainingSchedulingListComponent implements OnInit, OnDestroy {
     };
   }
 
+  ngOnDestroy(): void {
+    this.dtTrigger.unsubscribe();
+    this.messageService.clearMessage();
+  }
+
   getSchedules(): void {
     this.loading = true;
     this.trainingService
@@ -64,7 +71,7 @@ export class TrainingSchedulingListComponent implements OnInit, OnDestroy {
       )
       .subscribe((data) => {
         this.schedules = data.data;
-        console.log(this.schedules);
+        this.dtTrigger.next();
         this.loading = false;
       });
 

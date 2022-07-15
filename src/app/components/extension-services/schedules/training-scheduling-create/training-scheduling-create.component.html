@@ -342,11 +342,15 @@
                     </div>
                     <div class="col-sm-6">
                       <input
-                        atp-time-picker
-                        formControlName="startTime"
+                        [owlDateTimeTrigger]="dt2"
                         class="form-control"
-                        placeholder="00:00"
+                        formControlName="startTime"
+                        [owlDateTime]="dt2"
                       />
+                      <owl-date-time
+                        [pickerType]="'timer'"
+                        #dt2
+                      ></owl-date-time>
                     </div>
                   </div>
                 </div>
@@ -361,8 +365,8 @@
                   <div class="row">
                     <div class="col-sm-6">
                       <input
-                        [owlDateTimeTrigger]="dt2"
-                        [owlDateTime]="dt2"
+                        [owlDateTimeTrigger]="dt3"
+                        [owlDateTime]="dt3"
                         formControlName="trainingEndDate"
                         class="form-control"
                         placeholder="Dd/mm/yyyy"
@@ -370,16 +374,20 @@
                       />
                       <owl-date-time
                         [pickerType]="'calendar'"
-                        #dt2
+                        #dt3
                       ></owl-date-time>
                     </div>
                     <div class="col-sm-6">
                       <input
-                        atp-time-picker
-                        formControlName="endTime"
+                        [owlDateTimeTrigger]="dt4"
                         class="form-control"
-                        placeholder="00:00"
+                        formControlName="endTime"
+                        [owlDateTime]="dt4"
                       />
+                      <owl-date-time
+                        [pickerType]="'timer'"
+                        #dt4
+                      ></owl-date-time>
                     </div>
                   </div>
                 </div>
@@ -401,7 +409,9 @@
           <div class="col-sm-6">
             <fieldset style="margin: 0px -3px 0px -3px !important">
               <legend style="width: 13em">
-                <label class="control-label label-required">&nbsp; TRAINEES SELECTION </label>
+                <label class="control-label label-required"
+                  >&nbsp; TRAINEES SELECTION
+                </label>
               </legend>
               <form
                 [formGroup]="filterForm"

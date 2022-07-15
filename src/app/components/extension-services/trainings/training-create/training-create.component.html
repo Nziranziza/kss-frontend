@@ -40,7 +40,9 @@
             <div>
               <label class="control-label label-required">Associated GAP</label>
               <div class="confirm-text-box confirm-text">
-                {{ createTraining.value.adoptionGap }}
+                <li *ngFor="let gaps of createTraining.value.adoptionGap; let i = index">
+                  {{ gaps.name }}
+                </li>
               </div>
             </div>
             <div>
@@ -123,6 +125,7 @@
 <h3>
   Training Management > <span style="font-weight: bold"> Add a Training </span>
 </h3>
+<app-list-message [message]="message"></app-list-message>
 <app-list-errors [errorList]="errors"></app-list-errors>
 <form [formGroup]="createTraining" (ngSubmit)="onSubmit()">
   <div class="row">
@@ -190,7 +193,6 @@
 
               <ng-multiselect-dropdown
                 formControlName="adoptionGap"
-                [placeholder]="'select gap'"
                 [settings]="gapDropdownSettings"
                 [data]="gaps"
                 [(ngModel)]="createTraining.value.adoptionGap"

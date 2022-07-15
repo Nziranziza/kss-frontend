@@ -13,6 +13,7 @@ import {
 import {Router} from '@angular/router';
 import {HelperService} from '../../../../core';
 import {BasicComponent} from '../../../../core';
+import { ChartType } from 'angular-google-charts';
 
 @Component({
   selector: 'app-distribution-progress',

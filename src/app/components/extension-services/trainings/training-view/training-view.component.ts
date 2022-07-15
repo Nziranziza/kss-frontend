@@ -1,9 +1,11 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { TrainingService, GapService, Training } from "../../../../core";
 import { MessageService } from "../../../../core";
 import { BasicComponent } from "../../../../core";
+import {Subject} from 'rxjs';
+import {DataTableDirective} from 'angular-datatables';
 
 @Component({
   selector: "app-training-view",
@@ -17,7 +19,7 @@ export class TrainingViewComponent
   createTraining: FormGroup;
   closeResult = "";
   id: string;
-  training: any[] = [];
+  training: Training;
   constructor(
     private trainingService: TrainingService,
     private route: ActivatedRoute,
@@ -39,8 +41,14 @@ export class TrainingViewComponent
 
   results: any[] = [];
   gaps: any[] = [];
+  config: any;
+  dtOptions: any = {};
   loading = false;
-  dataReturned: any[] = [];
+  // @ts-ignore
+  dtTrigger: Subject = new Subject();
+  // @ts-ignore
+  @ViewChild(DataTableDirective, {static: false})
+  dtElement: DataTableDirective;
 
   getTraining() {
     this.trainingService.one(this.id).subscribe((data) => {

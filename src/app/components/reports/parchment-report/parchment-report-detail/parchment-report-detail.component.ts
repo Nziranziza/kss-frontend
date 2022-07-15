@@ -1,10 +1,10 @@
 import {Component, Inject, Injector, Input, OnInit, PLATFORM_ID} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
-import {AuthenticationService, ParchmentService, UserService} from '../../../../core/services';
+import {AuthenticationService, ParchmentService, UserService} from '../../../../core';
 import {DatePipe, isPlatformBrowser} from '@angular/common';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {BasicComponent} from '../../../../core/library';
-import {HelperService} from '../../../../core/helpers';
+import {BasicComponent} from '../../../../core';
+import {HelperService} from '../../../../core';
 
 @Component({
   selector: 'app-parchment-report-detail',

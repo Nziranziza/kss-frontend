@@ -34,35 +34,55 @@
           <div class="col-xs-12">
             <div style="margin-bottom: 10px">
               <label class="control-label label-required">Farm to visit</label>
-              <div class="confirm-text-box confirm-text">Hello</div>
+              <div class="confirm-text-box confirm-text">
+                <li *ngFor="let farms of selectedFarms; let i = index">
+                  {{ farms.farmer + " -- UPI " + farms.upi }}
+                </li>
+              </div>
             </div>
             <div style="margin-bottom: 10px">
               <label class="control-label label-required"
                 >GAP to be covered during the visit</label
               >
               <div class="confirm-text-box confirm-text">
-                Hello <br />
-                Hello
+                <li
+                  *ngFor="
+                    let gaps of scheduleVisit.value.adoptionGap;
+                    let i = index
+                  "
+                >
+                  {{ gaps.name }}
+                </li>
               </div>
             </div>
             <div style="margin-bottom: 10px">
               <label class="control-label label-required"
                 >Agronomist who will visit</label
               >
-              <div class="confirm-text-box confirm-text">Hello</div>
+              <div class="confirm-text-box confirm-text">
+                {{ scheduleVisit.value.agronomist }}
+              </div>
             </div>
             <div style="margin-bottom: 10px">
               <label class="control-label label-required"
                 >Date and Time of the visit</label
               >
-              <div class="confirm-text-box confirm-text">Hello</div>
+              <div class="confirm-text-box confirm-text">
+                {{ scheduleVisit.value.date.visitDate | date: "fullDate" }}
+                {{
+                  " from " +
+                    scheduleVisit.value.startTime +
+                    " to " +
+                    scheduleVisit.value.endTime
+                }}
+              </div>
             </div>
             <div style="margin-bottom: 10px">
               <label class="control-label label-required"
                 >Visit Description</label
               >
               <div class="confirm-text-box confirm-text">
-                Hello <br /><br /><br />
+                {{ scheduleVisit.value.description }} <br /><br /><br />
               </div>
             </div>
           </div>
@@ -85,7 +105,7 @@
       <div class="col-sm-3">
         <button
           class="btn btn-secondary btn-lg submit"
-          (click)="modal.dismiss(); open(ccontent)"
+          (click)="modal.dismiss(); onSubmit(); open(ccontent)"
           [disabled]="loading"
         >
           <span *ngIf="!loading; else other_content">Confirm</span>
@@ -212,10 +232,10 @@
                   <div class="row" style="margin-top: 70px">
                     <div
                       class="col-sm-3"
-                      *ngIf="farmDetails.treeAges[0].numOfTrees"
+                      *ngIf="farmDetails.treeAges[0].numOfTrees > 0"
                     >
                       <img
-                        src="https://cdn2.iconfinder.com/data/icons/coffee-5/512/coffee_tree-512.png"
+                        src="assets/dist/img/sks/coffeeTree.png"
                         width="40px"
                         height="40px"
                         style="position: absolute; bottom: 0"
@@ -223,10 +243,10 @@
                     </div>
                     <div
                       class="col-sm-3"
-                      *ngIf="farmDetails.treeAges[1]numOfTrees"
+                      *ngIf="farmDetails.treeAges[1].numOfTrees > 0"
                     >
                       <img
-                        src="https://cdn2.iconfinder.com/data/icons/coffee-5/512/coffee_tree-512.png"
+                        src="assets/dist/img/sks/coffeeTree.png"
                         width="50px"
                         height="50px"
                         style="position: absolute; bottom: 0"
@@ -234,10 +254,10 @@
                     </div>
                     <div
                       class="col-sm-3"
-                      *ngIf="farmDetails.treeAges[2].numOfTrees"
+                      *ngIf="farmDetails.treeAges[2].numOfTrees > 0"
                     >
                       <img
-                        src="https://cdn2.iconfinder.com/data/icons/coffee-5/512/coffee_tree-512.png"
+                        src="assets/dist/img/sks/coffeeTree.png"
                         width="60px"
                         height="60px"
                         style="position: absolute; bottom: 0"
@@ -245,18 +265,20 @@
                     </div>
                     <div
                       class="col-sm-3"
-                      *ngIf="farmDetails.treeAges[3].numOfTrees"
+                      *ngIf="farmDetails.treeAges[3].numOfTrees > 0"
                     >
                       <img
-                        src="https://cdn2.iconfinder.com/data/icons/coffee-5/512/coffee_tree-512.png"
+                        src="assets/dist/img/sks/coffeeTree.png"
                         width="70px"
                         height="70px"
                         style="position: absolute; bottom: 0"
                       />
                     </div>
+                  </div>
+                  <div class="row">
                     <div
                       class="col-sm-3"
-                      *ngIf="farmDetails.treeAges[0].numOfTrees"
+                      *ngIf="farmDetails.treeAges[0].numOfTrees > 0"
                     >
                       <span style="color: green"> 0-3 </span>
                       --
@@ -271,16 +293,12 @@
                     </div>
                     <div
                       class="col-sm-3"
-                      *ngIf="farmDetails.treeAges[1].numOfTrees"
+                      *ngIf="farmDetails.treeAges[1].numOfTrees > 0"
                     >
                       <span style="color: green"> 4-10 </span>
                       --
                       <label>
-                        {{
-                          farmDetails.treeAges[1]
-                            ? farmDetails.treeAges[1].numOfTrees
-                            : 0
-                        }}
+                        {{ farmDetails.treeAges[1].numOfTrees }}
                       </label>
                       T
                     </div>
@@ -291,37 +309,30 @@
                       <span style="color: green"> 11-15 </span>
                       --
                       <label>
-                        {{
-                          farmDetails.treeAges[2]
-                            ? farmDetails.treeAges[2].numOfTrees
-                            : 0
-                        }}
+                        {{ farmDetails.treeAges[2].numOfTrees }}
                       </label>
                       T
                     </div>
                     <div
                       class="col-sm-3"
-                      *ngIf="farmDetails.treeAges[3].numOfTrees"
+                      *ngIf="farmDetails.treeAges[3].numOfTrees > 0"
                     >
                       <span style="color: green"> 16-20 </span>
                       --
                       <label>
-                        {{
-                          farmDetails.treeAges[3]
-                            ? farmDetails.treeAges[3].numOfTrees
-                            : 0
-                        }}
+                        {{ farmDetails.treeAges[3].numOfTrees }}
                       </label>
                       T
                     </div>
                   </div>
+
                   <div class="row" style="margin-top: 100px">
                     <div
                       class="col-sm-4"
-                      *ngIf="farmDetails.treeAges[4].numOfTrees"
+                      *ngIf="farmDetails.treeAges[4].numOfTrees > 0"
                     >
                       <img
-                        src="https://cdn2.iconfinder.com/data/icons/coffee-5/512/coffee_tree-512.png"
+                        src="assets/dist/img/sks/coffeeTree.png"
                         width="80px"
                         height="80px"
                         style="position: absolute; bottom: 0"
@@ -329,10 +340,10 @@
                     </div>
                     <div
                       class="col-sm-4"
-                      *ngIf="farmDetails.treeAges[5].numOfTrees"
+                      *ngIf="farmDetails.treeAges[5].numOfTrees > 0"
                     >
                       <img
-                        src="https://cdn2.iconfinder.com/data/icons/coffee-5/512/coffee_tree-512.png"
+                        src="assets/dist/img/sks/coffeeTree.png"
                         width="90px"
                         height="90px"
                         style="position: absolute; bottom: 0"
@@ -340,57 +351,47 @@
                     </div>
                     <div
                       class="col-sm-4"
-                      *ngIf="farmDetails.treeAges[6].numOfTrees"
+                      *ngIf="farmDetails.treeAges[6].numOfTrees > 0"
                     >
                       <img
-                        src="https://cdn2.iconfinder.com/data/icons/coffee-5/512/coffee_tree-512.png"
+                        src="assets/dist/img/sks/coffeeTree.png"
                         width="95px"
                         height="95px"
                         style="position: absolute; bottom: 0"
                       />
                     </div>
+                  </div>
+                  <div class="row">
                     <div
                       class="col-sm-4"
-                      *ngIf="farmDetails.treeAges[4].numOfTrees"
+                      *ngIf="farmDetails.treeAges[4].numOfTrees > 0"
                     >
                       <span style="color: green"> 21-24 </span>
                       --
                       <label>
-                        {{
-                          farmDetails.treeAges[4]
-                            ? farmDetails.treeAges[4].numOfTrees
-                            : 0
-                        }}
+                        {{ farmDetails.treeAges[4].numOfTrees }}
                       </label>
                       T
                     </div>
                     <div
                       class="col-sm-4"
-                      *ngIf="farmDetails.treeAges[5].numOfTrees"
+                      *ngIf="farmDetails.treeAges[5].numOfTrees > 0"
                     >
                       <span style="color: green"> 25-30 </span>
                       --
                       <label>
-                        {{
-                          farmDetails.treeAges[5]
-                            ? farmDetails.treeAges[5].numOfTrees
-                            : 0
-                        }}
+                        {{ farmDetails.treeAges[5].numOfTrees }}
                       </label>
                       T
                     </div>
                     <div
                       class="col-sm-4"
-                      *ngIf="farmDetails.treeAges[6].numOfTrees"
+                      *ngIf="farmDetails.treeAges[6].numOfTrees > 0"
                     >
                       <span style="color: green"> 31+ </span>
                       --
                       <label>
-                        {{
-                          farmDetails.treeAges[6]
-                            ? farmDetails.treeAges[6].numOfTrees
-                            : 0
-                        }}
+                        {{ farmDetails.treeAges[6].numOfTrees }}
                       </label>
                       T
                     </div>
@@ -413,8 +414,19 @@
             [data]="gaps"
             [(ngModel)]="scheduleVisit.value.adoptionGap"
             (onSelect)="onGapSelect($event)"
+            required
           >
           </ng-multiselect-dropdown>
+          <app-inline-errors
+            *ngIf="
+              scheduleVisit.value.adoptionGap.invalid &&
+              (scheduleVisit.value.adoptionGap.dirty ||
+                scheduleVisit.value.adoptionGap.touched)
+            "
+            [errors]="scheduleVisit.value.adoptionGap.errors"
+            [label]="'adoptionGap'"
+          >
+          </app-inline-errors>
         </div>
       </div>
       <div class="col-sm-10 col-centered">
@@ -422,7 +434,7 @@
           <label class="control-label label-required"
             >Select an agronomist who will visit the farm</label
           >
-          <select class="form-control" formControlName="farm">
+          <select class="form-control" formControlName="agronomist">
             <option value="" disabled selected>select agronomist</option>
             <option
               *ngFor="let agro of agronomist; let i = index"
@@ -461,24 +473,24 @@
             <div class="form-group">
               <label class="control-label label-required">Starts</label>
               <input
-                type="time"
-                atp-time-picker
-                formControlName="startTime"
+                [owlDateTimeTrigger]="dt3"
                 class="form-control"
-                placeholder="00:00"
+                formControlName="startTime"
+                [owlDateTime]="dt3"
               />
+              <owl-date-time [pickerType]="'timer'" #dt3></owl-date-time>
             </div>
           </div>
           <div class="col-sm-6">
             <div class="form-group">
               <label class="control-label label-required">Ends</label>
               <input
-                type="time"
-                atp-time-picker
-                formControlName="endTime"
+                [owlDateTimeTrigger]="dt4"
                 class="form-control"
-                placeholder="00:00"
+                formControlName="endTime"
+                [owlDateTime]="dt4"
               />
+              <owl-date-time [pickerType]="'timer'" #dt4></owl-date-time>
             </div>
           </div>
         </div>
@@ -491,7 +503,18 @@
             formControlName="description"
             class="form-control"
             style="height: 100px"
+            required
           />
+          <app-inline-errors
+            *ngIf="
+              scheduleVisit.value.description.invalid &&
+              (scheduleVisit.value.description.dirty ||
+                scheduleVisit.value.description.touched)
+            "
+            [errors]="scheduleVisit.value.description.errors"
+            [label]="'description'"
+          >
+          </app-inline-errors>
         </div>
       </div>
     </div>
@@ -513,7 +536,7 @@
       </button>
       <button
         class="btn"
-        (click)="onSubmit()"
+        (click)="open(content)"
         [disabled]="loading"
         style="
           width: 250px;

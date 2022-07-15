@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DeleteFarmVisitComponent } from './delete-farm-visit.component';
+import { EditNurseryComponent } from './edit-nursery.component';
 
-describe('DeleteFarmVisitComponent', () => {
-  let component: DeleteFarmVisitComponent;
-  let fixture: ComponentFixture<DeleteFarmVisitComponent>;
+describe('EditNurseryComponent', () => {
+  let component: EditNurseryComponent;
+  let fixture: ComponentFixture<EditNurseryComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DeleteFarmVisitComponent ]
+      declarations: [ EditNurseryComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DeleteFarmVisitComponent);
+    fixture = TestBed.createComponent(EditNurseryComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

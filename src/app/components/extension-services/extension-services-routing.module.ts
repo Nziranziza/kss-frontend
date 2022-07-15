@@ -7,19 +7,23 @@ import { FarmerGroupListComponent } from './groups/farmer-group-list/farmer-grou
 import { GapListComponent } from './gaps/gap-list/gap-list.component';
 import { GapCreateComponent } from './gaps/gap-create/gap-create.component';
 import { GapEditComponent } from './gaps/gap-edit/gap-edit.component';
+import { FarmerGroupEditComponent} from './groups/farmer-group-edit/farmer-group-edit.component';
 import { TrainingCreateComponent } from './trainings/training-create/training-create.component';
 import { TrainingListComponent } from './trainings/training-list/training-list.component';
+import { TrainingEditComponent } from './trainings/training-edit/training-edit.component';
+import { TrainingViewComponent } from './trainings/training-view/training-view.component';
 import { TrainingSchedulingCreateComponent } from './schedules/training-scheduling-create/training-scheduling-create.component';
 import { TrainingSchedulingListComponent } from './schedules/training-scheduling-list/training-scheduling-list.component';
-import { TrainingEditComponent } from './trainings/training-edit/training-edit.component';
+import { TrainingScheduleViewComponent } from './schedules/training-schedule-view/training-schedule-view.component';
+import { TrainingScheduleEditComponent } from './schedules/training-schedule-edit/training-schedule-edit.component';
 import { ScheduleFarmVisitComponent } from './farm-visits/schedule-farm-visit/schedule-farm-visit.component';
 import { EditFarmVisitComponent } from './farm-visits/edit-farm-visit/edit-farm-visit.component';
 import { FarmVisitListComponent } from './farm-visits/farm-visit-list/farm-visit-list.component';
 import { ViewFarmVisitComponent } from './farm-visits/view-farm-visit/view-farm-visit.component';
-import { TrainingScheduleViewComponent } from './schedules/training-schedule-view/training-schedule-view.component';
-import { TrainingScheduleEditComponent } from './schedules/training-schedule-edit/training-schedule-edit.component';
-import { TrainingViewComponent } from './trainings/training-view/training-view.component';
-import { FarmerGroupEditComponent} from './groups/farmer-group-edit/farmer-group-edit.component';
+import { EditNurseryComponent } from './seedlings/nurseries/edit-nursery/edit-nursery.component';
+import { ViewNurseryComponent } from './seedlings/nurseries/view-nursery/view-nursery.component';
+import { NurseryListComponent } from './seedlings/nurseries/nursery-list/nursery-list.component';
+import { NurseryCreateComponent } from './seedlings/nurseries/nursery-create/nursery-create.component';
 
 const routes: Routes = [
   {
@@ -99,6 +103,22 @@ const routes: Routes = [
       {
         path: 'farm/visit/details/:id',
         component: ViewFarmVisitComponent,
+      },
+      {
+        path: 'seedling/nursery/create',
+        component: NurseryCreateComponent,
+      },
+      {
+        path: 'seedling/nursery/list',
+        component: NurseryListComponent,
+      },
+      {
+        path: 'seedling/nursery/edit/:id',
+        component: EditNurseryComponent,
+      },
+      {
+        path: 'seedling/nursery/details/:id',
+        component: ViewNurseryComponent,
       },
     ],
   },

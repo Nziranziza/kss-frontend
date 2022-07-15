@@ -43,15 +43,15 @@
                     (selected)='selectEvent($event)'
                     (inputCleared) = 'deselectEvent()'
                     [initialValue]="initialValue"
-                    [placeHolder]="'Select origin'"
+                    placeholder="'Select origin'"
                     [itemTemplate]="itemTemplate"
                     [notFoundTemplate]="notFoundTemplate">
                   </ng-autocomplete>
-              
+
                   <ng-template #itemTemplate let-item>
                     <a [innerHTML]="item.organizationName"></a>
                   </ng-template>
-              
+
                   <ng-template #notFoundTemplate let-notFound>
                     <div [innerHTML]="notFound"></div>
                   </ng-template>

@@ -15,6 +15,10 @@
     </div>
   </div>
 </h3>
+<div class="col-sm-12">
+  <app-list-message [message]="message"></app-list-message>
+  <app-list-errors [errorList]="errors"></app-list-errors>
+</div>
 <div class="col-sm-12 stats-section">
   <div class="row">
     <div class="col-sm-12 text-center stats-title">Training Summary</div>
@@ -38,8 +42,6 @@
     </div>
   </div>
 </div>
-<app-list-message [message]="message"></app-list-message>
-<app-list-errors [errorList]="errors"></app-list-errors>
 <div class="row">
   <div class="col-xs-12">
     <div class="box">

@@ -25,19 +25,6 @@ export class TrainingCreateComponent
   ) {
     super();
   }
-
-  get trainingName() {
-    return this.createTraining.get('trainingName');
-  }
-  get description() {
-    return this.createTraining.get('description');
-  }
-  get adoptionGap() {
-    return this.createTraining.get('adoptionGap');
-  }
-  get status() {
-    return this.createTraining.get('status');
-  }
   createTraining: FormGroup;
   closeResult = '';
   gapDropdownSettings: IDropdownSettings = {};
@@ -68,6 +55,19 @@ export class TrainingCreateComponent
       itemsShowLimit: 6,
       allowSearchFilter: true,
     };
+  }
+
+  get trainingName() {
+    return this.createTraining.get('trainingName');
+  }
+  get description() {
+    return this.createTraining.get('description');
+  }
+  get adoptionGap() {
+    return this.createTraining.get('adoptionGap');
+  }
+  get status() {
+    return this.createTraining.get('status');
   }
 
   onGapSelect(item: any) {

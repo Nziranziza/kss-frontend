@@ -4,6 +4,10 @@ import {ExcelServicesService, LocationService} from '../../../core';
 import {Router} from '@angular/router';
 import {AuthenticationService, FarmerService, OrganisationService, OrganisationTypeService} from '../../../core';
 import {HelperService} from '../../../core';
+import { ChartType } from 'angular-google-charts';
+
+
+
 import {AuthorisationService} from '../../../core';
 
 @Component({
@@ -30,7 +34,7 @@ export class FarmersRegistrationReportComponent implements OnInit {
   reportData = [];
   message: string;
   graph = {
-    type: 'ColumnChart',
+    type: ChartType.ColumnChart,
     data: [],
     options: {
       colors: ['#367fa9'],

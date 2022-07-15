@@ -16,7 +16,7 @@ implements OnInit, OnDestroy
 createTraining: FormGroup;
 closeResult = "";
 id: string;
-training: any[] = [];
+training: any;
 constructor(
   private trainingService: TrainingService,
   private route: ActivatedRoute,

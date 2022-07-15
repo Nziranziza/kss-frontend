@@ -6,7 +6,7 @@ import {UserEditComponent} from './user-edit/user-edit.component';
 import {UserCreateComponent} from './user-create/user-create.component';
 import {SharedModule} from '../../shared';
 import {RouterModule} from '@angular/router';
-import {OwlDateTimeModule, OwlNativeDateTimeModule} from 'ng-pick-datetime';
+import {OwlDateTimeModule, OwlNativeDateTimeModule} from 'ng-pick-datetime-ex';
 import {UserDetailsComponent} from './user-details/user-details.component';
 import { ChangeUserOrgComponent } from './change-user-org/change-user-org.component';
 import { AutocompleteLibModule } from 'angular-ng-autocomplete';

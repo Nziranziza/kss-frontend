@@ -5,11 +5,13 @@ import {
   AuthenticationService,
   GapService,
   GroupService,
+  HelperService,
   UserService,
   VisitService,
 } from "src/app/core";
 import { IDropdownSettings } from "ng-multiselect-dropdown";
-import { Router } from '@angular/router';
+import { Router } from "@angular/router";
+import { SuccessModalComponent } from "../../../../shared";
 @Component({
   selector: "app-schedule-farm-visit",
   templateUrl: "./schedule-farm-visit.component.html",
@@ -28,6 +30,8 @@ export class ScheduleFarmVisitComponent implements OnInit {
     private userService: UserService,
     private visitService: VisitService,
     private router: Router,
+    private modal: NgbModal,
+    private helper: HelperService
   ) {}
   loading: Boolean = false;
   farmerGroups: any[] = [];
@@ -41,11 +45,13 @@ export class ScheduleFarmVisitComponent implements OnInit {
   viewDetailsClicked: Boolean;
   farmDetails;
   farmerGroupId;
+  errors: any;
+  selectedFarms: any[] = [];
 
   ngOnInit() {
     this.scheduleVisit = this.formBuilder.group({
       farmerGroup: ["", Validators.required],
-      farm: ["", Validators.required],
+      agronomist: ["", Validators.required],
       description: ["", Validators.required],
       adoptionGap: ["", Validators.required],
       status: [""],
@@ -76,7 +82,6 @@ export class ScheduleFarmVisitComponent implements OnInit {
 
   getFarmerGroup() {
     this.loading = true;
-    console.log(this.authenticationService.getCurrentUser());
     this.groupService
       .list({
         reference: "5d1635ac60c3dd116164d4ae",
@@ -160,12 +165,14 @@ export class ScheduleFarmVisitComponent implements OnInit {
   getGaps(): void {
     this.loading = true;
     this.gapService.all().subscribe((data) => {
-      let newData :any[] = [{
-        _id : "",
-        name: "Not Applied"
-      }];
-      data.data.forEach(data => { 
-        newData.push({_id: data._id, name: data.name});
+      let newData: any[] = [
+        {
+          _id: "",
+          name: "Not Applied",
+        },
+      ];
+      data.data.forEach((data) => {
+        newData.push({ _id: data._id, name: data.name });
       });
       this.gaps = newData;
       this.loading = false;
@@ -181,48 +188,65 @@ export class ScheduleFarmVisitComponent implements OnInit {
   }
 
   open(content) {
+    this.selectedFarms = this.farmList.filter((data) => {
+      return data.selected == true;
+    });
+    console.log(this.selectedFarms);
+    console.log(this.scheduleVisit);
     this.modalService.open(content, { ariaLabelledBy: "modal-basic-title" });
   }
 
   onSubmit() {
-    this.loading = true;
-    const dataValues = JSON.parse(JSON.stringify(this.scheduleVisit.value));
-    let adoptionGap = [];
-    dataValues.adoptionGap.forEach((adoption) => {
-      adoptionGap.push(adoption._id);
-    });
-    let farms = this.farmList.filter(data => {
-      return data.selected == true;
-    });
-    const data = {
-      farms: farms.map(data => {
-        return {
-          farmId : data.farm._id,
-          owner: data.owner
+    if (this.scheduleVisit.valid) {
+      this.loading = true;
+      const dataValues = JSON.parse(JSON.stringify(this.scheduleVisit.value));
+      let adoptionGap = [];
+      dataValues.adoptionGap.forEach((adoption) => {
+        adoptionGap.push(adoption._id);
+      });
+      const data = {
+        farms: this.selectedFarms.map((data) => {
+          return {
+            farmId: data.farm._id,
+            owner: data.owner,
+          };
+        }),
+        gaps: adoptionGap,
+        description: dataValues.description,
+        org_id: this.authenticationService.getCurrentUser().info.org_id,
+        visitor: dataValues.agronomist,
+        groupId: this.farmerGroupId,
+        observation: "observation",
+        date: dataValues.date.visitDate,
+        expectedDuration: {
+          from: dataValues.startTime,
+          to: dataValues.endTime,
+        },
+      };
+      this.visitService.create(data).subscribe(
+        (data) => {
+          this.loading = false;
+          console.log(data);
+          this.router.navigateByUrl("admin/farm/visit/list");
+        },
+        (err) => {
+          this.loading = false;
+          console.log(err);
         }
-      }),
-      gaps: adoptionGap,
-      description: dataValues.description,
-      org_id: this.authenticationService.getCurrentUser().info.org_id,
-      visitor: dataValues.farm,
-      groupId: this.farmerGroupId,
-      observation: "observation",
-      date: dataValues.date.visitDate,
-      expectedDuration: {
-        from: dataValues.startTime,
-        to: dataValues.endTime,
-      },
-    };
-    this.visitService.create(data).subscribe(
-      (data) => {
-        this.loading = false;
-        console.log(data);
-        this.router.navigateByUrl('admin/farm/visit/list');
-      },
-      (err) => {
-        this.loading = false;
-        console.log(err);
-      }
-    );
+      );
+    } else {
+      this.errors = this.helper.getFormValidationErrors(this.scheduleVisit);
+    }
+  }
+  success(name) {
+    const modalRef = this.modal.open(SuccessModalComponent, {
+      ariaLabelledBy: "modal-basic-title",
+    });
+    modalRef.componentInstance.message = "has been added";
+    modalRef.componentInstance.title = "Thank you Group";
+    modalRef.componentInstance.name = name;
+    modalRef.result.finally(() => {
+      this.router.navigateByUrl("admin/farmers/group/list");
+    });
   }
 }
