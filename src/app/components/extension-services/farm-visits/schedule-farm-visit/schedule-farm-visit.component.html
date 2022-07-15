@@ -473,24 +473,24 @@
             <div class="form-group">
               <label class="control-label label-required">Starts</label>
               <input
-                type="time"
-                atp-time-picker
-                formControlName="startTime"
+                [owlDateTimeTrigger]="dt3"
                 class="form-control"
-                placeholder="00:00"
+                formControlName="startTime"
+                [owlDateTime]="dt3"
               />
+              <owl-date-time [pickerType]="'timer'" #dt3></owl-date-time>
             </div>
           </div>
           <div class="col-sm-6">
             <div class="form-group">
               <label class="control-label label-required">Ends</label>
               <input
-                type="time"
-                atp-time-picker
-                formControlName="endTime"
+                [owlDateTimeTrigger]="dt4"
                 class="form-control"
-                placeholder="00:00"
+                formControlName="endTime"
+                [owlDateTime]="dt4"
               />
+              <owl-date-time [pickerType]="'timer'" #dt4></owl-date-time>
             </div>
           </div>
         </div>
