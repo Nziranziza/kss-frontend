@@ -28,4 +28,8 @@ export class GapService {
   save(body: any) {
     return this.apiService.post('/v1.1/gaps', body);
   }
+
+  getGapsStats(body: any){
+    return this.apiService.post('/v1.1/gaps/stats', body);
+  }
 }

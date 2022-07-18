@@ -8,8 +8,12 @@ import {
   OrganisationService,
   FarmService,
   SeedlingService,
+  TrainingService,
+  UserService,
+  VisitService,
+  GapService,
 } from "src/app/core";
-
+import { Router } from "@angular/router";
 @Component({
   selector: "app-nursery-create",
   templateUrl: "./nursery-create.component.html",
@@ -25,11 +29,14 @@ export class NurseryCreateComponent extends BasicComponent implements OnInit {
     private organisationService: OrganisationService,
     private farmService: FarmService,
     private seedlingService: SeedlingService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private router: Router,
+    
   ) {
     super(locationService, organisationService);
   }
   addNursery: FormGroup;
+  editNursery: FormGroup;
   agronomist: any[] = [];
   treeVarieties: any[] = [{ name: "", _id: "" }];
   nurserySites: any[] = [];
@@ -37,6 +44,34 @@ export class NurseryCreateComponent extends BasicComponent implements OnInit {
 
   ngOnInit() {
     this.addNursery = this.formBuilder.group({
+      nurseryName: ["", Validators.required],
+      ownerName: ["", Validators.required],
+      ownerNumber: ["", Validators.required],
+      representativeName: ["", Validators.required],
+      representativeNumber: ["", Validators.required],
+      siteAvailability: ["no"],
+      description: ["", Validators.required],
+      agronomist: [""],
+      stockData: new FormArray([], Validators.required),
+      location: this.formBuilder.group({
+        prov_id: [""],
+        dist_id: [""],
+        sect_id: [""],
+        cell_id: [""],
+        village_id: [""],
+        latitude: [""],
+        longitude: [""],
+      }),
+      totalSeedlings: ["", Validators.required],
+      adoptionGap: ["", Validators.required],
+      status: [""],
+      date: this.formBuilder.group({
+        visitDate: [""],
+        startTime: [""],
+        endTime: [""],
+      }),
+    });
+    this.editNursery = this.formBuilder.group({
       nurseryName: ["", Validators.required],
       owner: ["", Validators.required],
       siteAvailability: [""],
@@ -68,6 +103,8 @@ export class NurseryCreateComponent extends BasicComponent implements OnInit {
     this.getNurserySites();
     this.onChanges();
   }
+
+  
 
   get formData() {
     return this.addNursery.get("stockData") as FormArray;
@@ -101,13 +138,14 @@ export class NurseryCreateComponent extends BasicComponent implements OnInit {
   }
   removeStockItem(index: number) {
     (this.addNursery.controls.stockData as FormArray).removeAt(index);
+    this.currentIndex--;
   }
   createStock(): FormGroup {
     return this.formBuilder.group({
       variety: [this.treeVarieties[this.currentIndex]._id],
-      seed: [""],
+      seed: [0],
       expectedSeedling: [{ value: "", disabled: true }],
-      recordedSeedling: [""],
+      recordedSeedling: [0],
       germinationRate: [{ value: "", disabled: true }],
       distributed: [{ value: "", disabled: true }],
     });
@@ -140,12 +178,12 @@ export class NurseryCreateComponent extends BasicComponent implements OnInit {
     let data = {
       nurseryName: this.addNursery.value.nurseryName,
       owner: {
-        name: "Big Boss",
-        phoneNumber: "250780348088",
+        name: this.addNursery.value.ownerName,
+        phoneNumber: this.addNursery.value.ownerNumber,
       },
       representative: {
-        name: "Big Boss",
-        phoneNumber: "250780348088",
+        name: this.addNursery.value.representativeName,
+        phoneNumber: this.addNursery.value.representativeNumber,
       },
       org_id: this.authenticationService.getCurrentUser().info.org_id,
       latitude: this.addNursery.value.location.latitude,
@@ -157,16 +195,17 @@ export class NurseryCreateComponent extends BasicComponent implements OnInit {
         cell_id: this.addNursery.value.location.cell_id,
         village_id: this.addNursery.value.location.village_id,
       },
-      stocks: [
-        {
-          varietyId: "626bb0a85d5a18a1b38dd5ca",
-          seeds: 1,
-        },
-      ],
+      stocks: this.addNursery.value.stockData.map((data) => {
+        return {
+          varietyId: data.variety,
+          seeds: data.seed,
+        };
+      }),
     };
+    console.log(data);
+    console.log(this.addNursery.value);
     this.seedlingService.create(data).subscribe((data) => {
-      this.addNursery.reset();
-      this.getNurserySites();
+      this.router.navigateByUrl("admin/seedling/nursery/list");
     });
   }
 

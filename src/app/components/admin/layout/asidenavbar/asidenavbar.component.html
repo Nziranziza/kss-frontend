@@ -204,6 +204,12 @@
         </ul>
       </li>
       <li class="header" *appHasPermission="[1]">EXTENSION SERVICES</li>
+      <li routerLinkActive="active" *appHasPermission="[[4,1],[4,11],[4,12],0,6,5,11,[8,1],[1,1]]">
+        <a routerLink="/admin/dashboard/data">
+          <i class="fa fa-dashboard" aria-hidden="true"></i>
+          <span>Dashboard</span>
+        </a>
+      </li>
       <li class="treeview" routerLinkActive="active" *appHasPermission="[1]">
         <a href="#">
           <i class="fa fa-users"></i> <span>Farmers groups</span>

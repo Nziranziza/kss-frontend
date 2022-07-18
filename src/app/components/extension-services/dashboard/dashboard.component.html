@@ -1,0 +1,371 @@
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB6rJxA0WuYgN4LPaHcP8uLrgOQ-BUc_5A"></script>
+<h3>Welcome to SKS - Dashboard - Extension Services</h3>
+<form [formGroup]="dashboardForm">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="row" formGroupName="location">
+        <div class="col-xs-3" style="padding: 8px 0px 0px 10px">
+          <div class="header-location-text">Filter by location</div>
+        </div>
+        <div
+          class="col-xs-3"
+          id="location-province"
+          style="padding: 0 5px 0 0px"
+        >
+          <div class="form-group">
+            <select class="form-control" formControlName="prov_id">
+              <option value="" selected disabled>All Provinces</option>
+              <option
+                *ngFor="let province of locationProvinces"
+                value="{{ province._id }}"
+              >
+                {{ province.namee | titlecase }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div
+          class="col-xs-3"
+          id="location-district"
+          style="padding: 0 5px 0 0px"
+        >
+          <div class="form-group">
+            <select class="form-control" formControlName="dist_id">
+              <option value="" selected disabled>All Districts</option>
+              <option
+                *ngFor="let district of locationDistricts"
+                value="{{ district._id }}"
+              >
+                {{ district.name | titlecase }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="col-xs-3" id="location-sector" style="padding: 0 5px 0 0px">
+          <div class="form-group">
+            <select class="form-control" formControlName="sect_id">
+              <option value="" selected disabled>All Sectors</option>
+              <option
+                *ngFor="let sector of locationSectors"
+                value="{{ sector._id }}"
+              >
+                {{ sector.name | titlecase }}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="row">
+        <div class="col-xs-2" style="padding: 8px 0px 0px 10px">
+          <div class="header-location-text">Filter by CWS</div>
+        </div>
+        <div class="col-xs-3" style="padding: 0 5px 0 5px">
+          <div class="form-group">
+            <select class="form-control">
+              <option value="" selected disabled>All CWS</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-xs-2" style="padding: 8px 0px 0px 10px">
+          <div class="header-location-text">Filter by Time</div>
+        </div>
+        <div class="col-xs-3" style="padding: 0 5px 0 5px">
+          <div class="form-group">
+            <input
+              [owlDateTimeTrigger]="dt1"
+              [owlDateTime]="dt1"
+              formControlName="filterByDate"
+              class="form-control"
+              placeholder="Dd/mm/yyyy"
+            />
+            <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+          </div>
+        </div>
+        <div class="col-xs-2">
+          <button class="btn">Filter</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="row"
+    style="
+      padding: 5px;
+      background: #ffffff 0% 0% no-repeat padding-box;
+      border-radius: 7px;
+      opacity: 1;
+    "
+  >
+    <div class="col-xs-3">
+      <div
+        style="
+          height: 350px;
+          background: #fff3e3 0% 0% no-repeat padding-box;
+          padding: 5px;
+          border-radius: 7px;
+          margin-bottom: 10px;
+        "
+      >
+        <h4 class="text-center">Training</h4>
+        <label class="control-label">Select Training</label>
+        <select class="form-control" formControlName="training_id">
+          <option value="" selected disabled>Recent (Training Module)</option>
+          <option
+            *ngFor="let training of trainings; let i = index"
+            value="{{ training._id }}"
+          >
+            {{ training.trainingName | titlecase }}
+          </option>
+        </select>
+
+        <label class="control-label">Select Trainers</label>
+        <select class="form-control" formControlName="trainer_id">
+          <option value="" selected disabled>All Trainers</option>
+          <option
+            *ngFor="let trainer of trainers; let i = index"
+            value="{{ trainer._id }}"
+          >
+            {{ trainer.foreName + " " + trainer.surname | titlecase }}
+          </option>
+        </select>
+
+        <div class="text-center">
+          <p>Total Trainees</p>
+          <h4>{{ trainingsStats.totalInvitees }}</h4>
+        </div>
+
+        <div class="row">
+          <div class="col-xs-6">
+            <div class="text-center trainees-box">
+              <p>Attended</p>
+              <h4>{{ trainingsStats.totalPresent }}</h4>
+              <div class="row">
+                <div class="col-xs-6">
+                  <i
+                    class="fa fa-male fa-2x"
+                    aria-hidden="true"
+                    style="color: #35a1ff"
+                  ></i>
+                  <p>{{ trainingsStats.malePresent }}</p>
+                </div>
+                <div class="col-xs-6">
+                  <i
+                    class="fa fa-female fa-2x"
+                    aria-hidden="true"
+                    style="color: #ff69f6"
+                  ></i>
+                  <p>{{ trainingsStats.femalePresent }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-6">
+            <div class="text-center trainees-box trainees-box-absent">
+              <p>Not Attended</p>
+              <h4>{{ trainingsStats.totalAbsent }}</h4>
+              <div class="row">
+                <div class="col-xs-6">
+                  <i
+                    class="fa fa-male fa-2x"
+                    aria-hidden="true"
+                    style="color: #35a1ff"
+                  ></i>
+                  <p>{{ trainingsStats.maleAbsent }}</p>
+                </div>
+                <div class="col-xs-6">
+                  <i
+                    class="fa fa-female fa-2x"
+                    aria-hidden="true"
+                    style="color: #ff69f6"
+                  ></i>
+                  <p>{{ trainingsStats.femaleAbsent }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        style="
+          padding: 5px;
+          height: 330px;
+          background: #f2f2f2 0% 0% no-repeat padding-box;
+          border-radius: 7px;
+        "
+      >
+        <h4 class="text-center">GAP Adoption</h4>
+        <div
+          style="margin-bottom: 10px"
+          *ngFor="let gapAdoption of gapAdoptionStats"
+        >
+          <div
+            class="progress-bar"
+            [ngStyle]="{
+              width: gapAdoption ? gapAdoption.adoptionRate + '%' : '0%',
+              height: '5px',
+              background: '#4f210d 0% 0% no-repeat padding-box'
+            }"
+          ></div>
+          <br />
+          <div class="row" style="margin-top: -15px">
+            <div class="col-xs-9">
+              <h5>{{ gapAdoption.name }}</h5>
+            </div>
+            <div class="col-xs-3">
+              <div
+                style="
+                  background: #ffffff 0% 0% no-repeat padding-box;
+                  border-radius: 5px;
+                  opacity: 1;
+                "
+              >
+                <h5 class="text-center">{{ gapAdoption.adoptionRate }}%</h5>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-3" style="padding: 0 5px 0 0px">
+      <div
+        style="
+          height: 350px;
+          padding: 5px;
+          border-radius: 7px;
+          background: #f2f2f2 0% 0% no-repeat padding-box;
+          margin-bottom: 10px;
+        "
+      >
+        <h4 class="text-center">Farms Visits</h4>
+        <label class="control-label">Select Season</label>
+        <select class="form-control" formControlName="training_id">
+          <option value="" selected disabled>Recent (Season 2022)</option>
+        </select>
+        <div class="text-center">
+          <p>Total Visited Farms</p>
+          <h4>{{ visitStats.totolVisits }}</h4>
+        </div>
+
+        <div class="chart-visit-box" style="padding: 10px">
+          <div class="row">
+            <div class="col-xs-1 text-center">
+              <br />
+              <br />
+              <i
+                class="fa fa-female fa-3x"
+                aria-hidden="true"
+                style="color: #ff69f6"
+              ></i>
+              <p style="margin-left: 5px">{{ visitStats.femaleFarmVisits }}</p>
+            </div>
+            <div class="col-xs-8">
+              <google-chart
+                #chart
+                [type]="graph.type"
+                [data]="graph.data"
+                [options]="graph.options"
+                [width]="graph.width"
+                [columns]="graph.columnNames"
+                [height]="graph.height"
+              >
+              </google-chart>
+            </div>
+            <div class="col-xs-2 text-center">
+              <br />
+              <br />
+              <i
+                class="fa fa-male fa-3x"
+                aria-hidden="true"
+                style="color: #35a1ff"
+              ></i>
+              <p style="margin-left: 5px">{{ visitStats.maleFarmVisits }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        style="
+          height: 330px;
+          padding: 5px;
+          border-radius: 7px;
+          background: #fff3e3 0% 0% no-repeat padding-box;
+        "
+      >
+        <h4 class="text-center">Seedling Distribution</h4>
+        <label class="control-label">Select District</label>
+        <select class="form-control" formControlName="training_id">
+          <option value="" selected disabled>All Districts</option>
+        </select>
+
+        <label class="control-label">Select Seedlings Nurseries</label>
+        <select class="form-control" formControlName="training_id">
+          <option value="" selected disabled>All Seedlings Nurseries</option>
+        </select>
+        <div class="text-center">
+          <p>Seedling Distributed</p>
+          <h4>000</h4>
+        </div>
+        <div class="text-center" style="margin-top: -25px; margin-left: 35px">
+          <google-chart
+            #chart2
+            [type]="graph.type"
+            [data]="seedlingGraph.data"
+            [options]="seedlingGraph.options"
+            [width]="graph.width"
+            [columns]="seedlingGraph.columnNames"
+            [height]="graph.height"
+          >
+          </google-chart>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-6" style="padding: 0 5px 0 5px">
+      <div
+        style="
+          background: #f0f0f0 0% 0% no-repeat padding-box;
+          padding: 5px;
+          border-radius: 7px;
+          height: 690px;
+        "
+      >
+        <h4 class="text-center">Farms</h4>
+        <google-map [options]="mapOptions" width="100%" height="505px">
+          <map-marker
+            *ngFor="let spot of spots"
+            [position]="{ lat: spot.lat, lng: spot.lng }"
+            [options]="markerOptions"
+            [clickable]="true"
+            (mapClick)="selectMarker(spot)"
+          ></map-marker>
+        </google-map>
+        <div class="farm-graph-popup" *ngIf="clickedMarker">
+          <div class="row text-center">
+            <div class="col-xs-3" style="padding: 0 2px 0 0px">
+              <h4>Owner</h4>
+              <h5>{{ selectedFarmDetails.name }}</h5>
+              <h6>0782010011</h6>
+            </div>
+            <div class="col-xs-3" style="padding: 0 2px 0 0px">
+              <h4>Location</h4>
+              <h6>Province:</h6>
+              <h6>District:</h6>
+              <h6>Sector:</h6>
+            </div>
+            <div class="col-xs-3" style="padding: 0 2px 0 0px">
+              <h4>Trees</h4>
+              <h6>Total trees in farm</h6>
+              <h4> {{ selectedFarmDetails.trees }} </h4>
+            </div>
+            <div class="col-xs-3" style="padding: 0 5px 0 0px">
+              <h4>Visits</h4>
+              <h6>Total trees in farm </h6>
+              <h4> {{ selectedFarmDetails.visits }} </h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

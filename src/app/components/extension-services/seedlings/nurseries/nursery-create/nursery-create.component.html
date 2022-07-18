@@ -25,7 +25,7 @@
                   {{ addNursery.value.location.prov_id }}
                 </div>
               </div>
-              <div class="col-xs-2" >
+              <div class="col-xs-2">
                 <label class="control-label label-required">District</label>
                 <div class="confirm-text-box confirm-text">
                   {{ addNursery.value.location.prov_id }}
@@ -34,31 +34,31 @@
               <div class="col-xs-2">
                 <label class="control-label label-required">Sector</label>
                 <div class="confirm-text-box confirm-text">
-                  {{ addNursery.value.location.prov_id  }}
+                  {{ addNursery.value.location.prov_id }}
                 </div>
               </div>
               <div class="col-xs-2" id="location-cell">
                 <label class="control-label label-required">Cell</label>
                 <div class="confirm-text-box confirm-text">
-                  {{ addNursery.value.location.prov_id  }}
+                  {{ addNursery.value.location.prov_id }}
                 </div>
               </div>
               <div class="col-xs-2" id="location-village">
                 <label class="control-label label-required">Village</label>
                 <div class="confirm-text-box confirm-text">
-                  {{ addNursery.value.location.prov_id  }}
+                  {{ addNursery.value.location.prov_id }}
                 </div>
               </div>
               <div class="col-xs-1" id="location-latitude">
                 <label class="control-label label-required">Lat</label>
                 <div class="confirm-text-box confirm-text">
-                  {{ addNursery.value.location.prov_id  }}
+                  {{ addNursery.value.location.prov_id }}
                 </div>
               </div>
               <div class="col-xs-1" id="location-longitude">
                 <label class="control-label label-required">Long</label>
                 <div class="confirm-text-box confirm-text">
-                  {{ addNursery.value.location.prov_id  }}
+                  {{ addNursery.value.location.prov_id }}
                 </div>
               </div>
             </div>
@@ -132,7 +132,7 @@
                 *ngFor="let stock of formData.controls; let i = index"
                 class="text-center"
               >
-                <span >
+                <span>
                   <div class="col-sm-2">
                     <div class="confirm-text-box confirm-text">
                       {{ addNursery.value.nurseryName }}
@@ -229,28 +229,10 @@
   <span style="font-weight: bold"> Add new Nursery</span>
 </h3>
 <app-list-errors [errorList]="errors"></app-list-errors>
-<form [formGroup]="addNursery">
-  <div class="box">
+<div class="box">
+  <form [formGroup]="addNursery">
     <div class="row">
       <br />
-      <div class="col-sm-10 col-centered">
-        <div class="form-group">
-          <div class="row">
-            <div class="col-sm-7">
-              <label class="control-label label-required"
-                >Do you want to use already registered Nursery Site ?
-              </label>
-            </div>
-            <div class="col-sm-5">
-              <select class="form-control" formControlName="siteAvailability">
-                <option value="" disabled selected>Select One</option>
-                <option value="yes">Yes</option>
-                <option value="no">No</option>
-              </select>
-            </div>
-          </div>
-        </div>
-      </div>
       <span *ngIf="addNursery.value.siteAvailability === 'no'">
         <div class="col-sm-10 col-centered">
           <div class="form-group">
@@ -278,7 +260,7 @@
                 </select>
               </div>
             </div>
-            <div class="col-xs-2" id="location-district">
+            <div class="col-xs-2" id="location-district" style="padding: 0 2px 0 0px">
               <div class="form-group">
                 <label class="control-label label-required">District</label>
                 <select class="form-control" formControlName="dist_id">
@@ -292,7 +274,7 @@
                 </select>
               </div>
             </div>
-            <div class="col-xs-2" id="location-sector">
+            <div class="col-xs-2" id="location-sector" style="padding: 0 2px 0 0px">
               <div class="form-group">
                 <label class="control-label label-required">Sector</label>
                 <select class="form-control" formControlName="sect_id">
@@ -306,7 +288,7 @@
                 </select>
               </div>
             </div>
-            <div class="col-xs-2" id="location-cell">
+            <div class="col-xs-2" id="location-cell" style="padding: 0 2px 0 0px">
               <div class="form-group">
                 <label class="control-label label-required">Cell</label>
                 <select class="form-control" formControlName="cell_id">
@@ -320,7 +302,7 @@
                 </select>
               </div>
             </div>
-            <div class="col-xs-2" id="location-village">
+            <div class="col-xs-2" id="location-village" style="padding: 0 2px 0 0px">
               <div class="form-group">
                 <label class="control-label label-required">Village</label>
                 <select class="form-control" formControlName="village_id">
@@ -334,7 +316,7 @@
                 </select>
               </div>
             </div>
-            <div class="col-xs-1" id="location-latitude">
+            <div class="col-xs-1" id="location-latitude" style="padding: 0 2px 0 0px">
               <div class="form-group">
                 <label class="control-label label-required">Lat</label>
                 <input
@@ -344,7 +326,7 @@
                 />
               </div>
             </div>
-            <div class="col-xs-1" id="location-longitude">
+            <div class="col-xs-1" id="location-longitude" style="padding: 0 2px 0 0px">
               <div class="form-group">
                 <label class="control-label label-required">Long</label>
                 <input
@@ -365,7 +347,7 @@
                 </label>
                 <input
                   type="text"
-                  formControlName="nurseryName"
+                  formControlName="ownerName"
                   class="form-control"
                 />
               </div>
@@ -377,7 +359,7 @@
                 >
                 <input
                   type="text"
-                  formControlName="nurseryName"
+                  formControlName="ownerNumber"
                   class="form-control"
                 />
               </div>
@@ -393,7 +375,7 @@
                 >
                 <input
                   type="text"
-                  formControlName="agronomist"
+                  formControlName="representativeName"
                   class="form-control"
                 />
               </div>
@@ -405,7 +387,7 @@
                 >
                 <input
                   type="text"
-                  formControlName="nurseryName"
+                  formControlName="representativeNumber"
                   class="form-control"
                 />
               </div>
@@ -469,13 +451,17 @@
                   <input
                     type="text"
                     class="form-control"
-                    formControlName="expectedSeedling"
+                    value={{
+                      stock.controls.seed * 2500
+                    }}
+                    disabled
                   />
                 </div>
                 <div class="col-sm-2" style="margin-top: 10px">
                   <input
                     type="number"
                     class="form-control"
+                    value = "0"
                     formControlName="recordedSeedling"
                   />
                 </div>
@@ -504,27 +490,6 @@
                 </div>
               </span>
             </span>
-            <span *ngIf="formData.controls.length > 0">
-              <div class="col-sm-2 text-center">
-                <label class="control-label">Total</label>
-              </div>
-              <div class="col-sm-1 text-center">
-                <label class="control-label text-center">1</label>
-              </div>
-              <div class="col-sm-2 text-center">
-                <label class="control-label">2500</label>
-              </div>
-              <div class="col-sm-2 text-center">
-                <label class="control-label">200</label>
-              </div>
-              <div class="col-sm-2 text-center">
-                <label class="control-label">2500</label>
-              </div>
-              <div class="col-sm-2 text-center">
-                <label class="control-label">200</label>
-              </div>
-              <div class="col-sm-1"></div>
-            </span>
             <div
               class="col-sm-12 text-center"
               style="margin-top: 10px; margin-bottom: 10px"
@@ -540,155 +505,198 @@
           </div>
         </div>
       </span>
-      <span *ngIf="addNursery.value.siteAvailability === 'yes'">
-        <div class="col-sm-10 col-centered">
-          <div class="form-group">
-            <div class="row">
-              <div class="col-sm-3">
-                <label class="control-label label-required">Site Name</label>
-              </div>
-              <div class="col-sm-9">
-                <select class="form-control" formControlName="nurseryName">
-                  <option value="" selected disabled>Select Site</option>
-                  <option
-                    *ngFor="let nursery of nurserySites"
-                    value="{{ nursery._id }}"
-                  >
-                    {{ nursery.nurseryName | titlecase }}
+    </div>
+    <div class="text-center" *ngIf="addNursery.value.siteAvailability === 'no'">
+      <br />
+      <br />
+      <button
+        type="button"
+        class="btn"
+        style="
+          width: 250px;
+          height: 50px;
+          margin-right: 10px;
+          background-color: #bababa;
+          color: #ffffff;
+        "
+        routerLink="/admin/seedling/nursery/list"
+      >
+        Cancel
+      </button>
+      <button
+        class="btn"
+        (click)="onCreate()"
+        [disabled]="loading"
+        style="
+          width: 250px;
+          height: 50px;
+          background-color: #4f210d;
+          color: #ffffff;
+        "
+        [disabled]="loading"
+      >
+        <span *ngIf="!loading; else other_content">Add new Nursery</span>
+        <ng-template #other_content>
+          <div class="loader">
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+          </div>
+        </ng-template>
+      </button>
+    </div>
+    <br />
+  </form>
+
+  <form
+    [formGroup]="editNursery"
+    *ngIf="addNursery.value.siteAvailability === 'yes'"
+  >
+    <div class="row">
+      <div class="col-sm-10 col-centered">
+        <div class="form-group">
+          <div class="row">
+            <div class="col-sm-3">
+              <label class="control-label label-required">Site Name</label>
+            </div>
+            <div class="col-sm-9">
+              <select class="form-control" formControlName="nurseryName">
+                <option value="" selected disabled>Select Site</option>
+                <option
+                  *ngFor="let nursery of nurserySites"
+                  value="{{ nursery._id }}"
+                >
+                  {{ nursery.nurseryName | titlecase }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-10 col-centered">
+        <label class="control-label label-required"
+          >Record Seeds/Seedlings Information</label
+        >
+        <br />
+        <div class="row">
+          <div class="col-sm-2 text-center">
+            <label class="control-label">Variety</label>
+          </div>
+          <div class="col-sm-1 text-center">
+            <label class="control-label">Seed</label>
+          </div>
+          <div class="col-sm-2 text-center">
+            <label class="control-label">Expected Seedlings</label>
+          </div>
+          <div class="col-sm-2 text-center">
+            <label class="control-label">Recorded </label>
+          </div>
+          <div class="col-sm-2 text-center">
+            <label class="control-label">Germination rate </label>
+          </div>
+          <div class="col-sm-2 text-center">
+            <label class="control-label">Distributed </label>
+          </div>
+          <div class="col-sm-1"></div>
+          <span
+            *ngFor="let stock of formData.controls; let i = index"
+            class="text-center"
+            formArrayName="stockData"
+          >
+            <span [formGroupName]="i">
+              <div class="col-sm-2">
+                <select
+                  class="form-control"
+                  formControlName="variety"
+                  style="margin-top: 10px"
+                >
+                  <option value="{{ treeVarieties[i]._id }}" selected disabled>
+                    {{ treeVarieties[i].name | titlecase }}
                   </option>
                 </select>
               </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-sm-10 col-centered">
-          <label class="control-label label-required"
-            >Record Seeds/Seedlings Information</label
-          >
-          <br />
-          <div class="row">
+              <div class="col-sm-1" style="margin-top: 10px">
+                <input
+                  type="number"
+                  class="form-control"
+                  formControlName="seed"
+                />
+              </div>
+              <div class="col-sm-2" style="margin-top: 10px">
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="expectedSeedling"
+                />
+              </div>
+              <div class="col-sm-2" style="margin-top: 10px">
+                <input
+                  type="number"
+                  class="form-control"
+                  formControlName="recordedSeedling"
+                />
+              </div>
+              <div class="col-sm-2" style="margin-top: 10px">
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="germinationRate"
+                />
+              </div>
+              <div class="col-xs-2" style="margin-top: 10px">
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="distributed"
+                />
+              </div>
+              <div class="col-xs-1 text-center" style="margin-top: 10px">
+                <button
+                  class="btn btn-danger btn-sm pull-right"
+                  type="button"
+                  (click)="removeStockItem(i)"
+                >
+                  Remove
+                </button>
+              </div>
+            </span>
+          </span>
+          <span *ngIf="formData.controls.length > 0">
             <div class="col-sm-2 text-center">
-              <label class="control-label">Variety</label>
+              <label class="control-label">Total</label>
             </div>
             <div class="col-sm-1 text-center">
-              <label class="control-label">Seed</label>
+              <label class="control-label text-center">1</label>
             </div>
             <div class="col-sm-2 text-center">
-              <label class="control-label">Expected Seedlings</label>
+              <label class="control-label">2500</label>
             </div>
             <div class="col-sm-2 text-center">
-              <label class="control-label">Recorded </label>
+              <label class="control-label">200</label>
             </div>
             <div class="col-sm-2 text-center">
-              <label class="control-label">Germination rate </label>
+              <label class="control-label">2500</label>
             </div>
             <div class="col-sm-2 text-center">
-              <label class="control-label">Distributed </label>
+              <label class="control-label">200</label>
             </div>
             <div class="col-sm-1"></div>
-            <span
-              *ngFor="let stock of formData.controls; let i = index"
-              class="text-center"
-              formArrayName="stockData"
+          </span>
+          <div
+            class="col-sm-12 text-center"
+            style="margin-top: 10px; margin-bottom: 10px"
+          >
+            <button
+              class="btn btn-default"
+              type="button"
+              (click)="addStockItem()"
             >
-              <span [formGroupName]="i">
-                <div class="col-sm-2">
-                  <select
-                    class="form-control"
-                    formControlName="variety"
-                    style="margin-top: 10px"
-                  >
-                    <option
-                      value="{{ treeVarieties[i]._id }}"
-                      selected
-                      disabled
-                    >
-                      {{ treeVarieties[i].name | titlecase }}
-                    </option>
-                  </select>
-                </div>
-                <div class="col-sm-1" style="margin-top: 10px">
-                  <input
-                    type="number"
-                    class="form-control"
-                    formControlName="seed"
-                  />
-                </div>
-                <div class="col-sm-2" style="margin-top: 10px">
-                  <input
-                    type="text"
-                    class="form-control"
-                    formControlName="expectedSeedling"
-                  />
-                </div>
-                <div class="col-sm-2" style="margin-top: 10px">
-                  <input
-                    type="number"
-                    class="form-control"
-                    formControlName="recordedSeedling"
-                  />
-                </div>
-                <div class="col-sm-2" style="margin-top: 10px">
-                  <input
-                    type="text"
-                    class="form-control"
-                    formControlName="germinationRate"
-                  />
-                </div>
-                <div class="col-xs-2" style="margin-top: 10px">
-                  <input
-                    type="text"
-                    class="form-control"
-                    formControlName="distributed"
-                  />
-                </div>
-                <div class="col-xs-1 text-center" style="margin-top: 10px">
-                  <button
-                    class="btn btn-danger btn-sm pull-right"
-                    type="button"
-                    (click)="removeStockItem(i)"
-                  >
-                    Remove
-                  </button>
-                </div>
-              </span>
-            </span>
-            <span *ngIf="formData.controls.length > 0">
-              <div class="col-sm-2 text-center">
-                <label class="control-label">Total</label>
-              </div>
-              <div class="col-sm-1 text-center">
-                <label class="control-label text-center">1</label>
-              </div>
-              <div class="col-sm-2 text-center">
-                <label class="control-label">2500</label>
-              </div>
-              <div class="col-sm-2 text-center">
-                <label class="control-label">200</label>
-              </div>
-              <div class="col-sm-2 text-center">
-                <label class="control-label">2500</label>
-              </div>
-              <div class="col-sm-2 text-center">
-                <label class="control-label">200</label>
-              </div>
-              <div class="col-sm-1"></div>
-            </span>
-            <div
-              class="col-sm-12 text-center"
-              style="margin-top: 10px; margin-bottom: 10px"
-            >
-              <button
-                class="btn btn-default"
-                type="button"
-                (click)="addStockItem()"
-              >
-                Add Variety
-              </button>
-            </div>
+              Add Variety
+            </button>
           </div>
         </div>
-      </span>
+      </div>
     </div>
     <br />
     <br />
@@ -731,5 +739,5 @@
       </button>
     </div>
     <br />
-  </div>
-</form>
+  </form>
+</div>
