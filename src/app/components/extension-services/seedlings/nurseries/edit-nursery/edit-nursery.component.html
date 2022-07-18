@@ -1,3 +1,312 @@
-<p>
-  edit-nursery works!
-</p>
+<div class="box">
+  <form [formGroup]="addNursery">
+    <div class="row">
+      <br />
+      <span *ngIf="addNursery.value.siteAvailability === 'no'">
+        <div class="col-sm-10 col-centered">
+          <div class="form-group">
+            <label class="control-label label-required">Site Name </label>
+            <input
+              type="text"
+              formControlName="nurseryName"
+              class="form-control"
+            />
+          </div>
+        </div>
+        <div class="col-sm-10 col-centered">
+          <div class="row" formGroupName="location">
+            <div class="col-xs-2" id="location-province">
+              <div class="form-group">
+                <label class="control-label label-required">Province</label>
+                <select class="form-control" formControlName="prov_id">
+                  <option value=""></option>
+                  <option
+                    *ngFor="let province of locationProvinces"
+                    value="{{ province._id }}"
+                  >
+                    {{ province.namee | titlecase }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="col-xs-2" id="location-district" style="padding: 0 2px 0 0px">
+              <div class="form-group">
+                <label class="control-label label-required">District</label>
+                <select class="form-control" formControlName="dist_id">
+                  <option value=""></option>
+                  <option
+                    *ngFor="let district of locationDistricts"
+                    value="{{ district._id }}"
+                  >
+                    {{ district.name | titlecase }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="col-xs-2" id="location-sector" style="padding: 0 2px 0 0px">
+              <div class="form-group">
+                <label class="control-label label-required">Sector</label>
+                <select class="form-control" formControlName="sect_id">
+                  <option value=""></option>
+                  <option
+                    *ngFor="let sector of locationSectors"
+                    value="{{ sector._id }}"
+                  >
+                    {{ sector.name | titlecase }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="col-xs-2" id="location-cell" style="padding: 0 2px 0 0px">
+              <div class="form-group">
+                <label class="control-label label-required">Cell</label>
+                <select class="form-control" formControlName="cell_id">
+                  <option value=""></option>
+                  <option
+                    *ngFor="let cell of locationCells"
+                    value="{{ cell._id }}"
+                  >
+                    {{ cell.name | titlecase }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="col-xs-2" id="location-village" style="padding: 0 2px 0 0px">
+              <div class="form-group">
+                <label class="control-label label-required">Village</label>
+                <select class="form-control" formControlName="village_id">
+                  <option value=""></option>
+                  <option
+                    *ngFor="let village of locationVillages"
+                    value="{{ village._id }}"
+                  >
+                    {{ village.name | titlecase }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="col-xs-1" id="location-latitude" style="padding: 0 2px 0 0px">
+              <div class="form-group">
+                <label class="control-label label-required">Lat</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="latitude"
+                />
+              </div>
+            </div>
+            <div class="col-xs-1" id="location-longitude" style="padding: 0 2px 0 0px">
+              <div class="form-group">
+                <label class="control-label label-required">Long</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="longitude"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-10 col-centered">
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="control-label label-required"
+                  >Nursery Owner
+                </label>
+                <input
+                  type="text"
+                  formControlName="ownerName"
+                  class="form-control"
+                />
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="control-label label-required"
+                  >Owner Phone number</label
+                >
+                <input
+                  type="text"
+                  formControlName="ownerNumber"
+                  class="form-control"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-10 col-centered">
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="control-label label-required"
+                  >Responsible Manager</label
+                >
+                <input
+                  type="text"
+                  formControlName="representativeName"
+                  class="form-control"
+                />
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="control-label label-required"
+                  >Manager Phone number</label
+                >
+                <input
+                  type="text"
+                  formControlName="representativeNumber"
+                  class="form-control"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-10 col-centered">
+          <label class="control-label label-required"
+            >Record Seeds/Seedlings Information</label
+          >
+          <br />
+          <div class="row">
+            <div class="col-sm-2 text-center">
+              <label class="control-label">Variety</label>
+            </div>
+            <div class="col-sm-1 text-center">
+              <label class="control-label">Seed</label>
+            </div>
+            <div class="col-sm-2 text-center">
+              <label class="control-label">Expected Seedlings</label>
+            </div>
+            <div class="col-sm-2 text-center">
+              <label class="control-label">Available Seedlings </label>
+            </div>
+            <div class="col-sm-2 text-center">
+              <label class="control-label">Germination rate </label>
+            </div>
+            <div class="col-sm-2 text-center">
+              <label class="control-label">Distributed </label>
+            </div>
+            <div class="col-sm-1"></div>
+            <span
+              *ngFor="let stock of formData.controls; let i = index"
+              class="text-center"
+              formArrayName="stockData"
+            >
+              <span [formGroupName]="i">
+                <div class="col-sm-2">
+                  <select
+                    class="form-control"
+                    formControlName="variety"
+                    style="margin-top: 10px"
+                  >
+                    <option
+                      value="{{ treeVarieties[i]._id }}"
+                      selected
+                      disabled
+                    >
+                      {{ treeVarieties[i].name | titlecase }}
+                    </option>
+                  </select>
+                </div>
+                <div class="col-sm-1" style="margin-top: 10px">
+                  <input
+                    type="number"
+                    class="form-control"
+                    formControlName="seed"
+                  />
+                </div>
+                <div class="col-sm-2" style="margin-top: 10px">
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="expectedSeedling"
+                  />
+                </div>
+                <div class="col-sm-2" style="margin-top: 10px">
+                  <input
+                    type="number"
+                    class="form-control"
+                    formControlName="recordedSeedling"
+                    max="{{ stock.controls.expectedSeedling.value }}"
+                  />
+                </div>
+                <div class="col-sm-2" style="margin-top: 10px">
+                  <input
+                    type="text"
+                    class="form-control"
+                    value="{{
+                      ((stock.controls.expectedSeedling.value -
+                        stock.value.recordedSeedling) *
+                        100) /
+                        stock.controls.expectedSeedling.value || 0
+                        | number: '1.2-2'
+                    }}%"
+                    disabled
+                  />
+                </div>
+                <div class="col-xs-2" style="margin-top: 10px">
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="distributed"
+                  />
+                </div>
+                <div class="col-xs-1 text-center" style="margin-top: 10px">
+                  <button
+                    class="btn btn-danger btn-sm pull-right"
+                    type="button"
+                    (click)="removeStockItem(i)"
+                  >
+                    Remove
+                  </button>
+                </div>
+              </span>
+            </span>
+          </div>
+        </div>
+      </span>
+    </div>
+    <div class="text-center" *ngIf="addNursery.value.siteAvailability === 'no'">
+      <br />
+      <br />
+      <button
+        type="button"
+        class="btn"
+        style="
+          width: 250px;
+          height: 50px;
+          margin-right: 10px;
+          background-color: #bababa;
+          color: #ffffff;
+        "
+        routerLink="/admin/seedling/nursery/list"
+      >
+        Cancel
+      </button>
+      <button
+        class="btn"
+        (click)="onCreate()"
+        [disabled]="loading"
+        style="
+          width: 250px;
+          height: 50px;
+          background-color: #4f210d;
+          color: #ffffff;
+        "
+        [disabled]="loading"
+      >
+        <span *ngIf="!loading; else other_content">Edit Nursery</span>
+        <ng-template #other_content>
+          <div class="loader">
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+          </div>
+        </ng-template>
+      </button>
+    </div>
+    <br />
+  </form>
+</div>

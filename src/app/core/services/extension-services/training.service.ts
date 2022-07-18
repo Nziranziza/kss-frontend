@@ -41,4 +41,7 @@ export class TrainingService {
   sendMessage(id: any) {
     return this.apiService.get("/v1.1/schedules/invite/" + id);
   }
+  getScheduleStats(body: any) {
+    return this.apiService.post("/v1.1/schedules/stats", body);
+  }
 }

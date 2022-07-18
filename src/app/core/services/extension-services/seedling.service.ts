@@ -9,7 +9,7 @@ export class SeedlingService {
   constructor(private apiService: ApiService) {}
 
   create(body: any) {
-    return this.apiService.post("/v1.1/farm-visit-schedules/", body);
+    return this.apiService.post("/v1.1/nurseries", body);
   }
 
   all(): Observable<any> {
@@ -17,10 +17,10 @@ export class SeedlingService {
   }
 
   one(id: string): Observable<any> {
-    return this.apiService.get("/v1.1/farm-visit-schedules/" + id);
+    return this.apiService.get("/v1.1/nurseries/" + id);
   }
 
   update(id: string, body: any): Observable<any> {
-    return this.apiService.put("/v1.1/farm-visit-schedules/" + id, body);
+    return this.apiService.put("/v1.1/nurseries/" + id, body);
   }
 }

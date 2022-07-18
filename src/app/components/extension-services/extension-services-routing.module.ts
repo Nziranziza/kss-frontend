@@ -24,6 +24,7 @@ import { EditNurseryComponent } from './seedlings/nurseries/edit-nursery/edit-nu
 import { ViewNurseryComponent } from './seedlings/nurseries/view-nursery/view-nursery.component';
 import { NurseryListComponent } from './seedlings/nurseries/nursery-list/nursery-list.component';
 import { NurseryCreateComponent } from './seedlings/nurseries/nursery-create/nursery-create.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 const routes: Routes = [
   {
@@ -117,8 +118,12 @@ const routes: Routes = [
         component: EditNurseryComponent,
       },
       {
-        path: 'seedling/nursery/details/:id',
+        path: 'seedling/nursery/view/:id',
         component: ViewNurseryComponent,
+      },
+      {
+        path: 'dashboard/data',
+        component: DashboardComponent,
       },
     ],
   },

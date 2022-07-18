@@ -74,7 +74,7 @@ export class TrainingSchedulingCreateComponent
         village_id: [""],
         venue: [""],
       }),
-      trainingStartDate: [this.today],
+      trainingStartDate: [""],
       trainingEndDate: [""],
       startTime: [""],
       endTime: [""],

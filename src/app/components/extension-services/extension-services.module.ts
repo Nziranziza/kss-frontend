@@ -33,6 +33,9 @@ import { EditNurseryComponent } from './seedlings/nurseries/edit-nursery/edit-nu
 import { ViewNurseryComponent } from './seedlings/nurseries/view-nursery/view-nursery.component';
 import { NurseryListComponent } from './seedlings/nurseries/nursery-list/nursery-list.component';
 import { NurseryCreateComponent } from './seedlings/nurseries/nursery-create/nursery-create.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { GoogleMapsModule } from '@angular/google-maps';
+import { GoogleChartsModule } from "angular-google-charts";
 @NgModule({
   declarations: [
     FarmerGroupListComponent,
@@ -58,6 +61,7 @@ import { NurseryCreateComponent } from './seedlings/nurseries/nursery-create/nur
     EditNurseryComponent,
     NurseryListComponent,
     NurseryCreateComponent,
+    DashboardComponent,
   ],
   imports: [
     FormsModule,
@@ -69,6 +73,8 @@ import { NurseryCreateComponent } from './seedlings/nurseries/nursery-create/nur
     OwlNativeDateTimeModule,
     NgbModule,
     NgxPaginationModule,
+    GoogleMapsModule,
+    GoogleChartsModule,
     NgMultiSelectDropDownModule,
   ],
   entryComponents: [GapDeleteModal],

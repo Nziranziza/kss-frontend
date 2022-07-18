@@ -23,4 +23,8 @@ export class VisitService {
   edit(id: string, body: any): Observable<any> {
     return this.apiService.put("/v1.1/farm-visit-schedules/" + id, body);
   }
+  
+  getVisitsStats(body: any) {
+    return this.apiService.post("/v1.1/farm-visit-schedules/stats", body);
+  }
 }
