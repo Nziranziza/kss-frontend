@@ -122,7 +122,7 @@ const routes: Routes = [
         component: ViewNurseryComponent,
       },
       {
-        path: 'dashboard/data',
+        path: 'dashboard',
         component: DashboardComponent,
       },
     ],

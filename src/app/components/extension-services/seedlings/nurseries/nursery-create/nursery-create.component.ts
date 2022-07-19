@@ -107,7 +107,9 @@ export class NurseryCreateComponent extends BasicComponent implements OnInit {
   
 
   get formData() {
+    console.log((this.addNursery.get("stockData") as FormArray).controls)
     return this.addNursery.get("stockData") as FormArray;
+
   }
 
   getTreeVariety() {
@@ -145,9 +147,9 @@ export class NurseryCreateComponent extends BasicComponent implements OnInit {
       variety: [this.treeVarieties[this.currentIndex]._id],
       seed: [0],
       expectedSeedling: [{ value: "", disabled: true }],
-      recordedSeedling: [0],
+      recordedSeedling: [{ value: 0, disabled: true }],
       germinationRate: [{ value: "", disabled: true }],
-      distributed: [{ value: "", disabled: true }],
+      distributed: [{ value: 0, disabled: true }],
     });
   }
 

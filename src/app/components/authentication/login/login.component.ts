@@ -116,7 +116,7 @@ export class LoginComponent extends BasicComponent implements OnInit, OnDestroy 
     } else if (this.authorisationService.isSiteManager()) {
       this.router.navigateByUrl('admin/input/site/distribution');
     } else {
-      this.router.navigateByUrl('admin/organisations');
+      this.router.navigateByUrl('admin/dashboard');
     }
   }
 }
