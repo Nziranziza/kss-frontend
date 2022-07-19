@@ -234,7 +234,7 @@
     <div class="row">
       <br />
       <span *ngIf="addNursery.value.siteAvailability === 'no'">
-        <div class="col-sm-10 col-centered">
+        <div class="col-sm-11 col-centered">
           <div class="form-group">
             <label class="control-label label-required">Site Name </label>
             <input
@@ -244,9 +244,13 @@
             />
           </div>
         </div>
-        <div class="col-sm-10 col-centered">
+        <div class="col-sm-11 col-centered">
           <div class="row" formGroupName="location">
-            <div class="col-xs-2" id="location-province">
+            <div
+              class="col-xs-2"
+              id="location-province"
+              style="padding: 0 2px 0 15px"
+            >
               <div class="form-group">
                 <label class="control-label label-required">Province</label>
                 <select class="form-control" formControlName="prov_id">
@@ -260,7 +264,11 @@
                 </select>
               </div>
             </div>
-            <div class="col-xs-2" id="location-district" style="padding: 0 2px 0 0px">
+            <div
+              class="col-xs-2"
+              id="location-district"
+              style="padding: 0 2px 0 0px"
+            >
               <div class="form-group">
                 <label class="control-label label-required">District</label>
                 <select class="form-control" formControlName="dist_id">
@@ -274,7 +282,11 @@
                 </select>
               </div>
             </div>
-            <div class="col-xs-2" id="location-sector" style="padding: 0 2px 0 0px">
+            <div
+              class="col-xs-2"
+              id="location-sector"
+              style="padding: 0 2px 0 0px"
+            >
               <div class="form-group">
                 <label class="control-label label-required">Sector</label>
                 <select class="form-control" formControlName="sect_id">
@@ -288,7 +300,11 @@
                 </select>
               </div>
             </div>
-            <div class="col-xs-2" id="location-cell" style="padding: 0 2px 0 0px">
+            <div
+              class="col-xs-2"
+              id="location-cell"
+              style="padding: 0 2px 0 0px"
+            >
               <div class="form-group">
                 <label class="control-label label-required">Cell</label>
                 <select class="form-control" formControlName="cell_id">
@@ -302,7 +318,11 @@
                 </select>
               </div>
             </div>
-            <div class="col-xs-2" id="location-village" style="padding: 0 2px 0 0px">
+            <div
+              class="col-xs-2"
+              id="location-village"
+              style="padding: 0 2px 0 0px"
+            >
               <div class="form-group">
                 <label class="control-label label-required">Village</label>
                 <select class="form-control" formControlName="village_id">
@@ -316,7 +336,11 @@
                 </select>
               </div>
             </div>
-            <div class="col-xs-1" id="location-latitude" style="padding: 0 2px 0 0px">
+            <div
+              class="col-xs-1"
+              id="location-latitude"
+              style="padding: 0 2px 0 0px"
+            >
               <div class="form-group">
                 <label class="control-label label-required">Lat</label>
                 <input
@@ -326,7 +350,11 @@
                 />
               </div>
             </div>
-            <div class="col-xs-1" id="location-longitude" style="padding: 0 2px 0 0px">
+            <div
+              class="col-xs-1"
+              id="location-longitude"
+              style="padding: 0 10px 0 0px"
+            >
               <div class="form-group">
                 <label class="control-label label-required">Long</label>
                 <input
@@ -338,7 +366,7 @@
             </div>
           </div>
         </div>
-        <div class="col-sm-10 col-centered">
+        <div class="col-sm-11 col-centered">
           <div class="row">
             <div class="col-sm-6">
               <div class="form-group">
@@ -366,7 +394,7 @@
             </div>
           </div>
         </div>
-        <div class="col-sm-10 col-centered">
+        <div class="col-sm-11 col-centered">
           <div class="row">
             <div class="col-sm-6">
               <div class="form-group">
@@ -394,7 +422,7 @@
             </div>
           </div>
         </div>
-        <div class="col-sm-10 col-centered">
+        <div class="col-sm-11 col-centered">
           <label class="control-label label-required"
             >Record Seeds/Seedlings Information</label
           >
@@ -403,34 +431,40 @@
             <div class="col-sm-2 text-center">
               <label class="control-label">Variety</label>
             </div>
-            <div class="col-sm-1 text-center">
+            <div class="col-sm-1 text-center" style="padding: 0 2px 0 0px">
               <label class="control-label">Seed</label>
             </div>
-            <div class="col-sm-2 text-center">
+            <div class="col-sm-2 text-center" style="padding: 0 2px 0 0px">
               <label class="control-label">Expected Seedlings</label>
             </div>
-            <div class="col-sm-2 text-center">
-              <label class="control-label">Recorded </label>
-            </div>
-            <div class="col-sm-2 text-center">
+            <div class="col-sm-2 text-center" style="padding: 0 2px 0 0px">
               <label class="control-label">Germination rate </label>
             </div>
-            <div class="col-sm-2 text-center">
-              <label class="control-label">Distributed </label>
+            <div class="col-sm-2 text-center" style="padding: 0 2px 0 0px">
+              <label class="control-label">Pricked out Seedlings </label>
             </div>
-            <div class="col-sm-1"></div>
+            <div class="col-sm-1 text-center" style="padding: 0 2px 0 0px">
+              <label class="control-label"> Success Rate</label>
+            </div>
+            <div class="col-sm-1 text-center" style="padding: 0 2px 0 0px">
+              <label class="control-label">Disributed Seedlings</label>
+            </div>
+            <div class="col-sm-1 text-center" style="padding: 0 2px 0 10px">
+              <label class="control-label"> </label>
+            </div>
+          </div>
+          <div class="row">
             <span
               *ngFor="let stock of formData.controls; let i = index"
-              class="text-center"
               formArrayName="stockData"
+              class="text-center"
             >
               <span [formGroupName]="i">
-                <div class="col-sm-2">
-                  <select
-                    class="form-control"
-                    formControlName="variety"
-                    style="margin-top: 10px"
-                  >
+                <div
+                  class="col-sm-2"
+                  style="margin-top: 10px; padding: 0 2px 0 15px"
+                >
+                  <select class="form-control" formControlName="variety">
                     <option
                       value="{{ treeVarieties[i]._id }}"
                       selected
@@ -438,45 +472,76 @@
                     >
                       {{ treeVarieties[i].name | titlecase }}
                     </option>
+                    <option
+                      *ngFor="let trees of treeVarieties"
+                      value="{{ trees._id }}"
+                    >
+                      {{ trees.name | titlecase }}
+                    </option>
                   </select>
                 </div>
-                <div class="col-sm-1" style="margin-top: 10px">
+                <div
+                  class="col-sm-1"
+                  style="margin-top: 10px; padding: 0 2px 0 0px"
+                >
                   <input
                     type="number"
                     class="form-control"
                     formControlName="seed"
                   />
                 </div>
-                <div class="col-sm-2" style="margin-top: 10px">
+                <div
+                  class="col-sm-2"
+                  style="margin-top: 10px; padding: 0 2px 0 0px"
+                >
                   <input
                     type="text"
                     class="form-control"
-                    value={{
-                      stock.controls.seed * 2500
-                    }}
+                    value="{{ stock.controls.seed.value * 2500 }}"
                     disabled
                   />
                 </div>
-                <div class="col-sm-2" style="margin-top: 10px">
-                  <input
-                    type="number"
-                    class="form-control"
-                    value = "0"
-                    formControlName="recordedSeedling"
-                  />
-                </div>
-                <div class="col-sm-2" style="margin-top: 10px">
+                <div
+                  class="col-sm-2"
+                  style="margin-top: 10px; padding: 0 2px 0 0px"
+                >
                   <input
                     type="text"
                     class="form-control"
                     formControlName="germinationRate"
                   />
                 </div>
-                <div class="col-xs-2" style="margin-top: 10px">
+                <div
+                  class="col-sm-2"
+                  style="margin-top: 10px; padding: 0 2px 0 0px"
+                >
                   <input
-                    type="text"
+                    type="number"
                     class="form-control"
-                    formControlName="distributed"
+                    value="0"
+                    formControlName="recordedSeedling"
+                  />
+                </div>
+                <div
+                  class="col-sm-1"
+                  style="margin-top: 10px; padding: 0 2px 0 0px"
+                >
+                  <input
+                    type="number"
+                    class="form-control"
+                    value="0"
+                    formControlName="recordedSeedling"
+                  />
+                </div>
+                <div
+                  class="col-sm-1"
+                  style="margin-top: 10px; padding: 0 2px 0 0px"
+                >
+                  <input
+                    type="number"
+                    class="form-control"
+                    value="0"
+                    formControlName="recordedSeedling"
                   />
                 </div>
                 <div class="col-xs-1 text-center" style="margin-top: 10px">
@@ -554,7 +619,7 @@
     *ngIf="addNursery.value.siteAvailability === 'yes'"
   >
     <div class="row">
-      <div class="col-sm-10 col-centered">
+      <div class="col-sm-11 col-centered">
         <div class="form-group">
           <div class="row">
             <div class="col-sm-3">
@@ -574,13 +639,13 @@
           </div>
         </div>
       </div>
-      <div class="col-sm-10 col-centered">
+      <div class="col-sm-11 col-centered">
         <label class="control-label label-required"
           >Record Seeds/Seedlings Information</label
         >
         <br />
         <div class="row">
-          <div class="col-sm-2 text-center">
+          <div class="col-sm-1 text-center">
             <label class="control-label">Variety</label>
           </div>
           <div class="col-sm-1 text-center">
@@ -595,7 +660,7 @@
           <div class="col-sm-2 text-center">
             <label class="control-label">Germination rate </label>
           </div>
-          <div class="col-sm-2 text-center">
+          <div class="col-sm-1 text-center">
             <label class="control-label">Distributed </label>
           </div>
           <div class="col-sm-1"></div>
