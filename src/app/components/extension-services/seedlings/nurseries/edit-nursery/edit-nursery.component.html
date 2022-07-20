@@ -215,11 +215,8 @@
             <div class="col-sm-1 text-center" style="padding: 0 2px 0 0px">
               <label class="control-label"> Success Rate</label>
             </div>
-            <div class="col-sm-1 text-center" style="padding: 0 2px 0 0px">
+            <div class="col-sm-2 text-center" style="padding: 0 2px 0 0px">
               <label class="control-label">Disributed Seedlings</label>
-            </div>
-            <div class="col-sm-1 text-center" style="padding: 0 2px 0 10px">
-              <label class="control-label"> </label>
             </div>
           </div>
           <div class="row">
@@ -241,12 +238,6 @@
                       disabled
                     >
                       {{ treeVarieties[i].name | titlecase }}
-                    </option>
-                    <option
-                      *ngFor="let trees of treeVarieties"
-                      value="{{ trees._id }}"
-                    >
-                      {{ trees.name | titlecase }}
                     </option>
                   </select>
                 </div>
@@ -285,12 +276,19 @@
                   class="col-sm-2"
                   style="margin-top: 10px; padding: 0 2px 0 0px"
                 >
-                  <input
-                    type="number"
+                  <select
                     class="form-control"
-                    formControlName="recordedSeedling"
-                    max="{{ stock.controls.expectedSeedling.value }}"
-                  />
+                    formControlName="germinationRate"
+                    style="margin-top: 10px; padding: 0 2px 0 10px"
+                  >
+                    <option
+                      value="{{ treeVarieties[i]._id }}"
+                      selected
+                      disabled
+                    >
+                      {{ treeVarieties[i].name | titlecase }}
+                    </option>
+                  </select>
                 </div>
                 <div
                   class="col-sm-1"
@@ -307,21 +305,12 @@
                     disabled
                   />
                 </div>
-                <div class="col-xs-1" style="margin-top: 10px">
+                <div class="col-xs-2" style="margin-top: 10px">
                   <input
                     type="text"
                     class="form-control"
                     formControlName="distributed"
                   />
-                </div>
-                <div class="col-xs-1 text-center" style="margin-top: 10px">
-                  <button
-                    class="btn btn-danger btn-sm pull-right"
-                    type="button"
-                    (click)="removeStockItem(i)"
-                  >
-                    Remove
-                  </button>
                 </div>
               </span>
             </span>
