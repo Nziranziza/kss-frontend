@@ -1,3 +1,239 @@
-<p>
-  view-nursery works!
-</p>
+<div class="box">
+  <div class="box-body box-confirm">
+    <div class="row">
+      <div class="col-sm-11 col-centered">
+        <div style="margin-bottom: 10px" class="form-group">
+          <label class="control-label">Site Name </label>
+          <div class="confirm-text-box confirm-text">
+            {{ nurseryDatas.nurseryName }}
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-11 col-centered">
+        <div class="row">
+          <div class="col-xs-2" style="padding: 0 2px 0 15px">
+            <div class="form-group">
+              <label class="control-label">Province</label>
+              <div class="confirm-text-box confirm-text">
+                {{ nurseryDatas.location.prov_id.namek || "" }}
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-2" style="padding: 0 2px 0 0px">
+            <div class="form-group">
+              <label class="control-label">District</label>
+              <div class="confirm-text-box confirm-text">
+                {{ nurseryDatas.location.dist_id.name || "" }}
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-2" style="padding: 0 2px 0 0px">
+            <div class="form-group">
+              <label class="control-label">Sector</label>
+              <div class="confirm-text-box confirm-text">
+                {{ nurseryDatas.location.sect_id.name || "" }}
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-2" style="padding: 0 2px 0 0px">
+            <div class="form-group">
+              <label class="control-label">Cell</label>
+              <div class="confirm-text-box confirm-text">
+                {{ nurseryDatas.location.cell_id.name || "" }}
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-2" style="padding: 0 2px 0 0px">
+            <div class="form-group">
+              <label class="control-label">Village</label>
+              <div class="confirm-text-box confirm-text">
+                {{ nurseryDatas.location.village_id.name || "" }}
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-1" style="padding: 0 2px 0 0px">
+            <div class="form-group">
+              <label class="control-label">Lat</label>
+              <div class="confirm-text-box confirm-text">
+                {{ nurseryDatas.latitude || "" }}
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-1" style="padding: 0 10px 0 0px">
+            <div class="form-group">
+              <label class="control-label">Long</label>
+              <div class="confirm-text-box confirm-text">
+                {{ nurseryDatas.longitude || "" }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-11 col-centered">
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label class="control-label">Nursery Owner </label>
+              <div class="confirm-text-box confirm-text">
+                {{ nurseryDatas.owner.name || "" }}
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label class="control-label">Owner Phone number</label>
+              <div class="confirm-text-box confirm-text">
+                {{ nurseryDatas.owner.phoneNumber || "" }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-11 col-centered">
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label class="control-label">Responsible Manager</label>
+              <div class="confirm-text-box confirm-text">
+                {{ nurseryDatas.representative.name || "" }}
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label class="control-label">Manager Phone number</label>
+              <div class="confirm-text-box confirm-text">
+                {{ nurseryDatas.representative.phoneNumber || "" }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-11 col-centered">
+        <label class="control-label label-required"
+          >Record Seeds/Seedlings Information</label
+        >
+        <br />
+        <div class="row">
+          <div
+            class="col-sm-2 text-center"
+            style="margin-top: 10px; padding: 0 2px 0 10px"
+          >
+            <label class="control-label">Variety</label>
+          </div>
+          <div
+            class="col-sm-1 text-center"
+            style="margin-top: 10px; padding: 0 2px 0 0px"
+          >
+            <label class="control-label">Seed</label>
+          </div>
+          <div
+            class="col-sm-2 text-center"
+            style="margin-top: 10px; padding: 0 2px 0 0px"
+          >
+            <label class="control-label">Expected Seedlings</label>
+          </div>
+          <div
+            class="col-sm-2 text-center"
+            style="margin-top: 10px; padding: 0 2px 0 0px"
+          >
+            <label class="control-label">Germination rate </label>
+          </div>
+          <div
+            class="col-sm-2 text-center"
+            style="margin-top: 10px; padding: 0 2px 0 0px"
+          >
+            <label class="control-label">Pricked out Seedlings </label>
+          </div>
+          <div
+            class="col-sm-1 text-center"
+            style="margin-top: 10px; padding: 0 2px 0 0px"
+          >
+            <label class="control-label"> Success Rate</label>
+          </div>
+          <div
+            class="col-sm-1 text-center"
+            style="margin-top: 10px; padding: 0 2px 0 0px"
+          >
+            <label class="control-label">Disributed Seedlings</label>
+          </div>
+          <div
+            class="col-sm-1 text-center"
+            style="margin-top: 10px; padding: 0 2px 0 0px"
+          >
+            <label class="control-label"></label>
+          </div>
+        </div>
+        <div class="row">
+          <span *ngFor="let stock of nurseryDatas.stocks; let i = index">
+            <div
+              class="col-sm-2 text-center"
+              style="margin-top: 10px; padding: 0 2px 0 10px"
+            >
+              <div class="confirm-text-box confirm-text">
+                {{ stock.varietyId.name || "" }}
+              </div>
+            </div>
+            <div
+              class="col-sm-1 text-center"
+              style="margin-top: 10px; padding: 0 2px 0 0px"
+            >
+              <div class="confirm-text-box confirm-text">
+                {{ stock.seeds || 0 }}
+              </div>
+            </div>
+            <div
+              class="col-sm-2 text-center"
+              style="margin-top: 10px; padding: 0 2px 0 0px"
+              
+            >
+              <div class="confirm-text-box confirm-text">
+                {{ stock.expectedSeedlings || 0 }}
+              </div>
+            </div>
+            <div
+              class="col-sm-2 text-center"
+              style="margin-top: 10px; padding: 0 2px 0 0px"
+            >
+              <div class="confirm-text-box confirm-text">
+                {{ stock.germinationRate || 0 }}
+              </div>
+            </div>
+            <div
+              class="col-sm-2 text-center"
+              style="margin-top: 10px; padding: 0 2px 0 0px"
+            >
+              <div class="confirm-text-box confirm-text">
+                {{ stock.prickedQty || 0 }}
+              </div>
+            </div>
+            <div
+              class="col-sm-1 text-center"
+              style="margin-top: 10px; padding: 0 2px 0 0px"
+            >
+              <div class="confirm-text-box confirm-text">
+                {{ stock.successRate || "0%" }}
+              </div>
+            </div>
+            <div
+              class="col-xs-1 text-center"
+              style="margin-top: 10px; padding: 0 2px 0 0px"
+            >
+              <div class="confirm-text-box confirm-text">
+                {{ stock.distributed || 0 }}
+              </div>
+            </div>
+            <div
+              class="col-xs-1 text-center"
+              style="margin-top: 10px"
+            >
+              <div class="confirm-text-box confirm-text">
+                <i class="fa fa-caret-down"> </i>
+              </div>
+            </div>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

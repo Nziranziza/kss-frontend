@@ -12,6 +12,7 @@ import {
   UserService,
   VisitService,
   GapService,
+  HelperService,
 } from "src/app/core";
 import { Router } from "@angular/router";
 @Component({
@@ -31,7 +32,7 @@ export class NurseryCreateComponent extends BasicComponent implements OnInit {
     private seedlingService: SeedlingService,
     private modalService: NgbModal,
     private router: Router,
-    
+    private helper: HelperService
   ) {
     super(locationService, organisationService);
   }
@@ -50,7 +51,6 @@ export class NurseryCreateComponent extends BasicComponent implements OnInit {
       representativeName: ["", Validators.required],
       representativeNumber: ["", Validators.required],
       siteAvailability: ["no"],
-      description: ["", Validators.required],
       agronomist: [""],
       stockData: new FormArray([], Validators.required),
       location: this.formBuilder.group({
@@ -62,41 +62,7 @@ export class NurseryCreateComponent extends BasicComponent implements OnInit {
         latitude: [""],
         longitude: [""],
       }),
-      totalSeedlings: ["", Validators.required],
-      adoptionGap: ["", Validators.required],
       status: [""],
-      date: this.formBuilder.group({
-        visitDate: [""],
-        startTime: [""],
-        endTime: [""],
-      }),
-    });
-    this.editNursery = this.formBuilder.group({
-      nurseryName: ["", Validators.required],
-      owner: ["", Validators.required],
-      siteAvailability: [""],
-      description: ["", Validators.required],
-      agronomist: [""],
-      stockData: new FormArray([], Validators.required),
-      location: this.formBuilder.group({
-        prov_id: [""],
-        dist_id: [""],
-        sect_id: [""],
-        cell_id: [""],
-        village_id: [""],
-        latitude: [""],
-        longitude: [""],
-      }),
-      totalSeedlings: ["", Validators.required],
-      adoptionGap: ["", Validators.required],
-      status: [""],
-      date: this.formBuilder.group({
-        visitDate: [""],
-        startTime: [""],
-        endTime: [""],
-      }),
-      startTime: "00:00",
-      endTime: "00:00",
     });
     this.getTreeVariety();
     this.basicInit(this.authenticationService.getCurrentUser().info.org_id);
@@ -104,12 +70,9 @@ export class NurseryCreateComponent extends BasicComponent implements OnInit {
     this.onChanges();
   }
 
-  
-
   get formData() {
-    console.log((this.addNursery.get("stockData") as FormArray).controls)
+    console.log((this.addNursery.get("stockData") as FormArray).controls);
     return this.addNursery.get("stockData") as FormArray;
-
   }
 
   getTreeVariety() {
@@ -177,38 +140,40 @@ export class NurseryCreateComponent extends BasicComponent implements OnInit {
   }
 
   onCreate() {
-    let data = {
-      nurseryName: this.addNursery.value.nurseryName,
-      owner: {
-        name: this.addNursery.value.ownerName,
-        phoneNumber: this.addNursery.value.ownerNumber,
-      },
-      representative: {
-        name: this.addNursery.value.representativeName,
-        phoneNumber: this.addNursery.value.representativeNumber,
-      },
-      org_id: this.authenticationService.getCurrentUser().info.org_id,
-      latitude: this.addNursery.value.location.latitude,
-      longitude: this.addNursery.value.location.longitude,
-      location: {
-        prov_id: this.addNursery.value.location.prov_id,
-        dist_id: this.addNursery.value.location.dist_id,
-        sect_id: this.addNursery.value.location.sect_id,
-        cell_id: this.addNursery.value.location.cell_id,
-        village_id: this.addNursery.value.location.village_id,
-      },
-      stocks: this.addNursery.value.stockData.map((data) => {
-        return {
-          varietyId: data.variety,
-          seeds: data.seed,
-        };
-      }),
-    };
-    console.log(data);
-    console.log(this.addNursery.value);
-    this.seedlingService.create(data).subscribe((data) => {
-      this.router.navigateByUrl("admin/seedling/nursery/list");
-    });
+    if (this.addNursery.valid) {
+      let data = {
+        nurseryName: this.addNursery.value.nurseryName,
+        owner: {
+          name: this.addNursery.value.ownerName,
+          phoneNumber: this.addNursery.value.ownerNumber,
+        },
+        representative: {
+          name: this.addNursery.value.representativeName,
+          phoneNumber: this.addNursery.value.representativeNumber,
+        },
+        org_id: this.authenticationService.getCurrentUser().info.org_id,
+        latitude: this.addNursery.value.location.latitude,
+        longitude: this.addNursery.value.location.longitude,
+        location: {
+          prov_id: this.addNursery.value.location.prov_id,
+          dist_id: this.addNursery.value.location.dist_id,
+          sect_id: this.addNursery.value.location.sect_id,
+          cell_id: this.addNursery.value.location.cell_id,
+          village_id: this.addNursery.value.location.village_id,
+        },
+        stocks: this.addNursery.value.stockData.map((data) => {
+          return {
+            varietyId: data.variety,
+            seeds: data.seed,
+          };
+        }),
+      };
+      this.seedlingService.create(data).subscribe((data) => {
+        this.router.navigateByUrl("admin/seedling/nursery/list");
+      });
+    } else {
+      this.errors = this.helper.getFormValidationErrors(this.addNursery);
+    }
   }
 
   onUpdate() {

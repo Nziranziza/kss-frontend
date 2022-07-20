@@ -43,6 +43,7 @@ export class EditNurseryComponent extends BasicComponent implements OnInit {
   nurserySites: any[] = [];
   currentIndex: number = 0;
   id: string;
+  oldDatas: any;
 
   ngOnInit() {
     this.addNursery = this.formBuilder.group({
@@ -77,11 +78,10 @@ export class EditNurseryComponent extends BasicComponent implements OnInit {
       this.id = params["id".toString()];
       this.seedlingService.one(params["id".toString()]).subscribe((data) => {
         const datas = data.data;
-        console.log(datas);
+        this.oldDatas = datas;
         this.addNursery
           .get("nurseryName".toString())
           .setValue(datas.nurseryName, { emitEvent: false });
-        // this.addNursery.patchValue(data.data);
         this.addNursery.controls.location
           .get("prov_id".toString())
           .setValue(datas.location.prov_id._id, { emitEvent: false });
@@ -118,20 +118,22 @@ export class EditNurseryComponent extends BasicComponent implements OnInit {
         datas.stocks.map((item) => {
           (this.addNursery.controls.stockData as FormArray).push(
             this.formBuilder.group({
-              variety: [{ value: item.varietyId._id, disabled: true }],
-              seed: [{ value: item.seeds, disabled: true }],
+              variety: [item.varietyId._id, { value: item.varietyId._id, disabled: true }],
+              seed: [item.seeds, { value: item.seeds, disabled: true }],
               expectedSeedling: [
                 { value: item.expectedSeedlings, disabled: true },
               ],
-              recordedSeedling: item.recordedSeedlings || 0,
-              germinationRate: [
+              prickedQty: item.prickedQty || 0,
+              successRate: [
                 { value: item.germinationRate || 0, disabled: true },
               ],
+              germinationRate: item.germinationRate || "",
               distributed: [{ value: item.distributed || 0, disabled: true }],
+              id: item._id || "",
+              
             }) as FormGroup
           );
         });
-        console.log(this.addNursery.get("stockData"));
       });
     });
     this.getTreeVariety();
@@ -141,7 +143,6 @@ export class EditNurseryComponent extends BasicComponent implements OnInit {
   }
 
   get formData() {
-    console.log((this.addNursery.get("stockData") as FormArray).controls);
     return this.addNursery.get("stockData") as FormArray;
     
   }
@@ -212,12 +213,15 @@ export class EditNurseryComponent extends BasicComponent implements OnInit {
 
   onCreate() {
     let data = {
+      _id: this.id,
       nurseryName: this.addNursery.value.nurseryName,
       owner: {
+        _id: this.oldDatas.owner._id,
         name: this.addNursery.value.ownerName,
         phoneNumber: this.addNursery.value.ownerNumber,
       },
       representative: {
+        _id: this.oldDatas.representative._id,
         name: this.addNursery.value.representativeName,
         phoneNumber: this.addNursery.value.representativeNumber,
       },
@@ -225,6 +229,7 @@ export class EditNurseryComponent extends BasicComponent implements OnInit {
       latitude: this.addNursery.value.location.latitude,
       longitude: this.addNursery.value.location.longitude,
       location: {
+        _id: this.oldDatas.location._id,
         prov_id: this.addNursery.value.location.prov_id,
         dist_id: this.addNursery.value.location.dist_id,
         sect_id: this.addNursery.value.location.sect_id,
@@ -235,57 +240,14 @@ export class EditNurseryComponent extends BasicComponent implements OnInit {
         return {
           varietyId: data.variety,
           seeds: data.seed,
+          _id: data.id,
+          prickedQty: data.prickedQty,
+          germinationRate: data.germinationRate,
         };
       }),
     };
-    console.log(data);
-    console.log(this.addNursery.value);
     this.seedlingService.update(this.id, data).subscribe((data) => {
       this.router.navigateByUrl("admin/seedling/nursery/list");
-    });
-  }
-
-  onUpdate() {
-    let data = {
-      _id: "62ce75c0f953f3052819f68e",
-      nurseryName: "Nursery Name: Updated",
-      owner: {
-        _id: "62cd9f17713f384d9015abd6",
-        name: "Big Boss",
-        phoneNumber: "250780348088",
-      },
-      representative: {
-        _id: "62cd9f17713f384d9015abd7",
-        name: "Big Boss",
-        phoneNumber: "250780348088",
-      },
-      org_id: "5d1f36dae6950c4d9eaffa37",
-      latitude: "2.4494949",
-      longitude: "9.955959",
-      location: {
-        prov_id: "5bf8170953d485a9eae4b41c",
-        dist_id: "5bf8171e53d485a9eae4b421",
-        sect_id: "5bfd8dbe91703530fcb9b1dd",
-        cell_id: "5bf816d753d485a9eae4aa7f",
-        village_id: "5bf8163553d485a9eae42ef5",
-      },
-      stocks: [
-        {
-          _id: "62ce75c0f953f3052819f692",
-          varietyId: "626bb0a85d5a18a1b38dd5ca",
-          seeds: 3,
-          seedlingQty: 2500,
-        },
-        {
-          varietyId: "626bc0fc2c09eeafbfb787ea",
-          seeds: 2,
-          seedlingQty: 2500,
-        },
-      ],
-    };
-    this.seedlingService.update(data._id, data).subscribe((data) => {
-      this.addNursery.reset();
-      this.getNurserySites();
     });
   }
 
