@@ -24,7 +24,6 @@ export class ViewNurseryComponent extends BasicComponent implements OnInit {
       this.id = params["id".toString()];
       this.seedlingService.one(params["id".toString()]).subscribe((data) => {
         const datas = data.data;
-        console.log(datas);
         this.nurseryDatas = datas;
       });
     });

@@ -1,0 +1,91 @@
+<h3>Reports</h3>
+<div class="row">
+  <div class="col-xs-4">
+    <div>
+      <h5 class="label-required">Filter Reports for</h5>
+      <select class="form-control">
+        <option value="" selected>Select Report Type</option>
+        <option value="training">Training</option>
+        <option value="farmerGroup">Farmer Groups</option>
+        <option value="farmVisit">Farm Visit</option>
+        <option value="coffeeFarmer">Cofee Farmer</option>
+        <option value="coffeeFarm">Cofee Farm</option>
+      </select>
+    </div>
+    <div class="text-center" *ngIf="false">
+      <span class="label-required"> Training Modules </span>
+      <select>
+        <option value="" selected>Select Report Type</option>
+        <option value="training">Training</option>
+      </select>
+    </div>
+  </div>
+  <div class="col-xs-8">
+    <div class="row">
+      <div class="col-xs-6">
+        <h5 class="label-required text-center">Filters</h5>
+        <div class="row">
+          <div class="col-xs-6">
+            <select class="form-control">
+              <option value="" selected>All Provinces</option>
+              <option value="training">Training</option>
+            </select>
+          </div>
+          <div class="col-xs-6">
+            <select class="form-control">
+              <option value="" selected>All Districts</option>
+              <option value="training">Training</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-3">
+        <div class="text-center">
+          <h5 class="label-required text-center">Filter By CWS</h5>
+          <input
+            type="radio"
+            id="age1"
+            name="age"
+            value="30"
+            style="margin-top: 5px"
+          />
+        </div>
+      </div>
+      <div class="col-xs-3">
+        <div class="text-center">
+          <h5 class="label-required text-center">Filter By Sector</h5>
+          <input
+            type="radio"
+            id="age2"
+            name="age"
+            value="30"
+            style="margin-top: 5px"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <span *ngIf="true">
+        <div class="col-xs-3">CWS</div>
+        <div class="col-xs-3">Sectors</div>
+        <div class="col-xs-3">Cells</div>
+        <div class="col-xs-3">Villages</div>
+      </span>
+      <span *ngIf="true">
+        <div class="col-xs-3">Sectors</div>
+        <div class="col-xs-3">Cells</div>
+        <div class="col-xs-3">Villages</div>
+        <div class="col-xs-3">All Farmer Groups</div>
+      </span>
+      <span *ngIf="true">
+        <div class="col-xs-4">Training Modules</div>
+        <div class="col-xs-4">All Status</div>
+        <div class="col-xs-4">All Gender</div>
+      </span>
+      <span *ngIf="true">
+        <div class="col-xs-6">Seasons</div>
+        <div class="col-xs-6">Date Ranges</div>
+      </span>
+    </div>
+  </div>
+</div>

@@ -45,7 +45,7 @@ export class DashboardComponent extends BasicComponent implements OnInit {
       backgroundColor: { fill: "transparent" },
     },
     columnNames: ["male", "female"],
-    width: 200,
+    width: 150,
     height: 150,
   };
 
@@ -167,7 +167,6 @@ export class DashboardComponent extends BasicComponent implements OnInit {
     this.loading = true;
     this.trainingService.all().subscribe((data) => {
       this.trainings = data.data;
-      console.log(this.trainings);
       this.loading = false;
     });
   }
@@ -176,16 +175,18 @@ export class DashboardComponent extends BasicComponent implements OnInit {
     this.loading = true;
     this.trainingService.getScheduleStats(body).subscribe((data) => {
       this.trainingsStats = data.data;
-      console.log(this.trainingsStats);
       this.loading = false;
     });
   }
 
   getVisitsStats(body: any): void {
     this.loading = true;
+    console.log(this.graph.data[0][1]);
     this.visitService.getVisitsStats(body).subscribe((data) => {
       this.visitStats = data.data;
-      console.log(this.visitStats);
+      this.graph.data[0][1] = this.visitStats.maleFarmVisits * 100 / this.visitStats.totolVisits;
+      this.graph.data[1][1] = this.visitStats.femaleFarmVisits * 100 / this.visitStats.totolVisits;
+      
       this.loading = false;
     });
   }
