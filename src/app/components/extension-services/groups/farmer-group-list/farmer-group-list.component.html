@@ -64,11 +64,11 @@
               <td> {{ group.leaderNames }}</td>
               <td> {{ group.leaderPhoneNumber }}</td>
               <td> <span style="text-transform: capitalize;">
-                {{ group.location.prov_id.namek }} >
-                {{ group.location.dist_id.name }} >
-                {{ group.location.sect_id.name }} >
-                {{ group.location.cell_id.name }} >
-                {{ group.location.village_id.name }}
+                {{ group.location.prov_id?.namek }} >
+                {{ group.location.dist_id?.name }} >
+                {{ group.location.sect_id?.name }} >
+                {{ group.location.cell_id?.name }} >
+                {{ group.location.village_id?.name }}
               </span>
               </td>
               <td><span>{{ group.members.length + ' ' + 'farmers'}}</span></td>

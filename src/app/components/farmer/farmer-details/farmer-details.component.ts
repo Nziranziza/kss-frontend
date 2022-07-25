@@ -19,6 +19,7 @@ export class FarmerDetailsComponent implements OnInit {
   showSetPinButton = false;
   showProduction = false;
   body = {};
+  totalTrees = 0;
 
   graph = {
     type: 'ColumnChart',
@@ -52,14 +53,23 @@ export class FarmerDetailsComponent implements OnInit {
     if (this.farmer.request) {
       if (isArray(this.farmer.request.requestInfo)) {
         this.requests = this.farmer.request.requestInfo;
+        this.totalTrees = this.farmer.request.requestInfo.reduce( function(tot, record) {
+          return tot + record.numberOfTrees;
+        },0);
+        
       } else {
         this.requests = [this.farmer.request.requestInfo];
+        this.totalTrees = this.farmer.request.requestInfo.numberOfTrees
       }
     } else if (this.farmer.requests) {
       if (isArray(this.farmer.requests.requestInfo)) {
         this.requests = this.farmer.requests.requestInfo;
+        this.totalTrees = this.farmer.request.requestInfo.reduce( function(tot, record) {
+          return tot + record.numberOfTrees;
+        },0);
       } else {
         this.requests = [this.farmer.requests.requestInfo];
+        this.totalTrees = this.farmer.request.requestInfo.numberOfTrees
       }
     }
     if (this.authorisationService.isCWSUser()) {
