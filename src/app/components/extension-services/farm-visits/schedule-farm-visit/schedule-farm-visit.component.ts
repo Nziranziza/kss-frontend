@@ -54,14 +54,12 @@ export class ScheduleFarmVisitComponent implements OnInit {
       agronomist: ["", Validators.required],
       description: ["", Validators.required],
       adoptionGap: ["", Validators.required],
-      status: [""],
+      status: ["", Validators.required],
       date: this.formBuilder.group({
-        visitDate: [""],
-        startTime: [""],
-        endTime: [""],
+        visitDate: ["", Validators.required],
       }),
-      startTime: "00:00",
-      endTime: "00:00",
+      startTime: ["", Validators.required],
+      endTime: ["", Validators.required],
     });
 
     this.gapDropdownSettings = {
@@ -188,12 +186,14 @@ export class ScheduleFarmVisitComponent implements OnInit {
   }
 
   open(content) {
-    this.selectedFarms = this.farmList.filter((data) => {
-      return data.selected == true;
-    });
-    console.log(this.selectedFarms);
-    console.log(this.scheduleVisit);
-    this.modalService.open(content, { ariaLabelledBy: "modal-basic-title" });
+    if (this.scheduleVisit.valid) {
+      this.selectedFarms = this.farmList.filter((data) => {
+        return data.selected == true;
+      });
+      this.modalService.open(content, { ariaLabelledBy: "modal-basic-title" });
+    } else {
+      this.errors = this.helper.getFormValidationErrors(this.scheduleVisit);
+    }
   }
 
   onSubmit() {
@@ -226,12 +226,10 @@ export class ScheduleFarmVisitComponent implements OnInit {
       this.visitService.create(data).subscribe(
         (data) => {
           this.loading = false;
-          console.log(data);
           this.router.navigateByUrl("admin/farm/visit/list");
         },
         (err) => {
           this.loading = false;
-          console.log(err);
         }
       );
     } else {

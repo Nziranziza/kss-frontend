@@ -45,7 +45,7 @@ export class DashboardComponent extends BasicComponent implements OnInit {
       backgroundColor: { fill: "transparent" },
     },
     columnNames: ["male", "female"],
-    width: 200,
+    width: 150,
     height: 150,
   };
 
@@ -53,7 +53,8 @@ export class DashboardComponent extends BasicComponent implements OnInit {
     type: ChartType.PieChart,
     data: [
       ["Variety1", 40],
-      ["Variety2", 60],
+      ["Variety2", 30],
+      ["Variety3", 30],
     ],
     options: {
       colors: ["#F5B23F", "#FF990A"],
@@ -62,8 +63,8 @@ export class DashboardComponent extends BasicComponent implements OnInit {
       backgroundColor: { fill: "transparent" },
     },
     columnNames: ["Variety1", "Variety2"],
-    width: 200,
-    height: 160,
+    width: 260,
+    height: 260,
   };
 
   selectedFarmDetails: any;
@@ -167,7 +168,6 @@ export class DashboardComponent extends BasicComponent implements OnInit {
     this.loading = true;
     this.trainingService.all().subscribe((data) => {
       this.trainings = data.data;
-      console.log(this.trainings);
       this.loading = false;
     });
   }
@@ -176,16 +176,18 @@ export class DashboardComponent extends BasicComponent implements OnInit {
     this.loading = true;
     this.trainingService.getScheduleStats(body).subscribe((data) => {
       this.trainingsStats = data.data;
-      console.log(this.trainingsStats);
       this.loading = false;
     });
   }
 
   getVisitsStats(body: any): void {
     this.loading = true;
+    console.log(this.graph.data[0][1]);
     this.visitService.getVisitsStats(body).subscribe((data) => {
       this.visitStats = data.data;
-      console.log(this.visitStats);
+      this.graph.data[0][1] = this.visitStats.maleFarmVisits * 100 / this.visitStats.totolVisits;
+      this.graph.data[1][1] = this.visitStats.femaleFarmVisits * 100 / this.visitStats.totolVisits;
+      
       this.loading = false;
     });
   }

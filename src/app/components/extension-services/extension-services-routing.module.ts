@@ -25,6 +25,7 @@ import { ViewNurseryComponent } from './seedlings/nurseries/view-nursery/view-nu
 import { NurseryListComponent } from './seedlings/nurseries/nursery-list/nursery-list.component';
 import { NurseryCreateComponent } from './seedlings/nurseries/nursery-create/nursery-create.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { ReportsComponent } from './reports/reports.component';
 
 const routes: Routes = [
   {
@@ -124,6 +125,10 @@ const routes: Routes = [
       {
         path: 'dashboard',
         component: DashboardComponent,
+      },
+      {
+        path: 'reports',
+        component: ReportsComponent,
       },
     ],
   },

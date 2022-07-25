@@ -265,30 +265,46 @@
                   class="col-sm-2"
                   style="margin-top: 10px; padding: 0 2px 0 0px"
                 >
-                  <input
-                    type="number"
+                  <select
                     class="form-control"
-                    formControlName="recordedSeedling"
-                    max="{{ stock.controls.expectedSeedling.value }}"
-                  />
+                    formControlName="germinationRate"
+                  >
+                    <option value="90+">
+                      Excellent
+                      <span class="pull-left" style="color: green">90+</span>
+                    </option>
+                    <option value="70-90">
+                      Very Good
+                      <span class="pull-left" style="color: blue">70~90</span>
+                    </option>
+                    <option value="50-70">
+                      Good
+                      <span class="pull-left" style="color: yellow"
+                        >50~70</span
+                      >
+                    </option>
+                    <option value="30-50">
+                      Bad
+                      <span class="pull-left" style="color: orange"
+                        >30~50</span
+                      >
+                    </option>
+                    <option value="0-30">
+                      Worse
+                      <span class="pull-left" style="color: red">0~30</span>
+                    </option>
+                  </select>
                 </div>
                 <div
                   class="col-sm-2"
                   style="margin-top: 10px; padding: 0 2px 0 0px"
                 >
-                  <select
+                  <input
+                    type="number"
                     class="form-control"
-                    formControlName="germinationRate"
-                    style="margin-top: 10px; padding: 0 2px 0 10px"
-                  >
-                    <option
-                      value="{{ treeVarieties[i]._id }}"
-                      selected
-                      disabled
-                    >
-                      {{ treeVarieties[i].name | titlecase }}
-                    </option>
-                  </select>
+                    formControlName="prickedQty"
+                    max="{{ stock.controls.expectedSeedling.value }}"
+                  />
                 </div>
                 <div
                   class="col-sm-1"
@@ -298,7 +314,7 @@
                     type="text"
                     class="form-control"
                     value="{{
-                      (stock.value.recordedSeedling * 100) /
+                      (stock.value.prickedQty * 100) /
                         stock.controls.expectedSeedling.value || 0
                         | number: '1.2-2'
                     }}%"
