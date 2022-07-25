@@ -212,7 +212,7 @@
               style="margin-top: 10px; padding: 0 2px 0 0px"
             >
               <div class="confirm-text-box confirm-text">
-                {{ stock.successRate || "0%" }}
+                {{ stock.successRate || "0" | number: '1.2-2' }} %
               </div>
             </div>
             <div

@@ -53,7 +53,8 @@ export class DashboardComponent extends BasicComponent implements OnInit {
     type: ChartType.PieChart,
     data: [
       ["Variety1", 40],
-      ["Variety2", 60],
+      ["Variety2", 30],
+      ["Variety3", 30],
     ],
     options: {
       colors: ["#F5B23F", "#FF990A"],
@@ -62,8 +63,8 @@ export class DashboardComponent extends BasicComponent implements OnInit {
       backgroundColor: { fill: "transparent" },
     },
     columnNames: ["Variety1", "Variety2"],
-    width: 200,
-    height: 160,
+    width: 260,
+    height: 260,
   };
 
   selectedFarmDetails: any;
