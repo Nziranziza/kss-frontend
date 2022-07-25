@@ -194,6 +194,7 @@ export class TrainingSchedulingCreateComponent
     this.trainees[index].editMode = false;
   }
   submitContact(index) {
+    if (this.editContactForm.valid) {
     let arrayControl = this.editContactForm.get("contacts") as FormArray;
     let traineData = arrayControl.at(index);
     this.trainees[index].contact = traineData.value.contact;
@@ -210,10 +211,13 @@ export class TrainingSchedulingCreateComponent
     this.userService
       .updateMemberContact(traineData.value.groupId, data)
       .subscribe((data) => {
-        console.log(data);
         this.loading = false;
       });
     this.getFarmers();
+    }
+    else {
+      this.errors = this.helper.getFormValidationErrors(this.editContactForm);
+    }
   }
 
   onFilter() {

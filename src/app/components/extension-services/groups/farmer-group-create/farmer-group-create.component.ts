@@ -64,9 +64,9 @@ export class FarmerGroupCreateComponent extends BasicComponent implements OnInit
 
   ngOnInit() {
     this.createForm = this.formBuilder.group({
-      groupName: [''],
-      leaderNames: [''],
-      leaderPhoneNumber: [''],
+      groupName: ['', Validators.required,],
+      leaderNames: ['', Validators.required,],
+      leaderPhoneNumber: ['', [Validators.required, Validators.pattern("[0-9]{12}")]],
       description: [''],
       meetingSchedule: this.formBuilder.group({
         meetingDay: [''],
