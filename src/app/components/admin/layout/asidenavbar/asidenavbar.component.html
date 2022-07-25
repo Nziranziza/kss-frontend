@@ -10,6 +10,12 @@
           <span>Dashboard</span>
         </a>
       </li>
+      <li routerLinkActive="active" *appHasPermission="[[11,1]]">
+        <a routerLink="/admin/reports">
+          <i class="fa fa-file" aria-hidden="true"></i>
+          <span>Reports</span>
+        </a>
+      </li>
       <li class="header" *appHasPermission="[[4,1],[4,11],[4,12],0,6,5,11,[8,1],[1,1]]">REGISTRATION</li>
       <li routerLinkActive="active" *appHasPermission="[[11,1]]">
         <a routerLink="/admin/organisations/{{user.org_id}}/users">
@@ -211,7 +217,7 @@
         </ul>
       </li>
       <li class="header" *appHasPermission="[11,1]">EXTENSION SERVICES</li>
-      <li class="treeview" routerLinkActive="active" *appHasPermission="[[1], [11,1]]">
+      <li class="treeview" routerLinkActive="active" *appHasPermission="[11,1]">
         <a href="#">
           <i class="fa fa-users"></i> <span>Farmers groups</span>
           <span class="pull-right-container">
@@ -219,7 +225,7 @@
           </span>
         </a>
         <ul class="treeview-menu">
-          <li routerLinkActive="active" *appHasPermission="[[1], [11,1]]">
+          <li routerLinkActive="active" *appHasPermission="[11,1]">
             <a routerLink="/admin/farmers/group/list">
               <i class="fa fa-circle-o"></i>
               <span>Groups</span>
