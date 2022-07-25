@@ -35,8 +35,8 @@ export class DashboardComponent extends BasicComponent implements OnInit {
   graph = {
     type: ChartType.PieChart,
     data: [
-      ["Male", 70],
-      ["Female", 30],
+      ["Male", 0],
+      ["Female", 0],
     ],
     options: {
       colors: ["#35A1FF", "#FF69F6"],

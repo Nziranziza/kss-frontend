@@ -173,7 +173,7 @@
         [dtTrigger]="dtTrigger"
         class="row-border hover table table-striped"
       >
-        <thead>
+        <thead *ngIf="reportForm.value.reportFor === 'training'">
           <tr>
             <th>Date added</th>
             <th>Group name</th>
@@ -188,7 +188,175 @@
             <th>status</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody *ngIf="reportForm.value.reportFor === 'training'">
+          <ng-container *ngFor="let group of groups">
+            <tr>
+              <td>{{ group.createdAt | date: "y/LL/d - h:mm" }}</td>
+              <td>{{ group.groupName }}</td>
+              <td>{{ group.leaderNames }}</td>
+              <td>{{ group.leaderPhoneNumber }}</td>
+              <td></td>
+              <td>
+                <span>{{ group.members.length + " " + "farmers" }}</span>
+              </td>
+              <td></td>
+              <td>
+                <span class="profile-text">
+                  <ng-container *ngIf="!group.active; else inactive"
+                    ><span style="color: green; font-weight: bold">active</span>
+                  </ng-container>
+                  <ng-template #inactive
+                    ><span style="color: #b21717; font-weight: bold"
+                      >inactive</span
+                    ></ng-template
+                  >
+                </span>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+        <thead *ngIf="reportForm.value.reportFor === 'farmerGroup'">
+          <tr>
+            <th>Date added</th>
+            <th>Group name</th>
+            <th>Group leader names</th>
+            <th>Group leader contact</th>
+            <th>Address</th>
+            <th>Group size</th>
+            <th>
+              Training <br />
+              attendance rate
+            </th>
+            <th>status</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="reportForm.value.reportFor === 'farmerGroup'">
+          <ng-container *ngFor="let group of groups">
+            <tr>
+              <td>{{ group.createdAt | date: "y/LL/d - h:mm" }}</td>
+              <td>{{ group.groupName }}</td>
+              <td>{{ group.leaderNames }}</td>
+              <td>{{ group.leaderPhoneNumber }}</td>
+              <td></td>
+              <td>
+                <span>{{ group.members.length + " " + "farmers" }}</span>
+              </td>
+              <td></td>
+              <td>
+                <span class="profile-text">
+                  <ng-container *ngIf="!group.active; else inactive"
+                    ><span style="color: green; font-weight: bold">active</span>
+                  </ng-container>
+                  <ng-template #inactive
+                    ><span style="color: #b21717; font-weight: bold"
+                      >inactive</span
+                    ></ng-template
+                  >
+                </span>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+        <thead *ngIf="reportForm.value.reportFor === 'farmVisit'">
+          <tr>
+            <th>Date added</th>
+            <th>Group name</th>
+            <th>Group leader names</th>
+            <th>Group leader contact</th>
+            <th>Address</th>
+            <th>Group size</th>
+            <th>
+              Training <br />
+              attendance rate
+            </th>
+            <th>status</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="reportForm.value.reportFor === 'farmVisit'">
+          <ng-container *ngFor="let group of groups">
+            <tr>
+              <td>{{ group.createdAt | date: "y/LL/d - h:mm" }}</td>
+              <td>{{ group.groupName }}</td>
+              <td>{{ group.leaderNames }}</td>
+              <td>{{ group.leaderPhoneNumber }}</td>
+              <td></td>
+              <td>
+                <span>{{ group.members.length + " " + "farmers" }}</span>
+              </td>
+              <td></td>
+              <td>
+                <span class="profile-text">
+                  <ng-container *ngIf="!group.active; else inactive"
+                    ><span style="color: green; font-weight: bold">active</span>
+                  </ng-container>
+                  <ng-template #inactive
+                    ><span style="color: #b21717; font-weight: bold"
+                      >inactive</span
+                    ></ng-template
+                  >
+                </span>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+        <thead *ngIf="reportForm.value.reportFor === 'coffeeFarmer'">
+          <tr>
+            <th>Date added</th>
+            <th>Group name</th>
+            <th>Group leader names</th>
+            <th>Group leader contact</th>
+            <th>Address</th>
+            <th>Group size</th>
+            <th>
+              Training <br />
+              attendance rate
+            </th>
+            <th>status</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="reportForm.value.reportFor === 'coffeeFarmer'">
+          <ng-container *ngFor="let group of groups">
+            <tr>
+              <td>{{ group.createdAt | date: "y/LL/d - h:mm" }}</td>
+              <td>{{ group.groupName }}</td>
+              <td>{{ group.leaderNames }}</td>
+              <td>{{ group.leaderPhoneNumber }}</td>
+              <td></td>
+              <td>
+                <span>{{ group.members.length + " " + "farmers" }}</span>
+              </td>
+              <td></td>
+              <td>
+                <span class="profile-text">
+                  <ng-container *ngIf="!group.active; else inactive"
+                    ><span style="color: green; font-weight: bold">active</span>
+                  </ng-container>
+                  <ng-template #inactive
+                    ><span style="color: #b21717; font-weight: bold"
+                      >inactive</span
+                    ></ng-template
+                  >
+                </span>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+        <thead *ngIf="reportForm.value.reportFor === 'coffeeFarm'">
+          <tr>
+            <th>Date added</th>
+            <th>Group name</th>
+            <th>Group leader names</th>
+            <th>Group leader contact</th>
+            <th>Address</th>
+            <th>Group size</th>
+            <th>
+              Training <br />
+              attendance rate
+            </th>
+            <th>status</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="reportForm.value.reportFor === 'coffeeFarm'">
           <ng-container *ngFor="let group of groups">
             <tr>
               <td>{{ group.createdAt | date: "y/LL/d - h:mm" }}</td>

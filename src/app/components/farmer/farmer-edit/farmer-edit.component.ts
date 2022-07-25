@@ -39,6 +39,7 @@ export class FarmerEditComponent extends BasicComponent implements OnInit, OnDes
   org: any;
   resetPin = true;
   showSetPinButton = false;
+  totalTrees = 0;
 
   constructor(private route: ActivatedRoute, private router: Router,
               private authenticationService: AuthenticationService,
@@ -144,6 +145,9 @@ export class FarmerEditComponent extends BasicComponent implements OnInit, OnDes
             return req;
           }
         });
+        this.totalTrees = this.requests.reduce( function(tot, record) {
+          return tot + record.numberOfTrees;
+        },0);
       } else if (this.authorisationService.isSiteManager() && (!this.isCWSOfficer)) {
         const sectorsSet = [];
         this.site.coveredAreas.coveredSectors.map((sector) => {
@@ -154,12 +158,21 @@ export class FarmerEditComponent extends BasicComponent implements OnInit, OnDes
             return req;
           }
         });
+        this.totalTrees = this.requests.reduce( function(tot, record) {
+          return tot + record.numberOfTrees;
+        },0);
       } else if (this.authorisationService.isDistrictCashCropOfficer()) {
         this.requests = this.farmer.request.requestInfo.filter((req) => {
           return (req.location.dist_id._id === this.authenticationService.getCurrentUser().info.location.dist_id);
         });
+        this.totalTrees = this.requests.reduce( function(tot, record) {
+          return tot + record.numberOfTrees;
+        },0);
       } else {
         this.requests = this.farmer.request.requestInfo;
+        this.totalTrees = this.requests.reduce( function(tot, record) {
+          return tot + record.numberOfTrees;
+        },0);
       }
       this.getSetPinStatus();
     });
