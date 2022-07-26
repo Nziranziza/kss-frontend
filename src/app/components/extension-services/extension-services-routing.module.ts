@@ -26,6 +26,7 @@ import { NurseryListComponent } from './seedlings/nurseries/nursery-list/nursery
 import { NurseryCreateComponent } from './seedlings/nurseries/nursery-create/nursery-create.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ReportsComponent } from './reports/reports.component';
+import { SmsDashboardComponent } from './sms-dashboard/sms-dashboard.component';
 
 const routes: Routes = [
   {
@@ -129,6 +130,10 @@ const routes: Routes = [
       {
         path: 'reports',
         component: ReportsComponent,
+      },
+      {
+        path: 'smsDashboard',
+        component: SmsDashboardComponent,
       },
     ],
   },

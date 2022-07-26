@@ -128,10 +128,16 @@
             <label class="control-label">Seed</label>
           </div>
           <div
-            class="col-sm-2 text-center"
+            class="col-sm-1 text-center"
             style="margin-top: 10px; padding: 0 2px 0 0px"
           >
             <label class="control-label">Expected Seedlings</label>
+          </div>
+          <div
+            class="col-sm-1 text-center"
+            style="margin-top: 10px; padding: 0 2px 0 0px"
+          >
+            <label class="control-label">Sowing Date</label>
           </div>
           <div
             class="col-sm-2 text-center"
@@ -183,7 +189,16 @@
               </div>
             </div>
             <div
-              class="col-sm-2 text-center"
+              class="col-sm-1 text-center"
+              style="margin-top: 10px; padding: 0 2px 0 0px"
+              
+            >
+              <div class="confirm-text-box confirm-text">
+                {{ stock.expectedSeedlings || 0 }}
+              </div>
+            </div>
+            <div
+              class="col-sm-1 text-center"
               style="margin-top: 10px; padding: 0 2px 0 0px"
               
             >

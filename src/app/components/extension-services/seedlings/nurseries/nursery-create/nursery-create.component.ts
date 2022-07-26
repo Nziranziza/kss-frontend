@@ -63,6 +63,7 @@ export class NurseryCreateComponent extends BasicComponent implements OnInit {
         longitude: [""],
       }),
       status: [""],
+      sowingDate: [""],
     });
     this.getTreeVariety();
     this.basicInit(this.authenticationService.getCurrentUser().info.org_id);

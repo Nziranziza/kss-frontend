@@ -7,13 +7,19 @@
       <li routerLinkActive="active" *appHasPermission="[[11,1]]">
         <a routerLink="/admin/dashboard">
           <i class="fa fa-dashboard" aria-hidden="true"></i>
-          <span>Dashboard</span>
+          <span>{{ 'dashboard' | translate }}</span>
         </a>
       </li>
       <li routerLinkActive="active" *appHasPermission="[[11,1]]">
         <a routerLink="/admin/reports">
           <i class="fa fa-file" aria-hidden="true"></i>
           <span>Reports</span>
+        </a>
+      </li>
+      <li routerLinkActive="active" *appHasPermission="[[11,1]]">
+        <a routerLink="/admin/smsDashboard">
+          <i class="fa fa-envelope-o" aria-hidden="true"></i>
+          <span>SMS Dashboard</span>
         </a>
       </li>
       <li class="header" *appHasPermission="[[4,1],[4,11],[4,12],0,6,5,11,[8,1],[1,1]]">REGISTRATION</li>

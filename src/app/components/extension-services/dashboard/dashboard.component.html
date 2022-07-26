@@ -331,15 +331,6 @@
         "
       >
         <h4 class="text-center">Farms</h4>
-        <google-map [options]="mapOptions" width="100%" height="505px">
-          <map-marker
-            *ngFor="let spot of spots"
-            [position]="{ lat: spot.lat, lng: spot.lng }"
-            [options]="markerOptions"
-            [clickable]="true"
-            (mapClick)="selectMarker(spot)"
-          ></map-marker>
-        </google-map>
         <div class="farm-graph-popup" *ngIf="clickedMarker">
           <div class="row text-center">
             <div class="col-xs-3" style="padding: 0 2px 0 0px">
@@ -365,6 +356,15 @@
             </div>
           </div>
         </div>
+        <google-map [options]="mapOptions" width="100%" height="505px">
+          <map-marker
+            *ngFor="let spot of spots"
+            [position]="{ lat: spot.lat, lng: spot.lng }"
+            [options]="markerOptions"
+            [clickable]="true"
+            (mapClick)="selectMarker(spot)"
+          ></map-marker>
+        </google-map>  
       </div>
     </div>
   </div>
