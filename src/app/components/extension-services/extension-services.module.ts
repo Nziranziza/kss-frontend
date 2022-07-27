@@ -37,6 +37,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { GoogleChartsModule } from "angular-google-charts";
 import { ReportsComponent } from './reports/reports.component';
+import { SmsDashboardComponent } from './sms-dashboard/sms-dashboard.component';
 @NgModule({
   declarations: [
     FarmerGroupListComponent,
@@ -64,6 +65,7 @@ import { ReportsComponent } from './reports/reports.component';
     NurseryCreateComponent,
     DashboardComponent,
     ReportsComponent,
+    SmsDashboardComponent,
   ],
   imports: [
     FormsModule,

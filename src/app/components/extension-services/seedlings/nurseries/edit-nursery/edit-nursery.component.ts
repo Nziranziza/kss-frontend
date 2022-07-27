@@ -130,6 +130,8 @@ export class EditNurseryComponent extends BasicComponent implements OnInit {
               germinationRate: item.germinationRate || "",
               distributed: [{ value: item.distributed || 0, disabled: true }],
               id: item._id || "",
+              pickingDate: [item.pickedDate || ""],
+              sowingDate: [item.sowingDate || ""],
               
             }) as FormGroup
           );
@@ -243,6 +245,7 @@ export class EditNurseryComponent extends BasicComponent implements OnInit {
           _id: data.id,
           prickedQty: data.prickedQty,
           germinationRate: data.germinationRate,
+          pickedDate: data.pickingDate
         };
       }),
     };
