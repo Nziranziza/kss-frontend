@@ -169,8 +169,10 @@ export class TrainingSchedulingCreateComponent
             return element.attendance !== "attended";
           })
           .map((item) => {
-            if (item.phoneNumber.length > 9) {
-              item.selected = true;
+            if (item.phoneNumber) {
+              if (item.phoneNumber.length > 9) {
+                item.selected = true;
+              }
             }
             return item;
           });
@@ -195,27 +197,26 @@ export class TrainingSchedulingCreateComponent
   }
   submitContact(index) {
     if (this.editContactForm.valid) {
-    let arrayControl = this.editContactForm.get("contacts") as FormArray;
-    let traineData = arrayControl.at(index);
-    this.trainees[index].contact = traineData.value.contact;
-    this.trainees[index].phoneNumber = traineData.value.contact;
-    this.trainees[index].editMode = false;
-    let data = {
-      userId: traineData.value.userId,
-      phoneNumber: traineData.value.contact.toString(),
-      lastModifiedBy: {
-        _id: this.authenticationService.getCurrentUser().info._id,
-        name: this.authenticationService.getCurrentUser().info.surname,
-      },
-    };
-    this.userService
-      .updateMemberContact(traineData.value.groupId, data)
-      .subscribe((data) => {
-        this.loading = false;
-      });
-    this.getFarmers();
-    }
-    else {
+      let arrayControl = this.editContactForm.get("contacts") as FormArray;
+      let traineData = arrayControl.at(index);
+      this.trainees[index].contact = traineData.value.contact;
+      this.trainees[index].phoneNumber = traineData.value.contact;
+      this.trainees[index].editMode = false;
+      let data = {
+        userId: traineData.value.userId,
+        phoneNumber: traineData.value.contact.toString(),
+        lastModifiedBy: {
+          _id: this.authenticationService.getCurrentUser().info._id,
+          name: this.authenticationService.getCurrentUser().info.surname,
+        },
+      };
+      this.userService
+        .updateMemberContact(traineData.value.groupId, data)
+        .subscribe((data) => {
+          this.loading = false;
+        });
+      this.getFarmers();
+    } else {
       this.errors = this.helper.getFormValidationErrors(this.editContactForm);
     }
   }
@@ -267,23 +268,25 @@ export class TrainingSchedulingCreateComponent
   }
 
   selectTrainee(isChecked: boolean, i: number) {
-    this.trainees[i].selected = true;
-    this.trainees[i].groupId = this.filterForm.controls.searchByLocation.get(
-      "farmerGroup".toString()
-    ).value;
-    if (!isChecked) {
-      this.allTraineesSelected = isChecked;
+    if (this.trainees[i].contact?.length > 9) {
+      this.trainees[i].selected = true;
+      this.trainees[i].groupId = this.filterForm.controls.searchByLocation.get(
+        "farmerGroup".toString()
+      ).value;
+      if (!isChecked) {
+        this.allTraineesSelected = isChecked;
+      }
     }
   }
 
   addSelectedToBeTrained() {
     this.trainees
-      .filter((item) => item.selected)
-      .map((item) => {
+      .filter((itemData) => itemData.selected)
+      .map((itemData) => {
         if (
-          !this.selectedTrainees.find((item) => item.userId === item.userId)
+          !this.selectedTrainees.find((item) => item.userId === itemData.userId)
         ) {
-          this.selectedTrainees.push(item);
+          this.selectedTrainees.push(itemData);
         }
       });
   }

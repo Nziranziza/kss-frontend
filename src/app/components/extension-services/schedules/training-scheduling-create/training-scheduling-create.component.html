@@ -135,7 +135,7 @@
           </div>
           <br />
           <h3 class="text-center">
-            Trainees ( Total: {{ selectedTrainees.length }} )
+            Trainees ( Total: {{ selectedTrainees?.length }} )
           </h3>
           <table class="row-border hover table table-striped">
             <thead>
@@ -484,7 +484,7 @@
                 </div>
               </form>
               <form [formGroup]="editContactForm">
-                <div *ngIf="trainees.length > 0">
+                <div *ngIf="trainees?.length > 0">
                   <table class="row-border hover table table-striped">
                     <thead>
                       <tr
@@ -649,7 +649,7 @@
               </legend>
               <div class="text-center stats-box">
                 <h6>TOTAL TO BE TRAINED</h6>
-                <h4>{{ selectedTrainees.length }}</h4>
+                <h4>{{ selectedTrainees?.length }}</h4>
               </div>
               <table class="row-border hover table table-striped">
                 <thead>
