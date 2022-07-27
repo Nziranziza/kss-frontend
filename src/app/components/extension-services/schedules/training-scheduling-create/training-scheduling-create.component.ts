@@ -268,23 +268,25 @@ export class TrainingSchedulingCreateComponent
   }
 
   selectTrainee(isChecked: boolean, i: number) {
-    this.trainees[i].selected = true;
-    this.trainees[i].groupId = this.filterForm.controls.searchByLocation.get(
-      "farmerGroup".toString()
-    ).value;
-    if (!isChecked) {
-      this.allTraineesSelected = isChecked;
+    if (this.trainees[i].contact?.length > 9) {
+      this.trainees[i].selected = true;
+      this.trainees[i].groupId = this.filterForm.controls.searchByLocation.get(
+        "farmerGroup".toString()
+      ).value;
+      if (!isChecked) {
+        this.allTraineesSelected = isChecked;
+      }
     }
   }
 
   addSelectedToBeTrained() {
     this.trainees
-      .filter((item) => item.selected)
-      .map((item) => {
+      .filter((itemData) => itemData.selected)
+      .map((itemData) => {
         if (
-          !this.selectedTrainees.find((item) => item.userId === item.userId)
+          !this.selectedTrainees.find((item) => item.userId === itemData.userId)
         ) {
-          this.selectedTrainees.push(item);
+          this.selectedTrainees.push(itemData);
         }
       });
   }
