@@ -54,7 +54,7 @@ export class ScheduleFarmVisitComponent implements OnInit {
       agronomist: ["", Validators.required],
       description: ["", Validators.required],
       adoptionGap: ["", Validators.required],
-      status: ["", Validators.required],
+      status: [""],
       date: this.formBuilder.group({
         visitDate: ["", Validators.required],
       }),
