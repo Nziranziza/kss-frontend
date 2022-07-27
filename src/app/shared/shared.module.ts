@@ -30,6 +30,7 @@ import { SuccessModalComponent } from "./layouts";
 import { GoogleChartsModule } from "angular-google-charts";
 import { CUSTOM_ELEMENTS_SCHEMA } from "@angular/compiler";
 import { TranslateModule } from "@ngx-translate/core";
+import { SafePipe } from '../shared/pipes/safe.pipe';
 
 @NgModule({
   imports: [
@@ -64,6 +65,7 @@ import { TranslateModule } from "@ngx-translate/core";
     ConfirmModalComponent,
     ConfirmModalComponent,
     SuccessModalComponent,
+    SafePipe,
   ],
   exports: [
     CommonModule,
@@ -94,6 +96,7 @@ import { TranslateModule } from "@ngx-translate/core";
     InlineErrorsComponent,
     InlineErrorsComponent,
     TranslateModule,
+    SafePipe,
   ],
   entryComponents: [ConfirmModalComponent, SuccessModalComponent],
 })

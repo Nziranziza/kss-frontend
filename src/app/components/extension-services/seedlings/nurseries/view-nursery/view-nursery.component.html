@@ -116,7 +116,7 @@
         <br />
         <div class="row">
           <div
-            class="col-sm-2 text-center"
+            class="col-sm-1 text-center"
             style="margin-top: 10px; padding: 0 2px 0 10px"
           >
             <label class="control-label">Variety</label>
@@ -163,6 +163,9 @@
           >
             <label class="control-label">Disributed Seedlings</label>
           </div>
+          <div class="col-sm-1 text-center" style="padding: 0 2px 0 0px">
+            <label class="control-label">Picking Date</label>
+          </div>
           <div
             class="col-sm-1 text-center"
             style="margin-top: 10px; padding: 0 2px 0 0px"
@@ -173,7 +176,7 @@
         <div class="row">
           <span *ngFor="let stock of nurseryDatas.stocks; let i = index">
             <div
-              class="col-sm-2 text-center"
+              class="col-sm-1 text-center"
               style="margin-top: 10px; padding: 0 2px 0 10px"
             >
               <div class="confirm-text-box confirm-text">
@@ -191,7 +194,6 @@
             <div
               class="col-sm-1 text-center"
               style="margin-top: 10px; padding: 0 2px 0 0px"
-              
             >
               <div class="confirm-text-box confirm-text">
                 {{ stock.expectedSeedlings || 0 }}
@@ -200,10 +202,9 @@
             <div
               class="col-sm-1 text-center"
               style="margin-top: 10px; padding: 0 2px 0 0px"
-              
             >
               <div class="confirm-text-box confirm-text">
-                {{ stock.expectedSeedlings || 0 }}
+                {{ stock.sowingDate  || "" | date: "short" }}
               </div>
             </div>
             <div
@@ -227,7 +228,7 @@
               style="margin-top: 10px; padding: 0 2px 0 0px"
             >
               <div class="confirm-text-box confirm-text">
-                {{ stock.successRate || "0" | number: '1.2-2' }} %
+                {{ stock.successRate || "0" | number: "1.2-2" }} %
               </div>
             </div>
             <div
@@ -239,9 +240,14 @@
               </div>
             </div>
             <div
-              class="col-xs-1 text-center"
-              style="margin-top: 10px"
+              class="col-sm-1 text-center"
+              style="margin-top: 10px; padding: 0 2px 0 0px"
             >
+              <div class="confirm-text-box confirm-text">
+                {{ stock.pickedDate || "" | date: "short" }}
+              </div>
+            </div>
+            <div class="col-xs-1 text-center" style="margin-top: 10px">
               <div class="confirm-text-box confirm-text">
                 <i class="fa fa-caret-down"> </i>
               </div>
