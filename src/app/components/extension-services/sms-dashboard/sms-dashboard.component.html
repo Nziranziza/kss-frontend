@@ -1,0 +1,158 @@
+<h3>
+  <div class="row">
+    <div class="col-sm-10">SMS Management > TechnoServe</div>
+    <div class="col-sm-2">
+      <a class="btn btn-success pull-right" (click)="open(content)"
+        ><i class="fa fa-shopping-cart"></i> Order SMS
+      </a>
+    </div>
+  </div>
+</h3>
+<ng-template #content let-modal>
+  <div class="modal-body text-center" style="font-size: 1.5em">
+    <div class="row">
+      <div class="col-sm-6">
+        <label class="control-label">Number Of SMS</label>
+      </div>
+      <div class="col-sm-6"><input type="number" class="form-control" /></div>
+    </div>
+    <br />
+    <button
+      type="button"
+      class="btn btn-success btn-lg pull-center"
+      (click)="modal.dismiss()"
+    >
+      Order Now
+    </button>
+  </div>
+</ng-template>
+<div class="col-sm-12 stats-section">
+  <div class="row">
+    <div class="col-sm-4">
+      <div class="text-center stats-box">
+        <h3>SMS Balance</h3>
+        <h1>200</h1>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="text-center stats-box middle-box">
+        <h3>Delivered SMS</h3>
+        <h1>000</h1>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="text-center stats-box third-box">
+        <h3>Failed SMS</h3>
+        <h1>000</h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-6" style="margin-top: 25px">
+    <div class="panel panel-default">
+      <div class="panel-heading text-center">
+        <h3 class="panel-title">SMS History</h3>
+      </div>
+      <div class="panel-body">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Date</th>
+              <th>Receiver</th>
+              <th>Message</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>01/01/2017</td>
+              <td>Albert</td>
+              <td>Amahugurwa</td>
+              <td>received</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>01/01/2017</td>
+              <td>Alphonse</td>
+              <td>Amahugurwa</td>
+              <td>pending</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>01/01/2017</td>
+              <td>Alphonse</td>
+              <td>Amahugurwa</td>
+              <td>pending</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>01/01/2017</td>
+              <td>Alphonse</td>
+              <td>Amahugurwa</td>
+              <td>pending</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6" style="margin-top: 25px">
+    <div class="panel panel-default">
+      <div class="panel-heading text-center">
+        <h3 class="panel-title">SMS Orders History</h3>
+      </div>
+      <div class="panel-body">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Date</th>
+              <th>Total SMS</th>
+              <th>Invoice</th>
+              <th>Amount</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>01/01/2017</td>
+              <td>200</td>
+              <td>SKSTB-202</td>
+              <td>25,000</td>
+              <td>Not Paid</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>01/01/2017</td>
+              <td>250</td>
+              <td>SKSTB-202</td>
+              <td>25,000</td>
+              <td>Received</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>01/01/2017</td>
+              <td>150</td>
+              <td>SKSTB-202</td>
+              <td>25,000</td>
+              <td>Received</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>01/01/2017</td>
+              <td>50</td>
+              <td>SKSTB-202</td>
+              <td>25,000</td>
+              <td>Received</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

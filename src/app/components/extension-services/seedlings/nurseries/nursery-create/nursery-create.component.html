@@ -434,8 +434,11 @@
             <div class="col-sm-1 text-center" style="padding: 0 2px 0 0px">
               <label class="control-label">Seed</label>
             </div>
-            <div class="col-sm-2 text-center" style="padding: 0 2px 0 0px">
+            <div class="col-sm-1 text-center" style="padding: 0 2px 0 0px">
               <label class="control-label">Expected Seedlings</label>
+            </div>
+            <div class="col-sm-1 text-center" style="padding: 0 2px 0 0px">
+              <label class="control-label">Sowing Date</label>
             </div>
             <div class="col-sm-2 text-center" style="padding: 0 2px 0 0px">
               <label class="control-label">Germination rate </label>
@@ -491,7 +494,7 @@
                   />
                 </div>
                 <div
-                  class="col-sm-2"
+                  class="col-sm-1"
                   style="margin-top: 10px; padding: 0 2px 0 0px"
                 >
                   <input
@@ -500,6 +503,19 @@
                     value="{{ stock.controls.seed.value * 2500 }}"
                     disabled
                   />
+                </div>
+                <div
+                  class="col-sm-1"
+                  style="margin-top: 10px; padding: 0 2px 0 0px"
+                >
+                  <input
+                    [owlDateTimeTrigger]="dt1"
+                    [owlDateTime]="dt1"
+                    formControlName="sowingDate"
+                    class="form-control"
+                    placeholder="Dd/mm/yyyy"
+                  />
+                  <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
                 </div>
                 <div
                   class="col-sm-2"

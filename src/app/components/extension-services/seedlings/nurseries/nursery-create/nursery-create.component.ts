@@ -112,6 +112,7 @@ export class NurseryCreateComponent extends BasicComponent implements OnInit {
       recordedSeedling: [{ value: 0, disabled: true }],
       germinationRate: [{ value: "", disabled: true }],
       distributed: [{ value: 0, disabled: true }],
+      sowingDate: [""],
     });
   }
 
@@ -164,6 +165,7 @@ export class NurseryCreateComponent extends BasicComponent implements OnInit {
           return {
             varietyId: data.variety,
             seeds: data.seed,
+            sowingDate: data.sowingDate,
           };
         }),
       };

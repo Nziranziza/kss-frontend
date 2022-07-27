@@ -197,14 +197,17 @@
           >
           <br />
           <div class="row">
-            <div class="col-sm-2 text-center">
+            <div class="col-sm-1 text-center">
               <label class="control-label">Variety</label>
             </div>
             <div class="col-sm-1 text-center" style="padding: 0 2px 0 0px">
               <label class="control-label">Seed</label>
             </div>
-            <div class="col-sm-2 text-center" style="padding: 0 2px 0 0px">
+            <div class="col-sm-1 text-center" style="padding: 0 2px 0 0px">
               <label class="control-label">Expected Seedlings</label>
+            </div>
+            <div class="col-sm-1 text-center" style="padding: 0 2px 0 0px">
+              <label class="control-label">Sowing Date</label>
             </div>
             <div class="col-sm-2 text-center" style="padding: 0 2px 0 0px">
               <label class="control-label">Germination rate </label>
@@ -218,6 +221,9 @@
             <div class="col-sm-2 text-center" style="padding: 0 2px 0 0px">
               <label class="control-label">Disributed Seedlings</label>
             </div>
+            <div class="col-sm-1 text-center" style="padding: 0 2px 0 0px">
+              <label class="control-label">Picking Date</label>
+            </div>
           </div>
           <div class="row">
             <span
@@ -226,18 +232,21 @@
               formArrayName="stockData"
             >
               <span [formGroupName]="i">
-                <div class="col-sm-2">
+                <div
+                  class="col-sm-1"
+                  style="margin-top: 10px; padding: 0 2px 0 0px"
+                >
                   <select
                     class="form-control"
                     formControlName="variety"
-                    style="margin-top: 10px; padding: 0 2px 0 10px"
+                    disabled
                   >
                     <option
-                      value="{{ treeVarieties[i]._id }}"
-                      selected
+                      *ngFor="let treeVariety of treeVarieties"
+                      value="{{ treeVariety._id }}"
                       disabled
                     >
-                      {{ treeVarieties[i].name | titlecase }}
+                      {{ treeVariety.name | titlecase }}
                     </option>
                   </select>
                 </div>
@@ -249,10 +258,21 @@
                     type="number"
                     class="form-control"
                     formControlName="seed"
+                    disabled
                   />
                 </div>
                 <div
-                  class="col-sm-2"
+                  class="col-sm-1"
+                  style="margin-top: 10px; padding: 0 2px 0 0px"
+                >
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="expectedSeedling"
+                  />
+                </div>
+                <div
+                  class="col-sm-1"
                   style="margin-top: 10px; padding: 0 2px 0 0px"
                 >
                   <input
@@ -266,6 +286,7 @@
                   style="margin-top: 10px; padding: 0 2px 0 0px"
                 >
                   <select
+                    type="number"
                     class="form-control"
                     formControlName="germinationRate"
                   >
@@ -279,15 +300,11 @@
                     </option>
                     <option value="50-70">
                       Good
-                      <span class="pull-left" style="color: yellow"
-                        >50~70</span
-                      >
+                      <span class="pull-left" style="color: yellow">50~70</span>
                     </option>
                     <option value="30-50">
                       Bad
-                      <span class="pull-left" style="color: orange"
-                        >30~50</span
-                      >
+                      <span class="pull-left" style="color: orange">30~50</span>
                     </option>
                     <option value="0-30">
                       Worse
@@ -321,12 +338,28 @@
                     disabled
                   />
                 </div>
-                <div class="col-xs-2" style="margin-top: 10px">
+                <div
+                  class="col-xs-2"
+                  style="margin-top: 10px; padding: 0 2px 0 0px"
+                >
                   <input
                     type="text"
                     class="form-control"
                     formControlName="distributed"
                   />
+                </div>
+                <div
+                  class="col-xs-1"
+                  style="margin-top: 10px; padding: 0 2px 0 0px"
+                >
+                  <input
+                    [owlDateTimeTrigger]="dt1"
+                    [owlDateTime]="dt1"
+                    class="form-control"
+                    formControlName="pickingDate"
+                    placeholder="Dd/mm/yyyy"
+                  />
+                  <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
                 </div>
               </span>
             </span>

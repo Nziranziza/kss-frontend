@@ -209,9 +209,12 @@
             }"
           ></div>
           <br />
-          <div class="row" style="margin-top: -15px">
+          <div class="row" style="margin-top: -18px">
             <div class="col-xs-9">
               <h5>{{ gapAdoption.name }}</h5>
+              <div style="font-size: 8px; margin-top: -10px" >
+                Baseline: {{ gapAdoption.adoptionRate + 10 }}%
+              </div>
             </div>
             <div class="col-xs-3">
               <div
@@ -258,7 +261,9 @@
                 aria-hidden="true"
                 style="color: #ff69f6"
               ></i>
-              <p style="margin-left: 5px" class="text-center">{{ visitStats.femaleFarmVisits }}</p>
+              <p style="margin-left: 5px" class="text-center">
+                {{ visitStats.femaleFarmVisits }}
+              </p>
             </div>
             <div class="col-xs-8">
               <google-chart
@@ -331,15 +336,6 @@
         "
       >
         <h4 class="text-center">Farms</h4>
-        <google-map [options]="mapOptions" width="100%" height="505px">
-          <map-marker
-            *ngFor="let spot of spots"
-            [position]="{ lat: spot.lat, lng: spot.lng }"
-            [options]="markerOptions"
-            [clickable]="true"
-            (mapClick)="selectMarker(spot)"
-          ></map-marker>
-        </google-map>
         <div class="farm-graph-popup" *ngIf="clickedMarker">
           <div class="row text-center">
             <div class="col-xs-3" style="padding: 0 2px 0 0px">
@@ -356,15 +352,24 @@
             <div class="col-xs-3" style="padding: 0 2px 0 0px">
               <h4>Trees</h4>
               <h6>Total trees in farm</h6>
-              <h4> {{ selectedFarmDetails.trees }} </h4>
+              <h4>{{ selectedFarmDetails.trees }}</h4>
             </div>
             <div class="col-xs-3" style="padding: 0 5px 0 0px">
               <h4>Visits</h4>
-              <h6>Total trees in farm </h6>
-              <h4> {{ selectedFarmDetails.visits }} </h4>
+              <h6>Total trees in farm</h6>
+              <h4>{{ selectedFarmDetails.visits }}</h4>
             </div>
           </div>
         </div>
+        <google-map [options]="mapOptions" width="100%" height="505px">
+          <map-marker
+            *ngFor="let spot of spots"
+            [position]="{ lat: spot.lat, lng: spot.lng }"
+            [options]="markerOptions"
+            [clickable]="true"
+            (mapClick)="selectMarker(spot)"
+          ></map-marker>
+        </google-map>
       </div>
     </div>
   </div>

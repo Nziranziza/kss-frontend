@@ -1,0 +1,23 @@
+{
+    "dashboard": "Incamake",
+    "reports": "Raporo",
+    "sms_dashboard": "Incamake Za SMS",
+    "registration": "Kwiyandikisha",
+    "users": "abakozi",
+    "organizations": "Amashyirahamwe",
+    "extension_services": "Iyamamazabuhinzi",
+    "farmer_groups": "Amatsinda",
+    "gap_management": "Gusuzuma iyamamazabuhinzi",
+    "training_management": "Amahugurwa",
+    "training_scheduling": "Gutumira amahugurwa",
+    "farm_visit": "Gusura imirima",
+    "farm_visit_schedeling": "Kumenyekanisha isurwa",
+    "planting_operation": "Gutera",
+    "nurseries": "Pepiniyeri",
+    "general": "Amakuru rusange",
+    "sign_out": "Gusohoka",
+    "wet_processing": "Ibitumbwe",
+    "farmers": "Abahinzi",
+    "parchments": "Amaganda",
+    "payments": "Kwishyurwa"
+}
