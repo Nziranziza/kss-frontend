@@ -1,0 +1,32 @@
+
+@media (min-width: 992px) {
+
+  .modal-lg {
+    width: 85% !important;
+    height: auto !important;
+  }
+
+  .modal-sm {
+    width: 65% !important;
+    height: auto !important;
+  }
+}
+
+.modal-content {
+  -webkit-border-radius: 5px !important;
+  -moz-border-radius: 5px !important;
+  border-radius: 5px !important;
+}
+
+.modal {
+  background: rgba(0, 0, 0, 0.0);
+}
+
+.modal-header {
+  border-bottom: none;
+}
+
+.big-modal-dialog {
+  width: 80% !important;
+  height: auto;
+}

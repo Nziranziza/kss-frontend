@@ -448,21 +448,19 @@
       <div class="col-sm-10 col-centered">
         <p style="font-weight: bold">Date and time of the visit</p>
         <br />
-        <ng-container formGroupName="date">
-          <div class="col-sm-10 col-centered">
-            <div class="form-group">
-              <label class="control-label label-required">Select Date</label>
-              <input
-                [owlDateTimeTrigger]="dt1"
-                [owlDateTime]="dt1"
-                formControlName="visitDate"
-                class="form-control"
-                placeholder="Dd/mm/yyyy"
-              />
-              <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
-            </div>
+        <div class="col-sm-10 col-centered" formGroupName="date">
+          <div class="form-group">
+            <label class="control-label label-required">Select Date</label>
+            <input
+              [owlDateTimeTrigger]="dt1"
+              [owlDateTime]="dt1"
+              formControlName="visitDate"
+              class="form-control"
+              placeholder="Dd/mm/yyyy"
+            />
+            <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
           </div>
-        </ng-container>
+        </div>
       </div>
       <div class="col-sm-10 col-centered">
         <div

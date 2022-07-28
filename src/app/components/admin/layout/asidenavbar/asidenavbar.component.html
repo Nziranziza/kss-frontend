@@ -13,26 +13,26 @@
       <li routerLinkActive="active" *appHasPermission="[[11,1]]">
         <a routerLink="/admin/reports">
           <i class="fa fa-file" aria-hidden="true"></i>
-          <span>Reports</span>
+          <span>{{ 'reports' | translate }}</span>
         </a>
       </li>
       <li routerLinkActive="active" *appHasPermission="[[11,1]]">
         <a routerLink="/admin/smsDashboard">
           <i class="fa fa-envelope-o" aria-hidden="true"></i>
-          <span>SMS Dashboard</span>
+          <span>{{ 'sms_dashboard' | translate }}</span>
         </a>
       </li>
-      <li class="header" *appHasPermission="[[4,1],[4,11],[4,12],0,6,5,11,[8,1],[1,1]]">REGISTRATION</li>
+      <li class="header" *appHasPermission="[[4,1],[4,11],[4,12],0,6,5,11,[8,1],[1,1]]">{{ 'registration' | translate }}</li>
       <li routerLinkActive="active" *appHasPermission="[[11,1]]">
         <a routerLink="/admin/organisations/{{user.org_id}}/users">
           <i class="fa fa-users" aria-hidden="true"></i>
-          <span>Users</span>
+          <span>{{ 'users' | translate }}</span>
         </a>
       </li>
       <li routerLinkActive="active" *appHasPermission="[[4,1],[4,11],[4,12],0,6,5,11,[8,1],[1,1]]">
         <a routerLink="/admin/organisations">
           <i class="fa fa-university" aria-hidden="true"></i>
-          <span>Organisations</span>
+          <span>{{ 'organisations' | translate }}</span>
         </a>
       </li>
 
@@ -70,10 +70,10 @@
           </li>
         </ul>
       </li>
-      <li class="header" *appHasPermission="[1,[4,1],[4,11],[4,12],0,6]">WET PROCESSING</li>
+      <li class="header" *appHasPermission="[1,[4,1],[4,11],[4,12],0,6]">{{ 'wet_processing' | translate }}</li>
       <li class="treeview" routerLinkActive="active" *appHasPermission="[1]">
         <a href="#">
-          <i class="fa fa-users"></i> <span>Farmers</span>
+          <i class="fa fa-users"></i> <span>{{ 'farmers' | translate }}</span>
           <span class="pull-right-container">
             <i class="fa fa-angle-left pull-right"></i>
           </span>
@@ -82,7 +82,7 @@
           <li routerLinkActive="active" *appHasPermission="[1]">
             <a routerLink="/admin/cws-farmers/{{user.org_id}}">
               <i class="fa fa-circle-o"></i>
-              <span>Farmers</span>
+              <span>{{ 'farmers' | translate }}</span>
             </a>
           </li>
           <li routerLinkActive="active" *appHasPermission="[1]">
@@ -108,7 +108,7 @@
       <li class="treeview" routerLinkActive="active" *appHasPermission="[1]">
         <a href="#">
           <i class="fa fa-archive" aria-hidden="true"></i>
-          <span>Parchments</span>
+          <span>{{ 'parchments' | translate }}</span>
           <span class="pull-right-container">
             <i class="fa fa-angle-left pull-right"></i>
           </span>
@@ -117,7 +117,7 @@
           <li routerLinkActive="active" *appHasPermission="[1]">
             <a routerLink="/admin/cws/parchments/list">
               <i class="fa fa-circle-o"></i>
-              <span>Parchments</span>
+              <span>{{ 'parchments' | translate }}</span>
             </a>
           </li>
           <li routerLinkActive="active" *appHasPermission="[1]">
@@ -161,7 +161,7 @@
       </ng-container>
       <li class="treeview" routerLinkActive="active" *appHasPermission="[1,1]" appInternal>
         <a href="#">
-          <i class="fa fa-gg"></i> <span>Payments</span>
+          <i class="fa fa-gg"></i> <span>{{ 'payments' | translate }}</span>
           <span class="pull-right-container">
             <i class="fa fa-angle-left pull-right"></i>
           </span>
@@ -222,10 +222,10 @@
           </li>
         </ul>
       </li>
-      <li class="header" *appHasPermission="[11,1]">EXTENSION SERVICES</li>
+      <li class="header" *appHasPermission="[11,1]">{{ 'extension_services' | translate }}</li>
       <li class="treeview" routerLinkActive="active" *appHasPermission="[11,1]">
         <a href="#">
-          <i class="fa fa-users"></i> <span>Farmers groups</span>
+          <i class="fa fa-users"></i> <span>{{ 'farmer_groups' | translate }}</span>
           <span class="pull-right-container">
             <i class="fa fa-angle-left pull-right"></i>
           </span>
@@ -241,7 +241,7 @@
       </li>
       <li class="treeview" routerLinkActive="active" *appHasPermission="[[1], [11, 1]]">
         <a href="#">
-          <i class="fa fa-delicious"></i> <span>Gap Management</span>
+          <i class="fa fa-delicious"></i> <span>{{ 'gap_management' | translate }}</span>
           <span class="pull-right-container">
             <i class="fa fa-angle-left pull-right"></i>
           </span>
@@ -256,7 +256,7 @@
         </ul>
       </li>
       <li class="treeview" *appHasPermission="[11,1]">  <a href="#">
-        <i class="fa fa-television"></i> <span>Training Management</span>
+        <i class="fa fa-television"></i> <span>{{ 'training_management' | translate }}</span>
         <span class="pull-right-container">
           <i class="fa fa-angle-left pull-right"></i>
         </span>
@@ -278,7 +278,7 @@
       </li>
       <li class="treeview" routerLinkActive="active" *appHasPermission="[11,1]">
         <a href="#">
-          <i class="fa fa-map"></i> <span>Farm Visit</span>
+          <i class="fa fa-map"></i> <span>{{'farm_visit' | translate}}</span>
           <span class="pull-right-container">
             <i class="fa fa-angle-left pull-right"></i>
           </span>
@@ -294,7 +294,7 @@
       </li>
       <li class="treeview" routerLinkActive="active" *appHasPermission="[11,1]">
         <a href="#">
-          <i class="fa fa-leaf"></i> <span>Planting Operation</span>
+          <i class="fa fa-leaf"></i> <span>{{'planting_operation' | translate}}</span>
           <span class="pull-right-container">
             <i class="fa fa-angle-left pull-right"></i>
           </span>
@@ -303,7 +303,7 @@
           <li routerLinkActive="active" *appHasPermission="[11,1]">
             <a routerLink="/admin/seedling/nursery/list">
               <i class="fa fa-circle-o"></i>
-              <span>Nurseries</span>
+              <span>{{ 'nurseries' | translate }}</span>
             </a>
           </li>
         </ul>
@@ -423,7 +423,7 @@
           <span>Dispatch</span>
         </a>
       </li>
-      <li class="header">GENERAL</li>
+      <li class="header">{{ 'general' | translate}}</li>
       <li class="treeview" routerLinkActive="active" *appHasPermission="[[4,1],[4,11],[4,12],0,6]">
         <a href="#">
           <i class="fa fa-bar-chart"></i><span>Reports</span>
@@ -495,7 +495,7 @@
       <li routerLinkActive="active">
         <a (click)="onLogOut()" style="cursor:pointer">
           <i class="fa fa-fw fa-lock" aria-hidden="true"></i>
-          <span>Sign out</span>
+          <span>{{ 'sign_out' | translate }}</span>
         </a>
       </li>
     </ul>

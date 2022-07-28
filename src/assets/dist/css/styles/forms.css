@@ -1,0 +1,16 @@
+form .input-required .asterisk:before {
+  color: #ff0f0f;
+  content: "*";
+  position: relative;
+  margin-left: 5px;
+}
+
+form .input-required input,
+form .input-required select,
+form .input-required textarea {
+  width: 95%;
+}
+
+form .input-required {
+  display: flex;
+}

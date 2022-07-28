@@ -28,6 +28,8 @@ import { InlineErrorsComponent } from './layouts/inline-errors/inline-errors.com
 import { ConfirmModalComponent } from './layouts';
 import { SuccessModalComponent } from './layouts';
 import { TranslateModule } from '@ngx-translate/core';
+import { SafePipe } from './pipes';
+
 
 @NgModule({
   imports: [
@@ -62,6 +64,7 @@ import { TranslateModule } from '@ngx-translate/core';
     ConfirmModalComponent,
     ConfirmModalComponent,
     SuccessModalComponent,
+    SafePipe,
   ],
   exports: [
     CommonModule,
@@ -92,6 +95,7 @@ import { TranslateModule } from '@ngx-translate/core';
     InlineErrorsComponent,
     InlineErrorsComponent,
     TranslateModule,
+    SafePipe,
   ],
   entryComponents: [ConfirmModalComponent, SuccessModalComponent],
 })

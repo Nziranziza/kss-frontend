@@ -2,10 +2,11 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TrainingService, GapService } from '../../../../core';
-import { MessageService } from '../../../../core';
 import { HelperService } from '../../../../core';
 import { BasicComponent } from '../../../../core';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
+import {SuccessModalComponent} from '../../../../shared';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-training-create',
@@ -20,8 +21,8 @@ export class TrainingCreateComponent
     private modalService: NgbModal,
     private trainingService: TrainingService,
     private gapService: GapService,
+    private router: Router,
     private helperService: HelperService,
-    private messageService: MessageService
   ) {
     super();
   }
@@ -110,8 +111,8 @@ export class TrainingCreateComponent
         _id : '',
         name: 'Not Applied'
       }];
-      data.data.forEach(data => {
-        newData.push({_id: data._id, name: data.name});
+      data.data.forEach((gap) => {
+        newData.push({_id: gap._id, name: gap.name});
       });
       this.gaps = newData;
       this.loading = false;
@@ -212,5 +213,15 @@ export class TrainingCreateComponent
 
   open(content) {
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' });
+  }
+
+  uccess(name) {
+    const modalRef = this.modalService.open(SuccessModalComponent, { ariaLabelledBy: 'modal-basic-title' });
+    modalRef.componentInstance.message = 'has been added';
+    modalRef.componentInstance.title = 'Thank you Group';
+    modalRef.componentInstance.name = name;
+    modalRef.result.finally(() => {
+      this.router.navigateByUrl('admin/farmers/group/list');
+    });
   }
 }
