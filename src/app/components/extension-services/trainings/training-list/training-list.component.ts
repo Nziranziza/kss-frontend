@@ -46,6 +46,7 @@ export class TrainingListComponent
   config: any;
   dtOptions: any = {};
   loading = false;
+  trainingsStats: any;
   // @ts-ignore
   dtTrigger: Subject = new Subject();
   // @ts-ignore
@@ -54,6 +55,7 @@ export class TrainingListComponent
 
   ngOnInit() {
     this.getTrainingList();
+    this.getTrainingsStats({});
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 10
@@ -78,6 +80,15 @@ export class TrainingListComponent
       currentPage: 0 + 1,
       totalItems: this.trainings.length,
     };
+  }
+
+  getTrainingsStats(body: any): void {
+    this.loading = true;
+    this.trainingService.getScheduleStats(body).subscribe((data) => {
+      this.trainingsStats = data.data;
+      console.log(this.trainingsStats);
+      this.loading = false;
+    });
   }
 
   openDeleteModal(group: any, warning?: any) {

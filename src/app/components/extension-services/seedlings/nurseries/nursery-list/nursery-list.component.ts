@@ -1,15 +1,24 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { DataTableDirective } from 'angular-datatables';
-import { AuthenticationService, MessageService, TrainingService, SeedlingService, BasicComponent } from 'src/app/core';
+import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { DataTableDirective } from "angular-datatables";
+import {
+  AuthenticationService,
+  MessageService,
+  TrainingService,
+  SeedlingService,
+  BasicComponent,
+} from "src/app/core";
 import { Subject } from "rxjs";
 
 @Component({
-  selector: 'app-nursery-list',
-  templateUrl: './nursery-list.component.html',
-  styleUrls: ['./nursery-list.component.css']
+  selector: "app-nursery-list",
+  templateUrl: "./nursery-list.component.html",
+  styleUrls: ["./nursery-list.component.css"],
 })
-export class NurseryListComponent extends BasicComponent implements OnInit, OnDestroy {
+export class NurseryListComponent
+  extends BasicComponent
+  implements OnInit, OnDestroy
+{
   constructor(
     private messageService: MessageService,
     private trainingService: TrainingService,
@@ -38,6 +47,12 @@ export class NurseryListComponent extends BasicComponent implements OnInit, OnDe
   config: any;
   dtOptions: any = {};
   loading = false;
+  totalSeeds: any[] = [];
+  totalPrickedOut: any[] = [];
+  prickedSum = 0;
+  seedsSum = 0;
+  totalDistributedSum: any[] = [];
+  distributeSum = 0;
   // @ts-ignore
   dtTrigger: Subject = new Subject();
   // @ts-ignore
@@ -54,14 +69,36 @@ export class NurseryListComponent extends BasicComponent implements OnInit, OnDe
 
   getSchedules(): void {
     this.loading = true;
-    this.seedlingService
-      .all()
-      .subscribe((data) => {
-        this.nurseries = data.data;
-        console.log(this.nurseries);
-        this.dtTrigger.next();
-        this.loading = false;
+    this.seedlingService.all().subscribe((data) => {
+      this.nurseries = data.data;
+      this.nurseries.map((nursery) => {
+        let sum = 0;
+        let prickedSum = 0;
+        let distributedSum = 0;
+        nursery.stocks.map((stock) => {
+          let distributedSeed = stock.remainingQty
+            ? stock.prickedQty - stock.remainingQty
+            : 0;
+          sum += stock.seeds;
+          prickedSum += stock.prickedQty || 0;
+          distributedSum += distributedSeed || 0;
+        });
+        this.totalSeeds.push(sum);
+        this.totalDistributedSum.push(distributedSum);
+        this.totalPrickedOut.push(prickedSum);
       });
+      this.totalSeeds.map((total) => {
+        this.seedsSum += total;
+      });
+      this.totalDistributedSum.map((distSum) => {
+        this.distributeSum += distSum;
+      });
+      this.totalPrickedOut.map((total) => {
+        this.prickedSum += total;
+      });
+      this.dtTrigger.next();
+      this.loading = false;
+    });
 
     this.config = {
       itemsPerPage: 10,
@@ -74,7 +111,7 @@ export class NurseryListComponent extends BasicComponent implements OnInit, OnDe
     this.modalService.open(content, { size: "sm", windowClass: "modal-sm" });
   }
 
-  selectedSchedule(schedule){
+  selectedSchedule(schedule) {
     this.schedule = schedule;
   }
 

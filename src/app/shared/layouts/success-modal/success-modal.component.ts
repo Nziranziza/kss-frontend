@@ -14,6 +14,8 @@ export class SuccessModalComponent implements OnInit {
   @Input() closeButtonText: string;
   @Input() message: string;
   @Input() name: string;
+  @Input() messageApiUrl: string;
+  @Input() messageEnabled: Boolean;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
@@ -27,6 +29,10 @@ export class SuccessModalComponent implements OnInit {
   }
 
   close() {
+    this.modal.dismiss();
+  }
+
+  sendMessage(){
     this.modal.dismiss();
   }
 }

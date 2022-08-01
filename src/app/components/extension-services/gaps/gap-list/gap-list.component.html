@@ -14,20 +14,20 @@
       </div>
       <div class="col-sm-4">
         <div class="text-center stats-box">
-          <h3>GAP Added</h3>
-          <h1>000</h1>
+          <h3>Total Gaps</h3>
+          <h1>{{ gaps.length }}</h1>
         </div>
       </div>
       <div class="col-sm-4">
         <div class="text-center stats-box middle-box">
-          <h3>GAP Added</h3>
-          <h1>000</h1>
+          <h3>Most Adopted Gap</h3>
+          <h1>Pruning</h1>
         </div>
       </div>
       <div class="col-sm-4">
         <div class="text-center stats-box third-box">
-          <h3>GAP Added</h3>
-          <h1>000</h1>
+          <h3>Adoption Overall Score</h3>
+          <h1>20%</h1>
         </div>
       </div>
     </div>
@@ -67,6 +67,7 @@
                   <button
                     appRequiredSeason
                     class="btn btn-action-no-border btn-margin details-button"
+                    routerLink="/admin/gaps/view/{{ gap._id }}"
                   >
                     <em class="fa fa-eye"></em>
                   </button>
@@ -88,22 +89,6 @@
             </ng-container>
           </tbody>
         </table>
-      </div>
-      <div class="table-footer" style="width: 100%" *ngIf="showData">
-        <pagination-controls
-          class="custom-pagination"
-          [maxSize]="maxSize"
-          [directionLinks]="directionLinks"
-          [autoHide]="autoHide"
-          [responsive]="responsive"
-          [previousLabel]="labels.previousLabel"
-          [nextLabel]="labels.nextLabel"
-          [screenReaderPaginationLabel]="labels.screenReaderPaginationLabel"
-          [screenReaderPageLabel]="labels.screenReaderPageLabel"
-          [screenReaderCurrentLabel]="labels.screenReaderCurrentLabel"
-          (pageChange)="onPageChange($event)"
-        >
-        </pagination-controls>
       </div>
     </div>
   </div>

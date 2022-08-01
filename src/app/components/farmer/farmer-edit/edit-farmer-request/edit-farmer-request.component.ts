@@ -27,7 +27,7 @@ export class EditFarmerRequestComponent implements OnInit {
   districts: any;
   sectors = [];
   treeVarieties: any;
-  ranges = ['0-3', '4-10', '11-15', '16-20', '21-25', '25-30', '31+'];
+  ranges = ['0-3', '4-10', '11-15', '16-20', '21-24', '25-30', '31+'];
   certificates: any;
   cells: any;
   villages: any;

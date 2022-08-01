@@ -22,22 +22,56 @@
 <div class="col-sm-12 stats-section">
   <div class="row">
     <div class="col-sm-12 text-center stats-title">Training Summary</div>
-    <div class="col-sm-4">
+    <div class="col-sm-3">
       <div class="text-center stats-box">
         <h3>Trainings Added</h3>
         <h1>{{ trainings.length }}</h1>
       </div>
     </div>
-    <div class="col-sm-4">
-      <div class="text-center stats-box middle-box">
-        <h3>Scheduled Trainings</h3>
-        <h1>000</h1>
+    <div class="col-sm-3">
+      <div class="text-center stats-box">
+        <h3>Total Trainees</h3>
+        <h1>{{ trainingsStats.totalInvitees }}</h1>
       </div>
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-3">
+      <div class="text-center stats-box middle-box">
+        <h3>Total Attended Trainees</h3>
+        <div class="row">
+          <div class="col-sm-5">
+            <h1 style="margin-top: -5px; margin-left: 5px">
+              {{ trainingsStats.totalPresent }}
+            </h1>
+          </div>
+          <div class="col-sm-3">
+            <span style="white-space: pre"> Male </span>
+             {{ trainingsStats.malePresent }}
+          </div>
+          <div class="col-sm-3">
+            <span style="white-space: pre"> Female </span>
+            {{ trainingsStats.femalePresent }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-3">
       <div class="text-center stats-box third-box">
-        <h3>Trainings Given</h3>
-        <h1>000</h1>
+        <h3>Total Not Attended Trainees</h3>
+        <div class="row">
+          <div class="col-sm-5">
+            <h1 style="margin-top: -5px; margin-left: 5px">
+              {{ trainingsStats.totalAbsent }}
+            </h1>
+          </div>
+          <div class="col-sm-3">
+            <span style="white-space: pre"> Male </span>
+            {{ trainingsStats.maleAbsent }}
+          </div>
+          <div class="col-sm-3">
+            <span style="white-space: pre"> Female </span>
+            {{ trainingsStats.femaleAbsent }}
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -69,7 +103,12 @@
               <td>{{ training.createdAt | date: "short" }}</td>
               <td>{{ training.trainingName }}</td>
               <td>{{ training.description }}</td>
-              <td>{{ training.adoptionGap }}</td>
+              <td>
+                {{ training.adoptionGap }}
+                <div *ngFor="let adoption of training.adoptionGaps">
+                  {{ adoption?.name }}
+                </div>
+              </td>
               <td>{{ training.materials.length }} files</td>
               <td>Active</td>
               <td>
@@ -97,22 +136,6 @@
             </tr>
           </tbody>
         </table>
-      </div>
-      <div class="table-footer" style="width: 100%" *ngIf="showData">
-        <pagination-controls
-          class="custom-pagination"
-          [maxSize]="maxSize"
-          [directionLinks]="directionLinks"
-          [autoHide]="autoHide"
-          [responsive]="responsive"
-          [previousLabel]="labels.previousLabel"
-          [nextLabel]="labels.nextLabel"
-          [screenReaderPaginationLabel]="labels.screenReaderPaginationLabel"
-          [screenReaderPageLabel]="labels.screenReaderPageLabel"
-          [screenReaderCurrentLabel]="labels.screenReaderCurrentLabel"
-          (pageChange)="onPageChange($event)"
-        >
-        </pagination-controls>
       </div>
     </div>
   </div>

@@ -235,6 +235,7 @@ export class ScheduleFarmVisitComponent implements OnInit {
       this.errors = this.helper.getFormValidationErrors(this.scheduleVisit);
     }
   }
+  
   success(name) {
     const modalRef = this.modal.open(SuccessModalComponent, {
       ariaLabelledBy: 'modal-basic-title',
@@ -242,6 +243,8 @@ export class ScheduleFarmVisitComponent implements OnInit {
     modalRef.componentInstance.message = 'has been added';
     modalRef.componentInstance.title = 'Thank you farm visit schedule';
     modalRef.componentInstance.name = name;
+    modalRef.componentInstance.messageEnabled = true;
+    modalRef.componentInstance.messageApiUrl = '';
     modalRef.result.finally(() => {
       this.router.navigateByUrl('admin/farm/visit/list');
     });

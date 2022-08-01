@@ -23,13 +23,13 @@
       <div class="col-sm-4">
         <div class="text-center stats-box middle-box">
           <h3>Visited Farms</h3>
-          <h1>000</h1>
+          <h1>0</h1>
         </div>
       </div>
       <div class="col-sm-4">
         <div class="text-center stats-box third-box">
           <h3>Canceled Visits</h3>
-          <h1>000</h1>
+          <h1>0</h1>
         </div>
       </div>
     </div>
@@ -54,8 +54,9 @@
               <th>Visit Description</th>
               <th>GAP to be Covered</th>
               <th>Visitor</th>
-              <th>Date and Time of the visit</th>
+              <th>Visit Date</th>
               <th>Score</th>
+              <th>Status</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -75,7 +76,8 @@
               <td>{{ visit.gaps.length }} gaps</td>
               <td></td>
               <td>{{ visit.date | date: "short" }}</td>
-              <td></td>
+              <td>{{ visit.score || 0 }}</td>
+              <td>{{ visit.status || "Pending" }}</td>
               <td>
                 <button
                   appRequiredSeason
@@ -100,22 +102,6 @@
             </tr>
           </tbody>
         </table>
-      </div>
-      <div class="table-footer" style="width: 100%" *ngIf="showData">
-        <pagination-controls
-          class="custom-pagination"
-          [maxSize]="maxSize"
-          [directionLinks]="directionLinks"
-          [autoHide]="autoHide"
-          [responsive]="responsive"
-          [previousLabel]="labels.previousLabel"
-          [nextLabel]="labels.nextLabel"
-          [screenReaderPaginationLabel]="labels.screenReaderPaginationLabel"
-          [screenReaderPageLabel]="labels.screenReaderPageLabel"
-          [screenReaderCurrentLabel]="labels.screenReaderCurrentLabel"
-          (pageChange)="onPageChange($event)"
-        >
-        </pagination-controls>
       </div>
     </div>
   </div>

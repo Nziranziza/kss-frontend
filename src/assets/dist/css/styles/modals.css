@@ -2,7 +2,7 @@
 @media (min-width: 992px) {
 
   .modal-lg {
-    width: 85% !important;
+    width: 75% !important;
     height: auto !important;
   }
 
@@ -10,6 +10,11 @@
     width: 65% !important;
     height: auto !important;
   }
+}
+
+.modal-lg .modal-xl {
+  width: 75% !important;
+  height: auto !important;
 }
 
 .modal-content {

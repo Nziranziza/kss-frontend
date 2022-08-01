@@ -38,6 +38,8 @@ import { GoogleMapsModule } from '@angular/google-maps';
 import { GoogleChartsModule } from "angular-google-charts";
 import { ReportsComponent } from './reports/reports.component';
 import { SmsDashboardComponent } from './sms-dashboard/sms-dashboard.component';
+import { ViewGapComponent } from './gaps/view-gap/view-gap.component';
+import { ViewGroupComponent } from './groups/view-group/view-group.component';
 @NgModule({
   declarations: [
     FarmerGroupListComponent,
@@ -66,6 +68,8 @@ import { SmsDashboardComponent } from './sms-dashboard/sms-dashboard.component';
     DashboardComponent,
     ReportsComponent,
     SmsDashboardComponent,
+    ViewGapComponent,
+    ViewGroupComponent,
   ],
   imports: [
     FormsModule,
