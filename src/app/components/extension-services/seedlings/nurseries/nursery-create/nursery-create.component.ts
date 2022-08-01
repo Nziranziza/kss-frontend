@@ -67,6 +67,7 @@ export class NurseryCreateComponent extends BasicComponent implements OnInit {
     this.getTreeVariety();
     this.basicInit(this.authenticationService.getCurrentUser().info.org_id);
     this.getNurserySites();
+    this.addStockItem();
     this.onChanges();
   }
 

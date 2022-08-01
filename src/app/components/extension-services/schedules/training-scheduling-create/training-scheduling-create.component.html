@@ -135,7 +135,7 @@
           </div>
           <br />
           <h3 class="text-center">
-            Trainees ( Total: {{ selectedTrainees.length }} )
+            Trainees ( Total: {{ selectedTrainees?.length }} )
           </h3>
           <table class="row-border hover table table-striped">
             <thead>
@@ -217,6 +217,16 @@
                   {{ training.trainingName | titlecase }}
                 </option>
               </select>
+              <app-inline-errors
+                *ngIf="
+                  scheduleTraining.controls.trainingModule.invalid &&
+                  (scheduleTraining.controls.trainingModule.dirty ||
+                    scheduleTraining.controls.trainingModule.touched)
+                "
+                [errors]="scheduleTraining.controls.trainingModule.errors"
+                [label]="'training_module'"
+              >
+              </app-inline-errors>
             </div>
           </div>
           <div class="col-sm-6">
@@ -231,6 +241,16 @@
                   {{ trainer.foreName + " " + trainer.surname | titlecase }}
                 </option>
               </select>
+              <app-inline-errors
+                *ngIf="
+                  scheduleTraining.controls.trainer.invalid &&
+                  (scheduleTraining.controls.trainer.dirty ||
+                    scheduleTraining.controls.trainer.touched)
+                "
+                [errors]="scheduleTraining.controls.trainer.errors"
+                [label]="'trainer'"
+              >
+              </app-inline-errors>
             </div>
           </div>
           <div class="col-sm-12" formGroupName="location">
@@ -247,6 +267,21 @@
                       {{ province.namee | titlecase }}
                     </option>
                   </select>
+                  <app-inline-errors
+                    *ngIf="
+                      scheduleTraining.controls.location.get('prov_id')
+                        .invalid &&
+                      (scheduleTraining.controls.location.get('prov_id')
+                        .dirty ||
+                        scheduleTraining.controls.location.get('prov_id')
+                          .touched)
+                    "
+                    [errors]="
+                      scheduleTraining.controls.location.get('prov_id').errors
+                    "
+                    [label]="'province'"
+                  >
+                  </app-inline-errors>
                 </div>
               </div>
               <div class="col-xs-2" id="location-district">
@@ -261,6 +296,21 @@
                       {{ district.name | titlecase }}
                     </option>
                   </select>
+                  <app-inline-errors
+                    *ngIf="
+                      scheduleTraining.controls.location.get('dist_id')
+                        .invalid &&
+                      (scheduleTraining.controls.location.get('dist_id')
+                        .dirty ||
+                        scheduleTraining.controls.location.get('dist_id')
+                          .touched)
+                    "
+                    [errors]="
+                      scheduleTraining.controls.location.get('dist_id').errors
+                    "
+                    [label]="'district'"
+                  >
+                  </app-inline-errors>
                 </div>
               </div>
               <div class="col-xs-2" id="location-sector">
@@ -275,6 +325,21 @@
                       {{ sector.name | titlecase }}
                     </option>
                   </select>
+                  <app-inline-errors
+                    *ngIf="
+                      scheduleTraining.controls.location.get('sect_id')
+                        .invalid &&
+                      (scheduleTraining.controls.location.get('sect_id')
+                        .dirty ||
+                        scheduleTraining.controls.location.get('sect_id')
+                          .touched)
+                    "
+                    [errors]="
+                      scheduleTraining.controls.location.get('sect_id').errors
+                    "
+                    [label]="'sector'"
+                  >
+                  </app-inline-errors>
                 </div>
               </div>
               <div class="col-xs-2" id="location-cell">
@@ -289,6 +354,21 @@
                       {{ cell.name | titlecase }}
                     </option>
                   </select>
+                  <app-inline-errors
+                    *ngIf="
+                      scheduleTraining.controls.location.get('cell_id')
+                        .invalid &&
+                      (scheduleTraining.controls.location.get('cell_id')
+                        .dirty ||
+                        scheduleTraining.controls.location.get('cell_id')
+                          .touched)
+                    "
+                    [errors]="
+                      scheduleTraining.controls.location.get('cell_id').errors
+                    "
+                    [label]="'cell'"
+                  >
+                  </app-inline-errors>
                 </div>
               </div>
               <div class="col-xs-2" id="location-village">
@@ -303,6 +383,22 @@
                       {{ village.name | titlecase }}
                     </option>
                   </select>
+                  <app-inline-errors
+                    *ngIf="
+                      scheduleTraining.controls.location.get('village_id')
+                        .invalid &&
+                      (scheduleTraining.controls.location.get('village_id')
+                        .dirty ||
+                        scheduleTraining.controls.location.get('village_id')
+                          .touched)
+                    "
+                    [errors]="
+                      scheduleTraining.controls.location.get('village_id')
+                        .errors
+                    "
+                    [label]="'village'"
+                  >
+                  </app-inline-errors>
                 </div>
               </div>
               <div class="col-xs-2" id="venue">
@@ -313,6 +409,18 @@
                     formControlName="venue"
                     class="form-control"
                   />
+                  <app-inline-errors
+                    *ngIf="
+                      scheduleTraining.controls.location.get('venue').invalid &&
+                      (scheduleTraining.controls.location.get('venue').dirty ||
+                        scheduleTraining.controls.location.get('venue').touched)
+                    "
+                    [errors]="
+                      scheduleTraining.controls.location.get('venue').errors
+                    "
+                    [label]="'venue'"
+                  >
+                  </app-inline-errors>
                 </div>
               </div>
             </div>
@@ -339,6 +447,18 @@
                         [pickerType]="'calendar'"
                         #dt1
                       ></owl-date-time>
+                      <app-inline-errors
+                        *ngIf="
+                          scheduleTraining.controls.trainingStartDate.invalid &&
+                          (scheduleTraining.controls.trainingStartDate.dirty ||
+                            scheduleTraining.controls.trainingStartDate.touched)
+                        "
+                        [errors]="
+                          scheduleTraining.controls.trainingStartDate.errors
+                        "
+                        [label]="'trainingStartDate'"
+                      >
+                      </app-inline-errors>
                     </div>
                     <div class="col-sm-6">
                       <input
@@ -351,6 +471,16 @@
                         [pickerType]="'timer'"
                         #dt2
                       ></owl-date-time>
+                      <app-inline-errors
+                        *ngIf="
+                          scheduleTraining.controls.startTime.invalid &&
+                          (scheduleTraining.controls.startTime.dirty ||
+                            scheduleTraining.controls.startTime.touched)
+                        "
+                        [errors]="scheduleTraining.controls.startTime.errors"
+                        [label]="'startTime'"
+                      >
+                      </app-inline-errors>
                     </div>
                   </div>
                 </div>
@@ -376,6 +506,18 @@
                         [pickerType]="'calendar'"
                         #dt3
                       ></owl-date-time>
+                      <app-inline-errors
+                        *ngIf="
+                          scheduleTraining.controls.trainingEndDate.invalid &&
+                          (scheduleTraining.controls.trainingEndDate.dirty ||
+                            scheduleTraining.controls.trainingEndDate.touched)
+                        "
+                        [errors]="
+                          scheduleTraining.controls.trainingEndDate.errors
+                        "
+                        [label]="'trainingEndDate'"
+                      >
+                      </app-inline-errors>
                     </div>
                     <div class="col-sm-6">
                       <input
@@ -388,6 +530,16 @@
                         [pickerType]="'timer'"
                         #dt4
                       ></owl-date-time>
+                      <app-inline-errors
+                        *ngIf="
+                          scheduleTraining.controls.endTime.invalid &&
+                          (scheduleTraining.controls.endTime.dirty ||
+                            scheduleTraining.controls.endTime.touched)
+                        "
+                        [errors]="scheduleTraining.controls.endTime.errors"
+                        [label]="'endTime'"
+                      >
+                      </app-inline-errors>
                     </div>
                   </div>
                 </div>
@@ -484,7 +636,7 @@
                 </div>
               </form>
               <form [formGroup]="editContactForm">
-                <div *ngIf="trainees.length > 0">
+                <div *ngIf="trainees?.length > 0">
                   <table class="row-border hover table table-striped">
                     <thead>
                       <tr
@@ -649,7 +801,7 @@
               </legend>
               <div class="text-center stats-box">
                 <h6>TOTAL TO BE TRAINED</h6>
-                <h4>{{ selectedTrainees.length }}</h4>
+                <h4>{{ selectedTrainees?.length }}</h4>
               </div>
               <table class="row-border hover table table-striped">
                 <thead>

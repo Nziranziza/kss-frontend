@@ -113,7 +113,7 @@
                 <label class="control-label">Variety</label>
               </div>
               <div class="col-sm-1 text-center">
-                <label class="control-label">Seed</label>
+                <label class="control-label">Seed in Kg</label>
               </div>
               <div class="col-sm-2 text-center">
                 <label class="control-label">Expected Seedlings</label>
@@ -242,6 +242,16 @@
               formControlName="nurseryName"
               class="form-control"
             />
+            <app-inline-errors
+              *ngIf="
+                addNursery.controls.nurseryName.invalid &&
+                (addNursery.controls.nurseryName.dirty ||
+                  addNursery.controls.nurseryName.touched)
+              "
+              [errors]="addNursery.controls.nurseryName.errors"
+              [label]="'nursery_name'"
+            >
+            </app-inline-errors>
           </div>
         </div>
         <div class="col-sm-11 col-centered">
@@ -378,6 +388,16 @@
                   formControlName="ownerName"
                   class="form-control"
                 />
+                <app-inline-errors
+                  *ngIf="
+                    addNursery.controls.ownerName.invalid &&
+                    (addNursery.controls.ownerName.dirty ||
+                      addNursery.controls.ownerName.touched)
+                  "
+                  [errors]="addNursery.controls.ownerName.errors"
+                  [label]="'owner_name'"
+                >
+                </app-inline-errors>
               </div>
             </div>
             <div class="col-sm-6">
@@ -390,6 +410,16 @@
                   formControlName="ownerNumber"
                   class="form-control"
                 />
+                <app-inline-errors
+                  *ngIf="
+                    addNursery.controls.ownerNumber.invalid &&
+                    (addNursery.controls.ownerNumber.dirty ||
+                      addNursery.controls.ownerNumber.touched)
+                  "
+                  [errors]="addNursery.controls.ownerNumber.errors"
+                  [label]="'owner_number'"
+                >
+                </app-inline-errors>
               </div>
             </div>
           </div>
@@ -406,6 +436,16 @@
                   formControlName="representativeName"
                   class="form-control"
                 />
+                <app-inline-errors
+                  *ngIf="
+                    addNursery.controls.representativeName.invalid &&
+                    (addNursery.controls.representativeName.dirty ||
+                      addNursery.controls.representativeName.touched)
+                  "
+                  [errors]="addNursery.controls.representativeName.errors"
+                  [label]="'representativeName'"
+                >
+                </app-inline-errors>
               </div>
             </div>
             <div class="col-sm-6">
@@ -418,6 +458,16 @@
                   formControlName="representativeNumber"
                   class="form-control"
                 />
+                <app-inline-errors
+                  *ngIf="
+                    addNursery.controls.representativeNumber.invalid &&
+                    (addNursery.controls.representativeNumber.dirty ||
+                      addNursery.controls.representativeNumber.touched)
+                  "
+                  [errors]="addNursery.controls.representativeNumber.errors"
+                  [label]="'representativeNumber'"
+                >
+                </app-inline-errors>
               </div>
             </div>
           </div>
@@ -432,7 +482,7 @@
               <label class="control-label">Variety</label>
             </div>
             <div class="col-sm-1 text-center" style="padding: 0 2px 0 0px">
-              <label class="control-label">Seed</label>
+              <label class="control-label">Seed in Kg</label>
             </div>
             <div class="col-sm-1 text-center" style="padding: 0 2px 0 0px">
               <label class="control-label">Expected Seedlings</label>

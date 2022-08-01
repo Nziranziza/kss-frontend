@@ -128,7 +128,8 @@
   </div>
 </ng-template>
 <h3>
-  Training Management > <span style="font-weight: bold"> Add a Training </span>
+  {{ "training_management" | translate }} >
+  <span style="font-weight: bold"> {{ "add_training" | translate }} </span>
 </h3>
 <app-list-message [message]="message"></app-list-message>
 <app-list-errors [errorList]="errors"></app-list-errors>
@@ -140,73 +141,55 @@
           <div class="row">
             <div class="col-sm-6">
               <div class="form-group">
-                <label class="control-label label-required"
-                  >Training Name</label
-                >
+                <label class="control-label label-required">{{
+                  "training_name" | translate
+                }}</label>
                 <input
                   type="text"
                   formControlName="trainingName"
                   class="form-control"
-                  [ngClass]="{
-                    'has-error':
-                      trainingName.invalid &&
-                      (trainingName.dirty || trainingName.touched)
-                  }"
                 />
-                <div
+                <app-inline-errors
                   *ngIf="
-                    trainingName.invalid &&
-                    (trainingName.dirty || trainingName.touched)
+                    createTraining.controls.trainingName.invalid &&
+                    (createTraining.controls.trainingName.dirty ||
+                      createTraining.controls.trainingName.touched)
                   "
-                  class="alert"
+                  [errors]="createTraining.controls.trainingName.errors"
+                  [label]="'training_name'"
                 >
-                  <div
-                    *ngIf="trainingName.errors['required']"
-                    style="color: red"
-                  >
-                    *Training Name is required.
-                  </div>
-                </div>
+                </app-inline-errors>
               </div>
             </div>
             <div class="col-sm-6">
               <div class="form-group">
-                <label class="control-label label-required"
-                  >Training Description</label
-                >
+                <label class="control-label label-required">{{
+                  "training_description" | translate
+                }}</label>
                 <input
                   type="text"
                   formControlName="description"
                   class="form-control"
-                  [ngClass]="{
-                    'has-error':
-                      description.invalid &&
-                      (description.dirty || description.touched)
-                  }"
                 />
-                <div
+                <app-inline-errors
                   *ngIf="
-                    description.invalid &&
-                    (description.dirty || description.touched)
+                    createTraining.controls.description.invalid &&
+                    (createTraining.controls.description.dirty ||
+                      createTraining.controls.description.touched)
                   "
-                  class="alert"
+                  [errors]="createTraining.controls.description.errors"
+                  [label]="'description'"
                 >
-                  <div
-                    *ngIf="description.errors['required']"
-                    style="color: red"
-                  >
-                    *Description is required.
-                  </div>
-                </div>
+                </app-inline-errors>
               </div>
             </div>
           </div>
           <div class="row">
             <div class="col-sm-6">
               <div class="form-group">
-                <label class="control-label label-required"
-                  >Associated GAP</label
-                >
+                <label class="control-label label-required">{{
+                  "associated_gap" | translate
+                }}</label>
 
                 <ng-multiselect-dropdown
                   formControlName="adoptionGap"
@@ -217,32 +200,30 @@
                 >
                 </ng-multiselect-dropdown>
 
-                <div
+                <app-inline-errors
                   *ngIf="
-                    adoptionGap.invalid &&
-                    (adoptionGap.dirty || adoptionGap.touched)
+                    createTraining.controls.adoptionGap.invalid &&
+                    (createTraining.controls.adoptionGap.dirty ||
+                      createTraining.controls.adoptionGap.touched)
                   "
-                  class="alert"
+                  [errors]="createTraining.controls.adoptionGap.errors"
+                  [label]="'adoption_gap'"
                 >
-                  <div
-                    *ngIf="adoptionGap.errors['required']"
-                    style="color: red"
-                  >
-                    *Associated Gap is required.
-                  </div>
-                </div>
+                </app-inline-errors>
               </div>
             </div>
             <div class="col-sm-6">
               <div class="form-group">
-                <label class="control-label label-required">Attach files</label>
+                <label class="control-label label-required">{{
+                  "attach_files" | translate
+                }}</label>
                 <label for="file-input" class="training-file-input">
                   <img
                     src="assets/dist/img/sks/ico_export.svg"
                     class="training-file-input-icon"
                   />
                   <div class="training-file-input-text">
-                    Click or Drag PDF File to this area to upload
+                    {{ "click_drag_pdf_file" | translate }}
                   </div>
                 </label>
                 <input
@@ -293,7 +274,7 @@
       style="width: 250px; height: 50px; margin-right: 10px"
       routerLink="/admin/training/list"
     >
-      Cancel
+      {{ "cancel" | translate }}
     </button>
     <button
       type="button"
@@ -301,7 +282,7 @@
       (click)="onFileUpload(content)"
       style="width: 250px; height: 50px"
     >
-      Add Training
+      {{ "add_training" | translate }}
     </button>
   </div>
 </form>

@@ -1,6 +1,4 @@
-<h3>
-  Create a farmers group
-</h3>
+<h3>Create a farmers group</h3>
 <app-list-errors [errorList]="errors"></app-list-errors>
 <div class="row">
   <div class="col-xs-12">
@@ -10,7 +8,21 @@
           <div class="col-xs-6">
             <div class="form-group">
               <label class="control-label label-required">Group name</label>
-              <input type="text" formControlName="groupName" class="form-control">
+              <input
+                type="text"
+                formControlName="groupName"
+                class="form-control"
+              />
+              <app-inline-errors
+                *ngIf="
+                  createForm.controls.groupName.invalid &&
+                  (createForm.controls.groupName.dirty ||
+                    createForm.controls.groupName.touched)
+                "
+                [errors]="createForm.controls.groupName.errors"
+                [label]="'group_name'"
+              >
+              </app-inline-errors>
             </div>
           </div>
           <div class="col-xs-6" formGroupName="location">
@@ -20,14 +32,27 @@
                   <label class="control-label">Province</label>
                   <select class="form-control" formControlName="prov_id">
                     <option value=""></option>
-                    <option *ngFor="let province of locationProvinces"
-                            value="{{province._id}}">{{province.namee | titlecase}}</option>
+                    <option
+                      *ngFor="let province of locationProvinces"
+                      value="{{ province._id }}"
+                    >
+                      {{ province.namee | titlecase }}
+                    </option>
                   </select>
-                  <app-inline-errors *ngIf="createForm.controls.location.get('prov_id').invalid &&
-                   (createForm.controls.location.get('prov_id'.toString()).dirty
-                   || createForm.controls.location.get('prov_id'.toString()).touched)"
-                                     [errors]="createForm.controls.location.get('prov_id'.toString()).errors"
-                                     [label]="'province'">
+                  <app-inline-errors
+                    *ngIf="
+                      createForm.controls.location.get('prov_id').invalid &&
+                      (createForm.controls.location.get('prov_id'.toString())
+                        .dirty ||
+                        createForm.controls.location.get('prov_id'.toString())
+                          .touched)
+                    "
+                    [errors]="
+                      createForm.controls.location.get('prov_id'.toString())
+                        .errors
+                    "
+                    [label]="'province'"
+                  >
                   </app-inline-errors>
                 </div>
               </div>
@@ -36,8 +61,12 @@
                   <label class="control-label">District</label>
                   <select class="form-control" formControlName="dist_id">
                     <option value=""></option>
-                    <option *ngFor="let district of locationDistricts"
-                            value="{{district._id}}">{{district.name | titlecase}}</option>
+                    <option
+                      *ngFor="let district of locationDistricts"
+                      value="{{ district._id }}"
+                    >
+                      {{ district.name | titlecase }}
+                    </option>
                   </select>
                 </div>
               </div>
@@ -46,8 +75,12 @@
                   <label class="control-label">Sector</label>
                   <select class="form-control" formControlName="sect_id">
                     <option value=""></option>
-                    <option *ngFor="let sector of locationSectors"
-                            value="{{sector._id}}">{{sector.name | titlecase}}</option>
+                    <option
+                      *ngFor="let sector of locationSectors"
+                      value="{{ sector._id }}"
+                    >
+                      {{ sector.name | titlecase }}
+                    </option>
                   </select>
                 </div>
               </div>
@@ -56,7 +89,12 @@
                   <label class="control-label">Cell</label>
                   <select class="form-control" formControlName="cell_id">
                     <option value=""></option>
-                    <option *ngFor="let cell of locationCells" value="{{cell._id}}">{{cell.name | titlecase}}</option>
+                    <option
+                      *ngFor="let cell of locationCells"
+                      value="{{ cell._id }}"
+                    >
+                      {{ cell.name | titlecase }}
+                    </option>
                   </select>
                 </div>
               </div>
@@ -65,8 +103,12 @@
                   <label class="control-label">Village</label>
                   <select class="form-control" formControlName="village_id">
                     <option value=""></option>
-                    <option *ngFor="let village of locationVillages"
-                            value="{{village._id}}">{{village.name | titlecase}}</option>
+                    <option
+                      *ngFor="let village of locationVillages"
+                      value="{{ village._id }}"
+                    >
+                      {{ village.name | titlecase }}
+                    </option>
                   </select>
                 </div>
               </div>
@@ -75,13 +117,43 @@
           <div class="col-xs-3">
             <div class="form-group">
               <label class="control-label">Group leader names</label>
-              <input type="text" formControlName="leaderNames" class="form-control">
+              <input
+                type="text"
+                formControlName="leaderNames"
+                class="form-control"
+              />
+              <app-inline-errors
+                *ngIf="
+                  createForm.controls.leaderNames.invalid &&
+                  (createForm.controls.leaderNames.dirty ||
+                    createForm.controls.leaderNames.touched)
+                "
+                [errors]="createForm.controls.leaderNames.errors"
+                [label]="'leaderNames'"
+              >
+              </app-inline-errors>
             </div>
           </div>
           <div class="col-xs-3">
             <div class="form-group">
-              <label class="control-label label-required">Group leader phone number</label>
-              <input type="text" formControlName="leaderPhoneNumber" class="form-control">
+              <label class="control-label label-required"
+                >Group leader phone number</label
+              >
+              <input
+                type="text"
+                formControlName="leaderPhoneNumber"
+                class="form-control"
+              />
+              <app-inline-errors
+                *ngIf="
+                  createForm.controls.leaderNames.invalid &&
+                  (createForm.controls.leaderNames.dirty ||
+                    createForm.controls.leaderNames.touched)
+                "
+                [errors]="createForm.controls.leaderNames.errors"
+                [label]="'leaderNames'"
+              >
+              </app-inline-errors>
             </div>
           </div>
           <ng-container formGroupName="meetingSchedule">
@@ -89,61 +161,120 @@
               <div class="form-group">
                 <label class="control-label label-required">Meeting day</label>
                 <select class="form-control" formControlName="meetingDay">
-                  <option *ngFor="let el of days"
-                          value="{{ el.value }}">{{ el.name | titlecase}}</option>
+                  <option *ngFor="let el of days" value="{{ el.value }}">
+                    {{ el.name | titlecase }}
+                  </option>
                 </select>
+                <app-inline-errors
+                  *ngIf="
+                    createForm.controls.leaderNames.invalid &&
+                    (createForm.controls.leaderNames.dirty ||
+                      createForm.controls.leaderNames.touched)
+                  "
+                  [errors]="createForm.controls.leaderNames.errors"
+                  [label]="'leaderNames'"
+                >
+                </app-inline-errors>
               </div>
             </div>
             <div class="col-xs-1">
               <div class="form-group">
                 <label class="control-label label-required">Time</label>
-                <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="meetingTime"
-                       class="form-control">
+                <input
+                  [owlDateTimeTrigger]="dt1"
+                  [owlDateTime]="dt1"
+                  formControlName="meetingTime"
+                  class="form-control"
+                />
                 <owl-date-time [pickerType]="'timer'" #dt1></owl-date-time>
+                <app-inline-errors
+                  *ngIf="
+                    createForm.controls.leaderNames.invalid &&
+                    (createForm.controls.leaderNames.dirty ||
+                      createForm.controls.leaderNames.touched)
+                  "
+                  [errors]="createForm.controls.leaderNames.errors"
+                  [label]="'leaderNames'"
+                >
+                </app-inline-errors>
               </div>
             </div>
           </ng-container>
           <div class="col-xs-3">
             <div class="form-group">
               <label class="control-label">Description</label>
-              <input type="text" formControlName="description" class="form-control">
+              <input
+                type="text"
+                formControlName="description"
+                class="form-control"
+              />
+              <app-inline-errors
+                *ngIf="
+                  createForm.controls.leaderNames.invalid &&
+                  (createForm.controls.leaderNames.dirty ||
+                    createForm.controls.leaderNames.touched)
+                "
+                [errors]="createForm.controls.leaderNames.errors"
+                [label]="'leaderNames'"
+              >
+              </app-inline-errors>
             </div>
           </div>
         </form>
         <div class="row">
           <div class="col-xs-6">
-            <fieldset style=" margin-right: 0 !important;">
+            <fieldset style="margin-right: 0 !important">
               <legend>
                 <label class="control-label">&nbsp; SEARCH FARMERS</label>
               </legend>
               <app-loader *ngIf="loading"></app-loader>
               <div class="">
-                <form [formGroup]="filterForm" (ngSubmit)="onFilter()" style="text-align: center">
-                  <div class="col-xs-12" style="padding-bottom: 15px;">
+                <form
+                  [formGroup]="filterForm"
+                  (ngSubmit)="onFilter()"
+                  style="text-align: center"
+                >
+                  <div class="col-xs-12" style="padding-bottom: 15px">
                     <div class="form-inline">
-                      <div class="radio" style="margin-right: 15px;">
+                      <div class="radio" style="margin-right: 15px">
                         <label>
-                          <input type="radio" formControlName="searchOption" value="location">
+                          <input
+                            type="radio"
+                            formControlName="searchOption"
+                            value="location"
+                          />
                           Search by location
                         </label>
                       </div>
                       <div class="radio">
                         <label>
-                          <input type="radio" formControlName="searchOption" value="ids">
+                          <input
+                            type="radio"
+                            formControlName="searchOption"
+                            value="ids"
+                          />
                           Search by farmer IDs
                         </label>
                       </div>
                     </div>
                   </div>
-                  <div formGroupName="searchByLocation" *ngIf="searchByLocation">
-                    <div class="row">`
+                  <div
+                    formGroupName="searchByLocation"
+                    *ngIf="searchByLocation"
+                  >
+                    <div class="row">
+                      `
                       <div class="col-xs-4">
                         <div class="form-group">
-                          <select class="form-control" formControlName="sect_id">
+                          <select
+                            class="form-control"
+                            formControlName="sect_id"
+                          >
                             <option value="" selected>select sector</option>
                             <option
                               *ngFor="let sector of basicCoveredSectors"
-                              value="{{ sector._id }}">
+                              value="{{ sector._id }}"
+                            >
                               {{ sector.name | titlecase }}
                             </option>
                           </select>
@@ -151,9 +282,17 @@
                       </div>
                       <div class="col-xs-4">
                         <div class="form-group">
-                          <select class="form-control" formControlName="cell_id">
-                            <option value="" disabled selected>select cell</option>
-                            <option *ngFor="let cell of basicCoveredCells" value="{{ cell._id }}">
+                          <select
+                            class="form-control"
+                            formControlName="cell_id"
+                          >
+                            <option value="" disabled selected>
+                              select cell
+                            </option>
+                            <option
+                              *ngFor="let cell of basicCoveredCells"
+                              value="{{ cell._id }}"
+                            >
                               {{ cell.name | titlecase }}
                             </option>
                           </select>
@@ -161,11 +300,17 @@
                       </div>
                       <div class="col-xs-4">
                         <div class="form-group">
-                          <select class="form-control" formControlName="village_id">
-                            <option value="" disabled selected>select village</option>
+                          <select
+                            class="form-control"
+                            formControlName="village_id"
+                          >
+                            <option value="" disabled selected>
+                              select village
+                            </option>
                             <option
                               *ngFor="let village of basicCoveredVillages"
-                              value="{{ village._id }}">
+                              value="{{ village._id }}"
+                            >
                               {{ village.name | titlecase }}
                             </option>
                           </select>
@@ -180,10 +325,12 @@
                           <select
                             class="form-control"
                             formControlName="searchBy"
-                            style="margin-right: 10px">
+                            style="margin-right: 10px"
+                          >
                             <option
                               *ngFor="let field of searchFields"
-                              value="{{ field.value }}">
+                              value="{{ field.value }}"
+                            >
                               {{ field.name }}
                             </option>
                           </select>
@@ -197,97 +344,132 @@
                       </div>
                     </div>
                   </div>
-                  <button class="btn btn-action text-center" type="submit" style="font-size: 12px">
+                  <button
+                    class="btn btn-action text-center"
+                    type="submit"
+                    style="font-size: 12px"
+                  >
                     <i class="fa fa-search"></i> SEARCH FARMERS
                   </button>
                 </form>
               </div>
               <table class="row-border hover table table-striped">
                 <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Names</th>
-                  <th>Phone number</th>
-                  <th>
-                    Selection
-                    <span style="float: right;">
-                         <input type="checkbox" (click)="selectAllResults($event.target.checked)"
-                                [(ngModel)]="allResultsSelected" [ngModelOptions]="{standalone: true}">
+                  <tr>
+                    <th>#</th>
+                    <th>Names</th>
+                    <th>Phone number</th>
+                    <th>
+                      Selection
+                      <span style="float: right">
+                        <input
+                          type="checkbox"
+                          (click)="selectAllResults($event.target.checked)"
+                          [(ngModel)]="allResultsSelected"
+                          [ngModelOptions]="{ standalone: true }"
+                        />
                       </span>
-                  </th>
-                </tr>
+                    </th>
+                  </tr>
                 </thead>
                 <tbody>
-                <tr *ngFor="let item of searchResults; let i = index">
-                  <td>{{ i + 1 }}</td>
-                  <td>
-                    <ng-container *ngIf="item.type === 2; else names">
-                      {{ item.userInfo.groupName }}
-                    </ng-container>
-                    <ng-template #names>
-                      {{ item.userInfo.surname + ' ' + item.userInfo.foreName }}
-                    </ng-template>
-                  </td>
-                  <td>{{ item.userInfo.phone_number }}</td>
-                  <td>
-                    <input type="checkbox" (click)="selectResultsItem($event.target.checked, i)"
-                           *ngIf="notInGroupMembers(i)"
-                           [(ngModel)]="searchResults[i].selected" [ngModelOptions]="{standalone: true}">
-                  </td>
-                </tr>
+                  <tr *ngFor="let item of searchResults; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>
+                      <ng-container *ngIf="item.type === 2; else names">
+                        {{ item.userInfo.groupName }}
+                      </ng-container>
+                      <ng-template #names>
+                        {{
+                          item.userInfo.surname + " " + item.userInfo.foreName
+                        }}
+                      </ng-template>
+                    </td>
+                    <td>{{ item.userInfo.phone_number }}</td>
+                    <td>
+                      <input
+                        type="checkbox"
+                        (click)="selectResultsItem($event.target.checked, i)"
+                        *ngIf="notInGroupMembers(i)"
+                        [(ngModel)]="searchResults[i].selected"
+                        [ngModelOptions]="{ standalone: true }"
+                      />
+                    </td>
+                  </tr>
                 </tbody>
               </table>
-              <button type="button" class="btn btn-warning" style="width: 100%" (click)="addMembersToGroup()">
+              <button
+                type="button"
+                class="btn btn-warning"
+                style="width: 100%"
+                (click)="addMembersToGroup()"
+              >
                 ADD SELECTED TO THE GROUP
               </button>
             </fieldset>
           </div>
           <div class="col-xs-6">
-            <fieldset style=" margin-left: 0 !important;">
+            <fieldset style="margin-left: 0 !important">
               <legend>
                 <label class="control-label">&nbsp; GROUP FARMERS</label>
               </legend>
               <div class="col-sm-12 text-center">
                 <label class="control-label">TOTAL GROUP FARMERS</label>
-                <br/>
+                <br />
                 <label class="control-label">{{ groupMembers?.length }}</label>
               </div>
               <table class="row-border hover table table-striped">
                 <thead>
-                <tr>
-                  <th>Reg. Number</th>
-                  <th>Names</th>
-                  <th>Location</th>
-                  <th>Phone number</th>
-                  <th>Selection
-                    <span style="float: right;">
-                         <input type="checkbox" (click)="selectAllMembers($event.target.checked)"
-                                [(ngModel)]="allMembersSelected" [ngModelOptions]="{standalone: true}">
+                  <tr>
+                    <th>Reg. Number</th>
+                    <th>Names</th>
+                    <th>Location</th>
+                    <th>Phone number</th>
+                    <th>
+                      Selection
+                      <span style="float: right">
+                        <input
+                          type="checkbox"
+                          (click)="selectAllMembers($event.target.checked)"
+                          [(ngModel)]="allMembersSelected"
+                          [ngModelOptions]="{ standalone: true }"
+                        />
                       </span>
-                  </th>
-                </tr>
+                    </th>
+                  </tr>
                 </thead>
                 <tbody>
-                <tr *ngFor="let item of groupMembers; let t = index">
-                  <td> {{ item.userInfo.regNumber }}</td>
-                  <td>
-                    <ng-container *ngIf="item.type === 2; else gnames">
-                      {{ item.userInfo.groupName }}
-                    </ng-container>
-                    <ng-template #gnames>
-                      {{ item.userInfo.surname + ' ' + item.userInfo.foreName }}
-                    </ng-template>
-                  </td>
-                  <td></td>
-                  <td>{{ item.userInfo.phone_number }}</td>
-                  <td>
-                    <input type="checkbox" (click)="selectMember($event.target.checked, t)"
-                           [(ngModel)]="groupMembers[t].selected" [ngModelOptions]="{standalone: true}">
-                  </td>
-                </tr>
+                  <tr *ngFor="let item of groupMembers; let t = index">
+                    <td>{{ item.userInfo.regNumber }}</td>
+                    <td>
+                      <ng-container *ngIf="item.type === 2; else gnames">
+                        {{ item.userInfo.groupName }}
+                      </ng-container>
+                      <ng-template #gnames>
+                        {{
+                          item.userInfo.surname + " " + item.userInfo.foreName
+                        }}
+                      </ng-template>
+                    </td>
+                    <td></td>
+                    <td>{{ item.userInfo.phone_number }}</td>
+                    <td>
+                      <input
+                        type="checkbox"
+                        (click)="selectMember($event.target.checked, t)"
+                        [(ngModel)]="groupMembers[t].selected"
+                        [ngModelOptions]="{ standalone: true }"
+                      />
+                    </td>
+                  </tr>
                 </tbody>
               </table>
-              <button type="button" class="btn btn-danger" style="float: right;" (click)="removeMembersToGroup()">
+              <button
+                type="button"
+                class="btn btn-danger"
+                style="float: right"
+                (click)="removeMembersToGroup()"
+              >
                 <i class="fa fa-trash"></i>&nbsp;Remove selected
               </button>
             </fieldset>
@@ -299,8 +481,17 @@
 </div>
 <div class="row">
   <div class="col-xs-12">
-    <a class="btn btn-warning btn-margin pull-right" routerLink="/admin/farmers/group/list">Cancel</a>
-    <button type="button" class="btn btn-success pull-right" (click)="onSubmit()">Save</button>
+    <a
+      class="btn btn-warning btn-margin pull-right"
+      routerLink="/admin/farmers/group/list"
+      >Cancel</a
+    >
+    <button
+      type="button"
+      class="btn btn-success pull-right"
+      (click)="onSubmit()"
+    >
+      Save
+    </button>
   </div>
 </div>
-

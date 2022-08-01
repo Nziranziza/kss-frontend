@@ -13,4 +13,11 @@
     (click)="close()" >
     Ok
   </button>
+  <button
+    *ngIf="messageEnabled"
+    type="button"
+    class="btn btn-success btn-lg pull-center"
+    (click)="sendMessage()" >
+    Send Message
+  </button>
 </div>
