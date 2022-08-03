@@ -47,9 +47,9 @@ export class NurseryCreateComponent extends BasicComponent implements OnInit {
     this.addNursery = this.formBuilder.group({
       nurseryName: ["", Validators.required],
       ownerName: ["", Validators.required],
-      ownerNumber: ["", [Validators.required, Validators.pattern("[0-9]{12}")]],
+      ownerNumber: ["250", [Validators.required, Validators.pattern("[0-9]{12}")]],
       representativeName: ["", Validators.required],
-      representativeNumber: ["", [Validators.required, Validators.pattern("[0-9]{12}")]],
+      representativeNumber: ["250", [Validators.required, Validators.pattern("[0-9]{12}")]],
       siteAvailability: ["no"],
       agronomist: [""],
       stockData: new FormArray([], Validators.required),

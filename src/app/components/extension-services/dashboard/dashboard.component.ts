@@ -32,6 +32,11 @@ export class DashboardComponent extends BasicComponent implements OnInit {
   }
 
   dashboardForm: FormGroup;
+  trainingFilterEnabled: boolean = false;
+  visitFilterEnabled: boolean = false;
+  seedlingFilterEnabled: boolean = false;
+  gapFilterEnabled: boolean = false;
+
   graph = {
     type: ChartType.PieChart,
     data: [
@@ -185,9 +190,11 @@ export class DashboardComponent extends BasicComponent implements OnInit {
     console.log(this.graph.data[0][1]);
     this.visitService.getVisitsStats(body).subscribe((data) => {
       this.visitStats = data.data;
-      this.graph.data[0][1] = this.visitStats.maleFarmVisits * 100 / this.visitStats.totolVisits;
-      this.graph.data[1][1] = this.visitStats.femaleFarmVisits * 100 / this.visitStats.totolVisits;
-      
+      this.graph.data[0][1] =
+        (this.visitStats.maleFarmVisits * 100) / this.visitStats.totolVisits;
+      this.graph.data[1][1] =
+        (this.visitStats.femaleFarmVisits * 100) / this.visitStats.totolVisits;
+
       this.loading = false;
     });
   }
@@ -243,5 +250,17 @@ export class DashboardComponent extends BasicComponent implements OnInit {
       };
       this.getTrainingsStats(body);
     });
+  }
+
+  enableFilter(value: boolean, type: string) {
+    if (type == "training") {
+      this.trainingFilterEnabled = value;
+    } else if (type == "seedling") {
+      this.seedlingFilterEnabled = value;
+    } else if (type == "gap") {
+      this.gapFilterEnabled = value;
+    } else if (type == "visit") {
+      this.visitFilterEnabled = value;
+    }
   }
 }

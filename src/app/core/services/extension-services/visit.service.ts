@@ -20,6 +20,14 @@ export class VisitService {
     return this.apiService.get("/v1.1/farm-visit-schedules/" + id);
   }
 
+  delete(id: string): Observable<any> {
+    return this.apiService.get("/v1.1/farm-visit-schedules/" + id);
+  }
+
+  sendSms(id: string): Observable<any> {
+    return this.apiService.get("/v1.1/farm-visit-schedules/sms/" + id);
+  }
+
   edit(id: string, body: any): Observable<any> {
     return this.apiService.put("/v1.1/farm-visit-schedules/" + id, body);
   }

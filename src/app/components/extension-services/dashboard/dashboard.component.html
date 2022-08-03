@@ -1,90 +1,96 @@
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB6rJxA0WuYgN4LPaHcP8uLrgOQ-BUc_5A"></script>
 <h3>Welcome to SKS - Dashboard - Extension Services</h3>
 <form [formGroup]="dashboardForm">
-  <div class="row">
-    <div class="col-md-6">
-      <div class="row" formGroupName="location">
-        <div class="col-xs-3" style="padding: 8px 0px 0px 10px">
-          <div class="header-location-text">Filter by location</div>
-        </div>
-        <div
-          class="col-xs-3"
-          id="location-province"
-          style="padding: 0 5px 0 0px"
-        >
-          <div class="form-group">
-            <select class="form-control" formControlName="prov_id">
-              <option value="" selected disabled>All Provinces</option>
-              <option
-                *ngFor="let province of locationProvinces"
-                value="{{ province._id }}"
-              >
-                {{ province.namee | titlecase }}
-              </option>
-            </select>
+  <div class="filter-box">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="row" formGroupName="location">
+          <div class="col-xs-3" style="padding: 8px 0px 0px 10px">
+            <div class="header-location-text">Filter by location</div>
           </div>
-        </div>
-        <div
-          class="col-xs-3"
-          id="location-district"
-          style="padding: 0 5px 0 0px"
-        >
-          <div class="form-group">
-            <select class="form-control" formControlName="dist_id">
-              <option value="" selected disabled>All Districts</option>
-              <option
-                *ngFor="let district of locationDistricts"
-                value="{{ district._id }}"
-              >
-                {{ district.name | titlecase }}
-              </option>
-            </select>
+          <div
+            class="col-xs-3"
+            id="location-province"
+            style="padding: 0 5px 0 0px"
+          >
+            <div class="form-group">
+              <select class="form-control" formControlName="prov_id">
+                <option value="" selected disabled>All Provinces</option>
+                <option
+                  *ngFor="let province of locationProvinces"
+                  value="{{ province._id }}"
+                >
+                  {{ province.namee | titlecase }}
+                </option>
+              </select>
+            </div>
           </div>
-        </div>
-        <div class="col-xs-3" id="location-sector" style="padding: 0 5px 0 0px">
-          <div class="form-group">
-            <select class="form-control" formControlName="sect_id">
-              <option value="" selected disabled>All Sectors</option>
-              <option
-                *ngFor="let sector of locationSectors"
-                value="{{ sector._id }}"
-              >
-                {{ sector.name | titlecase }}
-              </option>
-            </select>
+          <div
+            class="col-xs-3"
+            id="location-district"
+            style="padding: 0 5px 0 0px"
+          >
+            <div class="form-group">
+              <select class="form-control" formControlName="dist_id">
+                <option value="" selected disabled>All Districts</option>
+                <option
+                  *ngFor="let district of locationDistricts"
+                  value="{{ district._id }}"
+                >
+                  {{ district.name | titlecase }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div
+            class="col-xs-3"
+            id="location-sector"
+            style="padding: 0 5px 0 0px"
+          >
+            <div class="form-group">
+              <select class="form-control" formControlName="sect_id">
+                <option value="" selected disabled>All Sectors</option>
+                <option
+                  *ngFor="let sector of locationSectors"
+                  value="{{ sector._id }}"
+                >
+                  {{ sector.name | titlecase }}
+                </option>
+              </select>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="col-md-6">
-      <div class="row">
-        <div class="col-xs-2" style="padding: 8px 0px 0px 10px">
-          <div class="header-location-text">Filter by CWS</div>
-        </div>
-        <div class="col-xs-3" style="padding: 0 5px 0 5px">
-          <div class="form-group">
-            <select class="form-control">
-              <option value="" selected disabled>All CWS</option>
-            </select>
+      <div class="col-md-6">
+        <div class="row">
+          <div class="col-xs-2" style="padding: 8px 0px 0px 10px">
+            <div class="header-location-text">Filter by CWS</div>
           </div>
-        </div>
-        <div class="col-xs-2" style="padding: 8px 0px 0px 10px">
-          <div class="header-location-text">Filter by Time</div>
-        </div>
-        <div class="col-xs-3" style="padding: 0 5px 0 5px">
-          <div class="form-group">
-            <input
-              [owlDateTimeTrigger]="dt1"
-              [owlDateTime]="dt1"
-              formControlName="filterByDate"
-              class="form-control"
-              placeholder="Dd/mm/yyyy"
-            />
-            <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+          <div class="col-xs-3" style="padding: 0 5px 0 5px">
+            <div class="form-group">
+              <select class="form-control">
+                <option value="" selected disabled>All CWS</option>
+              </select>
+            </div>
           </div>
-        </div>
-        <div class="col-xs-2">
-          <button class="btn">Filter</button>
+          <div class="col-xs-2" style="padding: 8px 0px 0px 10px">
+            <div class="header-location-text">Filter by Time</div>
+          </div>
+          <div class="col-xs-3" style="padding: 0 5px 0 5px">
+            <div class="form-group">
+              <input
+                [owlDateTimeTrigger]="dt1"
+                [owlDateTime]="dt1"
+                formControlName="filterByDate"
+                class="form-control"
+                placeholder="Dd/mm/yyyy"
+              />
+              <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+            </div>
+          </div>
+          <div class="col-xs-2">
+            <button class="btn">Filter</button>
+          </div>
         </div>
       </div>
     </div>
@@ -98,10 +104,10 @@
       opacity: 1;
     "
   >
-    <div class="col-xs-3">
+    <div class="col-xs-5" style="padding: 0 0px 0 5px">
       <div
         style="
-          height: 350px;
+          min-height: 350px;
           background: #fff3e3 0% 0% no-repeat padding-box;
           padding: 5px;
           border-radius: 7px;
@@ -109,28 +115,146 @@
         "
       >
         <h4 class="text-center">Training</h4>
-        <label class="control-label">Select Training</label>
-        <select class="form-control" formControlName="training_id">
-          <option value="" selected disabled>Recent (Training Module)</option>
-          <option
-            *ngFor="let training of trainings; let i = index"
-            value="{{ training._id }}"
-          >
-            {{ training.trainingName | titlecase }}
-          </option>
-        </select>
+        <div class="filter-box">
+          <div class="row">
+            <div class="col-xs-4" style="font-size: 20px">
+              <i
+                class="fa fa-filter"
+                aria-hidden="true"
+                style="margin-left: 5px"
+              ></i>
+              <span style="font-size: 16px"> Filters </span>
+            </div>
+            <div class="col-xs-6"></div>
+            <div class="col-xs-2 text-center" style="font-size: 20px">
+              <i
+                class="fa fa-caret-down"
+                aria-hidden="true"
+                type="button"
+                *ngIf="!trainingFilterEnabled"
+                (click)="enableFilter(true, 'training')"
+              ></i>
+              <i
+                class="fa fa-caret-up"
+                aria-hidden="true"
+                type="button"
+                *ngIf="trainingFilterEnabled"
+                (click)="enableFilter(false, 'training')"
+              ></i>
+            </div>
+          </div>
+          <span *ngIf="trainingFilterEnabled">
+            <div
+              class="row text-center"
+              style="margin-left: 10px; margin-right: 15px; margin-top: 10px"
+            >
+              <div class="col-xs-3 col-small-padding">
+                <div class="form-group">
+                  <label class="label-header-text">Select Season</label>
+                  <select
+                    class="form-control form-control-small"
+                    formControlName="training_id"
+                  >
+                    <option value="" selected disabled>Recent (Season)</option>
+                    <option
+                      *ngFor="let training of trainings; let i = index"
+                      value="{{ training._id }}"
+                    >
+                      {{ training.trainingName | titlecase }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xs-3 col-small-padding">
+                <div class="form-group">
+                  <label class="label-header-text">Select Training</label>
+                  <select
+                    class="form-control form-control-small"
+                    formControlName="training_id"
+                  >
+                    <option value="" selected disabled>
+                      Recent (Training Module)
+                    </option>
+                    <option
+                      *ngFor="let training of trainings; let i = index"
+                      value="{{ training._id }}"
+                    >
+                      {{ training.trainingName | titlecase }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xs-3 col-small-padding">
+                <div class="form-group">
+                  <label class="label-header-text">Select Trainer</label>
+                  <select
+                    class="form-control form-control-small"
+                    formControlName="trainer_id"
+                  >
+                    <option value="" selected disabled>All Trainers</option>
+                    <option
+                      *ngFor="let trainer of trainers; let i = index"
+                      value="{{ trainer._id }}"
+                    >
+                      {{ trainer.foreName + " " + trainer.surname | titlecase }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xs-3 col-small-padding">
+                <div class="form-group">
+                  <label class="label-header-text">Select Group</label>
+                  <select class="form-control form-control-small">
+                    <option value="" selected disabled>All Training</option>
+                  </select>
+                </div>
+              </div>
 
-        <label class="control-label">Select Trainers</label>
-        <select class="form-control" formControlName="trainer_id">
-          <option value="" selected disabled>All Trainers</option>
-          <option
-            *ngFor="let trainer of trainers; let i = index"
-            value="{{ trainer._id }}"
-          >
-            {{ trainer.foreName + " " + trainer.surname | titlecase }}
-          </option>
-        </select>
-
+              <div class="col-xs-3 col-small-padding">
+                <div class="form-group">
+                  <label class="label-header-text">Quarters</label>
+                  <select class="form-control form-control-small">
+                    <option value="" selected disabled>All Training</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xs-3 col-small-padding">
+                <div class="form-group">
+                  <label class="label-header-text">Months</label>
+                  <select class="form-control form-control-small">
+                    <option value="" selected disabled>All Training</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xs-3 col-small-padding">
+                <div class="form-group">
+                  <label class="label-header-text">Weeks</label>
+                  <select class="form-control form-control-small">
+                    <option value="" selected disabled>All Training</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xs-3 col-small-padding">
+                <div class="form-group">
+                  <label class="label-header-text">Date</label>
+                  <input
+                    [owlDateTimeTrigger]="dt2"
+                    [owlDateTime]="dt2"
+                    formControlName="filterByDate"
+                    class="form-control form-control-small"
+                    placeholder="Dd/mm/yyyy"
+                  />
+                  <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
+                </div>
+              </div>
+              <div class="col-xs-12 text-center" style="margin-bottom: 10px">
+                <button class="btn btn-default btn-sm" type="button">
+                  FILTER
+                </button>
+              </div>
+            </div>
+          </span>
+        </div>
         <div class="text-center">
           <p>Total Trainees</p>
           <h4>{{ trainingsStats.totalInvitees }}</h4>
@@ -187,54 +311,10 @@
           </div>
         </div>
       </div>
+
       <div
         style="
-          padding: 5px;
-          height: 330px;
-          background: #f2f2f2 0% 0% no-repeat padding-box;
-          border-radius: 7px;
-        "
-      >
-        <h4 class="text-center">GAP Adoption</h4>
-        <div
-          style="margin-bottom: 10px"
-          *ngFor="let gapAdoption of gapAdoptionStats"
-        >
-          <div
-            class="progress-bar"
-            [ngStyle]="{
-              width: gapAdoption ? gapAdoption.adoptionRate + '%' : '0%',
-              height: '5px',
-              background: '#4f210d 0% 0% no-repeat padding-box'
-            }"
-          ></div>
-          <br />
-          <div class="row" style="margin-top: -18px">
-            <div class="col-xs-9">
-              <h5>{{ gapAdoption.name }}</h5>
-              <div style="font-size: 8px; margin-top: -10px" >
-                Baseline: {{ gapAdoption.adoptionRate + 10 }}%
-              </div>
-            </div>
-            <div class="col-xs-3">
-              <div
-                style="
-                  background: #ffffff 0% 0% no-repeat padding-box;
-                  border-radius: 5px;
-                  opacity: 1;
-                "
-              >
-                <h5 class="text-center">{{ gapAdoption.adoptionRate }}%</h5>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-xs-3" style="padding: 0 5px 0 0px">
-      <div
-        style="
-          height: 350px;
+          min-height: 350px;
           padding: 5px;
           border-radius: 7px;
           background: #f2f2f2 0% 0% no-repeat padding-box;
@@ -242,10 +322,96 @@
         "
       >
         <h4 class="text-center">Farms Visits</h4>
-        <label class="control-label">Select Season</label>
-        <select class="form-control" formControlName="training_id">
-          <option value="" selected disabled>Recent (Season 2022)</option>
-        </select>
+        <div class="filter-box">
+          <div class="row">
+            <div class="col-xs-4" style="font-size: 20px">
+              <i
+                class="fa fa-filter"
+                aria-hidden="true"
+                style="margin-left: 5px"
+              ></i>
+              <span style="font-size: 16px"> Filters </span>
+            </div>
+            <div class="col-xs-6"></div>
+            <div class="col-xs-2 text-center" style="font-size: 20px">
+              <i
+                class="fa fa-caret-down"
+                aria-hidden="true"
+                type="button"
+                *ngIf="!visitFilterEnabled"
+                (click)="enableFilter(true, 'visit')"
+              ></i>
+              <i
+                class="fa fa-caret-up"
+                aria-hidden="true"
+                type="button"
+                *ngIf="visitFilterEnabled"
+                (click)="enableFilter(false, 'visit')"
+              ></i>
+            </div>
+          </div>
+          <span *ngIf="visitFilterEnabled">
+            <div
+              class="row text-center"
+              style="margin-left: 10px; margin-right: 15px; margin-top: 10px"
+            >
+              <div class="col-xs-12 text-center">
+                <label class="label-header-text">Select Season</label>
+                <select
+                  class="form-control form-control-small"
+                  style="width: 40%; margin-left: 30%"
+                  formControlName="training_id"
+                >
+                  <option value="" selected disabled>
+                    Recent (Season 2022)
+                  </option>
+                </select>
+              </div>
+              <div class="col-xs-3 col-small-padding">
+                <div class="form-group">
+                  <label class="label-header-text">Quarters</label>
+                  <select class="form-control form-control-small">
+                    <option value="" selected disabled>All Training</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xs-3 col-small-padding">
+                <div class="form-group">
+                  <label class="label-header-text">Months</label>
+                  <select class="form-control form-control-small">
+                    <option value="" selected disabled>All Training</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xs-3 col-small-padding">
+                <div class="form-group">
+                  <label class="label-header-text">Weeks</label>
+                  <select class="form-control form-control-small">
+                    <option value="" selected disabled>All Training</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xs-3 col-small-padding">
+                <div class="form-group">
+                  <label class="label-header-text">Date</label>
+                  <input
+                    [owlDateTimeTrigger]="dt5"
+                    [owlDateTime]="dt5"
+                    formControlName="filterByDate"
+                    class="form-control form-control-small"
+                    placeholder="Dd/mm/yyyy"
+                  />
+                  <owl-date-time [pickerType]="'calendar'" #dt5></owl-date-time>
+                </div>
+              </div>
+              <div class="col-xs-12 text-center" style="margin-bottom: 10px">
+                <button class="btn btn-default btn-sm" type="button">
+                  FILTER
+                </button>
+              </div>
+            </div>
+          </span>
+        </div>
         <div class="text-center">
           <p>Total Visited Farms</p>
           <h4>{{ visitStats.totolVisits }}</h4>
@@ -290,24 +456,117 @@
           </div>
         </div>
       </div>
+
       <div
         style="
-          height: 330px;
+          min-height: 330px;
           padding: 5px;
           border-radius: 7px;
           background: #fff3e3 0% 0% no-repeat padding-box;
         "
       >
         <h4 class="text-center">Seedling Distribution</h4>
-        <label class="control-label">Select District</label>
-        <select class="form-control" formControlName="training_id">
-          <option value="" selected disabled>All Districts</option>
-        </select>
-
-        <label class="control-label">Select Seedlings Nurseries</label>
-        <select class="form-control" formControlName="training_id">
-          <option value="" selected disabled>All Seedlings Nurseries</option>
-        </select>
+        <div class="filter-box">
+          <div class="row">
+            <div class="col-xs-4" style="font-size: 20px">
+              <i
+                class="fa fa-filter"
+                aria-hidden="true"
+                style="margin-left: 5px"
+              ></i>
+              <span style="font-size: 16px"> Filters </span>
+            </div>
+            <div class="col-xs-6"></div>
+            <div class="col-xs-2 text-center" style="font-size: 20px">
+              <i
+                class="fa fa-caret-down"
+                aria-hidden="true"
+                type="button"
+                *ngIf="!seedlingFilterEnabled"
+                (click)="enableFilter(true, 'seedling')"
+              ></i>
+              <i
+                class="fa fa-caret-up"
+                aria-hidden="true"
+                type="button"
+                *ngIf="seedlingFilterEnabled"
+                (click)="enableFilter(false, 'seedling')"
+              ></i>
+            </div>
+          </div>
+          <span *ngIf="seedlingFilterEnabled">
+            <div
+              class="row text-center"
+              style="margin-left: 10px; margin-right: 15px; margin-top: 10px"
+            >
+              <div class="col-xs-4 col-small-padding">
+                <div class="form-group">
+                  <label class="label-header-text">Select Season</label>
+                  <select class="form-control form-control-small">
+                    <option value="" selected disabled>All Training</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xs-4 col-small-padding">
+                <div class="form-group">
+                  <label class="label-header-text">Select District</label>
+                  <select class="form-control form-control-small">
+                    <option value="" selected disabled>All Training</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xs-4 col-small-padding">
+                <div class="form-group">
+                  <label class="label-header-text">Select Nursery</label>
+                  <select class="form-control form-control-small">
+                    <option value="" selected disabled>All Training</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xs-3 col-small-padding">
+                <div class="form-group">
+                  <label class="label-header-text">Quarters</label>
+                  <select class="form-control form-control-small">
+                    <option value="" selected disabled>All Training</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xs-3 col-small-padding">
+                <div class="form-group">
+                  <label class="label-header-text">Months</label>
+                  <select class="form-control form-control-small">
+                    <option value="" selected disabled>All Training</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xs-3 col-small-padding">
+                <div class="form-group">
+                  <label class="label-header-text">Weeks</label>
+                  <select class="form-control form-control-small">
+                    <option value="" selected disabled>All Training</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xs-3 col-small-padding">
+                <div class="form-group">
+                  <label class="label-header-text">Date</label>
+                  <input
+                    [owlDateTimeTrigger]="dt3"
+                    [owlDateTime]="dt3"
+                    class="form-control form-control-small"
+                    placeholder="Dd/mm/yyyy"
+                  />
+                  <owl-date-time [pickerType]="'calendar'" #dt3></owl-date-time>
+                </div>
+              </div>
+              <div class="col-xs-12 text-center" style="margin-bottom: 10px">
+                <button class="btn btn-default btn-sm" type="button">
+                  FILTER
+                </button>
+              </div>
+            </div>
+          </span>
+        </div>
         <div class="text-center">
           <p>Seedling Distributed</p>
           <h4>000</h4>
@@ -326,13 +585,14 @@
         </div>
       </div>
     </div>
-    <div class="col-xs-6" style="padding: 0 5px 0 5px">
+    <div class="col-xs-7" style="padding: 0 5px 0 12px">
       <div
         style="
           background: #f0f0f0 0% 0% no-repeat padding-box;
           padding: 5px;
           border-radius: 7px;
           height: 690px;
+          margin-bottom: 10px;
         "
       >
         <h4 class="text-center">Farms</h4>
@@ -370,6 +630,138 @@
             (mapClick)="selectMarker(spot)"
           ></map-marker>
         </google-map>
+      </div>
+      <div
+        style="
+          padding: 5px;
+          min-height: 330px;
+          background: #f2f2f2 0% 0% no-repeat padding-box;
+          border-radius: 7px;
+        "
+      >
+        <h4 class="text-center">GAP Adoption</h4>
+        <div class="filter-box">
+          <div class="row">
+            <div class="col-xs-4" style="font-size: 20px">
+              <i
+                class="fa fa-filter"
+                aria-hidden="true"
+                style="margin-left: 5px"
+              ></i>
+              <span style="font-size: 16px"> Filters </span>
+            </div>
+            <div class="col-xs-6"></div>
+            <div class="col-xs-2 text-center" style="font-size: 20px">
+              <i
+                class="fa fa-caret-down"
+                aria-hidden="true"
+                type="button"
+                *ngIf="!gapFilterEnabled"
+                (click)="enableFilter(true, 'gap')"
+              ></i>
+              <i
+                class="fa fa-caret-up"
+                aria-hidden="true"
+                type="button"
+                *ngIf="gapFilterEnabled"
+                (click)="enableFilter(false, 'gap')"
+              ></i>
+            </div>
+          </div>
+          <span *ngIf="gapFilterEnabled">
+            <div
+              class="row text-center"
+              style="margin-left: 10px; margin-right: 15px; margin-top: 10px"
+            >
+              <div class="col-xs-12 text-center">
+                <label class="label-header-text">Select Season</label>
+                <select
+                  class="form-control form-control-small"
+                  style="width: 40%; margin-left: 30%"
+                  formControlName="training_id"
+                >
+                  <option value="" selected disabled>
+                    Recent (Season 2022)
+                  </option>
+                </select>
+              </div>
+              <div class="col-xs-3 col-small-padding">
+                <div class="form-group">
+                  <label class="label-header-text">Quarters</label>
+                  <select class="form-control form-control-small">
+                    <option value="" selected disabled>All Training</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xs-3 col-small-padding">
+                <div class="form-group">
+                  <label class="label-header-text">Months</label>
+                  <select class="form-control form-control-small">
+                    <option value="" selected disabled>All Training</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xs-3 col-small-padding">
+                <div class="form-group">
+                  <label class="label-header-text">Weeks</label>
+                  <select class="form-control form-control-small">
+                    <option value="" selected disabled>All Training</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xs-3 col-small-padding">
+                <div class="form-group">
+                  <label class="label-header-text">Date</label>
+                  <input
+                    [owlDateTimeTrigger]="dt4"
+                    [owlDateTime]="dt4"
+                    class="form-control form-control-small"
+                    placeholder="Dd/mm/yyyy"
+                  />
+                  <owl-date-time [pickerType]="'calendar'" #dt4></owl-date-time>
+                </div>
+              </div>
+              <div class="col-xs-12 text-center" style="margin-bottom: 10px">
+                <button class="btn btn-default btn-sm" type="button">
+                  FILTER
+                </button>
+              </div>
+            </div>
+          </span>
+        </div>
+        <div
+          style="margin-bottom: 10px"
+          *ngFor="let gapAdoption of gapAdoptionStats"
+        >
+          <div
+            class="progress-bar"
+            [ngStyle]="{
+              width: gapAdoption ? gapAdoption.adoptionRate + '%' : '0%',
+              height: '5px',
+              background: '#4f210d 0% 0% no-repeat padding-box'
+            }"
+          ></div>
+          <br />
+          <div class="row" style="margin-top: -18px">
+            <div class="col-xs-9">
+              <h5>{{ gapAdoption.name }}</h5>
+              <div style="font-size: 8px; margin-top: -10px">
+                Baseline: {{ gapAdoption.adoptionRate + 10 }}%
+              </div>
+            </div>
+            <div class="col-xs-3">
+              <div
+                style="
+                  background: #ffffff 0% 0% no-repeat padding-box;
+                  border-radius: 5px;
+                  opacity: 1;
+                "
+              >
+                <h5 class="text-center">{{ gapAdoption.adoptionRate }}%</h5>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

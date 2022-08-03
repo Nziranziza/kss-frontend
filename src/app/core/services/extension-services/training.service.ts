@@ -38,6 +38,9 @@ export class TrainingService {
   getSchedule(id: any) {
     return this.apiService.get("/v1.1/schedules/" + id);
   }
+  deleteSchedule(id: string) {
+    return this.apiService.delete("/v1.1/schedules/" + id);
+  }
   sendMessage(id: any) {
     return this.apiService.get("/v1.1/schedules/invite/" + id);
   }
