@@ -4,20 +4,48 @@
       <div class="col-sm-12 text-center stats-title">Statistics</div>
       <div class="col-sm-4">
         <div class="text-center stats-box">
-          <h3>Attendance By Gender</h3>
-          <h1>000</h1>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div class="text-center stats-box middle-box">
-          <h3>Missed By Gender</h3>
-          <h1>000</h1>
+          <h3>Attended Trainees</h3>
+          <div class="row">
+            <div class="col-sm-5">
+              <h1 style="margin-top: -5px; margin-left: 5px">
+                {{ trainingsStats.totalPresent }}
+              </h1>
+            </div>
+            <div class="col-sm-3">
+              <span style="white-space: pre"> Male </span>
+              {{ trainingsStats.malePresent }}
+            </div>
+            <div class="col-sm-3">
+              <span style="white-space: pre"> Female </span>
+              {{ trainingsStats.femalePresent }}
+            </div>
+          </div>
         </div>
       </div>
       <div class="col-sm-4">
         <div class="text-center stats-box third-box">
-          <h3>Rate</h3>
-          <h1>000</h1>
+          <h3>Not Attended Trainees</h3>
+          <div class="row">
+            <div class="col-sm-5">
+              <h1 style="margin-top: -5px; margin-left: 5px">
+                {{ trainingsStats.totalAbsent }}
+              </h1>
+            </div>
+            <div class="col-sm-3">
+              <span style="white-space: pre"> Male </span>
+              {{ trainingsStats.maleAbsent }}
+            </div>
+            <div class="col-sm-3">
+              <span style="white-space: pre"> Female </span>
+              {{ trainingsStats.femaleAbsent }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="text-center stats-box middle-box">
+          <h3>Attendance Rate</h3>
+          <h1>0%</h1>
         </div>
       </div>
     </div>
@@ -98,6 +126,7 @@
     </div>
   </div>
   <div class="box">
+    <h4 class="text-center">List of Associated Schedule</h4>
     <div class="box-body table-responsive">
       <app-loader *ngIf="loading"></app-loader>
       <table
@@ -119,7 +148,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let schedule of training.schedules">
+          <tr *ngFor="let schedule of training.schedules | paginate: config">
             <td>{{ schedule.createdAt | date: "short" }}</td>
             <td>{{ schedule.trainingId.trainingName }}</td>
             <td>{{ schedule.startTime | date: "short" }}</td>

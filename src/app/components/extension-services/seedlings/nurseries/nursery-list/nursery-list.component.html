@@ -5,13 +5,55 @@
       <a
         class="btn btn-success pull-left"
         routerLink="/admin/seedling/nursery/create"
-        > Add Nursery
+      >
+        Add Nursery
       </a>
     </div>
   </div>
 </h3>
 <app-list-message [message]="message"></app-list-message>
 <app-list-errors [errorList]="errors"></app-list-errors>
+<div class="col-sm-12 stats-section">
+  <div class="row">
+    <div class="col-sm-12 text-center stats-title">Nurseries Summary</div>
+    <div class="col-sm-2" style="padding: 0 2px 0 0px">
+      <div class="text-center stats-box">
+        <h3>Nursery Sites Created</h3>
+        <h1>{{ nurseries.length }}</h1>
+      </div>
+    </div>
+    <div class="col-sm-2" style="padding: 0 2px 0 0px">
+      <div class="text-center stats-box middle-box">
+        <h3>Total Provided Seeds</h3>
+        <h1>{{ seedsSum }} Kg</h1>
+      </div>
+    </div>
+    <div class="col-sm-2" style="padding: 0 2px 0 0px">
+      <div class="text-center stats-box third-box">
+        <h3>Total Expected Seedlings</h3>
+        <h1>{{ seedsSum * 2500 }}</h1>
+      </div>
+    </div>
+    <div class="col-sm-2" style="padding: 0 2px 0 0px">
+      <div class="text-center stats-box">
+        <h3>Total Pricked Out Seedlings</h3>
+        <h1>{{ prickedSum }}</h1>
+      </div>
+    </div>
+    <div class="col-sm-2" style="padding: 0 2px 0 0px">
+      <div class="text-center stats-box">
+        <h3>Average Success Rate</h3>
+        <h1>{{ (prickedSum * 100) / (seedsSum * 2500) }}%</h1>
+      </div>
+    </div>
+    <div class="col-sm-2" style="padding: 0 2px 0 0px">
+      <div class="text-center stats-box">
+        <h3>Total Distributed Seedlings</h3>
+        <h1>{{ distributeSum }}</h1>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="row">
   <div class="col-xs-12">
     <div class="box">
@@ -36,14 +78,14 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let nursery of nurseries | paginate: config">
+            <tr *ngFor="let nursery of nurseries; let i = index">
               <td>{{ nursery.createdAt | date: "short" }}</td>
               <td>{{ nursery.nurseryName }}</td>
               <td>{{ nursery.owner.name }}</td>
               <td>{{ nursery.location.cell_id.name }}</td>
               <td>{{ nursery.stocks.length }} Variety</td>
-              <td>{{ nursery.stocks[0].seeds }}</td>
-              <td>{{ nursery.status }}</td>
+              <td>{{ totalSeeds[i] }} Kg</td>
+              <td>{{ nursery.status || "Active" }}</td>
               <td>
                 <button
                   appRequiredSeason
@@ -57,7 +99,7 @@
                   (click)="openDeleteModal(nursery)"
                   class="btn btn-action-no-border btn-margin"
                 >
-                  <em class="fa fa-close"></em>
+                  <em class="fa fa-trash"></em>
                 </button>
                 <button
                   class="btn btn-action-no-border btn-margin btn-sm details-button"
@@ -69,22 +111,6 @@
             </tr>
           </tbody>
         </table>
-      </div>
-      <div class="table-footer" style="width: 100%" *ngIf="showData">
-        <pagination-controls
-          class="custom-pagination"
-          [maxSize]="maxSize"
-          [directionLinks]="directionLinks"
-          [autoHide]="autoHide"
-          [responsive]="responsive"
-          [previousLabel]="labels.previousLabel"
-          [nextLabel]="labels.nextLabel"
-          [screenReaderPaginationLabel]="labels.screenReaderPaginationLabel"
-          [screenReaderPageLabel]="labels.screenReaderPageLabel"
-          [screenReaderCurrentLabel]="labels.screenReaderCurrentLabel"
-          (pageChange)="onPageChange($event)"
-        >
-        </pagination-controls>
       </div>
     </div>
   </div>

@@ -68,6 +68,7 @@ export class GapListComponent
     this.loading = true;
     this.gapService.all().subscribe((data) => {
       this.gaps = data.data;
+      this.dtTrigger.next();
       this.loading = false;
     });
 

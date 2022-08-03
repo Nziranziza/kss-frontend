@@ -1,11 +1,8 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Router} from '@angular/router';
 
-import { Gap, GapService } from '../../../../core';
-import { MessageService } from '../../../../core';
-import { HelperService } from '../../../../core';
-import { BasicComponent } from '../../../../core';
+import {BasicComponent, GapService, HelperService, MessageService} from '../../../../core';
 
 @Component({
   selector: 'app-gap-create',
@@ -17,18 +14,15 @@ export class GapCreateComponent
   implements OnInit, OnDestroy {
   createForm: FormGroup;
   approachs = [
-    { id: 'mark_input', name: 'Marks Input' },
-    { id: 'percentage_input', name: 'Percentage Input' },
-    { id: 'multiple_choice', name: 'multiple_choice' },
-    { id: 'multiple_single', name: 'Multiple Choice - Single' },
-    { id: 'yes_no', name: 'Yes/No' },
+    {id: 'mark_input', name: 'Marks Input'},
+    {id: 'multiple_single', name: 'Multiple Choice - Single'},
+    {id: 'yes_no', name: 'Yes/No'},
     {
-      id: 'multiple_all_apply',
+      id: 'multiple_apply',
       name: 'Multiple Choice - All that Apply',
-    },
+    }
   ];
   loading = false;
-  adoptionOptionsVisible = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -40,65 +34,219 @@ export class GapCreateComponent
     super();
   }
 
+  /*********
+   * Form Manipulation Getter Methods to get form field controls
+   */
+
+  // FORMERLY formCategory
+
+  get getQuestionSections() {
+    return this.createForm.get('sections') as FormArray;
+  }
+
+  get gapGame() {
+    return this.createForm.get('gap_name');
+  }
+
+  get getGapWeight() {
+    return this.createForm.get('gap_weight');
+  }
+
+  get getGapScore() {
+    return this.createForm.get('gap_score');
+  }
+
   ngOnInit() {
     this.createForm = this.formBuilder.group({
-      name: ['Pruning', Validators.required],
-      description: ['Check whether is pruning correctly.', Validators.required],
-      questions: new FormArray([], Validators.required),
+      gap_name: ['Pruning', Validators.required],
+      // description: ['Check whether is pruning correctly.', Validators.required],
+      sections: new FormArray([], Validators.required),
+      gap_weight: [20, Validators.required],
+      gap_score: [100, Validators.required],
+      picture_text: ['Describe how pictures will be taken', Validators.required]
     });
-    this.addQuestion();
+
+    // By Default Add a Question Section to the GAP FORM
+    this.addQuestionSection();
 
     this.initial();
     this.setMessage(this.messageService.getMessage());
   }
 
-  get name() {
-    return this.createForm.get('name');
-  }
-  get description() {
-    return this.createForm.get('description');
-  }
-
-  questionTitle(index: number) {
-    return this.formCategory.at(index).get('question');
+  // Method Add a new question section to the GAP form
+  addQuestionSection() {
+    const sections = (this.createForm.controls.sections as FormArray);
+    sections.push(this.createQuestionSection());
+    this.addQuestionToSection(sections.length - 1);
   }
 
-  checkIfWeightMatch(index: number, aIndex: number) {
-    const marks = this.formCategory.at(index).get('marks').value;
-    const answers = (this.formCategory.at(index).get('answers') as FormArray)
-      .controls;
+  removeQuestionSection(sectionIndex: number) {
+    this.getQuestionSections.removeAt(sectionIndex);
+  }
 
-    console.log(marks);
-    console.log(answers);
+  // Method creates a new Form Group for a question
+  createQuestionSection(): FormGroup {
+    return this.formBuilder.group({
+      section_name: ['This is a section name', Validators.required],
+      questions: new FormArray([])
+    });
+  }
 
-    let sum = 0;
-    for (const answer of answers) {
-      sum = sum + (answer as FormGroup).controls.weight.value;
-    }
-    console.log(sum);
-    if (sum === marks) {
-      console.log(true);
-      return true;
+  // Method Add a new question section to the GAP form
+  addQuestionToSection(sectionIndex) {
+    const section = (this.createForm.controls.sections as FormArray).controls[
+      sectionIndex
+      ] as FormGroup;
+
+    (section.controls.questions as FormArray).push(this.createQuestion());
+  }
+
+  createQuestion(): FormGroup {
+    return this.formBuilder.group({
+      question: ['This is the question to be asked', Validators.required],
+      description: ['Marks Input', Validators.required],
+      question_type: ['mark_input', Validators.required],
+      weight: [20, Validators.required],
+      answers: new FormArray([]),
+      is_not_applicable: [false, Validators.required]
+    });
+  }
+
+  addAnswersToQuestion(sectionIndex, qstIndex) {
+    const section = (this.createForm.controls.sections as FormArray).controls[
+      sectionIndex
+      ] as FormGroup;
+    const question = (section.controls.questions as FormArray).controls[qstIndex] as FormGroup;
+    (question.controls.answers as FormArray).push(this.createAnswer());
+  }
+
+  createAnswer(): FormGroup {
+    return this.formBuilder.group({
+      answer: ['This is an answer', Validators.required],
+      description: ['Answer Description', Validators.required],
+      weight: [20, Validators.required],
+      is_not_applicable: [false, Validators.required]
+    });
+  }
+
+  /*********
+   * GAP Manipulation methods
+   */
+
+  chooseIfApplicable(event) {
+    if (event.target.checked) {
     } else {
-      console.log(false);
-      return false;
     }
   }
 
-  weight(index: number, aIndex: number) {
-    const answers = (this.formCategory.at(index).get('answers') as FormArray)
-      .controls;
-    const answer = answers[aIndex] as FormGroup;
-    return answer.controls.weight;
+  chooseIfAnswerApplicable(event) {
+    if (event.target.checked) {
+    } else {
+    }
   }
 
-  marks(index: number) {
-    return this.formCategory.at(index).get('marks');
+  /*********
+   * Section Answers Form Manipulation methods
+   */
+
+
+  onQuestionTypeSelected(sectionIndex: number, qstIndex: number) {
+    const questions = this.getSectionQuestions(sectionIndex).controls;
+    const question = questions[qstIndex] as FormGroup;
+
+    if (question.controls.question_type.value === 'multiple_single' || question.controls.question_type.value === 'multiple_apply') {
+      this.addAnswersToQuestion(sectionIndex, qstIndex);
+    } else {
+      this.removeAllQuestionAnswers(sectionIndex, qstIndex);
+    }
   }
 
-  answerType(index: number) {
-    return this.formCategory.at(index).get('answerType');
+  removeAllQuestionAnswers(sectionIndex, qstIndex) {
+    this.getQuestionAnswers(sectionIndex, qstIndex).clear();
   }
+
+  getSectionName(index: number) {
+    return this.getQuestionSections.at(index).get('section_name');
+  }
+
+  getQuestionApplicable(sectionIndex: number, qstIndex: number) {
+    return this.getSectionQuestions(sectionIndex).at(qstIndex).get('is_not_applicable');
+  }
+
+  getAnswerApplicable(sectionIndex: number, qstIndex: number, answIndex: number) {
+    return this.getQuestionAnswers(sectionIndex, qstIndex).at(answIndex).get('is_not_applicable').value;
+  }
+
+  getSectionQuestions(qIndex: number): FormArray {
+    return this.getQuestionSections.at(qIndex).get('questions') as FormArray;
+  }
+
+  getQuestionAnswers(sectionIndex: number, qstIndex: number): FormArray {
+    return this.getSectionQuestions(sectionIndex).at(qstIndex).get('answers') as FormArray;
+  }
+
+  getQuestionType(sectionIndex: number, qstIndex: number) {
+    return this.getSectionQuestions(sectionIndex).at(qstIndex).get('question_type')
+  }
+
+  checkIFMultipleQuestion(sectionIndex: number, qstIndex: number) {
+    const type = this.getQuestionType(sectionIndex, qstIndex);
+    return type.value === 'multiple_single' || type.value === 'multiple_apply';
+  }
+
+  removeQuestionAnswer(sectionIndex, qstIndex, ansIndex) {
+    this.getQuestionAnswers(sectionIndex, qstIndex).removeAt(ansIndex);
+  }
+
+  // getQuestionType(): FormArray {
+  //
+  // }
+
+
+  // get description() {
+  //   return this.createForm.get('description');
+  // }
+  //
+  // questionTitle(index: number) {
+  //   return this.formCategory.at(index).get('question');
+  // }
+  //
+  // checkIfWeightMatch(index: number, aIndex: number) {
+  //   const marks = this.formCategory.at(index).get('marks').value;
+  //   const answers = (this.formCategory.at(index).get('answers') as FormArray)
+  //     .controls;
+  //
+  //   console.log(marks);
+  //   console.log(answers);
+  //
+  //   let sum = 0;
+  //   for (const answer of answers) {
+  //     sum = sum + (answer as FormGroup).controls.weight.value;
+  //   }
+  //   console.log(sum);
+  //   if (sum === marks) {
+  //     console.log(true);
+  //     return true;
+  //   } else {
+  //     console.log(false);
+  //     return false;
+  //   }
+  // }
+
+  // weight(index: number, aIndex: number) {
+  //   const answers = (this.formCategory.at(index).get('answers') as FormArray)
+  //     .controls;
+  //   const answer = answers[aIndex] as FormGroup;
+  //   return answer.controls.weight;
+  // }
+  //
+  // marks(index: number) {
+  //   return this.formCategory.at(index).get('marks');
+  // }
+
+  // answerType(index: number) {
+  //   return this.formCategory.at(index).get('answerType');
+  // }
 
   onSubmit() {
     if (this.createForm.valid) {
@@ -106,10 +254,14 @@ export class GapCreateComponent
       const temp = this.createForm.getRawValue();
 
       const gap = {
-        name: temp.name,
-        description: temp.description,
-        questions: temp.questions,
+        gap_name: temp.gap_name,
+        gap_weight: temp.gap_weight,
+        gap_score: temp.gap_score,
+        picture_text: temp.picture_text,
+        sections: temp.sections
       };
+
+      console.log(gap);
 
       this.gapService.save(gap).subscribe(
         (data) => {
@@ -130,69 +282,9 @@ export class GapCreateComponent
           this.helperService.getFormValidationErrors(this.createForm)
         );
       }
-      if (this.createForm.get('questions').invalid) {
+      if (this.createForm.get('sections').invalid) {
         this.setError('Missing required gap(s) information');
       }
-    }
-  }
-
-  createQuestion(): FormGroup {
-    return this.formBuilder.group({
-      question: ['Is user practising pruning', Validators.required],
-      answerType: ['', Validators.required],
-      answers: new FormArray([]),
-      marks: [100],
-    });
-  }
-
-  createAnswer(): FormGroup {
-    return this.formBuilder.group({
-      answer: [''],
-      weight: [0],
-    });
-  }
-
-  addAnswer(index: number) {
-    const question = (this.createForm.controls.questions as FormArray).controls[
-      index
-    ] as FormGroup;
-
-    (question.controls.answers as FormArray).push(this.createAnswer());
-  }
-
-  get formCategory() {
-    return this.createForm.get('questions') as FormArray;
-  }
-
-  questionAnswers(qIndex: number): FormArray {
-    return this.formCategory.at(qIndex).get('answers') as FormArray;
-  }
-
-  removeQuestionAnswer(qIndex: number, aIndex: number) {
-    this.questionAnswers(qIndex).removeAt(aIndex);
-  }
-
-  addQuestion() {
-    (this.createForm.controls.questions as FormArray).push(
-      this.createQuestion()
-    );
-    // this.addAnswer(
-    //   (this.createForm.controls.questions as FormArray).length - 1
-    // );
-  }
-
-  removeQuestion(index: number) {
-    (this.createForm.controls.questions as FormArray).removeAt(index);
-  }
-
-  getQuestionsFormGroup(index: number): FormGroup {
-    return this.formCategory.controls[index] as FormGroup;
-  }
-
-  onAdoptionMethodSelected(index: number) {
-    const value = this.getQuestionsFormGroup(index).controls.answerType.value;
-    if (value === 'multiple_choice') {
-      this.adoptionOptionsVisible = true;
     }
   }
 
@@ -200,7 +292,9 @@ export class GapCreateComponent
     // this.location.back();
   }
 
-  initial() {}
+  initial() {
+  }
 
-  ngOnDestroy() {}
+  ngOnDestroy() {
+  }
 }

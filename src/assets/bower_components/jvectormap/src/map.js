@@ -768,7 +768,7 @@ jvm.Map.prototype = {
 
     for (i = 0; i < selected.length; i++) {
       select[selected[i]] = false;
-    };
+    }
 
     this.setSelected(type, select);
   },
@@ -953,7 +953,7 @@ jvm.Map.prototype = {
     this.createMarkers(markers);
     for (i = 0; i < seriesData.length; i++) {
       this.series.markers[i].setValues(seriesData[i] || {});
-    };
+    }
   },
 
   /**
@@ -966,7 +966,7 @@ jvm.Map.prototype = {
     for (i = 0; i < markers.length; i++) {
       this.markers[ markers[i] ].element.remove();
       delete this.markers[ markers[i] ];
-    };
+    }
   },
 
   /**
