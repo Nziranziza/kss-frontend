@@ -28,7 +28,7 @@ export class TrainingEditComponent
     private router: Router,
     private route: ActivatedRoute,
     private messageService: MessageService,
-    private modalService: NgbModal, 
+    private modalService: NgbModal,
     private helperService: HelperService
   ) {
     super();
@@ -81,8 +81,8 @@ export class TrainingEditComponent
     return this.createTraining.get("adoptionGap");
   }
 
- 
-  
+
+
 
   getTraining() {
     this.trainingService.one(this.id).subscribe((data) => {
@@ -119,7 +119,7 @@ export class TrainingEditComponent
             fileName: files[i].name,
             url: data.data[i],
           });
-        };
+        }
         this.loading = false;
       },
       (err) => {
@@ -137,7 +137,7 @@ export class TrainingEditComponent
         _id : "",
         name: "Not Applied"
       }];
-      data.data.forEach(data => { 
+      data.data.forEach(data => {
         newData.push({_id: data._id, name: data.name});
       });
       this.gaps = newData;
@@ -152,7 +152,7 @@ export class TrainingEditComponent
     }
     console.log(this.createTraining.get('adoptionGap'.toString()).value);
   }
-  
+
   async onFileUpload() {
     if (this.createTraining.valid) {
       this.loading = true;

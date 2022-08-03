@@ -69,7 +69,7 @@ import { ViewGroupComponent } from './groups/view-group/view-group.component';
     ReportsComponent,
     SmsDashboardComponent,
     ViewGapComponent,
-    ViewGroupComponent,
+    ViewGroupComponent
   ],
   imports: [
     FormsModule,

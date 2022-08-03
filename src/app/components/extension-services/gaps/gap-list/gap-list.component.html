@@ -49,7 +49,7 @@
             <tr>
               <th>Date Added</th>
               <th>GAP Name</th>
-              <th>GAP Description</th>
+              <th>GAP Overall Weight</th>
               <th>Observations/Adoption</th>
               <th>Status</th>
               <th>Actions</th>
@@ -58,11 +58,11 @@
           <tbody>
             <ng-container *ngFor="let gap of gaps | paginate: config">
               <tr>
-                <td>{{ gap.createdAt | date: "short" }}</td>
-                <td>{{ gap.name }}</td>
-                <td>{{ gap.description }}</td>
-                <td>{{ gap.questions.length }}</td>
-                <td>Active</td>
+                <td>{{ gap.createdAt }}</td>
+                <td>{{ gap.gap_name }}</td>
+                <td>{{ gap.gap_weight }}</td>
+                <td>{{ gap.sections.length }}</td>
+                <td>{{ gap.status}}</td>
                 <td>
                   <button
                     appRequiredSeason
