@@ -1,34 +1,3 @@
-<<<<<<< HEAD
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { AdminComponent } from '../admin/admin/admin.component';
-import { AdminGuard } from '../../core/guards/admin.guard';
-import { FarmerGroupCreateComponent } from './groups/farmer-group-create/farmer-group-create.component';
-import { FarmerGroupListComponent } from './groups/farmer-group-list/farmer-group-list.component';
-import { GapListComponent } from './gaps/gap-list/gap-list.component';
-import { GapCreateComponent } from './gaps/gap-create/gap-create.component';
-import { GapEditComponent } from './gaps/gap-edit/gap-edit.component';
-import { FarmerGroupEditComponent} from './groups/farmer-group-edit/farmer-group-edit.component';
-import { TrainingCreateComponent } from './trainings/training-create/training-create.component';
-import { TrainingListComponent } from './trainings/training-list/training-list.component';
-import { TrainingEditComponent } from './trainings/training-edit/training-edit.component';
-import { TrainingViewComponent } from './trainings/training-view/training-view.component';
-import { TrainingSchedulingCreateComponent } from './schedules/training-scheduling-create/training-scheduling-create.component';
-import { TrainingSchedulingListComponent } from './schedules/training-scheduling-list/training-scheduling-list.component';
-import { TrainingScheduleViewComponent } from './schedules/training-schedule-view/training-schedule-view.component';
-import { TrainingScheduleEditComponent } from './schedules/training-schedule-edit/training-schedule-edit.component';
-import { ScheduleFarmVisitComponent } from './farm-visits/schedule-farm-visit/schedule-farm-visit.component';
-import { EditFarmVisitComponent } from './farm-visits/edit-farm-visit/edit-farm-visit.component';
-import { FarmVisitListComponent } from './farm-visits/farm-visit-list/farm-visit-list.component';
-import { ViewFarmVisitComponent } from './farm-visits/view-farm-visit/view-farm-visit.component';
-import { EditNurseryComponent } from './seedlings/nurseries/edit-nursery/edit-nursery.component';
-import { ViewNurseryComponent } from './seedlings/nurseries/view-nursery/view-nursery.component';
-import { NurseryListComponent } from './seedlings/nurseries/nursery-list/nursery-list.component';
-import { NurseryCreateComponent } from './seedlings/nurseries/nursery-create/nursery-create.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { ReportsComponent } from './reports/reports.component';
-import { SmsDashboardComponent } from './sms-dashboard/sms-dashboard.component';
-=======
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 import { AdminComponent } from "../admin/admin/admin.component";
@@ -60,7 +29,6 @@ import { ReportsComponent } from "./reports/reports.component";
 import { SmsDashboardComponent } from "./sms-dashboard/sms-dashboard.component";
 import { ViewGapComponent } from "./gaps/view-gap/view-gap.component";
 import { ViewGroupComponent } from "./groups/view-group/view-group.component";
->>>>>>> ec7f85194668984864f20bec69191f4bb81fdff6
 
 const routes: Routes = [
   {

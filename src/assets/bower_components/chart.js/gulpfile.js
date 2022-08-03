@@ -46,7 +46,7 @@ gulp.task('build', function(){
 
 	function FileName(moduleName){
 		return srcDir+'Chart.'+moduleName+'.js';
-	};
+	}
 });
 
 /*
