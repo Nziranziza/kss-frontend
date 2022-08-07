@@ -6,7 +6,7 @@ import { BasicComponent, SeedlingService } from "src/app/core";
   selector: "app-view-nursery",
   templateUrl: "./view-nursery.component.html",
   styleUrls: [
-    "../../../schedules/training-scheduling-create/training-scheduling-create.component.css",
+    "./view-nursery.component.css",
   ],
 })
 export class ViewNurseryComponent extends BasicComponent implements OnInit {
