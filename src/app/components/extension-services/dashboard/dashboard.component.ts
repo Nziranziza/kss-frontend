@@ -4,12 +4,16 @@ import { ChartType } from "angular-google-charts";
 import {
   AuthenticationService,
   BasicComponent,
+  FarmService,
   GapService,
+  GroupService,
   LocationService,
   OrganisationService,
+  SeasonService,
   TrainingService,
   UserService,
   VisitService,
+  SeedlingService,
 } from "src/app/core";
 
 @Component({
@@ -26,12 +30,28 @@ export class DashboardComponent extends BasicComponent implements OnInit {
     private trainingService: TrainingService,
     private userService: UserService,
     private visitService: VisitService,
-    private gapService: GapService
+    private gapService: GapService,
+    private seasonService: SeasonService,
+    private groupService: GroupService,
+    private farmService: FarmService,
+    private seedlingService: SeedlingService
   ) {
     super(locationService, organisationService);
   }
 
   dashboardForm: FormGroup;
+  trainingFilterEnabled: boolean = false;
+  visitFilterEnabled: boolean = false;
+  seedlingFilterEnabled: boolean = false;
+  gapFilterEnabled: boolean = false;
+  organisations = [];
+  newOrg: String;
+  farms: any[] = [];
+  oneLand: any;
+  maxDate: any;
+  minDate: any;
+  farmDetails: any;
+
   graph = {
     type: ChartType.PieChart,
     data: [
@@ -45,8 +65,8 @@ export class DashboardComponent extends BasicComponent implements OnInit {
       backgroundColor: { fill: "transparent" },
     },
     columnNames: ["male", "female"],
-    width: 150,
-    height: 150,
+    width: 320,
+    height: 160,
   };
 
   seedlingGraph = {
@@ -80,9 +100,50 @@ export class DashboardComponent extends BasicComponent implements OnInit {
     totalInvitees: 0,
     totalPresent: 0,
   };
-  visitStats: any = { femaleFarmVisits: 0, maleFarmVisits: 0, totolVisits: 0 };
+  visitStats: any = { femaleFarmVisits: 0, maleFarmVisits: 0, totalVisits: 0 };
   gapAdoptionStats: any[] = [];
   seedlingStats: any[] = [];
+  coveredSectors: any[] = [];
+  groups: any[] = [];
+  nurseries: any[] = [];
+  selectedGroup: String;
+  initialValue = "";
+  keyword = "organizationName";
+  groupKeyword = "groupName";
+  nurseryKeyword = "nurseryName";
+  seasons: any[];
+  currentSeason: any;
+  selectedNursery: any;
+  currentSeasonYear: any;
+  currentSelectedLocation: any;
+  dateRangeMin: any;
+  dateRangeMax: any;
+
+  weeks = [
+    { id: 1, name: "Week 1", start: "01", end: "07" },
+    { id: 2, name: "Week 2", start: "07", end: "14" },
+    { id: 3, name: "Week 3", start: "14", end: "21" },
+    { id: 4, name: "Week 4", start: "21", end: "31" },
+  ];
+
+  quarters = [
+    {
+      id: 1,
+      name: "Q1",
+    },
+    {
+      id: 2,
+      name: "Q2",
+    },
+    {
+      id: 3,
+      name: "Q3",
+    },
+    {
+      id: 4,
+      name: "Q4",
+    },
+  ];
 
   ngOnInit() {
     this.dashboardForm = this.formBuilder.group({
@@ -98,15 +159,18 @@ export class DashboardComponent extends BasicComponent implements OnInit {
       training_id: [""],
       trainer_id: [""],
       filterByDate: [""],
+      season_id: [""],
+      group_id: [""],
+      farm_id: [""],
+      cws_id: [""],
+      quarterId: [""],
+      covered_sector: [""],
     });
+    this.initial();
     this.basicInit(this.authenticationService.getCurrentUser().info.org_id);
     this.onChanges();
-    this.getTrainers();
-    this.getTrainings();
-    this.getTrainingsStats({});
-    this.getGapAdoptionStats({});
-    this.getVisitsStats({});
   }
+
   myLatLng = { lat: -2, lng: 30 }; // Map Options
   mapOptions: google.maps.MapOptions = {
     center: this.myLatLng,
@@ -121,53 +185,185 @@ export class DashboardComponent extends BasicComponent implements OnInit {
     id: number;
     lat: number;
     lng: number;
-    name: string;
-    trees: string;
-    visits: number;
   }[] = [
     {
       id: 1,
       lat: -1.9485423,
       lng: 30.0613514,
-      name: "Rugero Farm",
-      trees: "10",
-      visits: 10,
-    },
-    {
-      id: 2,
-      lat: -2.146385,
-      lng: 30.131367,
-      name: "Kigl Farm",
-      trees: "20",
-      visits: 20,
-    },
-    {
-      id: 3,
-      lat: -2.115194,
-      lng: 30.11542,
-      name: "Jk Farm",
-      trees: "30",
-      visits: 30,
-    },
-    {
-      id: 4,
-      lat: -1.898489,
-      lng: 30.19131,
-      name: "uio farm",
-      trees: "40",
-      visits: 40,
     },
   ];
 
-  selectMarker(spot: { id: number; lat: number; lng: number; name: string }) {
-    this.selectedFarmDetails = spot;
-    this.clickedMarker = true;
+  selectMarker(id: string) {
+    this.farmService.getLand(id).subscribe((data) => {
+      this.farmDetails = data.data;
+      this.clickedMarker = true;
+      console.log(this.farmDetails);
+      this.loading = false;
+    });
+  }
+
+  getFarmerGroup() {
+    this.loading = true;
+    this.groupService.all({}).subscribe((data) => {
+      this.groups = data.data;
+      console.log(this.groups);
+      this.loading = false;
+    });
+  }
+
+  getOrganisations() {
+    this.organisationService.all().subscribe((data) => {
+      if (data) {
+        this.organisations = data.content.filter((org) =>
+          org.organizationRole.includes(1)
+        );
+      }
+    });
+  }
+
+  getNurseries() {
+    this.seedlingService.all().subscribe((data) => {
+      this.nurseries = data.data;
+      console.log(this.nurseries);
+    });
+  }
+
+  // initials
+  initial() {
+    this.getTrainers();
+    this.getNurseries();
+    this.getTrainings();
+    this.getOrganisations();
+    this.getFarms();
+    this.getFarmerGroup();
+    this.seasonService.all().subscribe((data) => {
+      this.seasons = data.content;
+      this.currentSeason = this.authenticationService.getCurrentSeason();
+      this.currentSeasonYear = this.currentSeason.year;
+      this.dateRangeMin = `${parseFloat(this.currentSeasonYear) - 1}-10-01`;
+      this.dateRangeMax = `${this.currentSeasonYear}-09-31`;
+      this.dashboardForm.controls.filterByDate.setValue([
+        `${parseFloat(this.currentSeasonYear) - 1}-10-01`,
+        `${this.currentSeasonYear}-10-01`,
+      ]);
+    });
+    this.getGeneralStats({});
+  }
+  // General stats from filters
+  getGeneralStats(body: any) {
+    this.getTrainingsStats(body);
+    this.getGapAdoptionStats(body);
+    this.getVisitsStats(body);
+    this.getSeedlingStats(body);
+  }
+
+  // get stats from filters
+  getStats(filterBy: string) {
+    if (filterBy === "training") {
+      let body: any;
+      if (this.dashboardForm.value.filterByDate.length > 1) {
+        body = {
+          date: {
+            from: this.dashboardForm.value.filterByDate[0],
+            to: this.dashboardForm.value.filterByDate[1],
+          },
+        };
+      }
+      this.getTrainingsStats(body);
+    } else if (filterBy === "visits") {
+      let body: any;
+      if (this.dashboardForm.value.filterByDate.length > 1) {
+        body = {
+          date: {
+            from: this.dashboardForm.value.filterByDate[0],
+            to: this.dashboardForm.value.filterByDate[1],
+          },
+        };
+      }
+      this.visitStats(body);
+    } else if (filterBy === "seedling") {
+      let body: any;
+      if (this.dashboardForm.value.filterByDate.length > 1) {
+        body = {
+          date: {
+            from: this.dashboardForm.value.filterByDate[0],
+            to: this.dashboardForm.value.filterByDate[1],
+          },
+        };
+      }
+      this.getSeedlingStats(body);
+    } else if (filterBy === "gap") {
+      let body: any;
+      if (this.dashboardForm.value.filterByDate.length > 1) {
+        body = {
+          date: {
+            from: this.dashboardForm.value.filterByDate[0],
+            to: this.dashboardForm.value.filterByDate[1],
+          },
+        };
+      }
+      this.getGapAdoptionStats(body);
+    } else if (filterBy === "location") {
+      const body = this.currentSelectedLocation;
+      if (typeof body === "object") {
+        this.getGeneralStats({ location: body });
+      }
+    } else if (filterBy === "cws") {
+      if (this.newOrg) {
+        let body: any;
+        body = { referenceId: this.newOrg };
+        if (this.dashboardForm.value.covered_sector != "") {
+          body.location = {
+            searchBy: "sect_id",
+            locationId: this.dashboardForm.value.covered_sector,
+          };
+        }
+        this.getGeneralStats(body);
+      }
+    }
+  }
+
+  selectEvent(item) {
+    this.newOrg = item._id;
+    let newData = this.organisations.filter((org) => org._id === item._id);
+    this.coveredSectors = newData[0].coveredSectors;
+  }
+
+  selectGroupEvent(item) {
+    this.selectedGroup = item._id;
+    let body: any = {
+      groupId: item._id,
+    };
+    if (this.dashboardForm.value.trainingId != "") {
+      body.trainingId = this.dashboardForm.value.trainingId;
+    }
+    if (this.dashboardForm.value.trainer_id != "") {
+      body.trainerId = this.dashboardForm.value.trainer_id;
+    }
+    this.getTrainingsStats(body);
+  }
+
+  deselectEvent() {
+    this.newOrg = "";
+  }
+
+  selectNurseryEvent(item) {
+    this.selectedNursery = item._id;
+  }
+
+  deselectNurseryEvent() {
+    this.selectedNursery = "";
+  }
+
+  deselectGroupEvent() {
+    this.selectedGroup = "";
   }
 
   getTrainings(): void {
     this.loading = true;
     this.trainingService.all().subscribe((data) => {
       this.trainings = data.data;
+      console.log(this.trainings);
       this.loading = false;
     });
   }
@@ -180,17 +376,50 @@ export class DashboardComponent extends BasicComponent implements OnInit {
     });
   }
 
-  getVisitsStats(body: any): void {
+  getSeedlingStats(body: any): void {
     this.loading = true;
-    console.log(this.graph.data[0][1]);
-    this.visitService.getVisitsStats(body).subscribe((data) => {
-      this.visitStats = data.data;
-      this.graph.data[0][1] = this.visitStats.maleFarmVisits * 100 / this.visitStats.totolVisits;
-      this.graph.data[1][1] = this.visitStats.femaleFarmVisits * 100 / this.visitStats.totolVisits;
-      
+    this.trainingService.getScheduleStats(body).subscribe((data) => {
+      this.trainingsStats = data.data;
       this.loading = false;
     });
   }
+
+  getFarms() {
+    this.loading = true;
+    this.farmService.all().subscribe((data) => {
+      data.data.forEach((item) => {
+        this.farms.push({
+          id: item.farmId,
+          lat: parseFloat(item.latitude),
+          lng: parseFloat(item.longitude),
+        });
+      });
+      console.log(this.farms);
+      this.loading = false;
+    });
+  }
+
+  getOneLand() {
+    this.loading = true;
+    this.farmService.getLand("").subscribe((data) => {
+      this.oneLand = data.data;
+    });
+  }
+
+  getVisitsStats(body: any): void {
+    this.loading = true;
+    this.visitService.getVisitsStats(body).subscribe((data) => {
+      this.visitStats = data.data;
+      this.graph.data[0][1] =
+        (this.visitStats.maleFarmVisits * 100) /
+        this.visitStats.totalFarmersVisited;
+      this.graph.data[1][1] =
+        (this.visitStats.femaleFarmVisits * 100) /
+        this.visitStats.totalFarmersVisited;
+      this.loading = false;
+    });
+  }
+
   getGapAdoptionStats(body: any): void {
     this.loading = true;
     this.gapService.getGapsStats(body).subscribe((data) => {
@@ -198,6 +427,7 @@ export class DashboardComponent extends BasicComponent implements OnInit {
       this.loading = false;
     });
   }
+
   getTrainers() {
     this.loading = true;
     this.userService
@@ -213,35 +443,132 @@ export class DashboardComponent extends BasicComponent implements OnInit {
       .get("prov_id".toString())
       .valueChanges.subscribe((value) => {
         this.locationChangeProvince(this.dashboardForm, value);
+        this.currentSelectedLocation = {
+          searchBy: "prov_id",
+          locationId: value,
+        };
       });
     this.dashboardForm.controls.location
       .get("dist_id".toString())
       .valueChanges.subscribe((value) => {
         this.locationChangDistrict(this.dashboardForm, value);
+        this.currentSelectedLocation = {
+          searchBy: "dist_id",
+          locationId: value,
+        };
       });
     this.dashboardForm.controls.location
       .get("sect_id".toString())
       .valueChanges.subscribe((value) => {
         this.locationChangSector(this.dashboardForm, value);
+        this.currentSelectedLocation = {
+          searchBy: "sect_id",
+          locationId: value,
+        };
       });
     this.dashboardForm.controls.location
       .get("cell_id".toString())
       .valueChanges.subscribe((value) => {
         this.locationChangCell(this.dashboardForm, value);
+        this.currentSelectedLocation = {
+          searchBy: "cell_id",
+          locationId: value,
+        };
       });
 
     this.dashboardForm.controls.training_id.valueChanges.subscribe((value) => {
-      let body = {
+      let body: any = {
         trainingId: value,
       };
       this.getTrainingsStats(body);
     });
 
+    this.dashboardForm.controls.season_id.valueChanges.subscribe((value) => {
+      this.dateRangeMin = `${parseFloat(value) - 1}-10-01`;
+      this.dateRangeMax = `${value}-09-31`;
+      this.dashboardForm.controls.filterByDate.setValue([
+        `${parseFloat(value) - 1}-10-01`,
+        `${value}-10-01`,
+      ]);
+    });
+
+    this.dashboardForm.controls.quarterId.valueChanges.subscribe((value) => {
+      let current =
+        this.dashboardForm.value.season_id != ""
+          ? this.dashboardForm.value.season_id
+          : this.currentSeasonYear;
+      if (value == 1) {
+        this.dateRangeMin = `${parseFloat(current) - 1}-10-01`;
+        this.dateRangeMax = `${current}-01-01`;
+        this.dashboardForm.controls.filterByDate.setValue([
+          `${parseFloat(current) - 1}-10-01`,
+          `${current}-01-01`,
+        ]);
+      } else if (value == 2) {
+        this.dateRangeMin = `${current}-01-01`;
+        this.dateRangeMax = `${current}-04-01`;
+        this.dashboardForm.controls.filterByDate.setValue([
+          `${current}-01-01`,
+          `${current}-04-01`,
+        ]);
+      } else if (value == 3) {
+        this.dateRangeMin = `${current}-04-01`;
+        this.dateRangeMax = `${current}-07-01`;
+        this.dashboardForm.controls.filterByDate.setValue([
+          `${current}-04-01`,
+          `${current}-07-01`,
+        ]);
+      } else if (value == 4) {
+        this.dateRangeMin = `${current}-07-01`;
+        this.dateRangeMax = `${current}-10-01`;
+        this.dashboardForm.controls.filterByDate.setValue([
+          `${current}-07-01`,
+          `${current}-10-01`,
+        ]);
+      }
+    });
+
+    this.dashboardForm.controls.filterByDate.valueChanges.subscribe((value) => {
+      let selectedDate = [];
+      if (value) {
+        value.forEach((newData) => {
+          selectedDate.push(this.formatDate(newData));
+        });
+      }
+    });
+
     this.dashboardForm.controls.trainer_id.valueChanges.subscribe((value) => {
-      let body = {
+      let body: any = {
         trainerId: value,
       };
+      if (this.dashboardForm.value.trainingId != "") {
+        body.trainingId = this.dashboardForm.value.trainingId;
+      }
       this.getTrainingsStats(body);
     });
+  }
+
+  formatDate(date) {
+    var d = new Date(date),
+      month = "" + (d.getMonth() + 1),
+      day = "" + d.getDate(),
+      year = d.getFullYear();
+
+    if (month.length < 2) month = "0" + month;
+    if (day.length < 2) day = "0" + day;
+
+    return [year, month, day].join("-");
+  }
+
+  enableFilter(value: boolean, type: string) {
+    if (type == "training") {
+      this.trainingFilterEnabled = value;
+    } else if (type == "seedling") {
+      this.seedlingFilterEnabled = value;
+    } else if (type == "gap") {
+      this.gapFilterEnabled = value;
+    } else if (type == "visit") {
+      this.visitFilterEnabled = value;
+    }
   }
 }

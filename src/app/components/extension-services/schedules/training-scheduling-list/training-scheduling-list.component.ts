@@ -9,6 +9,7 @@ import { BasicComponent } from "../../../../core";
 import { Subject } from "rxjs";
 import { DataTableDirective } from "angular-datatables";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { ConfirmModalComponent } from "src/app/shared";
 
 @Component({
   selector: "app-training-scheduling-list",
@@ -94,9 +95,37 @@ extends BasicComponent implements OnInit, OnDestroy {
     this.loading = true;
     console.log(this.schedule);
     let data = this.schedule._id;
-    console.log(data);
     this.trainingService.sendMessage(data).subscribe((data) => {
       this.loading = false;
+    });
+  }
+
+  openDeleteModal(group: any, warning?: any) {
+    const modalRef = this.modal.open(ConfirmModalComponent);
+    modalRef.componentInstance.title = "Delete Training Schedule";
+    modalRef.componentInstance.content =
+      "Are you sure you want to Delete this Schedule?";
+    modalRef.componentInstance.confirmButtonText = "Delete";
+    modalRef.componentInstance.cancelButtonText = "Cancel";
+    modalRef.componentInstance.warning = warning;
+    modalRef.result.then((results) => {
+      if (results.confirmed) {
+        this.trainingService.deleteSchedule(group._id).subscribe(
+          () => {
+            this.loading = true;
+            const body = {
+              reference:
+                this.authenticationService.getCurrentUser().info.org_id,
+            };
+
+            this.getSchedules();
+            this.setMessage("Schedule successfully Deleted!");
+          },
+          (err) => {
+            this.openDeleteModal(group, err.message);
+          }
+        );
+      }
     });
   }
 }

@@ -9,6 +9,7 @@ import {
   BasicComponent,
 } from "src/app/core";
 import { Subject } from "rxjs";
+import { ConfirmModalComponent } from "src/app/shared";
 
 @Component({
   selector: "app-nursery-list",
@@ -107,21 +108,32 @@ export class NurseryListComponent
     };
   }
 
-  open(content) {
-    this.modalService.open(content, { size: "sm", windowClass: "modal-sm" });
-  }
+  openDeleteModal(group: any, warning?: any) {
+    const modalRef = this.modalService.open(ConfirmModalComponent);
+    modalRef.componentInstance.title = "Delete Nursery";
+    modalRef.componentInstance.content =
+      "Are you sure you want to Delete this Nursery?";
+    modalRef.componentInstance.confirmButtonText = "Delete";
+    modalRef.componentInstance.cancelButtonText = "Cancel";
+    modalRef.componentInstance.warning = warning;
+    modalRef.result.then((results) => {
+      if (results.confirmed) {
+        this.seedlingService.delete(group._id).subscribe(
+          () => {
+            this.loading = true;
+            const body = {
+              reference:
+                this.authenticationService.getCurrentUser().info.org_id,
+            };
 
-  selectedSchedule(schedule) {
-    this.schedule = schedule;
-  }
-
-  sendMessage() {
-    this.loading = true;
-    console.log(this.schedule);
-    let data = this.schedule._id;
-    console.log(data);
-    this.trainingService.sendMessage(data).subscribe((data) => {
-      this.loading = false;
+            this.getSchedules();
+            this.setMessage("Nursery successfully Deleted!");
+          },
+          (err) => {
+            this.openDeleteModal(group, err.message);
+          }
+        );
+      }
     });
   }
 }

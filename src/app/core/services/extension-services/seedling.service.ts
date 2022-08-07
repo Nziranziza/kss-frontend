@@ -20,6 +20,10 @@ export class SeedlingService {
     return this.apiService.get("/v1.1/nurseries/" + id);
   }
 
+  delete(id: string): Observable<any> {
+    return this.apiService.delete("/v1.1/nurseries/" + id);
+  }
+
   update(id: string, body: any): Observable<any> {
     return this.apiService.put("/v1.1/nurseries/" + id, body);
   }

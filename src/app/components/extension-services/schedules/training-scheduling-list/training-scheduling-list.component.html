@@ -81,7 +81,7 @@
               <td>
                 <button
                   appRequiredSeason
-                  class="btn btn-action-no-border btn-margin details-button"
+                  class="btn btn-action-no-border details-button"
                   routerLink="/admin/training/schedule/view/{{ schedule._id }}"
                 >
                   <em class="fa fa-eye"></em>
@@ -89,19 +89,19 @@
                 <button
                   appRequiredSeason
                   (click)="openDeleteModal(schedule)"
-                  class="btn btn-action-no-border btn-margin"
+                  class="btn btn-action-no-border"
                 >
-                  <em class="fa fa-close"></em>
+                  <em class="fa fa-trash"></em>
                 </button>
                 <button
                   appRequiredSeason
                   (click)="open(content); selectedSchedule(schedule)"
-                  class="btn btn-action-no-border btn-margin"
+                  class="btn btn-action-no-border"
                 >
                   <em class="fa fa-envelope-o"></em>
                 </button>
                 <button
-                  class="btn btn-action-no-border btn-margin btn-sm details-button"
+                  class="btn btn-action-no-border btn-sm details-button"
                   routerLink="/admin/training/schedule/edit/{{ schedule._id }}"
                 >
                   <em class="fa fa-pencil"></em>
