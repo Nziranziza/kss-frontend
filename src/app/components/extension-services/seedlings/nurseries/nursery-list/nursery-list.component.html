@@ -28,28 +28,34 @@
         <h1>{{ seedsSum }} Kg</h1>
       </div>
     </div>
-    <div class="col-sm-2" style="padding: 0 2px 0 0px">
-      <div class="text-center stats-box third-box">
-        <h3>Total Expected Seedlings</h3>
-        <h1>{{ seedsSum * 2500 }}</h1>
-      </div>
-    </div>
-    <div class="col-sm-2" style="padding: 0 2px 0 0px">
-      <div class="text-center stats-box">
-        <h3>Total Pricked Out Seedlings</h3>
-        <h1>{{ prickedSum }}</h1>
-      </div>
-    </div>
-    <div class="col-sm-2" style="padding: 0 2px 0 0px">
-      <div class="text-center stats-box">
-        <h3>Average Success Rate</h3>
-        <h1>{{ (prickedSum * 100) / (seedsSum * 2500) }}%</h1>
-      </div>
-    </div>
-    <div class="col-sm-2" style="padding: 0 2px 0 0px">
-      <div class="text-center stats-box">
-        <h3>Total Distributed Seedlings</h3>
-        <h1>{{ distributeSum }}</h1>
+    <div class="col-sm-8" style="padding: 0 2px 0 0px">
+      <div class="row stats-box">
+        <div class="col-sm-3" style="padding: 0 2px 0 0px">
+          <div class="text-center">
+            <h4>Total Expected Seedlings</h4>
+            <h2>{{ seedsSum * 2500 }}</h2>
+          </div>
+        </div>
+        <div class="col-sm-3" style="padding: 0 2px 0 0px">
+          <div class="text-center">
+            <h4>Total Pricked Out Seedlings</h4>
+            <h2>{{ prickedSum }}</h2>
+          </div>
+        </div>
+        <div class="col-sm-3" style="padding: 0 2px 0 0px">
+          <div class="text-center">
+            <h4>Average Success Rate</h4>
+            <h2>
+              {{ (prickedSum * 100) / (seedsSum * 2500) | number: "1.2-2" }}%
+            </h2>
+          </div>
+        </div>
+        <div class="col-sm-3" style="padding: 0 2px 0 0px">
+          <div class="text-center">
+            <h4>Total Distributed Seedlings</h4>
+            <h2>{{ distributeSum }}</h2>
+          </div>
+        </div>
       </div>
     </div>
   </div>
