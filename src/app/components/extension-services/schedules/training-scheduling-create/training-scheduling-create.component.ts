@@ -144,7 +144,7 @@ export class TrainingSchedulingCreateComponent
     this.loading = true;
     this.groupService
       .list({
-        reference: '5d1635ac60c3dd116164d4ae',
+        reference: this.authenticationService.getCurrentUser().info.org_id,
       })
       .subscribe((data) => {
         this.farmerGroups = data.data;

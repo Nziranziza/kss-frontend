@@ -86,7 +86,6 @@ export class ScheduleFarmVisitComponent implements OnInit {
       })
       .subscribe((data) => {
         this.farmerGroups = data.data;
-        console.log(this.farmerGroups);
         this.loading = false;
       });
   }

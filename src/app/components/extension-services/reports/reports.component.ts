@@ -94,11 +94,7 @@ export class ReportsComponent extends BasicComponent implements OnInit {
   onChanges() {
     this.reportForm.get("reportFor").valueChanges.subscribe((value) => {
       this.reportBody = {};
-      if (value === "Farmer Groups") {
-        this.reportService.groupStats({}).subscribe((data) => {
-          this.stats = data.data[0];
-        });
-      }
+      this.getStats(value, this.reportBody);
     });
     this.reportForm.controls.location
       .get("prov_id".toString())
@@ -107,16 +103,11 @@ export class ReportsComponent extends BasicComponent implements OnInit {
         this.reportBody.location = {
           prov_id: value,
         };
-        this.reportService
-          .groupStats({
-            location: {
-              prov_id: value,
-            },
-          })
-          .subscribe((data) => {
-            this.stats = data.data[0];
-            console.log(this.stats);
-          });
+        this.getStats(this.reportForm.value.reportFor, {
+          location: {
+            prov_id: value,
+          },
+        });
       });
     this.reportForm.controls.location
       .get("dist_id".toString())
@@ -125,16 +116,11 @@ export class ReportsComponent extends BasicComponent implements OnInit {
           dist_id: value,
         };
         this.locationChangDistrict(this.reportForm, value);
-        this.reportService
-          .groupStats({
-            location: {
-              dist_id: value,
-            },
-          })
-          .subscribe((data) => {
-            this.stats = data.data[0];
-            console.log(this.stats);
-          });
+        this.getStats(this.reportForm.value.reportFor, {
+          location: {
+            dist_id: value,
+          },
+        });
       });
     this.reportForm.controls.location
       .get("sect_id".toString())
@@ -143,6 +129,21 @@ export class ReportsComponent extends BasicComponent implements OnInit {
       });
   }
 
+  getStats(value: any, body: any) {
+    if (value === "Farmer Groups") {
+      this.reportService.groupStats(body).subscribe((data) => {
+        this.stats = data.data[0];
+      });
+    } else if (value === "Trainings") {
+      this.reportService.trainingStats(body).subscribe((data) => {
+        this.stats = data.data[0];
+      });
+    } else if (value === "Farm Visits") {
+      this.reportService.visitStats(body).subscribe((data) => {
+        this.stats = data.data[0];
+      });
+    }
+  }
   downloadCsv() {
     this.generateFinalReport("application/xslx", ".xslx");
   }
@@ -154,7 +155,6 @@ export class ReportsComponent extends BasicComponent implements OnInit {
   }
 
   download(type: string, extension: string, filePath: any) {
-    console.log(filePath);
     const byteArray = new Uint8Array(
       atob(filePath.split(",")[1])
         .split("")
@@ -180,16 +180,33 @@ export class ReportsComponent extends BasicComponent implements OnInit {
         this.dtTrigger.next();
         this.reportGenerated = true;
       });
-
+    } else if (this.reportForm.value.reportFor === "Trainings") {
+      this.reportService.trainingSummary(this.reportBody).subscribe((data) => {
+        this.reportsTableData = data.data;
+        this.dtTrigger.next();
+        this.reportGenerated = true;
+      });
+    } else if (this.reportForm.value.reportFor === "Farm Visits") {
+      this.reportService.visitSummary(this.reportBody).subscribe((data) => {
+        this.reportsTableData = data.data;
+        this.dtTrigger.next();
+        this.reportGenerated = true;
+      });
     }
   }
 
   generateFinalReport(type: string, extension: string) {
     if (this.reportForm.value.reportFor === "Farmer Groups") {
       this.reportService.groupDownload(this.reportBody).subscribe((data) => {
-        // this.download(type, extension, data.data.file);
         this.dataFile = data.data.file;
-        console.log(this.dataFile);
+      });
+    } else if (this.reportForm.value.reportFor === "Trainings") {
+      this.reportService.trainingDownload(this.reportBody).subscribe((data) => {
+        this.dataFile = data.data.file;
+      });
+    } else if (this.reportForm.value.reportFor === "Farm Visits") {
+      this.reportService.visitDownload(this.reportBody).subscribe((data) => {
+        this.dataFile = data.data.file;
       });
     }
   }

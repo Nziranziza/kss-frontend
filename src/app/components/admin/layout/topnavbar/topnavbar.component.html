@@ -64,7 +64,16 @@
             data-toggle="dropdown"
             aria-expanded="false"
           >
-            Select Language &nbsp;
+            <span
+              class="hidden-xs"
+              style="
+                font-weight: bolder;
+                font: normal normal bold 15px Helvetica Neue;
+              "
+            >
+              <img src="assets/dist/img/sks/ico_language.svg" /> &nbsp; English
+              &nbsp;</span
+            >
             <i
               class="fa fa-caret-down"
               aria-hidden="true"
@@ -79,9 +88,6 @@
                 </li>
                 <li>
                   <a type="button" (click)="setLanguage('rw')"> Kinyarwanda </a>
-                </li>
-                <li>
-                  <a type="button" (click)="setLanguage('fr')">French </a>
                 </li>
               </ul>
             </li>

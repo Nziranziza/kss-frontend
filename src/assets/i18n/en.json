@@ -49,6 +49,6 @@
   "training_description": "Training Description",
   "attach_files": "Attach Files",
   "click_drag_pdf_file": "Click or Drag PDF File to this area to upload",
-  "pattern": "not a valid",
+  "pattern": "not valid",
   "owner_number": "Owner Phone Number"
 }
