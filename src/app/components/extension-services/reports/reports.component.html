@@ -211,6 +211,26 @@
           <h3>{{ stats?.numberOfMembers || 0 }}</h3>
         </div>
       </span>
+      <span *ngIf="reportForm.value.reportFor === 'Trainings'">
+        <div class="col-sm-6 text-center">
+          <h4>Total Trainees</h4>
+          <h3>{{ stats?.numberOfTrainees || 0 }}</h3>
+        </div>
+        <div class="col-sm-6 text-center">
+          <h4>Total Attended Trainees</h4>
+          <h3>{{ stats?.numberOfAttendedTrainees || 0 }}</h3>
+        </div>
+      </span>
+      <span *ngIf="reportForm.value.reportFor === 'Farm Visits'">
+        <div class="col-sm-6 text-center">
+          <h4>Total Visits</h4>
+          <h3>{{ stats?.numberOfFarmVisits || 0 }}</h3>
+        </div>
+        <div class="col-sm-6 text-center">
+          <h4>Total Visited Farmers</h4>
+          <h3>{{ stats?.numberOfFarmVisits || 0 }}</h3>
+        </div>
+      </span>
     </div>
   </div>
   <div class="text-center" style="margin-top: 5px" *ngIf="reportGenerated">
@@ -246,19 +266,24 @@
             <th>Associated GAP</th>
             <th>Attachments</th>
             <th>Status</th>
-            <th>Actions</th>
           </tr>
         </thead>
         <tbody *ngIf="reportForm.value.reportFor === 'Trainings'">
-          <ng-container *ngFor="let group of groups">
+          <ng-container *ngFor="let training of reportsTableData">
             <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
+              <td>{{ training.createdAt | date: "short" }}</td>
+              <td>{{ training.trainingName }}</td>
+              <td>{{ training.description }}</td>
+              <td>
+                {{ training.adoptionGap }}
+                <div *ngFor="let adoption of training.adoptionGaps">
+                  {{ adoption?.name }}
+                </div>
+              </td>
+              <td>{{ training.materials.length }} files</td>
+              <td>
+                <span style="color: green; font-weight: bold">active</span>
+              </td>
             </tr>
           </ng-container>
         </tbody>
@@ -313,20 +338,28 @@
             <th>Visitor</th>
             <th>Date and Time of the visit</th>
             <th>Score</th>
-            <th>Actions</th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody *ngIf="reportForm.value.reportFor === 'Farm Visits'">
-          <ng-container *ngFor="let group of groups">
+          <ng-container *ngFor="let visit of reportsTableData">
             <tr>
+              <td>{{ visit.createdAt | date: "short" }}</td>
+              <td>
+                {{
+                  visit.farms[0].owner.firstName
+                    ? visit.farms[0].owner.firstName +
+                      " " +
+                      visit.farms[0].owner.lastName
+                    : visit.farms[0].owner.groupName
+                }}
+              </td>
+              <td>{{ visit.description }}</td>
+              <td>{{ visit.gaps.length }} gaps</td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
+              <td>{{ visit.date | date: "short" }}</td>
+              <td>{{ visit.score || 0 }}</td>
+              <td>{{ visit.status || "Pending" }}</td>
             </tr>
           </ng-container>
         </tbody>

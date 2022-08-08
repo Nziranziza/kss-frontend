@@ -17,6 +17,7 @@ declare var $;
 export class LoginComponent extends BasicComponent implements OnInit, OnDestroy {
 
   authForm: FormGroup;
+  viewPasswordEnabled: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -74,6 +75,11 @@ export class LoginComponent extends BasicComponent implements OnInit, OnDestroy 
       this.authenticationService.clearLocalStorage();
       this.afterLogInRedirect();
     }
+  }
+
+  viewPassword() {
+    console.log(this.viewPasswordEnabled);
+    this.viewPasswordEnabled = !this.viewPasswordEnabled;
   }
 
   onSubmit() {

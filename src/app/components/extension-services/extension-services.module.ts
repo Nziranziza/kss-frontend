@@ -40,6 +40,7 @@ import { ReportsComponent } from './reports/reports.component';
 import { SmsDashboardComponent } from './sms-dashboard/sms-dashboard.component';
 import { ViewGapComponent } from './gaps/view-gap/view-gap.component';
 import { ViewGroupComponent } from './groups/view-group/view-group.component';
+import { AutocompleteLibModule } from 'angular-ng-autocomplete';
 @NgModule({
   declarations: [
     FarmerGroupListComponent,
@@ -84,6 +85,7 @@ import { ViewGroupComponent } from './groups/view-group/view-group.component';
     GoogleMapsModule,
     GoogleChartsModule,
     NgMultiSelectDropDownModule,
+    AutocompleteLibModule
   ],
   entryComponents: [GapDeleteModal],
 })
