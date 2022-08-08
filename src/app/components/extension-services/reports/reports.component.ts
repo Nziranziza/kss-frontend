@@ -94,6 +94,8 @@ export class ReportsComponent extends BasicComponent implements OnInit {
   onChanges() {
     this.reportForm.get("reportFor").valueChanges.subscribe((value) => {
       this.reportBody = {};
+      this.stats = {};
+      this.reportsTableData = [];
       this.getStats(value, this.reportBody);
     });
     this.reportForm.controls.location

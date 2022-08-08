@@ -257,8 +257,12 @@
         [dtOptions]="dtOptions"
         [dtTrigger]="dtTrigger"
         class="row-border hover table table-striped"
+        *ngIf="
+          reportForm.value.reportFor === 'Trainings' &&
+          reportsTableData.length > 0
+        "
       >
-        <thead *ngIf="reportForm.value.reportFor === 'Trainings'">
+        <thead>
           <tr>
             <th>Date Added</th>
             <th>Title</th>
@@ -268,7 +272,7 @@
             <th>Status</th>
           </tr>
         </thead>
-        <tbody *ngIf="reportForm.value.reportFor === 'Trainings'">
+        <tbody>
           <ng-container *ngFor="let training of reportsTableData">
             <tr>
               <td>{{ training.createdAt | date: "short" }}</td>
@@ -287,7 +291,18 @@
             </tr>
           </ng-container>
         </tbody>
-        <thead *ngIf="reportForm.value.reportFor === 'Farmer Groups'">
+      </table>
+      <table
+        datatable
+        [dtOptions]="dtOptions"
+        [dtTrigger]="dtTrigger"
+        class="row-border hover table table-striped"
+        *ngIf="
+          reportForm.value.reportFor === 'Farmer Groups' &&
+          reportsTableData.length > 0
+        "
+      >
+        <thead>
           <tr>
             <th>Date added</th>
             <th>Group name</th>
@@ -302,7 +317,7 @@
             <th>status</th>
           </tr>
         </thead>
-        <tbody *ngIf="reportForm.value.reportFor === 'Farmer Groups'">
+        <tbody>
           <ng-container *ngFor="let group of reportsTableData">
             <tr>
               <td>{{ group.createdAt | date: "y/LL/d - h:mm" }}</td>
@@ -329,7 +344,18 @@
             </tr>
           </ng-container>
         </tbody>
-        <thead *ngIf="reportForm.value.reportFor === 'Farm Visits'">
+      </table>
+      <table
+        datatable
+        [dtOptions]="dtOptions"
+        [dtTrigger]="dtTrigger"
+        class="row-border hover table table-striped"
+        *ngIf="
+          reportForm.value.reportFor === 'Farm Visits' &&
+          reportsTableData.length > 0
+        "
+      >
+        <thead>
           <tr>
             <th>Date Added</th>
             <th>Farm to visit</th>
@@ -341,7 +367,7 @@
             <th>Status</th>
           </tr>
         </thead>
-        <tbody *ngIf="reportForm.value.reportFor === 'Farm Visits'">
+        <tbody>
           <ng-container *ngFor="let visit of reportsTableData">
             <tr>
               <td>{{ visit.createdAt | date: "short" }}</td>
@@ -363,7 +389,18 @@
             </tr>
           </ng-container>
         </tbody>
-        <thead *ngIf="reportForm.value.reportFor === 'Coffee Farmers'">
+      </table>
+      <table
+        datatable
+        [dtOptions]="dtOptions"
+        [dtTrigger]="dtTrigger"
+        class="row-border hover table table-striped"
+        *ngIf="
+          reportForm.value.reportFor === 'Coffee Farmers' &&
+          reportsTableData.length > 0
+        "
+      >
+        <thead>
           <tr>
             <th>Date added</th>
             <th>Group name</th>
@@ -378,7 +415,7 @@
             <th>status</th>
           </tr>
         </thead>
-        <tbody *ngIf="reportForm.value.reportFor === 'Coffee Farmers'">
+        <tbody>
           <ng-container *ngFor="let group of groups">
             <tr>
               <td>{{ group.createdAt | date: "y/LL/d - h:mm" }}</td>
@@ -405,7 +442,18 @@
             </tr>
           </ng-container>
         </tbody>
-        <thead *ngIf="reportForm.value.reportFor === 'Coffee Farms'">
+      </table>
+      <table
+        datatable
+        [dtOptions]="dtOptions"
+        [dtTrigger]="dtTrigger"
+        class="row-border hover table table-striped"
+        *ngIf="
+          reportForm.value.reportFor === 'Coffee Farms' &&
+          reportsTableData.length > 0
+        "
+      >
+        <thead>
           <tr>
             <th>Date added</th>
             <th>Group name</th>
@@ -420,7 +468,7 @@
             <th>status</th>
           </tr>
         </thead>
-        <tbody *ngIf="reportForm.value.reportFor === 'Coffee Farms'">
+        <tbody>
           <ng-container *ngFor="let group of groups">
             <tr>
               <td>{{ group.createdAt | date: "y/LL/d - h:mm" }}</td>

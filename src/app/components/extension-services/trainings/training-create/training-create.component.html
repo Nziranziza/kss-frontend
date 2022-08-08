@@ -161,7 +161,10 @@
                 </app-inline-errors>
               </div>
             </div>
-            <div class="col-sm-6">
+            <div
+              class="col-sm-6"
+              *ngIf="createTraining.value.trainingName != ''"
+            >
               <div class="form-group">
                 <label class="control-label label-required">{{
                   "training_description" | translate
@@ -184,7 +187,7 @@
               </div>
             </div>
           </div>
-          <div class="row">
+          <div class="row" *ngIf="createTraining.value.trainingName != ''">
             <div class="col-sm-6">
               <div class="form-group">
                 <label class="control-label label-required">{{
@@ -267,7 +270,7 @@
       </div>
     </div>
   </div>
-  <div class="text-center">
+  <div class="text-center" *ngIf="createTraining.value.trainingName != ''">
     <button
       type="button"
       class="btn btn-success"
