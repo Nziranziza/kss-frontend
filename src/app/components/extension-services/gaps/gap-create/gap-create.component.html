@@ -142,7 +142,7 @@
                   >
                     <div [formGroupName]="x" class="col-xs-12">
 
-                      <div class="col-xs-3 vcenter">
+                      <div class="col-xs-6 vcenter">
                         <label class="control-label">Question</label>
                         <div class="form-group">
                           <input
@@ -154,7 +154,7 @@
                         </div>
                       </div>
 
-                      <div class="col-xs-3 vcenter">
+                      <div class="col-xs-6 vcenter">
                         <label class="control-label">Description</label>
                         <div class="form-group">
                           <input
@@ -166,7 +166,7 @@
                         </div>
                       </div>
 
-                      <div class="col-xs-2 vcenter">
+                      <div class="col-xs-3 vcenter">
                         <label class="control-label">Question Score</label>
                         <div class="form-group">
                           <input
@@ -178,7 +178,7 @@
                         </div>
                       </div>
 
-                      <div class="col-xs-2 vcenter">
+                      <div class="col-xs-3 vcenter">
                         <div
                           class="form-group"
                         >
@@ -198,10 +198,13 @@
                         </div>
                       </div>
 
-                      <div class="col-xs-2 vcenter">
+                      <div class="col-xs-3 vcenter">
                         <div
-                          class="form-check vcenter"
+                          class="form-check vcenter" style="margin-top: 10px"
                         >
+                          <label class="control-label" for="checkBoxApplicable">Not Applicable
+                          </label>
+
                           <input
                             (change)="chooseIfApplicable($event)"
                             checked="{{getQuestionApplicable(i, x).value}}"
@@ -212,9 +215,18 @@
                             type="checkbox"
                           />
                           &nbsp;
-                          <label class="form-check-label" for="checkBoxApplicable">Is Not Applicable
-                          </label>
+
                         </div>
+                      </div>
+
+                      <div class="col-xs-3 text-center">
+                        <button
+                          (click)="removeQuestion(i, x)"
+                          class="btn btn-danger btn-sm inline-btn btn-custom-margin-top"
+                          type="button"
+                        >
+                          <i class="fa fa-minus-circle"></i>
+                        </button>
                       </div>
 
                       <div *ngIf="checkIFMultipleQuestion(i, x)" class="col-sm-12 vcenter"
@@ -343,15 +355,14 @@
 
                     </div>
                   </div>
-
                 </div>
                 <div class="col-xs-12 text-center">
                   <button
-                    (click)="removeQuestionSection(i)"
-                    class="btn btn-danger btn-sm inline-btn btn-custom-margin-top"
+                    (click)="addQuestionToSection(i)"
+                    class="btn btn-success add-btn btn-sm btn-custom-margin-top"
                     type="button"
                   >
-                    <i class="fa fa-minus-circle"></i> Remove Section
+                    <em class="fa fa-plus"></em> Add Question
                   </button>
                 </div>
               </div>
