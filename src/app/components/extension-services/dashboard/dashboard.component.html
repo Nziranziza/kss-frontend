@@ -719,25 +719,35 @@
             </div>
           </span>
         </div>
-        <div class="text-center">
-          <p>Seedling Distributed</p>
-          <h4>000</h4>
-        </div>
-        <div
-          class="text-center"
-          style="margin-top: -25px; margin-left: 35px"
-          *ng-if="visitStats.totalVisits > 0"
-        >
-          <google-chart
-            #chart2
-            [type]="graph.type"
-            [data]="seedlingGraph.data"
-            [options]="seedlingGraph.options"
-            [width]="graph.width"
-            [columns]="seedlingGraph.columnNames"
-            [height]="graph.height"
-          >
-          </google-chart>
+        <div class="row">
+          <div class="col-xs-6">
+            <div class="text-center">
+              <p>Seedling Distributed</p>
+              <h4>{{ totalSeedlings }}</h4>
+            </div>
+            <div class="text-center" *ngFor="let seedling of seedlingStats">
+              <p>{{ seedling.variety }}</p>
+              <h4>{{ seedling.totalQuantity }}</h4>
+            </div>
+          </div>
+          <div class="col-xs-6">
+            <div
+              class="text-center"
+              style="margin-top: -15px; margin-left: -85px"
+              *ngIf="totalSeedlings == 0"
+            >
+              <google-chart
+                #chart2
+                [type]="graph.type"
+                [data]="seedlingGraph.data"
+                [options]="seedlingGraph.options"
+                [width]="graph.width"
+                [columns]="seedlingGraph.columnNames"
+                [height]="graph.height"
+              >
+              </google-chart>
+            </div>
+          </div>
         </div>
       </div>
     </div>

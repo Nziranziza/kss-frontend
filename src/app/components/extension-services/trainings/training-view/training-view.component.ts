@@ -89,7 +89,6 @@ export class TrainingViewComponent
       })
       .subscribe((data) => {
         this.trainingsStats = data.data;
-        console.log(this.trainingsStats);
         this.loading = false;
       });
   }

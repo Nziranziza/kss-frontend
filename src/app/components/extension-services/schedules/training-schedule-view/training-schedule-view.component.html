@@ -4,20 +4,55 @@
       <div class="col-sm-12 text-center stats-title">Statistics</div>
       <div class="col-sm-4">
         <div class="text-center stats-box">
-          <h3>attendance</h3>
-          <h1>000</h1>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div class="text-center stats-box middle-box">
-          <h3>rate</h3>
-          <h1>000</h1>
+          <h3>Attended Trainees</h3>
+          <div class="row">
+            <div class="col-sm-5">
+              <h1 style="margin-top: -5px; margin-left: 5px">
+                {{ trainingsStats.totalPresent }}
+              </h1>
+            </div>
+            <div class="col-sm-3">
+              <span style="white-space: pre"> Male </span>
+              {{ trainingsStats.malePresent }}
+            </div>
+            <div class="col-sm-3">
+              <span style="white-space: pre"> Female </span>
+              {{ trainingsStats.femalePresent }}
+            </div>
+          </div>
         </div>
       </div>
       <div class="col-sm-4">
         <div class="text-center stats-box third-box">
-          <h3>pending</h3>
-          <h1>000</h1>
+          <h3>Not Attended Trainees</h3>
+          <div class="row">
+            <div class="col-sm-5">
+              <h1 style="margin-top: -5px; margin-left: 5px">
+                {{ trainingsStats.totalAbsent }}
+              </h1>
+            </div>
+            <div class="col-sm-3">
+              <span style="white-space: pre"> Male </span>
+              {{ trainingsStats.maleAbsent }}
+            </div>
+            <div class="col-sm-3">
+              <span style="white-space: pre"> Female </span>
+              {{ trainingsStats.femaleAbsent }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="text-center stats-box middle-box">
+          <h3>Attendance Rate</h3>
+          <h1>
+            {{
+              trainingsStats.totalPresent > 0
+                ? (trainingsStats.totalPresent * 100) /
+                  trainingsStats.totalInvitees
+                : 0
+            }}%
+          </h1>
         </div>
       </div>
     </div>
@@ -81,7 +116,7 @@
             <div class="col-sm-6">
               <label class="control-label"> To </label>
               <div class="confirm-text-box confirm-text">
-                {{ training.endTime | date: "short"}}
+                {{ training.endTime | date: "short" }}
               </div>
             </div>
           </div>
