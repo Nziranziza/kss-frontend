@@ -198,6 +198,10 @@ export class GapCreateComponent
     this.getQuestionAnswers(sectionIndex, qstIndex).removeAt(ansIndex);
   }
 
+  removeQuestion(sectionIndex, qstIndex){
+    this.getSectionQuestions(sectionIndex).removeAt(qstIndex);
+  }
+
   // getQuestionType(): FormArray {
   //
   // }
