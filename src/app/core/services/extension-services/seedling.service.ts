@@ -27,4 +27,8 @@ export class SeedlingService {
   update(id: string, body: any): Observable<any> {
     return this.apiService.put("/v1.1/nurseries/" + id, body);
   }
+
+  getSeedlingStats(body: any) {
+    return this.apiService.post("/v1.1/seedlings/stats", body);
+  }
 }

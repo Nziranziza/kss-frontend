@@ -218,8 +218,8 @@ export class ScheduleFarmVisitComponent implements OnInit {
         observation: 'observation',
         date: dataValues.date.visitDate,
         expectedDuration: {
-          from: dataValues.startTime,
-          to: dataValues.endTime,
+          from: this.formatTime(dataValues.startTime),
+          to: this.formatTime(dataValues.endTime),
         },
       };
       this.visitService.create(data).subscribe(
@@ -227,6 +227,7 @@ export class ScheduleFarmVisitComponent implements OnInit {
           this.success(data.data.data.description);
         },
         (err) => {
+          this.error('farm visit')
           this.loading = false;
         }
       );
@@ -243,9 +244,31 @@ export class ScheduleFarmVisitComponent implements OnInit {
     modalRef.componentInstance.title = 'Thank you farm visit schedule';
     modalRef.componentInstance.name = name;
     modalRef.componentInstance.messageEnabled = true;
-    modalRef.componentInstance.messageApiUrl = '';
+    modalRef.componentInstance.messageApiUrl = '/farm-visit-schedules/sms/';
     modalRef.result.finally(() => {
       this.router.navigateByUrl('admin/farm/visit/list');
     });
+  }
+
+  error(name) {
+    const modalRef = this.modal.open(SuccessModalComponent, {
+      ariaLabelledBy: 'modal-basic-title',
+    });
+    modalRef.componentInstance.message = 'failed to be scheduled';
+    modalRef.componentInstance.title = 'check the information again and try again';
+    modalRef.componentInstance.name = name;
+    modalRef.result.finally(() => {
+      this.router.navigateByUrl('admin/farm/visit/list');
+    });
+  }
+
+  formatTime(date) {
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    hours = hours % 24;
+    hours = hours ? hours : 24; // the hour '0' should be '12'
+    minutes = minutes < 10 ? "0" + minutes : minutes;
+    var strTime = hours + ":" + minutes;
+    return strTime;
   }
 }

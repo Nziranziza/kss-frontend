@@ -72,9 +72,9 @@ export class DashboardComponent extends BasicComponent implements OnInit {
   seedlingGraph = {
     type: ChartType.PieChart,
     data: [
-      ["Variety1", 40],
-      ["Variety2", 30],
-      ["Variety3", 30],
+      ["Boubon", 100],
+      ["Variety2", 0],
+      ["Variety3", 0],
     ],
     options: {
       colors: ["#F5B23F", "#FF990A"],
@@ -83,8 +83,8 @@ export class DashboardComponent extends BasicComponent implements OnInit {
       backgroundColor: { fill: "transparent" },
     },
     columnNames: ["Variety1", "Variety2"],
-    width: 260,
-    height: 260,
+    width: 320,
+    height: 230,
   };
 
   selectedFarmDetails: any;
@@ -103,6 +103,7 @@ export class DashboardComponent extends BasicComponent implements OnInit {
   visitStats: any = { femaleFarmVisits: 0, maleFarmVisits: 0, totalVisits: 0 };
   gapAdoptionStats: any[] = [];
   seedlingStats: any[] = [];
+  totalSeedlings = 0;
   coveredSectors: any[] = [];
   groups: any[] = [];
   nurseries: any[] = [];
@@ -197,7 +198,6 @@ export class DashboardComponent extends BasicComponent implements OnInit {
     this.farmService.getLand(id).subscribe((data) => {
       this.farmDetails = data.data;
       this.clickedMarker = true;
-      console.log(this.farmDetails);
       this.loading = false;
     });
   }
@@ -206,7 +206,6 @@ export class DashboardComponent extends BasicComponent implements OnInit {
     this.loading = true;
     this.groupService.all({}).subscribe((data) => {
       this.groups = data.data;
-      console.log(this.groups);
       this.loading = false;
     });
   }
@@ -224,7 +223,6 @@ export class DashboardComponent extends BasicComponent implements OnInit {
   getNurseries() {
     this.seedlingService.all().subscribe((data) => {
       this.nurseries = data.data;
-      console.log(this.nurseries);
     });
   }
 
@@ -363,7 +361,6 @@ export class DashboardComponent extends BasicComponent implements OnInit {
     this.loading = true;
     this.trainingService.all().subscribe((data) => {
       this.trainings = data.data;
-      console.log(this.trainings);
       this.loading = false;
     });
   }
@@ -378,8 +375,17 @@ export class DashboardComponent extends BasicComponent implements OnInit {
 
   getSeedlingStats(body: any): void {
     this.loading = true;
-    this.trainingService.getScheduleStats(body).subscribe((data) => {
-      this.trainingsStats = data.data;
+    this.seedlingService.getSeedlingStats(body).subscribe((data) => {
+      this.seedlingStats = data.data;
+      this.totalSeedlings = 0;
+      this.seedlingStats.forEach((data) => {
+        this.totalSeedlings += data.totalQuantity;
+      });
+      this.seedlingStats.forEach((data, index) => {
+        this.seedlingGraph.data[index][index] = data.variety;
+        this.seedlingGraph.data[index][index + 1] =
+          (data.totalQuantity * 100) / this.totalSeedlings;
+      });
       this.loading = false;
     });
   }
@@ -394,7 +400,6 @@ export class DashboardComponent extends BasicComponent implements OnInit {
           lng: parseFloat(item.longitude),
         });
       });
-      console.log(this.farms);
       this.loading = false;
     });
   }

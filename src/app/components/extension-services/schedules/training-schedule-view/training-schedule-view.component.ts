@@ -32,6 +32,7 @@ ngOnInit() {
     this.id = params["id".toString()];
   });
   this.getTraining();
+  this.getTrainingsStats();
   this.setMessage(this.messageService.getMessage());
 }
 
@@ -39,11 +40,23 @@ results: any[] = [];
 gaps: any[] = [];
 loading = false;
 dataReturned: any[] = [];
+trainingsStats: any;
 
 getTraining() {
   this.trainingService.getSchedule(this.id).subscribe((data) => {
     this.training = data.data;
-    console.log(this.training);
   });
+}
+
+getTrainingsStats(): void {
+  this.loading = true;
+  this.trainingService
+    .getScheduleStats({
+      scheduleId: this.id,
+    })
+    .subscribe((data) => {
+      this.trainingsStats = data.data;
+      this.loading = false;
+    });
 }
 }

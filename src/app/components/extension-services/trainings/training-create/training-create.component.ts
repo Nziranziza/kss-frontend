@@ -76,7 +76,6 @@ export class TrainingCreateComponent
     if (item._id === '') {
       this.gapDropdownSettings.singleSelection = true;
     }
-    console.log(this.createTraining.get('adoptionGap'.toString()).value);
   }
   onDeGapSelect(item: any) {
     if (item._id === '') {
@@ -89,7 +88,6 @@ export class TrainingCreateComponent
   onGapSelectAll(items: any) {
     const gapSelected = this.createTraining.get('adoptionGap'.toString());
     gapSelected.setValue(items, { emitEvent: false });
-    console.log(this.createTraining.get('adoptionGap'.toString()).value);
   }
 
   onFileSelected(event) {
@@ -112,7 +110,7 @@ export class TrainingCreateComponent
         name: 'Not Applied'
       }];
       data.data.forEach((gap) => {
-        newData.push({_id: gap._id, name: gap.name});
+        newData.push({_id: gap._id, name: gap.gap_name});
       });
       this.gaps = newData;
       this.loading = false;
