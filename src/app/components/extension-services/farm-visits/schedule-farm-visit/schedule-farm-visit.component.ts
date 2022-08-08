@@ -33,16 +33,16 @@ export class ScheduleFarmVisitComponent implements OnInit {
     private modal: NgbModal,
     private helper: HelperService
   ) {}
-  loading: Boolean = false;
+  loading = false;
   farmerGroups: any[] = [];
   farmList: any[] = [];
   selectedFarm: any[] = [];
-  allTraineesSelected: Boolean;
+  allTraineesSelected: boolean;
   gaps: any[] = [];
   agronomist: any[] = [];
   farmers: any[] = [];
   gapDropdownSettings: IDropdownSettings = {};
-  viewDetailsClicked: Boolean;
+  viewDetailsClicked: boolean;
   farmDetails;
   farmerGroupId;
   errors: any;
@@ -170,7 +170,7 @@ export class ScheduleFarmVisitComponent implements OnInit {
         },
       ];
       data.data.forEach((data) => {
-        newData.push({ _id: data._id, name: data.name });
+        newData.push({ _id: data._id, name: data.gap_name });
       });
       this.gaps = newData;
       this.loading = false;
@@ -188,7 +188,7 @@ export class ScheduleFarmVisitComponent implements OnInit {
   open(content) {
     if (this.scheduleVisit.valid) {
       this.selectedFarms = this.farmList.filter((data) => {
-        return data.selected == true;
+        return data.selected === true;
       });
       this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' });
     } else {
@@ -235,7 +235,7 @@ export class ScheduleFarmVisitComponent implements OnInit {
       this.errors = this.helper.getFormValidationErrors(this.scheduleVisit);
     }
   }
-  
+
   success(name) {
     const modalRef = this.modal.open(SuccessModalComponent, {
       ariaLabelledBy: 'modal-basic-title',
