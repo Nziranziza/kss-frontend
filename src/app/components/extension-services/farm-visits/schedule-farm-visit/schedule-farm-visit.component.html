@@ -478,7 +478,7 @@
                 class="form-control"
                 placeholder="Dd/mm/yyyy"
               />
-              <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+              <owl-date-time [pickerType]="'calendar'" [scrollStrategy]="scrollStrategy" #dt1></owl-date-time>
               <app-inline-errors
                 *ngIf="
                   scheduleVisit.controls.date.get('visitDate').invalid &&
@@ -486,7 +486,7 @@
                     scheduleVisit.controls.date.get('visitDate').touched)
                 "
                 [errors]="scheduleVisit.controls.date.get('visitDate').errors"
-                [label]="'visit_date'"
+                [label]="'visit date'"
               >
               </app-inline-errors>
             </div>
@@ -508,7 +508,7 @@
                   formControlName="startTime"
                   [owlDateTime]="dt3"
                 />
-                <owl-date-time [pickerType]="'timer'" #dt3></owl-date-time>
+                <owl-date-time [pickerType]="'timer'" [scrollStrategy]="scrollStrategy" #dt3></owl-date-time>
                 <app-inline-errors
                   *ngIf="
                     scheduleVisit.controls.startTime.invalid &&
@@ -516,7 +516,7 @@
                       scheduleVisit.controls.startTime.touched)
                   "
                   [errors]="scheduleVisit.controls.startTime.errors"
-                  [label]="'start_Time'"
+                  [label]="'start time'"
                 >
                 </app-inline-errors>
               </div>
@@ -532,7 +532,7 @@
                   formControlName="endTime"
                   [owlDateTime]="dt4"
                 />
-                <owl-date-time [pickerType]="'timer'" #dt4></owl-date-time>
+                <owl-date-time [pickerType]="'timer'" [scrollStrategy]="scrollStrategy" #dt4></owl-date-time>
                 <app-inline-errors
                   *ngIf="
                     scheduleVisit.controls.endTime.invalid &&
@@ -540,7 +540,7 @@
                       scheduleVisit.controls.endTime.touched)
                   "
                   [errors]="scheduleVisit.controls.endTime.errors"
-                  [label]="'end_time'"
+                  [label]="'end time'"
                 >
                 </app-inline-errors>
               </div>
