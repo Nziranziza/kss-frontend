@@ -32,6 +32,7 @@ export class FarmerGroupListComponent extends BasicComponent implements OnInit, 
   dtOptions: DataTables.Settings = {};
   // @ts-ignore
   dtTrigger: Subject = new Subject();
+  groupMembersTotal: number = 0;
 
   ngOnInit() {
     this.listGroups();
@@ -57,6 +58,9 @@ export class FarmerGroupListComponent extends BasicComponent implements OnInit, 
 
     this.groupService.list(body).subscribe((data) => {
       this.groups = data.data;
+      this.groups.forEach((group) => {
+        this.groupMembersTotal += group.members.length;
+      })
       this.dtTrigger.next();
     });
   }

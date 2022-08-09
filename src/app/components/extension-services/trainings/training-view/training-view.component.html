@@ -45,7 +45,14 @@
       <div class="col-sm-4">
         <div class="text-center stats-box middle-box">
           <h3>Attendance Rate</h3>
-          <h1>0%</h1>
+          <h1>
+            {{
+              trainingsStats.totalPresent > 0
+                ? (trainingsStats.totalPresent * 100) /
+                  trainingsStats.totalInvitees
+                : 0
+            }}%
+          </h1>
         </div>
       </div>
     </div>

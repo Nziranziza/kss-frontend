@@ -34,4 +34,8 @@ export class GroupService {
   getByName(body: any) {
     return this.apiService.post('/v1.1/groups/search', body);
   }
+
+  checkNameStatus(body: any) {
+    return this.apiService.post('/v1.1/groups/exist', body);
+  }
 }

@@ -58,12 +58,12 @@ export class GapCreateComponent
 
   ngOnInit() {
     this.createForm = this.formBuilder.group({
-      gap_name: ['Pruning', Validators.required],
+      gap_name: ['', Validators.required],
       // description: ['Check whether is pruning correctly.', Validators.required],
       sections: new FormArray([], Validators.required),
       gap_weight: [20, Validators.required],
       gap_score: [100, Validators.required],
-      picture_text: ['Describe how pictures will be taken', Validators.required]
+      picture_text: ['', Validators.required]
     });
 
     // By Default Add a Question Section to the GAP FORM
@@ -87,7 +87,7 @@ export class GapCreateComponent
   // Method creates a new Form Group for a question
   createQuestionSection(): FormGroup {
     return this.formBuilder.group({
-      section_name: ['This is a section name', Validators.required],
+      section_name: ['', Validators.required],
       questions: new FormArray([])
     });
   }
@@ -103,10 +103,10 @@ export class GapCreateComponent
 
   createQuestion(): FormGroup {
     return this.formBuilder.group({
-      question: ['This is the question to be asked', Validators.required],
-      description: ['Marks Input', Validators.required],
-      question_type: ['mark_input', Validators.required],
-      weight: [20, Validators.required],
+      question: ['', Validators.required],
+      description: ['', Validators.required],
+      question_type: ['', Validators.required],
+      weight: ['', Validators.required],
       answers: new FormArray([]),
       is_not_applicable: [false, Validators.required]
     });
@@ -122,8 +122,8 @@ export class GapCreateComponent
 
   createAnswer(): FormGroup {
     return this.formBuilder.group({
-      answer: ['This is an answer', Validators.required],
-      description: ['Answer Description', Validators.required],
+      answer: ['', Validators.required],
+      description: ['', Validators.required],
       weight: [20, Validators.required],
       is_not_applicable: [false, Validators.required]
     });

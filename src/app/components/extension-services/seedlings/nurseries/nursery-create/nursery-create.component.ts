@@ -47,9 +47,12 @@ export class NurseryCreateComponent extends BasicComponent implements OnInit {
     this.addNursery = this.formBuilder.group({
       nurseryName: ["", Validators.required],
       ownerName: ["", Validators.required],
-      ownerNumber: ["250", [Validators.required, Validators.pattern("[0-9]{12}")]],
+      ownerNumber: ["", [Validators.required, Validators.pattern("[0-9]{12}")]],
       representativeName: ["", Validators.required],
-      representativeNumber: ["250", [Validators.required, Validators.pattern("[0-9]{12}")]],
+      representativeNumber: [
+        "",
+        [Validators.required, Validators.pattern("[0-9]{12}")],
+      ],
       siteAvailability: ["no"],
       agronomist: [""],
       stockData: new FormArray([], Validators.required),
@@ -128,6 +131,18 @@ export class NurseryCreateComponent extends BasicComponent implements OnInit {
       .valueChanges.subscribe((value) => {
         this.locationChangDistrict(this.addNursery, value);
       });
+    this.addNursery.controls.ownerNumber.valueChanges.subscribe((value) => {
+      if (value === "07") {
+        this.addNursery.controls.ownerNumber.setValue("2507");
+      }
+    });
+    this.addNursery.controls.representativeNumber.valueChanges.subscribe(
+      (value) => {
+        if (value === "07") {
+          this.addNursery.controls.representativeNumber.setValue("2507");
+        }
+      }
+    );
     this.addNursery.controls.location
       .get("sect_id".toString())
       .valueChanges.subscribe((value) => {

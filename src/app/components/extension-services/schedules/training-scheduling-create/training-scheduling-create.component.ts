@@ -1,6 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import {
   TrainingService,
   Training,
@@ -12,14 +12,14 @@ import {
   UserService,
   GroupService,
   User,
-} from '../../../../core';
-import { isEmptyObject } from 'jquery';
-import { Router } from '@angular/router';
+} from "../../../../core";
+import { isEmptyObject } from "jquery";
+import { Router } from "@angular/router";
 
 @Component({
-  selector: 'app-training-scheduling-create',
-  templateUrl: './training-scheduling-create.component.html',
-  styleUrls: ['./training-scheduling-create.component.css'],
+  selector: "app-training-scheduling-create",
+  templateUrl: "./training-scheduling-create.component.html",
+  styleUrls: ["./training-scheduling-create.component.css"],
 })
 export class TrainingSchedulingCreateComponent
   extends BasicComponent
@@ -63,21 +63,21 @@ export class TrainingSchedulingCreateComponent
   ngOnInit() {
     this.getGroups();
     this.scheduleTraining = this.formBuilder.group({
-      trainingModule: ['', Validators.required],
-      trainer: ['', Validators.required],
-      description: ['', Validators.required],
+      trainingModule: ["", Validators.required],
+      trainer: ["", Validators.required],
+      description: ["", Validators.required],
       location: this.formBuilder.group({
-        prov_id: ['', Validators.required],
-        dist_id: ['', Validators.required],
-        sect_id: ['', Validators.required],
-        cell_id: ['', Validators.required],
-        village_id: ['', Validators.required],
-        venue: ['', Validators.required],
+        prov_id: ["", Validators.required],
+        dist_id: ["", Validators.required],
+        sect_id: ["", Validators.required],
+        cell_id: ["", Validators.required],
+        village_id: ["", Validators.required],
+        venue: ["", Validators.required],
       }),
-      trainingStartDate: ['', Validators.required],
-      trainingEndDate: ['', Validators.required],
-      startTime: ['', Validators.required],
-      endTime: ['', Validators.required],
+      trainingStartDate: ["", Validators.required],
+      trainingEndDate: ["", Validators.required],
+      startTime: ["", Validators.required],
+      endTime: ["", Validators.required],
     });
     this.parameters = {
       length: 10,
@@ -89,17 +89,17 @@ export class TrainingSchedulingCreateComponent
       contacts: this.formBuilder.array([]),
     });
     this.filterForm = this.formBuilder.group({
-      searchOption: ['location'],
+      searchOption: ["location"],
       searchByLocation: this.formBuilder.group({
-        searchBy: ['farmer_location'],
-        sect_id: [''],
-        cell_id: [''],
-        village_id: [''],
-        farmerGroup: [''],
+        searchBy: ["farmer_location"],
+        sect_id: [""],
+        cell_id: [""],
+        village_id: [""],
+        farmerGroup: [""],
       }),
       searchByTerm: this.formBuilder.group({
-        term: ['', Validators.minLength(3)],
-        searchBy: ['reg_number'],
+        term: ["", Validators.minLength(3)],
+        searchBy: ["reg_number"],
       }),
     });
     this.basicInit(this.authenticationService.getCurrentUser().info.org_id);
@@ -109,8 +109,9 @@ export class TrainingSchedulingCreateComponent
     this.getFarmerGroup();
   }
   addContacts() {
-    const departmentControl = (this.editContactForm.get('contacts') as FormArray)
-      .controls;
+    const departmentControl = (
+      this.editContactForm.get("contacts") as FormArray
+    ).controls;
     this.trainees.forEach((trainee) => {
       departmentControl.push(
         this.formBuilder.group({
@@ -156,7 +157,7 @@ export class TrainingSchedulingCreateComponent
     this.loading = true;
     this.trainingService
       .getFarmersByGroup(
-        this.filterForm.controls.searchByLocation.get('farmerGroup'.toString())
+        this.filterForm.controls.searchByLocation.get("farmerGroup".toString())
           .value,
         {
           trainingId:
@@ -166,7 +167,7 @@ export class TrainingSchedulingCreateComponent
       .subscribe((data) => {
         this.trainees = data.data
           .filter((element) => {
-            return element.attendance !== 'attended';
+            return element.attendance !== "attended";
           })
           .map((item) => {
             if (item.phoneNumber) {
@@ -183,7 +184,7 @@ export class TrainingSchedulingCreateComponent
 
   open(content) {
     if (this.scheduleTraining.valid) {
-      this.modalService.open(content, { size: 'lg', windowClass: 'modal-lg' });
+      this.modalService.open(content, { size: "lg", windowClass: "modal-lg" });
     } else {
       this.errors = this.helper.getFormValidationErrors(this.scheduleTraining);
     }
@@ -197,7 +198,7 @@ export class TrainingSchedulingCreateComponent
   }
   submitContact(index) {
     if (this.editContactForm.valid) {
-      const arrayControl = this.editContactForm.get('contacts') as FormArray;
+      const arrayControl = this.editContactForm.get("contacts") as FormArray;
       const traineData = arrayControl.at(index);
       this.trainees[index].contact = traineData.value.contact;
       this.trainees[index].phoneNumber = traineData.value.contact;
@@ -226,19 +227,19 @@ export class TrainingSchedulingCreateComponent
       this.loading = true;
       const filter = JSON.parse(JSON.stringify(this.filterForm.value));
       delete filter.searchOption;
-      if (filter.searchByTerm.term === '') {
+      if (filter.searchByTerm.term === "") {
         delete filter.searchByTerm;
       }
       const location = filter.searchByLocation;
       if (location) {
-        if (location.village_id !== '') {
-          filter.searchByLocation.filterBy = 'village';
+        if (location.village_id !== "") {
+          filter.searchByLocation.filterBy = "village";
           filter.searchByLocation.village_id = location.village_id;
-        } else if (location.cell_id !== '') {
-          filter.searchByLocation.filterBy = 'cell';
+        } else if (location.cell_id !== "") {
+          filter.searchByLocation.filterBy = "cell";
           filter.searchByLocation.cell_id = location.cell_id;
-        } else if (location.sect_id !== '') {
-          filter.searchByLocation.filterBy = 'sector';
+        } else if (location.sect_id !== "") {
+          filter.searchByLocation.filterBy = "sector";
           filter.searchByLocation.sect_id = location.sect_id;
         } else {
           delete filter.searchByLocation;
@@ -247,7 +248,7 @@ export class TrainingSchedulingCreateComponent
       this.helper.cleanObject(filter.searchByLocation);
 
       if (!isEmptyObject(filter)) {
-        this.parameters['search'.toString()] = filter;
+        this.parameters["search".toString()] = filter;
       } else {
         delete this.parameters.search;
       }
@@ -271,7 +272,7 @@ export class TrainingSchedulingCreateComponent
     if (this.trainees[i].contact?.length > 9) {
       this.trainees[i].selected = true;
       this.trainees[i].groupId = this.filterForm.controls.searchByLocation.get(
-        'farmerGroup'.toString()
+        "farmerGroup".toString()
       ).value;
       if (!isChecked) {
         this.allTraineesSelected = isChecked;
@@ -293,29 +294,29 @@ export class TrainingSchedulingCreateComponent
 
   onChanges() {
     this.scheduleTraining.controls.location
-      .get('prov_id'.toString())
+      .get("prov_id".toString())
       .valueChanges.subscribe((value) => {
         this.locationChangeProvince(this.scheduleTraining, value);
       });
     this.scheduleTraining.controls.location
-      .get('dist_id'.toString())
+      .get("dist_id".toString())
       .valueChanges.subscribe((value) => {
         this.locationChangDistrict(this.scheduleTraining, value);
       });
     this.scheduleTraining.controls.location
-      .get('sect_id'.toString())
+      .get("sect_id".toString())
       .valueChanges.subscribe((value) => {
         this.locationChangSector(this.scheduleTraining, value);
       });
     this.scheduleTraining.controls.location
-      .get('cell_id'.toString())
+      .get("cell_id".toString())
       .valueChanges.subscribe((value) => {
         this.locationChangCell(this.scheduleTraining, value);
       });
     this.filterForm.controls.searchByLocation
-      .get('sect_id'.toString())
+      .get("sect_id".toString())
       .valueChanges.subscribe((value) => {
-        if (value !== '') {
+        if (value !== "") {
           this.locationService.getCells(value).subscribe((data) => {
             this.basicCoveredCells = this.filterZoningCells(
               this.basicOrg.coveredSectors,
@@ -323,27 +324,27 @@ export class TrainingSchedulingCreateComponent
             );
             this.basicCoveredVillages = null;
             this.filterForm.controls.searchByLocation
-              .get('village_id'.toString())
-              .setValue('', { emitEvent: false });
+              .get("village_id".toString())
+              .setValue("", { emitEvent: false });
           });
         } else {
           this.basicCoveredCells = null;
           this.basicCoveredVillages = null;
           this.filterForm.controls.searchByLocation
-            .get('cell_id'.toString())
-            .setValue('', { emitEvent: false });
+            .get("cell_id".toString())
+            .setValue("", { emitEvent: false });
           this.filterForm.controls.searchByLocation
-            .get('village_id'.toString())
-            .setValue('', { emitEvent: false });
+            .get("village_id".toString())
+            .setValue("", { emitEvent: false });
         }
       });
     this.filterForm.controls.searchByLocation
-      .get('cell_id'.toString())
+      .get("cell_id".toString())
       .valueChanges.subscribe((value) => {
-        if (value !== '') {
+        if (value !== "") {
           this.locationService.getVillages(value).subscribe((data) => {
             const id = this.filterForm.controls.searchByLocation.get(
-              'sect_id'.toString()
+              "sect_id".toString()
             ).value;
             this.basicCoveredVillages = this.filterZoningVillages(
               this.basicOrg.coveredSectors,
@@ -351,38 +352,38 @@ export class TrainingSchedulingCreateComponent
               data
             );
             this.filterForm.controls.searchByLocation
-              .get('village_id'.toString())
-              .setValue('', { emitEvent: false });
+              .get("village_id".toString())
+              .setValue("", { emitEvent: false });
           });
         }
       });
 
     this.filterForm.controls.searchByLocation
-      .get('farmerGroup'.toString())
+      .get("farmerGroup".toString())
       .valueChanges.subscribe((value) => {
-        if (value !== '') {
+        if (value !== "") {
           this.getFarmers();
         }
       });
     this.scheduleTraining
-      .get('trainingStartDate'.toString())
+      .get("trainingStartDate".toString())
       .valueChanges.subscribe((value) => {
-        if (value !== '') {
+        if (value !== "") {
           this.scheduleTraining
-            .get('trainingStartDate'.toString())
-            .setValue(new Date(value).toISOString().split('T')[0], {
+            .get("trainingStartDate".toString())
+            .setValue(new Date(value).toISOString().split("T")[0], {
               emitEvent: false,
             });
         }
       });
 
     this.scheduleTraining
-      .get('trainingEndDate'.toString())
+      .get("trainingEndDate".toString())
       .valueChanges.subscribe((value) => {
-        if (value !== '') {
+        if (value !== "") {
           this.scheduleTraining
-            .get('trainingEndDate'.toString())
-            .setValue(new Date(value).toISOString().split('T')[0], {
+            .get("trainingEndDate".toString())
+            .setValue(new Date(value).toISOString().split("T")[0], {
               emitEvent: false,
             });
         }
@@ -398,7 +399,7 @@ export class TrainingSchedulingCreateComponent
         userId: this.trainers[this.scheduleTraining.value.trainer]._id,
         fullName:
           this.trainers[this.scheduleTraining.value.trainer].foreName +
-          ' ' +
+          " " +
           this.trainers[this.scheduleTraining.value.trainer].surname,
         phoneNumber:
           this.trainers[this.scheduleTraining.value.trainer].phoneNumber,
@@ -406,7 +407,7 @@ export class TrainingSchedulingCreateComponent
           this.authenticationService.getCurrentUser().orgInfo.orgName,
       },
       groupId: this.filterForm.controls.searchByLocation.get(
-        'farmerGroup'.toString()
+        "farmerGroup".toString()
       ).value,
       description: this.scheduleTraining.value.description,
       location: {
@@ -418,14 +419,14 @@ export class TrainingSchedulingCreateComponent
       },
       venueName: this.scheduleTraining.value.location.venue,
       startTime:
-        this.scheduleTraining.value.trainingStartDate +
-        'T' +
-        this.scheduleTraining.value.startTime,
+        this.formatDate(this.scheduleTraining.value.trainingStartDate) +
+        "T" +
+        this.formatTime(this.scheduleTraining.value.startTime),
       endTime:
-        this.scheduleTraining.value.trainingEndDate +
-        'T' +
-        this.scheduleTraining.value.endTime,
-      referenceId: '5d1635ac60c3dd116164d4ae',
+        this.formatDate(this.scheduleTraining.value.trainingEndDate) +
+        "T" +
+        this.formatTime(this.scheduleTraining.value.endTime),
+      referenceId: "5d1635ac60c3dd116164d4ae",
       trainees: this.selectedTrainees.map((item) => {
         return {
           userId: item.userId,
@@ -443,8 +444,29 @@ export class TrainingSchedulingCreateComponent
     this.loading = true;
     const data = this.successDatails._id;
     this.trainingService.sendMessage(data).subscribe((data) => {
-      this.router.navigateByUrl('admin/training/schedule/list');
+      this.router.navigateByUrl("admin/training/schedule/list");
       this.loading = false;
     });
+  }
+  formatDate(date) {
+    var d = new Date(date),
+      month = "" + (d.getMonth() + 1),
+      day = "" + d.getDate(),
+      year = d.getFullYear();
+
+    if (month.length < 2) month = "0" + month;
+    if (day.length < 2) day = "0" + day;
+
+    return [year, month, day].join("-");
+  }
+
+  formatTime(date) {
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    hours = hours % 24;
+    hours = hours ? hours : 24; // the hour '0' should be '24'
+    minutes = minutes < 10 ? "0" + minutes : minutes;
+    var strTime = hours + ":" + minutes;
+    return strTime;
   }
 }

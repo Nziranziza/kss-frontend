@@ -5,223 +5,341 @@
     <div class="box">
       <div class="box-body">
         <form [formGroup]="createForm">
-          <div class="col-xs-6">
-            <div class="form-group">
-              <label class="control-label label-required">Group name</label>
-              <input
-                type="text"
-                formControlName="groupName"
-                class="form-control"
-              />
-              <app-inline-errors
-                *ngIf="
-                  createForm.controls.groupName.invalid &&
-                  (createForm.controls.groupName.dirty ||
-                    createForm.controls.groupName.touched)
-                "
-                [errors]="createForm.controls.groupName.errors"
-                [label]="'group_name'"
-              >
-              </app-inline-errors>
+          <div class="row">
+            <div class="col-xs-6">
+              <div class="form-group">
+                <label class="control-label label-required">Group name</label>
+                <input
+                  type="text"
+                  formControlName="groupName"
+                  class="form-control"
+                  (mouseout)="checkNameStatus()"
+                />
+                <div
+                  style="font: normal 10px Helvetica Neue; color: #ff2c2c"
+                  *ngIf="nameAlreadyExist"
+                >
+                  group already exists
+                </div>
+                <app-inline-errors
+                  *ngIf="
+                    createForm.controls.groupName.invalid &&
+                    (createForm.controls.groupName.dirty ||
+                      createForm.controls.groupName.touched)
+                  "
+                  [errors]="createForm.controls.groupName.errors"
+                  [label]="'group name'"
+                >
+                </app-inline-errors>
+              </div>
             </div>
-          </div>
-          <div class="col-xs-6" formGroupName="location">
-            <div class="row">
-              <div class="col-xs-2" id="location-province">
+            <span *ngIf="!nameAlreadyExist && createForm.value.groupName != ''">
+              <div class="col-xs-6" formGroupName="location">
+                <div class="row">
+                  <div
+                    class="col-xs-2"
+                    id="location-province"
+                    style="padding: 0 2px 0 0px"
+                  >
+                    <div class="form-group">
+                      <label class="control-label label-required"
+                        >Province</label
+                      >
+                      <select class="form-control" formControlName="prov_id">
+                        <option value=""></option>
+                        <option
+                          *ngFor="let province of locationProvinces"
+                          value="{{ province._id }}"
+                        >
+                          {{ province.namee | titlecase }}
+                        </option>
+                      </select>
+                      <app-inline-errors
+                        *ngIf="
+                          createForm.controls.location.get('prov_id').invalid &&
+                          (createForm.controls.location.get(
+                            'prov_id'.toString()
+                          ).dirty ||
+                            createForm.controls.location.get(
+                              'prov_id'.toString()
+                            ).touched)
+                        "
+                        [errors]="
+                          createForm.controls.location.get('prov_id'.toString())
+                            .errors
+                        "
+                        [label]="'province'"
+                      >
+                      </app-inline-errors>
+                    </div>
+                  </div>
+                  <div
+                    class="col-xs-2"
+                    id="location-district"
+                    style="padding: 0 2px 0 0px"
+                  >
+                    <div class="form-group">
+                      <label class="control-label label-required"
+                        >District</label
+                      >
+                      <select class="form-control" formControlName="dist_id">
+                        <option value=""></option>
+                        <option
+                          *ngFor="let district of locationDistricts"
+                          value="{{ district._id }}"
+                        >
+                          {{ district.name | titlecase }}
+                        </option>
+                      </select>
+                      <app-inline-errors
+                        *ngIf="
+                          createForm.controls.location.get('dist_id').invalid &&
+                          (createForm.controls.location.get(
+                            'dist_id'.toString()
+                          ).dirty ||
+                            createForm.controls.location.get(
+                              'dist_id'.toString()
+                            ).touched)
+                        "
+                        [errors]="
+                          createForm.controls.location.get('dist_id'.toString())
+                            .errors
+                        "
+                        [label]="'district'"
+                      >
+                      </app-inline-errors>
+                    </div>
+                  </div>
+                  <div
+                    class="col-xs-2"
+                    id="location-sector"
+                    style="padding: 0 2px 0 0px"
+                  >
+                    <div class="form-group">
+                      <label class="control-label label-required">Sector</label>
+                      <select class="form-control" formControlName="sect_id">
+                        <option value=""></option>
+                        <option
+                          *ngFor="let sector of locationSectors"
+                          value="{{ sector._id }}"
+                        >
+                          {{ sector.name | titlecase }}
+                        </option>
+                      </select>
+                      <app-inline-errors
+                        *ngIf="
+                          createForm.controls.location.get('sect_id').invalid &&
+                          (createForm.controls.location.get(
+                            'sect_id'.toString()
+                          ).dirty ||
+                            createForm.controls.location.get(
+                              'sect_id'.toString()
+                            ).touched)
+                        "
+                        [errors]="
+                          createForm.controls.location.get('sect_id'.toString())
+                            .errors
+                        "
+                        [label]="'sector'"
+                      >
+                      </app-inline-errors>
+                    </div>
+                  </div>
+                  <div
+                    class="col-xs-2"
+                    id="location-cell"
+                    style="padding: 0 2px 0 0px"
+                  >
+                    <div class="form-group">
+                      <label class="control-label label-required">Cell</label>
+                      <select class="form-control" formControlName="cell_id">
+                        <option value=""></option>
+                        <option
+                          *ngFor="let cell of locationCells"
+                          value="{{ cell._id }}"
+                        >
+                          {{ cell.name | titlecase }}
+                        </option>
+                      </select>
+                      <app-inline-errors
+                        *ngIf="
+                          createForm.controls.location.get('cell_id').invalid &&
+                          (createForm.controls.location.get(
+                            'cell_id'.toString()
+                          ).dirty ||
+                            createForm.controls.location.get(
+                              'cell_id'.toString()
+                            ).touched)
+                        "
+                        [errors]="
+                          createForm.controls.location.get('cell_id'.toString())
+                            .errors
+                        "
+                        [label]="'cell'"
+                      >
+                      </app-inline-errors>
+                    </div>
+                  </div>
+                  <div
+                    class="col-xs-2"
+                    id="location-village"
+                    style="padding: 0 2px 0 0px"
+                  >
+                    <div class="form-group">
+                      <label class="control-label">Village</label>
+                      <select class="form-control" formControlName="village_id">
+                        <option value=""></option>
+                        <option
+                          *ngFor="let village of locationVillages"
+                          value="{{ village._id }}"
+                        >
+                          {{ village.name | titlecase }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-3">
                 <div class="form-group">
-                  <label class="control-label">Province</label>
-                  <select class="form-control" formControlName="prov_id">
-                    <option value=""></option>
-                    <option
-                      *ngFor="let province of locationProvinces"
-                      value="{{ province._id }}"
-                    >
-                      {{ province.namee | titlecase }}
-                    </option>
-                  </select>
+                  <label class="control-label label-required"
+                    >Group leader names</label
+                  >
+                  <input
+                    type="text"
+                    formControlName="leaderNames"
+                    class="form-control"
+                  />
                   <app-inline-errors
                     *ngIf="
-                      createForm.controls.location.get('prov_id').invalid &&
-                      (createForm.controls.location.get('prov_id'.toString())
-                        .dirty ||
-                        createForm.controls.location.get('prov_id'.toString())
-                          .touched)
+                      createForm.controls.leaderNames.invalid &&
+                      (createForm.controls.leaderNames.dirty ||
+                        createForm.controls.leaderNames.touched)
                     "
-                    [errors]="
-                      createForm.controls.location.get('prov_id'.toString())
-                        .errors
-                    "
-                    [label]="'province'"
+                    [errors]="createForm.controls.leaderNames.errors"
+                    [label]="'group leader names'"
                   >
                   </app-inline-errors>
                 </div>
               </div>
-              <div class="col-xs-2" id="location-district">
+              <div class="col-xs-3">
                 <div class="form-group">
-                  <label class="control-label">District</label>
-                  <select class="form-control" formControlName="dist_id">
-                    <option value=""></option>
-                    <option
-                      *ngFor="let district of locationDistricts"
-                      value="{{ district._id }}"
-                    >
-                      {{ district.name | titlecase }}
-                    </option>
-                  </select>
+                  <label class="control-label label-required"
+                    >Group leader phone number</label
+                  >
+                  <input
+                    type="text"
+                    formControlName="leaderPhoneNumber"
+                    placeholder="250"
+                    class="form-control"
+                  />
+                  <app-inline-errors
+                    *ngIf="
+                      createForm.controls.leaderPhoneNumber.invalid &&
+                      (createForm.controls.leaderPhoneNumber.dirty ||
+                        createForm.controls.leaderPhoneNumber.touched)
+                    "
+                    [errors]="createForm.controls.leaderPhoneNumber.errors"
+                    [label]="'leader phone number'"
+                  >
+                  </app-inline-errors>
                 </div>
               </div>
-              <div class="col-xs-2" id="location-sector">
-                <div class="form-group">
-                  <label class="control-label">Sector</label>
-                  <select class="form-control" formControlName="sect_id">
-                    <option value=""></option>
-                    <option
-                      *ngFor="let sector of locationSectors"
-                      value="{{ sector._id }}"
+              <ng-container formGroupName="meetingSchedule">
+                <div class="col-xs-2" style="padding: 0 2px 0 0px">
+                  <div class="form-group">
+                    <label class="control-label label-required"
+                      >Meeting day</label
                     >
-                      {{ sector.name | titlecase }}
-                    </option>
-                  </select>
+                    <select class="form-control" formControlName="meetingDay">
+                      <option *ngFor="let el of days" value="{{ el.value }}">
+                        {{ el.name | titlecase }}
+                      </option>
+                    </select>
+                    <app-inline-errors
+                      *ngIf="
+                        createForm.controls.meetingSchedule.get(
+                          'meetingDay'.toString()
+                        ).invalid &&
+                        (createForm.controls.meetingSchedule.get(
+                          'meetingDay'.toString()
+                        ).dirty ||
+                          createForm.controls.meetingSchedule.get(
+                            'meetingDay'.toString()
+                          ).touched)
+                      "
+                      [errors]="
+                        createForm.controls.meetingSchedule.get(
+                          'meetingDay'.toString()
+                        ).errors
+                      "
+                      [label]="'meeting day'"
+                    >
+                    </app-inline-errors>
+                  </div>
+                </div>
+                <div class="col-xs-1" style="padding: 0 2px 0 0px">
+                  <div class="form-group">
+                    <label class="control-label label-required">Time</label>
+                    <input
+                      [owlDateTimeTrigger]="dt1"
+                      [owlDateTime]="dt1"
+                      formControlName="meetingTime"
+                      class="form-control"
+                    />
+                    <owl-date-time [pickerType]="'timer'" #dt1></owl-date-time>
+                    <app-inline-errors
+                      *ngIf="
+                        createForm.controls.meetingSchedule.get(
+                          'meetingTime'.toString()
+                        ).invalid &&
+                        (createForm.controls.meetingSchedule.get(
+                          'meetingTime'.toString()
+                        ).dirty ||
+                          createForm.controls.meetingSchedule.get(
+                            'meetingTime'.toString()
+                          ).touched)
+                      "
+                      [errors]="
+                        createForm.controls.meetingSchedule.get(
+                          'meetingTime'.toString()
+                        ).errors
+                      "
+                      [label]="'meeting time'"
+                    >
+                    </app-inline-errors>
+                  </div>
+                </div>
+              </ng-container>
+              <div class="col-xs-3" style="padding: 0px 20px 0px 2px">
+                <div class="form-group">
+                  <label class="control-label label-required"
+                    >Description</label
+                  >
+                  <input
+                    type="text"
+                    formControlName="description"
+                    class="form-control"
+                  />
+                  <app-inline-errors
+                    *ngIf="
+                      createForm.controls.description.invalid &&
+                      (createForm.controls.description.dirty ||
+                        createForm.controls.description.touched)
+                    "
+                    [errors]="createForm.controls.description.errors"
+                    [label]="'description'"
+                  >
+                  </app-inline-errors>
                 </div>
               </div>
-              <div class="col-xs-2" id="location-cell">
-                <div class="form-group">
-                  <label class="control-label">Cell</label>
-                  <select class="form-control" formControlName="cell_id">
-                    <option value=""></option>
-                    <option
-                      *ngFor="let cell of locationCells"
-                      value="{{ cell._id }}"
-                    >
-                      {{ cell.name | titlecase }}
-                    </option>
-                  </select>
-                </div>
-              </div>
-              <div class="col-xs-2" id="location-village">
-                <div class="form-group">
-                  <label class="control-label">Village</label>
-                  <select class="form-control" formControlName="village_id">
-                    <option value=""></option>
-                    <option
-                      *ngFor="let village of locationVillages"
-                      value="{{ village._id }}"
-                    >
-                      {{ village.name | titlecase }}
-                    </option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-xs-3">
-            <div class="form-group">
-              <label class="control-label">Group leader names</label>
-              <input
-                type="text"
-                formControlName="leaderNames"
-                class="form-control"
-              />
-              <app-inline-errors
-                *ngIf="
-                  createForm.controls.leaderNames.invalid &&
-                  (createForm.controls.leaderNames.dirty ||
-                    createForm.controls.leaderNames.touched)
-                "
-                [errors]="createForm.controls.leaderNames.errors"
-                [label]="'leaderNames'"
-              >
-              </app-inline-errors>
-            </div>
-          </div>
-          <div class="col-xs-3">
-            <div class="form-group">
-              <label class="control-label label-required"
-                >Group leader phone number</label
-              >
-              <input
-                type="text"
-                formControlName="leaderPhoneNumber"
-                class="form-control"
-              />
-              <app-inline-errors
-                *ngIf="
-                  createForm.controls.leaderNames.invalid &&
-                  (createForm.controls.leaderNames.dirty ||
-                    createForm.controls.leaderNames.touched)
-                "
-                [errors]="createForm.controls.leaderNames.errors"
-                [label]="'leaderNames'"
-              >
-              </app-inline-errors>
-            </div>
-          </div>
-          <ng-container formGroupName="meetingSchedule">
-            <div class="col-xs-2">
-              <div class="form-group">
-                <label class="control-label label-required">Meeting day</label>
-                <select class="form-control" formControlName="meetingDay">
-                  <option *ngFor="let el of days" value="{{ el.value }}">
-                    {{ el.name | titlecase }}
-                  </option>
-                </select>
-                <app-inline-errors
-                  *ngIf="
-                    createForm.controls.leaderNames.invalid &&
-                    (createForm.controls.leaderNames.dirty ||
-                      createForm.controls.leaderNames.touched)
-                  "
-                  [errors]="createForm.controls.leaderNames.errors"
-                  [label]="'leaderNames'"
-                >
-                </app-inline-errors>
-              </div>
-            </div>
-            <div class="col-xs-1">
-              <div class="form-group">
-                <label class="control-label label-required">Time</label>
-                <input
-                  [owlDateTimeTrigger]="dt1"
-                  [owlDateTime]="dt1"
-                  formControlName="meetingTime"
-                  class="form-control"
-                />
-                <owl-date-time [pickerType]="'timer'" #dt1></owl-date-time>
-                <app-inline-errors
-                  *ngIf="
-                    createForm.controls.leaderNames.invalid &&
-                    (createForm.controls.leaderNames.dirty ||
-                      createForm.controls.leaderNames.touched)
-                  "
-                  [errors]="createForm.controls.leaderNames.errors"
-                  [label]="'leaderNames'"
-                >
-                </app-inline-errors>
-              </div>
-            </div>
-          </ng-container>
-          <div class="col-xs-3">
-            <div class="form-group">
-              <label class="control-label">Description</label>
-              <input
-                type="text"
-                formControlName="description"
-                class="form-control"
-              />
-              <app-inline-errors
-                *ngIf="
-                  createForm.controls.leaderNames.invalid &&
-                  (createForm.controls.leaderNames.dirty ||
-                    createForm.controls.leaderNames.touched)
-                "
-                [errors]="createForm.controls.leaderNames.errors"
-                [label]="'leaderNames'"
-              >
-              </app-inline-errors>
-            </div>
+            </span>
           </div>
         </form>
-        <div class="row">
+        <div
+          class="row"
+          *ngIf="!nameAlreadyExist && createForm.value.groupName != ''"
+        >
           <div class="col-xs-6">
             <fieldset style="margin-right: 0 !important">
               <legend>
@@ -479,7 +597,7 @@
     </div>
   </div>
 </div>
-<div class="row">
+<div class="row" *ngIf="!nameAlreadyExist && createForm.value.groupName != ''">
   <div class="col-xs-12">
     <a
       class="btn btn-warning btn-margin pull-right"
