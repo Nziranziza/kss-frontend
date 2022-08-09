@@ -15,15 +15,13 @@ export class GapEditComponent
   id: string;
   createForm: FormGroup;
   approachs = [
-    {id: 'text_input', name: 'text_input'},
-    {id: 'percentage_input', name: 'percentage_input'},
-    {id: 'multiple_choice', name: 'multiple_choice'},
+    {id: 'mark_input', name: 'Marks Input'},
     {id: 'multiple_single', name: 'Multiple Choice - Single'},
     {id: 'yes_no', name: 'Yes/No'},
     {
-      id: 'multiple_all_apply',
+      id: 'multiple_apply',
       name: 'Multiple Choice - All that Apply',
-    },
+    }
   ];
   loading = false;
   adoptionOptionsVisible = false;
@@ -74,11 +72,12 @@ export class GapEditComponent
     });
 
     this.createForm = this.formBuilder.group({
-      gap_name: ['Pruning', Validators.required],
+      _id: [''],
+      gap_name: ['', Validators.required],
       sections: new FormArray([], Validators.required),
-      gap_weight: [20, Validators.required],
-      gap_score: [100, Validators.required],
-      picture_text: ['Describe how pictures will be taken', Validators.required]
+      gap_weight: ['', Validators.required],
+      gap_score: ['', Validators.required],
+      picture_text: ['', Validators.required]
     });
 
     this.getGap();
@@ -91,13 +90,11 @@ export class GapEditComponent
     this.gapService.one(this.id).subscribe((data) => {
       if (data && data.data) {
         this.gap = data.data;
-        // this.createForm.controls._id.setValue(this.gap._id);
+        this.createForm.controls._id.setValue(this.gap._id);
         this.createForm.controls.gap_name.setValue(this.gap.gap_name);
         this.createForm.controls.gap_weight.setValue(this.gap.gap_weight);
         this.createForm.controls.gap_score.setValue(this.gap.gap_score);
-        // this.createForm.controls.description.setValue(this.gap.description, {
-        //   onlySelf: true,
-        // });
+        this.createForm.controls.picture_text.setValue(this.gap.picture_text);
         this.gap.sections.forEach((value, index) => {
           this.populateSections(value, index);
         });
@@ -108,7 +105,7 @@ export class GapEditComponent
   populateSections(element: Section, index: number) {
     const sections = this.createForm.controls.sections as FormArray;
     sections.push(this.createQuestionSection());
-    // sections.at(index).get('_id').setValue(element._id);
+    sections.at(index).get('_id').setValue(element._id);
     sections.at(index).get('section_name').setValue(element.section_name);
     element.questions.forEach((value, sectionIndex) => {
       this.populateQuestions(value, index, sectionIndex);
@@ -117,23 +114,22 @@ export class GapEditComponent
 
   populateQuestions(question: Question, sectionIndex: number, qstIndex: number) {
     const questions = this.getSectionQuestions(sectionIndex).controls;
-    console.log(questions, 'questions populate')
     questions.push(this.createQuestion());
-    // questions.at(qstIndex).get('_id').setValue(question._id);
-    questions.at(qstIndex).get('question').setValue(question.question);
-    // questions.at(qstIndex).get('question_type').setValue(question.question_type);
-    // questions.at(qstIndex).get('weight').setValue(question.weight);
-    // questions.at(qstIndex).get('description').setValue(question.description);
-    // questions.at(qstIndex).get('is_not_applicable').setValue(question.is_not_applicable);
-    // question.answers.forEach((value, answerIndex) => {
-    //   this.populateAnswers(value, sectionIndex, qstIndex, answerIndex);
-    // });
-    console.log(questions, 'questions populate')
+    questions.at(qstIndex).get('_id').setValue(question._id);
+    questions.at(qstIndex).get('question').setValue('jjjjj');
+    questions.at(qstIndex).get('question_type').setValue(question.question_type);
+    questions.at(qstIndex).get('weight').setValue(question.weight);
+    questions.at(qstIndex).get('description').setValue(question.description);
+    questions.at(qstIndex).get('is_not_applicable').setValue(question.is_not_applicable);
+    question.answers.forEach((value, answerIndex) => {
+      this.populateAnswers(value, sectionIndex, qstIndex, answerIndex);
+    });
   }
 
   populateAnswers(answer: Answer, sectionIndex: number, qstIndex: number, answerIndex:number){
     const answers = this.getQuestionAnswers(sectionIndex, qstIndex);
     answers.push(this.createAnswer());
+    answers.at(answerIndex).get('_id').setValue(answer._id);
     answers.at(answerIndex).get('answer').setValue(answer.answer);
     answers.at(answerIndex).get('weight').setValue(answer.weight);
     answers.at(answerIndex).get('description').setValue(answer.description);
@@ -143,7 +139,8 @@ export class GapEditComponent
   // Method creates a new Form Group for a question
   createQuestionSection(): FormGroup {
     return this.formBuilder.group({
-      section_name: ['This is a section name', Validators.required],
+      _id: [''],
+      section_name: ['', Validators.required],
       questions: new FormArray([])
     });
   }
@@ -249,19 +246,6 @@ export class GapEditComponent
     this.getQuestionAnswers(sectionIndex, qstIndex).clear();
   }
 
-  addQuestions(element: Question, index: number) {
-    const questions = this.createForm.controls.questions as FormArray;
-    questions.push(this.createQuestion());
-    questions.at(index).get('_id').setValue(element._id);
-    questions.at(index).get('question').setValue(element.question);
-    // questions.at(index).get('answerType').setValue(element.answerType);
-    // questions.at(index).get('marks').setValue(element.marks);
-
-    element.answers.forEach((value, aindex) => {
-      this.addAnswers(value, index, aindex);
-    });
-  }
-
   addAnswers(element: Answer, qIndex: number, aIndex: number) {
     const question = (this.createForm.controls.questions as FormArray).controls[
       qIndex
@@ -272,6 +256,12 @@ export class GapEditComponent
     answers.at(aIndex).get('_id').setValue(element._id);
     answers.at(aIndex).get('answer').setValue(element.answer);
     answers.at(aIndex).get('weight').setValue(element.weight);
+    answers.at(aIndex).get('description').setValue(element.description);
+    answers.at(aIndex).get('is_not_applicable').setValue(element.is_not_applicable);
+  }
+
+  removeQuestion(sectionIndex, qstIndex){
+    this.getSectionQuestions(sectionIndex).removeAt(qstIndex);
   }
 
   questionTitle(index: number) {
@@ -283,9 +273,11 @@ export class GapEditComponent
   }
 
   onSubmit() {
+    console.log(this.createForm);
     if (this.createForm.valid) {
       this.loading = true;
       this.gap = this.createForm.getRawValue();
+      console.log(this.gap)
       this.gapService.update(this.gap, this.id).subscribe(
         (data) => {
           this.loading = false;
@@ -313,79 +305,28 @@ export class GapEditComponent
 
   createQuestion(): FormGroup {
     return this.formBuilder.group({
-      _id: [Validators.required],
-      question: ['Is user practising pruning', Validators.required],
-      answerType: ['', Validators.required],
+      _id: [''],
+      question: ['', Validators.required],
+      description: ['', Validators.required],
+      question_type: ['', Validators.required],
+      weight: ['', Validators.required],
       answers: new FormArray([]),
-      marks: [],
+      is_not_applicable: [false, Validators.required]
     });
   }
 
   createAnswer(): FormGroup {
     return this.formBuilder.group({
-      _id: [],
-      answer: [''],
-      weight: [],
+      _id: [''],
+      answer: ['', Validators.required],
+      description: ['', Validators.required],
+      weight: ['', Validators.required],
+      is_not_applicable: [false, Validators.required]
     });
-  }
-
-  addAnswer(index: number) {
-    const question = (this.createForm.controls.questions as FormArray).controls[
-      index
-      ] as FormGroup;
-
-    (question.controls.answers as FormArray).push(this.createAnswer());
-  }
-
-  questionAnswers(qIndex: number): FormArray {
-    return this.formCategory.at(qIndex).get('answers') as FormArray;
-  }
-
-  addQuestion() {
-    (this.createForm.controls.questions as FormArray).push(
-      this.createQuestion()
-    );
-    // this.addAnswer(
-    //   (this.createForm.controls.questions as FormArray).length - 1
-    // );
-  }
-
-  removeQuestion(index: number) {
-    (this.createForm.controls.questions as FormArray).removeAt(index);
-  }
-
-  getQuestionsFormGroup(index: number): FormGroup {
-    return this.formCategory.controls[index] as FormGroup;
-  }
-
-  onAdoptionMethodSelected(index: number) {
-    const value = this.getQuestionsFormGroup(index).controls.answerType.value;
-    if (value === 'multiple_choice') {
-      this.adoptionOptionsVisible = true;
-    }
   }
 
   onCancel() {
     // this.location.back();
-  }
-
-  checkIfWeightMatch(index: number, aIndex: number) {
-    const marks = this.formCategory.at(index).get('marks').value;
-    const answers = (this.formCategory.at(index).get('answers') as FormArray)
-      .controls;
-
-    let sum = 0;
-    for (const answer of answers) {
-      sum = sum + (answer as FormGroup).controls.weight.value;
-    }
-    console.log(sum);
-    if (sum === marks) {
-      console.log(true);
-      return true;
-    } else {
-      console.log(false);
-      return false;
-    }
   }
 
   weight(index: number, aIndex: number) {
