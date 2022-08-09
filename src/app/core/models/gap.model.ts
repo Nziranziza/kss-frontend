@@ -19,6 +19,7 @@ export interface Question {
   _id: string;
   question: string;
   question_type: string;
+  description: string,
   weight: number;
   answers: Array<Answer>;
   is_not_applicable: boolean;
