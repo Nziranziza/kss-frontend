@@ -8,7 +8,7 @@
       <div class="col-md-12">
         <div class="row" formGroupName="location">
           <div
-            class="col-xs-2"
+            class="col-xs-4"
             style="padding: 8px 0px 0px 10px; font-size: 18px"
           >
             <i
@@ -28,7 +28,7 @@
                 class="form-control form-control-small"
                 formControlName="prov_id"
               >
-                <option value="" selected disabled>All Provinces</option>
+                <option value="" selected>All Provinces</option>
                 <option
                   *ngFor="let province of locationProvinces"
                   value="{{ province._id }}"
@@ -81,22 +81,6 @@
               <ng-template #notFoundTemplate let-notFound>
                 <div [innerHTML]="notFound"></div>
               </ng-template>
-            </div>
-          </div>
-          <div class="col-xs-2" style="padding: 8px 5px 0 5px">
-            <div class="form-group">
-              <select
-                class="form-control form-control-small"
-                formControlName="covered_sector"
-              >
-                <option value="" selected disabled>All Covered Sectors</option>
-                <option
-                  *ngFor="let sector of coveredSectors; let i = index"
-                  value="{{ sector?.sectorId._id }}"
-                >
-                  {{ sector?.sectorId.name | titlecase }}
-                </option>
-              </select>
             </div>
           </div>
           <div class="col-xs-2" style="padding: 8px 5px 0 5px">
@@ -276,7 +260,11 @@
                     [min]="dateRangeMin"
                     [max]="dateRangeMax"
                   />
-                  <owl-date-time [pickerType]="'calendar'"[scrollStrategy]="scrollStrategy" #dt2></owl-date-time>
+                  <owl-date-time
+                    [pickerType]="'calendar'"
+                    [scrollStrategy]="scrollStrategy"
+                    #dt2
+                  ></owl-date-time>
                 </div>
               </div>
               <div class="col-xs-12 text-center" style="margin-bottom: 10px">
@@ -442,7 +430,11 @@
                     [min]="dateRangeMin"
                     [max]="dateRangeMax"
                   />
-                  <owl-date-time [pickerType]="'calendar'" [scrollStrategy]="scrollStrategy" #dt3></owl-date-time>
+                  <owl-date-time
+                    [pickerType]="'calendar'"
+                    [scrollStrategy]="scrollStrategy"
+                    #dt3
+                  ></owl-date-time>
                 </div>
               </div>
               <div class="col-xs-12 text-center" style="margin-bottom: 10px">
@@ -671,7 +663,11 @@
                     [min]="dateRangeMin"
                     [max]="dateRangeMax"
                   />
-                  <owl-date-time [pickerType]="'calendar'" [scrollStrategy]="scrollStrategy" #dt3></owl-date-time>
+                  <owl-date-time
+                    [pickerType]="'calendar'"
+                    [scrollStrategy]="scrollStrategy"
+                    #dt3
+                  ></owl-date-time>
                 </div>
               </div>
               <div class="col-xs-12 text-center" style="margin-bottom: 10px">
@@ -886,7 +882,11 @@
                     [min]="dateRangeMin"
                     [max]="dateRangeMax"
                   />
-                  <owl-date-time [pickerType]="'calendar'" [scrollStrategy]="scrollStrategy" #dt5></owl-date-time>
+                  <owl-date-time
+                    [pickerType]="'calendar'"
+                    [scrollStrategy]="scrollStrategy"
+                    #dt5
+                  ></owl-date-time>
                 </div>
               </div>
               <div class="col-xs-12 text-center" style="margin-bottom: 10px">
@@ -934,11 +934,11 @@
                   background: #3de327 0% 0% no-repeat padding-box;
                   border-radius: 5px;
                   opacity: 1;
-                  margin-top: -6px;
+                  margin-top: 1px;
                 "
               >
-                <div style="font: normal 9px Helvetica Neue">Baseline</div>
-                <div style="font: normal 15px Helvetica Neue">
+                <div style="font: normal 8px Helvetica Neue">Baseline</div>
+                <div style="font: normal 13px Helvetica Neue">
                   {{ gapAdoption.baselineRate + 10 | number: "1.1-1" }}%
                 </div>
               </div>
@@ -950,11 +950,11 @@
                   background: #ffffff 0% 0% no-repeat padding-box;
                   border-radius: 5px;
                   opacity: 1;
-                  margin-top: -6px;
+                  margin-top: 1px;
                 "
               >
-                <div style="font: normal 9px Helvetica Neue">Score</div>
-                <div style="font: normal 15px Helvetica Neue">
+                <div style="font: normal 8px Helvetica Neue">Score</div>
+                <div style="font: normal 13px Helvetica Neue">
                   {{ gapAdoption.adoptionRate | number: "1.1-1" }}%
                 </div>
               </div>

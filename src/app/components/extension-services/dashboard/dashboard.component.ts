@@ -14,11 +14,9 @@ import {
   UserService,
   VisitService,
   SeedlingService,
+  SiteService,
 } from "src/app/core";
-import {
-  ScrollStrategy,
-  ScrollStrategyOptions
-} from "@angular/cdk/overlay";
+import { ScrollStrategy, ScrollStrategyOptions } from "@angular/cdk/overlay";
 
 @Component({
   selector: "app-dashboard",
@@ -40,7 +38,8 @@ export class DashboardComponent extends BasicComponent implements OnInit {
     private groupService: GroupService,
     private farmService: FarmService,
     private seedlingService: SeedlingService,
-    private readonly sso: ScrollStrategyOptions
+    private readonly sso: ScrollStrategyOptions,
+    private siteService: SiteService
   ) {
     super(locationService, organisationService);
     this.scrollStrategy = this.sso.noop();
@@ -126,6 +125,7 @@ export class DashboardComponent extends BasicComponent implements OnInit {
   currentSelectedLocation: any;
   dateRangeMin: any;
   dateRangeMax: any;
+  mainBody: any = {};
 
   weeks = [
     { id: 1, name: "Week 1", start: "01", end: "07" },
@@ -265,66 +265,53 @@ export class DashboardComponent extends BasicComponent implements OnInit {
   // get stats from filters
   getStats(filterBy: string) {
     if (filterBy === "training") {
-      let body: any;
       if (this.dashboardForm.value.filterByDate.length > 1) {
-        body = {
-          date: {
-            from: this.dashboardForm.value.filterByDate[0],
-            to: this.dashboardForm.value.filterByDate[1],
-          },
+        this.mainBody.date = {
+          from: this.dashboardForm.value.filterByDate[0],
+          to: this.dashboardForm.value.filterByDate[1],
         };
       }
-      this.getTrainingsStats(body);
+      this.getTrainingsStats(this.mainBody);
     } else if (filterBy === "visits") {
-      let body: any;
       if (this.dashboardForm.value.filterByDate.length > 1) {
-        body = {
-          date: {
-            from: this.dashboardForm.value.filterByDate[0],
-            to: this.dashboardForm.value.filterByDate[1],
-          },
+        this.mainBody.date = {
+          from: this.dashboardForm.value.filterByDate[0],
+          to: this.dashboardForm.value.filterByDate[1],
         };
       }
-      this.visitStats(body);
+      this.visitStats(this.mainBody);
     } else if (filterBy === "seedling") {
-      let body: any;
       if (this.dashboardForm.value.filterByDate.length > 1) {
-        body = {
-          date: {
-            from: this.dashboardForm.value.filterByDate[0],
-            to: this.dashboardForm.value.filterByDate[1],
-          },
+        this.mainBody.date = {
+          from: this.dashboardForm.value.filterByDate[0],
+          to: this.dashboardForm.value.filterByDate[1],
         };
       }
-      this.getSeedlingStats(body);
+      this.getSeedlingStats(this.mainBody);
     } else if (filterBy === "gap") {
-      let body: any;
       if (this.dashboardForm.value.filterByDate.length > 1) {
-        body = {
-          date: {
-            from: this.dashboardForm.value.filterByDate[0],
-            to: this.dashboardForm.value.filterByDate[1],
-          },
+        this.mainBody.date = {
+          from: this.dashboardForm.value.filterByDate[0],
+          to: this.dashboardForm.value.filterByDate[1],
         };
       }
-      this.getGapAdoptionStats(body);
+      this.getGapAdoptionStats(this.mainBody);
     } else if (filterBy === "location") {
-      const body = this.currentSelectedLocation;
-      if (typeof body === "object") {
-        this.getGeneralStats({ location: body });
+      this.mainBody = {};
+      const locationId = this.currentSelectedLocation;
+      if (typeof locationId === "object") {
+        this.mainBody.location = locationId;
       }
-    } else if (filterBy === "cws") {
-      if (this.newOrg) {
-        let body: any;
-        body = { referenceId: this.newOrg };
+      if (this.newOrg != "") {
+        this.mainBody.referenceId = this.newOrg;
         if (this.dashboardForm.value.covered_sector != "") {
-          body.location = {
+          this.mainBody.location = {
             searchBy: "sect_id",
             locationId: this.dashboardForm.value.covered_sector,
           };
         }
-        this.getGeneralStats(body);
       }
+      this.getGeneralStats(this.mainBody);
     }
   }
 
@@ -354,10 +341,12 @@ export class DashboardComponent extends BasicComponent implements OnInit {
 
   selectNurseryEvent(item) {
     this.selectedNursery = item._id;
+    this.getSeedlingStats({ nurseryId: item._id });
   }
 
   deselectNurseryEvent() {
     this.selectedNursery = "";
+    this.getSeedlingStats({});
   }
 
   deselectGroupEvent() {
@@ -454,11 +443,22 @@ export class DashboardComponent extends BasicComponent implements OnInit {
     this.dashboardForm.controls.location
       .get("prov_id".toString())
       .valueChanges.subscribe((value) => {
-        this.locationChangeProvince(this.dashboardForm, value);
-        this.currentSelectedLocation = {
-          searchBy: "prov_id",
-          locationId: value,
-        };
+        if (value != "") {
+          this.locationChangeProvince(this.dashboardForm, value);
+          this.currentSelectedLocation = {
+            searchBy: "prov_id",
+            locationId: value,
+          };
+          this.siteService
+            .getZone({ prov_id: value, searchBy: "province" })
+            .subscribe((data) => {
+              if (data) {
+                this.organisations = data.content.filter((org) =>
+                  org.organizationRole.includes(1)
+                );
+              }
+            });
+        }
       });
     this.dashboardForm.controls.location
       .get("dist_id".toString())
@@ -468,6 +468,15 @@ export class DashboardComponent extends BasicComponent implements OnInit {
           searchBy: "dist_id",
           locationId: value,
         };
+        this.siteService
+          .getZone({ dist_id: value, searchBy: "district" })
+          .subscribe((data) => {
+            if (data) {
+              this.organisations = data.content.filter((org) =>
+                org.organizationRole.includes(1)
+              );
+            }
+          });
       });
     this.dashboardForm.controls.location
       .get("sect_id".toString())

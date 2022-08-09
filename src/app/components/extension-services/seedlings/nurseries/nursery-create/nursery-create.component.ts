@@ -15,6 +15,7 @@ import {
   HelperService,
 } from "src/app/core";
 import { Router } from "@angular/router";
+import { ScrollStrategy, ScrollStrategyOptions } from "@angular/cdk/overlay";
 @Component({
   selector: "app-nursery-create",
   templateUrl: "./nursery-create.component.html",
@@ -23,6 +24,7 @@ import { Router } from "@angular/router";
   ],
 })
 export class NurseryCreateComponent extends BasicComponent implements OnInit {
+  scrollStrategy: ScrollStrategy;
   constructor(
     private formBuilder: FormBuilder,
     protected locationService: LocationService,
@@ -32,9 +34,11 @@ export class NurseryCreateComponent extends BasicComponent implements OnInit {
     private seedlingService: SeedlingService,
     private modalService: NgbModal,
     private router: Router,
+    private readonly sso: ScrollStrategyOptions,
     private helper: HelperService
   ) {
     super(locationService, organisationService);
+    this.scrollStrategy = this.sso.noop();
   }
   addNursery: FormGroup;
   editNursery: FormGroup;

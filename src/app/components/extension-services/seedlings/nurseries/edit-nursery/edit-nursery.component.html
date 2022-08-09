@@ -276,10 +276,17 @@
                   style="margin-top: 10px; padding: 0 2px 0 0px"
                 >
                   <input
-                    type="text"
+                    [owlDateTimeTrigger]="dt1"
+                    [owlDateTime]="dt1"
+                    formControlName="sowingDate"
                     class="form-control"
-                    formControlName="expectedSeedling"
+                    placeholder="Dd/mm/yyyy"
                   />
+                  <owl-date-time
+                    [pickerType]="'calendar'"
+                    [scrollStrategy]="scrollStrategy"
+                    #dt1
+                  ></owl-date-time>
                 </div>
                 <div
                   class="col-sm-2"
@@ -359,7 +366,11 @@
                     formControlName="pickingDate"
                     placeholder="Dd/mm/yyyy"
                   />
-                  <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+                  <owl-date-time
+                    [pickerType]="'calendar'"
+                    [scrollStrategy]="scrollStrategy"
+                    #dt1
+                  ></owl-date-time>
                 </div>
               </span>
             </span>

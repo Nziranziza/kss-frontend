@@ -233,7 +233,7 @@
               style="margin-top: 10px; padding: 0 2px 0 0px"
             >
               <div class="confirm-text-box confirm-text">
-                {{ stock.distributed || 0 }}
+                {{ stock.prickedQty - stock.remainingQty || 0 }}
               </div>
             </div>
             <div

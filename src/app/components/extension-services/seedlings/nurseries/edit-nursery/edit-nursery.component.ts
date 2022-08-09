@@ -14,6 +14,7 @@ import {
   GapService,
 } from "src/app/core";
 import { ActivatedRoute, Router } from "@angular/router";
+import { ScrollStrategy, ScrollStrategyOptions } from "@angular/cdk/overlay";
 
 @Component({
   selector: "app-edit-nursery",
@@ -23,6 +24,7 @@ import { ActivatedRoute, Router } from "@angular/router";
   ],
 })
 export class EditNurseryComponent extends BasicComponent implements OnInit {
+  scrollStrategy: ScrollStrategy;
   constructor(
     private formBuilder: FormBuilder,
     protected locationService: LocationService,
@@ -32,9 +34,11 @@ export class EditNurseryComponent extends BasicComponent implements OnInit {
     private seedlingService: SeedlingService,
     private route: ActivatedRoute,
     private modalService: NgbModal,
+    private readonly sso: ScrollStrategyOptions,
     private router: Router
   ) {
     super(locationService, organisationService);
+    this.scrollStrategy = this.sso.noop();
   }
   addNursery: FormGroup;
   editNursery: FormGroup;
@@ -128,7 +132,7 @@ export class EditNurseryComponent extends BasicComponent implements OnInit {
                 { value: item.germinationRate || 0, disabled: true },
               ],
               germinationRate: item.germinationRate || "",
-              distributed: [{ value: item.distributed || 0, disabled: true }],
+              distributed: [{ value: item.prickedQty - item.remainingQty || 0, disabled: true }],
               id: item._id || "",
               pickingDate: [item.pickedDate || ""],
               sowingDate: [item.sowingDate || ""],
