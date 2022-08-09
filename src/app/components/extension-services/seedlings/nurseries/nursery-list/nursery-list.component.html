@@ -16,33 +16,33 @@
 <div class="col-sm-12 stats-section">
   <div class="row">
     <div class="col-sm-12 text-center stats-title">Nurseries Summary</div>
-    <div class="col-sm-2" style="padding: 0 2px 0 0px">
-      <div class="text-center stats-box">
-        <h3>Nursery Sites Created</h3>
-        <h1>{{ nurseries.length }}</h1>
-      </div>
-    </div>
-    <div class="col-sm-2" style="padding: 0 2px 0 0px">
-      <div class="text-center stats-box middle-box">
-        <h3>Total Provided Seeds</h3>
-        <h1>{{ seedsSum }} Kg</h1>
-      </div>
-    </div>
-    <div class="col-sm-8" style="padding: 0 2px 0 0px">
+    <div class="col-sm-12">
       <div class="row stats-box">
-        <div class="col-sm-3" style="padding: 0 2px 0 0px">
+        <div class="col-sm-2">
+          <div class="text-center">
+            <h4>Nursery Sites Created</h4>
+            <h2>{{ nurseries.length }}</h2>
+          </div>
+        </div>
+        <div class="col-sm-2">
+          <div class="text-center">
+            <h4>Total Provided Seeds</h4>
+            <h2>{{ seedsSum }} Kg</h2>
+          </div>
+        </div>
+        <div class="col-sm-2">
           <div class="text-center">
             <h4>Total Expected Seedlings</h4>
             <h2>{{ seedsSum * 2500 }}</h2>
           </div>
         </div>
-        <div class="col-sm-3" style="padding: 0 2px 0 0px">
+        <div class="col-sm-2">
           <div class="text-center">
             <h4>Total Pricked Out Seedlings</h4>
             <h2>{{ prickedSum }}</h2>
           </div>
         </div>
-        <div class="col-sm-3" style="padding: 0 2px 0 0px">
+        <div class="col-sm-2">
           <div class="text-center">
             <h4>Average Success Rate</h4>
             <h2>
@@ -50,7 +50,7 @@
             </h2>
           </div>
         </div>
-        <div class="col-sm-3" style="padding: 0 2px 0 0px">
+        <div class="col-sm-2">
           <div class="text-center">
             <h4>Total Distributed Seedlings</h4>
             <h2>{{ distributeSum }}</h2>

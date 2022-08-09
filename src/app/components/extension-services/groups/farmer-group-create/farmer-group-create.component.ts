@@ -258,7 +258,7 @@ export class FarmerGroupCreateComponent
         delete this.parameters.search;
       }
       this.organisationService.getFarmers(this.parameters).subscribe(
-        (data) => {
+        (data) => {         
           this.searchResults = data.data;
           this.loading = false;
         },

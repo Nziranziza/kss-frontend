@@ -5,7 +5,7 @@
 <form [formGroup]="dashboardForm">
   <div class="filter-box filter-box-top">
     <div class="row">
-      <div class="col-md-7">
+      <div class="col-md-12">
         <div class="row" formGroupName="location">
           <div
             class="col-xs-2"
@@ -58,40 +58,7 @@
               </select>
             </div>
           </div>
-          <div
-            class="col-xs-2"
-            id="location-sector"
-            style="padding: 8px 5px 0 0px"
-          >
-            <div class="form-group">
-              <select
-                class="form-control form-control-small"
-                formControlName="sect_id"
-              >
-                <option value="" selected disabled>All Sectors</option>
-                <option
-                  *ngFor="let sector of locationSectors"
-                  value="{{ sector._id }}"
-                >
-                  {{ sector.name | titlecase }}
-                </option>
-              </select>
-            </div>
-          </div>
-          <div
-            class="col-xs-4"
-            id="location-sector"
-            style="padding: 8px 5px 0 0px"
-          >
-            <button class="btn btn-dashboard" (click)="getStats('location')">
-              FILTER BY LOCATION
-            </button>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-5">
-        <div class="row">
-          <div class="col-xs-4" style="padding: 8px 5px 0 5px">
+          <div class="col-xs-2" style="padding: 8px 5px 0 5px">
             <div class="ng-autocomplete">
               <ng-autocomplete
                 #origin
@@ -116,7 +83,7 @@
               </ng-template>
             </div>
           </div>
-          <div class="col-xs-4" style="padding: 8px 5px 0 5px">
+          <div class="col-xs-2" style="padding: 8px 5px 0 5px">
             <div class="form-group">
               <select
                 class="form-control form-control-small"
@@ -132,9 +99,9 @@
               </select>
             </div>
           </div>
-          <div class="col-xs-4" style="padding: 8px 5px 0 5px">
-            <button class="btn btn-dashboard" (click)="getStats('cws')">
-              FILTER BY CWS
+          <div class="col-xs-2" style="padding: 8px 5px 0 5px">
+            <button class="btn btn-dashboard" (click)="getStats('location')">
+              FILTER
             </button>
           </div>
         </div>
@@ -309,7 +276,7 @@
                     [min]="dateRangeMin"
                     [max]="dateRangeMax"
                   />
-                  <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
+                  <owl-date-time [pickerType]="'calendar'"[scrollStrategy]="scrollStrategy" #dt2></owl-date-time>
                 </div>
               </div>
               <div class="col-xs-12 text-center" style="margin-bottom: 10px">
@@ -475,7 +442,7 @@
                     [min]="dateRangeMin"
                     [max]="dateRangeMax"
                   />
-                  <owl-date-time [pickerType]="'calendar'" #dt3></owl-date-time>
+                  <owl-date-time [pickerType]="'calendar'" [scrollStrategy]="scrollStrategy" #dt3></owl-date-time>
                 </div>
               </div>
               <div class="col-xs-12 text-center" style="margin-bottom: 10px">
@@ -704,7 +671,7 @@
                     [min]="dateRangeMin"
                     [max]="dateRangeMax"
                   />
-                  <owl-date-time [pickerType]="'calendar'" #dt3></owl-date-time>
+                  <owl-date-time [pickerType]="'calendar'" [scrollStrategy]="scrollStrategy" #dt3></owl-date-time>
                 </div>
               </div>
               <div class="col-xs-12 text-center" style="margin-bottom: 10px">
@@ -734,7 +701,7 @@
             <div
               class="text-center"
               style="margin-top: -15px; margin-left: -85px"
-              *ngIf="totalSeedlings == 0"
+              *ngIf="totalSeedlings > 0"
             >
               <google-chart
                 #chart2
@@ -794,11 +761,11 @@
           <div class="row text-center">
             <div class="col-xs-3" style="padding: 0 2px 0 0px">
               <h4>Owner</h4>
-              <h5>
+              <h6>
                 {{
                   farmDetails?.user.foreName + " " + farmDetails?.user.surname
                 }}
-              </h5>
+              </h6>
             </div>
             <div class="col-xs-3" style="padding: 0 2px 0 0px">
               <h4>Upi Number</h4>
@@ -919,7 +886,7 @@
                     [min]="dateRangeMin"
                     [max]="dateRangeMax"
                   />
-                  <owl-date-time [pickerType]="'calendar'" #dt5></owl-date-time>
+                  <owl-date-time [pickerType]="'calendar'" [scrollStrategy]="scrollStrategy" #dt5></owl-date-time>
                 </div>
               </div>
               <div class="col-xs-12 text-center" style="margin-bottom: 10px">
@@ -972,7 +939,7 @@
               >
                 <div style="font: normal 9px Helvetica Neue">Baseline</div>
                 <div style="font: normal 15px Helvetica Neue">
-                  {{ gapAdoption.baselineRate + 10 }}%
+                  {{ gapAdoption.baselineRate + 10 | number: "1.1-1" }}%
                 </div>
               </div>
             </div>
@@ -988,7 +955,7 @@
               >
                 <div style="font: normal 9px Helvetica Neue">Score</div>
                 <div style="font: normal 15px Helvetica Neue">
-                  {{ gapAdoption.adoptionRate }}%
+                  {{ gapAdoption.adoptionRate | number: "1.1-1" }}%
                 </div>
               </div>
             </div>

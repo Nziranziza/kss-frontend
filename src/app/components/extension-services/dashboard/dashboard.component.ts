@@ -15,6 +15,10 @@ import {
   VisitService,
   SeedlingService,
 } from "src/app/core";
+import {
+  ScrollStrategy,
+  ScrollStrategyOptions
+} from "@angular/cdk/overlay";
 
 @Component({
   selector: "app-dashboard",
@@ -22,6 +26,7 @@ import {
   styleUrls: ["./dashboard.component.css"],
 })
 export class DashboardComponent extends BasicComponent implements OnInit {
+  scrollStrategy: ScrollStrategy;
   constructor(
     private formBuilder: FormBuilder,
     private authenticationService: AuthenticationService,
@@ -34,9 +39,11 @@ export class DashboardComponent extends BasicComponent implements OnInit {
     private seasonService: SeasonService,
     private groupService: GroupService,
     private farmService: FarmService,
-    private seedlingService: SeedlingService
+    private seedlingService: SeedlingService,
+    private readonly sso: ScrollStrategyOptions
   ) {
     super(locationService, organisationService);
+    this.scrollStrategy = this.sso.noop();
   }
 
   dashboardForm: FormGroup;
