@@ -143,7 +143,7 @@
           <span *ngIf="trainingFilterEnabled">
             <div
               class="row text-center"
-              style="margin-left: 10px; margin-right: 15px"
+              style="margin-left: 10px; margin-right: 15px; margin-bottom: 5px"
             >
               <div class="col-xs-4 col-small-padding">
                 <div class="form-group">
@@ -209,73 +209,69 @@
                   </div>
                 </div>
               </div>
-              <div class="col-xs-4 col-small-padding">
-                <div class="form-group">
-                  <label class="label-header-text">Select Season</label>
-                  <select
-                    class="form-control form-control-small"
-                    formControlName="season_id"
-                  >
-                    <option value="" selected disabled>
-                      Season {{ currentSeason?.season }}
-                    </option>
-                    <option
-                      *ngFor="let season of seasons; let i = index"
-                      value="{{ season.year }}"
+              <span formGroupName="trainingFilters">
+                <div class="col-xs-4 col-small-padding">
+                  <div class="form-group">
+                    <label class="label-header-text">Select Season</label>
+                    <select
+                      class="form-control form-control-small"
+                      formControlName="season_id"
+                      (change)="seasonChange('trainingFilters')"
                     >
-                      {{ season.season | titlecase }}
-                    </option>
-                  </select>
+                      <option value="" selected disabled>
+                        Season {{ currentSeason?.season }}
+                      </option>
+                      <option
+                        *ngFor="let season of seasons; let i = index"
+                        value="{{ season.year }}"
+                      >
+                        {{ season.season | titlecase }}
+                      </option>
+                    </select>
+                  </div>
                 </div>
-              </div>
 
-              <div class="col-xs-4 col-small-padding">
-                <div class="form-group">
-                  <label class="label-header-text">Quarters</label>
-                  <select
-                    class="form-control form-control-small"
-                    formControlName="quarterId"
-                  >
-                    <option value="" selected>All Quaters</option>
-                    <option
-                      *ngFor="let quater of quarters; let i = index"
-                      value="{{ quater.id }}"
+                <div class="col-xs-4 col-small-padding">
+                  <div class="form-group">
+                    <label class="label-header-text">Quarters</label>
+                    <select
+                      class="form-control form-control-small"
+                      formControlName="quarterId"
+                      (change)="seasonQuarterChange('trainingFilters')"
                     >
-                      {{ quater.name | titlecase }}
-                    </option>
-                  </select>
+                      <option value="" selected>All Quaters</option>
+                      <option
+                        *ngFor="let quater of quarters; let i = index"
+                        value="{{ quater.id }}"
+                      >
+                        {{ quater.name | titlecase }}
+                      </option>
+                    </select>
+                  </div>
                 </div>
-              </div>
-              <div class="col-xs-4 col-small-padding">
-                <div class="form-group">
-                  <label class="label-header-text">Date</label>
-                  <input
-                    [(ngModel)]="dateRange"
-                    [selectMode]="'range'"
-                    [owlDateTimeTrigger]="dt2"
-                    [owlDateTime]="dt2"
-                    formControlName="filterByDate"
-                    class="form-control form-control-small"
-                    placeholder="From: Dd/mm/yyyy ~ To: Dd/mm/yyyy"
-                    [min]="dateRangeMin"
-                    [max]="dateRangeMax"
-                  />
-                  <owl-date-time
-                    [pickerType]="'calendar'"
-                    [scrollStrategy]="scrollStrategy"
-                    #dt2
-                  ></owl-date-time>
+                <div class="col-xs-4 col-small-padding">
+                  <div class="form-group">
+                    <label class="label-header-text">Date</label>
+                    <input
+                      [(ngModel)]="dateRange"
+                      [selectMode]="'range'"
+                      [owlDateTimeTrigger]="dt2"
+                      [owlDateTime]="dt2"
+                      formControlName="filterByDate"
+                      (change)="seasonDateChange('trainingFilters')"
+                      class="form-control form-control-small"
+                      placeholder="From: Dd/mm/yyyy ~ To: Dd/mm/yyyy"
+                      [min]="dateRangeMin['trainingFilters']"
+                      [max]="dateRangeMax['trainingFilters']"
+                    />
+                    <owl-date-time
+                      [pickerType]="'calendar'"
+                      [scrollStrategy]="scrollStrategy"
+                      #dt2
+                    ></owl-date-time>
+                  </div>
                 </div>
-              </div>
-              <div class="col-xs-12 text-center" style="margin-bottom: 10px">
-                <button
-                  class="btn btn-dashboard"
-                  type="button"
-                  (click)="getStats('training')"
-                >
-                  FILTER BY DATE
-                </button>
-              </div>
+              </span>
             </div>
           </span>
         </div>
@@ -286,7 +282,7 @@
 
         <div
           class="row"
-          style="margin-left: 15%; margin-right: 15%; margin-bottom: 10px"
+          style="margin-left: 15%; margin-right: 15%; margin-bottom: 5px"
         >
           <div class="col-xs-6">
             <div class="text-center trainees-box">
@@ -380,13 +376,15 @@
           <span *ngIf="visitFilterEnabled">
             <div
               class="row text-center"
-              style="margin-left: 10px; margin-right: 15px"
+              style="margin-left: 10px; margin-right: 15px; margin-bottom: 5px"
+              formGroupName="visitFilters"
             >
               <div class="col-xs-4 col-small-padding">
                 <label class="label-header-text">Select Season</label>
                 <select
                   class="form-control form-control-small"
                   formControlName="season_id"
+                  (change)="seasonChange('visitFilters')"
                 >
                   <option value="" selected disabled>
                     Season {{ currentSeason?.season }}
@@ -405,6 +403,7 @@
                   <select
                     class="form-control form-control-small"
                     formControlName="quarterId"
+                    (change)="seasonQuarterChange('visitFilters')"
                   >
                     <option value="" selected>All Quaters</option>
                     <option
@@ -424,11 +423,12 @@
                     [selectMode]="'range'"
                     [owlDateTimeTrigger]="dt3"
                     [owlDateTime]="dt3"
+                    (change)="seasonDateChange('visitFilters')"
                     formControlName="filterByDate"
                     class="form-control form-control-small"
                     placeholder="From: Dd/mm/yyyy ~ To: Dd/mm/yyyy"
-                    [min]="dateRangeMin"
-                    [max]="dateRangeMax"
+                    [min]="dateRangeMin['visitFilters']"
+                    [max]="dateRangeMax['visitFilters']"
                   />
                   <owl-date-time
                     [pickerType]="'calendar'"
@@ -436,15 +436,6 @@
                     #dt3
                   ></owl-date-time>
                 </div>
-              </div>
-              <div class="col-xs-12 text-center" style="margin-bottom: 10px">
-                <button
-                  class="btn btn-dashboard"
-                  type="button"
-                  (click)="getStats('visits')"
-                >
-                  FILTER BY DATE
-                </button>
               </div>
             </div>
           </span>
@@ -478,7 +469,7 @@
                 {{ visitStats.femaleFarmVisits }}
               </p>
             </div>
-            <div class="col-xs-6" style="margin-left: -70px; margin-top: -20px">
+            <div class="col-xs-6" style="margin-left: -75px; margin-top: -20px">
               <google-chart
                 #chart
                 [type]="graph.type"
@@ -544,81 +535,47 @@
           <span *ngIf="seedlingFilterEnabled">
             <div
               class="row text-center"
-              style="margin-left: 10px; margin-right: 15px"
+              style="margin-left: 10px; margin-right: 15px; margin-bottom: 5px"
+              formGroupName="seedlingFilters"
             >
-              <span formGroupName="location">
-                <div class="col-xs-4 col-small-padding">
-                  <div class="form-group">
-                    <label class="label-header-text">Select Province</label>
-                    <select
-                      class="form-control form-control-small"
-                      formControlName="prov_id"
+              <div class="col-xs-3 col-small-padding">
+                <div class="form-group">
+                  <label class="label-header-text">Select Nursery</label>
+                  <div class="ng-autocomplete">
+                    <ng-autocomplete
+                      #origin
+                      [data]="nurseries"
+                      [searchKeyword]="nurseryKeyword"
+                      (selected)="selectNurseryEvent($event)"
+                      (inputCleared)="deselectNurseryEvent()"
+                      [initialValue]="initialValue"
+                      placeholder="All Nurseries"
+                      [itemTemplate]="itemTemplate"
+                      [notFoundTemplate]="notFoundTemplate"
+                      style="height: 10px"
                     >
-                      <option value="" selected disabled>All Provinces</option>
-                      <option
-                        *ngFor="let province of locationProvinces"
-                        value="{{ province._id }}"
-                      >
-                        {{ province.namee | titlecase }}
-                      </option>
-                    </select>
-                  </div>
-                </div>
-                <div class="col-xs-4 col-small-padding">
-                  <div class="form-group">
-                    <label class="label-header-text">Select District</label>
-                    <select
-                      class="form-control form-control-small"
-                      formControlName="dist_id"
-                    >
-                      <option value="" selected disabled>All Districts</option>
-                      <option
-                        *ngFor="let district of locationDistricts"
-                        value="{{ district._id }}"
-                      >
-                        {{ district.name | titlecase }}
-                      </option>
-                    </select>
-                  </div>
-                </div>
-                <div class="col-xs-4 col-small-padding">
-                  <div class="form-group">
-                    <label class="label-header-text">Select Nursery</label>
-                    <div class="ng-autocomplete">
-                      <ng-autocomplete
-                        #origin
-                        [data]="nurseries"
-                        [searchKeyword]="nurseryKeyword"
-                        (selected)="selectNurseryEvent($event)"
-                        (inputCleared)="deselectNurseryEvent()"
-                        [initialValue]="initialValue"
-                        placeholder="All Nurseries"
-                        [itemTemplate]="itemTemplate"
-                        [notFoundTemplate]="notFoundTemplate"
-                        style="height: 10px"
-                      >
-                      </ng-autocomplete>
+                    </ng-autocomplete>
 
-                      <ng-template #itemTemplate let-item>
-                        <a
-                          [innerHTML]="item.nurseryName"
-                          style="height: 20px"
-                        ></a>
-                      </ng-template>
+                    <ng-template #itemTemplate let-item>
+                      <a
+                        [innerHTML]="item.nurseryName"
+                        style="height: 20px"
+                      ></a>
+                    </ng-template>
 
-                      <ng-template #notFoundTemplate let-notFound>
-                        <div [innerHTML]="notFound"></div>
-                      </ng-template>
-                    </div>
+                    <ng-template #notFoundTemplate let-notFound>
+                      <div [innerHTML]="notFound"></div>
+                    </ng-template>
                   </div>
                 </div>
-              </span>
-              <div class="col-xs-4 col-small-padding">
+              </div>
+              <div class="col-xs-3 col-small-padding">
                 <div class="form-group">
                   <label class="label-header-text">Select Season</label>
                   <select
                     class="form-control form-control-small"
                     formControlName="season_id"
+                    (change)="seasonChange('seedlingFilters')"
                   >
                     <option value="" selected disabled>
                       Season {{ currentSeason?.season }}
@@ -632,12 +589,13 @@
                   </select>
                 </div>
               </div>
-              <div class="col-xs-4 col-small-padding">
+              <div class="col-xs-3 col-small-padding">
                 <div class="form-group">
                   <label class="label-header-text">Quarters</label>
                   <select
                     class="form-control form-control-small"
                     formControlName="quarterId"
+                    (change)="seasonQuarterChange('seedlingFilters')"
                   >
                     <option value="" selected>All Quaters</option>
                     <option
@@ -649,7 +607,7 @@
                   </select>
                 </div>
               </div>
-              <div class="col-xs-4 col-small-padding">
+              <div class="col-xs-3 col-small-padding">
                 <div class="form-group">
                   <label class="label-header-text">Date</label>
                   <input
@@ -658,10 +616,11 @@
                     [owlDateTimeTrigger]="dt3"
                     [owlDateTime]="dt3"
                     formControlName="filterByDate"
+                    (change)="seasonDateChange('seedlingFilters')"
                     class="form-control form-control-small"
                     placeholder="From: Dd/mm/yyyy ~ To: Dd/mm/yyyy"
-                    [min]="dateRangeMin"
-                    [max]="dateRangeMax"
+                    [min]="dateRangeMin['visitFilters']"
+                    [max]="dateRangeMax['visitFilters']"
                   />
                   <owl-date-time
                     [pickerType]="'calendar'"
@@ -669,15 +628,6 @@
                     #dt3
                   ></owl-date-time>
                 </div>
-              </div>
-              <div class="col-xs-12 text-center" style="margin-bottom: 10px">
-                <button
-                  class="btn btn-dashboard"
-                  type="button"
-                  (click)="getStats('seedling')"
-                >
-                  FILTER BY DATE
-                </button>
               </div>
             </div>
           </span>
@@ -832,13 +782,15 @@
           <span *ngIf="gapFilterEnabled">
             <div
               class="row text-center"
-              style="margin-left: 10px; margin-right: 15px"
+              style="margin-left: 10px; margin-right: 15px; margin-bottom: 5px"
+              formGroupName="gapFilters"
             >
               <div class="col-xs-4 col-small-padding">
                 <label class="label-header-text">Select Season</label>
                 <select
                   class="form-control form-control-small"
                   formControlName="season_id"
+                  (change)="seasonChange('gapFilters')"
                 >
                   <option value="" selected disabled>
                     Season {{ currentSeason?.season }}
@@ -857,6 +809,7 @@
                   <select
                     class="form-control form-control-small"
                     formControlName="quarterId"
+                    (change)="seasonQuarterChange('gapFilters')"
                   >
                     <option value="" selected>All Quaters</option>
                     <option
@@ -868,7 +821,7 @@
                   </select>
                 </div>
               </div>
-              <div class="col-xs-4 col-small-padding">
+              <div class="col-xs-4 col-small-padding" >
                 <div class="form-group">
                   <label class="label-header-text">Date</label>
                   <input
@@ -877,10 +830,11 @@
                     [owlDateTimeTrigger]="dt5"
                     [owlDateTime]="dt5"
                     formControlName="filterByDate"
+                    (change)="seasonDateChange('gapFilters')"
                     class="form-control form-control-small"
                     placeholder="From: Dd/mm/yyyy ~ To: Dd/mm/yyyy"
-                    [min]="dateRangeMin"
-                    [max]="dateRangeMax"
+                    [min]="dateRangeMin.gapFilters"
+                    [max]="dateRangeMax.gapFilters"
                   />
                   <owl-date-time
                     [pickerType]="'calendar'"
@@ -888,15 +842,6 @@
                     #dt5
                   ></owl-date-time>
                 </div>
-              </div>
-              <div class="col-xs-12 text-center" style="margin-bottom: 10px">
-                <button
-                  class="btn btn-dashboard"
-                  type="button"
-                  (click)="getStats('gap')"
-                >
-                  FILTER BY DATE
-                </button>
               </div>
             </div>
           </span>

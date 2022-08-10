@@ -116,7 +116,7 @@ export class GapEditComponent
     const questions = this.getSectionQuestions(sectionIndex).controls;
     questions.push(this.createQuestion());
     questions.at(qstIndex).get('_id').setValue(question._id);
-    questions.at(qstIndex).get('question').setValue('jjjjj');
+    questions.at(qstIndex).get('question').setValue(question.question);
     questions.at(qstIndex).get('question_type').setValue(question.question_type);
     questions.at(qstIndex).get('weight').setValue(question.weight);
     questions.at(qstIndex).get('description').setValue(question.description);
