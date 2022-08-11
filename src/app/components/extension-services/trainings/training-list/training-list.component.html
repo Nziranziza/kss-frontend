@@ -24,7 +24,7 @@
     <div class="col-sm-3">
       <div class="text-center stats-box">
         <h3>Total Trainees</h3>
-        <h1>{{ trainingsStats.totalInvitees }}</h1>
+        <h1>{{ trainingsStats?.totalInvitees }}</h1>
       </div>
     </div>
     <div class="col-sm-3">
@@ -33,16 +33,16 @@
         <div class="row">
           <div class="col-sm-5">
             <h1 style="margin-top: -5px; margin-left: 5px">
-              {{ trainingsStats.totalPresent }}
+              {{ trainingsStats?.totalPresent }}
             </h1>
           </div>
           <div class="col-sm-3">
             <span style="white-space: pre"> Male </span>
-             {{ trainingsStats.malePresent }}
+             {{ trainingsStats?.malePresent }}
           </div>
           <div class="col-sm-3">
             <span style="white-space: pre"> Female </span>
-            {{ trainingsStats.femalePresent }}
+            {{ trainingsStats?.femalePresent }}
           </div>
         </div>
       </div>
@@ -53,16 +53,16 @@
         <div class="row">
           <div class="col-sm-5">
             <h1 style="margin-top: -5px; margin-left: 5px">
-              {{ trainingsStats.totalAbsent }}
+              {{ trainingsStats?.totalAbsent }}
             </h1>
           </div>
           <div class="col-sm-3">
             <span style="white-space: pre"> Male </span>
-            {{ trainingsStats.maleAbsent }}
+            {{ trainingsStats?.maleAbsent }}
           </div>
           <div class="col-sm-3">
             <span style="white-space: pre"> Female </span>
-            {{ trainingsStats.femaleAbsent }}
+            {{ trainingsStats?.femaleAbsent }}
           </div>
         </div>
       </div>
