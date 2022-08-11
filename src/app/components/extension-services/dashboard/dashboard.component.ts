@@ -486,7 +486,7 @@ export class DashboardComponent extends BasicComponent implements OnInit {
 
   selectNurseryEvent(item) {
     this.selectedNursery = item._id;
-    this.getSeedlingStats({ nurseryId: item._id });
+    this.getSeedlingStats({ nurseryId: this.selectedNursery });
   }
 
   deselectNurseryEvent() {
@@ -516,6 +516,7 @@ export class DashboardComponent extends BasicComponent implements OnInit {
 
   getSeedlingStats(body: any): void {
     this.loading = true;
+    this.seedlingStats = [];
     this.seedlingService.getSeedlingStats(body).subscribe((data) => {
       this.seedlingStats = data.data;
       this.totalSeedlings = 0;

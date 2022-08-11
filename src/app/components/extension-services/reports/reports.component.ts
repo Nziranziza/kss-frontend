@@ -9,7 +9,6 @@ import {
   ReportService,
   SeasonService,
 } from "src/app/core";
-import * as FileSaver from "file-saver";
 
 @Component({
   selector: "app-reports",
@@ -35,7 +34,7 @@ export class ReportsComponent extends BasicComponent implements OnInit {
   groups: any[] = [];
   seasons: any[] = [];
   currentSeason: any;
-  stats: any;
+  stats: any = {};
   basePath: any;
   reportsTableData: any[] = [];
   reportBody: any;
@@ -177,18 +176,21 @@ export class ReportsComponent extends BasicComponent implements OnInit {
 
   generateReport() {
     if (this.reportForm.value.reportFor === "Farmer Groups") {
+      this.reportsTableData = [];
       this.reportService.groupSummary(this.reportBody).subscribe((data) => {
         this.reportsTableData = data.data;
         this.dtTrigger.next();
         this.reportGenerated = true;
       });
     } else if (this.reportForm.value.reportFor === "Trainings") {
+      this.reportsTableData = [];
       this.reportService.trainingSummary(this.reportBody).subscribe((data) => {
         this.reportsTableData = data.data;
         this.dtTrigger.next();
         this.reportGenerated = true;
       });
     } else if (this.reportForm.value.reportFor === "Farm Visits") {
+      this.reportsTableData = [];
       this.reportService.visitSummary(this.reportBody).subscribe((data) => {
         this.reportsTableData = data.data;
         this.dtTrigger.next();

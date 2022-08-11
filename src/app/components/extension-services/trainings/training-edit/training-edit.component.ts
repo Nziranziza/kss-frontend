@@ -55,7 +55,7 @@ export class TrainingEditComponent
     this.gapDropdownSettings = {
       singleSelection: false,
       idField: "_id",
-      textField: "name",
+      textField: "gap_name",
       selectAllText: "Select All",
       enableCheckAll: false,
       unSelectAllText: "UnSelect All",
@@ -86,6 +86,7 @@ export class TrainingEditComponent
 
   getTraining() {
     this.trainingService.one(this.id).subscribe((data) => {
+      console.log(data);
       if (data && data.data) {
         this.training = data.data;
         this.createTraining.controls.trainingName.setValue(
@@ -125,7 +126,6 @@ export class TrainingEditComponent
       (err) => {
         this.loading = false;
         this.errors = err.errors;
-        console.log(err);
       }
     );
   }
@@ -135,10 +135,11 @@ export class TrainingEditComponent
     this.gapService.all().subscribe((data) => {
       let newData :any[] = [{
         _id : "",
-        name: "Not Applied"
+        gap_name: "Not Applied"
       }];
       data.data.forEach(data => {
-        newData.push({_id: data._id, name: data.name});
+        console.log(data);
+        newData.push({_id: data._id, gap_name: data.gap_name});
       });
       this.gaps = newData;
       this.loading = false;
@@ -146,7 +147,6 @@ export class TrainingEditComponent
   }
 
   onGapSelect(item: any) {
-    console.log(item);
     if (item._id === '') {
       this.gapDropdownSettings.singleSelection = true;
     }
@@ -212,7 +212,6 @@ export class TrainingEditComponent
   onSubmit() {
     const value = JSON.parse(JSON.stringify(this.createTraining.value));
     value.materials = this.results;
-    console.log(value);
     this.trainingService.update(value, this.id).subscribe(
       (data) => {
         this.loading = false;

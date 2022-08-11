@@ -1,203 +1,198 @@
-<div>
-  <form [formGroup]="reportForm">
-    <div class="row">
-      <div class="col-xs-4">
-        <div>
-          <h5 class="label-required">Filter Reports for</h5>
-          <select class="form-control" formControlName="reportFor">
-            <option value="" selected>Select Report Type</option>
-            <option value="Trainings">Training</option>
-            <option value="Farmer Groups">Farmer Groups</option>
-            <option value="Farm Visits">Farm Visit</option>
-            <option value="Coffee Farmers">Cofee Farmer</option>
-            <option value="Coffee Farms">Cofee Farm</option>
-          </select>
-        </div>
+<form [formGroup]="reportForm">
+  <div class="row">
+    <div class="col-xs-4">
+      <div>
+        <h5 class="label-required">Filter Reports for</h5>
+        <select class="form-control" formControlName="reportFor">
+          <option value="" selected>Select Report Type</option>
+          <option value="Trainings">Training</option>
+          <option value="Farmer Groups">Farmer Groups</option>
+          <option value="Farm Visits">Farm Visit</option>
+          <option value="Coffee Farmers">Cofee Farmer</option>
+          <option value="Coffee Farms">Cofee Farm</option>
+        </select>
       </div>
-      <div class="col-xs-8">
-        <div class="row">
-          <div class="col-xs-6">
-            <h5 class="label-required text-center">Filters</h5>
-            <div class="row" formGroupName="location">
-              <div class="col-xs-6" id="location-province">
-                <select class="form-control" formControlName="prov_id">
-                  <option value="" selected>All Provinces</option>
-                  <option
-                    *ngFor="let province of locationProvinces"
-                    value="{{ province._id }}"
-                  >
-                    {{ province.namee | titlecase }}
-                  </option>
-                </select>
-              </div>
-              <div class="col-xs-6">
-                <select class="form-control" formControlName="dist_id">
-                  <option value="" selected>All Districts</option>
-                  <option
-                    *ngFor="let district of locationDistricts"
-                    value="{{ district._id }}"
-                  >
-                    {{ district.name | titlecase }}
-                  </option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <div class="col-xs-3">
-            <div class="text-center">
-              <h5 class="label-required text-center">Filter By CWS</h5>
-              <input
-                type="radio"
-                formControlName="filterByType"
-                value="cws"
-                style="margin-top: 5px"
-              />
-            </div>
-          </div>
-          <div class="col-xs-3">
-            <div class="text-center">
-              <h5 class="label-required text-center">Filter By Sector</h5>
-              <input
-                type="radio"
-                formControlName="filterByType"
-                value="sector"
-                style="margin-top: 5px"
-              />
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <span
-            *ngIf="reportForm.value.filterByType === 'cws'"
-            formGroupName="filterByCws"
-          >
-            <div class="col-xs-3" style="margin-top: 5px">
-              <select class="form-control">
-                <option value="" selected>All CWS</option>
-                <option value="training">Training</option>
-              </select>
-            </div>
-            <div class="col-xs-3" style="margin-top: 5px">
-              <select class="form-control">
-                <option value="" selected>All Covered Sector</option>
-                <option value="training">Training</option>
-              </select>
-            </div>
-            <div class="col-xs-3" style="margin-top: 5px">
-              <select class="form-control">
-                <option value="" selected>All Covered Cells</option>
-                <option value="training">Training</option>
-              </select>
-            </div>
-            <div class="col-xs-3" style="margin-top: 5px">
-              <select class="form-control">
-                <option value="" selected>All Covered Villages</option>
-                <option value="training">Training</option>
-              </select>
-            </div>
-          </span>
-          <span
-            *ngIf="reportForm.value.filterByType === 'sector'"
-            formGroupName="filterBySector"
-          >
-            <div class="col-xs-3" style="margin-top: 5px">
-              <select class="form-control">
-                <option value="" selected>All Sectors</option>
-                <option value="training">Training</option>
-              </select>
-            </div>
-            <div class="col-xs-3" style="margin-top: 5px">
-              <select class="form-control">
-                <option value="" selected>All Cells</option>
-                <option value="training">Training</option>
-              </select>
-            </div>
-            <div class="col-xs-3" style="margin-top: 5px">
-              <select class="form-control">
-                <option value="" selected>All Villages</option>
-                <option value="training">Training</option>
-              </select>
-            </div>
-            <div class="col-xs-3" style="margin-top: 5px">
-              <select class="form-control">
-                <option value="" selected>All Farmer Groups</option>
-                <option value="training">Training</option>
-              </select>
-            </div>
-          </span>
-          <span
-            *ngIf="reportForm.value.reportFor === 'Trainings'"
-            formGroupName="trainingFilters"
-          >
-            <div class="col-xs-4" style="margin-top: 5px">
-              <select class="form-control">
-                <option value="" selected>Training Module</option>
-                <option value="training">Training</option>
-              </select>
-            </div>
-            <div class="col-xs-4" style="margin-top: 5px">
-              <select class="form-control">
-                <option value="" selected>All Status</option>
-                <option value="training">Training</option>
-              </select>
-            </div>
-            <div class="col-xs-4" style="margin-top: 5px">
-              <select class="form-control">
-                <option value="" selected>All Gender</option>
-                <option value="training">Training</option>
-              </select>
-            </div>
-          </span>
-          <span
-            *ngIf="reportForm.value.reportFor !== ''"
-            formGroupName="seasonFilters"
-          >
-            <div class="col-xs-6" style="margin-top: 5px">
-              <select class="form-control">
-                <option value="" selected>Choose Season</option>
+    </div>
+    <div class="col-xs-8">
+      <div class="row">
+        <div class="col-xs-6">
+          <h5 class="label-required text-center">Filters</h5>
+          <div class="row" formGroupName="location">
+            <div class="col-xs-6" id="location-province">
+              <select class="form-control" formControlName="prov_id">
+                <option value="" selected>All Provinces</option>
                 <option
-                  *ngFor="let season of seasons"
-                  value="season._id"
-                  selected
+                  *ngFor="let province of locationProvinces"
+                  value="{{ province._id }}"
                 >
-                  {{ season.season }}
+                  {{ province.namee | titlecase }}
                 </option>
               </select>
             </div>
-            <div class="col-xs-3" style="margin-top: 5px">
-              <input
-                [owlDateTimeTrigger]="dt1"
-                [owlDateTime]="dt1"
-                formControlName="sowingDate"
-                class="form-control"
-                placeholder="Dd/mm/yyyy"
-              />
-              <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+            <div class="col-xs-6">
+              <select class="form-control" formControlName="dist_id">
+                <option value="" selected>All Districts</option>
+                <option
+                  *ngFor="let district of locationDistricts"
+                  value="{{ district._id }}"
+                >
+                  {{ district.name | titlecase }}
+                </option>
+              </select>
             </div>
-            <div class="col-xs-3" style="margin-top: 5px">
-              <input
-                [owlDateTimeTrigger]="dt2"
-                [owlDateTime]="dt2"
-                formControlName="sowingDate"
-                class="form-control"
-                placeholder="Dd/mm/yyyy"
-              />
-              <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
-            </div>
-            <div class="col-xs-12 text-center" style="margin-top: 10px">
-              <button
-                class="btn btn-default"
-                type="button"
-                (click)="generateReport(); downloadCsv()"
-              >
-                GENERATE REPORT
-              </button>
-            </div>
-          </span>
+          </div>
+        </div>
+        <div class="col-xs-3">
+          <div class="text-center">
+            <h5 class="label-required text-center">Filter By CWS</h5>
+            <input
+              type="radio"
+              formControlName="filterByType"
+              value="cws"
+              style="margin-top: 5px"
+            />
+          </div>
+        </div>
+        <div class="col-xs-3">
+          <div class="text-center">
+            <h5 class="label-required text-center">Filter By Sector</h5>
+            <input
+              type="radio"
+              formControlName="filterByType"
+              value="sector"
+              style="margin-top: 5px"
+            />
+          </div>
         </div>
       </div>
+      <div class="row">
+        <span
+          *ngIf="reportForm.value.filterByType === 'cws'"
+          formGroupName="filterByCws"
+        >
+          <div class="col-xs-3" style="margin-top: 5px">
+            <select class="form-control">
+              <option value="" selected>All CWS</option>
+              <option value="training">Training</option>
+            </select>
+          </div>
+          <div class="col-xs-3" style="margin-top: 5px">
+            <select class="form-control">
+              <option value="" selected>All Covered Sector</option>
+              <option value="training">Training</option>
+            </select>
+          </div>
+          <div class="col-xs-3" style="margin-top: 5px">
+            <select class="form-control">
+              <option value="" selected>All Covered Cells</option>
+            </select>
+          </div>
+          <div class="col-xs-3" style="margin-top: 5px">
+            <select class="form-control">
+              <option value="" selected>All Covered Villages</option>
+  
+            </select>
+          </div>
+        </span>
+        <span
+          *ngIf="reportForm.value.filterByType === 'sector'"
+          formGroupName="filterBySector"
+        >
+          <div class="col-xs-3" style="margin-top: 5px">
+            <select class="form-control">
+              <option value="" selected>All Sectors</option>
+            </select>
+          </div>
+          <div class="col-xs-3" style="margin-top: 5px">
+            <select class="form-control">
+              <option value="" selected>All Cells</option>
+            </select>
+          </div>
+          <div class="col-xs-3" style="margin-top: 5px">
+            <select class="form-control">
+              <option value="" selected>All Villages</option>
+              <option value="training">Training</option>
+            </select>
+          </div>
+          <div class="col-xs-3" style="margin-top: 5px">
+            <select class="form-control">
+              <option value="" selected>All Farmer Groups</option>
+              <option value="training">Training</option>
+            </select>
+          </div>
+        </span>
+        <span
+          *ngIf="reportForm.value.reportFor === 'Trainings'"
+          formGroupName="trainingFilters"
+        >
+          <div class="col-xs-4" style="margin-top: 5px">
+            <select class="form-control">
+              <option value="" selected>Training Module</option>
+              <option value="training">Training</option>
+            </select>
+          </div>
+          <div class="col-xs-4" style="margin-top: 5px">
+            <select class="form-control">
+              <option value="" selected>All Status</option>
+              <option value="training">Training</option>
+            </select>
+          </div>
+          <div class="col-xs-4" style="margin-top: 5px">
+            <select class="form-control">
+              <option value="" selected>All Gender</option>
+              <option value="training">Training</option>
+            </select>
+          </div>
+        </span>
+        <span
+          *ngIf="reportForm.value.reportFor !== ''"
+          formGroupName="seasonFilters"
+        >
+          <div class="col-xs-6" style="margin-top: 5px">
+            <select class="form-control">
+              <option value="" selected>Choose Season</option>
+              <option
+                *ngFor="let season of seasons"
+                value="season._id"
+                selected
+              >
+                {{ season.season }}
+              </option>
+            </select>
+          </div>
+          <div class="col-xs-3" style="margin-top: 5px">
+            <input
+              [owlDateTimeTrigger]="dt1"
+              [owlDateTime]="dt1"
+              formControlName="startDate"
+              class="form-control"
+              placeholder="Dd/mm/yyyy"
+            />
+            <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+          </div>
+          <div class="col-xs-3" style="margin-top: 5px">
+            <input
+              [owlDateTimeTrigger]="dt2"
+              [owlDateTime]="dt2"
+              formControlName="endDate"
+              class="form-control"
+              placeholder="Dd/mm/yyyy"
+            />
+            <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
+          </div>
+          <div class="col-xs-12 text-center" style="margin-top: 10px">
+            <button
+              class="btn btn-default"
+              type="button"
+              (click)="generateReport(); downloadCsv()"
+            >
+              GENERATE REPORT
+            </button>
+          </div>
+        </span>
+      </div>
     </div>
-  </form>
+  </div>
   <div class="summary-box">
     <h3 class="text-center">{{ reportForm.value.reportFor }} Summary Box</h3>
     <div class="row" style="margin-top: -15px">
@@ -254,7 +249,6 @@
       "
     >
       <div class="box-body table-responsive">
-        <app-loader *ngIf="loading"></app-loader>
         <table
           datatable
           [dtOptions]="dtOptions"
@@ -264,31 +258,24 @@
           <thead>
             <tr>
               <th>Date Added</th>
-              <th>Title</th>
-              <th>Description</th>
-              <th>Associated GAP</th>
-              <th>Attachments</th>
+              <th>Training Module Title</th>
+              <th>Date/Time of the training</th>
+              <th>Location of the training</th>
+              <th>Trainer</th>
+              <th>Trainees</th>
               <th>Status</th>
             </tr>
           </thead>
           <tbody>
-            <ng-container *ngFor="let training of reportsTableData">
-              <tr>
-                <td>{{ training.createdAt | date: "short" }}</td>
-                <td>{{ training.trainingName }}</td>
-                <td>{{ training.description }}</td>
-                <td>
-                  {{ training.adoptionGap }}
-                  <div *ngFor="let adoption of training.adoptionGaps">
-                    {{ adoption?.name }}
-                  </div>
-                </td>
-                <td>{{ training.materials.length }} files</td>
-                <td>
-                  <span style="color: green; font-weight: bold">active</span>
-                </td>
-              </tr>
-            </ng-container>
+            <tr *ngFor="let schedule of reportsTableData">
+              <td>{{ schedule.createdAt | date: "short" }}</td>
+              <td>{{ schedule.trainingId.trainingName }}</td>
+              <td>{{ schedule.startTime | date: "short" }}</td>
+              <td>{{ schedule.venueName }}</td>
+              <td>{{ schedule.trainer.fullName }}</td>
+              <td>{{ schedule.trainees.length }} trainees</td>
+              <td>{{ schedule.status }}</td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -528,4 +515,4 @@
       </div>
     </span>
   </div>
-</div>
+</form>
