@@ -523,8 +523,9 @@ export class DashboardComponent extends BasicComponent implements OnInit {
         this.totalSeedlings += data.totalQuantity;
       });
       this.seedlingStats.forEach((data, index) => {
-        this.seedlingGraph.data[index][index] = data.variety;
-        this.seedlingGraph.data[index][index + 1] =
+        let nextIndex = 0;
+        this.seedlingGraph.data[index][nextIndex] = data.variety;
+        this.seedlingGraph.data[index][nextIndex + 1] =
           (data.totalQuantity * 100) / this.totalSeedlings;
       });
       this.loading = false;
