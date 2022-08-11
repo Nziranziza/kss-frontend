@@ -93,7 +93,6 @@ extends BasicComponent implements OnInit, OnDestroy {
 
   sendMessage() {
     this.loading = true;
-    console.log(this.schedule);
     let data = this.schedule._id;
     this.trainingService.sendMessage(data).subscribe((data) => {
       this.loading = false;

@@ -40,7 +40,6 @@ export class ViewGroupComponent
   getVisits() {
     this.groupService.get(this.id).subscribe((data) => {
       this.groupDetails = data.data;
-      console.log(this.groupDetails);
     });
   }
 }

@@ -273,11 +273,9 @@ export class GapEditComponent
   }
 
   onSubmit() {
-    console.log(this.createForm);
     if (this.createForm.valid) {
       this.loading = true;
       this.gap = this.createForm.getRawValue();
-      console.log(this.gap)
       this.gapService.update(this.gap, this.id).subscribe(
         (data) => {
           this.loading = false;

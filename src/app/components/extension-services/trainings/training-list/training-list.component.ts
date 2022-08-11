@@ -86,7 +86,6 @@ export class TrainingListComponent
     this.loading = true;
     this.trainingService.getScheduleStats(body).subscribe((data) => {
       this.trainingsStats = data.data;
-      console.log(this.trainingsStats);
       this.loading = false;
     });
   }

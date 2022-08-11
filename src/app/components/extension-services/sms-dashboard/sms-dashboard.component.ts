@@ -36,7 +36,6 @@ export class SmsDashboardComponent implements OnInit {
       .getBalance(this.authenticationService.getCurrentUser().info.org_id)
       .subscribe((data) => {
         this.smsBalance = data.data;
-        console.log(this.smsBalance);
       });
   }
 
@@ -45,7 +44,6 @@ export class SmsDashboardComponent implements OnInit {
       .allOrder(this.authenticationService.getCurrentUser().info.org_id)
       .subscribe((data) => {
         this.smsOrders = data.data;
-        console.log(this.smsOrders);
       });
   }
 
@@ -58,7 +56,6 @@ export class SmsDashboardComponent implements OnInit {
       };
 
       this.smsService.createOrder(body).subscribe((data) => {
-        console.log(data);
         this.createOrder.reset();
         this.getOrders();
         this.getBalance();

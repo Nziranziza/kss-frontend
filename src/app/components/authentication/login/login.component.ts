@@ -78,7 +78,6 @@ export class LoginComponent extends BasicComponent implements OnInit, OnDestroy 
   }
 
   viewPassword() {
-    console.log(this.viewPasswordEnabled);
     this.viewPasswordEnabled = !this.viewPasswordEnabled;
   }
 

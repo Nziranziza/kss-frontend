@@ -86,7 +86,6 @@ export class TrainingEditComponent
 
   getTraining() {
     this.trainingService.one(this.id).subscribe((data) => {
-      console.log(data);
       if (data && data.data) {
         this.training = data.data;
         this.createTraining.controls.trainingName.setValue(
@@ -138,7 +137,6 @@ export class TrainingEditComponent
         gap_name: "Not Applied"
       }];
       data.data.forEach(data => {
-        console.log(data);
         newData.push({_id: data._id, gap_name: data.gap_name});
       });
       this.gaps = newData;
@@ -150,7 +148,6 @@ export class TrainingEditComponent
     if (item._id === '') {
       this.gapDropdownSettings.singleSelection = true;
     }
-    console.log(this.createTraining.get('adoptionGap'.toString()).value);
   }
 
   async onFileUpload() {
@@ -172,7 +169,6 @@ export class TrainingEditComponent
           (err) => {
             this.loading = false;
             this.errors = err.errors;
-            console.log(err);
           }
         );
     } else {

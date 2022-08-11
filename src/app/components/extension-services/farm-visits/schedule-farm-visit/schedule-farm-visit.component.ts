@@ -96,7 +96,6 @@ export class ScheduleFarmVisitComponent implements OnInit {
   }
 
   onGapSelect(item: any) {
-    console.log(this.scheduleVisit.get("adoptionGap".toString()).value);
   }
   onDeGapSelect(item: any) {
     const gapSelected = this.scheduleVisit.get("adoptionGap".toString());
@@ -108,7 +107,6 @@ export class ScheduleFarmVisitComponent implements OnInit {
   onGapSelectAll(items: any) {
     const gapSelected = this.scheduleVisit.get("adoptionGap".toString());
     gapSelected.setValue(items, { emitEvent: false });
-    console.log(this.scheduleVisit.get("adoptionGap".toString()).value);
   }
 
   getFarms() {
@@ -233,14 +231,11 @@ export class ScheduleFarmVisitComponent implements OnInit {
       if (adoptionGap.length > 0) {
         data.gaps = adoptionGap;
       }
-      console.log(data);
       this.visitService.create(data).subscribe(
         (data) => {
-          console.log(data);
           this.success(data.data.description, data.data._id);
         },
         (err) => {
-          console.log(err);
           this.error("farm visit");
           this.loading = false;
         }
@@ -286,7 +281,6 @@ export class ScheduleFarmVisitComponent implements OnInit {
     hours = hours ? hours : 24; // the hour '0' should be '12'
     minutes = minutes < 10 ? 0 + minutes : minutes;
     var strTime = hours + ":" + minutes;
-    console.log(strTime);
     return strTime;
   }
 }

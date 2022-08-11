@@ -215,8 +215,6 @@ export class GapCreateComponent
         sections: temp.sections
       };
 
-      console.log(gap);
-
       this.gapService.save(gap).subscribe(
         (data) => {
           this.loading = false;
