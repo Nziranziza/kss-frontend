@@ -73,7 +73,6 @@ export class TrainingCreateComponent
   }
 
   onGapSelect(item: any) {
-    console.log(item);
     if (item._id === "") {
       this.gapDropdownSettings.singleSelection = true;
     }
@@ -163,7 +162,6 @@ export class TrainingCreateComponent
           (err) => {
             this.loading = false;
             this.errors = err.errors;
-            console.log(err);
           }
         );
     } else {

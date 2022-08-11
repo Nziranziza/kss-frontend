@@ -331,7 +331,6 @@ export class FarmerCreateComponent
             .subscribe(
               (pr) => {
                 this.province = pr[0];
-                console.log(this.province);
               },
               (err) => {},
               () => {
@@ -1083,7 +1082,6 @@ export class FarmerCreateComponent
     this.createForm.controls.tree_location
       .get("prov_id".toString())
       .valueChanges.subscribe((value) => {
-        console.log(value);
         if (value !== null) {
           this.locationService.getDistricts(value).subscribe((data) => {
             this.districts = data;

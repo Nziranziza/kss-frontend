@@ -40,7 +40,6 @@ export class ViewGapComponent
   getVisits() {
     this.gapService.one(this.id).subscribe((data) => {
       this.gapDetails = data.data;
-      console.log(this.gapDetails);
     });
   }
 }

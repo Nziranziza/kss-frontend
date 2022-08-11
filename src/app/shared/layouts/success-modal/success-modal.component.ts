@@ -43,13 +43,11 @@ export class SuccessModalComponent implements OnInit {
 
   sendMessage() {
     if (this.serviceName == "visit") {
-      this.visitService.sendSms(this.smsId).subscribe((data) => {
-        console.log(data);    
+      this.visitService.sendSms(this.smsId).subscribe((data) => {  
       });
 
     } else if (this.serviceName == "training") {
-      this.trainingService.sendMessage(this.smsId).subscribe((data) => {
-        console.log(data);    
+      this.trainingService.sendMessage(this.smsId).subscribe((data) => {  
       });
     }
     this.modal.dismiss();
