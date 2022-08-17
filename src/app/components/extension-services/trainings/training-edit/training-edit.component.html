@@ -86,7 +86,7 @@
             <div class="form-group">
               <label class="control-label label-required">Status</label>
               <select class="form-control" formControlName="status">
-                <option value="" disabled >select status</option>
+                <option value="" disabled>select status</option>
                 <option value="active" selected>Active</option>
                 <option value="inactive">Inactive</option>
               </select>
@@ -115,6 +115,30 @@
               />
               <div class="training-file-list">
                 Attached file(s) to upload <br /><br />
+                <div
+                  *ngFor="let file of results; let i = index"
+                  style="padding-bottom: 6px"
+                >
+                  <span style="width: 75%; float: left">
+                    <img
+                      src="assets/dist/img/sks/ico_attach.svg"
+                      style="margin-right: 5px"
+                    />
+                    {{ file.fileName }}
+                  </span>
+                  <span style="margin-left: 40px; width: 12%; float: left">
+                    <a href="{{ file.url }}" target="_blank">
+                      <i class="fa fa-download"></i>
+                    </a>
+                  </span>
+                  <i
+                    class="fa fa-times"
+                    aria-hidden="true"
+                    (click)="removeSelectedFile(index)"
+                    style="color: red"
+                  ></i>
+                  <br />
+                </div>
                 <div
                   *ngFor="let file of files; let i = index"
                   style="padding-bottom: 6px"

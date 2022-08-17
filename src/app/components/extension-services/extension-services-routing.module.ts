@@ -11,10 +11,8 @@ import { FarmerGroupEditComponent } from "./groups/farmer-group-edit/farmer-grou
 import { TrainingCreateComponent } from "./trainings/training-create/training-create.component";
 import { TrainingListComponent } from "./trainings/training-list/training-list.component";
 import { TrainingEditComponent } from "./trainings/training-edit/training-edit.component";
-import { TrainingViewComponent } from "./trainings/training-view/training-view.component";
 import { TrainingSchedulingCreateComponent } from "./schedules/training-scheduling-create/training-scheduling-create.component";
 import { TrainingSchedulingListComponent } from "./schedules/training-scheduling-list/training-scheduling-list.component";
-import { TrainingScheduleViewComponent } from "./schedules/training-schedule-view/training-schedule-view.component";
 import { TrainingScheduleEditComponent } from "./schedules/training-schedule-edit/training-schedule-edit.component";
 import { ScheduleFarmVisitComponent } from "./farm-visits/schedule-farm-visit/schedule-farm-visit.component";
 import { EditFarmVisitComponent } from "./farm-visits/edit-farm-visit/edit-farm-visit.component";
@@ -28,7 +26,6 @@ import { DashboardComponent } from "./dashboard/dashboard.component";
 import { ReportsComponent } from "./reports/reports.component";
 import { SmsDashboardComponent } from "./sms-dashboard/sms-dashboard.component";
 import { ViewGapComponent } from "./gaps/view-gap/view-gap.component";
-import { ViewGroupComponent } from "./groups/view-group/view-group.component";
 
 const routes: Routes = [
   {
@@ -73,10 +70,6 @@ const routes: Routes = [
         component: TrainingEditComponent,
       },
       {
-        path: "training/details/:id",
-        component: TrainingViewComponent,
-      },
-      {
         path: "training/schedule/create",
         component: TrainingSchedulingCreateComponent,
       },
@@ -87,11 +80,6 @@ const routes: Routes = [
       {
         path: "training/schedule/edit/:id",
         component: TrainingScheduleEditComponent,
-      },
-      {
-        path: "training/schedule/view/:id",
-
-        component: TrainingScheduleViewComponent,
       },
       {
         path: "farm/visit/create",
@@ -128,10 +116,6 @@ const routes: Routes = [
       {
         path: "gaps/view/:id",
         component: ViewGapComponent,
-      },
-      {
-        path: "farmers/group/view/:id",
-        component: ViewGroupComponent,
       },
       {
         path: "dashboard",

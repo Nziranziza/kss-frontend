@@ -1,97 +1,172 @@
-<div class="row" style="margin-top: 15px">
-  <div class="col-sm-6">
-    <div class="box-confirm">
-      <div class="box-body">
-        <h4 class="text-center">Group details</h4>
-        <label class="control-label label-required">Group Name</label>
-        <div class="confirm-text-box confirm-text">
-          {{ groupDetails?.groupName }}
+<div class="modal-body extended-modal-body">
+  <div
+    (click)="modal.dismiss('cancel click')"
+    class="btn-modal-close text-center"
+  >
+    <em class="fa fa-close"></em>
+  </div>
+  <div class="stats-section">
+    <div class="row">
+      <div class="col-sm-12 text-center stats-title">Statistics</div>
+      <div class="col-sm-4">
+        <div class="text-center stats-box middle-box">
+          <h3>Total Members</h3>
+          <h1>{{ totalByGender.maleTotal + totalByGender.femaleTotal }}</h1>
         </div>
-        <label class="control-label label-required">Description</label>
-        <div class="confirm-text-box confirm-text confirm-text-area">
-          {{ groupDetails.description }}
-        </div>
-
-        <label class="control-label label-required"
-          >Training Location address</label
-        >
-        <div class="row">
-          <div class="col-sm-6">
-            <label class="control-label"> Province </label>
-            <div class="confirm-text-box confirm-text">
-              {{ groupDetails.location?.prov_id.namek }}
+      </div>
+      <div class="col-sm-4">
+        <div class="text-center stats-box">
+          <h3>Members By Gender</h3>
+          <div class="row">
+            <div class="col-sm-6">
+              <span> Male </span>
+              <h4>{{ totalByGender.maleTotal }}</h4>
             </div>
-            <label class="control-label"> Sector </label>
-            <div class="confirm-text-box confirm-text">
-              {{ groupDetails.location?.sect_id.name }}
-            </div>
-            <label class="control-label"> Village </label>
-            <div class="confirm-text-box confirm-text">
-              {{ groupDetails.location?.village_id.name }}
-            </div>
-          </div>
-          <div class="col-sm-6">
-            <label class="control-label label-required"> District </label>
-            <div class="confirm-text-box confirm-text">
-              {{ groupDetails.location?.dist_id.name }}
-            </div>
-            <label class="control-label"> Cell </label>
-            <div class="confirm-text-box confirm-text">
-              {{ groupDetails.location?.cell_id.name }}
+            <div class="col-sm-6">
+              <span> Female </span>
+              <h4>{{ totalByGender.femaleTotal }}</h4>
             </div>
           </div>
         </div>
-        <label class="control-label">Meeting Date & Time</label>
-        <div class="row">
-          <div class="col-sm-6">
-            <label class="control-label"> Date </label>
-            <div class="confirm-text-box confirm-text">
-              {{ groupDetails.meetingSchedule?.meetingTime | date: "short" }}
+      </div>
+      <div class="col-sm-4">
+        <div class="text-center stats-box third-box">
+          <div class="row">
+            <div class="col-sm-6" style="color: black">
+              <span> Youth </span>
+              <h4>
+                {{
+                  totalByGender.femaleYouthTotal + totalByGender.maleYouthTotal
+                }}
+              </h4>
+              <div class="row">
+                <div class="col-sm-6">
+                  <span> Male </span>
+                  <h4>{{ totalByGender.maleYouthTotal }}</h4>
+                </div>
+                <div class="col-sm-6">
+                  <span> Female </span>
+                  <h4>{{ totalByGender.femaleYouthTotal }}</h4>
+                </div>
+              </div>
             </div>
-          </div>
-          <div class="col-sm-6">
-            <label class="control-label"> Day </label>
-            <div class="confirm-text-box confirm-text">
-              {{ groupDetails.meetingSchedule?.meetingDay }}
+            <div class="col-sm-6">
+              <span> Old </span>
+              <h4>
+                {{ totalByGender.femaleOldTotal + totalByGender.maleOldTotal }}
+              </h4>
+              <div class="row">
+                <div class="col-sm-6">
+                  <span> Male </span>
+                  <h4>{{ totalByGender.maleOldTotal }}</h4>
+                </div>
+                <div class="col-sm-6">
+                  <span> Female </span>
+                  <h4>{{ totalByGender.femaleOldTotal }}</h4>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-        <div class="control-label text-center"></div>
       </div>
     </div>
   </div>
-  <div class="col-sm-6">
-    <div class="box-confirm">
-      <div class="box-body">
-        <h4 class="text-center">Member details</h4>
-        <label class="control-label label-required">Leader Name</label>
-        <div class="confirm-text-box confirm-text">
-          {{ groupDetails.leaderNames }}
+  <div class="row" style="margin-top: 15px">
+    <div class="col-sm-6">
+      <div class="box-confirm">
+        <div class="box-body">
+          <h4 class="text-center">Group details</h4>
+          <label class="control-label">Group Name</label>
+          <div class="confirm-text-box confirm-text">
+            {{ groupDetails?.groupName }}
+          </div>
+          <label class="control-label">Description</label>
+          <div class="confirm-text-box confirm-text confirm-text-area">
+            {{ groupDetails?.description }}
+          </div>
+
+          <label class="control-label">Training Location address</label>
+          <div class="row">
+            <div class="col-sm-6">
+              <label class="control-label"> Province </label>
+              <div class="confirm-text-box confirm-text">
+                {{ groupDetails?.location?.prov_id.namek }}
+              </div>
+              <label class="control-label"> Sector </label>
+              <div class="confirm-text-box confirm-text">
+                {{ groupDetails?.location?.sect_id.name }}
+              </div>
+              <label class="control-label"> Village </label>
+              <div class="confirm-text-box confirm-text">
+                {{ groupDetails?.location?.village_id.name }}
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <label class="control-label"> District </label>
+              <div class="confirm-text-box confirm-text">
+                {{ groupDetails?.location?.dist_id.name }}
+              </div>
+              <label class="control-label"> Cell </label>
+              <div class="confirm-text-box confirm-text">
+                {{ groupDetails?.location?.cell_id.name }}
+              </div>
+            </div>
+          </div>
+          <label class="control-label">Meeting Date & Time</label>
+          <div class="row">
+            <div class="col-sm-6">
+              <label class="control-label"> Date </label>
+              <div class="confirm-text-box confirm-text">
+                {{ groupDetails?.meetingSchedule?.meetingTime | date: "short" }}
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <label class="control-label"> Meeting Day </label>
+              <div class="confirm-text-box confirm-text">
+                {{ weekDays[groupDetails?.meetingSchedule?.meetingDay - 1] }}
+                every week
+              </div>
+            </div>
+          </div>
+          <div class="control-label text-center"></div>
         </div>
-        <label class="control-label label-required">Leader Phone</label>
-        <div class="confirm-text-box confirm-text">
-          {{ groupDetails.leaderPhoneNumber }}
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class="box-confirm">
+        <div class="box-body">
+          <h4 class="text-center">Member details</h4>
+          <label class="control-label">Leader Name</label>
+          <div class="confirm-text-box confirm-text">
+            {{ groupDetails?.leaderNames }}
+          </div>
+          <label class="control-label">Leader Phone</label>
+          <div class="confirm-text-box confirm-text">
+            {{ groupDetails?.leaderPhoneNumber }}
+          </div>
+          <br />
+          <h3 class="text-center">
+            Members ( Total:
+            {{ groupDetails?.members ? groupDetails.members.length : 0 }} )
+          </h3>
+          <table class="row-border hover table table-striped">
+            <thead>
+              <tr>
+                <th>Farmer Names</th>
+                <th>Contact</th>
+                <th>Age</th>
+                <th>Reg Number</th>
+              </tr>
+              <tr *ngFor="let trainee of groupDetails?.members; let i = index">
+                <td>{{ trainee.firstName + " " + trainee.lastName }}</td>
+                <td>{{ trainee.phoneNumber }}</td>
+                <td>{{ trainee.age }}</td>
+                <td>{{ trainee.regNumber }}</td>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
         </div>
-        <br />
-        <h3 class="text-center">
-          Members ( Total:
-          {{ groupDetails.members ? groupDetails.members.length : 0 }} )
-        </h3>
-        <table class="row-border hover table table-striped">
-          <thead>
-            <tr>
-              <th>Farmer Names</th>
-              <th>Contact</th>
-              <th>Reg Number</th>
-            </tr>
-            <tr *ngFor="let trainee of groupDetails.members; let i = index">
-              <td>{{ trainee.firstName + " " + trainee.lastName }}</td>
-              <td>{{ trainee.phoneNumber }}</td>
-              <td>{{ trainee.regNumber }}</td>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
       </div>
     </div>
   </div>

@@ -11,6 +11,7 @@ import { Subject } from "rxjs";
 import { DataTableDirective } from "angular-datatables";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { ConfirmModalComponent } from "../../../../shared";
+import { TrainingViewComponent } from "../training-view/training-view.component";
 
 @Component({
   selector: "app-training-list",
@@ -57,8 +58,8 @@ export class TrainingListComponent
     this.getTrainingList();
     this.getTrainingsStats({});
     this.dtOptions = {
-      pagingType: 'full_numbers',
-      pageLength: 10
+      pagingType: "full_numbers",
+      pageLength: 10,
     };
     this.setMessage(this.messageService.getMessage());
   }
@@ -117,5 +118,10 @@ export class TrainingListComponent
         );
       }
     });
+  }
+
+  openViewModal(id: string) {
+    const modalRef = this.modal.open(TrainingViewComponent);
+    modalRef.componentInstance.id = id;
   }
 }

@@ -67,7 +67,7 @@ export class EditFarmVisitComponent implements OnInit {
     this.gapDropdownSettings = {
       singleSelection: false,
       idField: "_id",
-      textField: "name",
+      textField: "gap_name",
       selectAllText: "Select All",
       unSelectAllText: "UnSelect All",
       itemsShowLimit: 6,

@@ -1,62 +1,74 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from "@angular/forms";
-import { ActivatedRoute, Router } from "@angular/router";
+import {
+  Component,
+  Injector,
+  OnDestroy,
+  OnInit,
+  PLATFORM_ID,
+  Inject,
+  Input,
+} from "@angular/core";
+import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 import { TrainingService, GapService, Training } from "../../../../core";
 import { MessageService } from "../../../../core";
 import { BasicComponent } from "../../../../core";
+import { isPlatformBrowser } from "@angular/common";
 
 @Component({
-  selector: 'app-training-schedule-view',
-  templateUrl: './training-schedule-view.component.html',
-  styleUrls: ['../training-scheduling-create/training-scheduling-create.component.css']
+  selector: "app-training-schedule-view",
+  templateUrl: "./training-schedule-view.component.html",
+  styleUrls: ["./training-schedule-view.component.css"],
 })
-export class TrainingScheduleViewComponent extends BasicComponent
-implements OnInit, OnDestroy
+export class TrainingScheduleViewComponent
+  extends BasicComponent
+  implements OnInit, OnDestroy
 {
-createTraining: FormGroup;
-closeResult = "";
-id: string;
-training: any;
-constructor(
-  private trainingService: TrainingService,
-  private route: ActivatedRoute,
-  private messageService: MessageService
-) {
-  super();
-}
+  closeResult = "";
+  training: any;
+  modal: NgbActiveModal;
+  @Input() id: string;
 
-ngOnDestroy(): void {}
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: object,
+    private injector: Injector,
+    private trainingService: TrainingService,
+    private messageService: MessageService
+  ) {
+    super();
+    if (isPlatformBrowser(this.platformId)) {
+      this.modal = this.injector.get(NgbActiveModal);
+    }
+  }
 
-ngOnInit() {
-  this.route.params.subscribe((params) => {
-    this.id = params["id".toString()];
-  });
-  this.getTraining();
-  this.getTrainingsStats();
-  this.setMessage(this.messageService.getMessage());
-}
+  ngOnDestroy(): void {}
 
-results: any[] = [];
-gaps: any[] = [];
-loading = false;
-dataReturned: any[] = [];
-trainingsStats: any;
+  ngOnInit() {
+    this.getTraining();
+    this.getTrainingsStats();
+    this.setMessage(this.messageService.getMessage());
+  }
 
-getTraining() {
-  this.trainingService.getSchedule(this.id).subscribe((data) => {
-    this.training = data.data;
-  });
-}
+  results: any[] = [];
+  gaps: any[] = [];
+  loading = false;
+  dataReturned: any[] = [];
+  trainingsStats: any;
 
-getTrainingsStats(): void {
-  this.loading = true;
-  this.trainingService
-    .getScheduleStats({
-      scheduleId: this.id,
-    })
-    .subscribe((data) => {
-      this.trainingsStats = data.data;
-      this.loading = false;
+  getTraining() {
+    this.trainingService.getSchedule(this.id).subscribe((data) => {
+      this.training = data.data;
+      console.log(this.training);
     });
-}
+  }
+
+  getTrainingsStats(): void {
+    this.loading = true;
+    this.trainingService
+      .getScheduleStats({
+        scheduleId: this.id,
+      })
+      .subscribe((data) => {
+        this.trainingsStats = data.data;
+        this.loading = false;
+      });
+  }
 }

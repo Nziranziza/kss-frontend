@@ -1,4 +1,14 @@
-import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import {
+  Component,
+  Injector,
+  OnDestroy,
+  OnInit,
+  PLATFORM_ID,
+  Inject,
+  Input,
+  ViewChild,
+} from "@angular/core";
+import { NgbActiveModal, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { TrainingService, GapService, Training } from "../../../../core";
@@ -6,6 +16,8 @@ import { MessageService } from "../../../../core";
 import { BasicComponent } from "../../../../core";
 import { Subject } from "rxjs";
 import { DataTableDirective } from "angular-datatables";
+import { isPlatformBrowser } from "@angular/common";
+import { TrainingScheduleViewComponent } from "../../schedules/training-schedule-view/training-schedule-view.component";
 
 @Component({
   selector: "app-training-view",
@@ -18,14 +30,21 @@ export class TrainingViewComponent
 {
   createTraining: FormGroup;
   closeResult = "";
-  id: string;
   training: Training;
+  modal: NgbActiveModal;
+  @Input() id: string;
+
   constructor(
+    @Inject(PLATFORM_ID) private platformId: object,
+    private injector: Injector,
     private trainingService: TrainingService,
-    private route: ActivatedRoute,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private modalService: NgbModal
   ) {
     super();
+    if (isPlatformBrowser(this.platformId)) {
+      this.modal = this.injector.get(NgbActiveModal);
+    }
   }
 
   ngOnDestroy(): void {}
@@ -55,9 +74,6 @@ export class TrainingViewComponent
   dtElement: DataTableDirective;
 
   ngOnInit() {
-    this.route.params.subscribe((params) => {
-      this.id = params["id".toString()];
-    });
     this.dtOptions = {
       pagingType: "full_numbers",
       pageLength: 10,
@@ -91,5 +107,10 @@ export class TrainingViewComponent
         this.trainingsStats = data.data;
         this.loading = false;
       });
+  }
+
+  openViewModal(id: string) {
+    const modalRef = this.modalService.open(TrainingScheduleViewComponent);
+    modalRef.componentInstance.id = id;
   }
 }
