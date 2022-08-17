@@ -83,7 +83,7 @@
                 <button
                   appRequiredSeason
                   class="btn btn-action-no-border details-button"
-                  routerLink="/admin/training/schedule/view/{{ schedule._id }}"
+                  (click)="openViewModal(schedule._id)"
                 >
                   <em class="fa fa-eye"></em>
                 </button>

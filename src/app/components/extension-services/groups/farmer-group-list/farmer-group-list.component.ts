@@ -99,15 +99,6 @@ export class FarmerGroupListComponent extends BasicComponent implements OnInit, 
   openViewModal(id: string) {
     const modalRef = this.modal.open(ViewGroupComponent);
     modalRef.componentInstance.id = id;
-    modalRef.result.finally(() => {
-      const body = {
-        reference: this.authenticationService.getCurrentUser().info.org_id
-      };
-      this.groupService.list(body).subscribe((data) => {
-        this.groups = data.data;
-        this.loading = false;
-      });
-    });
   }
 
 }

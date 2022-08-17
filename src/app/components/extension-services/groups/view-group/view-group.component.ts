@@ -63,7 +63,7 @@ export class ViewGroupComponent
     this.groupService.get(this.id).subscribe((data) => {
       this.groupDetails = data.data;
       this.groupDetails.members.forEach((member) => {
-        member.age = new Date().getFullYear() - member.nid.substring(1, 5);
+        member.nid ? member.age = new Date().getFullYear() - member.nid.substring(1, 5) : member.age = 0;
         if (member.sex == "m" || member.sex == "M") {
           this.totalByGender.maleTotal += 1;
           if (member.age <= 30) {
@@ -80,7 +80,6 @@ export class ViewGroupComponent
         this.totalByGender.maleTotal - this.totalByGender.maleYouthTotal;
       this.totalByGender.femaleOldTotal =
         this.totalByGender.femaleTotal - this.totalByGender.femaleYouthTotal;
-      console.log(this.groupDetails, this.totalByGender);
     });
   }
 }

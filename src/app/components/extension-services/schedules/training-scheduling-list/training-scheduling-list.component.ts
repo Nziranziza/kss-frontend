@@ -10,20 +10,23 @@ import { Subject } from "rxjs";
 import { DataTableDirective } from "angular-datatables";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { ConfirmModalComponent } from "src/app/shared";
+import { TrainingScheduleViewComponent } from "../training-schedule-view/training-schedule-view.component";
 
 @Component({
   selector: "app-training-scheduling-list",
   templateUrl: "./training-scheduling-list.component.html",
   styleUrls: ["./training-scheduling-list.component.css"],
 })
-export class TrainingSchedulingListComponent 
-extends BasicComponent implements OnInit, OnDestroy {
+export class TrainingSchedulingListComponent
+  extends BasicComponent
+  implements OnInit, OnDestroy
+{
   constructor(
     private messageService: MessageService,
     private trainingService: TrainingService,
     private modal: NgbModal,
     private authenticationService: AuthenticationService,
-    private modalService: NgbModal,
+    private modalService: NgbModal
   ) {
     super();
   }
@@ -67,9 +70,7 @@ extends BasicComponent implements OnInit, OnDestroy {
   getSchedules(): void {
     this.loading = true;
     this.trainingService
-      .allSchedule(
-        this.authenticationService.getCurrentUser().info.org_id,
-      )
+      .allSchedule(this.authenticationService.getCurrentUser().info.org_id)
       .subscribe((data) => {
         this.schedules = data.data;
         this.dtTrigger.next();
@@ -87,7 +88,7 @@ extends BasicComponent implements OnInit, OnDestroy {
     this.modalService.open(content, { size: "sm", windowClass: "modal-sm" });
   }
 
-  selectedSchedule(schedule){
+  selectedSchedule(schedule) {
     this.schedule = schedule;
   }
 
@@ -126,5 +127,10 @@ extends BasicComponent implements OnInit, OnDestroy {
         );
       }
     });
+  }
+
+  openViewModal(id: string) {
+    const modalRef = this.modal.open(TrainingScheduleViewComponent);
+    modalRef.componentInstance.id = id;
   }
 }

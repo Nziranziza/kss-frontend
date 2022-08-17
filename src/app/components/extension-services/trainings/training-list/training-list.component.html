@@ -108,7 +108,7 @@
                 <button
                   appRequiredSeason
                   class="btn btn-action-no-border btn-margin details-button"
-                  routerLink="/admin/training/details/{{ training._id }}"
+                  (click)="openViewModal(training._id)"
                 >
                   <em class="fa fa-eye"></em>
                 </button>

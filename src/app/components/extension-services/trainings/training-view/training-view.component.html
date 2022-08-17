@@ -1,4 +1,10 @@
-<div class="modal-body">
+<div class="modal-body extended-modal-body">
+  <div
+    (click)="modal.dismiss('cancel click')"
+    class="btn-modal-close text-center"
+  >
+    <em class="fa fa-close"></em>
+  </div>
   <div class="stats-section">
     <div class="row">
       <div class="col-sm-12 text-center stats-title">Statistics</div>
@@ -167,7 +173,7 @@
               <button
                 appRequiredSeason
                 class="btn btn-action-no-border btn-margin details-button"
-                routerLink="/admin/training/schedule/view/{{ schedule._id }}"
+                (click)="openViewModal(schedule._id)"
               >
                 <em class="fa fa-eye"></em>
               </button>
