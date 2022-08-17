@@ -8,8 +8,8 @@
       <div class="col-md-12">
         <div class="row" formGroupName="location">
           <div
-            class="col-xs-4"
-            style="padding: 8px 0px 0px 10px; font-size: 18px"
+            class="col-xs-2"
+            style="padding: 8px 10px 0px 10px; font-size: 18px"
           >
             <i
               class="fa fa-filter"
@@ -18,75 +18,121 @@
             ></i>
             <span style="font-size: 16px"> Filters </span>
           </div>
-          <div
-            class="col-xs-2"
-            id="location-province"
-            style="padding: 8px 5px 0px 0px"
-          >
-            <div class="form-group">
-              <select
-                class="form-control form-control-small"
-                formControlName="prov_id"
+          <div class="col-xs-10">
+            <div class="row">
+              <div
+                class="col-xs-2"
+                id="location-province"
+                style="padding: 8px 5px 0px 0px"
               >
-                <option value="" selected>All Provinces</option>
-                <option
-                  *ngFor="let province of locationProvinces"
-                  value="{{ province._id }}"
-                >
-                  {{ province.namee | titlecase }}
-                </option>
-              </select>
-            </div>
-          </div>
-          <div
-            class="col-xs-2"
-            id="location-district"
-            style="padding: 8px 5px 0px 0px"
-          >
-            <div class="form-group">
-              <select
-                class="form-control form-control-small"
-                formControlName="dist_id"
+                <div class="form-group">
+                  <select
+                    class="form-control form-control-small"
+                    formControlName="prov_id"
+                  >
+                    <option value="" selected>All Provinces</option>
+                    <option
+                      *ngFor="let province of locationProvinces"
+                      value="{{ province._id }}"
+                    >
+                      {{ province.namee | titlecase }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div
+                class="col-xs-2"
+                id="location-district"
+                style="padding: 8px 5px 0px 0px"
               >
-                <option value="" selected disabled>All Districts</option>
-                <option
-                  *ngFor="let district of locationDistricts"
-                  value="{{ district._id }}"
-                >
-                  {{ district.name | titlecase }}
-                </option>
-              </select>
-            </div>
-          </div>
-          <div class="col-xs-2" style="padding: 8px 5px 0 5px">
-            <div class="ng-autocomplete">
-              <ng-autocomplete
-                #origin
-                [data]="organisations"
-                [searchKeyword]="keyword"
-                (selected)="selectEvent($event)"
-                (inputCleared)="deselectEvent()"
-                [initialValue]="initialValue"
-                placeholder="All Coffee Washing Stations"
-                [itemTemplate]="itemTemplate"
-                [notFoundTemplate]="notFoundTemplate"
-                style="height: 10px"
-              >
-              </ng-autocomplete>
+                <div class="form-group">
+                  <select
+                    class="form-control form-control-small"
+                    formControlName="dist_id"
+                  >
+                    <option value="" selected>All Districts</option>
+                    <option
+                      *ngFor="let district of locationDistricts"
+                      value="{{ district._id }}"
+                    >
+                      {{ district.name | titlecase }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xs-2" style="padding: 8px 5px 0 0px">
+                <div class="ng-autocomplete">
+                  <ng-autocomplete
+                    #origin
+                    [data]="organisations"
+                    [searchKeyword]="keyword"
+                    (selected)="selectEvent($event)"
+                    (inputCleared)="deselectEvent()"
+                    [initialValue]="initialValue"
+                    placeholder="All Coffee Washing Stations"
+                    [itemTemplate]="itemTemplate"
+                    [notFoundTemplate]="notFoundTemplate"
+                    style="height: 10px"
+                  >
+                  </ng-autocomplete>
 
-              <ng-template #itemTemplate let-item>
-                <a [innerHTML]="item.organizationName" style="height: 20px"></a>
-              </ng-template>
+                  <ng-template #itemTemplate let-item>
+                    <a
+                      [innerHTML]="item.organizationName"
+                      style="height: 20px"
+                    ></a>
+                  </ng-template>
 
-              <ng-template #notFoundTemplate let-notFound>
-                <div [innerHTML]="notFound"></div>
-              </ng-template>
+                  <ng-template #notFoundTemplate let-notFound>
+                    <div [innerHTML]="notFound"></div>
+                  </ng-template>
+                </div>
+              </div>
+              <div class="col-xs-2" style="padding: 8px 5px 0 0px">
+                <div class="form-group">
+                  <select
+                    class="form-control form-control-small"
+                    formControlName="covered_sector"
+                  >
+                    <option value="" selected>
+                      All Covered Sectors
+                    </option>
+                    <option
+                      *ngFor="let sector of coveredSectors; let i = index"
+                      value="{{ sector?.sectorId._id }}"
+                    >
+                      {{ sector.sectorId.name ? sector.sectorId.name : sector.sectorId  | titlecase }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xs-2" style="padding: 8px 5px 0 0px">
+                <div class="form-group">
+                  <input
+                    [selectMode]="'range'"
+                    [owlDateTimeTrigger]="dt8"
+                    [owlDateTime]="dt8"
+                    formControlName="filterByDate"
+                    (change)="seasonDateChange('trainingFilters')"
+                    class="form-control form-control-small"
+                    placeholder="From: Dd/mm/yyyy ~ To: Dd/mm/yyyy"
+                  />
+                  <owl-date-time
+                    [pickerType]="'calendar'"
+                    [scrollStrategy]="scrollStrategy"
+                    #dt8
+                  ></owl-date-time>
+                </div>
+              </div>
+              <div class="col-xs-2" style="padding: 8px 5px 0 5px">
+                <button
+                  class="btn btn-dashboard"
+                  (click)="getStats('location')"
+                >
+                  FILTER
+                </button>
+              </div>
             </div>
-          </div>
-          <div class="col-xs-2" style="padding: 8px 5px 0 5px">
-            <button class="btn btn-dashboard" (click)="getStats('location')">
-              FILTER
-            </button>
           </div>
         </div>
       </div>
@@ -152,8 +198,8 @@
                     class="form-control form-control-small"
                     formControlName="training_id"
                   >
-                    <option value="" selected disabled>
-                      Recent (Training Module)
+                    <option value="{{trainings[0]._id}}" selected>
+                      {{trainings[0].trainingName | titlecase}}
                     </option>
                     <option
                       *ngFor="let training of trainings; let i = index"
@@ -171,7 +217,7 @@
                     class="form-control form-control-small"
                     formControlName="trainer_id"
                   >
-                    <option value="" selected disabled>All Trainers</option>
+                    <option value="" selected>All Trainers</option>
                     <option
                       *ngFor="let trainer of trainers; let i = index"
                       value="{{ trainer._id }}"
@@ -821,7 +867,7 @@
                   </select>
                 </div>
               </div>
-              <div class="col-xs-4 col-small-padding" >
+              <div class="col-xs-4 col-small-padding">
                 <div class="form-group">
                   <label class="label-header-text">Date</label>
                   <input
@@ -854,23 +900,23 @@
             class="progress-bar"
             [ngStyle]="{
               width: gapAdoption ? gapAdoption.baselineRate + 10 + '%' : '0%',
-              height: '5px',
+              height: '7px',
               background: '#3DE327 0% 0% no-repeat padding-box',
               display: block
             }"
           ></div>
-          <div style="margin-bottom: 2px; height: 4px"></div>
+          <div style="margin-bottom: 2px; height: 6px"></div>
           <div
             class="progress-bar"
             [ngStyle]="{
               width: gapAdoption ? gapAdoption.adoptionRate + '%' : '0%',
-              height: '5px',
+              height: '7px',
               background: '#4f210d 0% 0% no-repeat padding-box'
             }"
           ></div>
           <div class="row">
             <div class="col-xs-10" style="margin-top: -5px">
-              <h4>{{ i + 1 }}. {{ gapAdoption.gap_name }}</h4>
+              <h4>{{ i + 1 }}. {{ gapAdoption.gap_name?.toLowerCase() }}</h4>
             </div>
             <div class="col-xs-1" style="padding: 0 2px 0 0px">
               <div

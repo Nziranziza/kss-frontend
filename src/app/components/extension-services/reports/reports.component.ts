@@ -31,6 +31,18 @@ export class ReportsComponent extends BasicComponent implements OnInit {
   dtOptions: DataTables.Settings = {};
   // @ts-ignore
   dtTrigger: Subject = new Subject();
+  dt2Options: DataTables.Settings = {};
+  // @ts-ignore
+  dt2Trigger: Subject = new Subject();
+  dt3Options: DataTables.Settings = {};
+  // @ts-ignore
+  dt3Trigger: Subject = new Subject();
+  dt4Options: DataTables.Settings = {};
+  // @ts-ignore
+  dt4Trigger: Subject = new Subject();
+  dt5Options: DataTables.Settings = {};
+  // @ts-ignore
+  dt5Trigger: Subject = new Subject();
   groups: any[] = [];
   seasons: any[] = [];
   currentSeason: any;
@@ -42,10 +54,13 @@ export class ReportsComponent extends BasicComponent implements OnInit {
   reportGenerated: Boolean = false;
 
   ngOnInit() {
-    this.dtOptions = {
-      pagingType: "full_numbers",
-      pageLength: 10,
-    };
+    this.dtOptions,
+      this.dt2Options,
+      this.dt3Options,
+      (this.dt4Options = {
+        pagingType: "full_numbers",
+        pageLength: 10,
+      });
     this.reportForm = this.formBuilder.group({
       filterByType: [""],
       reportFor: [""],
@@ -186,14 +201,14 @@ export class ReportsComponent extends BasicComponent implements OnInit {
       this.reportsTableData = [];
       this.reportService.trainingSummary(this.reportBody).subscribe((data) => {
         this.reportsTableData = data.data;
-        this.dtTrigger.next();
+        this.dt2Trigger.next();
         this.reportGenerated = true;
       });
     } else if (this.reportForm.value.reportFor === "Farm Visits") {
       this.reportsTableData = [];
       this.reportService.visitSummary(this.reportBody).subscribe((data) => {
         this.reportsTableData = data.data;
-        this.dtTrigger.next();
+        this.dt3Trigger.next();
         this.reportGenerated = true;
       });
     }

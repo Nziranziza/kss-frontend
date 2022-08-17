@@ -45,10 +45,10 @@
           <tr>
             <th>Date added</th>
             <th>Group name</th>
-            <th>Group leader names</th>
-            <th>Group leader contact</th>
+            <th>leader names & contact</th>
             <th>Address</th>
             <th>Group size</th>
+            <th>Meeting Day/Week</th>
             <th>Training <br/>
               attendance rate
             </th>
@@ -61,8 +61,7 @@
             <tr>
               <td> {{ group.createdAt | date:'y/LL/d - h:mm' }}</td>
               <td> {{ group.groupName }}</td>
-              <td> {{ group.leaderNames }}</td>
-              <td> {{ group.leaderPhoneNumber }}</td>
+              <td> {{ group.leaderNames }} > {{ group.leaderPhoneNumber }}</td>
               <td> <span style="text-transform: capitalize;">
                 {{ group.location.prov_id?.namek }} >
                 {{ group.location.dist_id?.name }} >
@@ -72,7 +71,8 @@
               </span>
               </td>
               <td><span>{{ group.members.length + ' ' + 'farmers'}}</span></td>
-              <td></td>
+              <td> every {{weekDays[group.meetingSchedule?.meetingDay - 1]}}</td>
+              <td> </td>
               <td>
                 <span class="profile-text">
                 <ng-container *ngIf="!group.active, else inactive"><span
@@ -85,7 +85,7 @@
                 <button
                   appRequiredSeason
                   class="btn btn-action-no-border btn-margin details-button"
-                  routerLink="/admin/farmers/group/view/{{ group._id }}"
+                  (click)="openViewModal(group._id)"
                 >
                   <em class="fa fa-eye"></em>
                 </button>

@@ -535,3 +535,13 @@ h3 {
 .third-box {
   color: #A75A00
 }
+
+/* ---------------------------------------------------------------- Main Background ---------- */
+
+.content-wrapper {
+  background-color: #ECF0F4 0% 0% no-repeat padding-box;
+}
+
+.content {
+  background-color: #ECF0F4 0% 0% no-repeat padding-box;
+}

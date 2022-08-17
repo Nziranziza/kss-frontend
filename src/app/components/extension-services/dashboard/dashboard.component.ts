@@ -164,6 +164,8 @@ export class DashboardComponent extends BasicComponent implements OnInit {
         village_id: [""],
         latitude: [""],
         longitude: [""],
+        covered_sector: [""],
+        filterByDate: [""],
       }),
       trainingFilters: this.formBuilder.group({
         season_id: [""],
@@ -186,6 +188,9 @@ export class DashboardComponent extends BasicComponent implements OnInit {
         quarterId: [""],
       }),
       training_id: [""],
+      season_id: [""],
+      filterByDate: [""],
+      quarterId: [""],
       trainer_id: [""],
       group_id: [""],
       farm_id: [""],
@@ -603,6 +608,7 @@ export class DashboardComponent extends BasicComponent implements OnInit {
                 this.organisations = data.content.filter((org) =>
                   org.organizationRole.includes(1)
                 );
+                console.log(this.organisations);
               }
             });
         }
@@ -709,6 +715,12 @@ export class DashboardComponent extends BasicComponent implements OnInit {
       this.dashboardForm.controls[group]
         .get("filterByDate")
         .setValue([`${current}-07-01`, `${current}-10-01`]);
+    } else if (value == "") {
+      this.dateRangeMin[group] = `${parseFloat(current) - 1}-10-01`;
+      this.dateRangeMax[group] = `${current}-10-01`;
+      this.dashboardForm.controls[group]
+        .get("filterByDate")
+        .setValue([`${parseFloat(current) - 1}-10-01`, `${current}-10-01`]);
     }
     this.getStats(group);
   }

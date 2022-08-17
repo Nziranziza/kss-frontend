@@ -28,7 +28,6 @@ import { DashboardComponent } from "./dashboard/dashboard.component";
 import { ReportsComponent } from "./reports/reports.component";
 import { SmsDashboardComponent } from "./sms-dashboard/sms-dashboard.component";
 import { ViewGapComponent } from "./gaps/view-gap/view-gap.component";
-import { ViewGroupComponent } from "./groups/view-group/view-group.component";
 
 const routes: Routes = [
   {
@@ -128,10 +127,6 @@ const routes: Routes = [
       {
         path: "gaps/view/:id",
         component: ViewGapComponent,
-      },
-      {
-        path: "farmers/group/view/:id",
-        component: ViewGroupComponent,
       },
       {
         path: "dashboard",

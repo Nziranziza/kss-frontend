@@ -10,6 +10,7 @@ import {Subject} from 'rxjs';
 
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ConfirmModalComponent} from '../../../../shared';
+import { ViewGroupComponent } from '../view-group/view-group.component';
 
 
 @Component({
@@ -33,6 +34,7 @@ export class FarmerGroupListComponent extends BasicComponent implements OnInit, 
   // @ts-ignore
   dtTrigger: Subject = new Subject();
   groupMembersTotal: number = 0;
+  weekDays: string[] = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
   ngOnInit() {
     this.listGroups();
@@ -91,6 +93,20 @@ export class FarmerGroupListComponent extends BasicComponent implements OnInit, 
           this.openDelete(group, err.message);
         });
       }
+    });
+  }
+
+  openViewModal(id: string) {
+    const modalRef = this.modal.open(ViewGroupComponent);
+    modalRef.componentInstance.id = id;
+    modalRef.result.finally(() => {
+      const body = {
+        reference: this.authenticationService.getCurrentUser().info.org_id
+      };
+      this.groupService.list(body).subscribe((data) => {
+        this.groups = data.data;
+        this.loading = false;
+      });
     });
   }
 
