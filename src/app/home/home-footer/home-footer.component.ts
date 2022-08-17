@@ -13,8 +13,4 @@ export class HomeFooterComponent implements OnInit {
 
   ngOnInit() {
   }
-
-  privacyPolice() {
-    this.modal.open(PrivacyPoliceComponent, {size: 'sm'});
-  }
 }
