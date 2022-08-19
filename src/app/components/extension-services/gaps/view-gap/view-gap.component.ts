@@ -1,5 +1,7 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { isPlatformBrowser } from "@angular/common";
+import { Component, Inject, Injector, Input, OnDestroy, OnInit, PLATFORM_ID } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
+import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 import { BasicComponent, GapService, MessageService } from "src/app/core";
 
 @Component({
@@ -12,22 +14,25 @@ export class ViewGapComponent
   implements OnInit, OnDestroy
 {
   closeResult = "";
-  id: string;
   gapDetails: any;
+  modal: NgbActiveModal;
+  @Input() id: string;
+
   constructor(
+    @Inject(PLATFORM_ID) private platformId: object,
+    private injector: Injector,
     private gapService: GapService,
-    private route: ActivatedRoute,
     private messageService: MessageService
   ) {
     super();
+    if (isPlatformBrowser(this.platformId)) {
+      this.modal = this.injector.get(NgbActiveModal);
+    }
   }
 
   ngOnDestroy(): void {}
 
   ngOnInit() {
-    this.route.params.subscribe((params) => {
-      this.id = params["id".toString()];
-    });
     this.getVisits();
     this.setMessage(this.messageService.getMessage());
   }
@@ -40,6 +45,7 @@ export class ViewGapComponent
   getVisits() {
     this.gapService.one(this.id).subscribe((data) => {
       this.gapDetails = data.data;
+      console.log(this.gapDetails);
     });
   }
 }

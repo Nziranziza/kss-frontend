@@ -10,6 +10,7 @@ import {
 } from "src/app/core";
 import { Subject } from "rxjs";
 import { ConfirmModalComponent } from "src/app/shared";
+import { ViewNurseryComponent } from "../view-nursery/view-nursery.component";
 
 @Component({
   selector: "app-nursery-list",
@@ -135,5 +136,10 @@ export class NurseryListComponent
         );
       }
     });
+  }
+
+  openViewModal(id: string) {
+    const modalRef = this.modalService.open(ViewNurseryComponent);
+    modalRef.componentInstance.id = id;
   }
 }

@@ -63,22 +63,22 @@
               <label class="control-label label-required">Associated GAP</label>
 
               <ng-multiselect-dropdown
-                formControlName="adoptionGap"
+                formControlName="adoptionGaps"
                 [settings]="gapDropdownSettings"
                 [data]="gaps"
-                [(ngModel)]="createTraining.value.adoptionGap"
+                [(ngModel)]="createTraining.value.adoptionGaps"
                 (onSelect)="onGapSelect($event)"
               >
               </ng-multiselect-dropdown>
 
               <div
                 *ngIf="
-                  adoptionGap.invalid &&
-                  (adoptionGap.dirty || adoptionGap.touched)
+                createTraining.value.adoptionGaps.invalid &&
+                  (createTraining.value.adoptionGaps.dirty || createTraining.value.adoptionGaps.touched)
                 "
                 class="alert"
               >
-                <div *ngIf="adoptionGap.errors['required']" style="color: red">
+                <div *ngIf="createTraining.value.adoptionGaps.errors['required']" style="color: red">
                   *Associated Gap is required.
                 </div>
               </div>
@@ -139,28 +139,6 @@
                   ></i>
                   <br />
                 </div>
-                <div
-                  *ngFor="let file of files; let i = index"
-                  style="padding-bottom: 6px"
-                >
-                  <span style="width: 75%; float: left">
-                    <img
-                      src="assets/dist/img/sks/ico_attach.svg"
-                      style="margin-right: 5px"
-                    />
-                    {{ file.name }}
-                  </span>
-                  <span style="margin-left: 40px; width: 12%; float: left">
-                    {{ file.size }}
-                  </span>
-                  <i
-                    class="fa fa-times"
-                    aria-hidden="true"
-                    (click)="removeSelectedFile(index)"
-                    style="color: red"
-                  ></i>
-                  <br />
-                </div>
               </div>
             </div>
           </div>
@@ -180,10 +158,10 @@
     <button
       type="button"
       class="btn btn-success"
-      (click)="onFileUpload()"
+      (click)="onSubmit()"
       style="width: 250px; height: 50px"
     >
-      Add Training
+      Update Training
     </button>
   </div>
 </form>

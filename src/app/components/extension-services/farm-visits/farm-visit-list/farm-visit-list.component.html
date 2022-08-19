@@ -84,39 +84,49 @@
           <thead>
             <tr>
               <th>Date Added</th>
-              <th>Farm to visit</th>
+              <th>Farmer to visit</th>
               <th>Visit Description</th>
               <th>GAP to be Covered</th>
               <th>Visitor</th>
               <th>Visit Date</th>
-              <th>Score</th>
+              <th>Group</th>
               <th>Status</th>
               <th>Actions</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody style="font-size: 12px">
             <tr *ngFor="let visit of visits | paginate: config">
               <td>{{ visit.createdAt | date: "short" }}</td>
               <td>
-                {{
-                  visit.farms[0].owner.firstName
-                    ? visit.farms[0].owner.firstName +
-                      " " +
-                      visit.farms[0].owner.lastName
-                    : visit.farms[0].owner.groupName
-                }}
+                <div *ngFor="let farm of visit.farms" style="font-size: 10px">
+                  {{
+                    farm.owner.firstName
+                      ? farm.owner.firstName + " " + farm.owner.lastName
+                      : farm.owner.groupName
+                  }}
+                </div>
               </td>
               <td>{{ visit.description }}</td>
-              <td>{{ visit.gaps.length }} gaps</td>
-              <td></td>
-              <td>{{ visit.date | date: "short" }}</td>
-              <td>{{ visit.score || 0 }}</td>
+              <td>
+                <div *ngFor="let gap of visit.gaps">
+                  {{ gap.gap_name }}
+                </div>
+              </td>
+              <td>
+                {{ visit?.visitor?.firstName + " " + visit?.visitor?.lastName }}
+              </td>
+              <td>
+                {{ visit.date | date: "shortDate" }}
+                {{ visit?.expectedDuration.from }} to
+                {{ visit?.expectedDuration.to }}
+              </td>
+              <td>{{ visit?.groupId?.groupName }}</td>
               <td>{{ visit.status || "Pending" }}</td>
               <td>
                 <button
                   appRequiredSeason
                   class="btn btn-action-no-border btn-margin details-button"
-                  routerLink="/admin/farm/visit/details/{{ visit._id }}"
+                  (click)="openViewModal(visit._id)"
                 >
                   <em class="fa fa-eye"></em>
                 </button>

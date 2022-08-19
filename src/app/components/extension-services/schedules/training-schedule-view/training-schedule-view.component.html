@@ -56,7 +56,7 @@
               trainingsStats.totalPresent > 0
                 ? (trainingsStats.totalPresent * 100) /
                   trainingsStats.totalInvitees
-                : 0
+                : 0 | number: "1.1-1"
             }}%
           </h1>
         </div>
@@ -85,25 +85,25 @@
             <div class="col-sm-6">
               <label class="control-label"> Province </label>
               <div class="confirm-text-box confirm-text">
-                {{ training.location ? training.location.prov_id.namek : "" }}
+                {{ training.location ? training.location.prov_id?.namek : "" }}
               </div>
               <label class="control-label"> Sector </label>
               <div class="confirm-text-box confirm-text">
-                {{ training.location ? training.location.sect_id.name : "" }}
+                {{ training.location ? training.location.sect_id?.name : "" }}
               </div>
               <label class="control-label"> Village </label>
               <div class="confirm-text-box confirm-text">
-                {{ training.location ? training.location.village_id.name : "" }}
+                {{ training.location ? training.location.village_id?.name : "" }}
               </div>
             </div>
             <div class="col-sm-6">
               <label class="control-label label-required"> District </label>
               <div class="confirm-text-box confirm-text">
-                {{ training.location ? training.location.dist_id.name : "" }}
+                {{ training.location ? training.location.dist_id?.name : "" }}
               </div>
               <label class="control-label"> Cell </label>
               <div class="confirm-text-box confirm-text">
-                {{ training.location ? training.location.cell_id.name : "" }}
+                {{ training.location ? training.location.cell_id?.name : "" }}
               </div>
               <label class="control-label"> Venue </label>
               <div class="confirm-text-box confirm-text">

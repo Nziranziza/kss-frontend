@@ -10,6 +10,7 @@ import {
   BasicComponent,
 } from "src/app/core";
 import { ConfirmModalComponent } from "src/app/shared";
+import { ViewFarmVisitComponent } from "../view-farm-visit/view-farm-visit.component";
 
 @Component({
   selector: "app-farm-visit-list",
@@ -67,6 +68,7 @@ export class FarmVisitListComponent
       .all(this.authenticationService.getCurrentUser().info.org_id)
       .subscribe((data) => {
         this.visits = data.data;
+        console.log(this.visits);
         this.dtTrigger.next();
         this.loading = false;
       });
@@ -121,5 +123,10 @@ export class FarmVisitListComponent
         );
       }
     });
+  }
+
+  openViewModal(id: string) {
+    const modalRef = this.modal.open(ViewFarmVisitComponent);
+    modalRef.componentInstance.id = id;
   }
 }
