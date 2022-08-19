@@ -379,6 +379,7 @@ export class DashboardComponent extends BasicComponent implements OnInit {
     this.loading = true;
     this.groupService.all({}).subscribe((data) => {
       this.groups = data.data;
+      this.groups.unshift({ groupName: "all groups", _id: "" });
       this.loading = false;
     });
   }
@@ -389,6 +390,10 @@ export class DashboardComponent extends BasicComponent implements OnInit {
         this.organisations = data.content.filter((org) =>
           org.organizationRole.includes(1)
         );
+        this.organisations.unshift({
+          organizationName: "all organizations",
+          _id: "",
+        });
       }
     });
   }
@@ -396,6 +401,7 @@ export class DashboardComponent extends BasicComponent implements OnInit {
   getNurseries() {
     this.seedlingService.all().subscribe((data) => {
       this.nurseries = data.data;
+      this.nurseries.unshift({ nurseryName: "all nurseries", _id: "" });
     });
   }
 
@@ -405,7 +411,7 @@ export class DashboardComponent extends BasicComponent implements OnInit {
     this.getNurseries();
     this.getTrainings();
     this.getOrganisations();
-    this.getFarms();
+    this.getFarms({});
     this.getFarmerGroup();
     this.seasonService.all().subscribe((data) => {
       this.seasons = data.content;
@@ -424,11 +430,14 @@ export class DashboardComponent extends BasicComponent implements OnInit {
     this.getGapAdoptionStats(body);
     this.getVisitsStats(body);
     this.getSeedlingStats(body);
+    if (this.newOrg != "") {
+      this.getFarms({ org_id: this.newOrg });
+    }
   }
 
   // get stats from filters
   getStats(filterBy: string) {
-    if (filterBy != "location" && filterBy != "") {
+    if (filterBy != "") {
       const value =
         this.dashboardForm.controls[filterBy].get("filterByDate").value;
       if (value.length > 1) {
@@ -449,17 +458,11 @@ export class DashboardComponent extends BasicComponent implements OnInit {
     } else if (filterBy === "location") {
       this.mainBody = {};
       const locationId = this.currentSelectedLocation;
-      if (typeof locationId === "object") {
+      if (typeof locationId === "object" && locationId.locationId !== "") {
         this.mainBody.location = locationId;
       }
       if (this.newOrg != "") {
         this.mainBody.referenceId = this.newOrg;
-        if (this.dashboardForm.value.covered_sector != "") {
-          this.mainBody.location = {
-            searchBy: "sect_id",
-            locationId: this.dashboardForm.value.covered_sector,
-          };
-        }
       }
       this.getGeneralStats(this.mainBody);
     }
@@ -473,9 +476,13 @@ export class DashboardComponent extends BasicComponent implements OnInit {
 
   selectGroupEvent(item) {
     this.selectedGroup = item._id;
-    let body: any = {
-      groupId: item._id,
-    };
+    let body: any = {};
+    if (this.selectedGroup !== "") {
+      body = {
+        groupId: item._id,
+      };
+    }
+
     if (this.dashboardForm.value.trainingId != "") {
       body.trainingId = this.dashboardForm.value.trainingId;
     }
@@ -501,6 +508,14 @@ export class DashboardComponent extends BasicComponent implements OnInit {
 
   deselectGroupEvent() {
     this.selectedGroup = "";
+    let body: any = {};
+    if (this.dashboardForm.value.trainingId != "") {
+      body.trainingId = this.dashboardForm.value.trainingId;
+    }
+    if (this.dashboardForm.value.trainer_id != "") {
+      body.trainerId = this.dashboardForm.value.trainer_id;
+    }
+    this.getTrainingsStats(body);
   }
 
   getTrainings(): void {
@@ -538,9 +553,9 @@ export class DashboardComponent extends BasicComponent implements OnInit {
     });
   }
 
-  getFarms() {
+  getFarms(body: any) {
     this.loading = true;
-    this.farmService.all().subscribe((data) => {
+    this.farmService.all(body).subscribe((data) => {
       data.data.forEach((item) => {
         this.farms.push({
           id: item.farmId,
@@ -608,59 +623,98 @@ export class DashboardComponent extends BasicComponent implements OnInit {
                 this.organisations = data.content.filter((org) =>
                   org.organizationRole.includes(1)
                 );
-                console.log(this.organisations);
+                this.organisations.unshift({
+                  organizationName: "all organizations",
+                  _id: "",
+                });
               }
             });
+        } else {
+          this.currentSelectedLocation = {
+            searchBy: "",
+            locationId: "",
+          };
         }
       });
     this.dashboardForm.controls.location
       .get("dist_id".toString())
       .valueChanges.subscribe((value) => {
-        this.locationChangDistrict(this.dashboardForm, value);
-        this.currentSelectedLocation = {
-          searchBy: "dist_id",
-          locationId: value,
-        };
-        this.siteService
-          .getZone({ dist_id: value, searchBy: "district" })
-          .subscribe((data) => {
-            if (data) {
-              this.organisations = data.content.filter((org) =>
-                org.organizationRole.includes(1)
-              );
-            }
-          });
+        if (value !== "") {
+          this.locationChangDistrict(this.dashboardForm, value);
+          this.currentSelectedLocation = {
+            searchBy: "dist_id",
+            locationId: value,
+          };
+          this.siteService
+            .getZone({ dist_id: value, searchBy: "district" })
+            .subscribe((data) => {
+              if (data) {
+                this.organisations = data.content.filter((org) =>
+                  org.organizationRole.includes(1)
+                );
+                this.organisations.unshift({
+                  organizationName: "all organizations",
+                  _id: "",
+                });
+              }
+            });
+        } else {
+          this.currentSelectedLocation = {
+            searchBy: "prov_id",
+            locationId:
+              this.dashboardForm.controls.location.get("prov_id").value,
+          };
+        }
       });
     this.dashboardForm.controls.location
       .get("sect_id".toString())
       .valueChanges.subscribe((value) => {
-        this.locationChangSector(this.dashboardForm, value);
-        this.currentSelectedLocation = {
-          searchBy: "sect_id",
-          locationId: value,
-        };
+        if (value !== "") {
+          this.locationChangSector(this.dashboardForm, value);
+          this.currentSelectedLocation = {
+            searchBy: "sect_id",
+            locationId: value,
+          };
+        } else {
+          this.currentSelectedLocation = {
+            searchBy: "dist_id",
+            locationId:
+              this.dashboardForm.controls.location.get("dist_id").value,
+          };
+        }
+        this.dashboardForm.controls.location.get("filterByDate").setValue("");
       });
     this.dashboardForm.controls.location
-      .get("cell_id".toString())
+      .get("filterByDate".toString())
       .valueChanges.subscribe((value) => {
-        this.locationChangCell(this.dashboardForm, value);
-        this.currentSelectedLocation = {
-          searchBy: "cell_id",
-          locationId: value,
-        };
+        let selectedDate = [];
+        if (value) {
+          value.forEach((newData) => {
+            selectedDate.push(this.formatDate(newData));
+          });
+        }
+
+        this.dashboardForm.controls.location
+          .get("filterByDate")
+          .setValue(selectedDate);
       });
 
     this.dashboardForm.controls.training_id.valueChanges.subscribe((value) => {
-      let body: any = {
-        trainingId: value,
-      };
+      let body: any = {};
+      if (value !== "") {
+        body.trainingId = value;
+      }
+      if (this.dashboardForm.value.trainer_id != "") {
+        body.trainerId = this.dashboardForm.value.trainerId;
+      }
       this.getTrainingsStats(body);
     });
 
     this.dashboardForm.controls.trainer_id.valueChanges.subscribe((value) => {
-      let body: any = {
-        trainerId: value,
-      };
+      let body: any = {};
+      if (value !== "") {
+        body.trainerId = value;
+      }
       if (this.dashboardForm.value.trainingId != "") {
         body.trainingId = this.dashboardForm.value.trainingId;
       }

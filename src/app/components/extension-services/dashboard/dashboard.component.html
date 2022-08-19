@@ -92,7 +92,7 @@
                 <div class="form-group">
                   <select
                     class="form-control form-control-small"
-                    formControlName="covered_sector"
+                    formControlName="sect_id"
                   >
                     <option value="" selected>
                       All Covered Sectors
@@ -198,8 +198,8 @@
                     class="form-control form-control-small"
                     formControlName="training_id"
                   >
-                    <option value="{{trainings[0]._id}}" selected>
-                      {{trainings[0].trainingName | titlecase}}
+                    <option value="" selected>
+                      All trainings
                     </option>
                     <option
                       *ngFor="let training of trainings; let i = index"
