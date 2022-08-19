@@ -97,9 +97,8 @@
               <td>{{ training.trainingName }}</td>
               <td>{{ training.description }}</td>
               <td>
-                {{ training.adoptionGap }}
                 <div *ngFor="let adoption of training.adoptionGaps">
-                  {{ adoption?.name }}
+                  {{ adoption?.gap_name }}
                 </div>
               </td>
               <td>{{ training.materials.length }} files</td>

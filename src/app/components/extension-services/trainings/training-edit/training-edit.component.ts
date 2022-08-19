@@ -3,7 +3,13 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { IDropdownSettings } from "ng-multiselect-dropdown";
-import { TrainingService, GapService, Training, HelperService } from "../../../../core";
+import { SuccessModalComponent } from "src/app/shared";
+import {
+  TrainingService,
+  GapService,
+  Training,
+  HelperService,
+} from "../../../../core";
 import { MessageService } from "../../../../core";
 import { BasicComponent } from "../../../../core";
 
@@ -28,7 +34,7 @@ export class TrainingEditComponent
     private router: Router,
     private route: ActivatedRoute,
     private messageService: MessageService,
-    private modalService: NgbModal,
+    private modal: NgbModal,
     private helperService: HelperService
   ) {
     super();
@@ -48,7 +54,7 @@ export class TrainingEditComponent
     this.createTraining = this.formBuilder.group({
       trainingName: ["", Validators.required],
       description: ["", Validators.required],
-      adoptionGap: ["", Validators.required],
+      adoptionGaps: ["", Validators.required],
       status: ["active", Validators.required],
     });
 
@@ -81,22 +87,17 @@ export class TrainingEditComponent
     return this.createTraining.get("adoptionGap");
   }
 
-
-
-
   getTraining() {
     this.trainingService.one(this.id).subscribe((data) => {
       if (data && data.data) {
-
         this.training = data.data;
-        console.log(this.training);
         this.createTraining.controls.trainingName.setValue(
           this.training.trainingName
         );
         this.createTraining.controls.description.setValue(
           this.training.description
         );
-        this.createTraining.controls.adoptionGap.setValue(
+        this.createTraining.controls.adoptionGaps.setValue(
           this.training.adoptionGaps
         );
         this.results = this.training.materials;
@@ -122,6 +123,7 @@ export class TrainingEditComponent
             url: data.data[i],
           });
         }
+        console.log(this.results);
         this.loading = false;
       },
       (err) => {
@@ -134,12 +136,14 @@ export class TrainingEditComponent
   getGaps(): void {
     this.loading = true;
     this.gapService.all().subscribe((data) => {
-      let newData :any[] = [{
-        _id : "",
-        name: "Not Applied"
-      }];
-      data.data.forEach(data => {
-        newData.push({_id: data._id, name: data.gap_name});
+      let newData: any[] = [
+        {
+          _id: "",
+          name: "Not Applied",
+        },
+      ];
+      data.data.forEach((data) => {
+        newData.push({ _id: data._id, name: data.gap_name });
       });
       this.gaps = newData;
       this.loading = false;
@@ -147,7 +151,7 @@ export class TrainingEditComponent
   }
 
   onGapSelect(item: any) {
-    if (item._id === '') {
+    if (item._id === "") {
       this.gapDropdownSettings.singleSelection = true;
     }
   }
@@ -210,11 +214,15 @@ export class TrainingEditComponent
   onSubmit() {
     const value = JSON.parse(JSON.stringify(this.createTraining.value));
     value.materials = this.results;
+    value.status = 'not_scheduled';
+    value.adoptionGaps = this.createTraining.value.adoptionGaps.map((item) => item._id);
+    console.log(value);
     this.trainingService.update(value, this.id).subscribe(
       (data) => {
         this.loading = false;
-        this.setMessage('Training successfully Edited.');
-        this.router.navigateByUrl('admin/training/list');
+        console.log(data);
+        this.setMessage("Training successfully Edited.");
+        this.success('Edit Training')
       },
       (err) => {
         this.loading = false;
@@ -225,5 +233,17 @@ export class TrainingEditComponent
 
   removeSelectedFile(index) {
     this.results.splice(index, 1);
+  }
+
+  success(name) {
+    const modalRef = this.modal.open(SuccessModalComponent, {
+      ariaLabelledBy: "modal-basic-title",
+    });
+    modalRef.componentInstance.message = "has been edited";
+    modalRef.componentInstance.title = "Thank you Training";
+    modalRef.componentInstance.name = name;
+    modalRef.result.finally(() => {
+      this.router.navigateByUrl("admin/training/list");
+    });
   }
 }

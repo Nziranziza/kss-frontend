@@ -17,15 +17,13 @@ import { TrainingScheduleEditComponent } from "./schedules/training-schedule-edi
 import { ScheduleFarmVisitComponent } from "./farm-visits/schedule-farm-visit/schedule-farm-visit.component";
 import { EditFarmVisitComponent } from "./farm-visits/edit-farm-visit/edit-farm-visit.component";
 import { FarmVisitListComponent } from "./farm-visits/farm-visit-list/farm-visit-list.component";
-import { ViewFarmVisitComponent } from "./farm-visits/view-farm-visit/view-farm-visit.component";
 import { EditNurseryComponent } from "./seedlings/nurseries/edit-nursery/edit-nursery.component";
-import { ViewNurseryComponent } from "./seedlings/nurseries/view-nursery/view-nursery.component";
 import { NurseryListComponent } from "./seedlings/nurseries/nursery-list/nursery-list.component";
 import { NurseryCreateComponent } from "./seedlings/nurseries/nursery-create/nursery-create.component";
 import { DashboardComponent } from "./dashboard/dashboard.component";
 import { ReportsComponent } from "./reports/reports.component";
 import { SmsDashboardComponent } from "./sms-dashboard/sms-dashboard.component";
-import { ViewGapComponent } from "./gaps/view-gap/view-gap.component";
+
 
 const routes: Routes = [
   {
@@ -94,10 +92,6 @@ const routes: Routes = [
         component: EditFarmVisitComponent,
       },
       {
-        path: "farm/visit/details/:id",
-        component: ViewFarmVisitComponent,
-      },
-      {
         path: "seedling/nursery/create",
         component: NurseryCreateComponent,
       },
@@ -108,14 +102,6 @@ const routes: Routes = [
       {
         path: "seedling/nursery/edit/:id",
         component: EditNurseryComponent,
-      },
-      {
-        path: "seedling/nursery/view/:id",
-        component: ViewNurseryComponent,
-      },
-      {
-        path: "gaps/view/:id",
-        component: ViewGapComponent,
       },
       {
         path: "dashboard",

@@ -9,6 +9,7 @@ import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { GapDeleteModal } from '../gap-delete-modal/gap-delete-modal.component';
+import { ViewGapComponent } from "../view-gap/view-gap.component";
 
 @Component({
   selector: 'app-gap-list',
@@ -98,5 +99,10 @@ export class GapListComponent
     //   .subscribe((data) => {
     //     this.farmers = data.data;
     //   });
+  }
+
+  openViewModal(id: string) {
+    const modalRef = this.modal.open(ViewGapComponent);
+    modalRef.componentInstance.id = id;
   }
 }

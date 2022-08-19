@@ -96,7 +96,7 @@
                 <button
                   appRequiredSeason
                   class="btn btn-action-no-border btn-margin details-button"
-                  routerLink="/admin/seedling/nursery/view/{{ nursery._id }}"
+                  (click)="openViewModal(nursery._id)"
                 >
                   <em class="fa fa-eye"></em>
                 </button>

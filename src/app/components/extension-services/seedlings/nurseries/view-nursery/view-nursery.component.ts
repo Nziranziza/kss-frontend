@@ -1,5 +1,7 @@
-import { Component, OnInit } from "@angular/core";
+import { isPlatformBrowser } from "@angular/common";
+import { Component, Inject, Injector, Input, OnInit, PLATFORM_ID } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
+import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 import { BasicComponent, SeedlingService } from "src/app/core";
 
 @Component({
@@ -10,22 +12,25 @@ import { BasicComponent, SeedlingService } from "src/app/core";
   ],
 })
 export class ViewNurseryComponent extends BasicComponent implements OnInit {
+  modal: NgbActiveModal;
+  @Input() id: string;
+
   constructor(
+    @Inject(PLATFORM_ID) private platformId: object,
+    private injector: Injector,
     private seedlingService: SeedlingService,
-    private route: ActivatedRoute
   ) {
     super();
+    if (isPlatformBrowser(this.platformId)) {
+      this.modal = this.injector.get(NgbActiveModal);
+    }
   }
-  id: string;
   nurseryDatas: any;
 
   ngOnInit() {
-    this.route.params.subscribe((params) => {
-      this.id = params["id".toString()];
-      this.seedlingService.one(params["id".toString()]).subscribe((data) => {
-        const datas = data.data;
-        this.nurseryDatas = datas;
-      });
+    this.seedlingService.one(this.id).subscribe((data) => {
+      const datas = data.data;
+      this.nurseryDatas = datas;
     });
   }
 }
