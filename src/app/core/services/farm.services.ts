@@ -32,8 +32,8 @@ export class FarmService {
     return this.apiService.post("/v1.1/farm/lands/validate/upi", body);
   }
 
-  all() {
-    return this.apiService.post("/v1.1/farm/lands/coordinates", {});
+  all(body: any) {
+    return this.apiService.post("/v1.1/farm/lands/coordinates", body);
   }
 
   getLand(id: string): Observable<any> {

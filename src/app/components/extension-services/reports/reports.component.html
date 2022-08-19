@@ -228,6 +228,14 @@
     </div>
   </div>
   <div class="text-center" style="margin-top: 5px" *ngIf="reportGenerated">
+    <button
+      class="btn btn-default"
+      type="button"
+      style="margin-left: 10px"
+      (click)="downloadPdf()"
+    >
+      export to PDF
+    </button>
     <button class="btn btn-default" type="button" style="margin-left: 10px">
       export to CSV
     </button>
@@ -239,8 +247,11 @@
       >export to XLS</a
     >
   </div>
-  <div class="box">
-    <h4 class="text-center">{{ reportForm.value.reportFor }} Summary Table</h4>
+  <div class="box" id="downloadFile">
+    <div class="box-header" *ngIf="reportsTableData.length > 0">
+      <img src="assets/dist/img/sks/tecnoserve.png" style="width: 140px" />
+    </div>
+    <h4 class="text-center">{{ reportForm.value.reportFor }} Summary</h4>
     <div
       class="box-body table-responsive"
       *ngIf="
@@ -260,6 +271,7 @@
             <th>Date/Time of the training</th>
             <th>Location of the training</th>
             <th>Trainer</th>
+            <th>Group</th>
             <th>Trainees</th>
             <th>Status</th>
           </tr>
@@ -269,9 +281,17 @@
             <td>{{ schedule.createdAt | date: "short" }}</td>
             <td>{{ schedule.trainingId.trainingName }}</td>
             <td>{{ schedule.startTime | date: "short" }}</td>
-            <td>{{ schedule.venueName }}</td>
+            <td>
+              {{ schedule.location.prov_id?.namek }} >
+              {{ schedule.location.dist_id?.name }} >
+              {{ schedule.location.sect_id?.name }} >
+              {{ schedule.location.cell_id?.name }} >
+              {{ schedule.location.village_id?.name }} >
+              {{ schedule.venueName }}
+            </td>
             <td>{{ schedule.trainer.fullName }}</td>
-            <td>{{ schedule.trainees.length }} trainees</td>
+            <td>{{ schedule.groupId.groupName }}</td>
+            <td>{{ schedule.trainees.length || 1 }} trainees</td>
             <td>{{ schedule.status }}</td>
           </tr>
         </tbody>
@@ -295,10 +315,10 @@
           <tr>
             <th>Date added</th>
             <th>Group name</th>
-            <th>Group leader names</th>
-            <th>Group leader contact</th>
+            <th>Leader names & contact</th>
             <th>Address</th>
             <th>Group size</th>
+            <th>Meeting Day</th>
             <th>
               Training <br />
               attendance rate
@@ -311,13 +331,23 @@
             <tr>
               <td>{{ group.createdAt | date: "y/LL/d - h:mm" }}</td>
               <td>{{ group.groupName }}</td>
-              <td>{{ group.leaderNames }}</td>
-              <td>{{ group.leaderPhoneNumber }}</td>
-              <td></td>
+              <td>{{ group.leaderNames }} > {{ group.leaderPhoneNumber }}</td>
+              <td>
+                <span style="text-transform: capitalize">
+                  {{ group.location.prov_id?.namek }} >
+                  {{ group.location.dist_id?.name }} >
+                  {{ group.location.sect_id?.name }} >
+                  {{ group.location.cell_id?.name }} >
+                  {{ group.location.village_id?.name }}
+                </span>
+              </td>
               <td>
                 <span>{{ group.members.length + " " + "farmers" }}</span>
               </td>
-              <td></td>
+              <td>
+                every {{ weekDays[group.meetingSchedule?.meetingDay - 1] }}
+              </td>
+              <td>0%</td>
               <td>
                 <span class="profile-text">
                   <ng-container *ngIf="!group.active; else inactive"
@@ -366,19 +396,31 @@
             <tr>
               <td>{{ visit.createdAt | date: "short" }}</td>
               <td>
-                {{
-                  visit.farms[0].owner.firstName
-                    ? visit.farms[0].owner.firstName +
-                      " " +
-                      visit.farms[0].owner.lastName
-                    : visit.farms[0].owner.groupName
-                }}
+                
+                <div >
+                  {{
+                    visit.farm.firstName
+                      ? visit.farm.firstName +
+                        " " +
+                        visit.farm.lastName
+                      : visit.farm.groupName
+                  }}
+                </div>
               </td>
               <td>{{ visit.description }}</td>
-              <td>{{ visit.gaps.length }} gaps</td>
-              <td></td>
+              <td>
+                {{ visit.gap.gap_name }}
+              </td>
+              <td>
+                {{ visit.visitor.firstName }} {{ visit.visitor.lastName }}
+              </td>
               <td>{{ visit.date | date: "short" }}</td>
-              <td>{{ visit.score || 0 }}</td>
+              <td>
+                {{
+                  (visit.overall_score * 100) / visit.overall_weight
+                    | number: "1.0-1"
+                }}%
+              </td>
               <td>{{ visit.status || "Pending" }}</td>
             </tr>
           </ng-container>

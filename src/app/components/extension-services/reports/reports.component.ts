@@ -9,6 +9,8 @@ import {
   ReportService,
   SeasonService,
 } from "src/app/core";
+import { jsPDF } from "jspdf";
+import html2canvas from "html2canvas";
 
 @Component({
   selector: "app-reports",
@@ -52,6 +54,8 @@ export class ReportsComponent extends BasicComponent implements OnInit {
   reportBody: any;
   dataFile: any;
   reportGenerated: Boolean = false;
+  showHeaders: Boolean = false;
+  weekDays: string[] = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
   ngOnInit() {
     this.dtOptions,
@@ -163,9 +167,6 @@ export class ReportsComponent extends BasicComponent implements OnInit {
   downloadCsv() {
     this.generateFinalReport("application/xslx", ".xslx");
   }
-  downloadPdf() {
-    this.generateFinalReport("application/pdf", ".pdf");
-  }
   downloadExcel() {
     this.generateFinalReport("application/pdf", ".pdf");
   }
@@ -189,6 +190,24 @@ export class ReportsComponent extends BasicComponent implements OnInit {
     linkElement.dispatchEvent(clickEvent);
   }
 
+  downloadPdf() {
+    this.showHeaders = true;
+    html2canvas(document.getElementById('downloadFile')).then((canvas) => {
+      // Few necessary setting options
+      let imgWidth = 208;
+      let pageHeight = 295;
+      let imgHeight = (canvas.height * imgWidth) / canvas.width;
+      let heightLeft = imgHeight;
+
+      const contentDataURL = canvas.toDataURL("image/png");
+      let pdf = new jsPDF("p", "mm", "a4"); // A4 size page of PDF
+      let position = 0;
+      pdf.addImage(contentDataURL, "PNG", 0, position, imgWidth, imgHeight);
+      pdf.save("sks-report.pdf"); // Generated PDF
+    });
+    this.showHeaders = false;
+  }
+
   generateReport() {
     if (this.reportForm.value.reportFor === "Farmer Groups") {
       this.reportsTableData = [];
@@ -196,6 +215,7 @@ export class ReportsComponent extends BasicComponent implements OnInit {
         this.reportsTableData = data.data;
         this.dtTrigger.next();
         this.reportGenerated = true;
+        console.log(this.reportsTableData);
       });
     } else if (this.reportForm.value.reportFor === "Trainings") {
       this.reportsTableData = [];
@@ -203,6 +223,7 @@ export class ReportsComponent extends BasicComponent implements OnInit {
         this.reportsTableData = data.data;
         this.dt2Trigger.next();
         this.reportGenerated = true;
+        console.log(this.reportsTableData);
       });
     } else if (this.reportForm.value.reportFor === "Farm Visits") {
       this.reportsTableData = [];
@@ -210,8 +231,11 @@ export class ReportsComponent extends BasicComponent implements OnInit {
         this.reportsTableData = data.data;
         this.dt3Trigger.next();
         this.reportGenerated = true;
+        console.log(this.reportsTableData);
       });
     }
+
+    
   }
 
   generateFinalReport(type: string, extension: string) {

@@ -197,50 +197,6 @@ export class NurseryCreateComponent extends BasicComponent implements OnInit {
     }
   }
 
-  onUpdate() {
-    let data = {
-      _id: "62ce75c0f953f3052819f68e",
-      nurseryName: "Nursery Name: Updated",
-      owner: {
-        _id: "62cd9f17713f384d9015abd6",
-        name: "Big Boss",
-        phoneNumber: "250780348088",
-      },
-      representative: {
-        _id: "62cd9f17713f384d9015abd7",
-        name: "Big Boss",
-        phoneNumber: "250780348088",
-      },
-      org_id: "5d1f36dae6950c4d9eaffa37",
-      latitude: "2.4494949",
-      longitude: "9.955959",
-      location: {
-        prov_id: "5bf8170953d485a9eae4b41c",
-        dist_id: "5bf8171e53d485a9eae4b421",
-        sect_id: "5bfd8dbe91703530fcb9b1dd",
-        cell_id: "5bf816d753d485a9eae4aa7f",
-        village_id: "5bf8163553d485a9eae42ef5",
-      },
-      stocks: [
-        {
-          _id: "62ce75c0f953f3052819f692",
-          varietyId: "626bb0a85d5a18a1b38dd5ca",
-          seeds: 3,
-          seedlingQty: 2500,
-        },
-        {
-          varietyId: "626bc0fc2c09eeafbfb787ea",
-          seeds: 2,
-          seedlingQty: 2500,
-        },
-      ],
-    };
-    this.seedlingService.update(data._id, data).subscribe((data) => {
-      this.addNursery.reset();
-      this.getNurserySites();
-    });
-  }
-
   open(content) {
     this.modalService.open(content, {
       ariaLabelledBy: "modal-basic-title",
