@@ -29,27 +29,10 @@ import { ConfirmModalComponent } from './layouts';
 import { SuccessModalComponent } from './layouts';
 import { TranslateModule } from '@ngx-translate/core';
 import { SafePipe } from './pipes';
-
-<<<<<<< HEAD
-} from './layout';
-import {MatDialogModule, MatIconModule} from '@angular/material';
-import {ConfirmDialogComponent} from './layout';
-import {DataTablesModule} from 'angular-datatables';
-import {RequiredRolesDirective} from './directives/required-roles.directive';
-import {LoaderComponent} from './layout';
-import {RequiredSeasonDirective} from './directives/required-season.directive';
-import {HasPermissionDirective} from './directives/has-permission.directive';
-import {QuantityUnitComponent} from './layout';
-import {ListWarningsComponent} from './layout';
-import {DownloadingComponent} from './layout';
-import {SpinnerComponent } from './layout';
-import {InternalDirective} from './directives/internal.directives';
-import {RequiredSeasonCherryDirective} from './directives/required-season-cherry.directive';
-import {DebounceClickDirective} from './directives/debounce-click.directive';
-import { LoadingComponent } from './layout/loading/loading.component';
+import {ConfirmDialogComponent} from '../core/services/layouts/confirm-dialog/confirm-dialog.component';
 import {HasServicesDirective} from './directives/has-services.directive';
-=======
->>>>>>> e22c5f780c941d2979066859001d6ccef20276fb
+
+
 
 @NgModule({
   imports: [
@@ -62,25 +45,12 @@ import {HasServicesDirective} from './directives/has-services.directive';
     MatDialogModule,
     DataTablesModule,
   ],
-<<<<<<< HEAD
+
   declarations: [ListErrorsComponent, LoaderComponent,
     HomeHeaderComponent, HomeFooterComponent, ListMessageComponent,
     ConfirmDialogComponent, RequiredRolesDirective, InternalDirective, LoaderComponent,
     RequiredSeasonDirective, RequiredSeasonCherryDirective, HasPermissionDirective, HasServicesDirective,
-=======
-  declarations: [
-    ListErrorsComponent,
-    LoaderComponent,
-    HomeHeaderComponent,
-    HomeFooterComponent,
-    ListMessageComponent,
-    RequiredRolesDirective,
-    InternalDirective,
-    LoaderComponent,
-    RequiredSeasonDirective,
-    RequiredSeasonCherryDirective,
-    HasPermissionDirective,
->>>>>>> e22c5f780c941d2979066859001d6ccef20276fb
+
     DebounceClickDirective,
     QuantityUnitComponent,
     ListWarningsComponent,
@@ -111,11 +81,7 @@ import {HasServicesDirective} from './directives/has-services.directive';
     SuccessModalComponent,
     QuantityUnitComponent,
     DownloadingComponent,
-<<<<<<< HEAD
-    MatIconModule, MatDialogModule,
-    DataTablesModule, RequiredRolesDirective,
-    RequiredSeasonDirective, HasPermissionDirective, InternalDirective, RequiredSeasonCherryDirective, HasServicesDirective
-=======
+    HasServicesDirective,
     MatIconModule,
     MatDialogModule,
     DataTablesModule,
@@ -127,8 +93,7 @@ import {HasServicesDirective} from './directives/has-services.directive';
     InlineErrorsComponent,
     InlineErrorsComponent,
     TranslateModule,
-    SafePipe,
->>>>>>> e22c5f780c941d2979066859001d6ccef20276fb
+    SafePipe
   ],
   entryComponents: [ConfirmModalComponent, SuccessModalComponent],
 })
