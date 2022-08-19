@@ -1,0 +1,134 @@
+<h3>
+  <div class="row">
+    <div class="col-sm-10">SMS Management > TechnoServe</div>
+    <div class="col-sm-2">
+      <a class="btn btn-success pull-right" (click)="open(content)"
+        ><i class="fa fa-shopping-cart"></i> Order SMS
+      </a>
+    </div>
+  </div>
+</h3>
+<ng-template #content let-modal>
+  <form [formGroup]="createOrder">
+    <div class="modal-body text-center" style="font-size: 1.5em">
+      <div class="text-center">Order SMS</div>
+      <div class="row" style="margin-top: 10px">
+        <div class="col-sm-4">
+          <label class="control-label">Number Of SMS</label>
+        </div>
+        <div class="col-sm-8">
+          <input
+            type="number"
+            class="form-control"
+            formControlName="smsQuantity"
+          />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-4">
+          <label class="control-label">Email</label>
+        </div>
+        <div class="col-sm-8">
+          <input type="text" class="form-control" formControlName="email" />
+        </div>
+      </div>
+      <br />
+      <button
+        type="button"
+        class="btn btn-success pull-center"
+        (click)="orderSms(); modal.dismiss()"
+      >
+        Order
+      </button>
+    </div>
+  </form>
+</ng-template>
+<div class="col-sm-12 stats-section">
+  <div class="row">
+    <div class="col-sm-4">
+      <div class="text-center stats-box">
+        <h3>SMS Balance</h3>
+        <h1>{{ smsBalance.balance }}</h1>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="text-center stats-box middle-box">
+        <h3>Delivered SMS</h3>
+        <h1>0</h1>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="text-center stats-box third-box">
+        <h3>Failed SMS</h3>
+        <h1>0</h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-6" style="margin-top: 25px">
+    <div class="panel panel-default">
+      <div class="panel-heading text-center">
+        <h3 class="panel-title">SMS History</h3>
+      </div>
+      <div class="panel-body">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Date</th>
+              <th>Receiver</th>
+              <th>Message</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6" style="margin-top: 25px">
+    <div class="panel panel-default">
+      <div class="panel-heading text-center">
+        <h3 class="panel-title">SMS Orders History</h3>
+      </div>
+      <div class="panel-body">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Requested SMS</th>
+              <th>Approved SMS</th>
+              <th>Invoice</th>
+              <th>Amount</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let order of smsOrders; let i = index">
+              <td>{{ order.createdAt | date: "short" }}</td>
+              <td>{{ order.requested_sms }}</td>
+              <td>{{ order.approved_sms }}</td>
+              <td>
+                <a href="{{ order.invoice }}" target="_blank">
+                  <i class="fa fa-download"></i>
+                </a>
+              </td>
+              <td>{{ order.requested_sms * order.rate }} rwf</td>
+              <td>
+                {{
+                  order.paid
+                    ? "Paid"
+                    : order.approved
+                    ? "Approved"
+                    : "Not approved"
+                }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

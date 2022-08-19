@@ -1,0 +1,68 @@
+<div class="modal-body extended-modal-body">
+  <div
+    (click)="modal.dismiss('cancel click')"
+    class="btn-modal-close text-center"
+  >
+    <em class="fa fa-close"></em>
+  </div>
+  <h3>Visit Details</h3>
+  <div class="box">
+    <div class="box-body box-confirm">
+      <div class="row">
+        <div class="col-xs-12">
+          <div style="margin-bottom: 10px">
+            <label class="control-label">Farm to visit</label>
+            <div
+              class="confirm-text-box confirm-text"
+              *ngFor="let farms of visits.farms"
+            >
+              <span> {{ farms.upiNumber }} </span>
+            </div>
+          </div>
+          <div style="margin-bottom: 10px">
+            <label class="control-label"
+              >GAP to be covered during the visit</label
+            >
+            <div
+              class="confirm-text-box confirm-text"
+              *ngFor="let gaps of visits.gaps"
+            >
+              {{ gaps }}
+            </div>
+          </div>
+          <div style="margin-bottom: 10px">
+            <label class="control-label"
+              >Agronomist who will visit</label
+            >
+            <div class="confirm-text-box confirm-text">
+              {{ visits.visitor.firstName + ' ' + visits.visitor.lastName }}
+            </div>
+          </div>
+          <div style="margin-bottom: 10px">
+            <label class="control-label"
+              >Date and Time of the visit</label
+            >
+            <div class="confirm-text-box confirm-text">
+              {{ visits.date | date: "shortDate" }} <br />
+              From :
+              {{
+                visits.expectedDuration ? visits.expectedDuration.from : ""
+              }}
+              <br /> To :
+              {{ visits.expectedDuration ? visits.expectedDuration.to : "" }}
+            </div>
+          </div>
+          <div style="margin-bottom: 10px">
+            <label class="control-label "
+              >Visit Description</label
+            >
+            <div class="confirm-text-box confirm-text">
+              {{ visits.description }} <br />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <h3>Observation Details</h3>
+</div>

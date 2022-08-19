@@ -1,0 +1,160 @@
+<ng-template #content let-modal>
+  <div class="modal-body text-center" style="font-size: 1.5em">
+    <i class="fa fa-check" style="color: #00a513; font-size: 4.5em"></i>
+    <br />
+    Are you sure you want to send <br />
+    Schedule for {{ schedule.trainingId.trainingName }}
+    <br />
+    sms again <br />
+
+    <button
+      type="button"
+      class="btn btn-success btn-lg pull-center"
+      (click)="modal.dismiss()"
+    >
+      cancel
+    </button>
+    <button
+      type="button"
+      class="btn btn-success btn-lg pull-center"
+      (click)="sendMessage(); modal.dismiss()"
+      [disabled]="loading"
+    >
+      <span *ngIf="!loading; else other_content">Send Message</span>
+      <ng-template #other_content>
+        <div class="loader">
+          <div class="line"></div>
+          <div class="line"></div>
+          <div class="line"></div>
+          <div class="line"></div>
+        </div>
+      </ng-template>
+    </button>
+  </div>
+</ng-template>
+<h3>
+  <div class="row">
+    <div class="col-sm-10">Farms Visits</div>
+    <div class="col-sm-2">
+      <a class="btn btn-success pull-left" routerLink="/admin/farm/visit/create"
+        ><i class="fa fa-calendar"></i> Schedule a Farm Visit
+      </a>
+    </div>
+  </div>
+</h3>
+<app-list-message [message]="message"></app-list-message>
+<app-list-errors [errorList]="errors"></app-list-errors>
+<div class="row">
+  <div class="col-sm-12 stats-section">
+    <div class="row">
+      <div class="col-sm-12 text-center stats-title">Visits Summary</div>
+      <div class="col-sm-4">
+        <div class="text-center stats-box">
+          <h3>Scheduled Visits</h3>
+          <h1>{{ visits.length }}</h1>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="text-center stats-box middle-box">
+          <h3>Visited Farms</h3>
+          <h1>0</h1>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="text-center stats-box third-box">
+          <h3>Canceled Visits</h3>
+          <h1>0</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-header">
+        <!-- <h6>Showing 1 t0 10 of 300 entries</h6> -->
+      </div>
+      <div class="box-body table-responsive">
+        <app-loader *ngIf="loading"></app-loader>
+        <table
+          datatable
+          [dtOptions]="dtOptions"
+          [dtTrigger]="dtTrigger"
+          class="row-border hover table table-striped"
+        >
+          <thead>
+            <tr>
+              <th>Date Added</th>
+              <th>Farmer to visit</th>
+              <th>Visit Description</th>
+              <th>GAP to be Covered</th>
+              <th>Visitor</th>
+              <th>Visit Date</th>
+              <th>Group</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody style="font-size: 12px">
+            <tr *ngFor="let visit of visits | paginate: config">
+              <td>{{ visit.createdAt | date: "short" }}</td>
+              <td>
+                <div *ngFor="let farm of visit.farms" style="font-size: 10px">
+                  {{
+                    farm.owner.firstName
+                      ? farm.owner.firstName + " " + farm.owner.lastName
+                      : farm.owner.groupName
+                  }}
+                </div>
+              </td>
+              <td>{{ visit.description }}</td>
+              <td>
+                <div *ngFor="let gap of visit.gaps">
+                  {{ gap.gap_name }}
+                </div>
+              </td>
+              <td>
+                {{ visit?.visitor?.firstName + " " + visit?.visitor?.lastName }}
+              </td>
+              <td>
+                {{ visit.date | date: "shortDate" }}
+                {{ visit?.expectedDuration.from }} to
+                {{ visit?.expectedDuration.to }}
+              </td>
+              <td>{{ visit?.groupId?.groupName }}</td>
+              <td>{{ visit.status || "Pending" }}</td>
+              <td>
+                <button
+                  appRequiredSeason
+                  class="btn btn-action-no-border btn-margin details-button"
+                  (click)="openViewModal(visit._id)"
+                >
+                  <em class="fa fa-eye"></em>
+                </button>
+                <button
+                  appRequiredSeason
+                  class="btn btn-action-no-border btn-margin"
+                  (click)="openDeleteModal(visit)"
+                >
+                  <em class="fa fa-trash"></em>
+                </button>
+                <button
+                  appRequiredSeason
+                  (click)="open(content); selectedSchedule(schedule)"
+                  class="btn btn-action-no-border btn-margin"
+                >
+                  <em class="fa fa-envelope-o"></em>
+                </button>
+                <button
+                  class="btn btn-action-no-border btn-margin btn-sm details-button"
+                  routerLink="/admin/farm/visit/edit/{{ visit._id }}"
+                >
+                  <em class="fa fa-pencil"></em>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

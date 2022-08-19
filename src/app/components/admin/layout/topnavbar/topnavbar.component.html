@@ -1,0 +1,165 @@
+<header class="main-header">
+  <!-- Logo -->
+  <span class="logo">
+    <!-- mini logo for sidebar mini 50x50 pixels -->
+    <span class="logo-mini"><b>S</b>K</span>
+    <!-- logo for regular state and mobile devices -->
+    <span class="logo-lg"><b>SMART</b> Kungahara</span>
+  </span>
+  <!-- Header Navbar: style can be found in header.less -->
+  <nav class="navbar navbar-static-top">
+    <!-- Sidebar toggle button-->
+    <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+      <span class="sr-only">Toggle navigation</span>
+    </a>
+    <!-- Navbar Right Menu -->
+    <div class="navbar-custom-menu">
+      <ul class="nav navbar-nav">
+        <!-- Notifications -->
+        <li class="dropdown notifications-menu" [appRequiredRoles]="[6]">
+          <a
+            href="#"
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <i class="fa fa-bell-o"></i>
+            <span class="label label-warning">{{ needOfApproval }}</span>
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <ul class="menu">
+                <li>
+                  <a
+                    [routerLink]="[
+                      '/admin/farmers/need-approval/list',
+                      { needApproval: 'updated' }
+                    ]"
+                  >
+                    <i class="fa fa-map-marker text-aqua"></i>
+                    <span class="text-yellow">{{ updatedLandToApprove }}</span>
+                    updated lands need to be approved
+                  </a>
+                </li>
+                <li>
+                  <a
+                    [routerLink]="[
+                      '/admin/farmers/need-approval/list',
+                      { needApproval: 'new' }
+                    ]"
+                  >
+                    <i class="fa fa-map-marker text-aqua"></i>
+                    <span class="text-yellow"> {{ newLandToApprove }}</span> new
+                    lands need to be approved
+                  </a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li class="dropdown notifications-menu">
+          <a
+            href="#"
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <span
+              class="hidden-xs"
+              style="
+                font-weight: bolder;
+                font: normal normal bold 15px Helvetica Neue;
+              "
+            >
+              <img src="assets/dist/img/sks/ico_language.svg" /> &nbsp; English
+              &nbsp;</span
+            >
+            <i
+              class="fa fa-caret-down"
+              aria-hidden="true"
+              style="font-weight: bolder"
+            ></i>
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <ul class="menu">
+                <li>
+                  <a type="button" (click)="setLanguage('en')">English </a>
+                </li>
+                <li>
+                  <a type="button" (click)="setLanguage('rw')"> Kinyarwanda </a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <!-- Languages Changing -->
+        <li class="dropdown notifications-menu">
+          <a
+            href="#"
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <i
+              class="fa fa-caret-down"
+              aria-hidden="true"
+              style="font-weight: bolder"
+            ></i>
+            &nbsp; Season {{ currentSeason?.season }}
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <ul class="menu">
+                <li *ngFor="let season of seasons">
+                  <a
+                    type="button"
+                    (click)="changeSeason(season._id)"
+                    *ngIf="season._id !== currentSeason._id"
+                    style="cursor: pointer"
+                  >
+                    <i class="fa fa-tint text-green" aria-hidden="true"></i>
+                    Season {{ season.season }}
+                  </a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <!-- User Account: style can be found in dropdown.less -->
+        <li class="dropdown user user-menu">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <i class="fa fa-user"></i>
+            <span class="hidden-xs" style="font-weight: bolder">{{
+              surname | titlecase
+            }}</span>
+          </a>
+          <ul class="dropdown-menu">
+            <!-- User image -->
+            <li class="user-header">
+              <p style="font-weight: bold">
+                <i class="fa fa-university"></i>
+                <small> {{ orgName }}</small>
+              </p>
+            </li>
+            <!-- Menu Footer-->
+            <li class="user-footer">
+              <div class="pull-left">
+                <a
+                  routerLink="/admin/users/profile"
+                  class="btn btn-default btn-flat"
+                  >Profile</a
+                >
+              </div>
+              <div class="pull-right">
+                <button (click)="onLogOut()" class="btn btn-default btn-flat">
+                  Sign out
+                </button>
+              </div>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>

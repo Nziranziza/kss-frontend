@@ -1,0 +1,505 @@
+<form [formGroup]="reportForm">
+  <div class="row">
+    <div class="col-xs-4">
+      <div>
+        <h5 class="label-required">Filter Reports for</h5>
+        <select class="form-control" formControlName="reportFor">
+          <option value="" selected>Select Report Type</option>
+          <option value="Trainings">Training</option>
+          <option value="Farmer Groups">Farmer Groups</option>
+          <option value="Farm Visits">Farm Visit</option>
+          <option value="Coffee Farmers">Cofee Farmer</option>
+          <option value="Coffee Farms">Cofee Farm</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-xs-8">
+      <div class="row">
+        <div class="col-xs-6">
+          <h5 class="label-required text-center">Filters</h5>
+          <div class="row" formGroupName="location">
+            <div class="col-xs-6" id="location-province">
+              <select class="form-control" formControlName="prov_id">
+                <option value="" selected>All Provinces</option>
+                <option
+                  *ngFor="let province of locationProvinces"
+                  value="{{ province._id }}"
+                >
+                  {{ province.namee | titlecase }}
+                </option>
+              </select>
+            </div>
+            <div class="col-xs-6">
+              <select class="form-control" formControlName="dist_id">
+                <option value="" selected>All Districts</option>
+                <option
+                  *ngFor="let district of locationDistricts"
+                  value="{{ district._id }}"
+                >
+                  {{ district.name | titlecase }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-3">
+          <div class="text-center">
+            <h5 class="label-required text-center">Filter By CWS</h5>
+            <input
+              type="radio"
+              formControlName="filterByType"
+              value="cws"
+              style="margin-top: 5px"
+            />
+          </div>
+        </div>
+        <div class="col-xs-3">
+          <div class="text-center">
+            <h5 class="label-required text-center">Filter By Sector</h5>
+            <input
+              type="radio"
+              formControlName="filterByType"
+              value="sector"
+              style="margin-top: 5px"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <span
+          *ngIf="reportForm.value.filterByType === 'cws'"
+          formGroupName="filterByCws"
+        >
+          <div class="col-xs-3" style="margin-top: 5px">
+            <select class="form-control">
+              <option value="" selected>All CWS</option>
+              <option value="training">Training</option>
+            </select>
+          </div>
+          <div class="col-xs-3" style="margin-top: 5px">
+            <select class="form-control">
+              <option value="" selected>All Covered Sector</option>
+              <option value="training">Training</option>
+            </select>
+          </div>
+          <div class="col-xs-3" style="margin-top: 5px">
+            <select class="form-control">
+              <option value="" selected>All Covered Cells</option>
+            </select>
+          </div>
+          <div class="col-xs-3" style="margin-top: 5px">
+            <select class="form-control">
+              <option value="" selected>All Covered Villages</option>
+            </select>
+          </div>
+        </span>
+        <span
+          *ngIf="reportForm.value.filterByType === 'sector'"
+          formGroupName="filterBySector"
+        >
+          <div class="col-xs-3" style="margin-top: 5px">
+            <select class="form-control">
+              <option value="" selected>All Sectors</option>
+            </select>
+          </div>
+          <div class="col-xs-3" style="margin-top: 5px">
+            <select class="form-control">
+              <option value="" selected>All Cells</option>
+            </select>
+          </div>
+          <div class="col-xs-3" style="margin-top: 5px">
+            <select class="form-control">
+              <option value="" selected>All Villages</option>
+              <option value="training">Training</option>
+            </select>
+          </div>
+          <div class="col-xs-3" style="margin-top: 5px">
+            <select class="form-control">
+              <option value="" selected>All Farmer Groups</option>
+              <option value="training">Training</option>
+            </select>
+          </div>
+        </span>
+        <span
+          *ngIf="reportForm.value.reportFor === 'Trainings'"
+          formGroupName="trainingFilters"
+        >
+          <div class="col-xs-4" style="margin-top: 5px">
+            <select class="form-control">
+              <option value="" selected>Training Module</option>
+              <option value="training">Training</option>
+            </select>
+          </div>
+          <div class="col-xs-4" style="margin-top: 5px">
+            <select class="form-control">
+              <option value="" selected>All Status</option>
+              <option value="training">Training</option>
+            </select>
+          </div>
+          <div class="col-xs-4" style="margin-top: 5px">
+            <select class="form-control">
+              <option value="" selected>All Gender</option>
+              <option value="training">Training</option>
+            </select>
+          </div>
+        </span>
+        <span
+          *ngIf="reportForm.value.reportFor !== ''"
+          formGroupName="seasonFilters"
+        >
+          <div class="col-xs-6" style="margin-top: 5px">
+            <select class="form-control">
+              <option value="" selected>Choose Season</option>
+              <option
+                *ngFor="let season of seasons"
+                value="season._id"
+                selected
+              >
+                {{ season.season }}
+              </option>
+            </select>
+          </div>
+          <div class="col-xs-3" style="margin-top: 5px">
+            <input
+              [owlDateTimeTrigger]="dt1"
+              [owlDateTime]="dt1"
+              formControlName="startDate"
+              class="form-control"
+              placeholder="Dd/mm/yyyy"
+            />
+            <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+          </div>
+          <div class="col-xs-3" style="margin-top: 5px">
+            <input
+              [owlDateTimeTrigger]="dt2"
+              [owlDateTime]="dt2"
+              formControlName="endDate"
+              class="form-control"
+              placeholder="Dd/mm/yyyy"
+            />
+            <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
+          </div>
+          <div class="col-xs-12 text-center" style="margin-top: 10px">
+            <button
+              class="btn btn-default"
+              type="button"
+              (click)="generateReport(); downloadCsv()"
+            >
+              GENERATE REPORT
+            </button>
+          </div>
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="summary-box">
+    <h3 class="text-center">{{ reportForm.value.reportFor }} Summary Box</h3>
+    <div class="row" style="margin-top: -15px">
+      <span *ngIf="reportForm.value.reportFor === 'Farmer Groups'">
+        <div class="col-sm-6 text-center">
+          <h4>Total Groups</h4>
+          <h3>{{ stats?.numberOfGroups || 0 }}</h3>
+        </div>
+        <div class="col-sm-6 text-center">
+          <h4>Total Members</h4>
+          <h3>{{ stats?.numberOfMembers || 0 }}</h3>
+        </div>
+      </span>
+      <span *ngIf="reportForm.value.reportFor === 'Trainings'">
+        <div class="col-sm-6 text-center">
+          <h4>Total Trainees</h4>
+          <h3>{{ stats?.numberOfTrainees || 0 }}</h3>
+        </div>
+        <div class="col-sm-6 text-center">
+          <h4>Total Attended Trainees</h4>
+          <h3>{{ stats?.numberOfAttendedTrainees || 0 }}</h3>
+        </div>
+      </span>
+      <span *ngIf="reportForm.value.reportFor === 'Farm Visits'">
+        <div class="col-sm-6 text-center">
+          <h4>Total Visits</h4>
+          <h3>{{ stats?.numberOfFarmVisits || 0 }}</h3>
+        </div>
+        <div class="col-sm-6 text-center">
+          <h4>Total Visited Farmers</h4>
+          <h3>{{ stats?.numberOfFarmVisits || 0 }}</h3>
+        </div>
+      </span>
+    </div>
+  </div>
+  <div class="text-center" style="margin-top: 5px" *ngIf="reportGenerated">
+    <button class="btn btn-default" type="button" style="margin-left: 10px">
+      export to CSV
+    </button>
+    <a
+      class="btn btn-default"
+      style="margin-left: 10px"
+      [href]="'data:application/octet-stream;base64,' + dataFile | safe"
+      download="generalReport.xlsx"
+      >export to XLS</a
+    >
+  </div>
+  <div class="box">
+    <h4 class="text-center">{{ reportForm.value.reportFor }} Summary Table</h4>
+    <div
+      class="box-body table-responsive"
+      *ngIf="
+        reportForm.value.reportFor === 'Trainings' &&
+        reportsTableData.length > 0
+      "
+    >
+      <table
+        [dtOptions]="dtOptions"
+        [dtTrigger]="dtTrigger"
+        class="row-border hover table table-striped"
+      >
+        <thead>
+          <tr>
+            <th>Date Added</th>
+            <th>Training Module Title</th>
+            <th>Date/Time of the training</th>
+            <th>Location of the training</th>
+            <th>Trainer</th>
+            <th>Trainees</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let schedule of reportsTableData">
+            <td>{{ schedule.createdAt | date: "short" }}</td>
+            <td>{{ schedule.trainingId.trainingName }}</td>
+            <td>{{ schedule.startTime | date: "short" }}</td>
+            <td>{{ schedule.venueName }}</td>
+            <td>{{ schedule.trainer.fullName }}</td>
+            <td>{{ schedule.trainees.length }} trainees</td>
+            <td>{{ schedule.status }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div
+      class="box-body table-responsive"
+      *ngIf="
+        reportForm.value.reportFor === 'Farmer Groups' &&
+        reportsTableData.length > 0
+      "
+    >
+      <app-loader *ngIf="loading"></app-loader>
+      <table
+        datatable
+        [dtOptions]="dt2Options"
+        [dtTrigger]="dt2Trigger"
+        class="row-border hover table table-striped"
+      >
+        <thead>
+          <tr>
+            <th>Date added</th>
+            <th>Group name</th>
+            <th>Group leader names</th>
+            <th>Group leader contact</th>
+            <th>Address</th>
+            <th>Group size</th>
+            <th>
+              Training <br />
+              attendance rate
+            </th>
+            <th>status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let group of reportsTableData">
+            <tr>
+              <td>{{ group.createdAt | date: "y/LL/d - h:mm" }}</td>
+              <td>{{ group.groupName }}</td>
+              <td>{{ group.leaderNames }}</td>
+              <td>{{ group.leaderPhoneNumber }}</td>
+              <td></td>
+              <td>
+                <span>{{ group.members.length + " " + "farmers" }}</span>
+              </td>
+              <td></td>
+              <td>
+                <span class="profile-text">
+                  <ng-container *ngIf="!group.active; else inactive"
+                    ><span style="color: green; font-weight: bold">active</span>
+                  </ng-container>
+                  <ng-template #inactive
+                    ><span style="color: #b21717; font-weight: bold"
+                      >inactive</span
+                    ></ng-template
+                  >
+                </span>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+    <div
+      class="box-body table-responsive"
+      *ngIf="
+        reportForm.value.reportFor === 'Farm Visits' &&
+        reportsTableData.length > 0
+      "
+    >
+      <app-loader *ngIf="loading"></app-loader>
+      <table
+        datatable
+        [dtOptions]="dt3Options"
+        [dtTrigger]="dt3Trigger"
+        class="row-border hover table table-striped"
+      >
+        <thead>
+          <tr>
+            <th>Date Added</th>
+            <th>Farm to visit</th>
+            <th>Visit Description</th>
+            <th>GAP to be Covered</th>
+            <th>Visitor</th>
+            <th>Date and Time of the visit</th>
+            <th>Score</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let visit of reportsTableData">
+            <tr>
+              <td>{{ visit.createdAt | date: "short" }}</td>
+              <td>
+                {{
+                  visit.farms[0].owner.firstName
+                    ? visit.farms[0].owner.firstName +
+                      " " +
+                      visit.farms[0].owner.lastName
+                    : visit.farms[0].owner.groupName
+                }}
+              </td>
+              <td>{{ visit.description }}</td>
+              <td>{{ visit.gaps.length }} gaps</td>
+              <td></td>
+              <td>{{ visit.date | date: "short" }}</td>
+              <td>{{ visit.score || 0 }}</td>
+              <td>{{ visit.status || "Pending" }}</td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+    <div
+      class="box-body table-responsive"
+      *ngIf="
+        reportForm.value.reportFor === 'Coffee Farmers' &&
+        reportsTableData.length > 0
+      "
+    >
+      <app-loader *ngIf="loading"></app-loader>
+      <table
+        datatable
+        [dtOptions]="dt4Options"
+        [dtTrigger]="dt4Trigger"
+        class="row-border hover table table-striped"
+      >
+        <thead>
+          <tr>
+            <th>Date added</th>
+            <th>Group name</th>
+            <th>Group leader names</th>
+            <th>Group leader contact</th>
+            <th>Address</th>
+            <th>Group size</th>
+            <th>
+              Training <br />
+              attendance rate
+            </th>
+            <th>status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let group of groups">
+            <tr>
+              <td>{{ group.createdAt | date: "y/LL/d - h:mm" }}</td>
+              <td>{{ group.groupName }}</td>
+              <td>{{ group.leaderNames }}</td>
+              <td>{{ group.leaderPhoneNumber }}</td>
+              <td></td>
+              <td>
+                <span>{{ group.members.length + " " + "farmers" }}</span>
+              </td>
+              <td></td>
+              <td>
+                <span class="profile-text">
+                  <ng-container *ngIf="!group.active; else inactive"
+                    ><span style="color: green; font-weight: bold">active</span>
+                  </ng-container>
+                  <ng-template #inactive
+                    ><span style="color: #b21717; font-weight: bold"
+                      >inactive</span
+                    ></ng-template
+                  >
+                </span>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+    <div
+      class="box-body table-responsive"
+      *ngIf="
+        reportForm.value.reportFor === 'Coffee Farms' &&
+        reportsTableData.length > 0
+      "
+    >
+      <app-loader *ngIf="loading"></app-loader>
+      <table
+        datatable
+        [dtOptions]="dt5Options"
+        [dtTrigger]="dt5Trigger"
+        class="row-border hover table table-striped"
+      >
+        <thead>
+          <tr>
+            <th>Date added</th>
+            <th>Group name</th>
+            <th>Group leader names</th>
+            <th>Group leader contact</th>
+            <th>Address</th>
+            <th>Group size</th>
+            <th>
+              Training <br />
+              attendance rate
+            </th>
+            <th>status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let group of groups">
+            <tr>
+              <td>{{ group.createdAt | date: "y/LL/d - h:mm" }}</td>
+              <td>{{ group.groupName }}</td>
+              <td>{{ group.leaderNames }}</td>
+              <td>{{ group.leaderPhoneNumber }}</td>
+              <td></td>
+              <td>
+                <span>{{ group.members.length + " " + "farmers" }}</span>
+              </td>
+              <td></td>
+              <td>
+                <span class="profile-text">
+                  <ng-container *ngIf="!group.active; else inactive"
+                    ><span style="color: green; font-weight: bold">active</span>
+                  </ng-container>
+                  <ng-template #inactive
+                    ><span style="color: #b21717; font-weight: bold"
+                      >inactive</span
+                    ></ng-template
+                  >
+                </span>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</form>

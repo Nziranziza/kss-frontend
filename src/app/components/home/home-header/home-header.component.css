@@ -1,0 +1,31 @@
+.navbar {
+  margin-bottom: 0 !important;
+  background: none;
+}
+
+.navbar-default .navbar-collapse, .navbar-default .navbar-form {
+  border-color: #c97653 !important;
+}
+
+.navbar-default .navbar-nav > li > a {
+  color: #4F210D;
+}
+
+.navbar-default {
+  border: none;
+}
+
+.navbar-default .navbar-brand {
+  color: #4F210D;
+}
+
+.navbar-brand {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+@media screen and (max-device-width: 900px) {
+  .navbar {
+    background: #3F71A7 !important;
+  }
+}

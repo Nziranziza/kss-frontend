@@ -1,0 +1,95 @@
+<div class="title-bar">
+  <h3>GAP Management</h3>
+  <a class="btn btn-success pull-right" routerLink="/admin/gaps/create"
+    ><i class="fa fa-plus"></i> Add a GAP
+  </a>
+</div>
+<app-list-message [message]="message"></app-list-message>
+<app-list-errors [errorList]="errors"></app-list-errors>
+<div class="row">
+  <div class="col-sm-12 stats-section">
+    <div class="row">
+      <div class="col-sm-12 text-center stats-title">
+        Good Agriculture Practices Summary
+      </div>
+      <div class="col-sm-4">
+        <div class="text-center stats-box">
+          <h3>Total Gaps</h3>
+          <h1>{{ gaps.length }}</h1>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="text-center stats-box middle-box">
+          <h3>Most Adopted Gap</h3>
+          <h1>Pruning</h1>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="text-center stats-box third-box">
+          <h3>Adoption Overall Score</h3>
+          <h1>20%</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-header">
+        <!-- <h6>Showing 1 t0 10 of 300 entries</h6> -->
+      </div>
+      <div class="box-body table-responsive">
+        <app-loader *ngIf="loading"></app-loader>
+        <table
+          datatable
+          [dtOptions]="dtOptions"
+          [dtTrigger]="dtTrigger"
+          class="row-border hover table table-striped"
+        >
+          <thead>
+            <tr>
+              <th>Date Added</th>
+              <th>GAP Name</th>
+              <th>GAP Overall Weight</th>
+              <th>Observations/Adoption</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let gap of gaps | paginate: config">
+              <tr>
+                <td>{{ gap.createdAt | date: "short" }}</td>
+                <td>{{ gap.gap_name }}</td>
+                <td>{{ gap.gap_weight }}</td>
+                <td>{{ gap.sections.length }}</td>
+                <td>{{ gap.status}}</td>
+                <td>
+                  <button
+                    appRequiredSeason
+                    class="btn btn-action-no-border btn-margin details-button"
+                    (click)="openViewModal(gap._id)"
+                  >
+                    <em class="fa fa-eye"></em>
+                  </button>
+                  <button
+                    appRequiredSeason
+                    (click)="openDeleteModal(gap)"
+                    class="btn btn-action-no-border btn-margin"
+                  >
+                    <em class="fa fa-trash"></em>
+                  </button>
+                  <button
+                    class="btn btn-action-no-border btn-margin btn-sm details-button"
+                    routerLink="/admin/gaps/edit/{{ gap._id }}"
+                  >
+                    <em class="fa fa-pencil"></em>
+                  </button>
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

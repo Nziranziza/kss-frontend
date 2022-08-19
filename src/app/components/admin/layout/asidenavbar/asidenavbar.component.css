@@ -1,0 +1,49 @@
+.main-sidebar, .main-sidebar {
+  background-color: #EAE4E2;
+}
+
+.sidebar-menu > li.header , .sidebar-menu>li{
+  background-color: #E7D7C1;
+  color: #4F210D;
+}
+.sidebar-menu > li.header  {
+  font-weight: bold;
+}
+
+.sidebar-menu>li.active>a {
+  border-left-color: #4F210D;
+}
+
+.sidebar a {
+  color: #4F210D;
+}
+
+.sidebar-menu>li {
+  background-color: #EAE4E2;
+}
+
+.sidebar-menu>li>.treeview-menu {
+  margin: 0 0;
+  background: none;
+}
+
+.sidebar-menu>li a {
+  color: white;
+}
+
+.sidebar-menu>li:hover>a, .sidebar-menu>li.active>a, .sidebar-menu>li.menu-open>a {
+  background-color: #4F210D1F;
+}
+
+.sidebar-menu>li.active>a {
+  border-left-color: #4F210D;
+}
+
+.sidebar-menu>li>.treeview-menu {
+  background-color: #EAE4E2;
+}
+
+.sidebar a:hover {
+  background: #4F210D1F;
+}
+

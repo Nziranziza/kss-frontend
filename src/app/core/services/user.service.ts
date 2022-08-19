@@ -60,4 +60,8 @@ export class UserService {
     return this.apiService.get('/users/verifyNID/' + nid);
   }
 
+  updateMemberContact(id: string, body: any): Observable<any> {
+    return this.apiService.put('/v1.1/groups/member/profile/' + id, body);
+  }
+
 }

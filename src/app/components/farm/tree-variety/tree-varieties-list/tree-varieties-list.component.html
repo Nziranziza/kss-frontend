@@ -1,0 +1,48 @@
+<h3>
+  Tree varieties
+  <a class="btn btn-success pull-right" routerLink="/admin/farm/tree-varieties/create"
+  ><i class="fa fa-plus"></i> Tree variety</a
+  >
+</h3>
+<app-list-message [message]="message"></app-list-message>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-body expendable-dataTable">
+        <table
+          datatable
+          [dtOptions]="dtOptions"
+          class="row-border hover table table-striped"
+          id="responsive-table"
+        >
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Acronym</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody style="border-width: 1px">
+          <ng-container *ngFor="let variety of varieties">
+            <tr>
+              <td>{{ variety.name }}</td>
+              <td>{{ variety.description }}</td>
+              <td>{{ variety.acronym }}</td>
+              <td>
+                <button class="btn btn-default btn-margin btn-sm pull-right" *appHasPermission="[4,0]" (click)="deleteVariety(variety._id)"
+                        type="button">
+                  <i class="fa fa-remove" aria-hidden="true"></i> Remove
+                </button>
+                <a class="btn btn-success btn-sm btn-margin pull-right" routerLink="/admin/farm/tree-varieties/edit/{{variety._id}}" *appHasPermission="[[4,1], 0]" style="margin-left: 10px;" >
+                  Edit
+                </a>
+              </td>
+            </tr>
+          </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

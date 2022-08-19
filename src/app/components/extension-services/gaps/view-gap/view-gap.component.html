@@ -1,0 +1,134 @@
+<div class="modal-body extended-modal-body">
+  <div
+    (click)="modal.dismiss('cancel click')"
+    class="btn-modal-close text-center"
+  >
+    <em class="fa fa-close"></em>
+  </div>
+  <h3 class="text-center">Gap Details</h3>
+  <div class="box">
+    <div class="box-body box-confirm">
+      <div class="row">
+        <div class="col-xs-6">
+          <div style="margin-bottom: 10px">
+            <label class="control-label">Gap Name</label>
+            <div class="confirm-text-box confirm-text">
+              {{ gapDetails?.gap_name }}
+            </div>
+          </div>
+
+          <div style="margin-bottom: 10px">
+            <label class="control-label">Gap Description</label>
+            <div class="confirm-text-box confirm-text">
+              {{ gapDetails?.picture_text }} <br />
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-6">
+          <div style="margin-bottom: 10px">
+            <label class="control-label">Gap Score</label>
+            <div class="confirm-text-box confirm-text">
+              {{ gapDetails?.gap_score }}
+            </div>
+          </div>
+
+          <div style="margin-bottom: 10px">
+            <label class="control-label">Gap Weight</label>
+            <div class="confirm-text-box confirm-text">
+              {{ gapDetails?.gap_weight }} <br />
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-12" style="margin-right: 10px">
+          <h3 class="text-center">Observation Details</h3>
+          <div *ngFor="let section of gapDetails.sections">
+            <fieldset style="margin-right: 0 !important">
+              <legend>
+                <label class="control-label text-center"
+                  >&nbsp; {{ section.section_name }}</label
+                >
+              </legend>
+              <div class="box" *ngFor="let question of section.questions">
+                <div
+                  style="
+                    margin-left: 10px;
+                    margin-right: 10px;
+                    background-color: white;
+                    margin-bottom: 10px;
+                    border-radius: 7px;
+                  "
+                >
+                  <div class="row">
+                    <div class="col-xs-12">
+                      <h3 class="text-center">Question Details</h3>
+                    </div>
+                    <div class="col-xs-8">
+                      <label class="control-label">Question</label>
+                      <div class="confirm-text">
+                        {{ question?.question }} <br />
+                      </div>
+                    </div>
+                    <div class="col-xs-4">
+                      <label class="control-label">Weight</label>
+                      <div class="confirm-text">
+                        {{ question?.weight }} <br />
+                      </div>
+                    </div>
+                    <div class="col-xs-8">
+                      <label class="control-label">Description</label>
+                      <div class="confirm-text">
+                        {{ question?.description }} <br />
+                      </div>
+                    </div>
+                    <div class="col-xs-4">
+                      <label class="control-label">Question type</label>
+                      <div class="confirm-text">
+                        {{ question?.question_type }} <br />
+                      </div>
+                    </div>
+                    <div class="col-xs-12" *ngIf="question.answers.length > 0">
+                      <h3 class="text-center">Answer Details</h3>
+                    </div>
+                    <div class="col-xs-12">
+                      <div
+                        style="
+                          background-color: #f2f2f2;
+                          margin-left: 10px;
+                          margin-right: 10px;
+                          margin-bottom: 10px;
+                          border-radius: 7px;
+                        "
+                        *ngFor="let answer of question.answers"
+                      >
+                        <div class="row">
+                          <div class="col-xs-5">
+                            <label class="control-label">Answer</label>
+                            <div class="confirm-text">
+                              {{ answer?.answer }} <br />
+                            </div>
+                          </div>
+                          <div class="col-xs-2">
+                            <label class="control-label">Weight</label>
+                            <div class="confirm-text">
+                              {{ answer?.weight }} <br />
+                            </div>
+                          </div>
+                          <div class="col-xs-5">
+                            <label class="control-label">Description</label>
+                            <div class="confirm-text">
+                              {{ answer?.description }} <br />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,380 @@
+<div class="title-bar">
+  <h3>GAP > <b> Add Gap</b></h3>
+</div>
+<app-list-message [message]="message"></app-list-message>
+<app-list-errors [errorList]="errors"></app-list-errors>
+<div class="row">
+  <div class="col-sm-12 gap-box">
+    <form (ngSubmit)="onSubmit()" [formGroup]="createForm">
+      <div class="row">
+        <!--    START OF GAP DETAILS FORM      -->
+        <div class="col-xs-3">
+          <div
+            [ngClass]="{
+              'has-error': gapGame.invalid && (gapGame.dirty || gapGame.touched)
+            }"
+            class="form-group"
+          >
+            <label class="control-label">Gap Name</label>
+            <input
+              class="form-control"
+              formControlName="gap_name"
+              name="gap_name"
+              placeholder=""
+              type="text"
+            />
+            <div
+              *ngIf="gapGame.invalid && (gapGame.dirty || gapGame.touched)"
+              class="alert"
+            >
+              <div *ngIf="gapGame.errors['required']" style="color: red">
+                *Name is required.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-3">
+          <div
+            [ngClass]="{
+              'has-error': getGapWeight.invalid && (getGapWeight.dirty || gapGame.touched)
+            }"
+            class="form-group"
+          >
+            <label class="control-label">Gap Weight</label>
+            <input
+              class="form-control"
+              formControlName="gap_weight"
+              name="gap_weight"
+              placeholder=""
+              type="text"
+            />
+            <div
+              *ngIf="getGapWeight.invalid && (getGapWeight.dirty || gapGame.touched)"
+              class="alert"
+            >
+              <div *ngIf="getGapWeight.errors['required']" style="color: red">
+                *Weight is required.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-3">
+          <div
+            [ngClass]="{
+              'has-error': getGapScore.invalid && (getGapScore.dirty || getGapScore.touched)
+            }"
+            class="form-group"
+          >
+            <label class="control-label">Gap Score</label>
+            <input
+              class="form-control"
+              formControlName="gap_score"
+              name="gap_score"
+              placeholder=""
+              type="text"
+            />
+            <div
+              *ngIf="getGapScore.invalid && (getGapScore.dirty || getGapScore.touched)"
+              class="alert"
+            >
+              <div *ngIf="getGapScore.errors['required']" style="color: red">
+                *Gap Score is required.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-3">
+          <div
+            class="form-group"
+          >
+            <label class="control-label">Image Description</label>
+            <input
+              class="form-control"
+              formControlName="picture_text"
+              name="picture_text"
+              placeholder=""
+              type="text"
+            />
+          </div>
+        </div>
+        <!--    END OF GAP DETAILS FORM      -->
+
+        <!--    START OF QUESTIONER FORM      -->
+        <div class="col-xs-12">
+          <fieldset style="margin-right: 0 !important">
+            <legend>
+              <label class="control-label">&nbsp; Adoption Methods</label>
+            </legend>
+            <!--    START OF QUESTION SECTIONS      -->
+            <div
+              *ngFor="let control of getQuestionSections.controls; let i = index"
+              class="question-section"
+              formArrayName="sections"
+            >
+              <div [formGroupName]="i" class="row">
+                <div class="col-xs-12">
+                  <div
+                    [ngClass]="{
+                      'has-error':
+                        getSectionName(i).invalid &&
+                        (getSectionName(i).dirty || getSectionName(i).touched)
+                    }"
+                    class="form-group"
+                  >
+                    <label class="control-label">Question Section Title</label>
+                    <input
+                      class="form-control"
+                      formControlName="section_name"
+                      placeholder=""
+                      type="text"
+                    />
+                  </div>
+                </div>
+
+                <div class="col-sm-12">
+                  <div
+                    *ngFor="
+                      let question of getSectionQuestions(i).controls;
+                      let x = index
+                    "
+                    class="row"
+                    formArrayName="questions"
+                  >
+                    <div [formGroupName]="x" class="col-xs-12" style="background-color: white; padding: 1%; margin: 20px">
+
+                      <div class="col-xs-6 vcenter">
+                        <label class="control-label">Question</label>
+                        <div class="form-group">
+                          <input
+                            class="form-control"
+                            formControlName="question"
+                            placeholder=""
+                            type="text"
+                          />
+                        </div>
+                      </div>
+
+                      <div class="col-xs-6 vcenter">
+                        <label class="control-label">Description</label>
+                        <div class="form-group">
+                          <input
+                            class="form-control"
+                            formControlName="description"
+                            placeholder=""
+                            type="text"
+                          />
+                        </div>
+                      </div>
+
+                      <div class="col-xs-4 vcenter">
+                        <label class="control-label">Question Score</label>
+                        <div class="form-group">
+                          <input
+                            class="form-control"
+                            formControlName="weight"
+                            placeholder=""
+                            type="text"
+                          />
+                        </div>
+                      </div>
+
+                      <div class="col-xs-4 vcenter">
+                        <div
+                          class="form-group"
+                        >
+                          <label class="control-label">Question Type</label>
+                          <select
+                            (change)="onQuestionTypeSelected(i, x)"
+                            class="form-control"
+                            formControlName="question_type"
+                          >
+                            <option
+                              *ngFor="let approach of approachs"
+                              value="{{ approach.id }}"
+                            >
+                              {{ approach.name }}
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="col-xs-2 vcenter">
+                        <div
+                          class="form-check vcenter" style="margin-top: 35px !important;"
+                        >
+                          <input
+                            (change)="chooseIfApplicable($event)"
+                            [checked]="getQuestionApplicable(i, x)"
+                            class="form-check-input"
+                            id="checkBoxApplicable"
+                            name="is_not_applicable"
+                            placeholder=""
+                            type="checkbox"
+                          />
+                          &nbsp;
+                          <label class="form-check-label" for="checkBoxApplicable">Is Not Applicable
+                          </label>
+                        </div>
+                      </div>
+
+                      <div class="col-xs-2 text-center">
+                        <button
+                          (click)="removeQuestion(i, x)"
+                          class="btn btn-danger btn-sm inline-btn btn-custom-margin-top"
+                          type="button"
+                        >
+                          <i class="fa fa-minus-circle"></i>
+                        </button>
+                      </div>
+
+                      <div *ngIf="checkIFMultipleQuestion(i, x)" class="col-sm-12 vcenter"
+                           style="background-color: white">
+                        <div
+                          *ngFor="
+                            let answer of getQuestionAnswers(i, x).controls;
+                            let y = index
+                          "
+                          class="row"
+                          formArrayName="answers"
+                        >
+                          <div [formGroupName]="y" class="col-xs-12">
+                            <div class="col-xs-3 vcenter">
+                              <label class="control-label">Answer</label>
+                              <div class="form-group">
+                                <input
+                                  class="form-control"
+                                  formControlName="answer"
+                                  name="answer"
+                                  placeholder=""
+                                  type="text"
+                                />
+                              </div>
+                            </div>
+
+                            <div class="col-xs-3 vcenter">
+                              <label class="control-label">Description</label>
+                              <div class="form-group">
+                                <input
+                                  class="form-control"
+                                  formControlName="description"
+                                  name="description"
+                                  placeholder=""
+                                  type="text"
+                                />
+                              </div>
+                            </div>
+
+                            <div class="col-xs-2 vcenter">
+                              <label class="control-label">weight</label>
+                              <div class="form-group">
+                                <input
+                                  class="form-control"
+                                  formControlName="weight"
+                                  name="weight"
+                                  placeholder=""
+                                  type="text"
+                                />
+                              </div>
+                            </div>
+
+                            <div class="col-xs-3 vcenter">
+                              <div
+                                class="form-check vcenter" style="margin-top: 35px !important;"
+                              >
+                                <input
+                                  (change)="chooseIfAnswerApplicable($event)"
+                                  [checked]="getAnswerApplicable(i, x, y)"
+                                  class="form-check-input"
+                                  id="checkBoxApplicableAnswer"
+                                  name="is_not_applicable"
+                                  placeholder=""
+                                  type="checkbox"
+                                />
+                                &nbsp;
+                                <label class="form-check-label" for="checkBoxApplicableAnswer">Is Not Applicable
+                                </label>
+                              </div>
+                            </div>
+
+                            <div class="col-xs-1 vcenter">
+                              <div class="form-group">
+                                <label class="control-label" style="color: white"
+                                >.</label
+                                >
+                                <button
+                                  (click)="removeQuestionAnswer(i, x, y)"
+                                  class="btn btn-danger btn-sm inline-btn form-control"
+                                  type="button"
+                                >
+                                  <i class="fa fa-minus-circle"></i>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xs-12 text-center">
+                          <button
+                            (click)="addAnswersToQuestion(i, x)"
+                            class="btn btn-success btn-sm"
+                            type="button"
+                          >
+                            <em class="fa fa-plus"></em>
+                          </button>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xs-12 text-center">
+                  <button
+                    (click)="addQuestionToSection(i)"
+                    class="btn btn-success add-btn btn-sm btn-custom-margin-top"
+                    type="button"
+                  >
+                    <em class="fa fa-plus"></em> Add Question
+                  </button>
+                </div>
+              </div>
+            </div>
+            <!--    END OF QUESTION SECTIONS        -->
+            <div class="col-xs-12 text-center">
+              <button
+                (click)="addQuestionSection()"
+                class="btn btn-success add-btn btn-sm btn-custom-margin-top"
+                type="button"
+              >
+                <em class="fa fa-plus"></em> Add Section
+              </button>
+            </div>
+          </fieldset>
+        </div>
+
+        <!--    END OF QUESTIONER FORM      -->
+      </div>
+    </form>
+  </div>
+  <div class="col-xs-12 text-right" style="margin-top: 10px">
+    <a
+      class="btn btn-warning btn-margin btn-lg"
+      routerLink="/admin/gaps/list"
+      style="margin-right: 20px"
+    >Cancel</a
+    >
+    <button
+      (click)="onSubmit()"
+      [disabled]="loading"
+      class="btn btn-success btn-lg submit"
+    >
+      <span *ngIf="!loading; else other_content">Submit</span>
+      <ng-template #other_content>
+        <div class="loader">
+          <div class="line"></div>
+          <div class="line"></div>
+          <div class="line"></div>
+          <div class="line"></div>
+        </div>
+      </ng-template>
+    </button>
+  </div>
+</div>
