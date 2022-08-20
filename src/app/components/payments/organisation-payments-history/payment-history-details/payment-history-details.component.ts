@@ -1,7 +1,7 @@
 import {Component, Inject, Injector, Input, OnDestroy, OnInit, PLATFORM_ID} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {Subject} from 'rxjs';
-import {CherrySupplyService, OrganisationService} from '../../../../core/services';
+import {CherrySupplyService, OrganisationService} from '../../../../core';
 import {isPlatformBrowser} from '@angular/common';
 
 @Component({

@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {FarmerService} from '../../../core/services';
+import {FarmerService} from '../../../core';
 import {ActivatedRoute} from '@angular/router';
-import {HelperService} from '../../../core/helpers';
+import {HelperService} from '../../../core';
 
 @Component({
   selector: 'app-farmer-lands',

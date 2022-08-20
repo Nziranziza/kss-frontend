@@ -159,9 +159,9 @@
         </ul>
       </li>
       </ng-container>
-      <li class="treeview" routerLinkActive="active" *appHasPermission="[1,1]" appInternal>
+      <li class="treeview" routerLinkActive="active" *appHasServices="['ONLINE_PAYMENT']" >
         <a href="#">
-          <i class="fa fa-gg"></i> <span>{{ 'payments' | translate }}</span>
+          <i class="fa fa-gg"></i> <span>E-Payments</span>
           <span class="pull-right-container">
             <i class="fa fa-angle-left pull-right"></i>
           </span>
@@ -179,6 +179,21 @@
               <span>History</span>
             </a>
           </li>
+          <!--
+            <li routerLinkActive="active" *appHasPermission="[1]">
+              <a routerLink="/admin/payment/reports">
+                <i class="fa fa-circle-o"></i>
+                <span>Reports</span>
+              </a>
+            </li>
+            <li routerLinkActive="active">
+              <a routerLink="/admin/top-ups/payments/{{user.org_id}}">
+                <i class="fa fa-circle-o"></i>
+                <span>Top-ups</span>
+              </a>
+            </li>
+          -->
+
         </ul>
       </li>
       <li class="header" *appHasPermission="[2]">DRY PROCESSING</li>
@@ -274,7 +289,7 @@
               <span>Schedule Training</span>
             </a>
           </li>
-        </ul> 
+        </ul>
       </li>
       <li class="treeview" routerLinkActive="active" *appHasPermission="[11,1]">
         <a href="#">
@@ -308,7 +323,7 @@
           </li>
         </ul>
       </li>
-   
+
       <li routerLinkActive="active" *appHasPermission="[[4,1],[4,11],[4,12],0,6,5]">
         <a routerLink="/admin/cherries/parchments/report">
           <i class="fa fa-bar-chart-o"></i>

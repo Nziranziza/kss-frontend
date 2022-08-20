@@ -23,6 +23,18 @@ export class AuthorisationService {
     return this.hasAccess;
   }
 
+  hasServices(services: string[]): boolean {
+    let hasService = false;
+    const orgServices = this.authenticationService.getServices();
+    services.forEach((service) => {
+      // tslint:disable-next-line:triple-equals
+      if (orgServices.findIndex((el) => el.serviceName == service)) {
+        hasService = true;
+      }
+    });
+    return hasService;
+  }
+
   clear() {
     this.hasAccess = false;
   }

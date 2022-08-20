@@ -4,10 +4,12 @@ import { Subject } from "rxjs";
 import {
   AuthenticationService,
   BasicComponent,
+  GroupService,
   LocationService,
   OrganisationService,
   ReportService,
   SeasonService,
+  TrainingService,
 } from "src/app/core";
 import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
@@ -18,12 +20,19 @@ import html2canvas from "html2canvas";
   styleUrls: ["./reports.component.css"],
 })
 export class ReportsComponent extends BasicComponent implements OnInit {
+  newOrg: any;
+  coveredSectors: any = [];
+  coveredVillages: any = [];
+  coveredCells: any = [];
+  selectedGroup: any;
   constructor(
     private formBuilder: FormBuilder,
     private seasonService: SeasonService,
     private authenticationService: AuthenticationService,
     private locationService: LocationService,
     private organisationService: OrganisationService,
+    private groupService: GroupService,
+    private trainingService: TrainingService,
     private reportService: ReportService
   ) {
     super(locationService, organisationService);
@@ -51,11 +60,25 @@ export class ReportsComponent extends BasicComponent implements OnInit {
   stats: any = {};
   basePath: any;
   reportsTableData: any[] = [];
+  organisations: any[] = [];
+  trainings: any[] = [];
   reportBody: any;
   dataFile: any;
   reportGenerated: Boolean = false;
   showHeaders: Boolean = false;
-  weekDays: string[] = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+  initialValue = "";
+  sectorIndex: number = 0;
+  keyword = "organizationName";
+  groupKeyword = "groupName";
+  weekDays: string[] = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+  ];
 
   ngOnInit() {
     this.dtOptions,
@@ -72,6 +95,8 @@ export class ReportsComponent extends BasicComponent implements OnInit {
         prov_id: [""],
         dist_id: [""],
         sect_id: [""],
+        cell_id: [""],
+        village_id: [""],
       }),
       date: this.formBuilder.group({
         visitDate: [""],
@@ -106,7 +131,68 @@ export class ReportsComponent extends BasicComponent implements OnInit {
       this.currentSeason = this.authenticationService.getCurrentSeason();
     });
     this.basicInit(this.authenticationService.getCurrentUser().info.org_id);
+    this.initial();
     this.onChanges();
+  }
+
+  initial() {
+    this.getTrainings();
+    this.getOrganisations();
+    this.getFarmerGroup();
+  }
+
+  getTrainings(): void {
+    this.loading = true;
+    this.trainingService.all().subscribe((data) => {
+      this.trainings = data.data;
+      this.loading = false;
+    });
+  }
+
+  getOrganisations() {
+    this.organisationService.all().subscribe((data) => {
+      if (data) {
+        this.organisations = data.content.filter((org) =>
+          org.organizationRole.includes(1)
+        );
+        this.organisations.unshift({
+          organizationName: "all organizations",
+          _id: "",
+        });
+      }
+    });
+  }
+
+  getFarmerGroup() {
+    this.loading = true;
+    this.groupService.all({}).subscribe((data) => {
+      this.groups = data.data;
+      this.groups.unshift({ groupName: "all groups", _id: "" });
+      this.loading = false;
+    });
+  }
+
+  selectEvent(item) {
+    this.newOrg = item._id;
+    let newData = this.organisations.filter((org) => org._id === item._id);
+    console.log(newData);
+    this.coveredSectors = newData[0].coveredSectors;
+    this.coveredCells =
+      newData[0].coveredSectors[this.sectorIndex].coveredCells;
+    this.coveredVillages =
+      newData[0].coveredSectors[this.sectorIndex].coveredVillages;
+  }
+
+  deselectEvent() {
+    this.newOrg = "";
+  }
+
+  selectGroupEvent(item) {
+    this.selectedGroup = item._id;
+  }
+
+  deselectGroupEvent(item) {
+    this.selectedGroup = "";
   }
 
   onChanges() {
@@ -146,6 +232,32 @@ export class ReportsComponent extends BasicComponent implements OnInit {
       .get("sect_id".toString())
       .valueChanges.subscribe((value) => {
         this.locationChangSector(this.reportForm, value);
+        this.getStats(this.reportForm.value.reportFor, {
+          location: {
+            sect_id: value,
+          },
+        });
+      });
+
+    this.reportForm.controls.location
+      .get("cell_id".toString())
+      .valueChanges.subscribe((value) => {
+        this.locationChangCell(this.reportForm, value);
+        this.getStats(this.reportForm.value.reportFor, {
+          location: {
+            cell_id: value,
+          },
+        });
+      });
+
+    this.reportForm.controls.location
+      .get("village_id".toString())
+      .valueChanges.subscribe((value) => {
+        this.getStats(this.reportForm.value.reportFor, {
+          location: {
+            village_id: value,
+          },
+        });
       });
   }
 
@@ -192,7 +304,7 @@ export class ReportsComponent extends BasicComponent implements OnInit {
 
   downloadPdf() {
     this.showHeaders = true;
-    html2canvas(document.getElementById('downloadFile')).then((canvas) => {
+    html2canvas(document.getElementById("downloadFile")).then((canvas) => {
       // Few necessary setting options
       let imgWidth = 208;
       let pageHeight = 295;
@@ -234,8 +346,6 @@ export class ReportsComponent extends BasicComponent implements OnInit {
         console.log(this.reportsTableData);
       });
     }
-
-    
   }
 
   generateFinalReport(type: string, extension: string) {
