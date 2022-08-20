@@ -1,8 +1,15 @@
-import { Component, Injector, OnDestroy, OnInit,   PLATFORM_ID,   Inject,   Input,} from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import {
+  Component,
+  Injector,
+  OnDestroy,
+  OnInit,
+  PLATFORM_ID,
+  Inject,
+  Input,
+} from "@angular/core";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 import { BasicComponent, GroupService, MessageService } from "src/app/core";
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser } from "@angular/common";
 
 @Component({
   selector: "app-view-group",
@@ -26,7 +33,7 @@ export class ViewGroupComponent
   ) {
     super();
     if (isPlatformBrowser(this.platformId)) {
-      this.modal = this.injector.get(NgbActiveModal, { size: "lg"});
+      this.modal = this.injector.get(NgbActiveModal, { size: "lg" });
     }
   }
 
@@ -63,7 +70,9 @@ export class ViewGroupComponent
     this.groupService.get(this.id).subscribe((data) => {
       this.groupDetails = data.data;
       this.groupDetails.members.forEach((member) => {
-        member.nid ? member.age = new Date().getFullYear() - member.nid.substring(1, 5) : member.age = 0;
+        member.nid
+          ? (member.age = new Date().getFullYear() - member.nid.substring(1, 5))
+          : (member.age = 0);
         if (member.sex == "m" || member.sex == "M") {
           this.totalByGender.maleTotal += 1;
           if (member.age <= 30) {
