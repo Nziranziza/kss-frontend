@@ -50,17 +50,15 @@ export class EditFarmVisitComponent implements OnInit {
     });
     this.scheduleVisit = this.formBuilder.group({
       farmerGroup: ["", Validators.required],
-      farm: ["", Validators.required],
+      agronomist: ["", Validators.required],
       description: ["", Validators.required],
       adoptionGap: ["", Validators.required],
       status: [""],
       date: this.formBuilder.group({
-        visitDate: [""],
-        startTime: [""],
-        endTime: [""],
+        visitDate: ["", Validators.required],
       }),
-      startTime: "00:00",
-      endTime: "00:00",
+      startTime: ["", Validators.required],
+      endTime: ["", Validators.required],
     });
     this.getVisits();
 
@@ -98,7 +96,7 @@ export class EditFarmVisitComponent implements OnInit {
       this.scheduleVisit.controls.description.setValue(
         data.data.description
       );
-      this.scheduleVisit.controls.farm.setValue(
+      this.scheduleVisit.controls.agronomist.setValue(
         data.data.visitor
       );
     });
@@ -226,7 +224,7 @@ export class EditFarmVisitComponent implements OnInit {
       gaps: adoptionGap,
       description: dataValues.description,
       org_id: this.authenticationService.getCurrentUser().info.org_id,
-      visitor: dataValues.farm,
+      visitor: dataValues.agronomist,
       groupId: this.farmerGroupId,
       observation: "observation",
       date: dataValues.date.visitDate,

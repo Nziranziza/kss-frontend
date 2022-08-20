@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {BasicComponent} from '../../../core/library';
+import {BasicComponent} from '../../../core';
 
 @Component({
   selector: 'app-organisation-pay-top-ups',

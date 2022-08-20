@@ -1,10 +1,10 @@
 import {Component, Inject, Injector, Input, OnInit, PLATFORM_ID} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {BasicComponent} from '../../../../core/library';
-import {HelperService} from '../../../../core/helpers';
+import {BasicComponent} from '../../../../core';
+import {HelperService} from '../../../../core';
 import {isPlatformBrowser} from '@angular/common';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
-import {AuthenticationService, CherrySupplyService, OrganisationService, UserService} from '../../../../core/services';
+import {AuthenticationService, CherrySupplyService, OrganisationService, UserService} from '../../../../core';
 import {PaymentService} from '../../../../core/services/payment.service';
 
 @Component({

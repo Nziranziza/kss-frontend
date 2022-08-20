@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { ChartType } from "angular-google-charts";
 import {
@@ -61,37 +61,49 @@ export class DashboardComponent extends BasicComponent implements OnInit {
   graph = {
     type: ChartType.PieChart,
     data: [
-      ["Male", 0],
       ["Female", 0],
+      ["Male", 0],
     ],
     options: {
-      colors: ["#35A1FF", "#FF69F6"],
+      colors: ["#FF69F6", "#35A1FF"],
       legend: { position: "none" },
-      pieHole: 0.4,
+      pieHole: 0.3,
       backgroundColor: { fill: "transparent" },
+      chartArea: {
+        left: 5,
+        top: 20,
+        bottom: 20,
+        width: "100%",
+        height: "150",
+      },
     },
-    columnNames: ["male", "female"],
-    width: 320,
-    height: 160,
+    columnNames: ["female", "male"],
+    width: "100%",
+    height: 150,
   };
 
   seedlingGraph = {
     type: ChartType.PieChart,
     data: [
-      ["Boubon", 100],
-      ["Variety2", 0],
-      ["Variety3", 0],
+      ["Boubon", 0],
     ],
     options: {
       colors: ["#F5B23F", "#FF990A"],
       legend: { position: "none" },
-      pieHole: 0.2,
+      pieHole: 0.3,
       backgroundColor: { fill: "transparent" },
+      chartArea: {
+        left: 5,
+        top: 20,
+        bottom: 20,
+        width: "100%",
+        height: "160",
+      },
     },
     columnNames: ["Variety1", "Variety2"],
-    width: 320,
-    height: 230,
-  };
+    width: "100%",
+    height: 180,
+  }
 
   selectedFarmDetails: any;
   clickedMarker: Boolean = false;
@@ -153,6 +165,9 @@ export class DashboardComponent extends BasicComponent implements OnInit {
       name: "Q4",
     },
   ];
+  @ViewChild("visitChart ", { static: false }) visitChart;
+  @ViewChild("seedlingChart ", { static: false }) seedlingChart;
+  @ViewChild("mapSet ", { static: false }) mapSet;
 
   ngOnInit() {
     this.dashboardForm = this.formBuilder.group({
@@ -437,6 +452,7 @@ export class DashboardComponent extends BasicComponent implements OnInit {
 
   // get stats from filters
   getStats(filterBy: string) {
+    this.mainBody = {};
     if (filterBy != "") {
       const value =
         this.dashboardForm.controls[filterBy].get("filterByDate").value;
@@ -451,12 +467,13 @@ export class DashboardComponent extends BasicComponent implements OnInit {
       this.getTrainingsStats(this.mainBody);
     } else if (filterBy === "visitFilters") {
       this.getVisitsStats(this.mainBody);
+      this.visitChart.draw();
     } else if (filterBy === "seedlingFilters") {
       this.getSeedlingStats(this.mainBody);
+      this.seedlingChart.draw();
     } else if (filterBy === "gapFilters") {
       this.getGapAdoptionStats(this.mainBody);
     } else if (filterBy === "location") {
-      this.mainBody = {};
       const locationId = this.currentSelectedLocation;
       if (typeof locationId === "object" && locationId.locationId !== "") {
         this.mainBody.location = locationId;
@@ -464,7 +481,12 @@ export class DashboardComponent extends BasicComponent implements OnInit {
       if (this.newOrg != "") {
         this.mainBody.referenceId = this.newOrg;
       }
+      this.clickedMarker = false;
+      this.myLatLng = { lat: -2, lng: 30 };
       this.getGeneralStats(this.mainBody);
+      this.seedlingChart.draw();
+      this.visitChart.draw();
+      this.mapSet.draw();
     }
   }
 
@@ -555,6 +577,7 @@ export class DashboardComponent extends BasicComponent implements OnInit {
 
   getFarms(body: any) {
     this.loading = true;
+    this.farms = [];
     this.farmService.all(body).subscribe((data) => {
       data.data.forEach((item) => {
         this.farms.push({
@@ -578,10 +601,10 @@ export class DashboardComponent extends BasicComponent implements OnInit {
     this.loading = true;
     this.visitService.getVisitsStats(body).subscribe((data) => {
       this.visitStats = data.data;
-      this.graph.data[0][1] =
+      this.graph.data[1][1] =
         (this.visitStats.maleFarmVisits * 100) /
         this.visitStats.totalFarmersVisited;
-      this.graph.data[1][1] =
+      this.graph.data[0][1] =
         (this.visitStats.femaleFarmVisits * 100) /
         this.visitStats.totalFarmersVisited;
       this.loading = false;

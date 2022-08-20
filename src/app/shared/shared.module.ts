@@ -29,7 +29,7 @@ import { ConfirmModalComponent } from './layouts';
 import { SuccessModalComponent } from './layouts';
 import { TranslateModule } from '@ngx-translate/core';
 import { SafePipe } from './pipes';
-
+import {HasServicesDirective} from './directives/has-services.directive';
 
 @NgModule({
   imports: [
@@ -42,18 +42,11 @@ import { SafePipe } from './pipes';
     MatDialogModule,
     DataTablesModule,
   ],
-  declarations: [
-    ListErrorsComponent,
-    LoaderComponent,
-    HomeHeaderComponent,
-    HomeFooterComponent,
-    ListMessageComponent,
-    RequiredRolesDirective,
-    InternalDirective,
-    LoaderComponent,
-    RequiredSeasonDirective,
-    RequiredSeasonCherryDirective,
-    HasPermissionDirective,
+
+  declarations: [ListErrorsComponent, LoaderComponent,
+    HomeHeaderComponent, HomeFooterComponent, ListMessageComponent,
+    RequiredRolesDirective, InternalDirective, LoaderComponent,
+    RequiredSeasonDirective, RequiredSeasonCherryDirective, HasPermissionDirective, HasServicesDirective,
     DebounceClickDirective,
     QuantityUnitComponent,
     ListWarningsComponent,
@@ -61,7 +54,6 @@ import { SafePipe } from './pipes';
     DownloadingComponent,
     SpinnerComponent,
     LoadingComponent,
-    ConfirmModalComponent,
     ConfirmModalComponent,
     SuccessModalComponent,
     SafePipe,
@@ -84,6 +76,7 @@ import { SafePipe } from './pipes';
     SuccessModalComponent,
     QuantityUnitComponent,
     DownloadingComponent,
+    HasServicesDirective,
     MatIconModule,
     MatDialogModule,
     DataTablesModule,
@@ -95,7 +88,7 @@ import { SafePipe } from './pipes';
     InlineErrorsComponent,
     InlineErrorsComponent,
     TranslateModule,
-    SafePipe,
+    SafePipe
   ],
   entryComponents: [ConfirmModalComponent, SuccessModalComponent],
 })
