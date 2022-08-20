@@ -13,7 +13,7 @@
         </select>
       </div>
     </div>
-    <div class="col-xs-8">
+    <div class="col-xs-8" *ngIf="reportForm.value.reportFor !== ''">
       <div class="row">
         <div class="col-xs-6">
           <h5 class="label-required text-center">Filters</h5>
@@ -71,53 +71,129 @@
           formGroupName="filterByCws"
         >
           <div class="col-xs-3" style="margin-top: 5px">
-            <select class="form-control">
-              <option value="" selected>All CWS</option>
-              <option value="training">Training</option>
-            </select>
+            <div class="ng-autocomplete">
+              <ng-autocomplete
+                #origin
+                [data]="organisations"
+                [searchKeyword]="keyword"
+                (selected)="selectEvent($event)"
+                (inputCleared)="deselectEvent()"
+                [initialValue]="initialValue"
+                placeholder="All Coffee Washing Stations"
+                [itemTemplate]="itemTemplate"
+                [notFoundTemplate]="notFoundTemplate"
+                style="height: 10px"
+              >
+              </ng-autocomplete>
+
+              <ng-template #itemTemplate let-item>
+                <a [innerHTML]="item.organizationName" style="height: 20px"></a>
+              </ng-template>
+
+              <ng-template #notFoundTemplate let-notFound>
+                <div [innerHTML]="notFound"></div>
+              </ng-template>
+            </div>
           </div>
           <div class="col-xs-3" style="margin-top: 5px">
             <select class="form-control">
               <option value="" selected>All Covered Sector</option>
-              <option value="training">Training</option>
+              <option
+                *ngFor="let sector of coveredSectors; let i = index"
+                value="{{ sector?.sectorId._id }}"
+              >
+                {{
+                  sector.sectorId.name
+                    ? sector.sectorId.name
+                    : (sector.sectorId | titlecase)
+                }}
+              </option>
             </select>
           </div>
           <div class="col-xs-3" style="margin-top: 5px">
             <select class="form-control">
               <option value="" selected>All Covered Cells</option>
+              <option
+                *ngFor="let sector of coveredCells; let i = index"
+                value="{{ sector?.cell_id }}"
+              >
+                {{ sector.name ? sector.name : (sector | titlecase) }}
+              </option>
             </select>
           </div>
           <div class="col-xs-3" style="margin-top: 5px">
             <select class="form-control">
               <option value="" selected>All Covered Villages</option>
+              <option
+                *ngFor="let sector of coveredVillages; let i = index"
+                value="{{ sector?.village_id }}"
+              >
+                {{ sector.name ? sector.name : (sector | titlecase) }}
+              </option>
             </select>
           </div>
         </span>
         <span
           *ngIf="reportForm.value.filterByType === 'sector'"
-          formGroupName="filterBySector"
+          formGroupName="location"
         >
           <div class="col-xs-3" style="margin-top: 5px">
-            <select class="form-control">
+            <select class="form-control" formControlName="sect_id">
               <option value="" selected>All Sectors</option>
+              <option
+                *ngFor="let sector of locationSectors"
+                value="{{ sector._id }}"
+              >
+                {{ sector.name | titlecase }}
+              </option>
             </select>
           </div>
           <div class="col-xs-3" style="margin-top: 5px">
-            <select class="form-control">
+            <select class="form-control" formControlName="cell_id">
               <option value="" selected>All Cells</option>
+              <option *ngFor="let cell of locationCells" value="{{ cell._id }}">
+                {{ cell.name | titlecase }}
+              </option>
             </select>
           </div>
           <div class="col-xs-3" style="margin-top: 5px">
-            <select class="form-control">
+            <select class="form-control" formControlName="village_id">
               <option value="" selected>All Villages</option>
-              <option value="training">Training</option>
+              <option
+                *ngFor="let village of locationVillages"
+                value="{{ village._id }}"
+              >
+                {{ village.name | titlecase }}
+              </option>
             </select>
           </div>
           <div class="col-xs-3" style="margin-top: 5px">
-            <select class="form-control">
-              <option value="" selected>All Farmer Groups</option>
-              <option value="training">Training</option>
-            </select>
+            <div
+              class="ng-autocomplete"
+              *ngIf="reportForm.value.reportFor !== 'Farmer Groups'"
+            >
+              <ng-autocomplete
+                #origin
+                [data]="groups"
+                [searchKeyword]="groupKeyword"
+                (selected)="selectGroupEvent($event)"
+                (inputCleared)="deselectGroupEvent()"
+                [initialValue]="initialValue"
+                placeholder="All groups"
+                [itemTemplate]="itemTemplate"
+                [notFoundTemplate]="notFoundTemplate"
+                style="height: 10px"
+              >
+              </ng-autocomplete>
+
+              <ng-template #itemTemplate let-item>
+                <a [innerHTML]="item.groupName" style="height: 20px"></a>
+              </ng-template>
+
+              <ng-template #notFoundTemplate let-notFound>
+                <div [innerHTML]="notFound"></div>
+              </ng-template>
+            </div>
           </div>
         </span>
         <span
@@ -127,24 +203,29 @@
           <div class="col-xs-4" style="margin-top: 5px">
             <select class="form-control">
               <option value="" selected>Training Module</option>
-              <option value="training">Training</option>
+              <option
+                *ngFor="let training of trainings; let i = index"
+                value="{{ training._id }}"
+              >
+                {{ training.trainingName | titlecase }}
+              </option>
             </select>
           </div>
           <div class="col-xs-4" style="margin-top: 5px">
             <select class="form-control">
               <option value="" selected>All Status</option>
-              <option value="training">Training</option>
             </select>
           </div>
           <div class="col-xs-4" style="margin-top: 5px">
             <select class="form-control">
               <option value="" selected>All Gender</option>
-              <option value="training">Training</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
             </select>
           </div>
         </span>
         <span
-          *ngIf="reportForm.value.reportFor !== ''"
+          *ngIf="reportForm.value.reportFor !== 'Farmer Groups'"
           formGroupName="seasonFilters"
         >
           <div class="col-xs-6" style="margin-top: 5px">
@@ -396,13 +477,10 @@
             <tr>
               <td>{{ visit.createdAt | date: "short" }}</td>
               <td>
-                
-                <div >
+                <div>
                   {{
                     visit.farm.firstName
-                      ? visit.farm.firstName +
-                        " " +
-                        visit.farm.lastName
+                      ? visit.farm.firstName + " " + visit.farm.lastName
                       : visit.farm.groupName
                   }}
                 </div>
