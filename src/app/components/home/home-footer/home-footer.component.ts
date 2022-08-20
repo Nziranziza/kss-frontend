@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import {PrivacyPoliceComponent} from '../privacy-police/privacy-police.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -12,9 +11,5 @@ export class HomeFooterComponent implements OnInit {
   constructor(private modal: NgbModal) { }
 
   ngOnInit() {
-  }
-
-  privacyPolice() {
-    this.modal.open(PrivacyPoliceComponent, {size: 'sm'});
   }
 }
