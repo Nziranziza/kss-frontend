@@ -29,10 +29,7 @@ import { ConfirmModalComponent } from './layouts';
 import { SuccessModalComponent } from './layouts';
 import { TranslateModule } from '@ngx-translate/core';
 import { SafePipe } from './pipes';
-import {ConfirmDialogComponent} from '../core/services/layouts/confirm-dialog/confirm-dialog.component';
 import {HasServicesDirective} from './directives/has-services.directive';
-
-
 
 @NgModule({
   imports: [
@@ -48,9 +45,8 @@ import {HasServicesDirective} from './directives/has-services.directive';
 
   declarations: [ListErrorsComponent, LoaderComponent,
     HomeHeaderComponent, HomeFooterComponent, ListMessageComponent,
-    ConfirmDialogComponent, RequiredRolesDirective, InternalDirective, LoaderComponent,
+    RequiredRolesDirective, InternalDirective, LoaderComponent,
     RequiredSeasonDirective, RequiredSeasonCherryDirective, HasPermissionDirective, HasServicesDirective,
-
     DebounceClickDirective,
     QuantityUnitComponent,
     ListWarningsComponent,
@@ -58,7 +54,6 @@ import {HasServicesDirective} from './directives/has-services.directive';
     DownloadingComponent,
     SpinnerComponent,
     LoadingComponent,
-    ConfirmModalComponent,
     ConfirmModalComponent,
     SuccessModalComponent,
     SafePipe,

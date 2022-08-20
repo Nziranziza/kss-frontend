@@ -28,9 +28,7 @@ import {MatDialogModule} from '@angular/material/dialog';
 
 @NgModule({
   imports: [
-
     CommonModule, BrowserAnimationsModule, MatDialogModule, MatIconModule
-
   ],
   providers: [
     ApiService,

@@ -5,10 +5,10 @@ import {
   Input,
   OnInit,
   PLATFORM_ID,
-} from "@angular/core";
-import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
-import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { HelperService } from "../../../../core/helpers";
+} from '@angular/core';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { HelperService } from '../../../../core/helpers';
 import {
   AuthenticationService,
   AuthorisationService,
@@ -16,17 +16,17 @@ import {
   FarmService,
   OrganisationService,
   SiteService,
-} from "../../../../core/services";
-import { isPlatformBrowser } from "@angular/common";
-import { LocationService } from "../../../../core/services";
-import { MessageService } from "../../../../core/services";
-import { Router } from "@angular/router";
-import { BasicComponent } from "../../../../core/library";
+} from '../../../../core/services';
+import { isPlatformBrowser } from '@angular/common';
+import { LocationService } from '../../../../core/services';
+import { MessageService } from '../../../../core/services';
+import { Router } from '@angular/router';
+import { BasicComponent } from '../../../../core/library';
 
 @Component({
-  selector: "app-add-farmer-request",
-  templateUrl: "./add-farmer-request.component.html",
-  styleUrls: ["./add-farmer-request.component.css"],
+  selector: 'app-add-farmer-request',
+  templateUrl: './add-farmer-request.component.html',
+  styleUrls: ['./add-farmer-request.component.css'],
 })
 export class AddFarmerRequestComponent
   extends BasicComponent
@@ -55,10 +55,10 @@ export class AddFarmerRequestComponent
   site: any;
   disableProvId = true;
   disableDistId = true;
-  provinceValue = "";
-  districtValue = "";
+  provinceValue = '';
+  districtValue = '';
   treeVarieties: any;
-  ranges = ["0-3", "4-10", "11-15", "16-20", "21-24", "25-30", "31+"];
+  ranges = ['0-3', '4-10', '11-15', '16-20', '21-24', '25-30', '31+'];
   certificates: any;
   validForm = true;
   save = false;
@@ -94,31 +94,31 @@ export class AddFarmerRequestComponent
   }
 
   ngOnInit() {
-    
+
     this.createForm = this.formBuilder.group({
-      familySize: [""],
+      familySize: [''],
       fertilizer_allocate: [0],
       location: this.formBuilder.group({
         prov_id: [
-          { value: "", disabled: this.disableProvId },
+          { value: '', disabled: this.disableProvId },
           Validators.required,
         ],
         dist_id: [
-          { value: "", disabled: this.disableDistId },
+          { value: '', disabled: this.disableDistId },
           Validators.required,
         ],
-        sect_id: ["", Validators.required],
-        cell_id: ["", Validators.required],
-        village_id: ["", Validators.required],
+        sect_id: ['', Validators.required],
+        cell_id: ['', Validators.required],
+        village_id: ['', Validators.required],
       }),
-      upiNumber: [""],
-      landOwner: [""],
-      longitudeCoordinate: [""],
-      latitudeCoordinate: [""],
-      active: [""],
+      upiNumber: [''],
+      landOwner: [''],
+      longitudeCoordinate: [''],
+      latitudeCoordinate: [''],
+      active: [''],
       treeAges: new FormArray([]),
       certificates: new FormArray([]),
-      numberOfTrees: ["", [Validators.required, Validators.pattern("[0-9]*")]],
+      numberOfTrees: ['', [Validators.required, Validators.pattern('[0-9]*')]],
     });
     this.farmService.listTreeVarieties().subscribe((data) => {
       this.treeVarieties = data.data;
@@ -228,11 +228,11 @@ export class AddFarmerRequestComponent
   }
 
   get formTreeAges() {
-    return this.createForm.get("treeAges") as FormArray;
+    return this.createForm.get('treeAges') as FormArray;
   }
 
   formTreeVarieties(i: number) {
-    return this.formTreeAges.at(i).get("varieties") as FormArray;
+    return this.formTreeAges.at(i).get('varieties') as FormArray;
   }
 
   addTreeVariety(i: number) {
@@ -243,7 +243,7 @@ export class AddFarmerRequestComponent
       })
     );
   }
-  
+
 
   createAgeRanges() {
     this.ranges.forEach((range, i) => {
@@ -266,13 +266,13 @@ export class AddFarmerRequestComponent
   }
 
   get formCertificates() {
-    return this.createForm.get("certificates") as FormArray;
+    return this.createForm.get('certificates') as FormArray;
   }
 
   createCertificate(): FormGroup {
     return this.formBuilder.group({
-      name: [""],
-      identificationNumber: [""],
+      name: [''],
+      identificationNumber: [''],
     });
   }
 
@@ -287,7 +287,7 @@ export class AddFarmerRequestComponent
   }
 
   getCertificateFormGroup(index): FormGroup {
-    this.certificates = this.createForm.get("certificates") as FormArray;
+    this.certificates = this.createForm.get('certificates') as FormArray;
     return this.certificates.controls[index] as FormGroup;
   }
 
@@ -298,12 +298,12 @@ export class AddFarmerRequestComponent
       .reduce((prev, curr) => prev + curr, 0);
     this.formTreeAges
       .at(i)
-      .get("numOfTrees")
+      .get('numOfTrees')
       .setValue(sum, { emitEvent: true });
-    if (this.formTreeVarieties(i).at(v).get("number").value !== 0) {
-      this.formTreeVarieties(i).at(v).get("selected").setValue(true);
+    if (this.formTreeVarieties(i).at(v).get('number').value !== 0) {
+      this.formTreeVarieties(i).at(v).get('selected').setValue(true);
     } else {
-      this.formTreeVarieties(i).at(v).get("selected").setValue(false);
+      this.formTreeVarieties(i).at(v).get('selected').setValue(false);
     }
   }
 
@@ -326,7 +326,7 @@ export class AddFarmerRequestComponent
               (err) => {},
               () => {
                 this.createForm.controls.location
-                  .get("prov_id")
+                  .get('prov_id')
                   .setValue(this.province._id, { emitEvent: true });
                 this.locationService
                   .getDistrictByName(
@@ -341,7 +341,7 @@ export class AddFarmerRequestComponent
                     (err) => {},
                     () => {
                       this.createForm.controls.location
-                        .get("dist_id")
+                        .get('dist_id')
                         .setValue(this.district._id, { emitEvent: true });
                       this.locationService
                         .getSectorByName(
@@ -357,7 +357,7 @@ export class AddFarmerRequestComponent
                           (err) => {},
                           () => {
                             this.createForm.controls.location
-                              .get("sect_id")
+                              .get('sect_id')
                               .setValue(this.sector._id, { emitEvent: true });
                             this.locationService
                               .getCellByName(
@@ -373,7 +373,7 @@ export class AddFarmerRequestComponent
                                 (err) => {},
                                 () => {
                                   this.createForm.controls.location
-                                    .get("cell_id")
+                                    .get('cell_id')
                                     .setValue(this.cell._id, {
                                       emitEvent: true,
                                     });
@@ -392,7 +392,7 @@ export class AddFarmerRequestComponent
                                       (err) => {},
                                       () => {
                                         this.createForm.controls.location
-                                          .get("village_id")
+                                          .get('village_id')
                                           .setValue(this.village._id);
                                       }
                                     );
@@ -406,16 +406,16 @@ export class AddFarmerRequestComponent
             );
           this.createForm.controls.landOwner.setValue(
             this.upi.representative.surname +
-              " " +
+              ' ' +
               this.upi.representative.foreNames
           );
           if (!Object.keys(this.upi).length) {
-            this.setError(["UPI not found"]);
+            this.setError(['UPI not found']);
           }
         },
         (error) => {
           this.createForm.controls.landOwner.reset();
-          this.setError(["UPI not found"]);
+          this.setError(['UPI not found']);
         }
       );
     }
@@ -432,10 +432,10 @@ export class AddFarmerRequestComponent
   createRequest(): FormGroup {
     return this.formBuilder.group({
       numberOfTrees: [
-        "",
-        [Validators.required, Validators.min(1), Validators.pattern("[0-9]*")],
+        '',
+        [Validators.required, Validators.min(1), Validators.pattern('[0-9]*')],
       ],
-      fertilizer_need: [""],
+      fertilizer_need: [''],
       fertilizer_allocate: [0],
       location: this.formBuilder.group({
         prov_id: [
@@ -446,15 +446,15 @@ export class AddFarmerRequestComponent
           { value: this.districtValue, disabled: this.disableDistId },
           Validators.required,
         ],
-        sect_id: ["", Validators.required],
-        cell_id: ["", Validators.required],
-        village_id: ["", Validators.required],
+        sect_id: ['', Validators.required],
+        cell_id: ['', Validators.required],
+        village_id: ['', Validators.required],
       }),
     });
   }
 
   get formRequests() {
-    return this.createForm.get("requests") as FormArray;
+    return this.createForm.get('requests') as FormArray;
   }
 
   addRequest() {
@@ -499,15 +499,15 @@ export class AddFarmerRequestComponent
   }
 
   getRequestsFormGroup(index): FormGroup {
-    this.requestList = this.createForm.get("requests") as FormArray;
+    this.requestList = this.createForm.get('requests') as FormArray;
     return this.requestList.controls[index] as FormGroup;
   }
 
   onChangeProvince(index: number) {
     const value = this.getRequestsFormGroup(index).controls.location.get(
-      "prov_id".toString()
+      'prov_id'.toString()
     ).value;
-    if (value !== "") {
+    if (value !== '') {
       this.locationService.getDistricts(value).subscribe((data) => {
         this.districts[index] = data;
         this.sectors[index] = [];
@@ -519,9 +519,9 @@ export class AddFarmerRequestComponent
 
   onChangeDistrict(index: number) {
     const value = this.getRequestsFormGroup(index).controls.location.get(
-      "dist_id".toString()
+      'dist_id'.toString()
     ).value;
-    if (value !== "") {
+    if (value !== '') {
       if (this.isUserSiteManager && !this.isUserCWSOfficer) {
         const temp = [];
         this.site.coveredAreas.coveredSectors.map((sector) => {
@@ -545,9 +545,9 @@ export class AddFarmerRequestComponent
 
   onChangeSector(index: number) {
     const value = this.getRequestsFormGroup(index).controls.location.get(
-      "sect_id".toString()
+      'sect_id'.toString()
     ).value;
-    if (value !== "") {
+    if (value !== '') {
       if (this.isUserCWSOfficer) {
         this.filterCustomCells(this.org, index);
       } else {
@@ -561,16 +561,16 @@ export class AddFarmerRequestComponent
 
   onChangeCell(index: number) {
     const value = this.getRequestsFormGroup(index).controls.location.get(
-      "cell_id".toString()
+      'cell_id'.toString()
     ).value;
-    if (value !== "") {
+    if (value !== '') {
       this.locationService.getVillages(value).subscribe((data) => {
         this.villages[index] = data;
       });
     }
   }
 
-  
+
 
   onSubmit() {
     if (this.createForm.valid) {
@@ -578,20 +578,20 @@ export class AddFarmerRequestComponent
       const farmer = {
         requestInfo: [],
       };
-      farmer["requestInfo".toString()] = temp.requests;
-      farmer["created_by".toString()] =
+      farmer['requestInfo'.toString()] = temp.requests;
+      farmer['created_by'.toString()] =
         this.authenticationService.getCurrentUser().info._id;
       this.helper.cleanObject(farmer);
       farmer.requestInfo.map((item) => {
-        item["fertilizer_need".toString()] =
-          +item["numberOfTrees".toString()] *
+        item['fertilizer_need'.toString()] =
+          +item['numberOfTrees'.toString()] *
           this.currentSeason.seasonParams.fertilizerKgPerTree;
         return this.helper.cleanObject(item);
       });
-      farmer["id".toString()] = this.farmerId;
+      farmer['id'.toString()] = this.farmerId;
       this.farmerService.addFarmerRequest(farmer).subscribe(
         () => {
-          this.modal.close("request successfully added!");
+          this.modal.close('request successfully added!');
           this.createForm.reset();
         },
         (err) => {
@@ -602,8 +602,8 @@ export class AddFarmerRequestComponent
       if (this.helper.getFormValidationErrors(this.createForm).length > 0) {
         this.setError(this.helper.getFormValidationErrors(this.createForm));
       }
-      if (this.createForm.get("requests").invalid) {
-        this.setError("Missing required land(s) information");
+      if (this.createForm.get('requests').invalid) {
+        this.setError('Missing required land(s) information');
       }
     }
   }
@@ -622,7 +622,7 @@ export class AddFarmerRequestComponent
   filterCustomCells(org: any, index: number) {
     const temp = [];
     const sectorId = this.getRequestsFormGroup(index).controls.location.get(
-      "sect_id".toString()
+      'sect_id'.toString()
     ).value;
     const i = org.coveredSectors.findIndex(
       (element) => element.sectorId._id === sectorId
@@ -652,7 +652,7 @@ export class AddFarmerRequestComponent
 
   onChange() {
     this.createForm.controls.location
-      .get("prov_id".toString())
+      .get('prov_id'.toString())
       .valueChanges.subscribe((value) => {
         if (value !== null) {
           this.locationService.getDistricts(value).subscribe((data) => {
@@ -699,7 +699,7 @@ export class AddFarmerRequestComponent
       }
     });
     this.createForm.controls.location
-      .get("dist_id".toString())
+      .get('dist_id'.toString())
       .valueChanges.subscribe((value) => {
         if (value !== null) {
           this.locationService.getSectors(value).subscribe((data) => {
@@ -721,7 +721,7 @@ export class AddFarmerRequestComponent
         }
       });
     this.createForm.controls.location
-      .get("sect_id".toString())
+      .get('sect_id'.toString())
       .valueChanges.subscribe((value) => {
         if (value !== null) {
           this.locationService.getCells(value).subscribe((data) => {
@@ -741,7 +741,7 @@ export class AddFarmerRequestComponent
         }
       });
     this.createForm.controls.location
-      .get("cell_id".toString())
+      .get('cell_id'.toString())
       .valueChanges.subscribe((value) => {
         if (value !== null) {
           this.locationService.getVillages(value).subscribe((data) => {
@@ -764,7 +764,7 @@ export class AddFarmerRequestComponent
   filterCustomVillages(org: any, villages: any) {
     const temp = [];
     const sectorId = this.createForm.controls.location.get(
-      "sect_id".toString()
+      'sect_id'.toString()
     ).value;
     const i = org.coveredSectors.findIndex(
       (element) => element.sectorId._id === sectorId

@@ -1,19 +1,19 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit } from '@angular/core';
 import {
   AuthenticationService,
   AuthorisationService,
   FarmerService,
   SeasonService,
-} from "../../../../core/services";
-import { Router } from "@angular/router";
-import { SharedDataService } from "../../../../core/services/shared-data.service";
-import { Subscription } from "rxjs";
-import { TranslateService } from "@ngx-translate/core";
+} from '../../../../core';
+import { Router } from '@angular/router';
+import { SharedDataService } from '../../../../core/services/shared-data.service';
+import { Subscription } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
-  selector: "app-topnavbar",
-  templateUrl: "./topnavbar.component.html",
-  styleUrls: ["./topnavbar.component.css"],
+  selector: 'app-topnavbar',
+  templateUrl: './topnavbar.component.html',
+  styleUrls: ['./topnavbar.component.css'],
 })
 export class TopnavbarComponent implements OnInit {
   surname: string;
@@ -66,7 +66,7 @@ export class TopnavbarComponent implements OnInit {
 
   onLogOut() {
     this.authenticationService.purgeAuth();
-    this.router.navigateByUrl("login");
+    this.router.navigateByUrl('login');
   }
 
   setLanguage(language: string) {

@@ -1,16 +1,15 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-<<<<<<< HEAD:src/app/authentication/login/login.component.ts
-import {AuthenticationService, BasicComponent, OrganisationService} from '../../core';
-import {MessageService} from '../../core/services';
-=======
-import {AuthenticationService, BasicComponent} from '../../../core';
-import {MessageService} from '../../../core/services';
->>>>>>> e22c5f780c941d2979066859001d6ccef20276fb:src/app/components/authentication/login/login.component.ts
 import {HttpHeaders} from '@angular/common/http';
-import {AuthorisationService} from '../../../core/services';
-import {SeasonService} from '../../../core/services';
+import {
+  AuthenticationService,
+  AuthorisationService,
+  BasicComponent,
+  MessageService,
+  OrganisationService
+} from '../../../core';
+import {SeasonService} from '../../../core';
 
 declare var $;
 
@@ -22,7 +21,7 @@ declare var $;
 export class LoginComponent extends BasicComponent implements OnInit, OnDestroy {
 
   authForm: FormGroup;
-  viewPasswordEnabled: boolean = false;
+  viewPasswordEnabled = false;
 
   constructor(
     private route: ActivatedRoute,
