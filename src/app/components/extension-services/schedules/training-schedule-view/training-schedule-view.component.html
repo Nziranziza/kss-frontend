@@ -147,7 +147,7 @@
               <th>Farmer Names</th>
               <th>Contact</th>
               <th>Attended</th>
-              <th>Message Delivered</th>
+              <th>SMS Status</th>
             </tr>
             <tr *ngFor="let trainee of training.trainees; let i = index">
               <td>{{ trainee.foreName + " " + trainee.surName }}</td>
@@ -164,7 +164,7 @@
               >
                 No
               </td>
-              <td style="text-align: center; color: red">No</td>
+              <td style="text-align: center; color: red">{{trainee.smsStatus}}</td>
             </tr>
           </thead>
           <tbody></tbody>

@@ -13,6 +13,7 @@ import {
 } from "src/app/core";
 import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
+import { saveAs } from "file-saver";
 
 @Component({
   selector: "app-reports",
@@ -25,6 +26,7 @@ export class ReportsComponent extends BasicComponent implements OnInit {
   coveredVillages: any = [];
   coveredCells: any = [];
   selectedGroup: any;
+  dataCsv: any;
   constructor(
     private formBuilder: FormBuilder,
     private seasonService: SeasonService,
@@ -277,29 +279,25 @@ export class ReportsComponent extends BasicComponent implements OnInit {
     }
   }
   downloadCsv() {
-    this.generateFinalReport("application/xslx", ".xslx");
-  }
-  downloadExcel() {
-    this.generateFinalReport("application/pdf", ".pdf");
+    this.generateFinalReport("xslx");
+    console.log(this.dataFile);
   }
 
-  download(type: string, extension: string, filePath: any) {
-    const byteArray = new Uint8Array(
-      atob(filePath.split(",")[1])
-        .split("")
-        .map((char) => char.charCodeAt(0))
+  downloadFile() {
+    this.generateFinalReport("csv");
+    let data = this.dataCsv;
+    const replacer = (key, value) => (value === null ? "" : value); // specify how you want to handle null values here
+    const header = Object.keys(data[0]);
+    let csv = data.map((row) =>
+      header
+        .map((fieldName) => JSON.stringify(row[fieldName], replacer))
+        .join(",")
     );
-    const newBlob = new Blob([byteArray], { type: type.toString() });
-    const linkElement = document.createElement("a");
-    const url = URL.createObjectURL(newBlob);
-    linkElement.setAttribute("href", url);
-    linkElement.setAttribute("download", "lab-results" + extension.toString());
-    const clickEvent = new MouseEvent("click", {
-      view: window,
-      bubbles: true,
-      cancelable: false,
-    });
-    linkElement.dispatchEvent(clickEvent);
+    csv.unshift(header.join(","));
+    let csvArray = csv.join("\r\n");
+
+    var blob = new Blob([csvArray], { type: "text/csv" });
+    saveAs(blob, "myFile.csv");
   }
 
   downloadPdf() {
@@ -348,19 +346,28 @@ export class ReportsComponent extends BasicComponent implements OnInit {
     }
   }
 
-  generateFinalReport(type: string, extension: string) {
+  generateFinalReport(type: string) {
     if (this.reportForm.value.reportFor === "Farmer Groups") {
-      this.reportService.groupDownload(this.reportBody).subscribe((data) => {
-        this.dataFile = data.data.file;
-      });
+      this.reportService
+        .groupDownload(this.reportBody, type)
+        .subscribe((data) => {
+          this.dataFile = data.data.file;
+          this.dataCsv = data.data.file;
+        });
     } else if (this.reportForm.value.reportFor === "Trainings") {
-      this.reportService.trainingDownload(this.reportBody).subscribe((data) => {
-        this.dataFile = data.data.file;
-      });
+      this.reportService
+        .trainingDownload(this.reportBody, type)
+        .subscribe((data) => {
+          this.dataFile = data.data.file;
+          this.dataCsv = data.data.file;
+        });
     } else if (this.reportForm.value.reportFor === "Farm Visits") {
-      this.reportService.visitDownload(this.reportBody).subscribe((data) => {
-        this.dataFile = data.data.file;
-      });
+      this.reportService
+        .visitDownload(this.reportBody, type)
+        .subscribe((data) => {
+          this.dataFile = data.data.file;
+          this.dataCsv = data.data.file;
+        });
     }
   }
 }
