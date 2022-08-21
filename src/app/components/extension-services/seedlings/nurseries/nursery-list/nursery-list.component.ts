@@ -62,14 +62,14 @@ export class NurseryListComponent
   dtElement: DataTableDirective;
 
   ngOnInit() {
-    this.getSchedules();
+    this.getNurseries();
     this.dtOptions = {
       pagingType: "full_numbers",
       pageLength: 25,
     };
   }
 
-  getSchedules(): void {
+  getNurseries(): void {
     this.loading = true;
     this.seedlingService.all().subscribe((data) => {
       this.nurseries = data.data;
@@ -109,7 +109,7 @@ export class NurseryListComponent
     };
   }
 
-  openDeleteModal(group: any, warning?: any) {
+  openDeleteModal(nursery: any, warning?: any) {
     const modalRef = this.modalService.open(ConfirmModalComponent);
     modalRef.componentInstance.title = "Delete Nursery";
     modalRef.componentInstance.content =
@@ -119,19 +119,18 @@ export class NurseryListComponent
     modalRef.componentInstance.warning = warning;
     modalRef.result.then((results) => {
       if (results.confirmed) {
-        this.seedlingService.delete(group._id).subscribe(
+        this.seedlingService.delete(nursery._id).subscribe(
           () => {
             this.loading = true;
             const body = {
               reference:
                 this.authenticationService.getCurrentUser().info.org_id,
             };
-
-            this.getSchedules();
+            this.getNurseries();
             this.setMessage("Nursery successfully Deleted!");
           },
           (err) => {
-            this.openDeleteModal(group, err.message);
+            this.errors = err.errors;
           }
         );
       }

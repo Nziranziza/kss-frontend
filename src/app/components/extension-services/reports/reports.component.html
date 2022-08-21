@@ -260,6 +260,8 @@
             />
             <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
           </div>
+        </span>
+        <span *ngIf="reportForm.value.reportFor !== ''">
           <div class="col-xs-12 text-center" style="margin-top: 10px">
             <button
               class="btn btn-default"
@@ -317,7 +319,12 @@
     >
       export to PDF
     </button>
-    <button class="btn btn-default" type="button" style="margin-left: 10px">
+    <button
+      class="btn btn-default"
+      type="button"
+      style="margin-left: 10px"
+      (click)= "downloadFile()"
+    >
       export to CSV
     </button>
     <a

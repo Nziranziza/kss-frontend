@@ -16,8 +16,8 @@ export class ReportService {
     return this.apiService.post('/v1.1/groups/report', body);
   }
 
-  groupDownload(body: any): Observable<any> {
-    return this.apiService.post('/v1.1/groups/report/download', body);
+  groupDownload(body: any, type: string): Observable<any> {
+    return this.apiService.post("/v1.1/groups/report/download/" + type, body);
   }
 
   trainingStats(body: any): Observable<any> {
@@ -28,8 +28,11 @@ export class ReportService {
     return this.apiService.post('/v1.1/schedules/report', body);
   }
 
-  trainingDownload(body: any): Observable<any> {
-    return this.apiService.post('/v1.1/schedules/report/download/xlsx', body);
+  trainingDownload(body: any, type: string): Observable<any> {
+    return this.apiService.post(
+      "/v1.1/schedules/report/download/" + type,
+      body
+    );
   }
 
   visitStats(body: any): Observable<any> {
@@ -40,7 +43,10 @@ export class ReportService {
     return this.apiService.post('/v1.1/farm-visit-conducts/report', body);
   }
 
-  visitDownload(body: any): Observable<any> {
-    return this.apiService.post('/v1.1/farm-visit-conducts/report/download/csv', body);
+  visitDownload(body: any, type: string): Observable<any> {
+    return this.apiService.post(
+      "/v1.1/farm-visit-conducts/report/download/" + type,
+      body
+    );
   }
 }

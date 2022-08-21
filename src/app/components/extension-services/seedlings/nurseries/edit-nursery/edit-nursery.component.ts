@@ -12,9 +12,11 @@ import {
   UserService,
   VisitService,
   GapService,
+  HelperService,
 } from "src/app/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ScrollStrategy, ScrollStrategyOptions } from "@angular/cdk/overlay";
+import { SuccessModalComponent } from "src/app/shared";
 
 @Component({
   selector: "app-edit-nursery",
@@ -35,7 +37,9 @@ export class EditNurseryComponent extends BasicComponent implements OnInit {
     private route: ActivatedRoute,
     private modalService: NgbModal,
     private readonly sso: ScrollStrategyOptions,
-    private router: Router
+    private router: Router,
+    private helper: HelperService,
+    private modal: NgbModal
   ) {
     super(locationService, organisationService);
     this.scrollStrategy = this.sso.noop();
@@ -57,7 +61,6 @@ export class EditNurseryComponent extends BasicComponent implements OnInit {
       representativeName: ["", Validators.required],
       representativeNumber: ["", Validators.required],
       siteAvailability: ["no"],
-      description: ["", Validators.required],
       agronomist: [""],
       stockData: new FormArray([], Validators.required),
       location: this.formBuilder.group({
@@ -69,8 +72,7 @@ export class EditNurseryComponent extends BasicComponent implements OnInit {
         latitude: [""],
         longitude: [""],
       }),
-      totalSeedlings: ["", Validators.required],
-      adoptionGap: ["", Validators.required],
+      totalSeedlings: [""],
       status: [""],
       date: this.formBuilder.group({
         visitDate: [""],
@@ -88,19 +90,19 @@ export class EditNurseryComponent extends BasicComponent implements OnInit {
           .setValue(datas.nurseryName, { emitEvent: false });
         this.addNursery.controls.location
           .get("prov_id".toString())
-          .setValue(datas.location.prov_id._id, { emitEvent: false });
+          .setValue(datas.location.prov_id._id);
         this.addNursery.controls.location
           .get("dist_id".toString())
-          .setValue(datas.location.dist_id._id, { emitEvent: false });
+          .setValue(datas.location.dist_id._id);
         this.addNursery.controls.location
           .get("sect_id".toString())
-          .setValue(datas.location.sect_id._id, { emitEvent: false });
+          .setValue(datas.location.sect_id._id);
         this.addNursery.controls.location
           .get("cell_id".toString())
-          .setValue(datas.location.cell_id._id, { emitEvent: false });
+          .setValue(datas.location.cell_id._id);
         this.addNursery.controls.location
           .get("village_id".toString())
-          .setValue(datas.location.village_id._id, { emitEvent: false });
+          .setValue(datas.location.village_id._id);
         this.addNursery.controls.location
           .get("latitude".toString())
           .setValue(datas.latitude, { emitEvent: false });
@@ -122,7 +124,10 @@ export class EditNurseryComponent extends BasicComponent implements OnInit {
         datas.stocks.map((item) => {
           (this.addNursery.controls.stockData as FormArray).push(
             this.formBuilder.group({
-              variety: [item.varietyId._id, { value: item.varietyId._id, disabled: true }],
+              variety: [
+                item.varietyId._id,
+                { value: item.varietyId._id, disabled: true },
+              ],
               seed: [item.seeds, { value: item.seeds, disabled: true }],
               expectedSeedling: [
                 { value: item.expectedSeedlings, disabled: true },
@@ -132,11 +137,15 @@ export class EditNurseryComponent extends BasicComponent implements OnInit {
                 { value: item.germinationRate || 0, disabled: true },
               ],
               germinationRate: item.germinationRate || "",
-              distributed: [{ value: item.prickedQty - item.remainingQty || 0, disabled: true }],
+              distributed: [
+                {
+                  value: item.prickedQty - item.remainingQty || 0,
+                  disabled: true,
+                },
+              ],
               id: item._id || "",
               pickingDate: [item.pickedDate || ""],
               sowingDate: [item.sowingDate || ""],
-              
             }) as FormGroup
           );
         });
@@ -150,7 +159,6 @@ export class EditNurseryComponent extends BasicComponent implements OnInit {
 
   get formData() {
     return this.addNursery.get("stockData") as FormArray;
-    
   }
 
   getTreeVariety() {
@@ -191,6 +199,7 @@ export class EditNurseryComponent extends BasicComponent implements OnInit {
       recordedSeedling: [0],
       germinationRate: [{ value: "", disabled: true }],
       distributed: [{ value: "", disabled: true }],
+      sowingDate: [""],
     });
   }
 
@@ -218,50 +227,74 @@ export class EditNurseryComponent extends BasicComponent implements OnInit {
   }
 
   onCreate() {
-    let data = {
-      _id: this.id,
-      nurseryName: this.addNursery.value.nurseryName,
-      owner: {
-        _id: this.oldDatas.owner._id,
-        name: this.addNursery.value.ownerName,
-        phoneNumber: this.addNursery.value.ownerNumber,
-      },
-      representative: {
-        _id: this.oldDatas.representative._id,
-        name: this.addNursery.value.representativeName,
-        phoneNumber: this.addNursery.value.representativeNumber,
-      },
-      org_id: this.authenticationService.getCurrentUser().info.org_id,
-      latitude: this.addNursery.value.location.latitude,
-      longitude: this.addNursery.value.location.longitude,
-      location: {
-        _id: this.oldDatas.location._id,
-        prov_id: this.addNursery.value.location.prov_id,
-        dist_id: this.addNursery.value.location.dist_id,
-        sect_id: this.addNursery.value.location.sect_id,
-        cell_id: this.addNursery.value.location.cell_id,
-        village_id: this.addNursery.value.location.village_id,
-      },
-      stocks: this.addNursery.value.stockData.map((data) => {
-        return {
-          varietyId: data.variety,
-          seeds: data.seed,
-          _id: data.id,
-          prickedQty: data.prickedQty,
-          germinationRate: data.germinationRate,
-          pickedDate: data.pickingDate
-        };
-      }),
-    };
-    this.seedlingService.update(this.id, data).subscribe((data) => {
-      this.router.navigateByUrl("admin/seedling/nursery/list");
-    });
+    if (this.addNursery.valid) {
+      let data = {
+        _id: this.id,
+        nurseryName: this.addNursery.value.nurseryName,
+        owner: {
+          _id: this.oldDatas.owner._id,
+          name: this.addNursery.value.ownerName,
+          phoneNumber: this.addNursery.value.ownerNumber,
+        },
+        representative: {
+          _id: this.oldDatas.representative._id,
+          name: this.addNursery.value.representativeName,
+          phoneNumber: this.addNursery.value.representativeNumber,
+        },
+        org_id: this.authenticationService.getCurrentUser().info.org_id,
+        latitude: this.addNursery.value.location.latitude,
+        longitude: this.addNursery.value.location.longitude,
+        location: {
+          _id: this.oldDatas.location._id,
+          prov_id: this.addNursery.value.location.prov_id,
+          dist_id: this.addNursery.value.location.dist_id,
+          sect_id: this.addNursery.value.location.sect_id,
+          cell_id: this.addNursery.value.location.cell_id,
+          village_id: this.addNursery.value.location.village_id,
+        },
+        stocks: this.addNursery.value.stockData.map((data) => {
+          return {
+            varietyId: data.variety,
+            seeds: data.seed,
+            _id: data.id,
+            prickedQty: data.prickedQty,
+            germinationRate: data.germinationRate,
+            pickedDate: data.pickingDate,
+            sowingDate: data.sowingDate,
+          };
+        }),
+      };
+      this.seedlingService.update(this.id, data).subscribe(
+        (results) => {
+          this.loading = false;
+          this.success(results.data.nurseryName);
+        },
+        (err) => {
+          this.loading = false;
+          this.errors = err.errors;
+        }
+      );
+    } else {
+      this.errors = this.helper.getFormValidationErrors(this.addNursery);
+    }
   }
 
   open(content) {
     this.modalService.open(content, {
       ariaLabelledBy: "modal-basic-title",
       size: "lg",
+    });
+  }
+
+  success(name) {
+    const modalRef = this.modal.open(SuccessModalComponent, {
+      ariaLabelledBy: "modal-basic-title",
+    });
+    modalRef.componentInstance.message = "has been updated successfully";
+    modalRef.componentInstance.title = "Thank you Nursery";
+    modalRef.componentInstance.name = name;
+    modalRef.result.finally(() => {
+      this.router.navigateByUrl("admin/seedling/nursery/list");
     });
   }
 }

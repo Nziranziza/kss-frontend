@@ -16,6 +16,7 @@ import {
 } from "src/app/core";
 import { Router } from "@angular/router";
 import { ScrollStrategy, ScrollStrategyOptions } from "@angular/cdk/overlay";
+import { SuccessModalComponent } from "src/app/shared";
 @Component({
   selector: "app-nursery-create",
   templateUrl: "./nursery-create.component.html",
@@ -35,7 +36,8 @@ export class NurseryCreateComponent extends BasicComponent implements OnInit {
     private modalService: NgbModal,
     private router: Router,
     private readonly sso: ScrollStrategyOptions,
-    private helper: HelperService
+    private helper: HelperService,
+    private modal: NgbModal
   ) {
     super(locationService, organisationService);
     this.scrollStrategy = this.sso.noop();
@@ -189,9 +191,16 @@ export class NurseryCreateComponent extends BasicComponent implements OnInit {
           };
         }),
       };
-      this.seedlingService.create(data).subscribe((data) => {
-        this.router.navigateByUrl("admin/seedling/nursery/list");
-      });
+      this.seedlingService.create(data).subscribe(
+        (results) => {
+          this.loading = false;
+          this.success(results.data.nurseryName);
+        },
+        (err) => {
+          this.loading = false;
+          this.errors = err.errors;
+        }
+      );
     } else {
       this.errors = this.helper.getFormValidationErrors(this.addNursery);
     }
@@ -201,6 +210,18 @@ export class NurseryCreateComponent extends BasicComponent implements OnInit {
     this.modalService.open(content, {
       ariaLabelledBy: "modal-basic-title",
       size: "lg",
+    });
+  }
+
+  success(name) {
+    const modalRef = this.modal.open(SuccessModalComponent, {
+      ariaLabelledBy: "modal-basic-title",
+    });
+    modalRef.componentInstance.message = "has been added successfully";
+    modalRef.componentInstance.title = "Thank you Nursery";
+    modalRef.componentInstance.name = name;
+    modalRef.result.finally(() => {
+      this.router.navigateByUrl("admin/seedling/nursery/list");
     });
   }
 }

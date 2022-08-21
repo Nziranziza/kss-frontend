@@ -5,19 +5,24 @@ import {
   AuthenticationService,
   GapService,
   GroupService,
+  HelperService,
   UserService,
   VisitService,
 } from "src/app/core";
 import { IDropdownSettings } from "ng-multiselect-dropdown";
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router } from "@angular/router";
+import { SuccessModalComponent } from "src/app/shared";
 
 @Component({
-  selector: 'app-edit-farm-visit',
-  templateUrl: './edit-farm-visit.component.html',
-  styleUrls: [ "../../schedules/training-scheduling-create/training-scheduling-create.component.css"]
+  selector: "app-edit-farm-visit",
+  templateUrl: "./edit-farm-visit.component.html",
+  styleUrls: [
+    "../../schedules/training-scheduling-create/training-scheduling-create.component.css",
+  ],
 })
 export class EditFarmVisitComponent implements OnInit {
   scheduleVisit: FormGroup;
+  errors: any;
   constructor(
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
@@ -28,6 +33,8 @@ export class EditFarmVisitComponent implements OnInit {
     private visitService: VisitService,
     private router: Router,
     private route: ActivatedRoute,
+    private helper: HelperService,
+    private modal: NgbModal
   ) {}
   loading: Boolean = false;
   farmerGroups: any[] = [];
@@ -36,6 +43,7 @@ export class EditFarmVisitComponent implements OnInit {
   allTraineesSelected: Boolean;
   gaps: any[] = [];
   agronomist: any[] = [];
+  savedFarmList: any[] = [];
   farmers: any[] = [];
   gapDropdownSettings: IDropdownSettings = {};
   viewDetailsClicked: Boolean;
@@ -79,31 +87,34 @@ export class EditFarmVisitComponent implements OnInit {
   getVisits() {
     this.visitService.one(this.id).subscribe((data) => {
       this.visits = data.data;
-      this.farmList = data.data.farms;
-      console.log(this.visits);
+      this.savedFarmList = data.data.farms;
       this.scheduleVisit.controls.startTime.setValue(
-        data.data.expectedDuration.from
+        data.data.date.split("T")[0] +
+          "T" +
+          data.data.expectedDuration.from +
+          ":00.000Z"
       );
       this.scheduleVisit.controls.endTime.setValue(
-        data.data.expectedDuration.to
+        data.data.date.split("T")[0] +
+          "T" +
+          data.data.expectedDuration.to +
+          ":00.000Z"
       );
       this.scheduleVisit.controls.farmerGroup.setValue(
-        data.data.groupId
+        data.data.groupId.groupName,
+        { emitEvent: false }
       );
-      this.scheduleVisit.controls.adoptionGap.setValue(
-        data.data.gaps
-      );
-      this.scheduleVisit.controls.description.setValue(
-        data.data.description
-      );
-      this.scheduleVisit.controls.agronomist.setValue(
-        data.data.visitor
-      );
+      this.getFarms();
+      this.scheduleVisit.controls.adoptionGap.setValue(data.data.gaps);
+      this.scheduleVisit.controls.description.setValue(data.data.description);
+      this.scheduleVisit.controls.agronomist.setValue(data.data.visitor.userId);
+      this.scheduleVisit.controls.date
+        .get("visitDate")
+        .setValue(data.data.date);
     });
   }
   getFarmerGroup() {
     this.loading = true;
-    console.log(this.authenticationService.getCurrentUser());
     this.groupService
       .list({
         reference: "5d1635ac60c3dd116164d4ae",
@@ -126,7 +137,6 @@ export class EditFarmVisitComponent implements OnInit {
   onGapSelectAll(items: any) {
     let gapSelected = this.scheduleVisit.get("adoptionGap".toString());
     gapSelected.setValue(items, { emitEvent: false });
-    console.log(this.scheduleVisit.get("adoptionGap".toString()).value);
   }
 
   getFarms() {
@@ -141,16 +151,18 @@ export class EditFarmVisitComponent implements OnInit {
       data.data.members.forEach((member) => {
         member.openDialog = false;
         this.farmers.push(member);
-        member.farms.forEach((farm) => {
-          farm.requestInfo.forEach((info) => {
-            this.farmList.push({
-              farmer: member.firstName
-                ? member.firstName + " " + member.lastName
-                : member.groupContactPersonNames,
-              farm: info,
-              owner: member.userId,
-              upi: info.upiNumber,
-              selected: false,
+        this.savedFarmList.forEach((farms) => {
+          member.farms.forEach((farm) => {
+            farm.requestInfo.forEach((info) => {
+              this.farmList.push({
+                farmer: member.firstName
+                  ? member.firstName + " " + member.lastName
+                  : member.groupContactPersonNames,
+                farm: info,
+                owner: member.userId,
+                upi: info.upiNumber,
+                selected: info._id == farms.farmId,
+              });
             });
           });
         });
@@ -187,7 +199,16 @@ export class EditFarmVisitComponent implements OnInit {
   getGaps(): void {
     this.loading = true;
     this.gapService.all().subscribe((data) => {
-      this.gaps = data.data;
+      const newData: any[] = [
+        {
+          _id: "",
+          gap_name: "Not Applied",
+        },
+      ];
+      data.data.forEach((data) => {
+        newData.push({ _id: data._id, gap_name: data.gap_name });
+      });
+      this.gaps = newData;
       this.loading = false;
     });
   }
@@ -205,42 +226,77 @@ export class EditFarmVisitComponent implements OnInit {
   }
 
   onSubmit() {
-    this.loading = true;
-    const dataValues = JSON.parse(JSON.stringify(this.scheduleVisit.value));
-    let adoptionGap = [];
-    dataValues.adoptionGap.forEach((adoption) => {
-      adoptionGap.push(adoption._id);
-    });
-    let farms = this.farmList.filter(data => {
-      return data.selected == true;
-    });
-    const data = {
-      farms: farms.map(data => {
-        return {
-          farmId : data.farm._id,
-          owner: data.owner
+    if (this.scheduleVisit.valid) {
+      this.loading = true;
+      const dataValues = JSON.parse(JSON.stringify(this.scheduleVisit.value));
+      let adoptionGap = [];
+      dataValues.adoptionGap.forEach((adoption) => {
+        if (adoption._id != "") {
+          adoptionGap.push(adoption._id);
         }
-      }),
-      gaps: adoptionGap,
-      description: dataValues.description,
-      org_id: this.authenticationService.getCurrentUser().info.org_id,
-      visitor: dataValues.agronomist,
-      groupId: this.farmerGroupId,
-      observation: "observation",
-      date: dataValues.date.visitDate,
-      expectedDuration: {
-        from: dataValues.startTime,
-        to: dataValues.endTime,
-      },
-    };
-    this.visitService.create(data).subscribe(
-      (data) => {
-        this.loading = false;
-        this.router.navigateByUrl('admin/farm/visit/list');
-      },
-      (err) => {
-        this.loading = false;
+      });
+      let farms = this.farmList.filter((data) => {
+        return data.selected == true;
+      });
+      const data: any = {
+        farms: farms.map((data) => {
+          return {
+            farmId: data.farm._id,
+            owner: data.owner,
+          };
+        }),
+        description: dataValues.description,
+        org_id: this.authenticationService.getCurrentUser().info.org_id,
+        visitor: dataValues.agronomist,
+        groupId: this.farmerGroupId,
+        observation: "observation",
+        date: dataValues.date.visitDate,
+        expectedDuration: {
+          from: this.formatTime(dataValues.startTime),
+          to: this.formatTime(dataValues.endTime),
+        },
+      };
+      if (adoptionGap.length > 0) {
+        data.gaps = adoptionGap;
       }
-    );
+      this.visitService.create(data).subscribe(
+        (data) => {
+          this.loading = false;
+          this.success(data.data.description, data.data._id);
+        },
+        (err) => {
+          this.loading = false;
+          this.errors = err.errors;
+        }
+      );
+    } else {
+      this.errors = this.helper.getFormValidationErrors(this.scheduleVisit);
+    }
+  }
+
+  success(name, id) {
+    const modalRef = this.modal.open(SuccessModalComponent, {
+      ariaLabelledBy: "modal-basic-title",
+    });
+    modalRef.componentInstance.message = "has been edited successfully";
+    modalRef.componentInstance.title = "Thank you farm visit schedule";
+    modalRef.componentInstance.name = name;
+    modalRef.componentInstance.messageEnabled = true;
+    modalRef.componentInstance.smsId = id;
+    modalRef.componentInstance.serviceName = "visit";
+    modalRef.result.finally(() => {
+      this.router.navigateByUrl("admin/farm/visit/list");
+    });
+  }
+
+  formatTime(date) {
+    let currentDate = new Date(date);
+    var hours = currentDate.getHours();
+    var minutes = currentDate.getMinutes();
+    hours = hours % 24;
+    hours = hours ? hours : 24; // the hour '0' should be '12'
+    minutes = minutes < 10 ? 0 + minutes : minutes;
+    var strTime = hours + ":" + minutes;
+    return strTime;
   }
 }
