@@ -502,10 +502,8 @@
         "
         [disabled]="loading"
       >
-        <span *ngIf="!loading; else other_content">{{
-          "update visit" | translate
-        }}</span>
-        <ng-template #other_content>
+        <span *ngIf="!loading">{{ "update visit" | translate }}</span>
+        <ng-template *ngIf="loading">
           <div class="loader">
             <div class="line"></div>
             <div class="line"></div>

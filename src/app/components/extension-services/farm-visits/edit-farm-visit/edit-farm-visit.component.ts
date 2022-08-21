@@ -239,18 +239,18 @@ export class EditFarmVisitComponent implements OnInit {
         return data.selected == true;
       });
       const data: any = {
+        date: dataValues.date.visitDate,
+        description: dataValues.description,
         farms: farms.map((data) => {
           return {
             farmId: data.farm._id,
             owner: data.owner,
           };
         }),
-        description: dataValues.description,
         org_id: this.authenticationService.getCurrentUser().info.org_id,
         visitor: dataValues.agronomist,
         groupId: this.farmerGroupId,
         observation: "observation",
-        date: dataValues.date.visitDate,
         expectedDuration: {
           from: this.formatTime(dataValues.startTime),
           to: this.formatTime(dataValues.endTime),
@@ -259,7 +259,8 @@ export class EditFarmVisitComponent implements OnInit {
       if (adoptionGap.length > 0) {
         data.gaps = adoptionGap;
       }
-      this.visitService.create(data).subscribe(
+      console.log(data);
+      this.visitService.edit(this.id, data).subscribe(
         (data) => {
           this.loading = false;
           this.success(data.data.description, data.data._id);
