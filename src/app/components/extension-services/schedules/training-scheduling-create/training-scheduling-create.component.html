@@ -445,7 +445,6 @@
                           formControlName="trainingStartDate"
                           class="form-control"
                           placeholder="Dd/mm/yyyy"
-                          [min]="today"
                         />
                         <owl-date-time
                           [pickerType]="'calendar'"
@@ -507,7 +506,6 @@
                           formControlName="trainingEndDate"
                           class="form-control"
                           placeholder="Dd/mm/yyyy"
-                          [min]="scheduleTraining.value.trainingStartDate"
                         />
                         <owl-date-time
                           [pickerType]="'calendar'"
@@ -684,8 +682,26 @@
                                     <input
                                       type="number"
                                       style="height: 23px; width: 95%"
+                                      placeholder="250"
                                       formControlName="contact"
-                                  /></span>
+                                    />
+                                    <app-inline-errors
+                                      *ngIf="
+                                        addNursery.controls.representativeNumber
+                                          .invalid &&
+                                        (addNursery.controls
+                                          .representativeNumber.dirty ||
+                                          addNursery.controls
+                                            .representativeNumber.touched)
+                                      "
+                                      [errors]="
+                                        addNursery.controls.representativeNumber
+                                          .errors
+                                      "
+                                      [label]="'manager phone number'"
+                                    >
+                                    </app-inline-errors>
+                                  </span>
                                 </div>
                                 <div class="col-xs-3">
                                   <span *ngIf="!trainee.editMode">
@@ -852,6 +868,7 @@
                   type="button"
                   class="btn btn-danger pull-right"
                   style="width: 35%"
+                  (click)="removeMembersToBeTrained()"
                 >
                   <i class="fa fa-trash" style="color: red"></i>
                   REMOVE SELECTED
