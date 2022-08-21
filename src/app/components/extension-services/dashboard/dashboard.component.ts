@@ -85,7 +85,9 @@ export class DashboardComponent extends BasicComponent implements OnInit {
   seedlingGraph = {
     type: ChartType.PieChart,
     data: [
-      ["Boubon", 0],
+      ["Variety 1", 0],
+      ["Variety 2", 0],
+      ["Variety 3", 0],
     ],
     options: {
       colors: ["#F5B23F", "#FF990A"],
@@ -103,7 +105,7 @@ export class DashboardComponent extends BasicComponent implements OnInit {
     columnNames: ["Variety1", "Variety2"],
     width: "100%",
     height: 180,
-  }
+  };
 
   selectedFarmDetails: any;
   clickedMarker: Boolean = false;
@@ -559,6 +561,7 @@ export class DashboardComponent extends BasicComponent implements OnInit {
   getSeedlingStats(body: any): void {
     this.loading = true;
     this.seedlingStats = [];
+    let colors = ["#F5B23F", "#FF990A", "#FF6600", "#FF3300", "#FF0000"];
     this.seedlingService.getSeedlingStats(body).subscribe((data) => {
       this.seedlingStats = data.data;
       this.totalSeedlings = 0;
@@ -570,6 +573,7 @@ export class DashboardComponent extends BasicComponent implements OnInit {
         this.seedlingGraph.data[index][nextIndex] = data.variety;
         this.seedlingGraph.data[index][nextIndex + 1] =
           (data.totalQuantity * 100) / this.totalSeedlings;
+        this.seedlingGraph.options.colors[index] = colors[index];
       });
       this.loading = false;
     });

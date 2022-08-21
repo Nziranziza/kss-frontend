@@ -72,7 +72,7 @@
               </td>
               <td><span>{{ group.members.length + ' ' + 'farmers'}}</span></td>
               <td> every {{weekDays[group.meetingSchedule?.meetingDay - 1]}}</td>
-              <td> </td>
+              <td> {{ group?.attendanceRate }} </td>
               <td>
                 <span class="profile-text">
                 <ng-container *ngIf="!group.active, else inactive"><span

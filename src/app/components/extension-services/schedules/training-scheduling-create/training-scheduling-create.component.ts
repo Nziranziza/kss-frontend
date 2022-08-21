@@ -108,6 +108,7 @@ export class TrainingSchedulingCreateComponent
     this.getTrainers();
     this.getFarmerGroup();
   }
+
   addContacts() {
     const departmentControl = (
       this.editContactForm.get("contacts") as FormArray
@@ -131,6 +132,7 @@ export class TrainingSchedulingCreateComponent
       this.loading = false;
     });
   }
+
   getTrainers() {
     this.loading = true;
     this.userService
@@ -193,9 +195,11 @@ export class TrainingSchedulingCreateComponent
   addContact(index) {
     this.trainees[index].editMode = true;
   }
+  
   cancelEditContact(index) {
     this.trainees[index].editMode = false;
   }
+
   submitContact(index) {
     if (this.editContactForm.valid) {
       const arrayControl = this.editContactForm.get("contacts") as FormArray;
@@ -211,12 +215,13 @@ export class TrainingSchedulingCreateComponent
           name: this.authenticationService.getCurrentUser().info.surname,
         },
       };
+      console.log(data);
       this.userService
         .updateMemberContact(traineData.value.groupId, data)
         .subscribe((data) => {
           this.loading = false;
+          console.log(data);
         });
-      this.getFarmers();
     } else {
       this.errors = this.helper.getFormValidationErrors(this.editContactForm);
     }
@@ -287,9 +292,21 @@ export class TrainingSchedulingCreateComponent
         if (
           !this.selectedTrainees.find((item) => item.userId === itemData.userId)
         ) {
+          itemData.selected = false;
           this.selectedTrainees.push(itemData);
         }
       });
+  }
+
+  removeMembersToBeTrained() {
+    this.selectedTrainees.forEach((item) => {
+      if (item.selected) {
+        this.selectedTrainees = this.selectedTrainees.filter(
+          (el) => el.userId != item.userId
+        );
+        item.selected = false;
+      }
+    });
   }
 
   onChanges() {

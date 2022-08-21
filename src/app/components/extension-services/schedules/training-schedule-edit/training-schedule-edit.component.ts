@@ -115,6 +115,7 @@ export class TrainingScheduleEditComponent
     this.getFarmerGroup();
     this.getSchedules();
   }
+
   getSchedules() {
     this.trainingService.getSchedule(this.id).subscribe((data) => {
       if (data && data.data) {
@@ -140,13 +141,29 @@ export class TrainingScheduleEditComponent
         this.scheduleTraining.controls.location
           .get("venue".toString())
           .setValue(this.scheduleData.venueName, { emitEvent: false });
+        this.scheduleTraining.controls.location
+          .get("prov_id".toString())
+          .setValue(this.scheduleData.location.prov_id._id);
+        this.scheduleTraining.controls.location
+          .get("dist_id".toString())
+          .setValue(this.scheduleData.location.dist_id._id);
+        this.scheduleTraining.controls.location
+          .get("sect_id".toString())
+          .setValue(this.scheduleData.location.sect_id._id);
+        this.scheduleTraining.controls.location
+          .get("cell_id".toString())
+          .setValue(this.scheduleData.location.cell_id._id);
+        this.scheduleTraining.controls.location
+          .get("village_id".toString())
+          .setValue(this.scheduleData.location.village_id._id);
       }
     });
   }
 
   addContacts() {
-    let departmentControl = (this.editContactForm.get("contacts") as FormArray)
-      .controls;
+    const departmentControl = (
+      this.editContactForm.get("contacts") as FormArray
+    ).controls;
     this.trainees.forEach((trainee) => {
       departmentControl.push(
         this.formBuilder.group({
@@ -166,6 +183,7 @@ export class TrainingScheduleEditComponent
       this.loading = false;
     });
   }
+
   getTrainers() {
     this.loading = true;
     this.userService
@@ -180,7 +198,7 @@ export class TrainingScheduleEditComponent
     this.loading = true;
     this.groupService
       .list({
-        reference: "5d1635ac60c3dd116164d4ae",
+        reference: this.authenticationService.getCurrentUser().info.org_id,
       })
       .subscribe((data) => {
         this.farmerGroups = data.data;
@@ -200,43 +218,64 @@ export class TrainingScheduleEditComponent
         }
       )
       .subscribe((data) => {
-        this.trainees = data.data;
+        this.trainees = data.data
+          .filter((element) => {
+            return element.attendance !== "attended";
+          })
+          .map((item) => {
+            if (item.phoneNumber) {
+              if (item.phoneNumber.length > 9) {
+                item.selected = true;
+              }
+            }
+            return item;
+          });
         this.addContacts();
         this.loading = false;
       });
   }
 
   open(content) {
-    this.modalService.open(content, { size: "lg", windowClass: "modal-lg" });
+    if (this.scheduleTraining.valid) {
+      this.modalService.open(content, { size: "lg", windowClass: "modal-lg" });
+    } else {
+      this.errors = this.helper.getFormValidationErrors(this.scheduleTraining);
+    }
   }
 
   addContact(index) {
     this.trainees[index].editMode = true;
   }
+
   cancelEditContact(index) {
     this.trainees[index].editMode = false;
   }
+
   submitContact(index) {
-    let arrayControl = this.editContactForm.get("contacts") as FormArray;
-    let traineData = arrayControl.at(index);
-    this.trainees[index].contact = traineData.value.contact;
-    this.trainees[index].phoneNumber = traineData.value.contact;
-    this.trainees[index].editMode = false;
-    let data = {
-      userId: traineData.value.userId,
-      phoneNumber: traineData.value.contact.toString(),
-      lastModifiedBy: {
-        _id: this.authenticationService.getCurrentUser().info._id,
-        name: this.authenticationService.getCurrentUser().info.surname,
-      },
-    };
-    this.userService
-      .updateMemberContact(traineData.value.groupId, data)
-      .subscribe((data) => {
-        console.log(data);
-        this.loading = false;
-      });
-    this.getFarmers();
+    if (this.editContactForm.valid) {
+      const arrayControl = this.editContactForm.get("contacts") as FormArray;
+      const traineData = arrayControl.at(index);
+      this.trainees[index].contact = traineData.value.contact;
+      this.trainees[index].phoneNumber = traineData.value.contact;
+      this.trainees[index].editMode = false;
+      const data = {
+        userId: traineData.value.userId,
+        phoneNumber: traineData.value.contact.toString(),
+        lastModifiedBy: {
+          _id: this.authenticationService.getCurrentUser().info._id,
+          name: this.authenticationService.getCurrentUser().info.surname,
+        },
+      };
+      console.log(data);
+      this.userService
+        .updateMemberContact(traineData.value.groupId, data)
+        .subscribe((data) => {
+          this.loading = false;
+          console.log(data);
+        });
+    } else {
+      this.errors = this.helper.getFormValidationErrors(this.editContactForm);
+    }
   }
 
   onFilter() {
@@ -286,19 +325,39 @@ export class TrainingScheduleEditComponent
   }
 
   selectTrainee(isChecked: boolean, i: number) {
-    this.trainees[i].selected = true;
-    this.trainees[i].groupId = this.filterForm.controls.searchByLocation.get(
-      "farmerGroup".toString()
-    ).value;
-    if (!isChecked) {
-      this.allTraineesSelected = isChecked;
+    if (this.trainees[i].contact?.length > 9) {
+      this.trainees[i].selected = true;
+      this.trainees[i].groupId = this.filterForm.controls.searchByLocation.get(
+        "farmerGroup".toString()
+      ).value;
+      if (!isChecked) {
+        this.allTraineesSelected = isChecked;
+      }
     }
   }
 
   addSelectedToBeTrained() {
     this.trainees
-      .filter((item) => item.selected)
-      .map((item) => this.selectedTrainees.push(item));
+      .filter((itemData) => itemData.selected)
+      .map((itemData) => {
+        if (
+          !this.selectedTrainees.find((item) => item.userId === itemData.userId)
+        ) {
+          itemData.selected = false;
+          this.selectedTrainees.push(itemData);
+        }
+      });
+  }
+
+  removeMembersToBeTrained() {
+    this.selectedTrainees.forEach((item) => {
+      if (item.selected) {
+        this.selectedTrainees = this.selectedTrainees.filter(
+          (el) => el.userId != item.userId
+        );
+        item.selected = false;
+      }
+    });
   }
 
   onChanges() {
@@ -412,27 +471,29 @@ export class TrainingScheduleEditComponent
           this.trainers[this.scheduleTraining.value.trainer].surname,
         phoneNumber:
           this.trainers[this.scheduleTraining.value.trainer].phoneNumber,
+        organisationName:
+          this.authenticationService.getCurrentUser().orgInfo.orgName,
       },
       groupId: this.filterForm.controls.searchByLocation.get(
         "farmerGroup".toString()
       ).value,
       description: this.scheduleTraining.value.description,
       location: {
-        provId: this.scheduleTraining.value.location.prov_id,
-        distId: this.scheduleTraining.value.location.dist_id,
-        sectId: this.scheduleTraining.value.location.sect_id,
-        cellId: this.scheduleTraining.value.location.cell_id,
-        villageId: this.scheduleTraining.value.location.village_id,
+        prov_id: this.scheduleTraining.value.location.prov_id,
+        dist_id: this.scheduleTraining.value.location.dist_id,
+        sect_id: this.scheduleTraining.value.location.sect_id,
+        cell_id: this.scheduleTraining.value.location.cell_id,
+        village_id: this.scheduleTraining.value.location.village_id,
       },
       venueName: this.scheduleTraining.value.location.venue,
       startTime:
-        this.scheduleTraining.value.trainingStartDate +
+        this.formatDate(this.scheduleTraining.value.trainingStartDate) +
         "T" +
-        this.scheduleTraining.value.startTime,
+        this.formatTime(this.scheduleTraining.value.startTime),
       endTime:
-        this.scheduleTraining.value.trainingEndDate +
+        this.formatDate(this.scheduleTraining.value.trainingEndDate) +
         "T" +
-        this.scheduleTraining.value.endTime,
+        this.formatTime(this.scheduleTraining.value.endTime),
       referenceId: "5d1635ac60c3dd116164d4ae",
       trainees: this.selectedTrainees.map((item) => {
         return {
@@ -449,12 +510,32 @@ export class TrainingScheduleEditComponent
 
   sendMessage() {
     this.loading = true;
-    console.log(this.successDatails);
-    let data = this.successDatails._id;
-    console.log(data);
+    const data = this.successDatails._id;
     this.trainingService.sendMessage(data).subscribe((data) => {
       this.router.navigateByUrl("admin/training/schedule/list");
       this.loading = false;
     });
+  }
+
+  formatDate(date) {
+    var d = new Date(date),
+      month = "" + (d.getMonth() + 1),
+      day = "" + d.getDate(),
+      year = d.getFullYear();
+
+    if (month.length < 2) month = "0" + month;
+    if (day.length < 2) day = "0" + day;
+
+    return [year, month, day].join("-");
+  }
+
+  formatTime(date) {
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    hours = hours % 24;
+    hours = hours ? hours : 24; // the hour '0' should be '24'
+    minutes = minutes < 10 ? "0" + minutes : minutes;
+    var strTime = hours + ":" + minutes;
+    return strTime;
   }
 }
