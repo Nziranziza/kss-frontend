@@ -9,6 +9,7 @@ import {
   OrganisationService,
   ReportService,
   SeasonService,
+  SiteService,
   TrainingService,
 } from "src/app/core";
 import { jsPDF } from "jspdf";
@@ -36,7 +37,8 @@ export class ReportsComponent extends BasicComponent implements OnInit {
     private organisationService: OrganisationService,
     private groupService: GroupService,
     private trainingService: TrainingService,
-    private reportService: ReportService
+    private reportService: ReportService,
+    private siteService: SiteService
   ) {
     super(locationService, organisationService);
   }
@@ -159,7 +161,7 @@ export class ReportsComponent extends BasicComponent implements OnInit {
           org.organizationRole.includes(1)
         );
         this.organisations.unshift({
-          organizationName: "all organizations",
+          organizationName: "all cws",
           _id: "",
         });
       }
@@ -178,16 +180,19 @@ export class ReportsComponent extends BasicComponent implements OnInit {
   selectEvent(item) {
     this.newOrg = item._id;
     let newData = this.organisations.filter((org) => org._id === item._id);
-    console.log(newData);
+    this.reportBody.reference = this.newOrg;
     this.coveredSectors = newData[0].coveredSectors;
     this.coveredCells =
       newData[0].coveredSectors[this.sectorIndex].coveredCells;
     this.coveredVillages =
       newData[0].coveredSectors[this.sectorIndex].coveredVillages;
+
+    this.getStats(this.reportForm.value.reportFor, this.reportBody);
   }
 
   deselectEvent() {
     this.newOrg = "";
+    this.getStats(this.reportForm.value.reportFor, {});
   }
 
   selectGroupEvent(item) {
@@ -217,6 +222,19 @@ export class ReportsComponent extends BasicComponent implements OnInit {
             prov_id: value,
           },
         });
+        this.siteService
+          .getZone({ prov_id: value, searchBy: "province" })
+          .subscribe((data) => {
+            if (data) {
+              this.organisations = data.content.filter((org) =>
+                org.organizationRole.includes(1)
+              );
+              this.organisations.unshift({
+                organizationName: "all cws",
+                _id: "",
+              });
+            }
+          });
       });
     this.reportForm.controls.location
       .get("dist_id".toString())
@@ -230,10 +248,26 @@ export class ReportsComponent extends BasicComponent implements OnInit {
             dist_id: value,
           },
         });
+        this.siteService
+          .getZone({ dist_id: value, searchBy: "district" })
+          .subscribe((data) => {
+            if (data) {
+              this.organisations = data.content.filter((org) =>
+                org.organizationRole.includes(1)
+              );
+              this.organisations.unshift({
+                organizationName: "all cws",
+                _id: "",
+              });
+            }
+          });
       });
     this.reportForm.controls.location
       .get("sect_id".toString())
       .valueChanges.subscribe((value) => {
+        this.reportBody.location = {
+          sect_id: value,
+        };
         this.locationChangSector(this.reportForm, value);
         this.getStats(this.reportForm.value.reportFor, {
           location: {
@@ -245,6 +279,9 @@ export class ReportsComponent extends BasicComponent implements OnInit {
     this.reportForm.controls.location
       .get("cell_id".toString())
       .valueChanges.subscribe((value) => {
+        this.reportBody.location = {
+          cell_id: value,
+        };
         this.locationChangCell(this.reportForm, value);
         this.getStats(this.reportForm.value.reportFor, {
           location: {
@@ -256,6 +293,9 @@ export class ReportsComponent extends BasicComponent implements OnInit {
     this.reportForm.controls.location
       .get("village_id".toString())
       .valueChanges.subscribe((value) => {
+        this.reportBody.location = {
+          village_id: value,
+        };
         this.getStats(this.reportForm.value.reportFor, {
           location: {
             village_id: value,

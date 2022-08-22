@@ -131,6 +131,7 @@ export class DashboardComponent extends BasicComponent implements OnInit {
   initialValue = "";
   keyword = "organizationName";
   groupKeyword = "groupName";
+  agronomistKeyword = "foreName";
   nurseryKeyword = "nurseryName";
   seasons: any[];
   currentSeason: any;
@@ -141,6 +142,8 @@ export class DashboardComponent extends BasicComponent implements OnInit {
   dateRangeMax: any = {};
   mainBody: any = {};
   markersArray = [];
+  generalFarmStats: any = {};
+  selectedAgronomist: any;
 
   weeks = [
     { id: 1, name: "Week 1", start: "01", end: "07" },
@@ -168,7 +171,7 @@ export class DashboardComponent extends BasicComponent implements OnInit {
     },
   ];
   @ViewChild("visitChart ", { static: false }) visitChart;
-  @ViewChild("seedlingChart ", { static: false }) seedlingChart;
+  @ViewChild("seedChart ", { static: false }) seedChart;
   @ViewChild("mapSet ", { static: false }) mapSet;
 
   ngOnInit() {
@@ -181,8 +184,10 @@ export class DashboardComponent extends BasicComponent implements OnInit {
         village_id: [""],
         latitude: [""],
         longitude: [""],
+        season_id: [""],
         covered_sector: [""],
         filterByDate: [""],
+        quarterId: [""],
       }),
       trainingFilters: this.formBuilder.group({
         season_id: [""],
@@ -408,7 +413,7 @@ export class DashboardComponent extends BasicComponent implements OnInit {
           org.organizationRole.includes(1)
         );
         this.organisations.unshift({
-          organizationName: "all organizations",
+          organizationName: "all cws",
           _id: "",
         });
       }
@@ -438,10 +443,12 @@ export class DashboardComponent extends BasicComponent implements OnInit {
       this.seasonChangeEffect("visitFilters");
       this.seasonChangeEffect("seedlingFilters");
       this.seasonChangeEffect("gapFilters");
+      this.seasonChangeEffect("location");
     });
     this.getGeneralStats({});
   }
   // General stats from filters
+
   getGeneralStats(body: any) {
     this.getTrainingsStats(body);
     this.getGapAdoptionStats(body);
@@ -450,32 +457,28 @@ export class DashboardComponent extends BasicComponent implements OnInit {
     if (this.newOrg != "") {
       this.getFarms({ org_id: this.newOrg });
     }
+    this.getFarmsStats(body);
   }
 
   // get stats from filters
   getStats(filterBy: string) {
     this.mainBody = {};
     if (filterBy != "") {
-      const value =
-        this.dashboardForm.controls[filterBy].get("filterByDate").value;
+      let value = [];
+      value = this.dashboardForm.controls[filterBy].get("filterByDate").value;
       if (value.length > 1) {
-        this.mainBody.date = {
-          from: value[0],
-          to: value[1],
-        };
+        if (typeof value[0].getMonth === "function") {
+          this.mainBody.date = {
+            from: this.formatDate(value[0]),
+            to: this.formatDate(value[1]),
+          };
+        } else {
+          this.mainBody.date = {
+            from: value[0],
+            to: value[1],
+          };
+        }
       }
-    }
-    if (filterBy === "trainingFilters") {
-      this.getTrainingsStats(this.mainBody);
-    } else if (filterBy === "visitFilters") {
-      this.getVisitsStats(this.mainBody);
-      this.visitChart.draw();
-    } else if (filterBy === "seedlingFilters") {
-      this.getSeedlingStats(this.mainBody);
-      this.seedlingChart.draw();
-    } else if (filterBy === "gapFilters") {
-      this.getGapAdoptionStats(this.mainBody);
-    } else if (filterBy === "location") {
       const locationId = this.currentSelectedLocation;
       if (typeof locationId === "object" && locationId.locationId !== "") {
         this.mainBody.location = locationId;
@@ -483,18 +486,26 @@ export class DashboardComponent extends BasicComponent implements OnInit {
       if (this.newOrg != "") {
         this.mainBody.referenceId = this.newOrg;
       }
+    }
+    if (filterBy === "trainingFilters") {
+      this.getTrainingsStats(this.mainBody);
+    } else if (filterBy === "visitFilters") {
+      this.getVisitsStats(this.mainBody);
+    } else if (filterBy === "seedlingFilters") {
+      this.getSeedlingStats(this.mainBody);
+    } else if (filterBy === "gapFilters") {
+      this.getGapAdoptionStats(this.mainBody);
+    } else if (filterBy === "location") {
       this.clickedMarker = false;
       this.myLatLng = { lat: -2, lng: 30 };
       this.getGeneralStats(this.mainBody);
-      this.seedlingChart.draw();
-      this.visitChart.draw();
-      this.mapSet.draw();
     }
   }
 
   selectEvent(item) {
     this.newOrg = item._id;
     let newData = this.organisations.filter((org) => org._id === item._id);
+    this.dashboardForm.controls.location.get("sect_id".toString()).setValue("");
     this.coveredSectors = newData[0].coveredSectors;
   }
 
@@ -510,14 +521,45 @@ export class DashboardComponent extends BasicComponent implements OnInit {
     if (this.dashboardForm.value.trainingId != "") {
       body.trainingId = this.dashboardForm.value.trainingId;
     }
-    if (this.dashboardForm.value.trainer_id != "") {
-      body.trainerId = this.dashboardForm.value.trainer_id;
+    if (this.selectedAgronomist != "") {
+      body.trainerId = this.selectedAgronomist;
+    }
+    this.getTrainingsStats(body);
+  }
+
+  selectAgronomistEvent(item) {
+    this.selectedAgronomist = item._id;
+    let body: any = {};
+    if (this.selectedGroup !== "") {
+      body = {
+        groupId: item._id,
+      };
+    }
+
+    if (this.dashboardForm.value.trainingId != "") {
+      body.trainingId = this.dashboardForm.value.trainingId;
+    }
+    if (this.selectedAgronomist != "") {
+      body.trainerId = this.selectedAgronomist;
+    }
+    this.getTrainingsStats(body);
+  }
+
+  deselectAgronomistEvent() {
+    this.selectedAgronomist = "";
+    let body: any = {};
+    if (this.dashboardForm.value.trainingId != "") {
+      body.trainingId = this.dashboardForm.value.trainingId;
+    }
+    if (this.selectedAgronomist != "") {
+      body.trainerId = this.selectedAgronomist;
     }
     this.getTrainingsStats(body);
   }
 
   deselectEvent() {
     this.newOrg = "";
+    this.dashboardForm.controls.location.get("sect_id".toString()).setValue("");
   }
 
   selectNurseryEvent(item) {
@@ -536,8 +578,8 @@ export class DashboardComponent extends BasicComponent implements OnInit {
     if (this.dashboardForm.value.trainingId != "") {
       body.trainingId = this.dashboardForm.value.trainingId;
     }
-    if (this.dashboardForm.value.trainer_id != "") {
-      body.trainerId = this.dashboardForm.value.trainer_id;
+    if (this.selectedAgronomist != "") {
+      body.trainerId = this.selectedAgronomist;
     }
     this.getTrainingsStats(body);
   }
@@ -576,6 +618,7 @@ export class DashboardComponent extends BasicComponent implements OnInit {
         this.seedlingGraph.options.colors[index] = colors[index];
       });
       this.loading = false;
+      this.seedlingGraph = Object.assign([], this.seedlingGraph);
     });
   }
 
@@ -590,6 +633,14 @@ export class DashboardComponent extends BasicComponent implements OnInit {
           lng: parseFloat(item.longitude),
         });
       });
+      this.loading = false;
+    });
+  }
+
+  getFarmsStats(body: any) {
+    this.loading = true;
+    this.farmService.farmStats(body).subscribe((data) => {
+      this.generalFarmStats = data.data;
       this.loading = false;
     });
   }
@@ -613,6 +664,7 @@ export class DashboardComponent extends BasicComponent implements OnInit {
         this.visitStats.totalFarmersVisited;
       this.loading = false;
     });
+    this.graph = Object.assign([], this.graph);
   }
 
   getGapAdoptionStats(body: any): void {
@@ -625,12 +677,10 @@ export class DashboardComponent extends BasicComponent implements OnInit {
 
   getTrainers() {
     this.loading = true;
-    this.userService
-      .all(this.authenticationService.getCurrentUser().info.org_id)
-      .subscribe((data) => {
-        this.trainers = data.content;
-        this.loading = false;
-      });
+    this.userService.allAgronomist().subscribe((data) => {
+      this.trainers = data.data;
+      this.loading = false;
+    });
   }
 
   onChanges() {
@@ -651,7 +701,7 @@ export class DashboardComponent extends BasicComponent implements OnInit {
                   org.organizationRole.includes(1)
                 );
                 this.organisations.unshift({
-                  organizationName: "all organizations",
+                  organizationName: "all cws",
                   _id: "",
                 });
               }
@@ -662,6 +712,13 @@ export class DashboardComponent extends BasicComponent implements OnInit {
             locationId: "",
           };
         }
+        this.dashboardForm.controls.location
+          .get("dist_id".toString())
+          .setValue("");
+        this.dashboardForm.controls.location
+          .get("sect_id".toString())
+          .setValue("");
+        this.newOrg = "";
       });
     this.dashboardForm.controls.location
       .get("dist_id".toString())
@@ -680,7 +737,7 @@ export class DashboardComponent extends BasicComponent implements OnInit {
                   org.organizationRole.includes(1)
                 );
                 this.organisations.unshift({
-                  organizationName: "all organizations",
+                  organizationName: "all cws",
                   _id: "",
                 });
               }
@@ -692,6 +749,10 @@ export class DashboardComponent extends BasicComponent implements OnInit {
               this.dashboardForm.controls.location.get("prov_id").value,
           };
         }
+        this.dashboardForm.controls.location
+          .get("sect_id".toString())
+          .setValue("");
+        this.newOrg = "";
       });
     this.dashboardForm.controls.location
       .get("sect_id".toString())
@@ -709,21 +770,7 @@ export class DashboardComponent extends BasicComponent implements OnInit {
               this.dashboardForm.controls.location.get("dist_id").value,
           };
         }
-        this.dashboardForm.controls.location.get("filterByDate").setValue("");
-      });
-    this.dashboardForm.controls.location
-      .get("filterByDate".toString())
-      .valueChanges.subscribe((value) => {
-        let selectedDate = [];
-        if (value) {
-          value.forEach((newData) => {
-            selectedDate.push(this.formatDate(newData));
-          });
-        }
-
-        this.dashboardForm.controls.location
-          .get("filterByDate")
-          .setValue(selectedDate);
+        this.newOrg = "";
       });
 
     this.dashboardForm.controls.training_id.valueChanges.subscribe((value) => {
@@ -731,19 +778,8 @@ export class DashboardComponent extends BasicComponent implements OnInit {
       if (value !== "") {
         body.trainingId = value;
       }
-      if (this.dashboardForm.value.trainer_id != "") {
+      if (this.selectedAgronomist != "") {
         body.trainerId = this.dashboardForm.value.trainerId;
-      }
-      this.getTrainingsStats(body);
-    });
-
-    this.dashboardForm.controls.trainer_id.valueChanges.subscribe((value) => {
-      let body: any = {};
-      if (value !== "") {
-        body.trainerId = value;
-      }
-      if (this.dashboardForm.value.trainingId != "") {
-        body.trainingId = this.dashboardForm.value.trainingId;
       }
       this.getTrainingsStats(body);
     });
@@ -761,9 +797,23 @@ export class DashboardComponent extends BasicComponent implements OnInit {
       .get("filterByDate")
       .setValue([`${parseFloat(value) - 1}-10-01`, `${value}-10-01`]);
   }
+
   seasonChange(group: string) {
     this.seasonChangeEffect(group);
-    this.getStats(group);
+    if (group !== "location") {
+      this.getStats(group);
+    } else {
+      this.dashboardForm.controls.location
+        .get("prov_id".toString())
+        .setValue("");
+      this.dashboardForm.controls.location
+        .get("dist_id".toString())
+        .setValue("");
+      this.dashboardForm.controls.location
+        .get("sect_id".toString())
+        .setValue("");
+      this.newOrg = "";
+    }
   }
 
   seasonQuarterChange(group: string) {
@@ -807,14 +857,9 @@ export class DashboardComponent extends BasicComponent implements OnInit {
   }
 
   seasonDateChange(group: string) {
-    const value = this.dashboardForm.controls[group].get("filterByDate").value;
-    let selectedDate = [];
-    if (value) {
-      value.forEach((newData) => {
-        selectedDate.push(this.formatDate(newData));
-      });
+    if (group !== "location") {
+      this.getStats(group);
     }
-    this.getStats(group);
   }
 
   formatDate(date) {

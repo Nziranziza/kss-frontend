@@ -407,10 +407,6 @@
             <th>Address</th>
             <th>Group size</th>
             <th>Meeting Day</th>
-            <th>
-              Training <br />
-              attendance rate
-            </th>
             <th>status</th>
           </tr>
         </thead>
@@ -435,7 +431,6 @@
               <td>
                 every {{ weekDays[group.meetingSchedule?.meetingDay - 1] }}
               </td>
-              <td>0%</td>
               <td>
                 <span class="profile-text">
                   <ng-container *ngIf="!group.active; else inactive"
@@ -522,10 +517,6 @@
             <th>Group leader contact</th>
             <th>Address</th>
             <th>Group size</th>
-            <th>
-              Training <br />
-              attendance rate
-            </th>
             <th>status</th>
           </tr>
         </thead>
@@ -540,7 +531,6 @@
               <td>
                 <span>{{ group.members.length + " " + "farmers" }}</span>
               </td>
-              <td></td>
               <td>
                 <span class="profile-text">
                   <ng-container *ngIf="!group.active; else inactive"
@@ -580,10 +570,6 @@
             <th>Group leader contact</th>
             <th>Address</th>
             <th>Group size</th>
-            <th>
-              Training <br />
-              attendance rate
-            </th>
             <th>status</th>
           </tr>
         </thead>
@@ -598,7 +584,6 @@
               <td>
                 <span>{{ group.members.length + " " + "farmers" }}</span>
               </td>
-              <td></td>
               <td>
                 <span class="profile-text">
                   <ng-container *ngIf="!group.active; else inactive"

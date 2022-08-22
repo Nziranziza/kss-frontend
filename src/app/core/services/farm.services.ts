@@ -39,4 +39,8 @@ export class FarmService {
   getLand(id: string): Observable<any> {
     return this.apiService.get("/v1.1/farm/lands/visits/" + id);
   }
+
+  farmStats(body: any): Observable<any> {
+    return this.apiService.post("/v1.1/farm-visit-schedules/overview", body);
+  }
 }
