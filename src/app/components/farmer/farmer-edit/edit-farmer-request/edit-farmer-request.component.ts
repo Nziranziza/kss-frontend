@@ -27,7 +27,7 @@ export class EditFarmerRequestComponent implements OnInit {
   districts: any;
   sectors = [];
   treeVarieties: any;
-  ranges = ['0-3', '4-10', '11-15', '16-20', '21-24', '25-30', '31+'];
+  ranges = ['0-3', '4-10', '11-15', '16-20', '21-25', '26-30', '31+'];
   certificates: any;
   cells: any;
   villages: any;
@@ -362,6 +362,7 @@ export class EditFarmerRequestComponent implements OnInit {
       });
       this.farmerService.updateFarmerRequest(request).subscribe(() => {
           this.setMessage('request successfully updated!');
+          
         },
         (err) => {
           this.setError(err.errors);

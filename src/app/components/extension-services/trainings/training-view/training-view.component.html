@@ -56,7 +56,7 @@
               trainingsStats.totalPresent > 0
                 ? (trainingsStats.totalPresent * 100) /
                   trainingsStats.totalInvitees
-                : 0 | number: "1.1-1"
+                : (0 | number: "1.1-1")
             }}%
           </h1>
         </div>
@@ -84,7 +84,7 @@
                 >
                 <div class="confirm-text-box confirm-text">
                   <li *ngFor="let gaps of training.adoptionGaps; let i = index">
-                    {{ gaps.name }}
+                    {{ gaps.gap_name }}
                   </li>
                 </div>
               </div>
@@ -157,7 +157,6 @@
             <th>Trainer</th>
             <th>Trainees</th>
             <th>Status</th>
-            <th class="text-center">Actions / To Do about</th>
           </tr>
         </thead>
         <tbody>
@@ -165,39 +164,17 @@
             <td>{{ schedule.createdAt | date: "short" }}</td>
             <td>{{ schedule.trainingId.trainingName }}</td>
             <td>{{ schedule.startTime | date: "short" }}</td>
-            <td>{{ schedule.venueName }}</td>
-            <td>{{ schedule.trainer.fullName }}</td>
-            <td>{{ schedule.trainees.length }} trainees</td>
-            <td>{{ schedule.status }}</td>
             <td>
-              <button
-                appRequiredSeason
-                class="btn btn-action-no-border btn-margin details-button"
-                (click)="openViewModal(schedule._id)"
-              >
-                <em class="fa fa-eye"></em>
-              </button>
-              <button
-                appRequiredSeason
-                (click)="openDeleteModal(schedule)"
-                class="btn btn-action-no-border btn-margin"
-              >
-                <em class="fa fa-close"></em>
-              </button>
-              <button
-                appRequiredSeason
-                (click)="open(content); selectedSchedule(schedule)"
-                class="btn btn-action-no-border btn-margin"
-              >
-                <em class="fa fa-envelope-o"></em>
-              </button>
-              <button
-                class="btn btn-action-no-border btn-margin btn-sm details-button"
-                routerLink="/admin/training/schedule/edit/{{ schedule._id }}"
-              >
-                <em class="fa fa-pencil"></em>
-              </button>
+              {{ schedule?.location.prov_id?.namek }} >
+              {{ schedule?.location.dist_id?.name }} >
+              {{ schedule?.location.sect_id?.name }} >
+              {{ schedule?.location.cell_id?.name }} >
+              {{ schedule?.location.village_id?.name }} >
+              {{ schedule?.venueName }}
             </td>
+            <td>{{ schedule?.trainer.fullName }}</td>
+            <td>{{ schedule?.trainees.length }} trainees</td>
+            <td>{{ schedule?.status }}</td>
           </tr>
         </tbody>
       </table>

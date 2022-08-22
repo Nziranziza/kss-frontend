@@ -27,6 +27,7 @@ export class ReportsComponent extends BasicComponent implements OnInit {
   coveredCells: any = [];
   selectedGroup: any;
   dataCsv: any;
+  dataPdf: any;
   constructor(
     private formBuilder: FormBuilder,
     private seasonService: SeasonService,
@@ -279,13 +280,12 @@ export class ReportsComponent extends BasicComponent implements OnInit {
     }
   }
   downloadCsv() {
-    this.generateFinalReport("xslx");
-    console.log(this.dataFile);
+    this.generateFinalReport();
   }
 
   downloadFile() {
-    this.generateFinalReport("csv");
     let data = this.dataCsv;
+    console.log(data);
     const replacer = (key, value) => (value === null ? "" : value); // specify how you want to handle null values here
     const header = Object.keys(data[0]);
     let csv = data.map((row) =>
@@ -298,6 +298,16 @@ export class ReportsComponent extends BasicComponent implements OnInit {
 
     var blob = new Blob([csvArray], { type: "text/csv" });
     saveAs(blob, "myFile.csv");
+  }
+
+  downloadPdfFile() {
+    let base64String = this.dataPdf;
+    console.log(base64String);
+    const source = `data:application/pdf;base64,${base64String}`;
+    const link = document.createElement("a");
+    link.href = source;
+    link.download = `sks-report.pdf`;
+    link.click();
   }
 
   downloadPdf() {
@@ -325,7 +335,6 @@ export class ReportsComponent extends BasicComponent implements OnInit {
         this.reportsTableData = data.data;
         this.dtTrigger.next();
         this.reportGenerated = true;
-        console.log(this.reportsTableData);
       });
     } else if (this.reportForm.value.reportFor === "Trainings") {
       this.reportsTableData = [];
@@ -333,7 +342,6 @@ export class ReportsComponent extends BasicComponent implements OnInit {
         this.reportsTableData = data.data;
         this.dt2Trigger.next();
         this.reportGenerated = true;
-        console.log(this.reportsTableData);
       });
     } else if (this.reportForm.value.reportFor === "Farm Visits") {
       this.reportsTableData = [];
@@ -341,32 +349,58 @@ export class ReportsComponent extends BasicComponent implements OnInit {
         this.reportsTableData = data.data;
         this.dt3Trigger.next();
         this.reportGenerated = true;
-        console.log(this.reportsTableData);
       });
     }
   }
 
-  generateFinalReport(type: string) {
+  generateFinalReport() {
     if (this.reportForm.value.reportFor === "Farmer Groups") {
       this.reportService
-        .groupDownload(this.reportBody, type)
+        .groupDownload(this.reportBody, "xlsx")
         .subscribe((data) => {
           this.dataFile = data.data.file;
+        });
+      this.reportService
+        .groupDownload(this.reportBody, "csv")
+        .subscribe((data) => {
           this.dataCsv = data.data.file;
+        });
+      this.reportService
+        .groupDownload(this.reportBody, "pdf")
+        .subscribe((data) => {
+          this.dataPdf = data.data.file;
         });
     } else if (this.reportForm.value.reportFor === "Trainings") {
       this.reportService
-        .trainingDownload(this.reportBody, type)
+        .trainingDownload(this.reportBody, "xlsx")
         .subscribe((data) => {
           this.dataFile = data.data.file;
+        });
+      this.reportService
+        .trainingDownload(this.reportBody, "csv")
+        .subscribe((data) => {
           this.dataCsv = data.data.file;
+        });
+      this.reportService
+        .trainingDownload(this.reportBody, "pdf")
+        .subscribe((data) => {
+          this.dataPdf = data.data.file;
         });
     } else if (this.reportForm.value.reportFor === "Farm Visits") {
       this.reportService
-        .visitDownload(this.reportBody, type)
+        .visitDownload(this.reportBody, "xlsx")
         .subscribe((data) => {
           this.dataFile = data.data.file;
+        });
+      this.reportService
+        .visitDownload(this.reportBody, "csv")
+        .subscribe((data) => {
           this.dataCsv = data.data.file;
+        });
+      this.reportService
+        .visitDownload(this.reportBody, "pdf")
+        .subscribe((data) => {
+          this.dataPdf = data.data.file;
         });
     }
   }

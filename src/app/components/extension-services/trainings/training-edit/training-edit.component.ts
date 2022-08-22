@@ -61,7 +61,7 @@ export class TrainingEditComponent
     this.gapDropdownSettings = {
       singleSelection: false,
       idField: "_id",
-      textField: "name",
+      textField: "gap_name",
       selectAllText: "Select All",
       enableCheckAll: false,
       unSelectAllText: "UnSelect All",
@@ -139,11 +139,11 @@ export class TrainingEditComponent
       let newData: any[] = [
         {
           _id: "",
-          name: "Not Applied",
+          gap_name: "Not Applied",
         },
       ];
       data.data.forEach((data) => {
-        newData.push({ _id: data._id, name: data.gap_name });
+        newData.push({ _id: data._id, gap_name: data.gap_name });
       });
       this.gaps = newData;
       this.loading = false;
