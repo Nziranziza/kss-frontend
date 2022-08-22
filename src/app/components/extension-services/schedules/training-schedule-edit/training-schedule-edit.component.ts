@@ -131,13 +131,6 @@ export class TrainingScheduleEditComponent
         this.scheduleTraining.controls.description.setValue(
           this.scheduleData.description
         );
-        this.scheduleTraining.controls.trainer.setValue(
-          this.trainers
-            .map(function (e) {
-              return e._id;
-            })
-            .indexOf(this.scheduleData.trainer.userId)
-        );
         this.scheduleTraining.controls.location
           .get("venue".toString())
           .setValue(this.scheduleData.venueName, { emitEvent: false });
@@ -156,6 +149,14 @@ export class TrainingScheduleEditComponent
         this.scheduleTraining.controls.location
           .get("village_id".toString())
           .setValue(this.scheduleData.location.village_id._id);
+
+        this.scheduleTraining.controls.trainer.setValue(
+          this.trainers
+            .map(function (e) {
+              return e._id;
+            })
+            .indexOf(this.scheduleData.trainer.userId)
+        );
       }
     });
   }

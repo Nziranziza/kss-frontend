@@ -65,7 +65,7 @@ export class FarmerCreateComponent
   paymentChannels: any;
   channels: any;
   treeVarieties: any;
-  ranges = ["0-3", "4-10", "11-15", "16-20", "21-24", "25-30", "31+"];
+  ranges = ["0-3", "4-10", "11-15", "16-20", "21-25", "26-30", "31+"];
   certificates: any;
   upi: any;
   land: any;

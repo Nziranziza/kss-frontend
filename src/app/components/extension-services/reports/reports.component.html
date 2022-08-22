@@ -311,22 +311,22 @@
     </div>
   </div>
   <div class="text-center" style="margin-top: 5px" *ngIf="reportGenerated">
-    <button
+    <a
       class="btn btn-default"
-      type="button"
       style="margin-left: 10px"
-      (click)="downloadPdf()"
+      [href]="'data:application/pdf;base64,' + dataPdf | safe"
+      download="generalReport.pdf"
     >
       export to PDF
-    </button>
-    <button
+    </a>
+    <a
       class="btn btn-default"
-      type="button"
       style="margin-left: 10px"
-      (click)= "downloadFile()"
+      [href]="'data:application/octet-stream;base64,' + dataCsv | safe"
+      download="generalReport.csv"
     >
       export to CSV
-    </button>
+    </a>
     <a
       class="btn btn-default"
       style="margin-left: 10px"
@@ -470,8 +470,6 @@
         <thead>
           <tr>
             <th>Date Added</th>
-            <th>Farm to visit</th>
-            <th>Visit Description</th>
             <th>GAP to be Covered</th>
             <th>Visitor</th>
             <th>Date and Time of the visit</th>
@@ -483,16 +481,6 @@
           <ng-container *ngFor="let visit of reportsTableData">
             <tr>
               <td>{{ visit.createdAt | date: "short" }}</td>
-              <td>
-                <div>
-                  {{
-                    visit.farm.firstName
-                      ? visit.farm.firstName + " " + visit.farm.lastName
-                      : visit.farm.groupName
-                  }}
-                </div>
-              </td>
-              <td>{{ visit.description }}</td>
               <td>
                 {{ visit.gap.gap_name }}
               </td>
