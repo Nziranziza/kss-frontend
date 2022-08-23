@@ -1,3 +1,152 @@
+<ng-template #content let-modal>
+  <div class="modal-body extended-modal-body">
+    <h4
+      class="modal-title training-modal-title text-center"
+      id="modal-basic-title"
+    >
+      Verify and Confirm
+    </h4>
+    <br />
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="box-confirm">
+          <div class="box-body">
+            <h4 class="text-center">Scheduled Training details</h4>
+            <label class="control-label label-required"
+              >Selected Training</label
+            >
+            <div class="confirm-text-box confirm-text">
+              {{
+                trainings[scheduleTraining.value.trainingModule].trainingName
+              }}
+            </div>
+            <label class="control-label label-required">Description</label>
+            <div class="confirm-text-box confirm-text confirm-text-area">
+              {{ scheduleTraining.value.description }}
+            </div>
+
+            <label class="control-label label-required"
+              >Training Location address</label
+            >
+            <div class="row">
+              <div class="col-sm-6">
+                <label class="control-label"> Province </label>
+                <div class="confirm-text-box confirm-text">
+                  {{ scheduleTraining.value.location.prov_id }}
+                </div>
+                <label class="control-label"> Sector </label>
+                <div class="confirm-text-box confirm-text">
+                  {{ scheduleTraining.value.location.sect_id }}
+                </div>
+                <label class="control-label"> Village </label>
+                <div class="confirm-text-box confirm-text">
+                  {{ scheduleTraining.value.location.village_id }}
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <label class="control-label label-required"> District </label>
+                <div class="confirm-text-box confirm-text">
+                  {{ scheduleTraining.value.location.dist_id }}
+                </div>
+                <label class="control-label"> Cell </label>
+                <div class="confirm-text-box confirm-text">
+                  {{ scheduleTraining.value.location.cell_id }}
+                </div>
+                <label class="control-label"> Venue </label>
+                <div class="confirm-text-box confirm-text">
+                  {{ scheduleTraining.value.location.venue }}
+                </div>
+              </div>
+            </div>
+            <label class="control-label">Training Date & Time</label>
+            <div class="row">
+              <div class="col-sm-6">
+                <label class="control-label"> From </label>
+                <div class="confirm-text-box confirm-text">
+                  {{
+                    scheduleTraining.value.trainingStartDate +
+                      "T" +
+                      scheduleTraining.value.startTime
+                  }}
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <label class="control-label"> To </label>
+                <div class="confirm-text-box confirm-text">
+                  {{
+                    scheduleTraining.value.trainingEndDate +
+                      "T" +
+                      scheduleTraining.value.endTime
+                  }}
+                </div>
+              </div>
+            </div>
+            <div class="control-label text-center"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="box-confirm">
+          <label class="control-label label-required">Trainer</label>
+          <div class="confirm-text-box confirm-text" style="margin-right: 20px">
+            {{ trainers[scheduleTraining.value.trainer].fullNames }}
+          </div>
+          <br />
+          <h3 class="text-center">
+            Trainees ( Total: {{ selectedTrainees?.length }} )
+          </h3>
+          <table class="row-border hover table table-striped">
+            <thead>
+              <tr>
+                <th>Reg. Number</th>
+                <th>Farmer Names</th>
+                <th>Contact</th>
+                <th>Status</th>
+              </tr>
+              <tr *ngFor="let trainee of selectedTrainees; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>{{ trainee.firstName + " " + trainee.lastName }}</td>
+                <td>{{ trainee.phoneNumber }}</td>
+                <td>{{ trainee.attendance }}</td>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <br />
+    <div class="row">
+      <div class="col-sm-3">
+        <button
+          type="button"
+          class="btn btn-danger btn-lg pull-left"
+          (click)="modal.dismiss()"
+        >
+          Cancel
+        </button>
+      </div>
+      <div class="col-sm-6"></div>
+      <div class="col-sm-3">
+        <button
+          class="btn btn-secondary btn-lg submit"
+          (click)="onSubmit(); modal.dismiss('cancel click'); open(ccontent)"
+          [disabled]="loading"
+        >
+          <span *ngIf="!loading; else other_content">Confirm</span>
+          <ng-template #other_content>
+            <div class="loader">
+              <div class="line"></div>
+              <div class="line"></div>
+              <div class="line"></div>
+              <div class="line"></div>
+            </div>
+          </ng-template>
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>
 <app-list-errors [errorList]="errors"></app-list-errors>
 <form [formGroup]="scheduleTraining" (ngSubmit)="onSubmit()">
   <div class="row">
@@ -247,6 +396,7 @@
                           [owlDateTime]="dt1"
                           formControlName="trainingStartDate"
                           class="form-control"
+                          [min]="today"
                           placeholder="Dd/mm/yyyy"
                         />
                         <owl-date-time
@@ -308,6 +458,9 @@
                           [owlDateTime]="dt3"
                           formControlName="trainingEndDate"
                           class="form-control"
+                          [min]="
+                            scheduleTraining.controls.trainingStartDate.value
+                          "
                           placeholder="Dd/mm/yyyy"
                         />
                         <owl-date-time

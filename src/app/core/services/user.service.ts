@@ -14,8 +14,8 @@ export class UserService {
     return this.apiService.get('/users/organization/' + organisationId);
   }
 
-  allAgronomist(): Observable<any> {
-    return this.apiService.get('/v1.1/users/profile/agronomists');
+  allAgronomist(body: any): Observable<any> {
+    return this.apiService.post('/v1.1/users/profile/agronomists', body);
   }
 
   get(id: string): Observable<any> {
