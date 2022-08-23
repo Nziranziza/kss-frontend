@@ -68,7 +68,6 @@ export class FarmVisitListComponent
       .all(this.authenticationService.getCurrentUser().info.org_id)
       .subscribe((data) => {
         this.visits = data.data;
-        console.log(this.visits);
         this.dtTrigger.next();
         this.loading = false;
       });

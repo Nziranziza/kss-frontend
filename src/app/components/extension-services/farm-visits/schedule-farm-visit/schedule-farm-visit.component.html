@@ -16,7 +16,15 @@
               <label class="control-label label-required">Farm to visit</label>
               <div class="confirm-text-box confirm-text">
                 <li *ngFor="let farms of selectedFarms; let i = index">
-                  {{ farms.farmer + " -- UPI " + farms.upi }}
+                  {{
+                    farms.farmer +
+                      " -- UPI/Location " +
+                      farms?.location?.dist_id?.name +
+                      " > " +
+                      farms?.location?.sect_id?.name +
+                      " > " +
+                      farms?.location?.cell_id?.name
+                  }}
                 </li>
               </div>
             </div>
@@ -39,8 +47,13 @@
               <label class="control-label label-required"
                 >Agronomist who will visit</label
               >
-              <div class="confirm-text-box confirm-text">
-                {{ scheduleVisit.value.agronomist }}
+              <div
+                class="confirm-text-box confirm-text"
+                *ngFor="let agro of agronomist; let i = index"
+              >
+                <span *ngIf="agro._id == scheduleVisit.value.agronomist">
+                  {{ agro.fullNames }}
+                </span>
               </div>
             </div>
             <div style="margin-bottom: 10px">
@@ -48,13 +61,7 @@
                 >Date and Time of the visit</label
               >
               <div class="confirm-text-box confirm-text">
-                {{ scheduleVisit.value.date.visitDate | date: "fullDate" }}
-                {{
-                  " from " +
-                    scheduleVisit.value.startTime +
-                    " to " +
-                    scheduleVisit.value.endTime
-                }}
+                {{ formatedStartDate + " to " + formatedEndDate }}
               </div>
             </div>
             <div style="margin-bottom: 10px">
@@ -140,9 +147,19 @@
             [label]="'farmer_group'"
           >
           </app-inline-errors>
+          <span
+            style="font: normal 10px Helvetica Neue; color: #ff2c2c"
+            *ngIf="
+              scheduleVisit.value.farmerGroup != '' && farmers?.length <= 0
+            "
+          >
+            group has no farmers</span
+          >
         </div>
       </div>
-      <span *ngIf="scheduleVisit.value.farmerGroup != ''">
+      <span
+        *ngIf="scheduleVisit.value.farmerGroup != '' && farmers?.length > 0"
+      >
         <div class="col-sm-10 col-centered">
           <div class="row">
             <div class="col-sm-6">
@@ -184,14 +201,27 @@
                         <table class="row-border hover table table-striped">
                           <thead>
                             <tr>
-                              <th>UPI</th>
+                              <th>UPI/Location</th>
+                              <th>Trees</th>
+                              <th>More</th>
                               <th>{{ "selection" | translate }}</th>
                             </tr>
                           </thead>
                           <tbody>
                             <tr *ngFor="let farm of farmList; let i = index">
                               <td *ngIf="farm.owner == member.userId">
-                                {{ farm.upi }}
+                                {{
+                                  farm.upi
+                                    ? farm.upi
+                                    : farm?.location?.dist_id?.name +
+                                      " > " +
+                                      farm?.location?.sect_id?.name +
+                                      " > " +
+                                      farm?.location?.cell_id?.name
+                                }}
+                              </td>
+                              <td *ngIf="farm.owner == member.userId">
+                                {{ farm?.trees }}
                               </td>
                               <td *ngIf="farm.owner == member.userId">
                                 <button
@@ -201,6 +231,8 @@
                                 >
                                   <em class="fa fa-eye"></em>
                                 </button>
+                              </td>
+                              <td *ngIf="farm.owner == member.userId">
                                 <input
                                   type="checkbox"
                                   class="pull-right"
@@ -219,6 +251,12 @@
                   </div>
                 </fieldset>
               </div>
+              <span
+                style="font: normal 10px Helvetica Neue; color: #ff2c2c"
+                *ngIf="selectedFarms?.length <= 0"
+              >
+                select at least one farm</span
+              >
             </div>
             <div class="col-sm-6">
               <fieldset style="margin: 0px -3px 0px -3px !important">
@@ -295,7 +333,6 @@
                               : 0
                           }}
                         </label>
-                        T
                       </div>
                       <div
                         class="col-sm-3"
@@ -306,7 +343,6 @@
                         <label>
                           {{ farmDetails.treeAges[1].numOfTrees }}
                         </label>
-                        T
                       </div>
                       <div
                         class="col-sm-3"
@@ -317,7 +353,6 @@
                         <label>
                           {{ farmDetails.treeAges[2].numOfTrees }}
                         </label>
-                        T
                       </div>
                       <div
                         class="col-sm-3"
@@ -328,7 +363,6 @@
                         <label>
                           {{ farmDetails.treeAges[3].numOfTrees }}
                         </label>
-                        T
                       </div>
                     </div>
 
@@ -377,7 +411,6 @@
                         <label>
                           {{ farmDetails.treeAges[4].numOfTrees }}
                         </label>
-                        T
                       </div>
                       <div
                         class="col-sm-4"
@@ -388,7 +421,6 @@
                         <label>
                           {{ farmDetails.treeAges[5].numOfTrees }}
                         </label>
-                        T
                       </div>
                       <div
                         class="col-sm-4"
@@ -399,7 +431,6 @@
                         <label>
                           {{ farmDetails.treeAges[6].numOfTrees }}
                         </label>
-                        T
                       </div>
                     </div>
                   </div>
@@ -448,7 +479,7 @@
                 *ngFor="let agro of agronomist; let i = index"
                 value="{{ agro._id }}"
               >
-                {{ agro.foreName + " " + agro.surname | titlecase }}
+                {{ agro.fullNames | titlecase }}
               </option>
             </select>
             <app-inline-errors
@@ -478,7 +509,11 @@
                 class="form-control"
                 placeholder="Dd/mm/yyyy"
               />
-              <owl-date-time [pickerType]="'calendar'" [scrollStrategy]="scrollStrategy" #dt1></owl-date-time>
+              <owl-date-time
+                [pickerType]="'calendar'"
+                [scrollStrategy]="scrollStrategy"
+                #dt1
+              ></owl-date-time>
               <app-inline-errors
                 *ngIf="
                   scheduleVisit.controls.date.get('visitDate').invalid &&
@@ -508,7 +543,11 @@
                   formControlName="startTime"
                   [owlDateTime]="dt3"
                 />
-                <owl-date-time [pickerType]="'timer'" [scrollStrategy]="scrollStrategy" #dt3></owl-date-time>
+                <owl-date-time
+                  [pickerType]="'timer'"
+                  [scrollStrategy]="scrollStrategy"
+                  #dt3
+                ></owl-date-time>
                 <app-inline-errors
                   *ngIf="
                     scheduleVisit.controls.startTime.invalid &&
@@ -532,7 +571,11 @@
                   formControlName="endTime"
                   [owlDateTime]="dt4"
                 />
-                <owl-date-time [pickerType]="'timer'" [scrollStrategy]="scrollStrategy" #dt4></owl-date-time>
+                <owl-date-time
+                  [pickerType]="'timer'"
+                  [scrollStrategy]="scrollStrategy"
+                  #dt4
+                ></owl-date-time>
                 <app-inline-errors
                   *ngIf="
                     scheduleVisit.controls.endTime.invalid &&

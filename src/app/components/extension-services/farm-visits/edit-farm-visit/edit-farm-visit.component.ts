@@ -51,6 +51,9 @@ export class EditFarmVisitComponent implements OnInit {
   farmerGroupId;
   id: string;
   visits: any[] = [];
+  selectedFarms: any[] = [];
+  formatedStartDate: string;
+  formatedEndDate: string;
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
@@ -69,7 +72,6 @@ export class EditFarmVisitComponent implements OnInit {
       endTime: ["", Validators.required],
     });
     this.getVisits();
-
     this.gapDropdownSettings = {
       singleSelection: false,
       idField: "_id",
@@ -87,6 +89,7 @@ export class EditFarmVisitComponent implements OnInit {
   getVisits() {
     this.visitService.one(this.id).subscribe((data) => {
       this.visits = data.data;
+      console.log(this.visits);
       this.savedFarmList = data.data.farms;
       this.scheduleVisit.controls.startTime.setValue(
         data.data.date.split("T")[0] +
@@ -104,7 +107,7 @@ export class EditFarmVisitComponent implements OnInit {
         data.data.groupId.groupName,
         { emitEvent: false }
       );
-      this.getFarms();
+      this.getFarms(data.data.groupId.groupName);
       this.scheduleVisit.controls.adoptionGap.setValue(data.data.gaps);
       this.scheduleVisit.controls.description.setValue(data.data.description);
       this.scheduleVisit.controls.agronomist.setValue(data.data.visitor.userId);
@@ -113,15 +116,15 @@ export class EditFarmVisitComponent implements OnInit {
         .setValue(data.data.date);
     });
   }
+
   getFarmerGroup() {
     this.loading = true;
     this.groupService
       .list({
-        reference: "5d1635ac60c3dd116164d4ae",
+        reference: this.authenticationService.getCurrentUser().info.org_id,
       })
       .subscribe((data) => {
         this.farmerGroups = data.data;
-        console.log(this.farmerGroups);
         this.loading = false;
       });
   }
@@ -139,9 +142,9 @@ export class EditFarmVisitComponent implements OnInit {
     gapSelected.setValue(items, { emitEvent: false });
   }
 
-  getFarms() {
-    let data = {
-      name: this.scheduleVisit.value.farmerGroup,
+  getFarms(groupName: string) {
+    const data = {
+      name: groupName,
       org_id: this.authenticationService.getCurrentUser().info.org_id,
     };
     this.farmList = [];
@@ -162,6 +165,8 @@ export class EditFarmVisitComponent implements OnInit {
                 owner: member.userId,
                 upi: info.upiNumber,
                 selected: info._id == farms.farmId,
+                location: info.location,
+                trees: info.numberOfTrees,
               });
             });
           });
@@ -182,9 +187,12 @@ export class EditFarmVisitComponent implements OnInit {
   getAgronomists() {
     this.loading = true;
     this.userService
-      .all(this.authenticationService.getCurrentUser().info.org_id)
+      .allAgronomist({
+        org_id: this.authenticationService.getCurrentUser().info.org_id,
+      })
       .subscribe((data) => {
-        this.agronomist = data.content;
+        this.agronomist = data.data;
+        console.log(this.agronomist);
         this.loading = false;
       });
   }
@@ -194,6 +202,9 @@ export class EditFarmVisitComponent implements OnInit {
     if (!isChecked) {
       this.allTraineesSelected = isChecked;
     }
+    this.selectedFarms = this.farmList.filter((data) => {
+      return data.selected === true;
+    });
   }
 
   getGaps(): void {
@@ -217,12 +228,29 @@ export class EditFarmVisitComponent implements OnInit {
     this.scheduleVisit
       .get("farmerGroup".toString())
       .valueChanges.subscribe((value) => {
-        this.getFarms();
+        this.getFarms(value);
       });
   }
 
   open(content) {
-    this.modalService.open(content, { ariaLabelledBy: "modal-basic-title" });
+    if (this.scheduleVisit.valid) {
+      this.selectedFarms = this.selectedFarms.length > 0 ? this.selectedFarms : this.savedFarmList;
+      this.formatedStartDate =
+        this.formatDate(
+          this.scheduleVisit.controls.date.get("visitDate".toString()).value
+        ).split("T")[0] +
+        " " +
+        this.formatTime(this.scheduleVisit.get("startTime".toString()).value);
+      this.formatedEndDate =
+        this.formatDate(
+          this.scheduleVisit.controls.date.get("visitDate".toString()).value
+        ).split("T")[0] +
+        " " +
+        this.formatTime(this.scheduleVisit.get("endTime".toString()).value);
+      this.modalService.open(content, { ariaLabelledBy: "modal-basic-title" });
+    } else {
+      this.errors = this.helper.getFormValidationErrors(this.scheduleVisit);
+    }
   }
 
   onSubmit() {
@@ -259,7 +287,6 @@ export class EditFarmVisitComponent implements OnInit {
       if (adoptionGap.length > 0) {
         data.gaps = adoptionGap;
       }
-      console.log(data);
       this.visitService.edit(this.id, data).subscribe(
         (data) => {
           this.loading = false;
@@ -288,6 +315,18 @@ export class EditFarmVisitComponent implements OnInit {
     modalRef.result.finally(() => {
       this.router.navigateByUrl("admin/farm/visit/list");
     });
+  }
+
+  formatDate(date) {
+    var d = new Date(date),
+      month = "" + (d.getMonth() + 1),
+      day = "" + d.getDate(),
+      year = d.getFullYear();
+
+    if (month.length < 2) month = "0" + month;
+    if (day.length < 2) day = "0" + day;
+
+    return [year, month, day].join("-");
   }
 
   formatTime(date) {

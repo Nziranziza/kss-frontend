@@ -36,15 +36,14 @@
   </div>
 </ng-template>
 <ng-template #content let-modal>
-  <div class="modal-header">
+  <div class="modal-body extended-modal-body">
     <h4
       class="modal-title training-modal-title text-center"
       id="modal-basic-title"
     >
       Verify and Confirm
     </h4>
-  </div>
-  <div class="modal-body">
+    <br />
     <div class="row">
       <div class="col-sm-6">
         <div class="box-confirm">
@@ -70,25 +69,66 @@
               <div class="col-sm-6">
                 <label class="control-label"> Province </label>
                 <div class="confirm-text-box confirm-text">
-                  {{ scheduleTraining.value.location.prov_id }}
+                  <div *ngFor="let province of locationProvinces">
+                    <span
+                      *ngIf="
+                        scheduleTraining.value.location.prov_id == province._id
+                      "
+                    >
+                      {{ province.namee }}
+                    </span>
+                  </div>
                 </div>
                 <label class="control-label"> Sector </label>
                 <div class="confirm-text-box confirm-text">
-                  {{ scheduleTraining.value.location.sect_id }}
+                  <div *ngFor="let sector of locationSectors">
+                    <span
+                      *ngIf="
+                        scheduleTraining.value.location.sect_id == sector._id
+                      "
+                    >
+                      {{ sector.name }}
+                    </span>
+                  </div>
                 </div>
                 <label class="control-label"> Village </label>
                 <div class="confirm-text-box confirm-text">
-                  {{ scheduleTraining.value.location.village_id }}
+                  <div *ngFor="let village of locationVillages">
+                    <span
+                      *ngIf="
+                        scheduleTraining.value.location.village_id ==
+                        village._id
+                      "
+                    >
+                      {{ village.name }}
+                    </span>
+                  </div>
                 </div>
               </div>
               <div class="col-sm-6">
                 <label class="control-label label-required"> District </label>
                 <div class="confirm-text-box confirm-text">
-                  {{ scheduleTraining.value.location.dist_id }}
+                  <div *ngFor="let district of locationDistricts">
+                    <span
+                      *ngIf="
+                        scheduleTraining.value.location.dist_id == district._id
+                      "
+                    >
+                      {{ district.name }}
+                    </span>
+                  </div>
                 </div>
                 <label class="control-label"> Cell </label>
                 <div class="confirm-text-box confirm-text">
-                  {{ scheduleTraining.value.location.cell_id }}
+                  <div *ngFor="let cell of locationCells">
+                    <span
+                      *ngIf="
+                        scheduleTraining.value.location.cell_id == cell._id
+                      "
+                    >
+                      {{ cell.name }}
+                    </span>
+                  </div>
                 </div>
                 <label class="control-label"> Venue </label>
                 <div class="confirm-text-box confirm-text">
@@ -101,21 +141,13 @@
               <div class="col-sm-6">
                 <label class="control-label"> From </label>
                 <div class="confirm-text-box confirm-text">
-                  {{
-                    scheduleTraining.value.trainingStartDate +
-                      "T" +
-                      scheduleTraining.value.startTime
-                  }}
+                  {{ selectedStartDate }}
                 </div>
               </div>
               <div class="col-sm-6">
                 <label class="control-label"> To </label>
                 <div class="confirm-text-box confirm-text">
-                  {{
-                    scheduleTraining.value.trainingEndDate +
-                      "T" +
-                      scheduleTraining.value.endTime
-                  }}
+                  {{ selectedEndDate }}
                 </div>
               </div>
             </div>
@@ -127,11 +159,7 @@
         <div class="box-confirm">
           <label class="control-label label-required">Trainer</label>
           <div class="confirm-text-box confirm-text" style="margin-right: 20px">
-            {{
-              trainers[scheduleTraining.value.trainer].foreName +
-                " " +
-                trainers[scheduleTraining.value.trainer].surname
-            }}
+            {{ trainers[scheduleTraining.value.trainer].fullNames }}
           </div>
           <br />
           <h3 class="text-center">
@@ -157,8 +185,7 @@
         </div>
       </div>
     </div>
-  </div>
-  <div class="modal-footer">
+    <br />
     <div class="row">
       <div class="col-sm-3">
         <button
@@ -239,7 +266,7 @@
                     *ngFor="let trainer of trainers; let i = index"
                     value="{{ i }}"
                   >
-                    {{ trainer.foreName + " " + trainer.surname | titlecase }}
+                    {{ trainer.fullNames | titlecase }}
                   </option>
                 </select>
                 <app-inline-errors
@@ -444,6 +471,7 @@
                           [owlDateTime]="dt1"
                           formControlName="trainingStartDate"
                           class="form-control"
+                          [min]="today"
                           placeholder="Dd/mm/yyyy"
                         />
                         <owl-date-time
@@ -503,6 +531,9 @@
                         <input
                           [owlDateTimeTrigger]="dt3"
                           [owlDateTime]="dt3"
+                          [min]="
+                            scheduleTraining.controls.trainingStartDate.value
+                          "
                           formControlName="trainingEndDate"
                           class="form-control"
                           placeholder="Dd/mm/yyyy"

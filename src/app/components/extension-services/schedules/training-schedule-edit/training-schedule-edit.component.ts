@@ -188,9 +188,11 @@ export class TrainingScheduleEditComponent
   getTrainers() {
     this.loading = true;
     this.userService
-      .all(this.authenticationService.getCurrentUser().info.org_id)
+      .allAgronomist({
+        org_id: this.authenticationService.getCurrentUser().info.org_id,
+      })
       .subscribe((data) => {
-        this.trainers = data.content;
+        this.trainers = data.data;
         this.loading = false;
       });
   }
@@ -238,7 +240,27 @@ export class TrainingScheduleEditComponent
 
   open(content) {
     if (this.scheduleTraining.valid) {
-      this.modalService.open(content, { size: "lg", windowClass: "modal-lg" });
+      this.scheduleTraining
+        .get("trainingEndDate".toString())
+        .setValue(
+          new Date(this.scheduleTraining.controls.trainingEndDate.value)
+            .toISOString()
+            .split("T")[0],
+          {
+            emitEvent: false,
+          }
+        );
+      this.scheduleTraining
+        .get("trainingStartDate".toString())
+        .setValue(
+          new Date(this.scheduleTraining.controls.trainingStartDate.value)
+            .toISOString()
+            .split("T")[0],
+          {
+            emitEvent: false,
+          }
+        );
+      this.modalService.open(content);
     } else {
       this.errors = this.helper.getFormValidationErrors(this.scheduleTraining);
     }
@@ -432,29 +454,6 @@ export class TrainingScheduleEditComponent
       .valueChanges.subscribe((value) => {
         if (value !== "") {
           this.getFarmers();
-        }
-      });
-    this.scheduleTraining
-      .get("trainingStartDate".toString())
-      .valueChanges.subscribe((value) => {
-        if (value !== "") {
-          this.scheduleTraining
-            .get("trainingStartDate".toString())
-            .setValue(new Date(value).toISOString().split("T")[0], {
-              emitEvent: false,
-            });
-        }
-      });
-
-    this.scheduleTraining
-      .get("trainingEndDate".toString())
-      .valueChanges.subscribe((value) => {
-        if (value !== "") {
-          this.scheduleTraining
-            .get("trainingEndDate".toString())
-            .setValue(new Date(value).toISOString().split("T")[0], {
-              emitEvent: false,
-            });
         }
       });
   }

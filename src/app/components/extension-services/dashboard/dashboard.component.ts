@@ -131,7 +131,7 @@ export class DashboardComponent extends BasicComponent implements OnInit {
   initialValue = "";
   keyword = "organizationName";
   groupKeyword = "groupName";
-  agronomistKeyword = "foreName";
+  agronomistKeyword = "fullNames";
   nurseryKeyword = "nurseryName";
   seasons: any[];
   currentSeason: any;
@@ -677,7 +677,7 @@ export class DashboardComponent extends BasicComponent implements OnInit {
 
   getTrainers() {
     this.loading = true;
-    this.userService.allAgronomist().subscribe((data) => {
+    this.userService.allAgronomist({}).subscribe((data) => {
       this.trainers = data.data;
       this.loading = false;
     });

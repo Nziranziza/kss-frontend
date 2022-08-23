@@ -245,7 +245,7 @@
                     </ng-autocomplete>
 
                     <ng-template #itemTemplate let-item>
-                      <a [innerHTML]="item.foreName + ' ' + item.surname" style="height: 20px"></a>
+                      <a [innerHTML]="item.fullNames" style="height: 20px"></a>
                     </ng-template>
 
                     <ng-template #notFoundTemplate let-notFound>

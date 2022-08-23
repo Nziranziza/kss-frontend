@@ -52,6 +52,8 @@ export class ScheduleFarmVisitComponent implements OnInit {
   farmerGroupId;
   errors: any;
   selectedFarms: any[] = [];
+  formatedStartDate: string;
+  formatedEndDate: string;
 
   ngOnInit() {
     this.scheduleVisit = this.formBuilder.group({
@@ -87,7 +89,7 @@ export class ScheduleFarmVisitComponent implements OnInit {
     this.loading = true;
     this.groupService
       .list({
-        reference: "5d1635ac60c3dd116164d4ae",
+        reference: this.authenticationService.getCurrentUser().info.org_id,
       })
       .subscribe((data) => {
         this.farmerGroups = data.data;
@@ -95,8 +97,7 @@ export class ScheduleFarmVisitComponent implements OnInit {
       });
   }
 
-  onGapSelect(item: any) {
-  }
+  onGapSelect(item: any) {}
   onDeGapSelect(item: any) {
     const gapSelected = this.scheduleVisit.get("adoptionGap".toString());
     const gapOptions = gapSelected.value.filter(
@@ -109,9 +110,9 @@ export class ScheduleFarmVisitComponent implements OnInit {
     gapSelected.setValue(items, { emitEvent: false });
   }
 
-  getFarms() {
+  getFarms(groupName: string) {
     const data = {
-      name: this.scheduleVisit.value.farmerGroup,
+      name: groupName,
       org_id: this.authenticationService.getCurrentUser().info.org_id,
     };
     this.farmList = [];
@@ -130,6 +131,8 @@ export class ScheduleFarmVisitComponent implements OnInit {
               farm: info,
               owner: member.userId,
               upi: info.upiNumber,
+              location: info.location,
+              trees: info.numberOfTrees,
               selected: false,
             });
           });
@@ -150,9 +153,11 @@ export class ScheduleFarmVisitComponent implements OnInit {
   getAgronomists() {
     this.loading = true;
     this.userService
-      .all(this.authenticationService.getCurrentUser().info.org_id)
+      .allAgronomist({
+        org_id: this.authenticationService.getCurrentUser().info.org_id,
+      })
       .subscribe((data) => {
-        this.agronomist = data.content;
+        this.agronomist = data.data;
         this.loading = false;
       });
   }
@@ -162,6 +167,9 @@ export class ScheduleFarmVisitComponent implements OnInit {
     if (!isChecked) {
       this.allTraineesSelected = isChecked;
     }
+    this.selectedFarms = this.farmList.filter((data) => {
+      return data.selected === true;
+    });
   }
 
   getGaps(): void {
@@ -185,15 +193,24 @@ export class ScheduleFarmVisitComponent implements OnInit {
     this.scheduleVisit
       .get("farmerGroup".toString())
       .valueChanges.subscribe((value) => {
-        this.getFarms();
+        this.getFarms(value);
       });
   }
 
   open(content) {
-    if (this.scheduleVisit.valid) {
-      this.selectedFarms = this.farmList.filter((data) => {
-        return data.selected === true;
-      });
+    if (this.scheduleVisit.valid && this.selectedFarms.length > 0) {
+      this.formatedStartDate =
+        this.formatDate(
+          this.scheduleVisit.controls.date.get("visitDate".toString()).value
+        ).split("T")[0] +
+        " " +
+        this.formatTime(this.scheduleVisit.get("startTime".toString()).value);
+      this.formatedEndDate =
+        this.formatDate(
+          this.scheduleVisit.controls.date.get("visitDate".toString()).value
+        ).split("T")[0] +
+        " " +
+        this.formatTime(this.scheduleVisit.get("endTime".toString()).value);
       this.modalService.open(content, { ariaLabelledBy: "modal-basic-title" });
     } else {
       this.errors = this.helper.getFormValidationErrors(this.scheduleVisit);
@@ -271,6 +288,18 @@ export class ScheduleFarmVisitComponent implements OnInit {
     modalRef.result.finally(() => {
       this.router.navigateByUrl("admin/farm/visit/list");
     });
+  }
+
+  formatDate(date) {
+    var d = new Date(date),
+      month = "" + (d.getMonth() + 1),
+      day = "" + d.getDate(),
+      year = d.getFullYear();
+
+    if (month.length < 2) month = "0" + month;
+    if (day.length < 2) day = "0" + day;
+
+    return [year, month, day].join("-");
   }
 
   formatTime(date) {

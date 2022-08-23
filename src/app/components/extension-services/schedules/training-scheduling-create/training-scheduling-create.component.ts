@@ -59,6 +59,8 @@ export class TrainingSchedulingCreateComponent
   farmers: any[] = [];
   farmerGroups: any[] = [];
   successDatails;
+  selectedStartDate: any;
+  selectedEndDate: any;
 
   ngOnInit() {
     this.getGroups();
@@ -136,9 +138,11 @@ export class TrainingSchedulingCreateComponent
   getTrainers() {
     this.loading = true;
     this.userService
-      .all(this.authenticationService.getCurrentUser().info.org_id)
+      .allAgronomist({
+        org_id: this.authenticationService.getCurrentUser().info.org_id,
+      })
       .subscribe((data) => {
-        this.trainers = data.content;
+        this.trainers = data.data;
         this.loading = false;
       });
   }
@@ -186,7 +190,23 @@ export class TrainingSchedulingCreateComponent
 
   open(content) {
     if (this.scheduleTraining.valid) {
-      this.modalService.open(content, { size: "lg", windowClass: "modal-lg" });
+      this.selectedStartDate =
+        this.formatDate(
+          new Date(this.scheduleTraining.controls.trainingStartDate.value)
+            .toISOString()
+            .split("T")[0]
+        ) +
+        " " +
+        this.formatTime(this.scheduleTraining.value.startTime);
+      this.selectedEndDate =
+        this.formatDate(
+          new Date(this.scheduleTraining.controls.trainingEndDate.value)
+            .toISOString()
+            .split("T")[0]
+        ) +
+        " " +
+        this.formatTime(this.scheduleTraining.value.endTime);
+      this.modalService.open(content);
     } else {
       this.errors = this.helper.getFormValidationErrors(this.scheduleTraining);
     }
@@ -195,7 +215,7 @@ export class TrainingSchedulingCreateComponent
   addContact(index) {
     this.trainees[index].editMode = true;
   }
-  
+
   cancelEditContact(index) {
     this.trainees[index].editMode = false;
   }
@@ -382,29 +402,6 @@ export class TrainingSchedulingCreateComponent
           this.getFarmers();
         }
       });
-    this.scheduleTraining
-      .get("trainingStartDate".toString())
-      .valueChanges.subscribe((value) => {
-        if (value !== "") {
-          this.scheduleTraining
-            .get("trainingStartDate".toString())
-            .setValue(new Date(value).toISOString().split("T")[0], {
-              emitEvent: false,
-            });
-        }
-      });
-
-    this.scheduleTraining
-      .get("trainingEndDate".toString())
-      .valueChanges.subscribe((value) => {
-        if (value !== "") {
-          this.scheduleTraining
-            .get("trainingEndDate".toString())
-            .setValue(new Date(value).toISOString().split("T")[0], {
-              emitEvent: false,
-            });
-        }
-      });
   }
 
   onSubmit() {
@@ -436,14 +433,22 @@ export class TrainingSchedulingCreateComponent
       },
       venueName: this.scheduleTraining.value.location.venue,
       startTime:
-        this.formatDate(this.scheduleTraining.value.trainingStartDate) +
+        this.formatDate(
+          new Date(this.scheduleTraining.controls.trainingStartDate.value)
+            .toISOString()
+            .split("T")[0]
+        ) +
         "T" +
         this.formatTime(this.scheduleTraining.value.startTime),
       endTime:
-        this.formatDate(this.scheduleTraining.value.trainingEndDate) +
+        this.formatDate(
+          new Date(this.scheduleTraining.controls.trainingEndDate.value)
+            .toISOString()
+            .split("T")[0]
+        ) +
         "T" +
         this.formatTime(this.scheduleTraining.value.endTime),
-      referenceId: "5d1635ac60c3dd116164d4ae",
+      referenceId: this.authenticationService.getCurrentUser().info.org_id,
       trainees: this.selectedTrainees.map((item) => {
         return {
           userId: item.userId,
@@ -465,6 +470,7 @@ export class TrainingSchedulingCreateComponent
       this.loading = false;
     });
   }
+
   formatDate(date) {
     var d = new Date(date),
       month = "" + (d.getMonth() + 1),
