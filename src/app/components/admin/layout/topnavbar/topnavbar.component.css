@@ -17,7 +17,21 @@
   padding: 5px 14px;
 }
 
-.skin-blue .main-header .navbar{
-  background-color: #367fa9 !important;
+.header-name-box {
+  border: 1px solid #ffffff19;
+  border-radius: 4px;
+  width: 130px;
+  opacity: 1;
+  margin-left: 20px;
+  height: 20px;
 }
 
+.header-name-text {
+  text-align: center;
+  font: normal normal normal 16px/18px Helvetica Neue;
+  letter-spacing: 0px;
+  color: #e1a33e;
+  opacity: 1;
+  margin-right: 40px;
+  margin-left: 5px;
+}
