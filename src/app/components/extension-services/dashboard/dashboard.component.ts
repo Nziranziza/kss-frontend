@@ -468,6 +468,7 @@ export class DashboardComponent extends BasicComponent implements OnInit {
     this.getSeedlingStats(body);
     if (this.newOrg != "") {
       this.getFarms({ org_id: this.newOrg });
+      this.getFarmerGroup({ reference: this.newOrg });
     }
     this.getFarmsStats(body);
   }
@@ -478,6 +479,9 @@ export class DashboardComponent extends BasicComponent implements OnInit {
     if (filterBy != "") {
       let value = [];
       value = this.dashboardForm.controls[filterBy].get("filterByDate").value;
+      if (this.newOrg != "") {
+        this.mainBody.referenceId = this.newOrg;
+      }
       if (value) {
         if (value.length > 1) {
           if (typeof value[0].getMonth === "function") {
@@ -496,10 +500,6 @@ export class DashboardComponent extends BasicComponent implements OnInit {
       const locationId = this.currentSelectedLocation;
       if (typeof locationId === "object" && locationId.locationId !== "") {
         this.mainBody.location = locationId;
-      }
-      if (this.newOrg != "") {
-        this.mainBody.referenceId = this.newOrg;
-        this.getFarmerGroup({ reference: this.newOrg });
       }
     }
     if (filterBy === "trainingFilters") {

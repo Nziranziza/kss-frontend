@@ -570,6 +570,7 @@ export class AddFarmerRequestComponent
         item["treeAges".toString()] = temp.treeAges;
         item["numberOfTrees".toString()] = temp.numberOfTrees;
         item["location".toString()] = temp.location;
+        item["fertilizer_allocate"] = 0;
         return this.helper.cleanObject(item);
       });
       farmer["certificates".toString()] = temp.certificates;
