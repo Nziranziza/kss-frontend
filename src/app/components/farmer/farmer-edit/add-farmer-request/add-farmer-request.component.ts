@@ -522,24 +522,11 @@ export class AddFarmerRequestComponent
       'dist_id'.toString()
     ).value;
     if (value !== '') {
-      if (this.isUserSiteManager && !this.isUserCWSOfficer) {
-        const temp = [];
-        this.site.coveredAreas.coveredSectors.map((sector) => {
-          temp.push({
-            _id: sector.sect_id,
-            name: sector.name,
-          });
-        });
-        this.sectors.push(temp);
-      } else if (this.isUserCWSOfficer) {
-        this.filterCustomSectors(this.org, index);
-      } else {
-        this.locationService.getSectors(value).subscribe((data) => {
-          this.sectors[index] = data;
-          this.cells[index] = [];
-          this.villages[index] = [];
-        });
-      }
+      this.locationService.getSectors(value).subscribe((data) => {
+        this.sectors[index] = data;
+        this.cells[index] = [];
+        this.villages[index] = [];
+      });
     }
   }
 
@@ -548,14 +535,10 @@ export class AddFarmerRequestComponent
       'sect_id'.toString()
     ).value;
     if (value !== '') {
-      if (this.isUserCWSOfficer) {
-        this.filterCustomCells(this.org, index);
-      } else {
-        this.locationService.getCells(value).subscribe((data) => {
-          this.cells[index] = data;
-          this.villages[index] = [];
-        });
-      }
+      this.locationService.getCells(value).subscribe((data) => {
+        this.cells[index] = data;
+        this.villages[index] = [];
+      });
     }
   }
 
@@ -576,19 +559,25 @@ export class AddFarmerRequestComponent
     if (this.createForm.valid) {
       const temp = this.createForm.getRawValue();
       const farmer = {
-        requestInfo: [],
+        requestInfo: [{}],
       };
-      farmer['requestInfo'.toString()] = temp.requests;
+      farmer.requestInfo.map((item) => {
+        item["fertilizer_need".toString()] =
+          +temp.numberOfTrees *
+          this.currentSeason.seasonParams.fertilizerKgPerTree;
+        item["landOwner".toString()] = temp.landOwner;
+        item["upiNumber".toString()] = temp.upiNumber;
+        item["treeAges".toString()] = temp.treeAges;
+        item["numberOfTrees".toString()] = temp.numberOfTrees;
+        item["location".toString()] = temp.location;
+        return this.helper.cleanObject(item);
+      });
+      farmer["certificates".toString()] = temp.certificates;
       farmer['created_by'.toString()] =
         this.authenticationService.getCurrentUser().info._id;
       this.helper.cleanObject(farmer);
-      farmer.requestInfo.map((item) => {
-        item['fertilizer_need'.toString()] =
-          +item['numberOfTrees'.toString()] *
-          this.currentSeason.seasonParams.fertilizerKgPerTree;
-        return this.helper.cleanObject(item);
-      });
       farmer['id'.toString()] = this.farmerId;
+      console.log(farmer);
       this.farmerService.addFarmerRequest(farmer).subscribe(
         () => {
           this.modal.close('request successfully added!');
@@ -654,34 +643,13 @@ export class AddFarmerRequestComponent
     this.createForm.controls.location
       .get('prov_id'.toString())
       .valueChanges.subscribe((value) => {
-        if (value !== null) {
+        if (value !== '') {
           this.locationService.getDistricts(value).subscribe((data) => {
             this.districts = data;
             this.sectors = null;
             this.cells = null;
             this.villages = null;
           });
-          if (this.isUserSiteManager && !this.isUserCWSOfficer) {
-            const temp = [];
-            this.site.coveredAreas.coveredSectors.map((sector) => {
-              temp.push({
-                _id: sector.sect_id,
-                name: sector.name,
-              });
-            });
-            this.sectors.push(temp);
-          } else if (this.isUserCWSOfficer) {
-            this.filterCustomSectors(this.org, 0);
-          } else {
-            this.locationService
-              .getSectors(value)
-              .toPromise()
-              .then((data) => {
-                this.sectors = data;
-                this.cells = [];
-                this.villages = [];
-              });
-          }
         }
       });
     this.createForm.controls.treeAges.valueChanges.subscribe((value) => {
@@ -691,7 +659,7 @@ export class AddFarmerRequestComponent
       }
     });
     this.createForm.controls.numberOfTrees.valueChanges.subscribe((value) => {
-      if (value !== null) {
+      if (value !== '') {
         this.validForm = this.validateNumbers(
           this.createForm.controls.treeAges.value
         );
@@ -701,55 +669,30 @@ export class AddFarmerRequestComponent
     this.createForm.controls.location
       .get('dist_id'.toString())
       .valueChanges.subscribe((value) => {
-        if (value !== null) {
+        if (value !== '') {
           this.locationService.getSectors(value).subscribe((data) => {
             this.sectors = data;
             this.cells = null;
             this.villages = null;
           });
-          if (this.isUserCWSOfficer) {
-            this.filterCustomCells(this.org, 0);
-          } else {
-            this.locationService
-              .getCells(value)
-              .toPromise()
-              .then((data) => {
-                this.cells = data;
-                this.villages = [];
-              });
-          }
         }
       });
     this.createForm.controls.location
       .get('sect_id'.toString())
       .valueChanges.subscribe((value) => {
-        if (value !== null) {
+        if (value !== '') {
           this.locationService.getCells(value).subscribe((data) => {
             this.cells = data;
             this.villages = null;
           });
-          if (this.isUserCWSOfficer) {
-            this.filterCustomCells(this.org, 0);
-          } else {
-            this.locationService
-              .getVillages(value)
-              .toPromise()
-              .then((data) => {
-                this.villages = data;
-              });
-          }
         }
       });
     this.createForm.controls.location
       .get('cell_id'.toString())
       .valueChanges.subscribe((value) => {
-        if (value !== null) {
+        if (value !== '') {
           this.locationService.getVillages(value).subscribe((data) => {
-            if (this.isUserCWSOfficer) {
-              this.filterCustomVillages(this.org, data);
-            } else {
-              this.villages = data;
-            }
+            this.villages = data;
           });
         }
       });

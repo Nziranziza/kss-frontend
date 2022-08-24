@@ -281,15 +281,6 @@
                 </div>
               </div>
             </fieldset>
-            <div class="col-xs-12" *ngIf="!createFromPending">
-              <button
-                class="btn btn-success btn-circle btn-lg pull-right"
-                (click)="addRequest()"
-                type="button"
-              >
-                <i class="fa fa-plus"></i>
-              </button>
-            </div>
             <div class="col-xs-12" *ngIf="createFromPending"></div>
             <ng-container *ngIf="!isUserCWSOfficer; else onCWSLevel">
               <div

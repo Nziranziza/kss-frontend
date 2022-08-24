@@ -92,7 +92,7 @@ export class TrainingListComponent
     });
   }
 
-  openDeleteModal(group: any, warning?: any) {
+  openDeleteModal(trainingId: any, warning?: any) {
     const modalRef = this.modal.open(ConfirmModalComponent);
     modalRef.componentInstance.title = "Delete Training";
     modalRef.componentInstance.content =
@@ -102,7 +102,7 @@ export class TrainingListComponent
     modalRef.componentInstance.warning = warning;
     modalRef.result.then((results) => {
       if (results.confirmed) {
-        this.trainingService.delete(group._id).subscribe(
+        this.trainingService.delete(trainingId).subscribe(
           () => {
             this.loading = true;
             const body = {
@@ -114,7 +114,8 @@ export class TrainingListComponent
             this.setMessage("Training successfully deleted!");
           },
           (err) => {
-            this.openDeleteModal(group, err.message);
+            console.log(err);
+            this.setMessage(err.errors);
           }
         );
       }

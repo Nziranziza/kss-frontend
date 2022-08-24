@@ -98,7 +98,6 @@ export class FarmerCreateComponent
   }
 
   ngOnInit() {
-    
     this.createForm = this.formBuilder.group({
       foreName: [""],
       surname: [""],
@@ -521,13 +520,10 @@ export class FarmerCreateComponent
     if (this.createForm.valid) {
       if (this.createFromPending) {
         const temp = this.createForm.getRawValue();
-        const farmer = {};
-        farmer["fertilizer_need".toString()] = temp.requests[0].fertilizer_need;
-        farmer["fertilizer_allocate".toString()] =
-          temp.requests[0].fertilizer_allocate;
-        farmer["location".toString()] = temp.requests[0].location;
-        farmer["numberOfTrees".toString()] = temp.requests[0].numberOfTrees;
-        farmer["_id".toString()] = this.id;
+        const farmer = {
+          requestInfo: [],
+        };
+        farmer["requestInfo".toString()] = temp.requests;
         farmer["created_by".toString()] =
           this.authenticationService.getCurrentUser().info._id;
         farmer["type".toString()] = temp.type;
@@ -543,6 +539,20 @@ export class FarmerCreateComponent
           farmer["groupName".toString()] = temp.groupName;
           farmer["groupContactPerson".toString()] = temp.groupContactPerson;
         }
+        farmer.requestInfo.map((item) => {
+          item["fertilizer_need".toString()] =
+            +temp.numberOfTrees *
+            this.currentSeason.seasonParams.fertilizerKgPerTree;
+          item["fertilizer_allocate"] = 0;
+          item["landOwner".toString()] = temp.landOwner;
+          item["upiNumber".toString()] = temp.upiNumber;
+          item["treeAges".toString()] = temp.treeAges;
+          item["numberOfTrees".toString()] = temp.numberOfTrees;
+          delete item.tree_location;
+          item["location".toString()] = temp.tree_location;
+          return this.helperService.cleanObject(item);
+        });
+        farmer["certificates".toString()] = temp.certificates;
         this.helperService.cleanObject(farmer);
         if (this.isGroup) {
           this.farmerService
@@ -596,7 +606,6 @@ export class FarmerCreateComponent
         const farmer = {
           requestInfo: [],
         };
-        farmer["_id".toString()] = this.id;
         farmer["type".toString()] = temp.type;
         farmer["phone_number".toString()] = temp.phone_number;
         farmer["created_by".toString()] =
@@ -613,13 +622,20 @@ export class FarmerCreateComponent
           farmer["groupContactPerson".toString()] = temp.groupContactPerson;
         }
         farmer["requestInfo".toString()] = temp.requests;
-        this.helperService.cleanObject(farmer);
         farmer.requestInfo.map((item) => {
           item["fertilizer_need".toString()] =
             +item["numberOfTrees".toString()] *
             this.currentSeason.seasonParams.fertilizerKgPerTree;
+          item["landOwner".toString()] = temp.landOwner;
+          item["upiNumber".toString()] = temp.upiNumber;
+          item["treeAges".toString()] = temp.treeAges;
+          item["numberOfTrees".toString()] = temp.numberOfTrees;
+          delete item.tree_location;
+          item["location".toString()] = temp.tree_location;
           return this.helperService.cleanObject(item);
         });
+        farmer["certificates".toString()] = temp.certificates;
+        this.helperService.cleanObject(farmer);
         if (this.isGroup) {
           this.farmerService
             .checkFarmerGroupName(temp.groupName)
@@ -1024,8 +1040,7 @@ export class FarmerCreateComponent
     this.createForm.controls.location
       .get("prov_id".toString())
       .valueChanges.subscribe((value) => {
-        
-        if (value !== "") { 
+        if (value !== "") {
           this.locationService.getDistricts(value).subscribe((data) => {
             this.addressDistricts = data;
             this.addressSectors = null;
@@ -1082,88 +1097,42 @@ export class FarmerCreateComponent
     this.createForm.controls.tree_location
       .get("prov_id".toString())
       .valueChanges.subscribe((value) => {
-        if (value !== null) {
+        if (value !== "") {
           this.locationService.getDistricts(value).subscribe((data) => {
             this.districts = data;
             this.sectors = null;
             this.cells = null;
             this.villages = null;
           });
-          if (this.isUserSiteManager && !this.isUserCWSOfficer) {
-            const temp = [];
-            this.site.coveredAreas.coveredSectors.map((sector) => {
-              temp.push({
-                _id: sector.sect_id,
-                name: sector.name,
-              });
-            });
-            this.sectors.push(temp);
-          } else if (this.isUserCWSOfficer) {
-            this.filterCustomSectors(this.org, 0);
-          } else {
-            this.locationService
-              .getSectors(value)
-              .toPromise()
-              .then((data) => {
-                this.sectors = data;
-                this.cells = [];
-                this.villages = [];
-              });
-          }
         }
       });
     this.createForm.controls.tree_location
       .get("dist_id".toString())
       .valueChanges.subscribe((value) => {
-        if (value !== null) {
+        if (value !== "") {
           this.locationService.getSectors(value).subscribe((data) => {
             this.sectors = data;
             this.cells = null;
             this.villages = null;
           });
-          if (this.isUserCWSOfficer) {
-            this.filterCustomCells(this.org, 0);
-          } else {
-            this.locationService
-              .getCells(value)
-              .toPromise()
-              .then((data) => {
-                this.cells = data;
-                this.villages = [];
-              });
-          }
         }
       });
     this.createForm.controls.tree_location
       .get("sect_id".toString())
       .valueChanges.subscribe((value) => {
-        if (value !== null) {
+        if (value !== "") {
           this.locationService.getCells(value).subscribe((data) => {
             this.cells = data;
             this.villages = null;
           });
-          if (this.isUserCWSOfficer) {
-            this.filterCustomCells(this.org, 0);
-          } else {
-            this.locationService
-              .getVillages(value)
-              .toPromise()
-              .then((data) => {
-                this.villages = data;
-              });
-          }
         }
       });
     this.createForm.controls.tree_location
       .get("cell_id".toString())
       .valueChanges.subscribe((value) => {
-        if (value !== null) {
+        if (value !== "") {
           this.locationService.getVillages(value).subscribe((data) => {
-            if (this.isUserCWSOfficer) {
-              this.filterCustomVillages(this.org, data);
-            } else {
-              this.villages = data;
-            }
+            this.villages = data;
           });
         }
       });
