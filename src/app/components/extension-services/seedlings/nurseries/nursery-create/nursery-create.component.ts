@@ -162,6 +162,7 @@ export class NurseryCreateComponent extends BasicComponent implements OnInit {
   }
 
   onCreate() {
+    this.addNursery.markAllAsTouched();
     if (this.addNursery.valid) {
       let data = {
         nurseryName: this.addNursery.value.nurseryName,

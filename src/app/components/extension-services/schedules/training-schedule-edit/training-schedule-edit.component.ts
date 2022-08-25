@@ -120,7 +120,6 @@ export class TrainingScheduleEditComponent
     this.trainingService.getSchedule(this.id).subscribe((data) => {
       if (data && data.data) {
         this.scheduleData = data.data;
-        console.log(this.scheduleData);
         this.scheduleTraining.controls.trainingModule.setValue(
           this.trainings
             .map(function (e) {
@@ -239,6 +238,7 @@ export class TrainingScheduleEditComponent
   }
 
   open(content) {
+    this.scheduleTraining.markAllAsTouched();
     if (this.scheduleTraining.valid) {
       this.scheduleTraining
         .get("trainingEndDate".toString())

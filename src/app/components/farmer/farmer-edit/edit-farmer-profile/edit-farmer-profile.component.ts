@@ -15,6 +15,7 @@ import { AuthenticationService, FarmerService } from '../../../../core';
 import { isUndefined } from 'util';
 import { PaymentService } from '../../../../core/services/payment.service';
 import { BasicComponent } from '../../../../core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-edit-farmer-profile',
@@ -49,6 +50,7 @@ export class EditFarmerProfileComponent
     private editPaymentChannelModal: NgbModal,
     private authenticationService: AuthenticationService,
     private injector: Injector,
+    private router: Router,
     private formBuilder: FormBuilder,
     private userService: UserService,
     private helper: HelperService,
@@ -66,7 +68,7 @@ export class EditFarmerProfileComponent
     this.editFarmerProfileForm = this.formBuilder.group({
       phone_number: [''],
       groupName: [''],
-      NID: [''],
+      NID: ['', Validators.required],
       foreName: [''],
       surname: [''],
       sex: [''],
@@ -189,6 +191,7 @@ export class EditFarmerProfileComponent
   }
 
   onSubmit() {
+    this.editFarmerProfileForm.markAllAsTouched();
     if (this.editFarmerProfileForm.valid) {
       const body = JSON.parse(JSON.stringify(this.editFarmerProfileForm.value));
       body['userId'.toString()] = this.farmer._id;
@@ -213,6 +216,8 @@ export class EditFarmerProfileComponent
       this.farmerService.updateFarmerProfile(body).subscribe(
         () => {
           this.setMessage('Profile successfully updated!');
+          this.router.navigateByUrl("admin/farmers/list");
+          this.modal.close();
         },
         (err) => {
           this.setError(err.errors);

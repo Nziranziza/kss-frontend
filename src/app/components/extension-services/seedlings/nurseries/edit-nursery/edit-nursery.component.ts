@@ -227,6 +227,7 @@ export class EditNurseryComponent extends BasicComponent implements OnInit {
   }
 
   onCreate() {
+    this.addNursery.markAllAsTouched();
     if (this.addNursery.valid) {
       let data = {
         _id: this.id,

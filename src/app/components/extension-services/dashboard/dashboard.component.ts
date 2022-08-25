@@ -543,33 +543,32 @@ export class DashboardComponent extends BasicComponent implements OnInit {
 
   selectAgronomistEvent(item) {
     this.selectedAgronomist = item._id;
-    let body: any = {};
     if (this.selectedGroup !== "") {
-      body = {
-        groupId: this.selectedGroup,
-      };
+      this.mainBody.groupId = this.selectedGroup;
     }
     if (this.dashboardForm.value.trainingId != "") {
-      body.trainingId = this.dashboardForm.value.trainingId;
+      this.mainBody.trainingId = this.dashboardForm.value.trainingId;
     }
     if (item._id != "") {
-      body.trainerId = item._id;
+      this.mainBody.trainerId = item._id;
     }
-    this.getTrainingsStats(body);
+    this.getTrainingsStats(this.mainBody);
+    delete this.mainBody.groupId;
+    delete this.mainBody.trainingId;
+    delete this.mainBody.trainerId;
   }
 
   deselectAgronomistEvent() {
     this.selectedAgronomist = "";
-    let body: any = {};
     if (this.dashboardForm.value.trainingId != "") {
-      body.trainingId = this.dashboardForm.value.trainingId;
+      this.mainBody.trainingId = this.dashboardForm.value.trainingId;
     }
     if (this.selectedGroup !== "") {
-      body = {
-        groupId: this.selectedGroup,
-      };
+      this.mainBody.groupId = this.selectedGroup;
     }
-    this.getTrainingsStats(body);
+    this.getTrainingsStats(this.mainBody);
+    delete this.mainBody.groupId;
+    delete this.mainBody.trainingId;
   }
 
   deselectEvent() {
@@ -789,14 +788,15 @@ export class DashboardComponent extends BasicComponent implements OnInit {
       });
 
     this.dashboardForm.controls.training_id.valueChanges.subscribe((value) => {
-      let body: any = {};
       if (value !== "") {
-        body.trainingId = value;
+        this.mainBody.trainingId = value;
       }
       if (this.selectedAgronomist != "") {
-        body.trainerId = this.dashboardForm.value.trainerId;
+        this.mainBody.trainerId = this.dashboardForm.value.trainerId;
       }
-      this.getTrainingsStats(body);
+      this.getTrainingsStats(this.mainBody);
+      delete this.mainBody.trainingId;
+      delete this.mainBody.trainerId;
     });
   }
 

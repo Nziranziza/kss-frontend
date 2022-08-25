@@ -104,7 +104,7 @@ export class FarmerCreateComponent
       groupName: [""],
       phone_number: [""],
       sex: ["m"],
-      NID: [""],
+      NID: ["", Validators.required],
       type: ["", Validators.required],
       groupContactPerson: this.formBuilder.group({
         firstName: [""],
@@ -450,6 +450,7 @@ export class FarmerCreateComponent
       this.formBuilder.group({
         selected: [false],
         number: [0],
+        varietyId: [""],
       })
     );
   }
@@ -468,6 +469,7 @@ export class FarmerCreateComponent
           this.formBuilder.group({
             selected: [false],
             number: [0],
+            varietyId: [variety._id],
           })
         );
       });
@@ -517,6 +519,7 @@ export class FarmerCreateComponent
   }
 
   onSubmit() {
+    this.createForm.markAllAsTouched();
     if (this.createForm.valid) {
       if (this.createFromPending) {
         const temp = this.createForm.getRawValue();
@@ -539,6 +542,12 @@ export class FarmerCreateComponent
           farmer["groupName".toString()] = temp.groupName;
           farmer["groupContactPerson".toString()] = temp.groupContactPerson;
         }
+        temp.treeAges.map((item) => {
+          item.varieties.map((variety) => {
+              delete variety.selected;
+              return variety;
+          });
+        });
         farmer.requestInfo.map((item) => {
           item["fertilizer_need".toString()] =
             +temp.numberOfTrees *
@@ -608,6 +617,12 @@ export class FarmerCreateComponent
         };
         farmer["type".toString()] = temp.type;
         farmer["phone_number".toString()] = temp.phone_number;
+        temp.treeAges.map((item) => {
+          item.varieties.map((variety) => {
+              delete variety.selected;
+              return variety;
+          });
+        });
         farmer["created_by".toString()] =
           this.authenticationService.getCurrentUser().info._id;
         if (!this.isGroup) {
