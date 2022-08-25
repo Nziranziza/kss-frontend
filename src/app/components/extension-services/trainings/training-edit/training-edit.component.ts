@@ -151,8 +151,19 @@ export class TrainingEditComponent
   }
 
   onGapSelect(item: any) {
+    const gapSelected = this.createTraining.get("adoptionGap".toString());
     if (item._id === "") {
-      this.gapDropdownSettings.singleSelection = true;
+      gapSelected.setValue(
+        [
+          {
+            _id: "",
+            gap_name: "Not Applied",
+          },
+        ],
+        { emitEvent: false }
+      );
+    } else {
+      gapSelected.setValue(gapSelected.value.filter((e) => e._id !== ""));
     }
   }
 
