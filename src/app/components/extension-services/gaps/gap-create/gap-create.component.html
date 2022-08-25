@@ -9,13 +9,11 @@
       <div class="row">
         <!--    START OF GAP DETAILS FORM      -->
         <div class="col-xs-3">
-          <div
-            [ngClass]="{
-              'has-error': gapGame.invalid && (gapGame.dirty || gapGame.touched)
-            }"
-            class="form-group"
-          >
-            <label class="control-label">Gap Name</label>
+          <div [ngClass]="{ 'has-error':
+                        gapGame.invalid &&
+                        (gapGame.dirty || gapGame.touched)
+                    }" class="form-group">
+            <label class="control-label label-required">Gap Name</label>
             <input
               class="form-control"
               formControlName="gap_name"
@@ -23,71 +21,62 @@
               placeholder=""
               type="text"
             />
-            <div
+            <app-inline-errors
               *ngIf="gapGame.invalid && (gapGame.dirty || gapGame.touched)"
-              class="alert"
+              [errors]="gapGame.errors"
+              [label]="'Gap Name'"
             >
-              <div *ngIf="gapGame.errors['required']" style="color: red">
-                *Name is required.
-              </div>
-            </div>
+            </app-inline-errors>
           </div>
         </div>
         <div class="col-xs-3">
-          <div
-            [ngClass]="{
-              'has-error': getGapWeight.invalid && (getGapWeight.dirty || gapGame.touched)
-            }"
-            class="form-group"
-          >
-            <label class="control-label">Gap Weight</label>
+          <div [ngClass]="{ 'has-error':
+                        getGapWeight.invalid &&
+                        (getGapWeight.dirty || getGapWeight.touched)
+                    }" class="form-group">
+            <label class="control-label label-required">Gap Weight</label>
             <input
               class="form-control"
               formControlName="gap_weight"
               name="gap_weight"
               placeholder=""
-              type="text"
+              type="number"
             />
-            <div
-              *ngIf="getGapWeight.invalid && (getGapWeight.dirty || gapGame.touched)"
-              class="alert"
+            <app-inline-errors
+              *ngIf="getGapWeight.invalid && (getGapWeight.dirty || getGapWeight.touched)"
+              [errors]="getGapWeight.errors"
+              [label]="'Weight'"
             >
-              <div *ngIf="getGapWeight.errors['required']" style="color: red">
-                *Weight is required.
-              </div>
-            </div>
+            </app-inline-errors>
           </div>
         </div>
         <div class="col-xs-3">
-          <div
-            [ngClass]="{
-              'has-error': getGapScore.invalid && (getGapScore.dirty || getGapScore.touched)
-            }"
-            class="form-group"
-          >
-            <label class="control-label">Gap Score</label>
+          <div [ngClass]="{ 'has-error':
+                        getGapScore.invalid &&
+                        (getGapScore.dirty || getGapScore.touched)
+                    }" class="form-group">
+            <label class="control-label label-required">Gap Score</label>
             <input
               class="form-control"
               formControlName="gap_score"
               name="gap_score"
               placeholder=""
-              type="text"
+              type="number"
             />
-            <div
+            <app-inline-errors
               *ngIf="getGapScore.invalid && (getGapScore.dirty || getGapScore.touched)"
-              class="alert"
+              [errors]="getGapScore.errors"
+              [label]="'Gap Score'"
             >
-              <div *ngIf="getGapScore.errors['required']" style="color: red">
-                *Gap Score is required.
-              </div>
-            </div>
+            </app-inline-errors>
           </div>
         </div>
         <div class="col-xs-3">
-          <div
-            class="form-group"
-          >
-            <label class="control-label">Image Description</label>
+          <div [ngClass]="{ 'has-error':
+                        getGapDescription.invalid &&
+                        (getGapDescription.dirty || getGapDescription.touched)
+                    }" class="form-group">
+            <label class="control-label label-required">Gap Description</label>
             <input
               class="form-control"
               formControlName="picture_text"
@@ -95,6 +84,12 @@
               placeholder=""
               type="text"
             />
+            <app-inline-errors
+              *ngIf="getGapDescription.invalid && (getGapDescription.dirty || getGapDescription.touched)"
+              [errors]="getGapDescription.errors"
+              [label]="'Gap Description'"
+            >
+            </app-inline-errors>
           </div>
         </div>
         <!--    END OF GAP DETAILS FORM      -->
@@ -121,13 +116,19 @@
                     }"
                     class="form-group"
                   >
-                    <label class="control-label">Question Section Title</label>
+                    <label class="control-label label-required">Question Section Title</label>
                     <input
                       class="form-control"
                       formControlName="section_name"
                       placeholder=""
                       type="text"
                     />
+                    <app-inline-errors
+                      *ngIf="getSectionName(i).invalid && (getSectionName(i).dirty || getSectionName(i).touched)"
+                      [errors]="getSectionName(i).errors"
+                      [label]="'Gap Description'"
+                    >
+                    </app-inline-errors>
                   </div>
                 </div>
 
@@ -140,49 +141,76 @@
                     class="row"
                     formArrayName="questions"
                   >
-                    <div [formGroupName]="x" class="col-xs-12" style="background-color: white; padding: 1%; margin: 20px">
+                    <div [formGroupName]="x" class="col-xs-12"
+                         style="background-color: white; padding: 1%; margin: 20px">
 
-                      <div class="col-xs-6 vcenter">
-                        <label class="control-label">Question</label>
-                        <div class="form-group">
+                      <div class="col-xs-6">
+                        <div
+                          [ngClass]="{ 'has-error': getQuestionField('question', i, x).invalid &&(getQuestionField('question', i, x).dirty || getQuestionField('question', i, x).touched) }"
+                          class="form-group">
+                          <label class="control-label label-required">Question</label>
                           <input
                             class="form-control"
                             formControlName="question"
                             placeholder=""
                             type="text"
                           />
+                          <app-inline-errors
+                            *ngIf="getQuestionField('question', i, x).invalid && (getQuestionField('question', i, x).dirty || getQuestionField('question', i, x).touched)"
+                            [errors]="getQuestionField('question', i, x).errors"
+                            [label]="'Question'"
+                          >
+                          </app-inline-errors>
                         </div>
                       </div>
 
-                      <div class="col-xs-6 vcenter">
-                        <label class="control-label">Description</label>
-                        <div class="form-group">
+                      <div class="col-xs-6">
+                        <div
+                          [ngClass]="{ 'has-error': getQuestionField('description', i, x).invalid &&(getQuestionField('description', i, x).dirty || getQuestionField('description', i, x).touched) }"
+                          class="form-group"
+                        >
+                          <label class="control-label label-required">Description</label>
                           <input
                             class="form-control"
                             formControlName="description"
                             placeholder=""
                             type="text"
                           />
+                          <app-inline-errors
+                            *ngIf="getQuestionField('description', i, x).invalid && (getQuestionField('description', i, x).dirty || getQuestionField('description', i, x).touched)"
+                            [errors]="getQuestionField('description', i, x).errors"
+                            [label]="'Description'"
+                          >
+                          </app-inline-errors>
                         </div>
                       </div>
 
                       <div class="col-xs-4 vcenter">
-                        <label class="control-label">Question Score</label>
-                        <div class="form-group">
+                        <div
+                          [ngClass]="{ 'has-error': getQuestionField('weight', i, x).invalid &&(getQuestionField('weight', i, x).dirty || getQuestionField('weight', i, x).touched) }"
+                          class="form-group"
+                        >
+                          <label class="control-label">Question Score</label>
                           <input
                             class="form-control"
                             formControlName="weight"
                             placeholder=""
                             type="text"
                           />
+                          <app-inline-errors
+                            *ngIf="getQuestionField('weight', i, x).invalid && (getQuestionField('weight', i, x).dirty || getQuestionField('weight', i, x).touched)"
+                            [errors]="getQuestionField('weight', i, x).errors"
+                            [label]="'Question Score'"
+                          ></app-inline-errors>
                         </div>
                       </div>
 
                       <div class="col-xs-4 vcenter">
                         <div
+                          [ngClass]="{ 'has-error': getQuestionField('question_type', i, x).invalid &&(getQuestionField('question_type', i, x).dirty || getQuestionField('question_type', i, x).touched) }"
                           class="form-group"
                         >
-                          <label class="control-label">Question Type</label>
+                          <label class="control-label label-required">Question Type</label>
                           <select
                             (change)="onQuestionTypeSelected(i, x)"
                             class="form-control"
@@ -195,29 +223,34 @@
                               {{ approach.name }}
                             </option>
                           </select>
+                          <app-inline-errors
+                            *ngIf="getQuestionField('question_type', i, x).invalid && (getQuestionField('question_type', i, x).dirty || getQuestionField('question_type', i, x).touched)"
+                            [errors]="getQuestionField('question_type', i, x).errors"
+                            [label]="'Question Type'"
+                          ></app-inline-errors>
                         </div>
                       </div>
 
-                      <div class="col-xs-2 vcenter">
+                      <div class="col-xs-3 vcenter">
                         <div
-                          class="form-check vcenter" style="margin-top: 35px !important;"
+                          class="form-check" style="margin-top: 35px !important;"
                         >
                           <input
-                            (change)="chooseIfApplicable($event)"
+                            (change)="chooseIfApplicable($event, i, x)"
                             [checked]="getQuestionApplicable(i, x)"
                             class="form-check-input"
-                            id="checkBoxApplicable"
+                            id="checkBoxApplicable2"
                             name="is_not_applicable"
                             placeholder=""
                             type="checkbox"
                           />
                           &nbsp;
-                          <label class="form-check-label" for="checkBoxApplicable">Is Not Applicable
+                          <label class="form-check-label" for="checkBoxApplicable2">Is Not Applicable
                           </label>
                         </div>
                       </div>
 
-                      <div class="col-xs-2 text-center">
+                      <div class="col-xs-1 text-center">
                         <button
                           (click)="removeQuestion(i, x)"
                           class="btn btn-danger btn-sm inline-btn btn-custom-margin-top"
@@ -239,8 +272,11 @@
                         >
                           <div [formGroupName]="y" class="col-xs-12">
                             <div class="col-xs-3 vcenter">
-                              <label class="control-label">Answer</label>
-                              <div class="form-group">
+                              <div
+                                [ngClass]="{ 'has-error': getAnswerField('answer', i, x, y).invalid &&(getAnswerField('answer', i, x, y).dirty || getAnswerField('answer', i, x, y).touched) }"
+                                class="form-group"
+                              >
+                                <label class="control-label label-required">Answer</label>
                                 <input
                                   class="form-control"
                                   formControlName="answer"
@@ -248,12 +284,20 @@
                                   placeholder=""
                                   type="text"
                                 />
+                                <app-inline-errors
+                                  *ngIf="getAnswerField('answer', i, x, y).invalid && (getAnswerField('answer', i, x, y).dirty || getAnswerField('answer', i, x, y).touched)"
+                                  [errors]="getAnswerField('answer', i, x, y).errors"
+                                  [label]="'Answer'"
+                                ></app-inline-errors>
                               </div>
                             </div>
 
                             <div class="col-xs-3 vcenter">
-                              <label class="control-label">Description</label>
-                              <div class="form-group">
+                              <div
+                                [ngClass]="{ 'has-error': getAnswerField('description', i, x, y).invalid &&(getAnswerField('description', i, x, y).dirty || getAnswerField('description', i, x, y).touched) }"
+                                class="form-group"
+                              >
+                                <label class="control-label label-required">Description</label>
                                 <input
                                   class="form-control"
                                   formControlName="description"
@@ -261,12 +305,20 @@
                                   placeholder=""
                                   type="text"
                                 />
+                                <app-inline-errors
+                                  *ngIf="getAnswerField('description', i, x, y).invalid && (getAnswerField('description', i, x, y).dirty || getAnswerField('description', i, x, y).touched)"
+                                  [errors]="getAnswerField('description', i, x, y).errors"
+                                  [label]="'Description'"
+                                ></app-inline-errors>
                               </div>
                             </div>
 
                             <div class="col-xs-2 vcenter">
-                              <label class="control-label">weight</label>
-                              <div class="form-group">
+                              <div
+                                [ngClass]="{ 'has-error': getAnswerField('weight', i, x, y).invalid &&(getAnswerField('weight', i, x, y).dirty || getAnswerField('weight', i, x, y).touched) }"
+                                class="form-group"
+                              >
+                                <label class="control-label label-required">weight</label>
                                 <input
                                   class="form-control"
                                   formControlName="weight"
@@ -274,6 +326,11 @@
                                   placeholder=""
                                   type="text"
                                 />
+                                <app-inline-errors
+                                  *ngIf="getAnswerField('weight', i, x, y).invalid && (getAnswerField('weight', i, x, y).dirty || getAnswerField('weight', i, x, y).touched)"
+                                  [errors]="getAnswerField('weight', i, x, y).errors"
+                                  [label]="'Weight'"
+                                ></app-inline-errors>
                               </div>
                             </div>
 
@@ -282,7 +339,7 @@
                                 class="form-check vcenter" style="margin-top: 35px !important;"
                               >
                                 <input
-                                  (change)="chooseIfAnswerApplicable($event)"
+                                  (change)="chooseIfAnswerApplicable($event, i, x, y)"
                                   [checked]="getAnswerApplicable(i, x, y)"
                                   class="form-check-input"
                                   id="checkBoxApplicableAnswer"
@@ -333,6 +390,14 @@
                     type="button"
                   >
                     <em class="fa fa-plus"></em> Add Question
+                  </button>
+                  &nbsp;&nbsp;
+                  <button
+                    (click)="removeQuestionSection(i)"
+                    class="btn btn-danger remove-btn btn-sm btn-custom-margin-top ml-50"
+                    type="button"
+                  >
+                    <em class="fa fa-remove"></em> Remove Section
                   </button>
                 </div>
               </div>
