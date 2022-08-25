@@ -222,7 +222,7 @@ export class TrainingCreateComponent
     this.modalService.open(content, { ariaLabelledBy: "modal-basic-title" });
   }
 
-  uccess(name) {
+  success(name) {
     const modalRef = this.modalService.open(SuccessModalComponent, {
       ariaLabelledBy: "modal-basic-title",
     });

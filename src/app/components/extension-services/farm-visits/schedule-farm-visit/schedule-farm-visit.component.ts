@@ -198,6 +198,7 @@ export class ScheduleFarmVisitComponent implements OnInit {
   }
 
   open(content) {
+    this.scheduleVisit.markAllAsTouched();
     if (this.scheduleVisit.valid && this.selectedFarms.length > 0) {
       this.formatedStartDate =
         this.formatDate(

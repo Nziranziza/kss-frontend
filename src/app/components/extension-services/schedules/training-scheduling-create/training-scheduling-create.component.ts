@@ -189,6 +189,7 @@ export class TrainingSchedulingCreateComponent
   }
 
   open(content) {
+    this.scheduleTraining.markAllAsTouched();
     if (this.scheduleTraining.valid) {
       this.selectedStartDate =
         this.formatDate(

@@ -233,6 +233,7 @@ export class EditFarmVisitComponent implements OnInit {
   }
 
   open(content) {
+    this.scheduleVisit.markAllAsTouched();
     if (this.scheduleVisit.valid) {
       this.selectedFarms = this.selectedFarms.length > 0 ? this.selectedFarms : this.savedFarmList;
       this.formatedStartDate =

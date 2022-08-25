@@ -35,7 +35,7 @@
 <h3>
   <div class="row">
     <div class="col-sm-10">Farms Visits</div>
-    <div class="col-sm-2">
+    <div class="col-sm-2" *appHasPermission="[1]">
       <a class="btn btn-success pull-left" routerLink="/admin/farm/visit/create"
         ><i class="fa fa-calendar"></i> Schedule a Farm Visit
       </a>
@@ -134,6 +134,7 @@
                   appRequiredSeason
                   class="btn btn-action-no-border btn-margin"
                   (click)="openDeleteModal(visit)"
+                  *appHasPermission="[1]"
                 >
                   <em class="fa fa-trash"></em>
                 </button>
@@ -145,6 +146,7 @@
                   <em class="fa fa-envelope-o"></em>
                 </button>
                 <button
+                  *appHasPermission="[1]"
                   class="btn btn-action-no-border btn-margin btn-sm details-button"
                   routerLink="/admin/farm/visit/edit/{{ visit._id }}"
                 >

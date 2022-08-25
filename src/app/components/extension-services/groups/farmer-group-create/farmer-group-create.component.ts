@@ -120,6 +120,7 @@ export class FarmerGroupCreateComponent
   }
 
   onSubmit() {
+    this.createForm.markAllAsTouched();
     if (this.createForm.valid) {
       const value = JSON.parse(JSON.stringify(this.createForm.value));
       value.org_id = this.authenticationService.getCurrentUser().info.org_id;

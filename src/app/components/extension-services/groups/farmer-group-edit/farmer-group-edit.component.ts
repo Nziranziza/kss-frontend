@@ -65,10 +65,10 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
 
   ngOnInit() {
     this.editForm = this.formBuilder.group({
-      groupName: [''],
-      leaderNames: [''],
-      leaderPhoneNumber: [''],
-      description: [''],
+      groupName: ['', Validators.required],
+      leaderNames: ['', Validators.required],
+      leaderPhoneNumber: ['', Validators.required, Validators.pattern("[0-9]{12}")],
+      description: ['', Validators.required],
       meetingSchedule: this.formBuilder.group({
         meetingDay: [''],
         meetingTime: [''],
@@ -127,6 +127,21 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
           this.groupMembers.push(item);
         });
         this.editForm.patchValue(data.data);
+        this.editForm.controls.location
+          .get("prov_id".toString())
+          .setValue(data.data.location.prov_id._id);
+        this.editForm.controls.location
+          .get("dist_id".toString())
+          .setValue(data.data.location.dist_id._id);
+        this.editForm.controls.location
+          .get("sect_id".toString())
+          .setValue(data.data.location.sect_id._id);
+        this.editForm.controls.location
+          .get("cell_id".toString())
+          .setValue(data.data.location.cell_id._id);
+        this.editForm.controls.location
+          .get("village_id".toString())
+          .setValue(data.data.location.village_id._id);
       });
     });
     this.basicInit(this.authenticationService.getCurrentUser().info.org_id);
@@ -134,6 +149,7 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
   }
 
   onSubmit() {
+    this.editForm.markAllAsTouched();
     if (this.editForm.valid) {
       const value = JSON.parse(JSON.stringify(this.editForm.value));
       value.org_id = this.authenticationService.getCurrentUser().info.org_id;
