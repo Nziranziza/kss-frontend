@@ -285,15 +285,15 @@ export class GapEditComponent
   }
 
   onSubmit() {
-    console.log("form element", this.createForm);
+    // First validate high level
+    this.createForm.markAllAsTouched();
+
     if (this.createForm.valid) {
       this.loading = true;
       this.gap = this.createForm.getRawValue();
       const dataString = JSON.stringify(this.gap, this.replaceUndefinedOrNull);
-      console.log(dataString)
       this.gap = JSON.parse(dataString);
 
-      console.log("To send", this.gap)
       this.gapService.update(this.gap, this.id).subscribe(
         (data) => {
           this.loading = false;
