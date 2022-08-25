@@ -97,7 +97,22 @@ export class ScheduleFarmVisitComponent implements OnInit {
       });
   }
 
-  onGapSelect(item: any) {}
+  onGapSelect(item: any) {
+    const gapSelected = this.scheduleVisit.get("adoptionGap".toString());
+    if (item._id === "") {
+      gapSelected.setValue(
+        [
+          {
+            _id: "",
+            name: "Not Applied",
+          },
+        ],
+        { emitEvent: false }
+      );
+    } else {
+      gapSelected.setValue(gapSelected.value.filter((e) => e._id !== ""));
+    }
+  }
   onDeGapSelect(item: any) {
     const gapSelected = this.scheduleVisit.get("adoptionGap".toString());
     const gapOptions = gapSelected.value.filter(

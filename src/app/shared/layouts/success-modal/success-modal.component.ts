@@ -45,11 +45,12 @@ export class SuccessModalComponent implements OnInit {
     if (this.serviceName == "visit") {
       this.visitService.sendSms(this.smsId).subscribe((data) => {  
       });
-
+      this.modal.dismiss();
     } else if (this.serviceName == "training") {
       this.trainingService.sendMessage(this.smsId).subscribe((data) => {  
       });
+      this.modal.dismiss();
     }
-    this.modal.dismiss();
+    
   }
 }
