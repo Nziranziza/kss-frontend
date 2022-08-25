@@ -66,6 +66,11 @@ export class GapEditComponent
     return this.createForm.get('gap_score');
   }
 
+  get getGapDescription() {
+    return this.createForm.get('picture_text');
+  }
+
+
   ngOnInit() {
     this.route.params.subscribe((params) => {
       this.id = params['id'.toString()];
@@ -153,16 +158,26 @@ export class GapEditComponent
     return this.getSectionQuestions(sectionIndex).at(qstIndex).get('answers') as FormArray;
   }
 
-  getAnswerApplicable(sectionIndex: number, qstIndex: number, answIndex: number) {
-    return this.getQuestionAnswers(sectionIndex, qstIndex).at(answIndex).get('is_not_applicable').value;
-  }
-
   getQuestionType(sectionIndex: number, qstIndex: number) {
     return this.getSectionQuestions(sectionIndex).at(qstIndex).get('question_type')
   }
 
+  // Methods for validating Question Fields
+
+  getQuestionField(field: string, sectionIndex: number, qstIndex: number){
+    return this.getSectionQuestions(sectionIndex).at(qstIndex).get(field);
+  }
+
+  getAnswerField(field: string, sectionIndex: number, qstIndex: number, answIndex: number){
+    return this.getQuestionAnswers(sectionIndex, qstIndex).at(answIndex).get(field);
+  }
+
   getQuestionApplicable(sectionIndex: number, qstIndex: number) {
-    return this.getSectionQuestions(sectionIndex).at(qstIndex).get('is_not_applicable');
+    return this.getSectionQuestions(sectionIndex).at(qstIndex).get('is_not_applicable').value;
+  }
+
+  getAnswerApplicable(sectionIndex: number, qstIndex: number, answIndex: number) {
+    return this.getQuestionAnswers(sectionIndex, qstIndex).at(answIndex).get('is_not_applicable').value;
   }
 
   getSectionName(index: number) {
@@ -207,16 +222,12 @@ export class GapEditComponent
    * GAP Manipulation methods
    */
 
-  chooseIfApplicable(event) {
-    if (event.target.checked) {
-    } else {
-    }
+  chooseIfApplicable(event, sectionIndex: number, qstIndex: number) {
+    this.getSectionQuestions(sectionIndex).at(qstIndex).get('is_not_applicable').setValue(event.target.checked);
   }
 
-  chooseIfAnswerApplicable(event) {
-    if (event.target.checked) {
-    } else {
-    }
+  chooseIfAnswerApplicable(event, sectionIndex: number, qstIndex: number, answIndex: number) {
+    this.getQuestionAnswers(sectionIndex, qstIndex).at(answIndex).get('is_not_applicable').setValue(event.target.checked);
   }
 
   checkIFMultipleQuestion(sectionIndex: number, qstIndex: number) {
@@ -235,6 +246,7 @@ export class GapEditComponent
     const question = questions[qstIndex] as FormGroup;
 
     if (question.controls.question_type.value === 'multiple_single' || question.controls.question_type.value === 'multiple_apply') {
+      this.removeAllQuestionAnswers(sectionIndex, qstIndex);
       this.addAnswersToQuestion(sectionIndex, qstIndex);
     } else {
       this.removeAllQuestionAnswers(sectionIndex, qstIndex);
@@ -273,9 +285,15 @@ export class GapEditComponent
   }
 
   onSubmit() {
+    console.log("form element", this.createForm);
     if (this.createForm.valid) {
       this.loading = true;
       this.gap = this.createForm.getRawValue();
+      const dataString = JSON.stringify(this.gap, this.replaceUndefinedOrNull);
+      console.log(dataString)
+      this.gap = JSON.parse(dataString);
+
+      console.log("To send", this.gap)
       this.gapService.update(this.gap, this.id).subscribe(
         (data) => {
           this.loading = false;
@@ -299,6 +317,14 @@ export class GapEditComponent
         this.setError('Missing required gap(s) information');
       }
     }
+  }
+
+  replaceUndefinedOrNull(key, value) {
+    if (value === '' && key === "_id") {
+      return undefined;
+    }
+
+    return value;
   }
 
   createQuestion(): FormGroup {
