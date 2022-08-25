@@ -137,6 +137,11 @@
           {{ training.trainer ? training.trainer.fullName : "" }}
         </div>
         <br />
+        <label class="control-label label-required">Group Name</label>
+        <div class="confirm-text-box confirm-text" style="margin-right: 20px">
+          {{ training.groupId?.groupName }}
+        </div>
+        <br />
         <h3 class="text-center">
           Trainees ( Total:
           {{ training.trainees ? training.trainees.length : 0 }} )
@@ -154,13 +159,13 @@
               <td>{{ trainee.phoneNumber }}</td>
               <td
                 style="text-align: center; color: green"
-                *ngIf="trainee.attendance"
+                *ngIf="trainee.attended"
               >
                 Yes
               </td>
               <td
                 style="text-align: center; color: red"
-                *ngIf="!trainee.attendance"
+                *ngIf="!trainee.attended"
               >
                 No
               </td>

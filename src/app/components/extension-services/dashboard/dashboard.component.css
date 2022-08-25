@@ -74,13 +74,13 @@
   background: #4f210d 0% 0% no-repeat padding-box;
   color: white;
   border-radius: 3px;
-  font: normal 9px Helvetica Neue;
+  font: normal 10px/15px Helvetica Neue;
   opacity: 1;
 }
 
 .form-control-small {
   height: 28px;
-  font: normal 9px Helvetica Neue;
+  font: normal 10px/15px Helvetica Neue;
   border: 1px solid #4f210d;
 }
 
@@ -90,13 +90,14 @@
 
 .ng-autocomplete ::ng-deep .autocomplete-container {
   height: 28px;
-  font: normal 9px Helvetica Neue;
+  font: normal 10px/15px Helvetica Neue;
 }
 
 .ng-autocomplete ::ng-deep .autocomplete-container .input-container input {
   height: 28px;
-  font: normal 9px Helvetica Neue;
+  font: normal 10px/15px Helvetica Neue;
   border: 1px solid #4f210d;
+  color: #333333;
   border-radius: 3px;
 }
 
@@ -107,11 +108,13 @@
   ul
   li
   a {
-  font: normal 9px Helvetica Neue;
+  font: normal 10px/15px Helvetica Neue;
+  color: #333333;
 }
 
 .ng-autocomplete ::ng-deep .autocomplete-container .input-container .x i {
-  font: normal 9px Helvetica Neue;
+  font: normal 10px/15px Helvetica Neue;
+  color: #333333;
 }
 
 .col-small-padding {

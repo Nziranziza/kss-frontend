@@ -135,13 +135,14 @@
                     (ngModelChange)="seasonDateChange('location')"
                     class="form-control form-control-small"
                     placeholder="From: Dd/mm/yyyy ~ To: Dd/mm/yyyy"
-                    [min]="dateRangeMin['location']"
-                    [max]="dateRangeMax['location']"
+                    [min]="dateRangeMin.location"
+                    [max]="dateRangeMax.location"
                   />
                   <owl-date-time
-                    [pickerType]="'calendar'"
-                    [scrollStrategy]="scrollStrategy"
                     #dt10
+                    [pickerType]="'calendar'"
+                    
+                    [scrollStrategy]="scrollStrategy"
                   ></owl-date-time>
                 </div>
               </div>
@@ -231,24 +232,24 @@
                   <label class="label-header-text">Select Trainer</label>
                   <div class="ng-autocomplete">
                     <ng-autocomplete
-                      #origin
+                      #origin4
                       [data]="trainers"
                       [searchKeyword]="agronomistKeyword"
                       (selected)="selectAgronomistEvent($event)"
                       (inputCleared)="deselectAgronomistEvent()"
                       [initialValue]="initialValue"
                       placeholder="All trainers"
-                      [itemTemplate]="itemTemplate"
-                      [notFoundTemplate]="notFoundTemplate"
+                      [itemTemplate]="itemTemplate4"
+                      [notFoundTemplate]="notFoundTemplate4"
                       style="height: 10px"
                     >
                     </ng-autocomplete>
 
-                    <ng-template #itemTemplate let-item>
+                    <ng-template #itemTemplate4 let-item>
                       <a [innerHTML]="item.fullNames" style="height: 20px"></a>
                     </ng-template>
 
-                    <ng-template #notFoundTemplate let-notFound>
+                    <ng-template #notFoundTemplate4 let-notFound>
                       <div [innerHTML]="notFound"></div>
                     </ng-template>
                   </div>
@@ -257,26 +258,26 @@
               <div class="col-xs-4 col-small-padding">
                 <div class="form-group">
                   <label class="label-header-text">Select Group</label>
-                  <div class="ng-autocomplete">
+                  <div class="ng-autocomplete" style="color: black">
                     <ng-autocomplete
-                      #origin
+                      #origin2
                       [data]="groups"
                       [searchKeyword]="groupKeyword"
                       (selected)="selectGroupEvent($event)"
                       (inputCleared)="deselectGroupEvent()"
                       [initialValue]="initialValue"
                       placeholder="All groups"
-                      [itemTemplate]="itemTemplate"
-                      [notFoundTemplate]="notFoundTemplate"
-                      style="height: 10px"
+                      [itemTemplate]="itemTemplate2"
+                      [notFoundTemplate]="notFoundTemplate2"
+                      style="height: 10px; color: black"
                     >
                     </ng-autocomplete>
 
-                    <ng-template #itemTemplate let-item>
-                      <a [innerHTML]="item.groupName" style="height: 20px"></a>
+                    <ng-template #itemTemplate2 let-item style="color: black">
+                      <a [innerHTML]="item.groupName" style="height: 20px; color: black"></a>
                     </ng-template>
 
-                    <ng-template #notFoundTemplate let-notFound>
+                    <ng-template #notFoundTemplate2 let-notFound>
                       <div [innerHTML]="notFound"></div>
                     </ng-template>
                   </div>
@@ -326,7 +327,6 @@
                   <div class="form-group">
                     <label class="label-header-text">Date</label>
                     <input
-                      [(ngModel)]="dateRange"
                       [selectMode]="'range'"
                       [owlDateTimeTrigger]="dt8"
                       [owlDateTime]="dt8"
@@ -334,13 +334,13 @@
                       (ngModelChange)="seasonDateChange('trainingFilters')"
                       class="form-control form-control-small"
                       placeholder="From: Dd/mm/yyyy ~ To: Dd/mm/yyyy"
-                      [min]="dateRangeMin['trainingFilters']"
-                      [max]="dateRangeMax['trainingFilters']"
+                      [min]="dateRangeMin.trainingFilters"
+                      [max]="dateRangeMax.trainingFilters"
                     />
                     <owl-date-time
+                      #dt8
                       [pickerType]="'calendar'"
                       [scrollStrategy]="scrollStrategy"
-                      #dt8
                     ></owl-date-time>
                   </div>
                 </div>
@@ -492,11 +492,10 @@
                 <div class="form-group">
                   <label class="label-header-text">Date</label>
                   <input
-                    [(ngModel)]="dateRange"
                     [selectMode]="'range'"
                     [owlDateTimeTrigger]="dt3"
                     [owlDateTime]="dt3"
-                    (ngModelChange)="seasonDateChange('visitFilters')"
+                    (ngModelChange)="seasonDateChange($event, 'visitFilters')"
                     formControlName="filterByDate"
                     class="form-control form-control-small"
                     placeholder="From: Dd/mm/yyyy ~ To: Dd/mm/yyyy"
@@ -504,9 +503,9 @@
                     [max]="dateRangeMax['visitFilters']"
                   />
                   <owl-date-time
+                    #dt3
                     [pickerType]="'calendar'"
                     [scrollStrategy]="scrollStrategy"
-                    #dt3
                   ></owl-date-time>
                 </div>
               </div>
@@ -616,27 +615,27 @@
                   <label class="label-header-text">Select Nursery</label>
                   <div class="ng-autocomplete">
                     <ng-autocomplete
-                      #origin
+                      #origin3
                       [data]="nurseries"
                       [searchKeyword]="nurseryKeyword"
                       (selected)="selectNurseryEvent($event)"
                       (inputCleared)="deselectNurseryEvent()"
                       [initialValue]="initialValue"
                       placeholder="All Nurseries"
-                      [itemTemplate]="itemTemplate"
-                      [notFoundTemplate]="notFoundTemplate"
+                      [itemTemplate]="itemTemplate3"
+                      [notFoundTemplate]="notFoundTemplate3"
                       style="height: 10px"
                     >
                     </ng-autocomplete>
 
-                    <ng-template #itemTemplate let-item>
+                    <ng-template #itemTemplate3 let-item>
                       <a
                         [innerHTML]="item.nurseryName"
                         style="height: 20px"
                       ></a>
                     </ng-template>
 
-                    <ng-template #notFoundTemplate let-notFound>
+                    <ng-template #notFoundTemplate3 let-notFound>
                       <div [innerHTML]="notFound"></div>
                     </ng-template>
                   </div>
@@ -684,7 +683,6 @@
                 <div class="form-group">
                   <label class="label-header-text">Date</label>
                   <input
-                    [(ngModel)]="dateRange"
                     [selectMode]="'range'"
                     [owlDateTimeTrigger]="dt4"
                     [owlDateTime]="dt4"
@@ -692,13 +690,13 @@
                     (ngModelChange)="seasonDateChange('seedlingFilters')"
                     class="form-control form-control-small"
                     placeholder="From: Dd/mm/yyyy ~ To: Dd/mm/yyyy"
-                    [min]="dateRangeMin['seedlingFilters']"
-                    [max]="dateRangeMax['seedlingFilters']"
+                    [min]="dateRangeMin.seedlingFilters"
+                    [max]="dateRangeMax.seedlingFilters"
                   />
                   <owl-date-time
-                    [pickerType]="'calendar'"
-                    [scrollStrategy]="scrollStrategy"
                     #dt4
+                    [pickerType]="'calendar'"
+                    [scrollStrategy]="scrollStrategy" 
                   ></owl-date-time>
                 </div>
               </div>
@@ -893,7 +891,6 @@
                 <div class="form-group">
                   <label class="label-header-text">Date</label>
                   <input
-                    [(ngModel)]="dateRange"
                     [selectMode]="'range'"
                     [owlDateTimeTrigger]="dt5"
                     [owlDateTime]="dt5"
@@ -901,13 +898,13 @@
                     (ngModelChange)="seasonDateChange('gapFilters')"
                     class="form-control form-control-small"
                     placeholder="From: Dd/mm/yyyy ~ To: Dd/mm/yyyy"
-                    [min]="dateRangeMin['gapFilters']"
-                    [max]="dateRangeMax['gapFilters']"
+                    [min]="dateRangeMin.gapFilters"
+                    [max]="dateRangeMax.gapFilters"
                   />
                   <owl-date-time
-                    [pickerType]="'calendar'"
-                    [scrollStrategy]="scrollStrategy"
                     #dt5
+                    [pickerType]="'calendar'"
+                    [scrollStrategy]="scrollStrategy" 
                   ></owl-date-time>
                 </div>
               </div>

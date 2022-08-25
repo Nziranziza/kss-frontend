@@ -12,50 +12,85 @@
         <div class="col-xs-12">
           <div style="margin-bottom: 10px">
             <label class="control-label">Farm to visit</label>
-            <div
-              class="confirm-text-box confirm-text"
-              *ngFor="let farms of visits.farms"
-            >
-              <span> {{ farms.upiNumber }} </span>
+            <div class="confirm-text-box confirm-text">
+              <table class="row-border hover table">
+                <thead>
+                  <tr>
+                    <th>Owner</th>
+                    <th>Phone Number</th>
+                    <th>Location</th>
+                    <th>UPI</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let farm of visits.farms; let i = index">
+                    <td>
+                      {{ farm.owner?.firstName + " " + farm.owner?.lastName }}
+                    </td>
+                    <td>{{ farm.owner?.phoneNumber }}</td>
+                    <td>
+                      {{
+                        farm?.location?.prov_id?.namek +
+                          " > " +
+                          farm?.location?.dist_id?.name +
+                          " > " +
+                          farm?.location?.sect_id?.name +
+                          " > " +
+                          farm?.location?.cell_id?.name +
+                          " > " +
+                          farm?.location?.village_id?.name
+                      }}
+                    </td>
+                    <td>
+                      {{ farm?.upiNumber }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
           <div style="margin-bottom: 10px">
             <label class="control-label"
               >GAP to be covered during the visit</label
             >
-            <div
-              class="confirm-text-box confirm-text"
-              *ngFor="let gaps of visits.gaps"
-            >
-              {{ gaps }}
-            </div>
-          </div>
-          <div style="margin-bottom: 10px">
-            <label class="control-label"
-              >Agronomist who will visit</label
-            >
             <div class="confirm-text-box confirm-text">
-              {{ visits.visitor.firstName + ' ' + visits.visitor.lastName }}
+              <table class="row-border hover table">
+                <thead>
+                  <tr>
+                    <th>Gap Name</th>
+                    <th>Visit Score</th>
+                    <th>Overall Weight</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let gap of visits.gaps; let i = index">
+                    <td>{{ gap.gap_name }}</td>
+                    <td>{{ gap.gap_score }}</td>
+                    <td>{{ gap.gap_weight }}</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
           <div style="margin-bottom: 10px">
-            <label class="control-label"
-              >Date and Time of the visit</label
-            >
+            <label class="control-label">Agronomist who will visit</label>
+            <div class="confirm-text-box confirm-text">
+              {{ visits.visitor.firstName + " " + visits.visitor.lastName }}
+            </div>
+          </div>
+          <div style="margin-bottom: 10px">
+            <label class="control-label">Date and Time of the visit</label>
             <div class="confirm-text-box confirm-text">
               {{ visits.date | date: "shortDate" }} <br />
               From :
-              {{
-                visits.expectedDuration ? visits.expectedDuration.from : ""
-              }}
-              <br /> To :
+              {{ visits.expectedDuration ? visits.expectedDuration.from : "" }}
+              <br />
+              To :
               {{ visits.expectedDuration ? visits.expectedDuration.to : "" }}
             </div>
           </div>
           <div style="margin-bottom: 10px">
-            <label class="control-label "
-              >Visit Description</label
-            >
+            <label class="control-label">Visit Description</label>
             <div class="confirm-text-box confirm-text">
               {{ visits.description }} <br />
             </div>
@@ -64,5 +99,4 @@
       </div>
     </div>
   </div>
-  <h3>Observation Details</h3>
 </div>
