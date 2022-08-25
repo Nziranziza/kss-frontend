@@ -214,7 +214,9 @@ export class GapCreateComponent
   }
 
   onSubmit() {
-    console.log(this.createForm)
+    // First validate high level
+    this.createForm.markAllAsTouched();
+
     if (this.createForm.valid) {
       this.loading = true;
       const temp = this.createForm.getRawValue();
@@ -239,7 +241,6 @@ export class GapCreateComponent
         }
       );
     } else {
-      console.log(this.helperService.getFormValidationErrors(this.createForm), "errors")
       if (
         this.helperService.getFormValidationErrors(this.createForm).length > 0
       ) {
