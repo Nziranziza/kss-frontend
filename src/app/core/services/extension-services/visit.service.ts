@@ -21,7 +21,7 @@ export class VisitService {
   }
 
   delete(id: string): Observable<any> {
-    return this.apiService.get("/v1.1/farm-visit-schedules/" + id);
+    return this.apiService.delete("/v1.1/farm-visit-schedules/" + id);
   }
 
   sendSms(id: string): Observable<any> {
@@ -31,7 +31,7 @@ export class VisitService {
   edit(id: string, body: any): Observable<any> {
     return this.apiService.put("/v1.1/farm-visit-schedules/" + id, body);
   }
-  
+
   getVisitsStats(body: any) {
     return this.apiService.post("/v1.1/farm-visit-schedules/stats", body);
   }
