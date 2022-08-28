@@ -89,8 +89,6 @@ export class OrganisationDetailsComponent
       this.org = data.content;
       console.log(this.org);
     });
-    this.getFarmers(this.organisationId);
-    this.getPaginatedFarmers();
     this.organisationService
       .getCwsSummary(this.organisationId)
       .subscribe((data) => {
@@ -110,42 +108,6 @@ export class OrganisationDetailsComponent
     this.setMessage(this.messageService.getMessage());
     this.orgCoveredArea = this.route.snapshot.data.orgCoveredArea;
     this.currentSeason = this.authenticationService.getCurrentSeason();
-  }
-  getFarmers(orgId: string): void {
-    this.organisationService.getOrgFarmers(orgId).subscribe((data) => {
-      if (data) {
-        this.farmers = data.content;
-        this.farmers.map((farmer) => {
-          farmer.request.requestInfo.map((land) => {
-            this.numberOfTrees = this.numberOfTrees + land.numberOfTrees;
-          });
-        });
-      }
-    });
-  }
-
-  getPaginatedFarmers(): void {
-    this.loading = true;
-    this.organisationService.getFarmers(this.parameters).subscribe((data) => {
-      if (data.data.length === 0) {
-        this.config = {
-          itemsPerPage: this.parameters.length,
-          currentPage: this.parameters.start + 1,
-          totalItems: 0,
-        };
-        this.numberOfFarmers = 0;
-      } else {
-        this.paginatedFarmers = data.data;
-        this.config = {
-          itemsPerPage: this.parameters.length,
-          currentPage: this.parameters.start + 1,
-          totalItems: data.recordsTotal,
-        };
-        this.numberOfFarmers = data.recordsTotal;
-      }
-      this.showData = true;
-      this.loading = false;
-    });
   }
 
   ngOnDestroy(): void {

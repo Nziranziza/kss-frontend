@@ -22,6 +22,7 @@ import {SupplierDeliveriesComponent} from './supplier-deliveries/supplier-delive
   styleUrls: ['./organisation-suppliers.component.css']
 })
 export class OrganisationSuppliersComponent extends BasicComponent implements OnInit, OnDestroy {
+  cwsDashes: any;
 
   constructor(private organisationService: OrganisationService, private userService: UserService,
               private authenticationService: AuthenticationService,
@@ -74,6 +75,9 @@ export class OrganisationSuppliersComponent extends BasicComponent implements On
     this.seasonStartingTime = this.authenticationService.getCurrentSeason().created_at;
     this.route.params.subscribe(params => {
       this.organisationId = params['organisationId'.toString()];
+    });
+    this.route.queryParams.subscribe((params) => {
+      this.cwsDashes = params['cwsDashes'.toString()];
     });
     this.route.queryParams.subscribe(params => {
       this.toFilterDate = params['to'.toString()] ? new Date(params['to'.toString()])
