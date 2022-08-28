@@ -1,9 +1,9 @@
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB6rJxA0WuYgN4LPaHcP8uLrgOQ-BUc_5A"></script>
-<div class="filter-title-text">
+<div class="filter-title-text" *ngIf="organisationId == undefined">
   Welcome to SKS - <span class="bold"> Dashboard - Extension Services </span>
 </div>
 <form [formGroup]="dashboardForm">
-  <div class="filter-box filter-box-top">
+  <div class="filter-box filter-box-top" *ngIf="organisationId == undefined">
     <div class="row">
       <div class="col-md-12">
         <div class="row" formGroupName="location">

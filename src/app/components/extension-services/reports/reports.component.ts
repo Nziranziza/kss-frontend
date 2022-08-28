@@ -317,6 +317,18 @@ export class ReportsComponent extends BasicComponent implements OnInit {
       this.reportService.visitStats(body).subscribe((data) => {
         this.stats = data.data[0];
       });
+    } else if (value === "Coffee Farmers") {
+      body.searchBy = "farmer";
+      this.reportService.farmStats(body).subscribe((data) => {
+        this.stats = data.data[0];
+        console.log(data);
+      });
+    } else if (value === "Coffee Farms") {
+      body.searchBy = "farm";
+      this.reportService.farmStats(body).subscribe((data) => {
+        this.stats = data.data[0];
+        console.log(data);
+      });
     }
   }
   downloadCsv() {
@@ -390,6 +402,26 @@ export class ReportsComponent extends BasicComponent implements OnInit {
         this.dt3Trigger.next();
         this.reportGenerated = true;
       });
+    } else if (this.reportForm.value.reportFor === "Coffee Farmers") {
+      this.reportsTableData = [];
+      this.reportBody.searchBy = "farmer";
+      console.log("-------");
+      this.reportService.farmSummary(this.reportBody).subscribe((data) => {
+        this.reportsTableData = data.data;
+        console.log(data);
+        this.dt3Trigger.next();
+        this.reportGenerated = true;
+      });
+    } else if (this.reportForm.value.reportFor === "Coffee Farms") {
+      this.reportsTableData = [];
+      console.log("-------");
+      this.reportBody.searchBy = "farm";
+      this.reportService.farmSummary(this.reportBody).subscribe((data) => {
+        this.reportsTableData = data.data;
+        console.log(data);
+        this.dt3Trigger.next();
+        this.reportGenerated = true;
+      });
     }
   }
 
@@ -439,6 +471,40 @@ export class ReportsComponent extends BasicComponent implements OnInit {
         });
       this.reportService
         .visitDownload(this.reportBody, "pdf")
+        .subscribe((data) => {
+          this.dataPdf = data.data.file;
+        });
+    } else if (this.reportForm.value.reportFor === "Coffee Farmers") {
+      this.reportBody.searchBy = "farmer";
+      this.reportService
+        .farmDownload(this.reportBody, "xlsx")
+        .subscribe((data) => {
+          this.dataFile = data.data.file;
+        });
+      this.reportService
+        .farmDownload(this.reportBody, "csv")
+        .subscribe((data) => {
+          this.dataCsv = data.data.file;
+        });
+      this.reportService
+        .farmDownload(this.reportBody, "pdf")
+        .subscribe((data) => {
+          this.dataPdf = data.data.file;
+        });
+    } else if (this.reportForm.value.reportFor === "Coffee Farms") {
+      this.reportBody.searchBy = "farm";
+      this.reportService
+        .farmDownload(this.reportBody, "xlsx")
+        .subscribe((data) => {
+          this.dataFile = data.data.file;
+        });
+      this.reportService
+        .farmDownload(this.reportBody, "csv")
+        .subscribe((data) => {
+          this.dataCsv = data.data.file;
+        });
+      this.reportService
+        .farmDownload(this.reportBody, "pdf")
         .subscribe((data) => {
           this.dataPdf = data.data.file;
         });

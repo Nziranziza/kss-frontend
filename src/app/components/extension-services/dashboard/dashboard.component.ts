@@ -17,6 +17,7 @@ import {
   SiteService,
 } from "src/app/core";
 import { ScrollStrategy, ScrollStrategyOptions } from "@angular/cdk/overlay";
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: "app-dashboard",
@@ -25,6 +26,7 @@ import { ScrollStrategy, ScrollStrategyOptions } from "@angular/cdk/overlay";
 })
 export class DashboardComponent extends BasicComponent implements OnInit {
   scrollStrategy: ScrollStrategy;
+  organisationId: string = "";
   constructor(
     private formBuilder: FormBuilder,
     private authenticationService: AuthenticationService,
@@ -39,6 +41,7 @@ export class DashboardComponent extends BasicComponent implements OnInit {
     private farmService: FarmService,
     private seedlingService: SeedlingService,
     private readonly sso: ScrollStrategyOptions,
+    private route: ActivatedRoute,
     private siteService: SiteService
   ) {
     super(locationService, organisationService);
@@ -156,7 +159,7 @@ export class DashboardComponent extends BasicComponent implements OnInit {
   markersArray = [];
   generalFarmStats: any = {};
   selectedAgronomist: any;
-
+  starterBody: any = {};
   weeks = [
     { id: 1, name: "Week 1", start: "01", end: "07" },
     { id: 2, name: "Week 2", start: "07", end: "14" },
@@ -230,6 +233,11 @@ export class DashboardComponent extends BasicComponent implements OnInit {
       farm_id: [""],
       cws_id: [""],
       covered_sector: [""],
+    });
+    this.route.params.subscribe((params) => {
+      this.organisationId = params["organisationId".toString()];
+      console.log(this.organisationId);
+      this.starterBody = {referenceId : params["organisationId".toString()]};
     });
     this.initial();
     this.basicInit(this.authenticationService.getCurrentUser().info.org_id);
@@ -445,8 +453,8 @@ export class DashboardComponent extends BasicComponent implements OnInit {
     this.getNurseries();
     this.getTrainings();
     this.getOrganisations();
-    this.getFarms({});
-    this.getFarmerGroup({});
+    this.getFarms(this.starterBody);
+    this.getFarmerGroup(this.starterBody);
     this.seasonService.all().subscribe((data) => {
       this.seasons = data.content;
       this.currentSeason = this.authenticationService.getCurrentSeason();
@@ -457,7 +465,7 @@ export class DashboardComponent extends BasicComponent implements OnInit {
       this.seasonChangeEffect("gapFilters");
       this.seasonChangeEffect("location");
     });
-    this.getGeneralStats({});
+    this.getGeneralStats(this.starterBody);
   }
   // General stats from filters
 

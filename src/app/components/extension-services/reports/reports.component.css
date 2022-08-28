@@ -1,5 +1,5 @@
 .summary-box {
-  height: 123px;
+  min-height: 123px;
   /* UI Properties */
   background: #ffffff 0% 0% no-repeat padding-box;
   border: 1px solid #e1a33e;
