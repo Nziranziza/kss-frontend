@@ -413,9 +413,7 @@ export class TrainingSchedulingCreateComponent
       trainer: {
         userId: this.trainers[this.scheduleTraining.value.trainer]._id,
         fullName:
-          this.trainers[this.scheduleTraining.value.trainer].foreName +
-          " " +
-          this.trainers[this.scheduleTraining.value.trainer].surname,
+          this.trainers[this.scheduleTraining.value.trainer].fullNames, 
         phoneNumber:
           this.trainers[this.scheduleTraining.value.trainer].phoneNumber,
         organisationName:

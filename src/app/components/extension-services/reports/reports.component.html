@@ -225,7 +225,7 @@
           </div>
         </span>
         <span
-          *ngIf="reportForm.value.reportFor !== 'Farmer Groups'"
+          *ngIf="reportForm.value.reportFor == 'to be defined'"
           formGroupName="seasonFilters"
         >
           <div class="col-xs-6" style="margin-top: 5px">
@@ -306,6 +306,72 @@
         <div class="col-sm-6 text-center">
           <h4>Total Visited Farmers</h4>
           <h3>{{ stats?.numberOfFarmVisits || 0 }}</h3>
+        </div>
+      </span>
+
+      <span
+        *ngIf="
+          reportForm.value.reportFor === 'Coffee Farmers' ||
+          reportForm.value.reportFor === 'Coffee Farms'
+        "
+      >
+        <div class="col-sm-4 text-center">
+          <h4>Total Farmers</h4>
+          <h3>
+            {{
+              stats?.statistics?.male?.farmers +
+                stats?.statistics?.female?.farmers || 0
+            }}
+          </h3>
+          <div class="row">
+            <div class="col-sm-6">
+              <h5>Male</h5>
+              <h6>{{ stats?.statistics?.male?.farmers || 0 }}</h6>
+            </div>
+            <div class="col-sm-6">
+              <h5>Female</h5>
+              <h6>{{ stats?.statistics?.female?.farmers || 0 }}</h6>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4 text-center">
+          <h4>Total Farms</h4>
+          <h3>
+            {{
+              stats?.statistics?.male?.numberOfLands +
+                stats?.statistics?.female?.numberOfLands || 0
+            }}
+          </h3>
+          <div class="row">
+            <div class="col-sm-6">
+              <h5>Male</h5>
+              <h6>{{ stats?.statistics?.male?.numberOfLands || 0 }}</h6>
+            </div>
+            <div class="col-sm-6">
+              <h5>Female</h5>
+              <h6>{{ stats?.statistics?.female?.numberOfLands || 0 }}</h6>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-4 text-center">
+          <h4>Total Trees</h4>
+          <h3>
+            {{
+              stats?.statistics?.male?.numberOfTrees +
+                stats?.statistics?.female?.numberOfTrees || 0
+            }}
+          </h3>
+          <div class="row">
+            <div class="col-sm-6">
+              <h5>Male</h5>
+              <h6>{{ stats?.statistics?.male?.numberOfTrees || 0 }}</h6>
+            </div>
+            <div class="col-sm-6">
+              <h5>Female</h5>
+              <h6>{{ stats?.statistics?.female?.numberOfTrees || 0 }}</h6>
+            </div>
+          </div>
         </div>
       </span>
     </div>
@@ -511,38 +577,37 @@
       >
         <thead>
           <tr>
-            <th>Date added</th>
-            <th>Group name</th>
-            <th>Group leader names</th>
-            <th>Group leader contact</th>
-            <th>Address</th>
-            <th>Group size</th>
-            <th>status</th>
+            <th>Farmer Name</th>
+            <th>Farmer Location</th>
+            <th>Reg Number</th>
+            <th>NID</th>
+            <th>Gender</th>
+            <th>Contact</th>
+            <th>Total Trees</th>
+            <th>Fertilizer Need</th>
+            <th>Fertilizer Allocated</th>
           </tr>
         </thead>
         <tbody>
-          <ng-container *ngFor="let group of groups">
+          <ng-container *ngFor="let data of reportsTableData">
             <tr>
-              <td>{{ group.createdAt | date: "y/LL/d - h:mm" }}</td>
-              <td>{{ group.groupName }}</td>
-              <td>{{ group.leaderNames }}</td>
-              <td>{{ group.leaderPhoneNumber }}</td>
-              <td></td>
               <td>
-                <span>{{ group.members.length + " " + "farmers" }}</span>
+                {{ data?.userInfo?.foreName + " " + data.userInfo.surname }}
               </td>
               <td>
-                <span class="profile-text">
-                  <ng-container *ngIf="!group.active; else inactive"
-                    ><span style="color: green; font-weight: bold">active</span>
-                  </ng-container>
-                  <ng-template #inactive
-                    ><span style="color: #b21717; font-weight: bold"
-                      >inactive</span
-                    ></ng-template
-                  >
-                </span>
+                {{ data.userInfo?.location?.prov_id?.namek }} >
+                {{ data.userInfo.location?.dist_id.name }} >
+                {{ data.userInfo.location?.sect_id.name }} >
+                {{ data.userInfo.location?.cell_id.name }} >
+                {{ data.userInfo.location?.village_id.name }}
               </td>
+              <td>{{ data?.userInfo?.regNumber }}</td>
+              <td>{{ data?.userInfo?.NID }}</td>
+              <td>{{ data?.userInfo?.sex }}</td>
+              <td>{{ data?.userInfo?.phone_number }}</td>
+              <td>{{ data.requestInfo[0]?.numberOfTrees }}</td>
+              <td>{{ data.requestInfo[0]?.fertilizer_need }}</td>
+              <td>{{ data.requestInfo[0]?.fertilizer_allocate }}</td>
             </tr>
           </ng-container>
         </tbody>
@@ -564,38 +629,29 @@
       >
         <thead>
           <tr>
-            <th>Date added</th>
-            <th>Group name</th>
-            <th>Group leader names</th>
-            <th>Group leader contact</th>
-            <th>Address</th>
-            <th>Group size</th>
-            <th>status</th>
+            <th>Farmer Name</th>
+            <th>Farm Location</th>
+            <th>Total Trees</th>
+            <th>Fertilizer Need</th>
+            <th>Fertilizer Allocated</th>
           </tr>
         </thead>
         <tbody>
-          <ng-container *ngFor="let group of groups">
+          <ng-container *ngFor="let data of reportsTableData">
             <tr>
-              <td>{{ group.createdAt | date: "y/LL/d - h:mm" }}</td>
-              <td>{{ group.groupName }}</td>
-              <td>{{ group.leaderNames }}</td>
-              <td>{{ group.leaderPhoneNumber }}</td>
-              <td></td>
               <td>
-                <span>{{ group.members.length + " " + "farmers" }}</span>
+                {{ data?.userInfo?.foreName + " " + data.userInfo?.surname }}
               </td>
               <td>
-                <span class="profile-text">
-                  <ng-container *ngIf="!group.active; else inactive"
-                    ><span style="color: green; font-weight: bold">active</span>
-                  </ng-container>
-                  <ng-template #inactive
-                    ><span style="color: #b21717; font-weight: bold"
-                      >inactive</span
-                    ></ng-template
-                  >
-                </span>
+                {{ data.requestInfo[0].location.prov_id.namek }} >
+                {{ data.requestInfo[0].location.dist_id.name }} >
+                {{ data.requestInfo[0].location.sect_id.name }} >
+                {{ data.requestInfo[0].location.cell_id.name }} >
+                {{ data.requestInfo[0].location.village_id.name }}
               </td>
+              <td>{{ data.requestInfo[0]?.numberOfTrees }}</td>
+              <td>{{ data.requestInfo[0]?.fertilizer_need }}</td>
+              <td>{{ data.requestInfo[0]?.fertilizer_allocate }}</td>
             </tr>
           </ng-container>
         </tbody>

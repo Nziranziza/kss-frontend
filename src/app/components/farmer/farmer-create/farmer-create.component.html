@@ -35,6 +35,16 @@
                     id="NID"
                     (input)="onInputNID($event.target.value)"
                   />
+                  <app-inline-errors
+                    *ngIf="
+                      createForm.controls.NID.invalid &&
+                      (createForm.controls.NID.dirty ||
+                        createForm.controls.NID.touched)
+                    "
+                    [errors]="createForm.controls.NID.errors"
+                    [label]="'national id'"
+                  >
+                  </app-inline-errors>
                   <span class="input-error" *ngIf="invalidId">
                     invalid nid
                   </span>
