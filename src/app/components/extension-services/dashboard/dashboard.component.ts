@@ -475,7 +475,8 @@ export class DashboardComponent extends BasicComponent implements OnInit {
     this.getVisitsStats(body);
     this.getSeedlingStats(body);
     if (this.newOrg != "") {
-      this.getFarms({ org_id: this.newOrg });
+      delete body.date;
+      this.getFarms(body);
       this.getFarmerGroup({ reference: this.newOrg });
     }
     this.getFarmsStats(body);
@@ -657,6 +658,7 @@ export class DashboardComponent extends BasicComponent implements OnInit {
       });
       this.loading = false;
     });
+    console.log(this.farms);
   }
 
   getFarmsStats(body: any) {
