@@ -108,12 +108,12 @@ export class TrainingScheduleEditComponent
         searchBy: ["reg_number"],
       }),
     });
+    this.getSchedules();
     this.basicInit(this.authenticationService.getCurrentUser().info.org_id);
     this.onChanges();
     this.addContacts();
     this.getTrainers();
     this.getFarmerGroup();
-    this.getSchedules();
   }
 
   getSchedules() {

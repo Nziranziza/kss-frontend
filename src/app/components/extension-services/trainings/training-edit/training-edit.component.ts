@@ -151,7 +151,7 @@ export class TrainingEditComponent
   }
 
   onGapSelect(item: any) {
-    const gapSelected = this.createTraining.get("adoptionGap".toString());
+    const gapSelected = this.createTraining.get("adoptionGaps".toString());
     if (item._id === "") {
       gapSelected.setValue(
         [
