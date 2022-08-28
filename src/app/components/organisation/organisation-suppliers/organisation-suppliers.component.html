@@ -10,7 +10,7 @@
 </div>
 <app-list-message [message]="message"></app-list-message>
 <div class="row">
-  <div class="col-md-12">
+  <div class="col-md-12" *ngIf="cwsDashes === undefined">
     <div class="box box-default">
       <div class="box-header with-border">
         <h3 class="box-title">{{org? org.organizationName : '' }} >> suppliers</h3>
@@ -207,7 +207,7 @@
             <th>National ID</th>
             <th>Phone number</th>
             <th>Reg number</th>
-            <th></th>
+            <th *ngIf="cwsDashes === undefined"></th>
           </tr>
           </thead>
           <tbody>
@@ -220,7 +220,7 @@
             <td> {{ farmer.userInfo.NID }}</td>
             <td> {{ farmer.userInfo.phone_number }}</td>
             <td> {{ farmer.userInfo.regNumber | uppercase}}</td>
-            <td>
+            <td *ngIf="cwsDashes === undefined">
               <a appRequiredSeasonCherry routerLink="/admin/cherries/supply/select/{{farmer.userInfo._id}}/{{farmer.userInfo.regNumber}}"
                  *appHasPermission="[[1,1]]" class="btn btn-success btn-margin pull-right btn-sm"
                  style="margin-left: 10px;">

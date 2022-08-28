@@ -29,6 +29,7 @@ import {DataTableDirective} from 'angular-datatables';
 export class OrganisationFarmersComponent
   extends BasicComponent
   implements OnInit, OnDestroy {
+  cwsDashes: any;
   constructor(
     private organisationService: OrganisationService,
     private userService: UserService,
@@ -119,6 +120,9 @@ export class OrganisationFarmersComponent
   ngOnInit() {
     this.route.params.subscribe((params) => {
       this.organisationId = params['organisationId'.toString()];
+    });
+    this.route.queryParams.subscribe((params) => {
+      this.cwsDashes = params['cwsDashes'.toString()];
     });
     this.parameters = {
       length: 10,

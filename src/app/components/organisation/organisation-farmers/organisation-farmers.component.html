@@ -38,7 +38,7 @@
       </div>
     </h3>
   </div>
-  <div class="col-md-12">
+  <div class="col-md-12" *ngIf="cwsDashes === undefined">
     <div class="box box-default">
       <div class="box-header with-border">
         <ng-container *ngIf="site">
@@ -439,7 +439,7 @@
               Lands <em class="fa fa-sort sorting"></em>
             </th>
             <th>Status</th>
-            <th class="text-center">Actions</th>
+            <th class="text-center" *ngIf="cwsDashes === undefined">Actions</th>
           </tr>
           </thead>
           <tbody *ngIf="showData">
@@ -473,7 +473,7 @@
             <ng-template #inactive><span style="color: #b21717; font-weight: bold">inactive</span></ng-template>
         </span>
             </td>
-            <td class="text-center">
+            <td class="text-center" *ngIf="cwsDashes === undefined">
               <button
                 appRequiredSeason
                 class="btn btn-action-no-border btn-margin details-button"

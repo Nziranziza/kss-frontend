@@ -67,12 +67,10 @@ const routes: Routes = [
           {
             path: ":organisationId/dashboard",
             component: DashboardComponent,
-            resolve: { orgCoveredAreaData: CoveredAreaResolverService },
           },
           {
             path: ":organisationId/farmers",
             component: OrganisationFarmersComponent,
-            resolve: { orgCoveredAreaData: CoveredAreaResolverService },
           },
           {
             path: ":organisationId/suppliers",

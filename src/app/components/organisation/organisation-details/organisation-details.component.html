@@ -55,28 +55,33 @@
       </div>
       <div class="col-sm-4" style="padding: 0 5px 0 0px">
         <div class="text-center stats-box">
-          <div class="stats-box-title">Covered Locations</div>
-          <div class="row stats-box-details-left" style="margin-top: 10px">
-            <div class="col-sm-3">Sectors</div>
-            <div class="col-sm-9">Cells</div>
-          </div>
-          <span *ngFor="let area of orgCoveredArea; let i = index">
-            <span *ngIf="i >= 2">
-              <div class="stats-box-divider-table"></div>
-              <div class="row">
-                <div class="col-sm-3">
-                  <div class="stats-box-location-sectors">{{ area?.name }}</div>
-                </div>
-                <div class="col-sm-9">
-                  <div class="stats-box-location-cells">
-                    <span *ngFor="let cell of area?.covCells; let i = index">
-                      <span *ngIf="i >= 3">{{ cell?.name }}, </span>
-                    </span>
+          <div style="height: 180px">
+            <div class="stats-box-title">Covered Locations</div>
+            <div class="row stats-box-details-left" style="margin-top: 10px">
+              <div class="col-sm-3">Sectors</div>
+              <div class="col-sm-9">Cells</div>
+            </div>
+            <span *ngFor="let area of orgCoveredArea; let i = index">
+              <span>
+                <div class="stats-box-divider-table"></div>
+                <div class="row">
+                  <div class="col-sm-3">
+                    <div class="stats-box-location-sectors">
+                      {{ area?.name }}
+                    </div>
+                  </div>
+                  <div class="col-sm-9">
+                    <div class="stats-box-location-cells">
+                      <span *ngFor="let cell of area.covCells; let i = index">
+                        <span>{{ cell?.name }}, </span>
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </span>
             </span>
-          </span>
+          </div>
+          <button class="stats-box-button">View more details</button>
         </div>
       </div>
       <div class="col-sm-4" style="padding: 0 5px 0 0px">
@@ -92,7 +97,9 @@
                     <div class="stats-box-cws-names">Farmers</div>
                   </div>
                   <div class="col-sm-7">
-                    <div class="stats-box-cws-tots">{{ cwsSummary.uniqueFarmersCount | number }}</div>
+                    <div class="stats-box-cws-tots">
+                      {{ cwsSummary.uniqueFarmersCount | number }}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -103,7 +110,9 @@
                     <div class="stats-box-cws-names">Trees</div>
                   </div>
                   <div class="col-sm-7">
-                    <div class="stats-box-cws-tots">{{ cwsSummary.totalNumberOfTrees | number }}</div>
+                    <div class="stats-box-cws-tots">
+                      {{ cwsSummary.totalNumberOfTrees | number }}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -117,7 +126,8 @@
                   </div>
                   <div class="col-sm-7">
                     <div class="stats-box-cws-tots">
-                      {{ cwsSummary.totalCherries | number }} <span class="stats-box-cws-kgs"> Kgs </span>
+                      {{ cwsSummary.totalCherries | number }}
+                      <span class="stats-box-cws-kgs"> Kgs </span>
                     </div>
                   </div>
                 </div>
@@ -130,7 +140,8 @@
                   </div>
                   <div class="col-sm-7">
                     <div class="stats-box-cws-tots">
-                      {{ cwsSummary.totalParchments | number }} <span class="stats-box-cws-kgs"> Kgs </span>
+                      {{ cwsSummary.totalParchments | number }}
+                      <span class="stats-box-cws-kgs"> Kgs </span>
                     </div>
                     <div class="stats-box-cws-desc">0 %</div>
                   </div>
@@ -144,13 +155,17 @@
                   </div>
                   <div class="col-sm-7">
                     <div class="stats-box-cws-tots">
-                      {{ cwsSummary.expectedParchments | number }} <span class="stats-box-cws-kgs"> Kgs </span>
+                      {{ cwsSummary.expectedParchments | number }}
+                      <span class="stats-box-cws-kgs"> Kgs </span>
                     </div>
-                    <div class="stats-box-cws-asc"> {{
-                      (cwsSummary.totalParchments /
-                        cwsSummary.expectedParchments) *
-                      100 | number: "1.0-1"
-                      }} % Completion</div>
+                    <div class="stats-box-cws-asc">
+                      {{
+                        (cwsSummary.totalParchments /
+                          cwsSummary.expectedParchments) *
+                          100 | number: "1.0-1"
+                      }}
+                      % Completion
+                    </div>
                   </div>
                 </div>
               </div>
@@ -168,7 +183,9 @@
   <ul class="nav nav-tabs" role="tablist">
     <li
       role="presentation"
-      routerLink="/admin/organisations/details/{{ organisationId }}/{{ organisationId }}/dashboard"
+      routerLink="/admin/organisations/details/{{ organisationId }}/{{
+        organisationId
+      }}/dashboard"
       routerLinkActive="active"
     >
       <a aria-controls="dashboard" role="tab" data-toggle="tab"
@@ -178,7 +195,10 @@
     <li
       role="presentation"
       appInternal
-      routerLink="/admin/organisations/details/{{ organisationId }}/{{ organisationId }}/farmers"
+      routerLink="/admin/organisations/details/{{ organisationId }}/{{
+        organisationId
+      }}/farmers"
+      [queryParams]="{ cwsDashes: 'hello' }"
       routerLinkActive="active"
     >
       <a role="tab" data-toggle="tab"><span>Farmers</span></a>
@@ -186,8 +206,11 @@
     <li
       role="presentation"
       appInternal
-      *appHasPermission="[[4,1],0,[8,1],[1,1]]"
-      routerLink="/admin/organisations/details/{{ organisationId }}/{{ organisationId }}/suppliers"
+      *appHasPermission="[[4, 1], 0, [8, 1], [1, 1]]"
+      routerLink="/admin/organisations/details/{{ organisationId }}/{{
+        organisationId
+      }}/suppliers"
+      [queryParams]="{ cwsDashes: 'hello' }"
       aria-controls="suppliers"
       routerLinkActive="active"
     >
@@ -196,8 +219,11 @@
     <li
       role="presentation"
       appInternal
-      *appHasPermission="[[4,1],0,[8,1],[1,1]]"
-      routerLink="/admin/organisations/details/{{ organisationId }}/{{ organisationId }}/cherries"
+      *appHasPermission="[[4, 1], 0, [8, 1], [1, 1]]"
+      routerLink="/admin/organisations/details/{{ organisationId }}/{{
+        organisationId
+      }}/cherries"
+      [queryParams]="{ cwsDashes: 'hello' }"
       routerLinkActive="active"
     >
       <a role="tab" data-toggle="tab"><span>Cherries & Parchments</span></a>
@@ -205,8 +231,11 @@
     <li
       role="presentation"
       appInternal
-      *appHasPermission="[[4,1],0,[8,1],[1,1]]"
-      routerLink="/admin/organisations/details/{{ organisationId }}/{{ organisationId }}/users"
+      *appHasPermission="[[4, 1], 0, [8, 1], [1, 1]]"
+      routerLink="/admin/organisations/details/{{ organisationId }}/{{
+        organisationId
+      }}/users"
+      [queryParams]="{ cwsDashes: 'hello' }"
       routerLinkActive="active"
     >
       <a role="tab" data-toggle="tab"><span>Users</span></a>

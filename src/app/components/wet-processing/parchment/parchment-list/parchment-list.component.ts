@@ -1,5 +1,5 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {CoffeeTypeService, ConfirmDialogService, MessageService, OrganisationService} from '../../../../core/services';
 import {ParchmentService} from '../../../../core/services';
@@ -51,6 +51,7 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
   summary: any;
   filter: any;
   seasonStartingDate: string;
+  cwsDashes: any;
 
   constructor(private parchmentService: ParchmentService,
               private router: Router,
@@ -62,6 +63,7 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
               private modal: NgbModal,
               private helper: HelperService,
               private datePipe: DatePipe,
+              private route: ActivatedRoute,
               private authenticationService: AuthenticationService) {
     super();
     this.dtOptions = {
@@ -74,6 +76,9 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
     this.initiateParameters();
     this.seasonStartingDate = this.datePipe.transform(this.authenticationService.getCurrentSeason().created_at, 'yyyy-MM-dd');
     this.currentDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
+    this.route.queryParams.subscribe((params) => {
+      this.cwsDashes = params['cwsDashes'.toString()];
+    });
     this.config = {
       itemsPerPage: 10,
       currentPage: 1,

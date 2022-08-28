@@ -171,3 +171,16 @@
 .stats-box-cws {
   height: 48px;
 }
+
+.stats-box-button {
+  width: 184px;
+  height: 17px;
+  /* UI Properties */
+  background: #4f210d 0% 0% no-repeat padding-box;
+  border-radius: 3px;
+  opacity: 1;
+  text-align: center;
+  font: normal normal bold 10px/10px Helvetica Neue;
+  letter-spacing: 0px;
+  color: #e1a33e;
+}
