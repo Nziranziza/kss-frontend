@@ -3,7 +3,8 @@
   [errorList]="errors"
   *ngIf="errors.length > 0"
 ></app-list-errors>
-<form [formGroup]="createForm" (ngSubmit)="onSubmit()">
+<form [formGroup]="createForm" (ngSubmit)="onSubmit()" autocomplete="off">
+  <input autocomplete="false" name="hidden" type="text" style="display:none;">
   <div class="row">
     <div class="col-xs-12">
       <div class="box">
@@ -56,10 +57,11 @@
               <div class="form-group">
                 <label class="control-label label-required">Phone number</label>
                 <input
-                  type="text"
+                  type="number"
                   formControlName="phone_number"
                   placeholder="2507xxxxxxxx"
                   class="form-control"
+                  autocomplete="off"
                 />
                 <app-inline-errors
                     *ngIf="

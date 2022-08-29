@@ -40,7 +40,7 @@ export class AuthorisationService {
   }
 
   isAdmin() {
-    return !!(this.authenticationService.getCurrentUser().parameters.type === 1);
+    return (this.authenticationService.getCurrentUser().parameters.type === 1);
   }
 
   isPartner() {
@@ -61,6 +61,11 @@ export class AuthorisationService {
   isTechouseUser() {
     this.userRoles = this.authenticationService.getCurrentUser().parameters.role;
     return !!this.userRoles.includes(0);
+  }
+
+  isTecnoserveUser() {
+    this.userRoles = this.authenticationService.getCurrentUser().parameters.role;
+    return !!this.userRoles.includes(11);
   }
 
   isDryMillUser() {
