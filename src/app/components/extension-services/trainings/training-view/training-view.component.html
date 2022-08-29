@@ -54,8 +54,8 @@
           <h1>
             {{
               trainingsStats.totalPresent > 0
-                ? (trainingsStats.totalPresent * 100) /
-                  trainingsStats.totalInvitees
+                ? ((trainingsStats.totalPresent * 100) /
+                  trainingsStats.totalInvitees).toFixed(0)
                 : (0 | number: "1.1-1")
             }}%
           </h1>
