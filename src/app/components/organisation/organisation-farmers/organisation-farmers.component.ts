@@ -414,7 +414,7 @@ export class OrganisationFarmersComponent
           this.districts = dt;
           this.filterForm.controls.searchByLocation
             .get('prov_id'.toString())
-            .patchValue(this.org.location.prov_id._id);
+            .patchValue(this.org.location.prov_id._id, {emitEvent: false});
           if (this.searchLocationBy === 'farm') {
             this.filterForm.controls.searchByLocation
               .get('dist_id'.toString())
