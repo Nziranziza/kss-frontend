@@ -1,22 +1,22 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   AuthenticationService,
   AuthorisationService,
   BasicComponent,
   GroupService,
   MessageService,
-} from "../../../../core";
-import { ActivatedRoute } from "@angular/router";
-import { Subject } from "rxjs";
+} from '../../../../core';
+import { ActivatedRoute } from '@angular/router';
+import { Subject } from 'rxjs';
 
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { ConfirmModalComponent } from "../../../../shared";
-import { ViewGroupComponent } from "../view-group/view-group.component";
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ConfirmModalComponent } from '../../../../shared';
+import { ViewGroupComponent } from '../view-group/view-group.component';
 
 @Component({
-  selector: "app-farmer-group-list",
-  templateUrl: "./farmer-group-list.component.html",
-  styleUrls: ["./farmer-group-list.component.css"],
+  selector: 'app-farmer-group-list',
+  templateUrl: './farmer-group-list.component.html',
+  styleUrls: ['./farmer-group-list.component.css'],
 })
 export class FarmerGroupListComponent
   extends BasicComponent
@@ -37,21 +37,21 @@ export class FarmerGroupListComponent
   dtOptions: DataTables.Settings = {};
   // @ts-ignore
   dtTrigger: Subject = new Subject();
-  groupMembersTotal: number = 0;
+  groupMembersTotal = 0;
   weekDays: string[] = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday",
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday',
   ];
 
   ngOnInit() {
     this.listGroups();
     this.dtOptions = {
-      pagingType: "full_numbers",
+      pagingType: 'full_numbers',
       pageLength: 10,
     };
     this.setMessage(this.messageService.getMessage());
@@ -79,11 +79,11 @@ export class FarmerGroupListComponent
 
   openDelete(group: any, warning?: any) {
     const modalRef = this.modal.open(ConfirmModalComponent);
-    modalRef.componentInstance.title = "Delete group";
+    modalRef.componentInstance.title = 'Delete group';
     modalRef.componentInstance.content =
-      "Are you sure you want to delete this Group?";
-    modalRef.componentInstance.confirmButtonText = "Delete";
-    modalRef.componentInstance.cancelButtonText = "Cancel";
+      'Are you sure you want to delete this Group?';
+    modalRef.componentInstance.confirmButtonText = 'Delete';
+    modalRef.componentInstance.cancelButtonText = 'Cancel';
     modalRef.componentInstance.warning = warning;
     modalRef.result.then((results) => {
       if (results.confirmed) {
@@ -99,7 +99,7 @@ export class FarmerGroupListComponent
               this.groups = data.data;
               this.loading = false;
             });
-            this.setMessage("Group successfully deleted!");
+            this.setMessage('Group successfully deleted!');
           },
           (err) => {
             this.openDelete(group, err.message);
