@@ -1,21 +1,20 @@
-import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { DataTableDirective } from "angular-datatables";
-import { Subject } from "rxjs";
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { DataTableDirective } from 'angular-datatables';
+import { Subject } from 'rxjs';
 import {
   MessageService,
   VisitService,
-  Training,
   AuthenticationService,
   BasicComponent,
-} from "src/app/core";
-import { ConfirmModalComponent } from "src/app/shared";
-import { ViewFarmVisitComponent } from "../view-farm-visit/view-farm-visit.component";
+} from 'src/app/core';
+import { ConfirmModalComponent } from 'src/app/shared';
+import { ViewFarmVisitComponent } from '../view-farm-visit/view-farm-visit.component';
 
 @Component({
-  selector: "app-farm-visit-list",
-  templateUrl: "./farm-visit-list.component.html",
-  styleUrls: ["../../gaps/gap-list/gap-list.component.css"],
+  selector: 'app-farm-visit-list',
+  templateUrl: './farm-visit-list.component.html',
+  styleUrls: ['../../gaps/gap-list/gap-list.component.css'],
 })
 export class FarmVisitListComponent
   extends BasicComponent
@@ -29,7 +28,6 @@ export class FarmVisitListComponent
   ) {
     super();
   }
-  ngOnDestroy(): void {}
 
   visits: any[] = [];
   maxSize = 5;
@@ -38,10 +36,10 @@ export class FarmVisitListComponent
   autoHide = false;
   responsive = false;
   labels: any = {
-    previousLabel: "Prev",
-    nextLabel: "Next",
-    screenReaderPaginationLabel: "Pagination",
-    screenReaderPageLabel: "page",
+    previousLabel: 'Prev',
+    nextLabel: 'Next',
+    screenReaderPaginationLabel: 'Pagination',
+    screenReaderPageLabel: 'page',
     screenReaderCurrentLabel: `You're on page`,
   };
   config: any;
@@ -53,11 +51,12 @@ export class FarmVisitListComponent
   // @ts-ignore
   @ViewChild(DataTableDirective, { static: false })
   dtElement: DataTableDirective;
+  ngOnDestroy(): void {}
 
   ngOnInit() {
     this.getVisits();
     this.dtOptions = {
-      pagingType: "full_numbers",
+      pagingType: 'full_numbers',
       pageLength: 25,
     };
   }
@@ -74,13 +73,13 @@ export class FarmVisitListComponent
     this.loading = false;
     this.config = {
       itemsPerPage: 10,
-      currentPage: 0 + 1,
+      currentPage: 1,
       totalItems: this.visits.length,
     };
   }
 
   open(content) {
-    this.modal.open(content, { size: "sm", windowClass: "modal-sm" });
+    this.modal.open(content, { size: 'sm', windowClass: 'modal-sm' });
   }
 
   selectedSchedule(visit) {
@@ -89,32 +88,32 @@ export class FarmVisitListComponent
 
   sendMessage() {
     this.loading = true;
-    let data = this.visit._id;
-    this.visitService.sendSms(data).subscribe((data) => {
+    const data = this.visit._id;
+    this.visitService.sendSms(data).subscribe(() => {
       this.loading = false;
     });
   }
 
   openDeleteModal(visit: any, warning?: any) {
     const modalRef = this.modal.open(ConfirmModalComponent);
-    modalRef.componentInstance.title = "Delete Farm Visit";
+    modalRef.componentInstance.title = 'Delete Farm Visit';
     modalRef.componentInstance.content =
-      "Are you sure you want to Delete this Farm Visit?";
-    modalRef.componentInstance.confirmButtonText = "Delete";
-    modalRef.componentInstance.cancelButtonText = "Cancel";
+      'Are you sure you want to Delete this Farm Visit?';
+    modalRef.componentInstance.confirmButtonText = 'Delete';
+    modalRef.componentInstance.cancelButtonText = 'Cancel';
     modalRef.componentInstance.warning = warning;
     modalRef.result.then((results) => {
       if (results.confirmed) {
         this.visitService.delete(visit._id).subscribe(
           () => {
             this.loading = true;
-            const body = {
-              reference:
-                this.authenticationService.getCurrentUser().info.org_id,
-            };
+            // const body = {
+            //   reference:
+            //     this.authenticationService.getCurrentUser().info.org_id,
+            // };
 
             this.getVisits();
-            this.setMessage("Schedule successfully Cancelled!");
+            this.setMessage('Schedule successfully Cancelled!');
           },
           (err) => {
             this.openDeleteModal(visit, err.message);

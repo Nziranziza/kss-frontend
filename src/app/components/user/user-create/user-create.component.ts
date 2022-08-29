@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {AuthorisationService, MessageService, UserService} from '../../../core/services';
-import {OrganisationService} from '../../../core/services';
-import {LocationService} from '../../../core/services';
-import {HelperService} from '../../../core/helpers';
-import {SiteService} from '../../../core/services';
+import {AuthorisationService, MessageService, UserService} from '../../../core';
+import {OrganisationService} from '../../../core';
+import {LocationService} from '../../../core';
+import {HelperService} from '../../../core';
+import {SiteService} from '../../../core';
 
 @Component({
   selector: 'app-user-create',
@@ -61,7 +61,7 @@ export class UserCreateComponent implements OnInit {
       foreName: [''],
       surname: [''],
       email: [''],
-      phone_number: ['', [Validators.required, Validators.pattern("[0-9]{12}")]],
+      phone_number: ['', [Validators.required, Validators.pattern('[0-9]{12}')]],
       sex: ['', Validators.required],
       NID: [''],
       password: [''],
@@ -87,6 +87,7 @@ export class UserCreateComponent implements OnInit {
       this.possibleRoles = Object.keys(data.content).map(key => {
         return {name: key, value: data.content[key]};
       });
+      console.log(this.possibleRoles);
       this.getRoles();
     });
     this.route.params.subscribe(params => {
@@ -268,7 +269,11 @@ export class UserCreateComponent implements OnInit {
               return {name: key, value: +dt.content[key]};
             });
             this.userTypes = [...this.userTypes, ...temp].filter((v, i, a) => a.findIndex(t => (t.name === v.name)) === i);
-            if ((!this.authorisationService.isNaebAdmin()) && (!this.authorisationService.isTechouseUser()) ) {
+            if (
+              (!this.authorisationService.isNaebAdmin()) &&
+              (!this.authorisationService.isTechouseUser()) &&
+              (!this.authorisationService.isTecnoserveUser())
+            ) {
               const index = this.userTypes.findIndex(v => v.name === 'ADMIN');
               if (index > -1) {
                 this.userTypes.splice(index, 1);
@@ -354,7 +359,7 @@ export class UserCreateComponent implements OnInit {
       this.isTechouseOrganisation(data.content);
       this.orgPossibleRoles = this.possibleRoles.filter(roles => data.content.organizationRole.includes(roles.value));
       this.orgPossibleRoles.map(() => {
-        const control = new FormControl(false);
+        const control = new FormControl(true);
         (this.createForm.controls.userRoles as FormArray).push(control);
       });
     });
