@@ -58,15 +58,11 @@
                 <thead>
                   <tr>
                     <th>Gap Name</th>
-                    <th>Visit Score</th>
-                    <th>Overall Weight</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr *ngFor="let gap of visits.gaps; let i = index">
                     <td>{{ gap.gap_name }}</td>
-                    <td>{{ gap.gap_score }}</td>
-                    <td>{{ gap.gap_weight }}</td>
                   </tr>
                 </tbody>
               </table>

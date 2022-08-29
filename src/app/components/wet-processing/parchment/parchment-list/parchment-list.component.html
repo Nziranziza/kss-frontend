@@ -100,7 +100,7 @@
             <th (click)="setOrder('lotNumber')"> Lot number <i class="fa fa-sort sorting"></i></th>
             <th (click)="setOrder('remainingQty')"> Remaining Qty <i class="fa fa-sort sorting"></i></th>
             <th (click)="setOrder('created_at')"> Recorded <i class="fa fa-sort sorting"></i></th>
-            <th *ngIf="cwsDashes === undefined"></th>
+            <th ></th>
           </tr>
           </thead>
           <tbody>
@@ -111,7 +111,7 @@
             <td> {{ parchment.lotNumber }} </td>
             <td> {{ parchment.remainingQty }} </td>
             <td> {{ parchment.created_at | date }} </td>
-            <td *ngIf="cwsDashes === undefined">
+            <td >
               <button *ngIf="parchment.remainingQty === parchment.totalKgs" class="btn btn-default btn-margin btn-sm pull-right" (click)="cancelParchment(parchment._id)"
                       type="button">
                 Cancel

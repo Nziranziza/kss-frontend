@@ -478,7 +478,7 @@
               </td>
               <td></td>
               <td>
-                <div *ngFor="let land of farmer.requestInfo" style="font-size: 8px;">
+                <div *ngFor="let land of farmer.request.requestInfo" style="font-size: 12px;">
                   {{ land.upiNumber }}
                 </div>
               </td>
@@ -495,7 +495,7 @@
                   >
                 </span>
               </td>
-              <td class="text-center" *ngIf="cwsDashes === undefined">
+              <td class="text-center">
                 <button
                   appRequiredSeason
                   class="btn btn-action-no-border btn-margin details-button"

@@ -10,6 +10,12 @@
           <span>{{ "dashboard" | translate }}</span>
         </a>
       </li>
+      <li routerLinkActive="active" *appHasPermission="[1]">
+        <a routerLink="/admin/organisations/details/{{ user.org_id }}/{{ user.org_id }}/dashboard">
+          <i class="fa fa-dashboard" aria-hidden="true"></i>
+          <span>{{ "dashboard" | translate }}</span>
+        </a>
+      </li>
       <li
         class="header"
         *appHasPermission="[
@@ -21,7 +27,7 @@
           5,
           11,
           [8, 1],
-          [1, 1]
+          [1, 1], 1
         ]"
       >
         {{ "COFFEE WASHING STATIONS" | translate }}
@@ -46,6 +52,17 @@
         </a>
       </li>
 
+      <li
+        routerLinkActive="active"
+        *appHasPermission="[
+          [1]
+        ]"
+      >
+        <a routerLink="/admin/organisations">
+          <i class="fa fa-university" aria-hidden="true"></i>
+          <span>{{ "Organisations" | translate }}</span>
+        </a>
+      </li>
       <li
         class="treeview"
         routerLinkActive="active"

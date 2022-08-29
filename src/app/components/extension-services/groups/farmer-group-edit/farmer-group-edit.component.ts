@@ -65,10 +65,10 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
 
   ngOnInit() {
     this.editForm = this.formBuilder.group({
-      groupName: ['', Validators.required],
+      groupName: [''],
       leaderNames: ['', Validators.required],
       leaderPhoneNumber: ['', Validators.required, Validators.pattern("[0-9]{12}")],
-      description: ['', Validators.required],
+      description: [''],
       meetingSchedule: this.formBuilder.group({
         meetingDay: [''],
         meetingTime: [''],
@@ -97,7 +97,7 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
         village_id: [''],
       }),
       searchByTerm: this.formBuilder.group({
-        term: ['', Validators.minLength(3)],
+        term: [''],
         searchBy: ['reg_number'],
       }),
     });
@@ -150,10 +150,10 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
 
   onSubmit() {
     this.editForm.markAllAsTouched();
-    if (this.editForm.valid) {
+    if (true) {
       const value = JSON.parse(JSON.stringify(this.editForm.value));
       value.org_id = this.authenticationService.getCurrentUser().info.org_id;
-      value.meetingSchedule.meetingDay = + value.meetingSchedule.meetingDay;
+      value.meetingSchedule.meetingDay = +value.meetingSchedule.meetingDay;
       const members = [];
       this.groupMembers.map((member) => {
         members.push(member.userInfo._id);
