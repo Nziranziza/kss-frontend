@@ -1,3 +1,40 @@
+<ng-template #ccontent let-modal>
+  <div class="modal-body text-center" style="font-size: 1.5em">
+    <i class="fa fa-check" style="color: #00a513; font-size: 4.5em"></i>
+    <br />
+    Thank you Training <br />
+    <span style="font-weight: bold">
+      “ {{ scheduleTraining.value.description }} “
+    </span>
+    <br />
+    has been Scheduled <br />
+
+    <button
+      type="button"
+      class="btn btn-success btn-lg pull-center"
+      routerLink="/admin/training/schedule/list"
+      (click)="modal.dismiss()"
+    >
+      OK
+    </button>
+    <button
+      type="button"
+      class="btn btn-success btn-lg pull-center"
+      (click)="sendMessage(); modal.dismiss()"
+      [disabled]="loading"
+    >
+      <span *ngIf="!loading; else other_content">Send Message</span>
+      <ng-template #other_content>
+        <div class="loader">
+          <div class="line"></div>
+          <div class="line"></div>
+          <div class="line"></div>
+          <div class="line"></div>
+        </div>
+      </ng-template>
+    </button>
+  </div>
+</ng-template>
 <ng-template #content let-modal>
   <div class="modal-body extended-modal-body">
     <h4
@@ -180,6 +217,11 @@
     </div>
   </div>
 </ng-template>
+
+<h3>
+  Training Management >
+  <span style="font-weight: bold"> Edit Scheduled Training</span>
+</h3>
 <app-list-errors [errorList]="errors"></app-list-errors>
 <form [formGroup]="scheduleTraining" (ngSubmit)="onSubmit()">
   <div class="row">
@@ -212,7 +254,7 @@
               </app-inline-errors>
             </div>
           </div>
-          <span >
+          <span>
             <div class="col-sm-6">
               <div class="form-group">
                 <label class="control-label label-required"
@@ -429,7 +471,6 @@
                           [owlDateTime]="dt1"
                           formControlName="trainingStartDate"
                           class="form-control"
-                          [min]="today"
                           placeholder="Dd/mm/yyyy"
                         />
                         <owl-date-time
@@ -489,11 +530,11 @@
                         <input
                           [owlDateTimeTrigger]="dt3"
                           [owlDateTime]="dt3"
-                          formControlName="trainingEndDate"
-                          class="form-control"
                           [min]="
                             scheduleTraining.controls.trainingStartDate.value
                           "
+                          formControlName="trainingEndDate"
+                          class="form-control"
                           placeholder="Dd/mm/yyyy"
                         />
                         <owl-date-time
@@ -870,7 +911,7 @@
     </div>
   </div>
 
-  <div class="row" *ngIf="scheduleTraining.value.trainingModule">
+  <div class="row">
     <div class="col-sm-3"></div>
     <div class="col-sm-3">
       <button

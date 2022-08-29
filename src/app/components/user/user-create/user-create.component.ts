@@ -1,11 +1,11 @@
-import {Component, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
-import {AuthorisationService, MessageService, UserService} from '../../../core';
-import {OrganisationService} from '../../../core';
-import {LocationService} from '../../../core';
-import {HelperService} from '../../../core';
-import {SiteService} from '../../../core';
+import { Component, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AuthorisationService, MessageService, UserService } from '../../../core';
+import { OrganisationService } from '../../../core';
+import { LocationService } from '../../../core';
+import { HelperService } from '../../../core';
+import { SiteService } from '../../../core';
 
 @Component({
   selector: 'app-user-create',
@@ -46,14 +46,14 @@ export class UserCreateComponent implements OnInit {
   hideEmail = false;
 
   constructor(private formBuilder: FormBuilder,
-              private route: ActivatedRoute, private router: Router,
-              private userService: UserService,
-              private siteService: SiteService,
-              private helper: HelperService,
-              private messageService: MessageService,
-              private authorisationService: AuthorisationService,
-              private organisationService: OrganisationService,
-              private locationService: LocationService) {
+    private route: ActivatedRoute, private router: Router,
+    private userService: UserService,
+    private siteService: SiteService,
+    private helper: HelperService,
+    private messageService: MessageService,
+    private authorisationService: AuthorisationService,
+    private organisationService: OrganisationService,
+    private locationService: LocationService) {
   }
 
   ngOnInit() {
@@ -80,12 +80,12 @@ export class UserCreateComponent implements OnInit {
     });
     this.userService.userTypes().subscribe(data => {
       this.userTypes = Object.keys(data.content).map(key => {
-        return {name: key, value: data.content[key]};
+        return { name: key, value: data.content[key] };
       });
     });
     this.organisationService.possibleRoles().subscribe(data => {
       this.possibleRoles = Object.keys(data.content).map(key => {
-        return {name: key, value: data.content[key]};
+        return { name: key, value: data.content[key] };
       });
       console.log(this.possibleRoles);
       this.getRoles();
@@ -148,11 +148,11 @@ export class UserCreateComponent implements OnInit {
         delete user.email;
         if (checkNIDBody.nid !== '') {
           this.userService.checkNID(checkNIDBody).subscribe(result => {
-              const res = result.content;
-              if (res.existsInSns) {
-                user['action'.toString()] = 'import';
-              }
-            },
+            const res = result.content;
+            if (res.existsInSns) {
+              user['action'.toString()] = 'import';
+            }
+          },
             (err) => {
               this.errors = err.errors;
             },
@@ -169,9 +169,9 @@ export class UserCreateComponent implements OnInit {
               }
               this.helper.cleanObject(user);
               this.userService.save(user).subscribe(() => {
-                  this.messageService.setMessage('user successfully created.');
-                  this.router.navigateByUrl('admin/organisations/' + this.organisationId + '/users');
-                },
+                this.messageService.setMessage('user successfully created.');
+                this.router.navigateByUrl('admin/organisations/' + this.organisationId + '/users');
+              },
                 (err) => {
                   this.errors = err.errors;
                 });
@@ -189,8 +189,8 @@ export class UserCreateComponent implements OnInit {
           }
           this.helper.cleanObject(user);
           this.userService.save(user).subscribe(() => {
-              this.router.navigateByUrl('admin/organisations/' + this.organisationId + '/users');
-            },
+            this.router.navigateByUrl('admin/organisations/' + this.organisationId + '/users');
+          },
             (err) => {
               this.errors = err.errors;
             });
@@ -198,24 +198,24 @@ export class UserCreateComponent implements OnInit {
 
       } else {
         this.userService.checkEmail(checkEmailBody).subscribe(data => {
-            const response = data.content;
-            if (response.existsInSns) {
-              user['action'.toString()] = 'import';
+          const response = data.content;
+          if (response.existsInSns) {
+            user['action'.toString()] = 'import';
+          }
+          if (!(response.existsInSns)) {
+            if (checkNIDBody.nid !== '') {
+              this.userService.checkNID(checkNIDBody).subscribe(result => {
+                const res = result.content;
+                if (res.existsInSns) {
+                  user['action'.toString()] = 'import';
+                }
+              },
+                (err) => {
+                  this.errors = err.errors;
+                });
             }
-            if (!(response.existsInSns)) {
-              if (checkNIDBody.nid !== '') {
-                this.userService.checkNID(checkNIDBody).subscribe(result => {
-                    const res = result.content;
-                    if (res.existsInSns) {
-                      user['action'.toString()] = 'import';
-                    }
-                  },
-                  (err) => {
-                    this.errors = err.errors;
-                  });
-              }
-            }
-          },
+          }
+        },
           (err) => {
             this.errors = err.errors;
           },
@@ -236,8 +236,8 @@ export class UserCreateComponent implements OnInit {
             this.helper.cleanObject(user);
             this.helper.cleanObject(user.location);
             this.userService.save(user).subscribe(() => {
-                this.router.navigateByUrl('admin/organisations/' + this.organisationId + '/users');
-              },
+              this.router.navigateByUrl('admin/organisations/' + this.organisationId + '/users');
+            },
               (err) => {
                 this.errors = err.errors;
               });
@@ -266,7 +266,7 @@ export class UserCreateComponent implements OnInit {
         selectedRoles.forEach((role) => {
           this.userService.userPermissions(role).subscribe(dt => {
             const temp = Object.keys(dt.content).map(key => {
-              return {name: key, value: +dt.content[key]};
+              return { name: key, value: +dt.content[key] };
             });
             this.userTypes = [...this.userTypes, ...temp].filter((v, i, a) => a.findIndex(t => (t.name === v.name)) === i);
             if (
@@ -345,6 +345,11 @@ export class UserCreateComponent implements OnInit {
         }
       }
     );
+    this.createForm.get('phone_number'.toString()).valueChanges.subscribe((value) => {
+      if (value === "07") {
+        this.createForm.controls.phone_number.setValue("2507");
+      }
+    })
   }
 
   initial() {
