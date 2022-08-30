@@ -41,6 +41,7 @@
               name="gap_weight"
               placeholder=""
               type="number"
+              min="0"
             />
             <app-inline-errors
               *ngIf="getGapWeight.invalid && (getGapWeight.dirty || getGapWeight.touched)"
@@ -62,6 +63,7 @@
               name="gap_score"
               placeholder=""
               type="number"
+              min="0"
             />
             <app-inline-errors
               *ngIf="getGapScore.invalid && (getGapScore.dirty || getGapScore.touched)"

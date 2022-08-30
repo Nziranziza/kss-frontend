@@ -464,7 +464,7 @@
               <td>{{ farmer.userInfo.phone_number }}</td>
               <td>{{ farmer.userInfo.regNumber | uppercase }}</td>
               <td>
-                {{
+                {{ farmer.userInfo?.location?.prov_id.namek == null ? '-' :
                   farmer.userInfo?.location?.prov_id.namek +
                     " > " +
                     farmer.userInfo.location?.dist_id.name +
