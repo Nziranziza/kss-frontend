@@ -141,7 +141,6 @@
                   <owl-date-time
                     #dt10
                     [pickerType]="'calendar'"
-                    
                     [scrollStrategy]="scrollStrategy"
                   ></owl-date-time>
                 </div>
@@ -274,7 +273,10 @@
                     </ng-autocomplete>
 
                     <ng-template #itemTemplate2 let-item style="color: black">
-                      <a [innerHTML]="item.groupName" style="height: 20px; color: black"></a>
+                      <a
+                        [innerHTML]="item.groupName"
+                        style="height: 20px; color: black"
+                      ></a>
                     </ng-template>
 
                     <ng-template #notFoundTemplate2 let-notFound>
@@ -696,7 +698,7 @@
                   <owl-date-time
                     #dt4
                     [pickerType]="'calendar'"
-                    [scrollStrategy]="scrollStrategy" 
+                    [scrollStrategy]="scrollStrategy"
                   ></owl-date-time>
                 </div>
               </div>
@@ -746,11 +748,7 @@
         "
       >
         <h4 class="text-center">Farms</h4>
-        <div
-          class="farm-graph-popup"
-          *ngIf="!clickedMarker"
-          style="margin-bottom: 5px"
-        >
+        <div class="farm-graph-popup" style="margin-bottom: 5px">
           <div class="row text-center">
             <div class="col-xs-3" style="padding: 0 2px 0 0px">
               <h4>Total Farms</h4>
@@ -904,7 +902,7 @@
                   <owl-date-time
                     #dt5
                     [pickerType]="'calendar'"
-                    [scrollStrategy]="scrollStrategy" 
+                    [scrollStrategy]="scrollStrategy"
                   ></owl-date-time>
                 </div>
               </div>

@@ -23,8 +23,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 })
 export class TrainingScheduleEditComponent
   extends BasicComponent
-  implements OnInit
-{
+  implements OnInit {
   scheduleTraining: FormGroup;
   filterForm: FormGroup;
   editContactForm: FormGroup;
@@ -131,6 +130,7 @@ export class TrainingScheduleEditComponent
             .indexOf(this.scheduleData.trainingId._id),
           { emitEvent: false }
         );
+        this.filterForm.controls.searchByLocation.get("farmerGroup").setValue(this.scheduleData.groupId._id);
         this.scheduleTraining.controls.description.setValue(
           this.scheduleData.description
         );
@@ -487,14 +487,13 @@ export class TrainingScheduleEditComponent
   onSubmit() {
     this.loading = true;
     const data = {
+      _id: this.id,
       trainingId:
         this.trainings[this.scheduleTraining.value.trainingModule]._id,
       trainer: {
         userId: this.trainers[this.scheduleTraining.value.trainer]._id,
         fullName:
-          this.trainers[this.scheduleTraining.value.trainer].foreName +
-          " " +
-          this.trainers[this.scheduleTraining.value.trainer].surname,
+          this.trainers[this.scheduleTraining.value.trainer].fullNames,
         phoneNumber:
           this.trainers[this.scheduleTraining.value.trainer].phoneNumber,
         organisationName:
