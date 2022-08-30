@@ -31,6 +31,9 @@ export class TrainingService {
   scheduleTraining(body: any) {
     return this.apiService.post("/v1.1/schedules", body);
   }
+  editSchedule(body: any, id: string) {
+    return this.apiService.put("/v1.1/schedules/" + id, body);
+  }
   allSchedule(id: any) {
     return this.apiService.get("/v1.1/schedules/org/" + id);
   }

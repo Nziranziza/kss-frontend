@@ -471,7 +471,6 @@
                           [owlDateTime]="dt1"
                           formControlName="trainingStartDate"
                           class="form-control"
-                          [min]="today"
                           placeholder="Dd/mm/yyyy"
                         />
                         <owl-date-time
@@ -712,6 +711,7 @@
                                   <span *ngIf="trainee.editMode">
                                     <input
                                       type="number"
+                                      min="0"
                                       style="height: 23px; width: 95%"
                                       placeholder="250"
                                       formControlName="contact"
@@ -770,6 +770,7 @@
                                   <span *ngIf="trainee.editMode">
                                     <input
                                       type="number"
+                                      min="0"
                                       style="height: 23px; width: 95%"
                                       formControlName="contact"
                                   /></span>

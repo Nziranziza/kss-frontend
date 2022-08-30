@@ -237,6 +237,7 @@ export class FarmerListComponent
       .getFarmers(this.parameters, this.as)
       .subscribe((data) => {
         this.farmers = data.data;
+        console.log(this.farmers);
         this.config = {
           itemsPerPage: this.parameters.length,
           currentPage: this.parameters.start + 1,

@@ -23,11 +23,12 @@ import { ActivatedRoute, Router } from "@angular/router";
 })
 export class TrainingScheduleEditComponent
   extends BasicComponent
-  implements OnInit
-{
+  implements OnInit {
   scheduleTraining: FormGroup;
   filterForm: FormGroup;
   editContactForm: FormGroup;
+  selectedStartDate: string;
+  selectedEndDate: string;
   constructor(
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
@@ -77,7 +78,7 @@ export class TrainingScheduleEditComponent
         village_id: [""],
         venue: [""],
       }),
-      trainingStartDate: ["", Validators.required],
+      trainingStartDate: [""],
       trainingEndDate: [""],
       startTime: [""],
       endTime: [""],
@@ -120,13 +121,16 @@ export class TrainingScheduleEditComponent
     this.trainingService.getSchedule(this.id).subscribe((data) => {
       if (data && data.data) {
         this.scheduleData = data.data;
+        console.log(this.scheduleData);
         this.scheduleTraining.controls.trainingModule.setValue(
           this.trainings
             .map(function (e) {
               return e._id;
             })
-            .indexOf(this.scheduleData.trainingId._id)
+            .indexOf(this.scheduleData.trainingId._id),
+          { emitEvent: false }
         );
+        this.filterForm.controls.searchByLocation.get("farmerGroup").setValue(this.scheduleData.groupId._id);
         this.scheduleTraining.controls.description.setValue(
           this.scheduleData.description
         );
@@ -156,6 +160,32 @@ export class TrainingScheduleEditComponent
             })
             .indexOf(this.scheduleData.trainer.userId)
         );
+        this.scheduleTraining.controls.startTime.setValue(
+          new Date(this.scheduleData.startTime)
+        );
+        this.scheduleTraining.controls.endTime.setValue(
+          new Date(this.scheduleData.endTime)
+        );
+        this.scheduleTraining.controls.trainingStartDate.setValue(
+          this.scheduleData.startTime
+        );
+        this.scheduleTraining.controls.trainingEndDate.setValue(
+          this.scheduleData.endTime
+        );
+        this.scheduleData.trainees.map((trainee) => {
+          let data = {
+            name: trainee.foreName + " " + trainee.surName,
+            firstName: trainee.foreName,
+            lastName: trainee.surName,
+            userId: trainee.userId,
+            phoneNumber: trainee.phoneNumber,
+            contact: trainee.phoneNumber,
+            attendance: trainee.attended ? "attended" : "not attended",
+            groupId: trainee.groupId,
+            selected: true,
+          };
+          this.selectedTrainees.push(data);
+        });
       }
     });
   }
@@ -240,26 +270,22 @@ export class TrainingScheduleEditComponent
   open(content) {
     this.scheduleTraining.markAllAsTouched();
     if (this.scheduleTraining.valid) {
-      this.scheduleTraining
-        .get("trainingEndDate".toString())
-        .setValue(
-          new Date(this.scheduleTraining.controls.trainingEndDate.value)
-            .toISOString()
-            .split("T")[0],
-          {
-            emitEvent: false,
-          }
-        );
-      this.scheduleTraining
-        .get("trainingStartDate".toString())
-        .setValue(
+      this.selectedStartDate =
+        this.formatDate(
           new Date(this.scheduleTraining.controls.trainingStartDate.value)
             .toISOString()
-            .split("T")[0],
-          {
-            emitEvent: false,
-          }
-        );
+            .split("T")[0]
+        ) +
+        " " +
+        this.formatTime(this.scheduleTraining.value.startTime);
+      this.selectedEndDate =
+        this.formatDate(
+          new Date(this.scheduleTraining.controls.trainingEndDate.value)
+            .toISOString()
+            .split("T")[0]
+        ) +
+        " " +
+        this.formatTime(this.scheduleTraining.value.endTime);
       this.modalService.open(content);
     } else {
       this.errors = this.helper.getFormValidationErrors(this.scheduleTraining);
@@ -461,14 +487,13 @@ export class TrainingScheduleEditComponent
   onSubmit() {
     this.loading = true;
     const data = {
+      _id: this.id,
       trainingId:
         this.trainings[this.scheduleTraining.value.trainingModule]._id,
       trainer: {
         userId: this.trainers[this.scheduleTraining.value.trainer]._id,
         fullName:
-          this.trainers[this.scheduleTraining.value.trainer].foreName +
-          " " +
-          this.trainers[this.scheduleTraining.value.trainer].surname,
+          this.trainers[this.scheduleTraining.value.trainer].fullNames,
         phoneNumber:
           this.trainers[this.scheduleTraining.value.trainer].phoneNumber,
         organisationName:
@@ -494,7 +519,7 @@ export class TrainingScheduleEditComponent
         this.formatDate(this.scheduleTraining.value.trainingEndDate) +
         "T" +
         this.formatTime(this.scheduleTraining.value.endTime),
-      referenceId: "5d1635ac60c3dd116164d4ae",
+      referenceId: this.authenticationService.getCurrentUser().info.org_id,
       trainees: this.selectedTrainees.map((item) => {
         return {
           userId: item.userId,
@@ -502,7 +527,7 @@ export class TrainingScheduleEditComponent
         };
       }),
     };
-    this.trainingService.scheduleTraining(data).subscribe((data) => {
+    this.trainingService.editSchedule(data, this.id).subscribe((data) => {
       this.successDatails = data.data;
       this.loading = false;
     });

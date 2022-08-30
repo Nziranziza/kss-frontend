@@ -18,12 +18,12 @@
                 <li *ngFor="let farms of selectedFarms; let i = index">
                   {{
                     farms.farmer +
-                      " -- UPI/Location " +
+                      " Location " +
                       farms?.location?.dist_id?.name +
                       " > " +
                       farms?.location?.sect_id?.name +
                       " > " +
-                      farms?.location?.cell_id?.name
+                      farms?.location?.cell_id?.name + " UPI " + farms.upiNumber 
                   }}
                 </li>
               </div>

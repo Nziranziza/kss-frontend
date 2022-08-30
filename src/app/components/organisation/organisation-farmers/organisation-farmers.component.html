@@ -5,7 +5,7 @@
         *appHasPermission="[0, [8, 2], 6, [1, 1], [1, 14]]"
         class="btn btn-success btn-margin pull-right"
         routerLink="/admin/farmers/create"
-      ><i class="fa fa-plus"></i> New Farmer
+        ><i class="fa fa-plus"></i> New Farmer
       </a>
       <button
         class="btn btn-success pull-right btn-margin"
@@ -13,7 +13,7 @@
         (click)="exportAsXLSX()"
         [disabled]="downloadingAll"
       >
-        <span *ngIf="downloadingAll"> Downloading... <br/> </span
+        <span *ngIf="downloadingAll"> Downloading... <br /> </span
         ><i class="fa fa-download" *ngIf="!downloadingAll"></i> Export all
         farmers
       </button>
@@ -23,13 +23,13 @@
             class="btn btn-warning btn-margin pull-right"
             *ngIf="resetPin"
             (click)="enableResetPin(false)"
-          ><i class="fa fa-check"></i>&nbsp; Disable Farmers Pin Reset
+            ><i class="fa fa-check"></i>&nbsp; Disable Farmers Pin Reset
           </a>
           <a
             class="btn btn-success btn-margin pull-right"
             *ngIf="!resetPin"
             (click)="enableResetPin(true)"
-          ><i class="fa fa-check"></i>&nbsp; Enable Farmers Pin Reset
+            ><i class="fa fa-check"></i>&nbsp; Enable Farmers Pin Reset
           </a>
         </ng-container>
         <ng-template #loadingSetPinStatus>
@@ -42,7 +42,8 @@
     <div class="box box-default">
       <div class="box-header with-border">
         <ng-container *ngIf="site">
-          <strong><em class="fa fa-tree margin-r-5"></em> Distribution Site</strong
+          <strong
+            ><em class="fa fa-tree margin-r-5"></em> Distribution Site</strong
           >
           <p class="text-muted">
             {{ site.siteName | uppercase }}
@@ -68,7 +69,7 @@
           <div class="col-sm-2 col-xs-6">
             <p class="text-left">
               <strong
-              >SEASON:
+                >SEASON:
                 <span class="text-light-blue">
                   {{ currentSeason.season }}
                 </span></strong
@@ -83,15 +84,15 @@
                   <div class="col-sm-6">Organisation</div>
                   <div class="col-sm-6">
                     <strong>{{ org?.organizationName }}</strong
-                    ><br/>
+                    ><br />
                   </div>
                   <div class="col-sm-6">Email</div>
                   <div class="col-sm-6">
                     <strong>{{ org?.email }}</strong
-                    ><br/>
+                    ><br />
                   </div>
                   <div class="col-sm-6">Telephone</div>
-                  <div class="col-sm-6">{{ org?.phone_number }}<br/></div>
+                  <div class="col-sm-6">{{ org?.phone_number }}<br /></div>
                 </div>
               </div>
             </div>
@@ -99,37 +100,37 @@
               <div class="col-sm-12">Location</div>
               <div class="col-sm-12">
                 <span class="details-row-title-sm" style="margin-left: 0px"
-                >Province
+                  >Province
                 </span>
                 :
                 <span
                   class="details-row-data-sm"
                   *ngIf="org?.location.prov_id"
-                >{{ org?.location.prov_id.namek }}</span
+                  >{{ org?.location.prov_id.namek }}</span
                 >
                 <span class="details-row-title-sm">District </span> :
                 <span
                   class="details-row-data-sm"
                   *ngIf="org?.location.dist_id"
-                >{{ org?.location.dist_id.name }}</span
+                  >{{ org?.location.dist_id.name }}</span
                 >
                 <span class="details-row-title-sm">Sector </span> :
                 <span
                   class="details-row-data-sm"
                   *ngIf="org?.location.sect_id"
-                >{{ org?.location.sect_id.name }}</span
+                  >{{ org?.location.sect_id.name }}</span
                 >
                 <span class="details-row-title-sm">Cell </span> :
                 <span
                   class="details-row-data-sm"
                   *ngIf="org?.location.cell_id"
-                >{{ org?.location.cell_id.name }}</span
+                  >{{ org?.location.cell_id.name }}</span
                 >
                 <span class="details-row-title-sm">Village </span> :
                 <span
                   class="details-row-data-sm"
                   *ngIf="org?.location.village_id"
-                >{{ org?.location.village_id.name }}</span
+                  >{{ org?.location.village_id.name }}</span
                 >
               </div>
             </div>
@@ -183,7 +184,7 @@
                 {{ cwsSummary.totalCherries | number }} &#13199;
               </h5>
               <span class="description-text">RECEIVED CHERRIES</span>
-              <br/>
+              <br />
               <a routerLink="/admin/cws-suppliers/{{ org?._id }}">
                 <i class="fa fa-users"></i>
                 <span>&nbsp;Suppliers</span>
@@ -210,10 +211,10 @@
               >
                 <i class="fa fa-caret-up"></i>&nbsp;
                 <span class="description-percentage text-green"
-                >{{
-                  (cwsSummary.totalParchments /
-                    cwsSummary.expectedParchments) *
-                  100 | number: "1.0-1"
+                  >{{
+                    (cwsSummary.totalParchments /
+                      cwsSummary.expectedParchments) *
+                      100 | number: "1.0-1"
                   }}
                   % &nbsp; Completion</span
                 >
@@ -273,10 +274,7 @@
             <div class="col-xs-2">
               <div class="form-group">
                 <div class="">
-                  <select
-                    class="form-control"
-                    formControlName="prov_id"
-                  >
+                  <select class="form-control" formControlName="prov_id">
                     <option value="" selected="selected">All provinces</option>
                     <option
                       *ngFor="let province of provinces"
@@ -291,10 +289,7 @@
             <div class="col-xs-2">
               <div class="form-group">
                 <div class="">
-                  <select
-                    class="form-control"
-                    formControlName="dist_id"
-                  >
+                  <select class="form-control" formControlName="dist_id">
                     <option value=""></option>
                     <option
                       *ngFor="let district of districts"
@@ -384,17 +379,16 @@
                 class="form-control"
                 placeholder="search.."
               />
-            <!--
+              <!--
               <button
               class="btn btn-warning pull-right btn-margin"
               type="button"
               (click)="onClearFilter()">
               Clear
               </button>
-            -->
-            </div>
+            --></div>
           </div>
-          <br/>
+          <br />
           <button class="btn btn-action text-center" type="submit">
             <i class="fa fa-search"></i> Submit
           </button>
@@ -413,94 +407,125 @@
     <div class="box">
       <div class="box-body table-responsive">
         <app-loader *ngIf="loading"></app-loader>
-        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped">
+        <table
+          datatable
+          [dtOptions]="dtOptions"
+          [dtTrigger]="dtTrigger"
+          class="row-border hover table table-striped"
+        >
           <thead>
-          <tr>
-            <th>Date Added</th>
-            <th (click)="setOrder('userInfo.foreName')">
-              Farmer Name <em class="fa fa-sort sorting"></em>
-            </th>
-            <th (click)="setOrder('userInfo.surname')">
-              ID Number <em class="fa fa-sort sorting"></em>
-            </th>
-            <th (click)="setOrder('userInfo.NID')">
-              Phone Number <em class="fa fa-sort sorting"></em>
-            </th>
-            <th (click)="setOrder('userInfo.phone_number')">
-              Reg Number <em class="fa fa-sort sorting"></em>
-            </th>
-            <th (click)="setOrder('userInfo.regNumber')">
-              Location Address <em class="fa fa-sort sorting"></em>
-            </th>
-            <th (click)="setOrder('userInfo.regNumber')">
-              Farmer Group <em class="fa fa-sort sorting"></em>
-            </th>
-            <th (click)="setOrder('userInfo.regNumber')">
-              Lands <em class="fa fa-sort sorting"></em>
-            </th>
-            <th>Status</th>
-            <th class="text-center" *ngIf="cwsDashes === undefined">Actions</th>
-          </tr>
+            <tr>
+              <th>Date Added</th>
+              <th (click)="setOrder('userInfo.foreName')">
+                Farmer Name <em class="fa fa-sort sorting"></em>
+              </th>
+              <th (click)="setOrder('userInfo.surname')">
+                ID Number <em class="fa fa-sort sorting"></em>
+              </th>
+              <th (click)="setOrder('userInfo.NID')">
+                Phone Number <em class="fa fa-sort sorting"></em>
+              </th>
+              <th (click)="setOrder('userInfo.phone_number')">
+                Reg Number <em class="fa fa-sort sorting"></em>
+              </th>
+              <th (click)="setOrder('userInfo.regNumber')">
+                Location Address <em class="fa fa-sort sorting"></em>
+              </th>
+              <th (click)="setOrder('userInfo.regNumber')">
+                Farmer Group <em class="fa fa-sort sorting"></em>
+              </th>
+              <th (click)="setOrder('userInfo.regNumber')">
+                Lands <em class="fa fa-sort sorting"></em>
+              </th>
+              <th>Status</th>
+              <th class="text-center" *ngIf="cwsDashes === undefined">
+                Actions
+              </th>
+            </tr>
           </thead>
           <tbody *ngIf="showData">
-          <tr
-            *ngFor="
+            <tr
+              *ngFor="
                 let farmer of paginatedFarmers
                   | orderBy: order:reverse:'case-insensitive'
                   | paginate: config
               "
-          >
-            <td></td>
-            <td *ngIf="farmer.userInfo.type === 2; else foreName">
-              {{ farmer.userInfo.groupName }}
-            </td>
-            <ng-template #foreName>
-              <td>
-                {{ farmer.userInfo.foreName }} {{ farmer.userInfo.surname }}
+            >
+              <td>{{ farmer.userInfo.createdAt | date: "short" }}</td>
+              <td *ngIf="farmer.userInfo.type === 2; else foreName">
+                {{ farmer.userInfo.groupName }}
               </td>
-            </ng-template>
-            <td>{{ farmer.userInfo.NID }}</td>
-            <td>{{ farmer.userInfo.phone_number }}</td>
-            <td>{{ farmer.userInfo.regNumber | uppercase }}</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>
-               <span class="profile-text">
-           <ng-container *ngIf="farmer?.userInfo.active!== 0, else inactive"><span
-             style="color: green; font-weight: bold">active</span>
-            </ng-container>
-            <ng-template #inactive><span style="color: #b21717; font-weight: bold">inactive</span></ng-template>
-        </span>
-            </td>
-            <td class="text-center" *ngIf="cwsDashes === undefined">
-              <button
-                appRequiredSeason
-                class="btn btn-action-no-border btn-margin details-button"
-                *appHasPermission="[[4, 1], 0, [8, 1], [1, 1], [1, 14]]"
-                routerLink="/admin/farmers/edit/{{ farmer.request._id }}"
-              >
-                <em class="fa fa-pencil"></em>
-              </button>
-              <button
-                appRequiredSeasonCherry
-                routerLink="/admin/cherries/supply/select/{{
+              <ng-template #foreName>
+                <td>
+                  {{ farmer.userInfo.foreName }} {{ farmer.userInfo.surname }}
+                </td>
+              </ng-template>
+              <td>{{ farmer.userInfo.NID }}</td>
+              <td>{{ farmer.userInfo.phone_number }}</td>
+              <td>{{ farmer.userInfo.regNumber | uppercase }}</td>
+              <td>
+                {{ farmer.userInfo?.location?.prov_id.namek == null ? '-' :
+                  farmer.userInfo?.location?.prov_id.namek +
+                    " > " +
+                    farmer.userInfo.location?.dist_id.name +
+                    " > " +
+                    farmer.userInfo.location?.sect_id.name +
+                    " > " +
+                    farmer.userInfo.location?.cell_id.name +
+                    " > " +
+                    farmer.userInfo.location?.village_id.name
+                }}
+              </td>
+              <td></td>
+              <td>
+                <div *ngFor="let land of farmer.request.requestInfo" style="font-size: 12px;">
+                  {{ land.upiNumber }}
+                </div>
+              </td>
+              <td>
+                <span class="profile-text">
+                  <ng-container
+                    *ngIf="farmer?.userInfo.active !== 0; else inactive"
+                    ><span style="color: green; font-weight: bold">active</span>
+                  </ng-container>
+                  <ng-template #inactive
+                    ><span style="color: #b21717; font-weight: bold"
+                      >inactive</span
+                    ></ng-template
+                  >
+                </span>
+              </td>
+              <td class="text-center">
+                <button
+                  appRequiredSeason
+                  class="btn btn-action-no-border btn-margin details-button"
+                  *appHasPermission="[[4, 1], 0, [8, 1], [1, 1], [1, 14]]"
+                  routerLink="/admin/farmers/edit/{{ farmer.request._id }}"
+                >
+                  <em class="fa fa-pencil"></em>
+                </button>
+                <button
+                  appRequiredSeasonCherry
+                  routerLink="/admin/cherries/supply/select/{{
                     farmer.userInfo._id
                   }}/{{ farmer.userInfo.regNumber }}"
-                class="btn btn-action-no-border btn-margin"
-                *appHasPermission="[[1, 1], [1, 14]]"
-              >
-                <em class="fa fa-cart-plus"></em> Supply
-              </button>
-              <button
-                *ngIf="hasRequest(farmer)"
-                class="btn btn-action-no-border btn-margin btn-sm details-button"
-                (click)="viewDetails(farmer)"
-              >
-                <em class="fa fa-eye"></em>
-              </button>
-            </td>
-          </tr>
+                  class="btn btn-action-no-border btn-margin"
+                  *appHasPermission="[
+                    [1, 1],
+                    [1, 14]
+                  ]"
+                >
+                  <em class="fa fa-cart-plus"></em> Supply
+                </button>
+                <button
+                  *ngIf="hasRequest(farmer)"
+                  class="btn btn-action-no-border btn-margin btn-sm details-button"
+                  (click)="viewDetails(farmer)"
+                >
+                  <em class="fa fa-eye"></em>
+                </button>
+              </td>
+            </tr>
           </tbody>
         </table>
         <div
@@ -510,9 +535,9 @@
           <div style="clear: both; float: left; padding-top: 0.755em">
             Showing {{ (config.currentPage - 1) * config.itemsPerPage + 1 }} to
             {{
-            config.currentPage * config.itemsPerPage > config.totalItems
-              ? config.totalItems
-              : config.currentPage * config.itemsPerPage
+              config.currentPage * config.itemsPerPage > config.totalItems
+                ? config.totalItems
+                : config.currentPage * config.itemsPerPage
             }}
             of {{ config.totalItems }} entries
           </div>

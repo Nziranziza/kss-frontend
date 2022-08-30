@@ -68,7 +68,7 @@ export class EditFarmerProfileComponent
     this.editFarmerProfileForm = this.formBuilder.group({
       phone_number: [''],
       groupName: [''],
-      NID: ['', Validators.required],
+      NID: [''],
       foreName: [''],
       surname: [''],
       sex: [''],
