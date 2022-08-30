@@ -498,6 +498,7 @@
               <input
                 [owlDateTimeTrigger]="dt1"
                 [owlDateTime]="dt1"
+                [min]="newDate"
                 formControlName="visitDate"
                 class="form-control"
                 placeholder="Dd/mm/yyyy"
@@ -561,6 +562,7 @@
                 <input
                   [owlDateTimeTrigger]="dt4"
                   class="form-control"
+                  [min]="startTime"
                   formControlName="endTime"
                   [owlDateTime]="dt4"
                 />

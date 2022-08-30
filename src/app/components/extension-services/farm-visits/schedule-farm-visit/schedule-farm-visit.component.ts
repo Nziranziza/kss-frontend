@@ -54,6 +54,8 @@ export class ScheduleFarmVisitComponent implements OnInit {
   selectedFarms: any[] = [];
   formatedStartDate: string;
   formatedEndDate: string;
+  newDate: Date = new Date();
+
 
   ngOnInit() {
     this.scheduleVisit = this.formBuilder.group({
@@ -68,6 +70,7 @@ export class ScheduleFarmVisitComponent implements OnInit {
       startTime: ["", Validators.required],
       endTime: ["", Validators.required],
     });
+    this.newDate.setDate(this.newDate.getDate() - 1);
 
     this.gapDropdownSettings = {
       singleSelection: false,

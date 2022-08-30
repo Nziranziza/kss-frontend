@@ -226,14 +226,18 @@ export class TrainingEditComponent
     const value = JSON.parse(JSON.stringify(this.createTraining.value));
     value.materials = this.results;
     value.status = 'not_scheduled';
-    value.adoptionGaps = this.createTraining.value.adoptionGaps.map((item) => item._id);
+    value.adoptionGap.forEach((adoption) => {
+      if (adoption._id != "") {
+        value.adoptionGaps.push(adoption._id);
+      }
+    });
     console.log(value);
     this.trainingService.update(value, this.id).subscribe(
       (data) => {
         this.loading = false;
         console.log(data);
         this.setMessage("Training successfully Edited.");
-        this.success('Edit Training')
+        this.success(value.trainingName)
       },
       (err) => {
         this.loading = false;
@@ -251,7 +255,7 @@ export class TrainingEditComponent
       ariaLabelledBy: "modal-basic-title",
     });
     modalRef.componentInstance.message = "has been edited";
-    modalRef.componentInstance.title = "Thank you Training";
+    modalRef.componentInstance.title = "Thank you";
     modalRef.componentInstance.name = name;
     modalRef.result.finally(() => {
       this.router.navigateByUrl("admin/training/list");

@@ -217,6 +217,7 @@ export class TrainingCreateComponent
       (data) => {
         this.loading = false;
         this.setMessage("Training successfully created.");
+        
       },
       (err) => {
         this.loading = false;
@@ -238,10 +239,10 @@ export class TrainingCreateComponent
       ariaLabelledBy: "modal-basic-title",
     });
     modalRef.componentInstance.message = "has been added";
-    modalRef.componentInstance.title = "Thank you Group";
+    modalRef.componentInstance.title = "Thank you";
     modalRef.componentInstance.name = name;
     modalRef.result.finally(() => {
-      this.router.navigateByUrl("admin/farmers/group/list");
+      this.router.navigateByUrl("admin/training/list");
     });
   }
 }
