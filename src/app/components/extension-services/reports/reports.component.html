@@ -4,15 +4,17 @@
       <div>
         <h5 class="label-required">Filter Reports for</h5>
         <select class="form-control" formControlName="reportFor">
-          <option value="" selected>Select Report Type</option>
+          <option value="" selected>Select report type</option>
           <option value="Trainings">Training</option>
-          <option value="Farmer Groups">Farmer Groups</option>
-          <option value="Farm Visits">Farm Visit</option>
-          <option value="Coffee Farmers">Cofee Farmer</option>
-          <option value="Coffee Farms">Cofee Farm</option>
+          <option value="Farmer Groups">Farmer groups</option>
+          <option value="Farm Visits">Farm visit</option>
+          <option value="Coffee Farmers">Coffee farmer</option>
+          <option value="Coffee Farms">Coffee farm</option>
         </select>
       </div>
     </div>
+  </div>
+  <div class="row">
     <div class="col-xs-8" *ngIf="reportForm.value.reportFor !== ''">
       <div class="row">
         <div class="col-xs-6">
@@ -20,7 +22,7 @@
           <div class="row" formGroupName="location">
             <div class="col-xs-6" id="location-province">
               <select class="form-control" formControlName="prov_id">
-                <option value="" selected>All Provinces</option>
+                <option value="" selected>All provinces</option>
                 <option
                   *ngFor="let province of locationProvinces"
                   value="{{ province._id }}"
@@ -31,7 +33,7 @@
             </div>
             <div class="col-xs-6">
               <select class="form-control" formControlName="dist_id">
-                <option value="" selected>All Districts</option>
+                <option value="" selected>All districts</option>
                 <option
                   *ngFor="let district of locationDistricts"
                   value="{{ district._id }}"
@@ -44,7 +46,7 @@
         </div>
         <div class="col-xs-3">
           <div class="text-center">
-            <h5 class="label-required text-center">Filter By CWS</h5>
+            <h5 class="label-required text-center">Filter by CWS</h5>
             <input
               type="radio"
               formControlName="filterByType"
@@ -55,7 +57,7 @@
         </div>
         <div class="col-xs-3">
           <div class="text-center">
-            <h5 class="label-required text-center">Filter By Sector</h5>
+            <h5 class="label-required text-center">Filter by sector</h5>
             <input
               type="radio"
               formControlName="filterByType"
@@ -85,7 +87,6 @@
                 style="height: 10px"
               >
               </ng-autocomplete>
-
               <ng-template #itemTemplate let-item>
                 <a [innerHTML]="item.organizationName" style="height: 20px"></a>
               </ng-template>
@@ -139,7 +140,7 @@
         >
           <div class="col-xs-3" style="margin-top: 5px">
             <select class="form-control" formControlName="sect_id">
-              <option value="" selected>All Sectors</option>
+              <option value="" selected>All sectors</option>
               <option
                 *ngFor="let sector of locationSectors"
                 value="{{ sector._id }}"
@@ -150,7 +151,7 @@
           </div>
           <div class="col-xs-3" style="margin-top: 5px">
             <select class="form-control" formControlName="cell_id">
-              <option value="" selected>All Cells</option>
+              <option value="" selected>All cells</option>
               <option *ngFor="let cell of locationCells" value="{{ cell._id }}">
                 {{ cell.name | titlecase }}
               </option>
@@ -158,7 +159,7 @@
           </div>
           <div class="col-xs-3" style="margin-top: 5px">
             <select class="form-control" formControlName="village_id">
-              <option value="" selected>All Villages</option>
+              <option value="" selected>All villages</option>
               <option
                 *ngFor="let village of locationVillages"
                 value="{{ village._id }}"

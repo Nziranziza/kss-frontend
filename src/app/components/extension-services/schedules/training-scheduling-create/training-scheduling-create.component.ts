@@ -28,6 +28,7 @@ export class TrainingSchedulingCreateComponent
   scheduleTraining: FormGroup;
   filterForm: FormGroup;
   editContactForm: FormGroup;
+  newDate: any;
   constructor(
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
@@ -81,6 +82,7 @@ export class TrainingSchedulingCreateComponent
       startTime: ["", Validators.required],
       endTime: ["", Validators.required],
     });
+    this.newDate.setDate(this.newDate.getDate() - 1);
     this.parameters = {
       length: 10,
       start: 0,

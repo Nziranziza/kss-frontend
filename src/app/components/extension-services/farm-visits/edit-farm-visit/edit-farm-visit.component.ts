@@ -35,7 +35,7 @@ export class EditFarmVisitComponent implements OnInit {
     private route: ActivatedRoute,
     private helper: HelperService,
     private modal: NgbModal
-  ) {}
+  ) { }
   loading: Boolean = false;
   farmerGroups: any[] = [];
   farmList: any[] = [];
@@ -54,11 +54,14 @@ export class EditFarmVisitComponent implements OnInit {
   selectedFarms: any[] = [];
   formatedStartDate: string;
   formatedEndDate: string;
+  newDate: Date = new Date();
+
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
       this.id = params["id".toString()];
     });
+    this.newDate.setDate(this.newDate.getDate() - 1);
     this.scheduleVisit = this.formBuilder.group({
       farmerGroup: ["", Validators.required],
       agronomist: ["", Validators.required],
@@ -93,16 +96,17 @@ export class EditFarmVisitComponent implements OnInit {
       this.savedFarmList = data.data.farms;
       this.scheduleVisit.controls.startTime.setValue(
         data.data.date.split("T")[0] +
-          "T" +
-          data.data.expectedDuration.from +
-          ":00.000Z"
+        "T" +
+        (parseInt(data.data.expectedDuration.from.split(":")[0]) - 2).toString() + ":" + data.data.expectedDuration.from.split(":")[1] +
+        ":00.000Z"
       );
       this.scheduleVisit.controls.endTime.setValue(
         data.data.date.split("T")[0] +
-          "T" +
-          data.data.expectedDuration.to +
-          ":00.000Z"
+        "T" +
+        (parseInt(data.data.expectedDuration.to.split(":")[0]) - 2).toString() + ":" + data.data.expectedDuration.to.split(":")[1] +
+        ":00.000Z"
       );
+      console.log(this.scheduleVisit.controls.endTime.value);
       this.scheduleVisit.controls.farmerGroup.setValue(
         data.data.groupId.groupName,
         { emitEvent: false }

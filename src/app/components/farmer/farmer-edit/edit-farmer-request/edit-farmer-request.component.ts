@@ -362,7 +362,7 @@ export class EditFarmerRequestComponent implements OnInit {
       });
       this.farmerService.updateFarmerRequest(request).subscribe(() => {
           this.setMessage('request successfully updated!');
-          
+
         },
         (err) => {
           this.setError(err.errors);
@@ -419,53 +419,33 @@ export class EditFarmerRequestComponent implements OnInit {
         upiNumber: upi
       };
       this.farmService.validateUPI(body).subscribe((data) => {
-        this.upi = data.data;
-        this.locationService.getProvinceByName(this.upi.parcelLocation.province.provinceName.toUpperCase()).subscribe((pr) => {
-          this.province = pr[0];
-        }, (err) => {
-        }, () => {
-          this.editFarmerRequestForm.controls.location.get('prov_id').setValue(this.province._id, {emitEvent: true});
-          this.locationService
-            .getDistrictByName(this.titleCase(this.upi.parcelLocation.district.districtName)).subscribe((dst) => {
-            this.district = dst[0];
-          }, (err) => {
-          }, () => {
-            this.editFarmerRequestForm.controls.location.get('dist_id').setValue(this.district._id, {emitEvent: true});
-            this.locationService
-              .getSectorByName(this.titleCase(this.upi.parcelLocation.sector.sectorName), this.district.id)
-              .subscribe((sect) => {
-                this.sector = sect[0];
-              }, (err) => {
-              }, () => {
-                this.editFarmerRequestForm.controls.location.get('sect_id').setValue(this.sector._id, {emitEvent: true});
-                this.locationService
-                  .getCellByName(this.titleCase(this.upi.parcelLocation.cell.cellName), this.sector.id)
-                  .subscribe((cel) => {
-                    this.cell = cel[0];
-                  }, (err) => {
-                  }, () => {
-                    this.editFarmerRequestForm.controls.location.get('cell_id').setValue(this.cell._id, {emitEvent: true});
-                    this.locationService
-                      .getVillageByName(this.titleCase(this.upi.parcelLocation.village.villageName), this.cell.id)
-                      .subscribe((vil) => {
-                        this.village = vil[0];
-                      }, (err) => {
-                      }, () => {
-                        this.editFarmerRequestForm.controls.location.get('village_id').setValue(this.village._id);
-                      });
-                  });
-              });
+          console.log(data);
+          this.upi = data.data;
+          const locationNames = {
+            province: this.upi.parcelLocation.province.provinceName.toUpperCase(),
+            district: this.upi.parcelLocation.district.districtName.charAt(0).toUpperCase() + this.upi.parcelLocation.district.districtName.slice(1).toLowerCase(),
+            sector: this.upi.parcelLocation.sector.sectorName.charAt(0).toUpperCase() + this.upi.parcelLocation.sector.sectorName.slice(1).toLowerCase(),
+            cell: this.upi.parcelLocation.cell.cellName.charAt(0).toUpperCase() + this.upi.parcelLocation.cell.cellName.slice(1).toLowerCase(),
+            village: this.upi.parcelLocation.village.villageName.charAt(0).toUpperCase() + this.upi.parcelLocation.village.villageName.slice(1).toLowerCase()
+          };
+          this.locationService.getZoningIDS(locationNames).subscribe((location) => {
+            this.editFarmerRequestForm.controls.location.get('prov_id').setValue(location.province._id);
+            this.editFarmerRequestForm.controls.location.get('dist_id').setValue(location.district._id, {emitEvent: true});
+            this.editFarmerRequestForm.controls.location.get('sect_id').setValue(location.sector._id, {emitEvent: true});
+            this.editFarmerRequestForm.controls.location.get('cell_id').setValue(location.cell._id, {emitEvent: true});
+            this.editFarmerRequestForm.controls.location.get('village_id').setValue(location.cell._id, {emitEvent: true});
           });
-        });
-        this.editFarmerRequestForm.controls.landOwner.setValue(this.upi.representative.surname +
-          ' ' + this.upi.representative.foreNames);
-        if (!Object.keys(this.upi).length) {
+          this.editFarmerRequestForm.controls.landOwner.setValue(this.upi.representative.surname +
+            ' ' + this.upi.representative.foreNames);
+          if (!Object.keys(this.upi).length) {
+            this.setError(['UPI not found']);
+          }
+        },
+        (error) => {
+          console.log(error);
+          this.editFarmerRequestForm.controls.landOwner.reset();
           this.setError(['UPI not found']);
-        }
-      }, (error) => {
-        this.editFarmerRequestForm.controls.landOwner.reset();
-        this.setError(['UPI not found']);
-      });
+        });
     }
   }
 

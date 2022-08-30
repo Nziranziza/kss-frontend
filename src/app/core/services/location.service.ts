@@ -53,4 +53,8 @@ export class LocationService {
   getVillageByName(name: string, id: string) {
     return this.apiService.get('/v1.1/zoning/villages/' + name + '/'  + id);
   }
+
+  getZoningIDS(body) {
+    return this.apiService.get('/v1.1/zoning', body);
+  }
 }
