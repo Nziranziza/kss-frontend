@@ -1,6 +1,6 @@
-import { Component, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { Subject } from "rxjs";
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Subject} from 'rxjs';
 import {
   AuthenticationService,
   BasicComponent,
@@ -11,15 +11,15 @@ import {
   SeasonService,
   SiteService,
   TrainingService,
-} from "src/app/core";
-import { jsPDF } from "jspdf";
-import html2canvas from "html2canvas";
-import { saveAs } from "file-saver";
+} from 'src/app/core';
+import {jsPDF} from 'jspdf';
+import html2canvas from 'html2canvas';
+import {saveAs} from 'file-saver';
 
 @Component({
-  selector: "app-reports",
-  templateUrl: "./reports.component.html",
-  styleUrls: ["./reports.component.css"],
+  selector: 'app-reports',
+  templateUrl: './reports.component.html',
+  styleUrls: ['./reports.component.css'],
 })
 export class ReportsComponent extends BasicComponent implements OnInit {
   newOrg: any;
@@ -29,6 +29,7 @@ export class ReportsComponent extends BasicComponent implements OnInit {
   selectedGroup: any;
   dataCsv: any;
   dataPdf: any;
+
   constructor(
     private formBuilder: FormBuilder,
     private seasonService: SeasonService,
@@ -42,6 +43,7 @@ export class ReportsComponent extends BasicComponent implements OnInit {
   ) {
     super(locationService, organisationService);
   }
+
   loading = false;
   reportForm: FormGroup;
   dtOptions: DataTables.Settings = {};
@@ -69,66 +71,48 @@ export class ReportsComponent extends BasicComponent implements OnInit {
   trainings: any[] = [];
   reportBody: any;
   dataFile: any;
-  reportGenerated: Boolean = false;
-  showHeaders: Boolean = false;
-  initialValue = "";
-  sectorIndex: number = 0;
-  keyword = "organizationName";
-  groupKeyword = "groupName";
+  reportGenerated = false;
+  showHeaders = false;
+  initialValue = '';
+  sectorIndex = 0;
+  keyword = 'organizationName';
+  groupKeyword = 'groupName';
   weekDays: string[] = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday",
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday',
   ];
 
   ngOnInit() {
     this.dtOptions,
-      this.dt2Options,
-      this.dt3Options,
-      (this.dt4Options = {
-        pagingType: "full_numbers",
-        pageLength: 10,
-      });
+    this.dt2Options,
+    this.dt3Options,
+    (this.dt4Options = {
+      pagingType: 'full_numbers',
+      pageLength: 10,
+    });
     this.reportForm = this.formBuilder.group({
-      filterByType: [""],
-      reportFor: [""],
+      filterByType: [''],
+      reportFor: [''],
+      cws: [''],
       location: this.formBuilder.group({
-        prov_id: [""],
-        dist_id: [""],
-        sect_id: [""],
-        cell_id: [""],
-        village_id: [""],
+        prov_id: [''],
+        dist_id: [''],
+        sect_id: [''],
+        cell_id: [''],
+        village_id: [''],
       }),
       date: this.formBuilder.group({
-        visitDate: [""],
-        startTime: [""],
-        endTime: [""],
-      }),
-      filterByCws: this.formBuilder.group({
-        cws: [""],
-        sect_id: [""],
-        cell_id: [""],
-        village_id: [""],
-      }),
-      filterBySector: this.formBuilder.group({
-        sect_id: [""],
-        cell_id: [""],
-        village_id: [""],
-        farmer_group: [""],
-      }),
-      seasonFilters: this.formBuilder.group({
-        startDate: [""],
-        endDate: [""],
-        seasons: [""],
+        from: [''],
+        to: [''],
       }),
       trainingFilters: this.formBuilder.group({
-        trainingModule: [""],
-        status: [""],
-        gender: [""],
+        trainingModule: [''],
+        gender: [''],
       }),
     });
     this.seasonService.all().subscribe((data) => {
@@ -161,8 +145,8 @@ export class ReportsComponent extends BasicComponent implements OnInit {
           org.organizationRole.includes(1)
         );
         this.organisations.unshift({
-          organizationName: "all cws",
-          _id: "",
+          organizationName: 'all cws',
+          _id: '',
         });
       }
     });
@@ -172,14 +156,14 @@ export class ReportsComponent extends BasicComponent implements OnInit {
     this.loading = true;
     this.groupService.all({}).subscribe((data) => {
       this.groups = data.data;
-      this.groups.unshift({ groupName: "all groups", _id: "" });
+      this.groups.unshift({groupName: 'all groups', _id: ''});
       this.loading = false;
     });
   }
 
   selectEvent(item) {
     this.newOrg = item._id;
-    let newData = this.organisations.filter((org) => org._id === item._id);
+    const newData = this.organisations.filter((org) => org._id === item._id);
     this.reportBody.reference = this.newOrg;
     this.coveredSectors = newData[0].coveredSectors;
     this.coveredCells =
@@ -191,7 +175,7 @@ export class ReportsComponent extends BasicComponent implements OnInit {
   }
 
   deselectEvent() {
-    this.newOrg = "";
+    this.newOrg = '';
     this.getStats(this.reportForm.value.reportFor, {});
   }
 
@@ -200,163 +184,164 @@ export class ReportsComponent extends BasicComponent implements OnInit {
   }
 
   deselectGroupEvent(item) {
-    this.selectedGroup = "";
+    this.selectedGroup = '';
   }
 
   onChanges() {
-    this.reportForm.get("reportFor").valueChanges.subscribe((value) => {
+    this.reportForm.get('reportFor').valueChanges.subscribe((value) => {
       this.reportBody = {};
       this.stats = {};
       this.reportsTableData = [];
       this.getStats(value, this.reportBody);
     });
     this.reportForm.controls.location
-      .get("prov_id".toString())
+      .get('prov_id'.toString())
       .valueChanges.subscribe((value) => {
-        this.locationChangeProvince(this.reportForm, value);
-        this.reportBody.location = {
+      this.locationChangeProvince(this.reportForm, value);
+      this.reportBody.location = {
+        prov_id: value,
+      };
+      this.getStats(this.reportForm.value.reportFor, {
+        location: {
           prov_id: value,
-        };
-        this.getStats(this.reportForm.value.reportFor, {
-          location: {
-            prov_id: value,
-          },
-        });
-        this.siteService
-          .getZone({ prov_id: value, searchBy: "province" })
-          .subscribe((data) => {
-            if (data) {
-              this.organisations = data.content.filter((org) =>
-                org.organizationRole.includes(1)
-              );
-              this.organisations.unshift({
-                organizationName: "all cws",
-                _id: "",
-              });
-            }
-          });
+        },
       });
+      this.siteService
+        .getZone({prov_id: value, searchBy: 'province'})
+        .subscribe((data) => {
+          if (data) {
+            this.organisations = data.content.filter((org) =>
+              org.organizationRole.includes(1)
+            );
+            this.organisations.unshift({
+              organizationName: 'all cws',
+              _id: '',
+            });
+          }
+        });
+    });
     this.reportForm.controls.location
-      .get("dist_id".toString())
+      .get('dist_id'.toString())
       .valueChanges.subscribe((value) => {
-        this.reportBody.location = {
+      this.reportBody.location = {
+        dist_id: value,
+      };
+      this.locationChangDistrict(this.reportForm, value);
+      this.getStats(this.reportForm.value.reportFor, {
+        location: {
           dist_id: value,
-        };
-        this.locationChangDistrict(this.reportForm, value);
-        this.getStats(this.reportForm.value.reportFor, {
-          location: {
-            dist_id: value,
-          },
-        });
-        this.siteService
-          .getZone({ dist_id: value, searchBy: "district" })
-          .subscribe((data) => {
-            if (data) {
-              this.organisations = data.content.filter((org) =>
-                org.organizationRole.includes(1)
-              );
-              this.organisations.unshift({
-                organizationName: "all cws",
-                _id: "",
-              });
-            }
-          });
+        },
       });
+      this.siteService
+        .getZone({dist_id: value, searchBy: 'district'})
+        .subscribe((data) => {
+          if (data) {
+            this.organisations = data.content.filter((org) =>
+              org.organizationRole.includes(1)
+            );
+            this.organisations.unshift({
+              organizationName: 'all cws',
+              _id: '',
+            });
+          }
+        });
+    });
     this.reportForm.controls.location
-      .get("sect_id".toString())
+      .get('sect_id'.toString())
       .valueChanges.subscribe((value) => {
-        this.reportBody.location = {
+      this.reportBody.location = {
+        sect_id: value,
+      };
+      this.locationChangSector(this.reportForm, value);
+      this.getStats(this.reportForm.value.reportFor, {
+        location: {
           sect_id: value,
-        };
-        this.locationChangSector(this.reportForm, value);
-        this.getStats(this.reportForm.value.reportFor, {
-          location: {
-            sect_id: value,
-          },
-        });
+        },
       });
+    });
 
     this.reportForm.controls.location
-      .get("cell_id".toString())
+      .get('cell_id'.toString())
       .valueChanges.subscribe((value) => {
-        this.reportBody.location = {
+      this.reportBody.location = {
+        cell_id: value,
+      };
+      this.locationChangCell(this.reportForm, value);
+      this.getStats(this.reportForm.value.reportFor, {
+        location: {
           cell_id: value,
-        };
-        this.locationChangCell(this.reportForm, value);
-        this.getStats(this.reportForm.value.reportFor, {
-          location: {
-            cell_id: value,
-          },
-        });
+        },
       });
+    });
 
     this.reportForm.controls.location
-      .get("village_id".toString())
+      .get('village_id'.toString())
       .valueChanges.subscribe((value) => {
-        this.reportBody.location = {
+      this.reportBody.location = {
+        village_id: value,
+      };
+      this.getStats(this.reportForm.value.reportFor, {
+        location: {
           village_id: value,
-        };
-        this.getStats(this.reportForm.value.reportFor, {
-          location: {
-            village_id: value,
-          },
-        });
+        },
       });
+    });
   }
 
   getStats(value: any, body: any) {
-    if (value === "Farmer Groups") {
+    if (value === 'Farmer Groups') {
       this.reportService.groupStats(body).subscribe((data) => {
         this.stats = data.data[0];
       });
-    } else if (value === "Trainings") {
+    } else if (value === 'Trainings') {
       this.reportService.trainingStats(body).subscribe((data) => {
         this.stats = data.data[0];
       });
-    } else if (value === "Farm Visits") {
+    } else if (value === 'Farm Visits') {
       this.reportService.visitStats(body).subscribe((data) => {
         this.stats = data.data[0];
       });
-    } else if (value === "Coffee Farmers") {
-      body.searchBy = "farmer";
+    } else if (value === 'Coffee Farmers') {
+      body.searchBy = 'farmer';
       this.reportService.farmStats(body).subscribe((data) => {
         this.stats = data.data[0];
         console.log(data);
       });
-    } else if (value === "Coffee Farms") {
-      body.searchBy = "farm";
+    } else if (value === 'Coffee Farms') {
+      body.searchBy = 'farm';
       this.reportService.farmStats(body).subscribe((data) => {
         this.stats = data.data[0];
         console.log(data);
       });
     }
   }
+
   downloadCsv() {
     this.generateFinalReport();
   }
 
   downloadFile() {
-    let data = this.dataCsv;
+    const data = this.dataCsv;
     console.log(data);
-    const replacer = (key, value) => (value === null ? "" : value); // specify how you want to handle null values here
+    const replacer = (key, value) => (value === null ? '' : value); // specify how you want to handle null values here
     const header = Object.keys(data[0]);
-    let csv = data.map((row) =>
+    const csv = data.map((row) =>
       header
         .map((fieldName) => JSON.stringify(row[fieldName], replacer))
-        .join(",")
+        .join(',')
     );
-    csv.unshift(header.join(","));
-    let csvArray = csv.join("\r\n");
+    csv.unshift(header.join(','));
+    const csvArray = csv.join('\r\n');
 
-    var blob = new Blob([csvArray], { type: "text/csv" });
-    saveAs(blob, "myFile.csv");
+    const blob = new Blob([csvArray], {type: 'text/csv'});
+    saveAs(blob, 'myFile.csv');
   }
 
   downloadPdfFile() {
-    let base64String = this.dataPdf;
+    const base64String = this.dataPdf;
     console.log(base64String);
     const source = `data:application/pdf;base64,${base64String}`;
-    const link = document.createElement("a");
+    const link = document.createElement('a');
     link.href = source;
     link.download = `sks-report.pdf`;
     link.click();
@@ -364,58 +349,58 @@ export class ReportsComponent extends BasicComponent implements OnInit {
 
   downloadPdf() {
     this.showHeaders = true;
-    html2canvas(document.getElementById("downloadFile")).then((canvas) => {
+    html2canvas(document.getElementById('downloadFile')).then((canvas) => {
       // Few necessary setting options
-      let imgWidth = 208;
-      let pageHeight = 295;
-      let imgHeight = (canvas.height * imgWidth) / canvas.width;
-      let heightLeft = imgHeight;
+      const imgWidth = 208;
+      const pageHeight = 295;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      const heightLeft = imgHeight;
 
-      const contentDataURL = canvas.toDataURL("image/png");
-      let pdf = new jsPDF("p", "mm", "a4"); // A4 size page of PDF
-      let position = 0;
-      pdf.addImage(contentDataURL, "PNG", 0, position, imgWidth, imgHeight);
-      pdf.save("sks-report.pdf"); // Generated PDF
+      const contentDataURL = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4'); // A4 size page of PDF
+      const position = 0;
+      pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
+      pdf.save('sks-report.pdf'); // Generated PDF
     });
     this.showHeaders = false;
   }
 
   generateReport() {
-    if (this.reportForm.value.reportFor === "Farmer Groups") {
+    if (this.reportForm.value.reportFor === 'Farmer Groups') {
       this.reportsTableData = [];
       this.reportService.groupSummary(this.reportBody).subscribe((data) => {
         this.reportsTableData = data.data;
         this.dtTrigger.next();
         this.reportGenerated = true;
       });
-    } else if (this.reportForm.value.reportFor === "Trainings") {
+    } else if (this.reportForm.value.reportFor === 'Trainings') {
       this.reportsTableData = [];
       this.reportService.trainingSummary(this.reportBody).subscribe((data) => {
         this.reportsTableData = data.data;
         this.dt2Trigger.next();
         this.reportGenerated = true;
       });
-    } else if (this.reportForm.value.reportFor === "Farm Visits") {
+    } else if (this.reportForm.value.reportFor === 'Farm Visits') {
       this.reportsTableData = [];
       this.reportService.visitSummary(this.reportBody).subscribe((data) => {
         this.reportsTableData = data.data;
         this.dt3Trigger.next();
         this.reportGenerated = true;
       });
-    } else if (this.reportForm.value.reportFor === "Coffee Farmers") {
+    } else if (this.reportForm.value.reportFor === 'Coffee Farmers') {
       this.reportsTableData = [];
-      this.reportBody.searchBy = "farmer";
-      console.log("-------");
+      this.reportBody.searchBy = 'farmer';
+      console.log('-------');
       this.reportService.farmSummary(this.reportBody).subscribe((data) => {
         this.reportsTableData = data.data;
         console.log(data);
         this.dt3Trigger.next();
         this.reportGenerated = true;
       });
-    } else if (this.reportForm.value.reportFor === "Coffee Farms") {
+    } else if (this.reportForm.value.reportFor === 'Coffee Farms') {
       this.reportsTableData = [];
-      console.log("-------");
-      this.reportBody.searchBy = "farm";
+      console.log('-------');
+      this.reportBody.searchBy = 'farm';
       this.reportService.farmSummary(this.reportBody).subscribe((data) => {
         this.reportsTableData = data.data;
         console.log(data);
@@ -426,85 +411,85 @@ export class ReportsComponent extends BasicComponent implements OnInit {
   }
 
   generateFinalReport() {
-    if (this.reportForm.value.reportFor === "Farmer Groups") {
+    if (this.reportForm.value.reportFor === 'Farmer Groups') {
       this.reportService
-        .groupDownload(this.reportBody, "xlsx")
+        .groupDownload(this.reportBody, 'xlsx')
         .subscribe((data) => {
           this.dataFile = data.data.file;
         });
       this.reportService
-        .groupDownload(this.reportBody, "csv")
+        .groupDownload(this.reportBody, 'csv')
         .subscribe((data) => {
           this.dataCsv = data.data.file;
         });
       this.reportService
-        .groupDownload(this.reportBody, "pdf")
+        .groupDownload(this.reportBody, 'pdf')
         .subscribe((data) => {
           this.dataPdf = data.data.file;
         });
-    } else if (this.reportForm.value.reportFor === "Trainings") {
+    } else if (this.reportForm.value.reportFor === 'Trainings') {
       this.reportService
-        .trainingDownload(this.reportBody, "xlsx")
+        .trainingDownload(this.reportBody, 'xlsx')
         .subscribe((data) => {
           this.dataFile = data.data.file;
         });
       this.reportService
-        .trainingDownload(this.reportBody, "csv")
+        .trainingDownload(this.reportBody, 'csv')
         .subscribe((data) => {
           this.dataCsv = data.data.file;
         });
       this.reportService
-        .trainingDownload(this.reportBody, "pdf")
+        .trainingDownload(this.reportBody, 'pdf')
         .subscribe((data) => {
           this.dataPdf = data.data.file;
         });
-    } else if (this.reportForm.value.reportFor === "Farm Visits") {
+    } else if (this.reportForm.value.reportFor === 'Farm Visits') {
       this.reportService
-        .visitDownload(this.reportBody, "xlsx")
+        .visitDownload(this.reportBody, 'xlsx')
         .subscribe((data) => {
           this.dataFile = data.data.file;
         });
       this.reportService
-        .visitDownload(this.reportBody, "csv")
+        .visitDownload(this.reportBody, 'csv')
         .subscribe((data) => {
           this.dataCsv = data.data.file;
         });
       this.reportService
-        .visitDownload(this.reportBody, "pdf")
+        .visitDownload(this.reportBody, 'pdf')
         .subscribe((data) => {
           this.dataPdf = data.data.file;
         });
-    } else if (this.reportForm.value.reportFor === "Coffee Farmers") {
-      this.reportBody.searchBy = "farmer";
+    } else if (this.reportForm.value.reportFor === 'Coffee Farmers') {
+      this.reportBody.searchBy = 'farmer';
       this.reportService
-        .farmDownload(this.reportBody, "xlsx")
+        .farmDownload(this.reportBody, 'xlsx')
         .subscribe((data) => {
           this.dataFile = data.data.file;
         });
       this.reportService
-        .farmDownload(this.reportBody, "csv")
+        .farmDownload(this.reportBody, 'csv')
         .subscribe((data) => {
           this.dataCsv = data.data.file;
         });
       this.reportService
-        .farmDownload(this.reportBody, "pdf")
+        .farmDownload(this.reportBody, 'pdf')
         .subscribe((data) => {
           this.dataPdf = data.data.file;
         });
-    } else if (this.reportForm.value.reportFor === "Coffee Farms") {
-      this.reportBody.searchBy = "farm";
+    } else if (this.reportForm.value.reportFor === 'Coffee Farms') {
+      this.reportBody.searchBy = 'farm';
       this.reportService
-        .farmDownload(this.reportBody, "xlsx")
+        .farmDownload(this.reportBody, 'xlsx')
         .subscribe((data) => {
           this.dataFile = data.data.file;
         });
       this.reportService
-        .farmDownload(this.reportBody, "csv")
+        .farmDownload(this.reportBody, 'csv')
         .subscribe((data) => {
           this.dataCsv = data.data.file;
         });
       this.reportService
-        .farmDownload(this.reportBody, "pdf")
+        .farmDownload(this.reportBody, 'pdf')
         .subscribe((data) => {
           this.dataPdf = data.data.file;
         });
