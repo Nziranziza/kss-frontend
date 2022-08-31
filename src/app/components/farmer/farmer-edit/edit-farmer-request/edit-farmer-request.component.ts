@@ -20,6 +20,7 @@ export class EditFarmerRequestComponent implements OnInit {
   errors: any;
   message: string;
   save = false;
+  loading = false;
   farmerId: string;
   provinces: any;
   disableProvId = false;
@@ -345,7 +346,9 @@ export class EditFarmerRequestComponent implements OnInit {
   }
 
   onSubmit() {
+    this.editFarmerRequestForm.markAllAsTouched();
     if (this.editFarmerRequestForm.valid) {
+      this.loading = true;
       const request = this.editFarmerRequestForm.getRawValue();
       request['fertilizer_need'.toString()] =
         +request['numberOfTrees'.toString()] * this.currentSeason.seasonParams.fertilizerKgPerTree;
@@ -362,13 +365,16 @@ export class EditFarmerRequestComponent implements OnInit {
       });
       this.farmerService.updateFarmerRequest(request).subscribe(() => {
           this.setMessage('request successfully updated!');
-
+          this.modal.dismiss();
+          this.loading = true;
         },
         (err) => {
           this.setError(err.errors);
+          this.loading = true;
         });
     } else {
       this.setError('missing required land(s) information');
+      this.loading = true;
     }
   }
 
