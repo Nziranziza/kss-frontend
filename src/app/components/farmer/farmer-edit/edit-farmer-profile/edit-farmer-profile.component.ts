@@ -66,7 +66,7 @@ export class EditFarmerProfileComponent
 
   ngOnInit() {
     this.editFarmerProfileForm = this.formBuilder.group({
-      phone_number: [''],
+      phone_number: ['', Validators.pattern("[0-9]{12}")],
       groupName: [''],
       NID: [''],
       foreName: [''],
@@ -122,8 +122,8 @@ export class EditFarmerProfileComponent
       this.farmer.active
         ? this.editFarmerProfileForm.get('active'.toString()).patchValue('true')
         : this.editFarmerProfileForm
-            .get('active'.toString())
-            .patchValue('false');
+          .get('active'.toString())
+          .patchValue('false');
     }
 
     this.getPaymentChannels();
@@ -402,6 +402,11 @@ export class EditFarmerProfileComponent
           });
         }
       });
+    this.editFarmerProfileForm.controls.phone_number.valueChanges.subscribe((value) => {
+      if (value === "07") {
+        this.editFarmerProfileForm.controls.phone_number.setValue("2507");
+      }
+    });
   }
 
   initial() {

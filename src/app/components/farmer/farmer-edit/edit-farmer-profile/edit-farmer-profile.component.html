@@ -161,6 +161,16 @@
                           formControlName="phone_number"
                           class="form-control"
                         />
+                        <app-inline-errors
+                          *ngIf="
+                          editFarmerProfileForm.controls.phone_number.invalid &&
+                            (editFarmerProfileForm.controls.phone_number.dirty ||
+                            editFarmerProfileForm.controls.phone_number.touched)
+                          "
+                          [errors]="editFarmerProfileForm.controls.phone_number.errors"
+                          [label]="'phone number'"
+                        >
+                        </app-inline-errors>
                       </div>
                     </div>
                     <div class="col-xs-6">

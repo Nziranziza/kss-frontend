@@ -752,19 +752,19 @@
           <div class="row text-center">
             <div class="col-xs-3" style="padding: 0 2px 0 0px">
               <h4>Total Farms</h4>
-              <h3>{{ generalFarmStats?.totalFarms }}</h3>
+              <h3>{{ generalFarmStats?.totalFarms | number: "1.0-0" }}</h3>
             </div>
             <div class="col-xs-3" style="padding: 0 2px 0 0px">
               <h4>Total Visits</h4>
-              <h3>{{ generalFarmStats?.totalVisits }}</h3>
+              <h3>{{ generalFarmStats?.totalVisits | number: "1.0-0" }}</h3>
             </div>
             <div class="col-xs-3" style="padding: 0 2px 0 0px">
               <h4>Total Farmers</h4>
-              <h3>{{ generalFarmStats?.totalFarmers }}</h3>
+              <h3>{{ generalFarmStats?.totalFarmers | number: "1.0-0" }}</h3>
             </div>
             <div class="col-xs-3" style="padding: 0 5px 0 0px">
               <h4>Total Trees</h4>
-              <h3>{{ generalFarmStats?.totalTrees }}</h3>
+              <h3>{{ generalFarmStats?.totalTrees | number: "1.0-0" }}</h3>
             </div>
           </div>
         </div>
@@ -773,6 +773,13 @@
           *ngIf="clickedMarker"
           style="margin-bottom: 5px"
         >
+          <div
+            (click)="disableFarmDetailsPopup()"
+            class="btn-modal-close text-center"
+            style="margin-right: -13px; margin-top: -25px"
+          >
+            <em class="fa fa-close"></em>
+          </div>
           <div class="row text-center">
             <div class="col-xs-3" style="padding: 0 2px 0 0px">
               <h4>Owner</h4>

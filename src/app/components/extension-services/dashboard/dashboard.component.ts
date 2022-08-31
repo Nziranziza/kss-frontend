@@ -529,6 +529,10 @@ export class DashboardComponent extends BasicComponent implements OnInit {
     }
   }
 
+  disableFarmDetailsPopup() {
+    this.clickedMarker = false
+  }
+
   selectEvent(item) {
     this.newOrg = item._id;
     let newData = this.organisations.filter((org) => org._id === item._id);
