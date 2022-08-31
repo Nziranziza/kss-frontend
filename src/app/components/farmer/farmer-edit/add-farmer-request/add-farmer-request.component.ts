@@ -554,6 +554,9 @@ export class AddFarmerRequestComponent
   }
 
   onSubmit() {
+    // First validate high level
+    this.createForm.markAllAsTouched();
+
     if (this.createForm.valid) {
       const temp = this.createForm.getRawValue();
       const farmer = {
@@ -570,16 +573,16 @@ export class AddFarmerRequestComponent
           +temp.numberOfTrees *
           this.currentSeason.seasonParams.fertilizerKgPerTree;
         item["landOwner".toString()] = temp.landOwner;
-        item["upiNumber".toString()] = temp.upiNumber;
+        item['upiNumber'.toString()] = temp.upiNumber;
         item["treeAges".toString()] = temp.treeAges;
         item["numberOfTrees".toString()] = temp.numberOfTrees;
         item["location".toString()] = temp.location;
         item["fertilizer_allocate"] = 0;
+        item["certificates"] = temp.certificates;
         return this.helper.cleanObject(item);
       });
       farmer["created_by".toString()] =
         this.authenticationService.getCurrentUser().info._id;
-      farmer["certificates".toString()] = temp.certificates;
       this.helper.cleanObject(farmer);
       farmer["id".toString()] = this.farmerId;
       this.farmerService.addFarmerRequest(farmer).subscribe(
