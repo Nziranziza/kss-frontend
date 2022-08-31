@@ -1111,7 +1111,7 @@ export class FarmerCreateComponent
       if (value === "07") {
         this.createForm.controls.phone_number.setValue("2507");
       }
-    })
+    });
     this.createForm.controls.tree_location
       .get('prov_id'.toString())
       .valueChanges.subscribe((value) => {
