@@ -1,11 +1,11 @@
-import {Component, Inject, Injector, Input, OnInit, PLATFORM_ID} from '@angular/core';
-import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {FarmService, HelperService} from '../../../../core';
-import {AuthenticationService, FarmerService, OrganisationService, SiteService} from '../../../../core';
-import {isPlatformBrowser} from '@angular/common';
-import {LocationService} from '../../../../core';
-import {AuthorisationService} from '../../../../core';
+import { Component, Inject, Injector, Input, OnInit, PLATFORM_ID } from '@angular/core';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FarmService, HelperService } from '../../../../core';
+import { AuthenticationService, FarmerService, OrganisationService, SiteService } from '../../../../core';
+import { isPlatformBrowser } from '@angular/common';
+import { LocationService } from '../../../../core';
+import { AuthorisationService } from '../../../../core';
 
 @Component({
   selector: 'app-edit-farmer-request',
@@ -74,8 +74,8 @@ export class EditFarmerRequestComponent implements OnInit {
       numberOfTrees: ['', [Validators.required, Validators.pattern('[0-9]*')]],
       fertilizer_allocate: [0],
       location: this.formBuilder.group({
-        prov_id: [{value: '', disabled: this.disableProvId}, Validators.required],
-        dist_id: [{value: '', disabled: this.disableDistId}, Validators.required],
+        prov_id: [{ value: '', disabled: this.disableProvId }, Validators.required],
+        dist_id: [{ value: '', disabled: this.disableDistId }, Validators.required],
         sect_id: ['', Validators.required],
         cell_id: ['', Validators.required],
         village_id: ['', Validators.required]
@@ -116,19 +116,19 @@ export class EditFarmerRequestComponent implements OnInit {
       this.org = data.content;
     });
     this.farmService.listTreeVarieties().subscribe((data) => {
-        this.treeVarieties = data.data;
-        this.createAgeRanges();
-        if (this.land.treeAges) {
-          this.editFarmerRequestForm.controls.treeAges.patchValue(this.land.treeAges);
-          this.land.treeAges.map((age, i) => {
-            age.varieties.map((variety, v) => {
-              if (variety.number > 0) {
-                this.formTreeVarieties(i).at(v).get('selected').setValue(true);
-              }
-            });
+      this.treeVarieties = data.data;
+      this.createAgeRanges();
+      if (this.land.treeAges) {
+        this.editFarmerRequestForm.controls.treeAges.patchValue(this.land.treeAges);
+        this.land.treeAges.map((age, i) => {
+          age.varieties.map((variety, v) => {
+            if (variety.number > 0) {
+              this.formTreeVarieties(i).at(v).get('selected').setValue(true);
+            }
           });
-        }
+        });
       }
+    }
     );
 
     this.initial();
@@ -166,7 +166,7 @@ export class EditFarmerRequestComponent implements OnInit {
     this.locationService.getVillages(this.land.location.cell_id._id).subscribe((villages) => {
       this.villages = villages;
     });
-    this.editFarmerRequestForm.patchValue(temp, {emitEvent: false});
+    this.editFarmerRequestForm.patchValue(temp, { emitEvent: false });
     this.onChanges();
   }
 
@@ -333,7 +333,7 @@ export class EditFarmerRequestComponent implements OnInit {
   updateList(i: number, v: number) {
     const value = this.editFarmerRequestForm.controls.treeAges.value;
     const sum = value[i].varieties.map(item => item.number).reduce((prev, curr) => prev + curr, 0);
-    this.formTreeAges.at(i).get('numOfTrees').setValue(sum, {emitEvent: true});
+    this.formTreeAges.at(i).get('numOfTrees').setValue(sum, { emitEvent: true });
     if (this.formTreeVarieties(i).at(v).get('number').value !== 0) {
       this.formTreeVarieties(i).at(v).get('selected').setValue(true);
     } else {
@@ -422,36 +422,114 @@ export class EditFarmerRequestComponent implements OnInit {
   validateUPI(upi: string) {
     if (upi.length >= 15) {
       const body = {
-        upiNumber: upi
+        upiNumber: upi,
       };
-      this.farmService.validateUPI(body).subscribe((data) => {
-          console.log(data);
+      this.farmService.validateUPI(body).subscribe(
+        (data) => {
           this.upi = data.data;
-          const locationNames = {
-            province: this.upi.parcelLocation.province.provinceName.toUpperCase(),
-            district: this.upi.parcelLocation.district.districtName.charAt(0).toUpperCase() + this.upi.parcelLocation.district.districtName.slice(1).toLowerCase(),
-            sector: this.upi.parcelLocation.sector.sectorName.charAt(0).toUpperCase() + this.upi.parcelLocation.sector.sectorName.slice(1).toLowerCase(),
-            cell: this.upi.parcelLocation.cell.cellName.charAt(0).toUpperCase() + this.upi.parcelLocation.cell.cellName.slice(1).toLowerCase(),
-            village: this.upi.parcelLocation.village.villageName.charAt(0).toUpperCase() + this.upi.parcelLocation.village.villageName.slice(1).toLowerCase()
-          };
-          this.locationService.getZoningIDS(locationNames).subscribe((location) => {
-            this.editFarmerRequestForm.controls.location.get('prov_id').setValue(location.province._id);
-            this.editFarmerRequestForm.controls.location.get('dist_id').setValue(location.district._id, {emitEvent: true});
-            this.editFarmerRequestForm.controls.location.get('sect_id').setValue(location.sector._id, {emitEvent: true});
-            this.editFarmerRequestForm.controls.location.get('cell_id').setValue(location.cell._id, {emitEvent: true});
-            this.editFarmerRequestForm.controls.location.get('village_id').setValue(location.cell._id, {emitEvent: true});
-          });
-          this.editFarmerRequestForm.controls.landOwner.setValue(this.upi.representative.surname +
-            ' ' + this.upi.representative.foreNames);
+          this.locationService
+            .getProvinceByName(
+              this.upi.parcelLocation.province.provinceName.toUpperCase()
+            )
+            .subscribe(
+              (pr) => {
+                this.province = pr[0];
+              },
+              (err) => { },
+              () => {
+                this.editFarmerRequestForm.controls.location
+                  .get("prov_id")
+                  .setValue(this.province._id, { emitEvent: true });
+                this.locationService
+                  .getDistrictByName(
+                    this.titleCase(
+                      this.upi.parcelLocation.district.districtName
+                    )
+                  )
+                  .subscribe(
+                    (dst) => {
+                      this.district = dst[0];
+                    },
+                    (err) => { },
+                    () => {
+                      this.editFarmerRequestForm.controls.location
+                        .get("dist_id")
+                        .setValue(this.district._id, { emitEvent: true });
+                      this.locationService
+                        .getSectorByName(
+                          this.titleCase(
+                            this.upi.parcelLocation.sector.sectorName
+                          ),
+                          this.district.id
+                        )
+                        .subscribe(
+                          (sect) => {
+                            this.sector = sect[0];
+                          },
+                          (err) => { },
+                          () => {
+                            this.editFarmerRequestForm.controls.location
+                              .get("sect_id")
+                              .setValue(this.sector._id, { emitEvent: true });
+                            this.locationService
+                              .getCellByName(
+                                this.titleCase(
+                                  this.upi.parcelLocation.cell.cellName
+                                ),
+                                this.sector.id
+                              )
+                              .subscribe(
+                                (cel) => {
+                                  this.cell = cel[0];
+                                },
+                                (err) => { },
+                                () => {
+                                  this.editFarmerRequestForm.controls.location
+                                    .get("cell_id")
+                                    .setValue(this.cell._id, {
+                                      emitEvent: true,
+                                    });
+                                  this.locationService
+                                    .getVillageByName(
+                                      this.titleCase(
+                                        this.upi.parcelLocation.village
+                                          .villageName
+                                      ),
+                                      this.cell.id
+                                    )
+                                    .subscribe(
+                                      (vil) => {
+                                        this.village = vil[0];
+                                      },
+                                      (err) => { },
+                                      () => {
+                                        this.editFarmerRequestForm.controls.location
+                                          .get("village_id")
+                                          .setValue(this.village._id);
+                                      }
+                                    );
+                                }
+                              );
+                          }
+                        );
+                    }
+                  );
+              }
+            );
+          this.editFarmerRequestForm.controls.landOwner.setValue(
+            this.upi.representative.surname +
+            " " +
+            this.upi.representative.foreNames
+          );
           if (!Object.keys(this.upi).length) {
-            this.setError(['UPI not found']);
+            this.setError(["UPI not found"]);
           }
         },
         (error) => {
-          console.log(error);
           this.editFarmerRequestForm.controls.landOwner.reset();
-          this.setError(['UPI not found']);
-        });
+          this.setError(["UPI not found"]);
+        }
+      );
     }
   }
 

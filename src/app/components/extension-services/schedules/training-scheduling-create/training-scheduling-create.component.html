@@ -576,6 +576,17 @@
                           [label]="'end time'"
                         >
                         </app-inline-errors>
+                        <span
+                          style="font: normal 8px Helvetica Neue; color: red"
+                          *ngIf="
+                            scheduleTraining.controls.startTime.value >=
+                              scheduleTraining.controls.endTime.value &&
+                            scheduleTraining.controls.trainingStartDate.value >=
+                              scheduleTraining.controls.trainingEndDate.value
+                          "
+                        >
+                          end time cannot be in the past
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -932,6 +943,12 @@
         class="btn btn-success"
         (click)="open(content)"
         style="width: 250px; height: 50px"
+        *ngIf="
+          !(scheduleTraining.controls.startTime.value >=
+            scheduleTraining.controls.endTime.value &&
+          scheduleTraining.controls.trainingStartDate.value >=
+            scheduleTraining.controls.trainingEndDate.value)
+        "
       >
         SCHEDULE A TRAINING
       </button>

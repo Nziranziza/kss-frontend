@@ -28,7 +28,7 @@ export class TrainingSchedulingCreateComponent
   scheduleTraining: FormGroup;
   filterForm: FormGroup;
   editContactForm: FormGroup;
-  newDate: any;
+  newDate: Date = new Date();
   constructor(
     private formBuilder: FormBuilder,
     private modalService: NgbModal,

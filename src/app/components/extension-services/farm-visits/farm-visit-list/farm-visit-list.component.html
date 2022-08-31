@@ -90,7 +90,6 @@
               <th>Visitor</th>
               <th>Visit Date</th>
               <th>Group</th>
-              <th>Status</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -121,7 +120,6 @@
                 {{ visit?.expectedDuration.to }}
               </td>
               <td>{{ visit?.groupId?.groupName }}</td>
-              <td>{{ visit.status || "Pending" }}</td>
               <td>
                 <button
                   appRequiredSeason
