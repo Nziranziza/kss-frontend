@@ -577,8 +577,9 @@
                         >
                         </app-inline-errors>
                         <span
-                          style="font: normal 8px Helvetica Neue; color: red"
+                          style="font: normal 10px Helvetica Neue; color: red"
                           *ngIf="
+                            scheduleTraining.controls.endTime.touched &&
                             scheduleTraining.controls.startTime.value >=
                               scheduleTraining.controls.endTime.value &&
                             scheduleTraining.controls.trainingStartDate.value >=
@@ -944,10 +945,12 @@
         (click)="open(content)"
         style="width: 250px; height: 50px"
         *ngIf="
-          !(scheduleTraining.controls.startTime.value >=
-            scheduleTraining.controls.endTime.value &&
-          scheduleTraining.controls.trainingStartDate.value >=
-            scheduleTraining.controls.trainingEndDate.value)
+          !(
+            scheduleTraining.controls.startTime.value >=
+              scheduleTraining.controls.endTime.value &&
+            scheduleTraining.controls.trainingStartDate.value >=
+              scheduleTraining.controls.trainingEndDate.value
+          )
         "
       >
         SCHEDULE A TRAINING

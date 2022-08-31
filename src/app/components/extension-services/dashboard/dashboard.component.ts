@@ -474,12 +474,15 @@ export class DashboardComponent extends BasicComponent implements OnInit {
     this.getGapAdoptionStats(body);
     this.getVisitsStats(body);
     this.getSeedlingStats(body);
-    if (this.newOrg != "") {
-      delete body.date;
-      this.getFarms(body);
+    if (this.newOrg != "") {  
       this.getFarmerGroup({ reference: this.newOrg });
     }
+    if (this.organisationId != null) {  
+      this.getFarmerGroup({ reference: this.organisationId});
+    }
     this.getFarmsStats(body);
+    delete body.date;
+    this.getFarms(body);
   }
 
   // get stats from filters

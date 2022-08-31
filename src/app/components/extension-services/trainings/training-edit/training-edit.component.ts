@@ -233,13 +233,10 @@ export class TrainingEditComponent
       }
     });
     delete value.adoptionGaps;
-    if (adoptionGap.length > 0) {
-      value.adoptionGaps = adoptionGap;
-    }
+    adoptionGap.length > 0 ? value.adoptionGaps = adoptionGap : value.adoptionGaps = [];
     this.trainingService.update(value, this.id).subscribe(
       (data) => {
         this.loading = false;
-        console.log(data);
         this.setMessage("Training successfully Edited.");
         this.success(value.trainingName)
       },

@@ -102,10 +102,10 @@ export class FarmerCreateComponent
       foreName: [''],
       surname: [''],
       groupName: [''],
-      phone_number: [''],
+      phone_number: ['', Validators.pattern("[0-9]{12}")],
       sex: ['m'],
-      NID: ['', Validators.required],
-      type: ['', Validators.required],
+      NID: [''],
+      type: [''],
       groupContactPerson: this.formBuilder.group({
         firstName: [''],
         lastName: [''],
@@ -125,15 +125,13 @@ export class FarmerCreateComponent
       tree_location: this.formBuilder.group({
         prov_id: [
           { value: this.provinceValue, disabled: this.disableProvId },
-          Validators.required,
         ],
         dist_id: [
           { value: '', disabled: this.disableDistId },
-          Validators.required,
         ],
-        sect_id: ['', Validators.required],
-        cell_id: ['', Validators.required],
-        village_id: ['', Validators.required],
+        sect_id: [''],
+        cell_id: [''],
+        village_id: [''],
       }),
       upiNumber: [''],
       landOwner: [''],
@@ -142,7 +140,7 @@ export class FarmerCreateComponent
       active: [''],
       treeAges: new FormArray([]),
       certificates: new FormArray([]),
-      numberOfTrees: ['', [Validators.required, Validators.pattern('[0-9]*')]],
+      numberOfTrees: ['', [Validators.pattern('[0-9]*')]],
     });
 
     this.farmService.listTreeVarieties().subscribe((data) => {
@@ -1109,6 +1107,11 @@ export class FarmerCreateComponent
         this.save = this.validForm;
       }
     });
+    this.createForm.controls.phone_number.valueChanges.subscribe((value) => {
+      if (value === "07") {
+        this.createForm.controls.phone_number.setValue("2507");
+      }
+    })
     this.createForm.controls.tree_location
       .get('prov_id'.toString())
       .valueChanges.subscribe((value) => {

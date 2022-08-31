@@ -23,8 +23,7 @@ import { Router } from "@angular/router";
 })
 export class TrainingSchedulingCreateComponent
   extends BasicComponent
-  implements OnInit
-{
+  implements OnInit {
   scheduleTraining: FormGroup;
   filterForm: FormGroup;
   editContactForm: FormGroup;
@@ -195,17 +194,14 @@ export class TrainingSchedulingCreateComponent
     if (this.scheduleTraining.valid) {
       this.selectedStartDate =
         this.formatDate(
-          new Date(this.scheduleTraining.controls.trainingStartDate.value)
-            .toISOString()
-            .split("T")[0]
+          new Date(this.scheduleTraining.controls.trainingStartDate.value).toLocaleDateString('pt-br').split('/').reverse().join('-')
         ) +
         " " +
         this.formatTime(this.scheduleTraining.value.startTime);
       this.selectedEndDate =
         this.formatDate(
           new Date(this.scheduleTraining.controls.trainingEndDate.value)
-            .toISOString()
-            .split("T")[0]
+          .toLocaleDateString('pt-br').split('/').reverse().join('-')
         ) +
         " " +
         this.formatTime(this.scheduleTraining.value.endTime);
@@ -238,12 +234,10 @@ export class TrainingSchedulingCreateComponent
           name: this.authenticationService.getCurrentUser().info.surname,
         },
       };
-      console.log(data);
       this.userService
         .updateMemberContact(traineData.value.groupId, data)
         .subscribe((data) => {
           this.loading = false;
-          console.log(data);
         });
     } else {
       this.errors = this.helper.getFormValidationErrors(this.editContactForm);
@@ -415,7 +409,7 @@ export class TrainingSchedulingCreateComponent
       trainer: {
         userId: this.trainers[this.scheduleTraining.value.trainer]._id,
         fullName:
-          this.trainers[this.scheduleTraining.value.trainer].fullNames, 
+          this.trainers[this.scheduleTraining.value.trainer].fullNames,
         phoneNumber:
           this.trainers[this.scheduleTraining.value.trainer].phoneNumber,
         organisationName:
@@ -436,16 +430,14 @@ export class TrainingSchedulingCreateComponent
       startTime:
         this.formatDate(
           new Date(this.scheduleTraining.controls.trainingStartDate.value)
-            .toISOString()
-            .split("T")[0]
+          .toLocaleDateString('pt-br').split('/').reverse().join('-')
         ) +
         "T" +
         this.formatTime(this.scheduleTraining.value.startTime),
       endTime:
         this.formatDate(
           new Date(this.scheduleTraining.controls.trainingEndDate.value)
-            .toISOString()
-            .split("T")[0]
+          .toLocaleDateString('pt-br').split('/').reverse().join('-')
         ) +
         "T" +
         this.formatTime(this.scheduleTraining.value.endTime),
