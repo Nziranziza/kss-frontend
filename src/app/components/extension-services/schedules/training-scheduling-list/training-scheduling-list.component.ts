@@ -58,7 +58,7 @@ export class TrainingSchedulingListComponent
     this.getSchedules();
     this.dtOptions = {
       pagingType: "full_numbers",
-      pageLength: 25,
+      pageLength: 10,
     };
   }
 
@@ -74,14 +74,8 @@ export class TrainingSchedulingListComponent
       .subscribe((data) => {
         this.schedules = data.data;
         this.dtTrigger.next();
-        this.loading = false;
       });
-
-    this.config = {
-      itemsPerPage: 10,
-      currentPage: 0 + 1,
-      totalItems: this.schedules.length,
-    };
+      this.loading = false;
   }
 
   open(content) {

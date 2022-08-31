@@ -576,6 +576,16 @@
                           [label]="'end time'"
                         >
                         </app-inline-errors>
+                        <span
+                          class="errors"
+                          *ngIf="
+                            scheduleTraining.controls.startTime.value >
+                              scheduleTraining.controls.endTime.value &&
+                            scheduleTraining.controls.startDate.value ==
+                              scheduleTraining.controls.endDate.value
+                          "
+                        >
+                        </span>
                       </div>
                     </div>
                   </div>
