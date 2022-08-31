@@ -226,12 +226,16 @@ export class TrainingEditComponent
     const value = JSON.parse(JSON.stringify(this.createTraining.value));
     value.materials = this.results;
     value.status = 'not_scheduled';
-    value.adoptionGap.forEach((adoption) => {
+    const adoptionGap = [];
+    value.adoptionGaps.forEach((adoption) => {
       if (adoption._id != "") {
-        value.adoptionGaps.push(adoption._id);
+        adoptionGap.push(adoption._id);
       }
     });
-    console.log(value);
+    delete value.adoptionGaps;
+    if (adoptionGap.length > 0) {
+      value.adoptionGaps = adoptionGap;
+    }
     this.trainingService.update(value, this.id).subscribe(
       (data) => {
         this.loading = false;

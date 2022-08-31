@@ -27,7 +27,7 @@ export class GapListComponent
     super();
   }
 
-  gaps: Gap[] = [];
+  gaps: any[] = [];
 
   maxSize = 5;
   directionLinks = true;
@@ -41,6 +41,8 @@ export class GapListComponent
     screenReaderPageLabel: 'page',
     screenReaderCurrentLabel: `You're on page`,
   };
+  mostAdopted: any = '';
+  overallWeight: number = 0;
   config: any;
 
   dtOptions: any = {};
@@ -52,7 +54,7 @@ export class GapListComponent
   dtElement: DataTableDirective;
 
   ngOnInit() {
-    this.getGroups();
+    this.getGap();
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 25,
@@ -65,10 +67,17 @@ export class GapListComponent
     this.messageService.clearMessage();
   }
 
-  getGroups(): void {
+  getGap(): void {
     this.loading = true;
     this.gapService.all().subscribe((data) => {
       this.gaps = data.data;
+      this.gaps.map((gap) => {
+        this.overallWeight += gap.gap_weight * gap.adoptionRate / 100;
+      })
+      let bestAdopted = data.data.reduce((max, gap) => max.adoptionRate > gap.adoptionRate ? max : gap);
+      if (bestAdopted.gap_name){
+        this.mostAdopted = bestAdopted.gap_name;
+      }
       this.dtTrigger.next();
       this.loading = false;
     });
@@ -84,7 +93,7 @@ export class GapListComponent
     const modalRef = this.modal.open(GapDeleteModal);
     modalRef.componentInstance.gap = gap;
     modalRef.result.finally(() => {
-      this.getGroups();
+      this.getGap();
     });
   }
 

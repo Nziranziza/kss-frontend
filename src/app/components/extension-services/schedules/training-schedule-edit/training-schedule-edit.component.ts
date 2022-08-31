@@ -29,7 +29,7 @@ export class TrainingScheduleEditComponent
   editContactForm: FormGroup;
   selectedStartDate: string;
   selectedEndDate: string;
-  newDate: any;
+  newDate: Date = new Date();
   constructor(
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
