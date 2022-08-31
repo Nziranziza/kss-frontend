@@ -590,8 +590,8 @@
                 >
                 </app-inline-errors>
                 <span
-                  style="font: normal 8px Helvetica Neue; color: red"
-                  *ngIf="
+                  style="font: normal 10px Helvetica Neue; color: red"
+                  *ngIf="scheduleVisit.controls.endTime.touched &&
                     scheduleVisit.controls.startTime.value >=
                     scheduleVisit.controls.endTime.value
                   "

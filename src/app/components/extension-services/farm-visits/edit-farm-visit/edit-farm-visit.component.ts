@@ -275,7 +275,7 @@ export class EditFarmVisitComponent implements OnInit {
     if (this.scheduleVisit.valid) {
       this.loading = true;
       const dataValues = JSON.parse(JSON.stringify(this.scheduleVisit.value));
-      let adoptionGap = [];
+      const adoptionGap = [];
       dataValues.adoptionGap.forEach((adoption) => {
         if (adoption._id != "") {
           adoptionGap.push(adoption._id);
@@ -302,9 +302,7 @@ export class EditFarmVisitComponent implements OnInit {
           to: this.formatTime(dataValues.endTime),
         },
       };
-      if (adoptionGap.length > 0) {
-        data.gaps = adoptionGap;
-      }
+      adoptionGap.length > 0 ? data.gaps = adoptionGap : data.gaps = [];
       this.visitService.edit(this.id, data).subscribe(
         (data) => {
           this.loading = false;
