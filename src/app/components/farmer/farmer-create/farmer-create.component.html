@@ -13,13 +13,13 @@
                   <label class="control-label label-required">Type</label>
                   <div class="radio">
                     <label>
-                      <input type="radio" formControlName="type" value="1" />
+                      <input type="radio" formControlName="type" [value]="farmerTypes[0]"/>
                       Individual
                     </label>
                   </div>
                   <div class="radio">
                     <label>
-                      <input type="radio" formControlName="type" value="2" />
+                      <input type="radio" formControlName="type" [value]="farmerTypes[1]" />
                       Group
                     </label>
                   </div>
@@ -52,7 +52,7 @@
               </div>
               <div class="col-xs-6">
                 <div class="form-group">
-                  <label class="control-label label-required">First name</label>
+                  <label class="control-label label-required">First Name</label>
                   <input
                     type="text"
                     formControlName="foreName"
@@ -63,7 +63,7 @@
               </div>
               <div class="col-xs-6">
                 <div class="form-group">
-                  <label class="control-label label-required">Last name</label>
+                  <label class="control-label label-required">Last Name</label>
                   <input
                     type="text"
                     formControlName="surname"
@@ -103,7 +103,7 @@
               </div>
               <div class="col-xs-6">
                 <div class="form-group">
-                  <label class="control-label">Family size</label>
+                  <label class="control-label">Family Size</label>
                   <input
                     type="number"
                     formControlName="familySize"
@@ -127,11 +127,12 @@
             </section>
             <div class="col-xs-6">
               <div class="form-group">
-                <label class="control-label">Phone number</label>
+                <label class="control-label">Phone Number</label>
                 <input
                   type="text"
                   formControlName="phone_number"
                   class="form-control"
+                  placeholder="250780348088"
                 />
                 <app-inline-errors
                   *ngIf="
@@ -265,13 +266,13 @@
             <fieldset class="location" *ngIf="isGroup">
               <legend>
                 <label class="control-label label-required"
-                  >&nbsp; Contact person</label
+                  >&nbsp; Contact Person</label
                 >
               </legend>
               <div formGroupName="groupContactPerson">
                 <div class="col-xs-4">
                   <div class="form-group">
-                    <span class="">First name</span>
+                    <span class="">First Name</span>
                     <input
                       type="text"
                       formControlName="firstName"
@@ -281,7 +282,7 @@
                 </div>
                 <div class="col-xs-4">
                   <div class="form-group">
-                    <span class="">Last name</span>
+                    <span class="">Last Name</span>
                     <input
                       type="text"
                       formControlName="lastName"
@@ -291,7 +292,7 @@
                 </div>
                 <div class="col-xs-4">
                   <div class="form-group">
-                    <span class="">Phone number</span>
+                    <span class="">Phone Number</span>
                     <input
                       type="text"
                       formControlName="phone"
@@ -326,7 +327,7 @@
                   <div class="row">
                     <div class="col-xs-6">
                       <div class="form-group">
-                        <label class="control-label">Number of trees</label>
+                        <label class="control-label">Number of Trees</label>
                         <input
                           type="text"
                           formControlName="numberOfTrees"
@@ -574,13 +575,13 @@
                     </div>
                     <div class="col-xs-6">
                       <div class="form-group">
-                        <label class="control-label">Land UPI number</label>
+                        <label class="control-label">Land UPI Number</label>
                         <input
                           type="text"
                           formControlName="upiNumber"
                           class="form-control"
                           placeholder="00/000/00/000"
-                          (input)="validateUPI($event.target.value)"
+                          (input)="validateUPI($event)"
                         />
                       </div>
                     </div>
@@ -765,7 +766,7 @@
                     <div class="col-xs-6">
                       <div class="form-group">
                         <label class="control-label"
-                          >Longitude geo coordinate</label
+                          >Longitude Geo Coordinate</label
                         >
                         <input
                           type="text"
@@ -778,7 +779,7 @@
                     <div class="col-xs-6">
                       <div class="form-group">
                         <label class="control-label"
-                          >Latitude geo coordinate</label
+                          >Latitude Geo Coordinate</label
                         >
                         <input
                           type="text"
@@ -804,125 +805,123 @@
                     <div class="col-md-12">
                       <table class="table varieties-table">
                         <tbody>
-                          <tr>
-                            <td style="padding-left: 0">
-                              <span> <b>Number of trees </b> </span>
+                        <tr>
+                          <td style="padding-left: 0">
+                            <div
+                              style="margin-bottom: 10px; margin-top: 10px"
+                            >
+                              <label class="control-label label-required">Number of Trees</label>
+                              <input
+                                class="form-control"
+                                formControlName="numberOfTrees"
+                                min="0"
+                                type="number"
+                              />
                               <div
-                                style="margin-bottom: 10px; margin-top: 10px"
-                              >
-                                <input
-                                  type="number"
-                                  min="0"
-                                  formControlName="numberOfTrees"
-                                  class="form-control"
-                                />
-                                <div
-                                  *ngIf="
+                                *ngIf="
                                     createForm.controls.numberOfTrees.invalid &&
                                     (createForm.controls.numberOfTrees.dirty ||
                                       createForm.controls.numberOfTrees.touched)
                                   "
-                                  class="input-error"
-                                >
-                                  <div
-                                    *ngIf="
+                                class="input-error"
+                              >
+                                <div
+                                  *ngIf="
                                       createForm.controls.numberOfTrees.errors
                                         .required
                                     "
-                                  >
-                                    Number of trees is required.
-                                  </div>
-                                  <div
-                                    *ngIf="
+                                >
+                                  Number of trees is required.
+                                </div>
+                                <div
+                                  *ngIf="
                                       createForm.controls.numberOfTrees.errors
                                         .min
                                     "
-                                  >
-                                    Number of trees must be greater than zero.
-                                  </div>
-                                  <div
-                                    *ngIf="
+                                >
+                                  Number of trees must be greater than zero.
+                                </div>
+                                <div
+                                  *ngIf="
                                       createForm.controls.numberOfTrees.errors
                                         .pattern
                                     "
-                                  >
-                                    Number of trees must be an integer.
-                                  </div>
+                                >
+                                  Number of trees must be an integer.
                                 </div>
                               </div>
-                            </td>
-                            <ng-container *ngIf="treeVarieties">
-                              <td
-                                *ngFor="
+                            </div>
+                          </td>
+                          <ng-container *ngIf="treeVarieties">
+                            <td
+                              *ngFor="
                                   let control of formTreeAges?.controls;
                                   let i = index
                                 "
-                                formArrayName="treeAges"
-                              >
-                                <div style="display: block" [formGroupName]="i">
+                              formArrayName="treeAges"
+                            >
+                              <div [formGroupName]="i" style="display: block">
                                   <span
-                                    >Trees age
+                                  >Trees age
                                     <b>{{ ranges[i] }} Years</b></span
                                   >
-                                  <div
-                                    style="
+                                <div
+                                  style="
                                       margin-bottom: 10px;
                                       margin-top: 10px;
                                     "
-                                  >
-                                    <input
-                                      type="number"
-                                      min="0"
-                                      formControlName="numOfTrees"
-                                      class="form-control"
-                                      min="0"
-                                      disabled
-                                    />
-                                  </div>
-                                  <div
-                                    *ngFor="
+                                >
+                                  <input
+                                    class="form-control"
+                                    disabled
+                                    formControlName="numOfTrees"
+                                    min="0"
+                                    type="number"
+                                  />
+                                </div>
+                                <div
+                                  *ngFor="
                                       let ctrl of formTreeVarieties(i).controls;
                                       let v = index
                                     "
-                                    formArrayName="varieties"
+                                  formArrayName="varieties"
+                                >
+                                  <div
+                                    [formGroupName]="v"
+                                    style="display: table-row"
                                   >
-                                    <div
-                                      style="display: table-row"
-                                      [formGroupName]="v"
-                                    >
-                                      <label
-                                        style="
+                                    <label
+                                      style="
                                           font-weight: lighter;
                                           display: table-cell;
                                           width: 70%;
                                           font-size: smaller;
                                         "
-                                      >
-                                        <input
-                                          type="checkbox"
-                                          formControlName="selected"
-                                        />
-                                        {{ treeVarieties[v].name | titlecase }}
-                                      </label>
-                                      <div
-                                        style="display: table-cell; width: auto"
-                                      >
-                                        <input
-                                          type="number"
-                                          min="0"
-                                          formControlName="number"
-                                          class="form-control v-number"
-                                          min="0"
-                                          (keyup)="updateList(i, v)"
-                                          (change)="updateList(i, v)"
-                                        />
-                                      </div>
+                                    >
+                                      <input
+                                        formControlName="selected"
+                                        type="checkbox"
+                                      />
+                                      {{ treeVarieties[v].name | titlecase }}
+                                    </label>
+                                    <div
+                                      style="display: table-cell; width: auto"
+                                    >
+                                      <input
+                                        (change)="updateList(i, v)"
+                                        (keyup)="updateList(i, v)"
+                                        class="form-control v-number"
+                                        formControlName="number"
+                                        min="0"
+                                        type="number"
+                                      />
                                     </div>
                                   </div>
                                 </div>
-                              </td>
-                            </ng-container>
-                          </tr>
+                              </div>
+                            </td>
+                          </ng-container>
+                        </tr>
                         </tbody>
                       </table>
                     </div>
@@ -1049,8 +1048,20 @@
       <a class="btn btn-warning btn-margin pull-right" (click)="onCancel()"
         >Cancel</a
       >
-      <button class="btn btn-success pull-right" [disabled]="!submit">
-        Save
+      <button
+        class="btn btn-success pull-right btn-md"
+        type="submit"
+        [disabled]="!submit || loading"
+      >
+        <span *ngIf="!loading; else other_content">Save</span>
+        <ng-template #other_content>
+          <div class="loader">
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+          </div>
+        </ng-template>
       </button>
     </div>
   </div>
