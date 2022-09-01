@@ -142,9 +142,12 @@ export class FarmerEditComponent extends BasicComponent implements OnInit, OnDes
           });
         });
         this.requests = this.farmer.request.requestInfo.filter((req) => {
-          if (villagesSet.includes(req.location.village_id._id)) {
-            return req;
-          }
+          return req;
+
+          // TODO: Uncomment this!! this is highly needed.
+          // if (villagesSet.includes(req.location.village_id._id)) {
+          //   return req;
+          // }
         });
         this.totalTrees = this.requests.reduce( (tot, record) => {
           return tot + record.numberOfTrees;
@@ -155,12 +158,9 @@ export class FarmerEditComponent extends BasicComponent implements OnInit, OnDes
           sectorsSet.push(sector.sect_id);
         });
         this.requests = this.farmer.request.requestInfo.filter((req) => {
-          return req;
-
-          // TODO: Uncomment this!! this is highly needed.
-          // if (sectorsSet.includes(req.location.sect_id._id)) {
-          //   return req;
-          // }
+          if (sectorsSet.includes(req.location.sect_id._id)) {
+            return req;
+          }
         });
         this.totalTrees = this.requests.reduce( (tot, record) => {
           return tot + record.numberOfTrees;
