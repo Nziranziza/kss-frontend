@@ -289,7 +289,7 @@
                     <select class="form-control" formControlName="prov_id">
                       <option value=""></option>
                       <option
-                        *ngFor="let province of locationProvinces"
+                        *ngFor="let province of provinces"
                         value="{{ province._id }}"
                       >
                         {{ province.namee | titlecase }}
@@ -318,7 +318,7 @@
                     <select class="form-control" formControlName="dist_id">
                       <option value=""></option>
                       <option
-                        *ngFor="let district of locationDistricts"
+                        *ngFor="let district of districts"
                         value="{{ district._id }}"
                       >
                         {{ district.name | titlecase }}
@@ -347,7 +347,7 @@
                     <select class="form-control" formControlName="sect_id">
                       <option value=""></option>
                       <option
-                        *ngFor="let sector of locationSectors"
+                        *ngFor="let sector of sectors"
                         value="{{ sector._id }}"
                       >
                         {{ sector.name | titlecase }}

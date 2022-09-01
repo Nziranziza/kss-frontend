@@ -132,7 +132,7 @@
                   type="text"
                   formControlName="phone_number"
                   class="form-control"
-                  placeholder="250780348088"
+                  placeholder="250780000000"
                 />
                 <app-inline-errors
                   *ngIf="
@@ -296,8 +296,25 @@
                     <input
                       type="text"
                       formControlName="phone"
+                      placeholder="250780000000"
                       class="form-control"
                     />
+                    <app-inline-errors
+                      *ngIf="
+                        createForm.controls.groupContactPerson.get('phone')
+                          .invalid &&
+                        (createForm.controls.groupContactPerson.get('phone')
+                          .dirty ||
+                          createForm.controls.groupContactPerson.get('phone')
+                            .touched)
+                      "
+                      [errors]="
+                        createForm.controls.groupContactPerson.get('phone')
+                          .errors
+                      "
+                      [label]="'phone number'"
+                    >
+                    </app-inline-errors>
                   </div>
                 </div>
               </div>

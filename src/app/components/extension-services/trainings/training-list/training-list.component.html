@@ -38,7 +38,7 @@
           </div>
           <div class="col-sm-3">
             <span style="white-space: pre"> Male </span>
-             {{ trainingsStats?.malePresent }}
+            {{ trainingsStats?.malePresent }}
           </div>
           <div class="col-sm-3">
             <span style="white-space: pre"> Female </span>
@@ -92,40 +92,42 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let training of trainings | paginate: config">
-              <td>{{ training.createdAt | date: "short" }}</td>
-              <td>{{ training.trainingName }}</td>
-              <td>{{ training.description }}</td>
-              <td>
-                <div *ngFor="let adoption of training.adoptionGaps">
-                  {{ adoption?.gap_name }}
-                </div>
-              </td>
-              <td>{{ training.materials.length }} files</td>
-              <td>Active</td>
-              <td>
-                <button
-                  appRequiredSeason
-                  class="btn btn-action-no-border btn-margin details-button"
-                  (click)="openViewModal(training._id)"
-                >
-                  <em class="fa fa-eye"></em>
-                </button>
-                <button
-                  appRequiredSeason
-                  (click)="openDeleteModal(training._id)"
-                  class="btn btn-action-no-border btn-margin"
-                >
-                  <em class="fa fa-trash"></em>
-                </button>
-                <button
-                  class="btn btn-action-no-border btn-margin btn-sm details-button"
-                  routerLink="/admin/training/edit/{{ training._id }}"
-                >
-                  <em class="fa fa-pencil"></em>
-                </button>
-              </td>
-            </tr>
+            <ng-container *ngFor="let training of trainings">
+              <tr>
+                <td>{{ training.createdAt | date: "short" }}</td>
+                <td>{{ training.trainingName }}</td>
+                <td>{{ training.description }}</td>
+                <td>
+                  <div *ngFor="let adoption of training.adoptionGaps">
+                    {{ adoption?.gap_name }}
+                  </div>
+                </td>
+                <td>{{ training.materials.length }} files</td>
+                <td>Active</td>
+                <td>
+                  <button
+                    appRequiredSeason
+                    class="btn btn-action-no-border btn-margin details-button"
+                    (click)="openViewModal(training._id)"
+                  >
+                    <em class="fa fa-eye"></em>
+                  </button>
+                  <button
+                    appRequiredSeason
+                    (click)="openDeleteModal(training._id)"
+                    class="btn btn-action-no-border btn-margin"
+                  >
+                    <em class="fa fa-trash"></em>
+                  </button>
+                  <button
+                    class="btn btn-action-no-border btn-margin btn-sm details-button"
+                    routerLink="/admin/training/edit/{{ training._id }}"
+                  >
+                    <em class="fa fa-pencil"></em>
+                  </button>
+                </td>
+              </tr>
+            </ng-container>
           </tbody>
         </table>
       </div>

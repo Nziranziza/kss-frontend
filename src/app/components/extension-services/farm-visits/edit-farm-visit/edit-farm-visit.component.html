@@ -17,13 +17,13 @@
               <div class="confirm-text-box confirm-text">
                 <li *ngFor="let farms of selectedFarms; let i = index">
                   {{
-                    farms.farmer +
-                      " -- UPI/Location " +
+                    farms?.farmer +
+                      " -- Location " +
                       farms?.location?.dist_id?.name +
                       " > " +
                       farms?.location?.sect_id?.name +
                       " > " +
-                      farms?.location?.cell_id?.name
+                      farms?.location?.cell_id?.name + " -- UPI " + farms?.upiNumber
                   }}
                 </li>
               </div>
@@ -572,13 +572,13 @@
                   #dt4
                 ></owl-date-time>
                 <span
-                  style="font: normal 8px Helvetica Neue; color: red"
+                  style="font: normal 10px Helvetica Neue; color: red"
                   *ngIf="
                     scheduleVisit.controls.startTime.value >=
                     scheduleVisit.controls.endTime.value
                   "
                 >
-                  end time cannot be in the past
+                 End Time can not be less the Start Time
                 </span>
                 <app-inline-errors
                   *ngIf="

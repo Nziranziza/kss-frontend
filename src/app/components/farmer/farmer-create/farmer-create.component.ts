@@ -126,7 +126,7 @@ export class FarmerCreateComponent
       groupContactPerson: this.formBuilder.group({
         firstName: [''],
         lastName: [''],
-        phone: [''],
+        phone: ['', Validators.pattern('[0-9]{12}')],
       }),
       /* paymentChannels: new FormArray([]), */
       // requests: new FormArray([]),
@@ -1157,6 +1157,11 @@ export class FarmerCreateComponent
       }
     });
     this.createForm.controls.phone_number.valueChanges.subscribe((value) => {
+      if (value === '07') {
+        this.createForm.controls.phone_number.setValue('2507');
+      }
+    });
+    this.createForm.controls.groupContactPerson.get('phone').valueChanges.subscribe((value) => {
       if (value === '07') {
         this.createForm.controls.phone_number.setValue('2507');
       }
