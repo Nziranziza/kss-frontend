@@ -45,6 +45,7 @@ export class FarmerCreateComponent
   id: string;
   submit = false;
   loading = false;
+  farmerTypes = [1, 2];
   invalidId = false;
   currentSeason: any;
   isUserCWSOfficer = false;
@@ -120,8 +121,8 @@ export class FarmerCreateComponent
       groupName: [''],
       phone_number: ['', Validators.pattern('[0-9]{12}')],
       sex: ['m'],
-      NID: [''],
-      type: [''],
+      NID: ['', Validators.required],
+      type: [this.farmerTypes[0], Validators.required],
       groupContactPerson: this.formBuilder.group({
         firstName: [''],
         lastName: [''],
@@ -156,7 +157,7 @@ export class FarmerCreateComponent
       active: [''],
       treeAges: new FormArray([]),
       certificates: new FormArray([]),
-      numberOfTrees: ['', [Validators.pattern('[0-9]*')]],
+      numberOfTrees: ['', [Validators.required, Validators.pattern('[0-9]*')]],
     });
 
     this.createRequest = this.formBuilder.group({
@@ -545,6 +546,7 @@ export class FarmerCreateComponent
     this.createForm.markAllAsTouched();
     console.log(this.createForm)
     if (this.createForm.valid) {
+      this.loading = true;
       if (this.createFromPending) {
         const temp = this.createForm.getRawValue();
         const farmer = {
@@ -684,11 +686,11 @@ export class FarmerCreateComponent
             upiNumber: temp.upiNumber,
             treeAges: temp.treeAges,
             numberOfTrees: temp.numberOfTrees,
-            location: temp.tree_location
+            location: temp.tree_location,
+            ...(temp.certificates.length > 0 && {certificates: temp.certificates})
           }
         ];
 
-        farmer['certificates'.toString()] = temp.certificates;
         this.helperService.cleanObject(farmer);
         if (this.isGroup) {
           this.farmerService
@@ -703,12 +705,14 @@ export class FarmerCreateComponent
               } else {
                 this.farmerService.save(farmer).subscribe(
                   () => {
+                    this.loading = false;
                     this.messageService.setMessage(
                       'Farmer successfully created!'
                     );
                     this.router.navigateByUrl('admin/farmers/list');
                   },
                   (err) => {
+                    this.loading = false;
                     this.setError(err.errors);
                   }
                 );
@@ -725,12 +729,14 @@ export class FarmerCreateComponent
             } else {
               this.farmerService.save(farmer).subscribe(
                 () => {
+                  this.loading = false;
                   this.messageService.setMessage(
                     'Farmer successfully created!'
                   );
                   this.location.back();
                 },
                 (err) => {
+                  this.loading = false;
                   if (isArray(err.errors)) {
                     this.setError(err.errors);
                   } else {
@@ -746,10 +752,12 @@ export class FarmerCreateComponent
       if (
         this.helperService.getFormValidationErrors(this.createForm).length > 0
       ) {
+        this.loading = false;
         this.setError(
           this.helperService.getFormValidationErrors(this.createForm)
         );
       }
+      this.loading = false;
       if (this.createForm.get('requests').invalid) {
         this.setError('Missing required land(s) information');
       }

@@ -146,7 +146,7 @@ export class FarmerEditComponent extends BasicComponent implements OnInit, OnDes
             return req;
           }
         });
-        this.totalTrees = this.requests.reduce( function(tot, record) {
+        this.totalTrees = this.requests.reduce( (tot, record) => {
           return tot + record.numberOfTrees;
         },0);
       } else if (this.authorisationService.isSiteManager() && (!this.isCWSOfficer)) {
@@ -155,23 +155,26 @@ export class FarmerEditComponent extends BasicComponent implements OnInit, OnDes
           sectorsSet.push(sector.sect_id);
         });
         this.requests = this.farmer.request.requestInfo.filter((req) => {
-          if (sectorsSet.includes(req.location.sect_id._id)) {
-            return req;
-          }
+          return req;
+
+          // TODO: Uncomment this!! this is highly needed.
+          // if (sectorsSet.includes(req.location.sect_id._id)) {
+          //   return req;
+          // }
         });
-        this.totalTrees = this.requests.reduce( function(tot, record) {
+        this.totalTrees = this.requests.reduce( (tot, record) => {
           return tot + record.numberOfTrees;
         },0);
       } else if (this.authorisationService.isDistrictCashCropOfficer()) {
         this.requests = this.farmer.request.requestInfo.filter((req) => {
           return (req.location.dist_id._id === this.authenticationService.getCurrentUser().info.location.dist_id);
         });
-        this.totalTrees = this.requests.reduce( function(tot, record) {
+        this.totalTrees = this.requests.reduce( (tot, record) => {
           return tot + record.numberOfTrees;
         },0);
       } else {
         this.requests = this.farmer.request.requestInfo;
-        this.totalTrees = this.requests.reduce( function(tot, record) {
+        this.totalTrees = this.requests.reduce( (tot, record) => {
           return tot + record.numberOfTrees;
         },0);
       }
