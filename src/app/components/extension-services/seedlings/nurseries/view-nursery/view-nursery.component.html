@@ -257,4 +257,65 @@
       </div>
     </div>
   </div>
+  <div class="box" *ngIf="nurseryDistribution.length > 0">
+    <h4 class="text-center">List of Distributed Seedlings</h4>
+    <div class="box-body table-responsive">
+      <app-loader *ngIf="loading"></app-loader>
+      <table
+        datatable
+        [dtOptions]="dtOptions"
+        [dtTrigger]="dtTrigger"
+        class="row-border hover table table-striped"
+      >
+        <thead>
+          <tr>
+            <th>Distribution Date</th>
+            <th>In Filling</th>
+            <th>Replacement</th>
+            <th>Expansion</th>
+            <th>Farmer</th>
+            <th>Officer</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let distribution of nurseryDistribution">
+            <tr>
+              <td>{{ distribution?.date | date: "short" }}</td>
+              <td *ngFor="let dist of distribution.distributions">
+                <span ngIf="dist.reason === 'in_filling'">
+                  {{ dist?.distributedQty }}
+                </span>
+              </td>
+              <td *ngFor="let dist of distribution.distributions">
+                <span ngIf="dist.reason === 'replacement'">
+                  {{ dist?.distributedQty }}
+                </span>
+              </td>
+              <td *ngFor="let dist of distribution.distributions">
+                <span ngIf="dist.reason === 'expansion'">
+                  {{ dist?.distributedQty }}
+                </span>
+              </td>
+              <td>
+                {{
+                  distribution?.farmer?.firstName +
+                    " " +
+                    distribution?.farmer?.lastName
+                }}
+              </td>
+              <td>{{ distribution?.officer?.name }}</td>
+              <td
+                *ngFor="let dist of distribution.distributions; let i = index"
+              >
+                <span ngIf="i == 0">
+                  {{ dist.approved ? "Approved" : "Pending" }}
+                </span>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>

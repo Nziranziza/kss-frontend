@@ -84,37 +84,39 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let nursery of nurseries; let i = index">
-              <td>{{ nursery.createdAt | date: "short" }}</td>
-              <td>{{ nursery.nurseryName }}</td>
-              <td>{{ nursery.owner.name }}</td>
-              <td>{{ nursery.location.cell_id.name }}</td>
-              <td>{{ nursery.stocks.length }} Variety</td>
-              <td>{{ totalSeeds[i] }} Kg</td>
-              <td>{{ nursery.status || "Active" }}</td>
-              <td>
-                <button
-                  appRequiredSeason
-                  class="btn btn-action-no-border btn-margin details-button"
-                  (click)="openViewModal(nursery._id)"
-                >
-                  <em class="fa fa-eye"></em>
-                </button>
-                <button
-                  appRequiredSeason
-                  (click)="openDeleteModal(nursery)"
-                  class="btn btn-action-no-border btn-margin"
-                >
-                  <em class="fa fa-trash"></em>
-                </button>
-                <button
-                  class="btn btn-action-no-border btn-margin btn-sm details-button"
-                  routerLink="/admin/seedling/nursery/edit/{{ nursery._id }}"
-                >
-                  <em class="fa fa-pencil"></em>
-                </button>
-              </td>
-            </tr>
+            <ng-container *ngFor="let nursery of nurseries; let i = index">
+              <tr>
+                <td>{{ nursery.createdAt | date: "short" }}</td>
+                <td>{{ nursery.nurseryName }}</td>
+                <td>{{ nursery.owner.name }}</td>
+                <td>{{ nursery.location.cell_id.name }}</td>
+                <td>{{ nursery.stocks.length }} Variety</td>
+                <td>{{ totalSeeds[i] }} Kg</td>
+                <td>{{ nursery.status || "Active" }}</td>
+                <td>
+                  <button
+                    appRequiredSeason
+                    class="btn btn-action-no-border btn-margin details-button"
+                    (click)="openViewModal(nursery._id)"
+                  >
+                    <em class="fa fa-eye"></em>
+                  </button>
+                  <button
+                    appRequiredSeason
+                    (click)="openDeleteModal(nursery)"
+                    class="btn btn-action-no-border btn-margin"
+                  >
+                    <em class="fa fa-trash"></em>
+                  </button>
+                  <button
+                    class="btn btn-action-no-border btn-margin btn-sm details-button"
+                    routerLink="/admin/seedling/nursery/edit/{{ nursery._id }}"
+                  >
+                    <em class="fa fa-pencil"></em>
+                  </button>
+                </td>
+              </tr>
+            </ng-container>
           </tbody>
         </table>
       </div>

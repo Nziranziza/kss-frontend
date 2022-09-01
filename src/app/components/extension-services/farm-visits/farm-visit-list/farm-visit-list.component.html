@@ -88,70 +88,75 @@
               <th>Visit Description</th>
               <th>GAP to be Covered</th>
               <th>Visitor</th>
-              <th>Visit Date</th>
+              <th>Visit Date and Time</th>
               <th>Group</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody style="font-size: 12px">
-            <tr *ngFor="let visit of visits | paginate: config">
-              <td>{{ visit.createdAt | date: "short" }}</td>
-              <td>
-                <div *ngFor="let farm of visit.farms" style="font-size: 10px">
+            <ng-container *ngFor="let visit of visits">
+              <tr>
+                <td>{{ visit.createdAt | date: "short" }}</td>
+                <td>
+                  <div *ngFor="let farm of visit.farms" style="font-size: 10px">
+                    {{
+                      farm.owner.firstName
+                        ? farm.owner.firstName + " " + farm.owner.lastName
+                        : farm.owner.groupName
+                    }}
+                  </div>
+                </td>
+                <td>{{ visit.description }}</td>
+                <td>
+                  <div *ngFor="let gap of visit.gaps">
+                    {{ gap.gap_name }}
+                  </div>
+                </td>
+                <td>
                   {{
-                    farm.owner.firstName
-                      ? farm.owner.firstName + " " + farm.owner.lastName
-                      : farm.owner.groupName
+                    visit?.visitor?.firstName + " " + visit?.visitor?.lastName
                   }}
+                </td>
+                <td>
+                  {{ visit.date | date: "shortDate" }},
+                  <div> {{ visit?.expectedDuration.from }} to
+                  {{ visit?.expectedDuration.to }}
                 </div>
-              </td>
-              <td>{{ visit.description }}</td>
-              <td>
-                <div *ngFor="let gap of visit.gaps">
-                  {{ gap.gap_name }}
-                </div>
-              </td>
-              <td>
-                {{ visit?.visitor?.firstName + " " + visit?.visitor?.lastName }}
-              </td>
-              <td>
-                {{ visit.date | date: "shortDate" }}
-                {{ visit?.expectedDuration.from }} to
-                {{ visit?.expectedDuration.to }}
-              </td>
-              <td>{{ visit?.groupId?.groupName }}</td>
-              <td>
-                <button
-                  appRequiredSeason
-                  class="btn btn-action-no-border btn-margin details-button"
-                  (click)="openViewModal(visit._id)"
-                >
-                  <em class="fa fa-eye"></em>
-                </button>
-                <button
-                  appRequiredSeason
-                  class="btn btn-action-no-border btn-margin"
-                  (click)="openDeleteModal(visit)"
-                  *appHasPermission="[1]"
-                >
-                  <em class="fa fa-trash"></em>
-                </button>
-                <button
-                  appRequiredSeason
-                  (click)="open(content); selectedSchedule(schedule)"
-                  class="btn btn-action-no-border btn-margin"
-                >
-                  <em class="fa fa-envelope-o"></em>
-                </button>
-                <button
-                  *appHasPermission="[1]"
-                  class="btn btn-action-no-border btn-margin btn-sm details-button"
-                  routerLink="/admin/farm/visit/edit/{{ visit._id }}"
-                >
-                  <em class="fa fa-pencil"></em>
-                </button>
-              </td>
-            </tr>
+                </td>
+                <td>{{ visit?.groupId?.groupName }}</td>
+                <td>
+                  <button
+                    appRequiredSeason
+                    class="btn btn-action-no-border btn-margin details-button"
+                    (click)="openViewModal(visit._id)"
+                  >
+                    <em class="fa fa-eye"></em>
+                  </button>
+                  <button
+                    appRequiredSeason
+                    class="btn btn-action-no-border btn-margin"
+                    (click)="openDeleteModal(visit)"
+                    *appHasPermission="[1]"
+                  >
+                    <em class="fa fa-trash"></em>
+                  </button>
+                  <button
+                    appRequiredSeason
+                    (click)="open(content); selectedSchedule(schedule)"
+                    class="btn btn-action-no-border btn-margin"
+                  >
+                    <em class="fa fa-envelope-o"></em>
+                  </button>
+                  <button
+                    *appHasPermission="[1]"
+                    class="btn btn-action-no-border btn-margin btn-sm details-button"
+                    routerLink="/admin/farm/visit/edit/{{ visit._id }}"
+                  >
+                    <em class="fa fa-pencil"></em>
+                  </button>
+                </td>
+              </tr>
+            </ng-container>
           </tbody>
         </table>
       </div>

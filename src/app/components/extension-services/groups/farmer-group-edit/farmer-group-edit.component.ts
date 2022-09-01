@@ -74,8 +74,8 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
         meetingTime: [''],
       }),
       location: this.formBuilder.group({
-        prov_id: [''],
-        dist_id: [''],
+        prov_id: [{ value: '', disabled: true }],
+        dist_id: [{ value: '', disabled: true }],
         sect_id: [''],
         cell_id: [''],
         village_id: [''],
