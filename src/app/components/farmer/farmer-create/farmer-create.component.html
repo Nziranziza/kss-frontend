@@ -580,7 +580,7 @@
                           formControlName="upiNumber"
                           class="form-control"
                           placeholder="00/000/00/000"
-                          (input)="validateUPI($event.target.value)"
+                          (input)="validateUPI($event)"
                         />
                       </div>
                     </div>
@@ -804,125 +804,125 @@
                     <div class="col-md-12">
                       <table class="table varieties-table">
                         <tbody>
-                          <tr>
-                            <td style="padding-left: 0">
-                              <span> <b>Number of trees </b> </span>
+                        <tr>
+                          <td style="padding-left: 0">
+                            <span> <b>Number of trees </b> </span>
+                            <div
+                              style="margin-bottom: 10px; margin-top: 10px"
+                            >
+                              <input
+                                class="form-control"
+                                formControlName="numberOfTrees"
+                                min="0"
+                                type="number"
+                              />
                               <div
-                                style="margin-bottom: 10px; margin-top: 10px"
-                              >
-                                <input
-                                  type="number"
-                                  min="0"
-                                  formControlName="numberOfTrees"
-                                  class="form-control"
-                                />
-                                <div
-                                  *ngIf="
+                                *ngIf="
                                     createForm.controls.numberOfTrees.invalid &&
                                     (createForm.controls.numberOfTrees.dirty ||
                                       createForm.controls.numberOfTrees.touched)
                                   "
-                                  class="input-error"
-                                >
-                                  <div
-                                    *ngIf="
+                                class="input-error"
+                              >
+                                <div
+                                  *ngIf="
                                       createForm.controls.numberOfTrees.errors
                                         .required
                                     "
-                                  >
-                                    Number of trees is required.
-                                  </div>
-                                  <div
-                                    *ngIf="
+                                >
+                                  Number of trees is required.
+                                </div>
+                                <div
+                                  *ngIf="
                                       createForm.controls.numberOfTrees.errors
                                         .min
                                     "
-                                  >
-                                    Number of trees must be greater than zero.
-                                  </div>
-                                  <div
-                                    *ngIf="
+                                >
+                                  Number of trees must be greater than zero.
+                                </div>
+                                <div
+                                  *ngIf="
                                       createForm.controls.numberOfTrees.errors
                                         .pattern
                                     "
-                                  >
-                                    Number of trees must be an integer.
-                                  </div>
+                                >
+                                  Number of trees must be an integer.
                                 </div>
                               </div>
-                            </td>
-                            <ng-container *ngIf="treeVarieties">
-                              <td
-                                *ngFor="
+                            </div>
+                          </td>
+                          <ng-container *ngIf="treeVarieties">
+                            <td
+                              *ngFor="
                                   let control of formTreeAges?.controls;
                                   let i = index
                                 "
-                                formArrayName="treeAges"
-                              >
-                                <div style="display: block" [formGroupName]="i">
+                              formArrayName="treeAges"
+                            >
+                              <div [formGroupName]="i" style="display: block">
                                   <span
-                                    >Trees age
+                                  >Trees age
                                     <b>{{ ranges[i] }} Years</b></span
                                   >
-                                  <div
-                                    style="
+                                <div
+                                  style="
                                       margin-bottom: 10px;
                                       margin-top: 10px;
                                     "
-                                  >
-                                    <input
-                                      type="number"
-                                      min="0"
-                                      formControlName="numOfTrees"
-                                      class="form-control"
-                                      min="0"
-                                      disabled
-                                    />
-                                  </div>
-                                  <div
-                                    *ngFor="
+                                >
+                                  <input
+                                    class="form-control"
+                                    disabled
+                                    formControlName="numOfTrees"
+                                    min="0"
+                                    min="0"
+                                    type="number"
+                                  />
+                                </div>
+                                <div
+                                  *ngFor="
                                       let ctrl of formTreeVarieties(i).controls;
                                       let v = index
                                     "
-                                    formArrayName="varieties"
+                                  formArrayName="varieties"
+                                >
+                                  <div
+                                    [formGroupName]="v"
+                                    style="display: table-row"
                                   >
-                                    <div
-                                      style="display: table-row"
-                                      [formGroupName]="v"
-                                    >
-                                      <label
-                                        style="
+                                    <label
+                                      style="
                                           font-weight: lighter;
                                           display: table-cell;
                                           width: 70%;
                                           font-size: smaller;
                                         "
-                                      >
-                                        <input
-                                          type="checkbox"
-                                          formControlName="selected"
-                                        />
-                                        {{ treeVarieties[v].name | titlecase }}
-                                      </label>
-                                      <div
-                                        style="display: table-cell; width: auto"
-                                      >
-                                        <input
-                                          type="number"
-                                          min="0"
-                                          formControlName="number"
-                                          class="form-control v-number"
-                                          min="0"
-                                          (keyup)="updateList(i, v)"
-                                          (change)="updateList(i, v)"
-                                        />
-                                      </div>
+                                    >
+                                      <input
+                                        formControlName="selected"
+                                        type="checkbox"
+                                      />
+                                      {{ treeVarieties[v].name | titlecase }}
+                                    </label>
+                                    <div
+                                      style="display: table-cell; width: auto"
+                                    >
+                                      <input
+                                        (change)="updateList(i, v)"
+                                        (keyup)="updateList(i, v)"
+                                        class="form-control v-number"
+                                        formControlName="number"
+                                        min="0"
+                                        min="0"
+                                        type="number"
+                                      />
                                     </div>
                                   </div>
                                 </div>
-                              </td>
-                            </ng-container>
-                          </tr>
+                              </div>
+                            </td>
+                          </ng-container>
+                        </tr>
                         </tbody>
                       </table>
                     </div>
