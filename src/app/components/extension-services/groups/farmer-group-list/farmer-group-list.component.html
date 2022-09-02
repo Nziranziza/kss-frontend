@@ -91,10 +91,11 @@
                 </button>
                 <button
                   (click)="openDelete(group)"
+                  *appHasPermission="[1]"
                   class="btn btn-action-no-border btn-margin">
                   <em class="fa fa-trash"></em>
                 </button>
-                <button class="btn btn-action-no-border btn-margin" [routerLink]="['/admin/farmers/group/edit', group._id]"
+                <button class="btn btn-action-no-border btn-margin" *appHasPermission="[1]" [routerLink]="['/admin/farmers/group/edit', group._id]"
                    style="margin-left: 10px;">
                   <em class="fa fa-pencil"></em>
                 </button>

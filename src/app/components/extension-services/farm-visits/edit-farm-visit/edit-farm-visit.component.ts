@@ -95,18 +95,17 @@ export class EditFarmVisitComponent implements OnInit {
       console.log(this.visits);
       this.savedFarmList = data.data.farms;
       this.scheduleVisit.controls.startTime.setValue(
-        data.data.date.split("T")[0] +
-        "T" +
-        (parseInt(data.data.expectedDuration.from.split(":")[0]) - 2).toString() + ":" + data.data.expectedDuration.from.split(":")[1] +
-        ":00.000Z"
+        new Date(data.data.date.split("T")[0] +
+          "T" +
+          (parseInt(data.data.expectedDuration.from.split(":")[0]) - 2).toString() + ":" + data.data.expectedDuration.from.split(":")[1] +
+          ":00.000Z")
       );
       this.scheduleVisit.controls.endTime.setValue(
-        data.data.date.split("T")[0] +
-        "T" +
-        (parseInt(data.data.expectedDuration.to.split(":")[0]) - 2).toString() + ":" + data.data.expectedDuration.to.split(":")[1] +
-        ":00.000Z"
+        new Date(data.data.date.split("T")[0] +
+          "T" +
+          (parseInt(data.data.expectedDuration.to.split(":")[0]) - 2).toString() + ":" + data.data.expectedDuration.to.split(":")[1] +
+          ":00.000Z")
       );
-      console.log(this.scheduleVisit.controls.endTime.value);
       this.scheduleVisit.controls.farmerGroup.setValue(
         data.data.groupId.groupName,
         { emitEvent: false }

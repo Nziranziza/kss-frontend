@@ -17,7 +17,7 @@
               <div class="confirm-text-box confirm-text">
                 <li *ngFor="let farms of selectedFarms; let i = index">
                   {{
-                    farms.farmer +
+                    farms?.farmer +
                       " Location " +
                       farms?.location?.dist_id?.name +
                       " > " +
@@ -25,7 +25,7 @@
                       " > " +
                       farms?.location?.cell_id?.name +
                       " UPI " +
-                      farms.upiNumber
+                      farms?.upiNumber
                   }}
                 </li>
               </div>
@@ -596,7 +596,7 @@
                     scheduleVisit.controls.endTime.value
                   "
                 >
-                  end time cannot be in the past
+                  End Time cannot be less than Start Time
                 </span>
               </div>
             </div>

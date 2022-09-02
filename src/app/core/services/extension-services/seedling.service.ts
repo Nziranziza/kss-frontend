@@ -31,4 +31,8 @@ export class SeedlingService {
   getSeedlingStats(body: any) {
     return this.apiService.post("/v1.1/seedlings/stats", body);
   }
+
+  getSeedlingDistributionByNursery(body: any) {
+    return this.apiService.post("/v1.1/seedlings/nursery", body);
+  }
 }
