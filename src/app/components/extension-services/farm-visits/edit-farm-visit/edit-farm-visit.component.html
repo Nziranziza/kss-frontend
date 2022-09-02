@@ -141,7 +141,7 @@
           >
           </app-inline-errors>
           <span
-            style="font: normal 10px Helvetica Neue; color: #ff2c2c"
+            style="font: normal 10px Helvetica Neue, Helvetica, Arial, sans-serif; color: #ff2c2c"
             *ngIf="
               scheduleVisit.value.farmerGroup != '' && farmers?.length <= 0
             "
@@ -245,7 +245,7 @@
                 </fieldset>
               </div>
               <span
-                style="font: normal 10px Helvetica Neue; color: #ff2c2c"
+                style="font: normal 10px Helvetica Neue, Helvetica, Arial, sans-serif; color: #ff2c2c"
                 *ngIf="selectedFarms?.length <= 0 && savedFarmList.length <=0"
               >
                 select at least one farm</span
@@ -572,7 +572,7 @@
                   #dt4
                 ></owl-date-time>
                 <span
-                  style="font: normal 10px Helvetica Neue; color: red"
+                  style="font: normal 10px Helvetica Neue, Helvetica, Arial, sans-serif; color: red"
                   *ngIf="
                     scheduleVisit.controls.startTime.value >=
                     scheduleVisit.controls.endTime.value

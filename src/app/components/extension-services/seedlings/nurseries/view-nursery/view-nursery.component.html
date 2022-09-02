@@ -282,20 +282,26 @@
           <ng-container *ngFor="let distribution of nurseryDistribution">
             <tr>
               <td>{{ distribution?.date | date: "short" }}</td>
-              <td *ngFor="let dist of distribution.distributions">
-                <span ngIf="dist.reason === 'in_filling'">
-                  {{ dist?.distributedQty }}
-                </span>
+              <td>
+                <div *ngFor="let dist of distribution.distributions">
+                  <span *ngIf="dist.reason == 'in_filling'">
+                    {{ dist?.distributedQty }}
+                  </span>
+                </div>
               </td>
-              <td *ngFor="let dist of distribution.distributions">
-                <span ngIf="dist.reason === 'replacement'">
-                  {{ dist?.distributedQty }}
-                </span>
+              <td>
+                <div *ngFor="let dist of distribution.distributions">
+                  <span *ngIf="dist.reason == 'replacement'">
+                    {{ dist?.distributedQty }}
+                  </span>
+                </div>
               </td>
-              <td *ngFor="let dist of distribution.distributions">
-                <span ngIf="dist.reason === 'expansion'">
-                  {{ dist?.distributedQty }}
-                </span>
+              <td>
+                <div *ngFor="let dist of distribution.distributions">
+                  <span *ngIf="dist.reason == 'expansion'">
+                    {{ dist?.distributedQty }}
+                  </span>
+                </div>
               </td>
               <td>
                 {{
@@ -305,12 +311,14 @@
                 }}
               </td>
               <td>{{ distribution?.officer?.name }}</td>
-              <td
-                *ngFor="let dist of distribution.distributions; let i = index"
-              >
-                <span ngIf="i == 0">
-                  {{ dist.approved ? "Approved" : "Pending" }}
-                </span>
+              <td>
+                <div
+                  *ngFor="let dist of distribution.distributions; let i = index"
+                >
+                  <span *ngIf="i == 0">
+                    {{ dist.approved ? "Approved" : "Pending" }}
+                  </span>
+                </div>
               </td>
             </tr>
           </ng-container>

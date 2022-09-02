@@ -1,20 +1,90 @@
-<div class="home">
-  <app-home-header></app-home-header>
-  <div class="container">
+<header class="sks_nav">
+  <span class="logo"><img src="assets/dist/img/sks/logo-updated.png" /> </span>
+  <div class="navbar-custom-menu">
+    <ul class="nav navbar-nav">
+      <!-- Notifications -->
+      <li class="user-footer">
+        <div class="pull-left">
+          <button class="header-button" [routerLink]="['/login']">Login</button>
+        </div>
+      </li>
+    </ul>
+  </div>
+</header>
+<div class="homepage">
+  <div class="sliders">
+    <img src="assets/dist/img/sks/slide2.jpg" alt="Slide 2" />
+  </div>
+  <div class="about">
     <div class="row">
-      <div class="col-xs-12">
-        <div class="logo">
-          <div class="text">
-            <span>
-            </span>
-          </div>
+      <div class="col-md-8 col-xs-12">
+        <div class="about-texts">
+          <span class="text">
+            Smart Kungahara System (SKS) is a product developed through a Public
+            Private Partnership between BK Techouse and National Agricultural
+            Export Development Board (NAEB ) which aims to digitalize cash crop
+            value chains such as coffee, tea and horticulture by creating the
+            stakeholders’ database, monitor the farmers’ agro-input distribution
+            at all levels, track the farmers’ production supply, manage the
+            production treatment centers operations ( e.g.: Coffee washing
+            stations, dry mills, sorting and export warehouse), create
+            transparency and efficiency, generate relevant analytics to ease
+            decision making processes, promote green economy via cashless
+            payments and unlock access to agriculture insurance and financial
+            services to the smallholder farmer.
+          </span>
+        </div>
+      </div>
+      <div class="col-md-4 col-xs-12">
+        <div>
+          <img
+            src="assets/dist/img/sks/sks_logo.svg"
+            alt="Logo 2"
+            class="about-logo"
+          />
         </div>
       </div>
     </div>
   </div>
-  <app-home-footer></app-home-footer>
 </div>
 
+<footer class="footer mt-auto py-3">
+  <div class="row">
+    <div class="col-sm-12 col-md-8 pl-4 footer_links">
+      <span class="col-sm-12">
+        <img
+          src="img/urubutopay_logomark_footer.svg"
+          alt=""
+          style="
+            display: inline-block;
+            border: 0px solid red;
+            float: left;
+            height: 50px;
+            margin-left: 10px;
+            margin-right: 10px;
+          "
+        />
+        <a href="#">Homepage</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#"
+          >About Us</a
+        >&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#">Terms & Conditions</a
+        >&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#">Privacy Policy</a
+        >&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#">Contact Us</a
+        >&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;Get Support:
+        <strong>Call 7074</strong>
+      </span>
 
+      <span class="col-sm-12 footer_copyrights"
+        >Copyright © 2022 NAEB - All Rights Reserved</span
+      >
+    </div>
 
-
+    <div class="col-sm-12 col-md-4 footer_powered">
+      <a href="https://www.bktechouse.rw/" target="_blank"
+        ><img
+          src="../../../../assets/dist/img/sks/bkt-logo.svg"
+          alt=""
+          class="img-fluid"
+      /></a>
+    </div>
+  </div>
+</footer>

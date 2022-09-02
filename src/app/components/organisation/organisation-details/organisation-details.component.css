@@ -1,13 +1,13 @@
 .filter-title-text {
   text-align: left;
-  font: normal normal normal 20px/24px Helvetica Neue;
+  font: normal normal normal 20px/24px Helvetica Neue, Helvetica, Arial, sans-serif;
   letter-spacing: 0px;
   color: #333333;
   margin-bottom: 10px;
 }
 
 .filter-title-text .bold {
-  font: normal normal bold 20px/24px Helvetica Neue;
+  font: normal normal bold 20px/24px Helvetica Neue, Helvetica, Arial, sans-serif;
 }
 
 .stats-section {
@@ -20,7 +20,7 @@
 .stats-title {
   text-align: center;
   margin-top: -5px;
-  font: normal normal bold 19px/23px Helvetica Neue;
+  font: normal normal bold 19px/23px Helvetica Neue, Helvetica, Arial, sans-serif;
   letter-spacing: 0px;
   color: #ffffff;
   opacity: 1;
@@ -42,7 +42,7 @@
   height: 21px;
   /* UI Properties */
   text-align: center;
-  font: normal normal bold 17px/20px Helvetica Neue;
+  font: normal normal bold 17px/20px Helvetica Neue, Helvetica, Arial, sans-serif;
   letter-spacing: 0px;
   color: #4f210d;
   opacity: 1;
@@ -52,7 +52,7 @@
   height: 25px;
   /* UI Properties */
   text-align: left;
-  font: normal normal bold 17px/42px Helvetica Neue;
+  font: normal normal bold 17px/42px Helvetica Neue, Helvetica, Arial, sans-serif;
   letter-spacing: 0px;
   color: #000000;
   opacity: 1;
@@ -62,7 +62,7 @@
   height: 18px;
   /* UI Properties */
   text-align: left;
-  font: normal normal medium 15px/42px Helvetica Neue;
+  font: normal normal medium 15px/42px Helvetica Neue, Helvetica, Arial, sans-serif;
   letter-spacing: 0px;
   color: #4f210d;
   opacity: 1;
@@ -71,7 +71,7 @@
 .stats-box-details-right {
   /* UI Properties */
   text-align: left;
-  font: normal normal normal 12px/14px Helvetica Neue;
+  font: normal normal normal 12px/14px Helvetica Neue, Helvetica, Arial, sans-serif;
   letter-spacing: 0px;
   color: #000000;
 }
@@ -95,12 +95,12 @@
 }
 
 .stats-box-details-right .bold {
-  font: normal normal bold 12px/14px Helvetica Neue;
+  font: normal normal bold 12px/14px Helvetica Neue, Helvetica, Arial, sans-serif;
 }
 
 .stats-box-location-sectors {
   text-align: left;
-  font: normal normal medium 12px/42px Helvetica Neue;
+  font: normal normal medium 12px/42px Helvetica Neue, Helvetica, Arial, sans-serif;
   letter-spacing: 0px;
   color: #000000;
   opacity: 1;
@@ -109,7 +109,7 @@
 .stats-box-location-cells {
   /* UI Properties */
   text-align: left;
-  font: normal normal normal 11px/14px Helvetica Neue;
+  font: normal normal normal 11px/14px Helvetica Neue, Helvetica, Arial, sans-serif;
   letter-spacing: 0px;
   color: #000000;
   opacity: 1;
@@ -118,7 +118,7 @@
 .stats-box-cws-names {
   /* UI Properties */
   text-align: left;
-  font: normal normal bold 15px/42px Helvetica Neue;
+  font: normal normal bold 15px/42px Helvetica Neue, Helvetica, Arial, sans-serif;
   letter-spacing: 0px;
   color: #4f210d;
   opacity: 1;
@@ -127,7 +127,7 @@
 .stats-box-cws-tots {
   /* UI Properties */
   text-align: left;
-  font: normal normal bold 25px/14px Helvetica Neue;
+  font: normal normal bold 25px/14px Helvetica Neue, Helvetica, Arial, sans-serif;
   letter-spacing: 0px;
   color: #000000;
   opacity: 1;
@@ -136,7 +136,7 @@
 .stats-box-cws-rnames {
   /* UI Properties */
   text-align: left;
-  font: normal normal bold 11px/14px Helvetica Neue;
+  font: normal normal bold 11px/14px Helvetica Neue, Helvetica, Arial, sans-serif;
   letter-spacing: 0px;
   color: #d38300;
   opacity: 1;
@@ -145,7 +145,7 @@
 .stats-box-cws-kgs {
   /* UI Properties */
   text-align: left;
-  font: normal normal bold 11px/14px Helvetica Neue;
+  font: normal normal bold 11px/14px Helvetica Neue, Helvetica, Arial, sans-serif;
   letter-spacing: 0px;
   color: #aaaaaa;
   opacity: 1;
@@ -153,7 +153,7 @@
 
 .stats-box-cws-desc {
   text-align: left;
-  font: normal normal bold 9px/14px Helvetica Neue;
+  font: normal normal bold 9px/14px Helvetica Neue, Helvetica, Arial, sans-serif;
   letter-spacing: 0px;
   color: #ff0000;
   opacity: 1;
@@ -162,7 +162,7 @@
 .stats-box-cws-asc {
   /* UI Properties */
   text-align: left;
-  font: normal normal bold 8px/14px Helvetica Neue;
+  font: normal normal bold 8px/14px Helvetica Neue, Helvetica, Arial, sans-serif;
   letter-spacing: 0px;
   color: #18d100;
   opacity: 1;
@@ -180,7 +180,7 @@
   border-radius: 3px;
   opacity: 1;
   text-align: center;
-  font: normal normal bold 10px/10px Helvetica Neue;
+  font: normal normal bold 10px/10px Helvetica Neue, Helvetica, Arial, sans-serif;
   letter-spacing: 0px;
   color: #e1a33e;
 }

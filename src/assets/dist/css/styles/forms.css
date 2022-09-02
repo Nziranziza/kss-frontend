@@ -31,7 +31,7 @@ form .input-required {
 }
 .confirm-text {
   text-align: left;
-  font: normal normal bold 12px/32px Helvetica Neue;
+  font: normal normal bold 12px/32px Helvetica Neue, Helvetica, Arial, sans-serif;
   letter-spacing: 0px;
   color: #000000;
   opacity: 1;
@@ -43,7 +43,7 @@ form .input-required {
 }
 
 .control-label {
-  font: normal normal medium 10px/30px Helvetica Neue;
+  font: normal normal medium 10px/30px Helvetica Neue, Helvetica, Arial, sans-serif;
   color: #4F210D;
   opacity: 1;
   margin-top: 5px;

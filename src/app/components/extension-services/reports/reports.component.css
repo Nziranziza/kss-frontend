@@ -13,12 +13,12 @@
 
 .ng-autocomplete ::ng-deep .autocomplete-container {
   height: 32px;
-  font: normal 12px Helvetica Neue;
+  font: normal 12px Helvetica Neue, Helvetica, Arial, sans-serif;
 }
 
 .ng-autocomplete ::ng-deep .autocomplete-container .input-container input {
   height: 32px;
-  font: normal 12px Helvetica Neue;
+  font: normal 12px Helvetica Neue, Helvetica, Arial, sans-serif;
   border: 1px solid #4f210d;
   border-radius: 3px;
 }
@@ -30,9 +30,9 @@
   ul
   li
   a {
-  font: normal 9px Helvetica Neue;
+  font: normal 9px Helvetica Neue, Helvetica, Arial, sans-serif;
 }
 
 .ng-autocomplete ::ng-deep .autocomplete-container .input-container .x i {
-  font: normal 9px Helvetica Neue;
+  font: normal 9px Helvetica Neue, Helvetica, Arial, sans-serif;
 }
