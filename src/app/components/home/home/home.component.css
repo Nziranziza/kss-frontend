@@ -1,3 +1,130 @@
+.logo {
+  pointer-events: none;
+  margin-left: 5px;
+  height: 50px;
+}
 
+.logo img {
+  margin-top: 5px;
+  height: 50px;
+  width: 128px;
+}
 
+header nav {
+  display: inline-block;
+  /* border-bottom: 2px solid #190ec7; */
+}
 
+.sks_nav {
+  background-color: #4f210d;
+  height: 60px;
+}
+
+.sks_nav div.vr {
+  border: 1px solid rgb(255 255 255 / 8%) !important;
+}
+
+.sks_nav button.navbar-toggler {
+  outline: none;
+  background-color: #4f210d !important;
+  color: #fff;
+}
+
+footer {
+  /* border: 2px solid red; */
+  padding-left: 10px;
+  padding-right: 10px;
+  background-color: #bfaea7 !important;
+}
+
+.footer_links {
+  font-size: 14px;
+  /* color: #cbcbcb; */
+}
+
+.footer_links a {
+  color: #4f210d;
+  border-bottom: 1px solid transparent;
+  text-decoration: none;
+}
+
+.footer_links a:hover {
+  color: #000000;
+  border-bottom: 1px solid #4f210d;
+  text-decoration: none;
+}
+
+.footer_links strong {
+  color: #000000;
+}
+
+.footer_copyrights {
+  display: block;
+  font-size: 12px;
+  text-align: left;
+  padding-left: 10px;
+  padding-top: 10px;
+}
+
+.footer_powered {
+  text-align: right;
+  /* padding:10px; */
+}
+
+.homepage {
+  opacity: 1;
+}
+.homepage .sliders {
+  width: 100%;
+}
+.homepage .sliders img {
+  height: 750px;
+  opacity: 1;
+}
+
+.homepage .about {
+  height: 500px;
+  padding: 20px;
+}
+
+.about-texts {
+  text-align: left;
+  margin-left: 40px;
+  letter-spacing: 0px;
+  height: 36px;
+  color: #000000;
+  font: normal normal medium 30px/40px Helvetica Neue, Helvetica, Arial,
+    sans-serif;
+}
+
+.about-texts .text {
+  font-size: 20px;
+}
+
+.about-logo {
+  margin-top: 20px;
+  height: 146px;
+  width: 441px;
+}
+
+.homepage .impact {
+  height: 500px;
+  padding: 50px;
+}
+
+.header-button {
+  background: #4f210d 0% 0% no-repeat padding-box;
+  border: 1px solid #ffffff;
+  border-radius: 7px;
+  width: 160px;
+  height: 45px;
+  color: #E1A33E;
+  font-size: 15px;
+  opacity: 1;
+}
+
+.navbar-custom-menu {
+  margin-left: 10px;
+  margin-top: 5px;
+  float: right;
+}
