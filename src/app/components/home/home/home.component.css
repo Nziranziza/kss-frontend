@@ -71,20 +71,36 @@ footer {
   /* padding:10px; */
 }
 
-.homepage {
+.homepage-section {
   opacity: 1;
-}
-.homepage .sliders {
   width: 100%;
 }
-.homepage .sliders img {
+.homepage-section .sliders {
+  width: 100%;
+}
+.homepage-section .sliders img {
   height: 750px;
   opacity: 1;
 }
 
-.homepage .about {
+.homepage-section .about {
   height: 500px;
   padding: 20px;
+}
+
+.homepage-section .about .partners {
+  margin-left: 100px;
+  margin-right: 20px;
+  margin-top: 80px;
+}
+
+.partner-image {
+  width: 171px;
+  height: 80px;
+}
+
+.bold {
+  font-weight: bold;
 }
 
 .about-texts {
@@ -101,15 +117,52 @@ footer {
   font-size: 20px;
 }
 
+.about-title {
+  font-size: 40px;
+  color: #e1a33e;
+  height: 66px;
+}
+
 .about-logo {
   margin-top: 20px;
   height: 146px;
   width: 441px;
 }
 
-.homepage .impact {
-  height: 500px;
+.homepage-section .impact {
+  height: 580px;
   padding: 50px;
+  background: #4f210d0a 0% 0% no-repeat padding-box;
+  opacity: 1;
+}
+
+.impact .box {
+  width: 90%;
+  height: 190px;
+  border-radius: 10px;
+  background: transparent;
+}
+
+.impact-ico {
+  margin-top: 15px;
+  width: 80px;
+  height: 83px;
+}
+
+.impact-title {
+  color: #4f210d;
+  font-size: 30px;
+}
+
+.impact-sub {
+  font-size: 20px;
+  color: #4f210d;
+}
+
+.homepage-section .features {
+  height: 600px;
+  padding: 50px;
+  background: #f2eee7 0% 0% no-repeat padding-box;
 }
 
 .header-button {
@@ -118,13 +171,45 @@ footer {
   border-radius: 7px;
   width: 160px;
   height: 45px;
-  color: #E1A33E;
+  color: #e1a33e;
   font-size: 15px;
   opacity: 1;
 }
 
 .navbar-custom-menu {
-  margin-left: 10px;
-  margin-top: 5px;
+  margin-right: 10px;
+  margin-top: 8px;
   float: right;
+}
+
+.footer_powered {
+  text-align: center;
+  font: normal normal medium 10px/13px Montserrat;
+  letter-spacing: 9.71px;
+  color: #4f210d;
+  opacity: 1;
+}
+
+.footer_copyrights {
+  /* UI Properties */
+  text-align: left;
+  font: normal normal 600 13px/19px Montserrat;
+  letter-spacing: 0px;
+  color: #4f210d;
+  margin-left: 25%;
+  float: center;
+  opacity: 1;
+}
+
+.footer_links {
+  /* UI Properties */
+  text-align: left;
+  font: normal normal 600 18px/23px Montserrat;
+  letter-spacing: 0px;
+  color: #4f210d;
+  opacity: 1;
+}
+
+.img-fluid {
+  margin-left: 30%;
 }

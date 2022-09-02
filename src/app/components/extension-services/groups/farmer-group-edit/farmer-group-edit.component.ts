@@ -77,8 +77,8 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
         meetingTime: [''],
       }),
       location: this.formBuilder.group({
-        prov_id: [{ value: '', disabled: true }],
-        dist_id: [{ value: '', disabled: true }],
+        prov_id: [''],
+        dist_id: [''],
         sect_id: [''],
         cell_id: [''],
         village_id: [''],
@@ -193,10 +193,10 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
           this.districts = dt;
           this.editForm.controls.location
             .get('prov_id'.toString())
-            .patchValue(this.org.location.prov_id._id, { emitEvent: false })
+            .patchValue(this.org.location.prov_id._id)
           this.editForm.controls.location
             .get('dist_id'.toString())
-            .patchValue(this.org.location.dist_id._id, { emitEvent: false });
+            .patchValue(this.org.location.dist_id._id);
           this.sectors = this.filterZoningSectors(this.org.coveredSectors);
         });
     });
