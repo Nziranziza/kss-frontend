@@ -1,25 +1,25 @@
 <h3>Create farmer</h3>
 <app-list-errors [errorList]="errors"></app-list-errors>
-<form [formGroup]="createForm" (ngSubmit)="onSubmit()">
+<form (ngSubmit)="onSubmit()" [formGroup]="createForm">
   <div class="row">
     <div class="col-xs-12">
       <div class="box">
         <div class="box-body">
           <app-loader *ngIf="loading"></app-loader>
           <div class="row">
-            <section id="personal" *ngIf="!isGroup">
+            <section *ngIf="!isGroup" id="personal">
               <div class="col-xs-6">
                 <div class="form-group">
                   <label class="control-label label-required">Type</label>
                   <div class="radio">
                     <label>
-                      <input type="radio" formControlName="type" [value]="farmerTypes[0]"/>
+                      <input [value]="farmerTypes[0]" formControlName="type" type="radio"/>
                       Individual
                     </label>
                   </div>
                   <div class="radio">
                     <label>
-                      <input type="radio" formControlName="type" [value]="farmerTypes[1]" />
+                      <input [value]="farmerTypes[1]" formControlName="type" type="radio"/>
                       Group
                     </label>
                   </div>
@@ -29,11 +29,11 @@
                 <div class="form-group">
                   <label class="control-label label-required">NID</label>
                   <input
-                    type="text"
-                    formControlName="NID"
-                    class="form-control"
-                    id="NID"
                     (input)="onInputNID($event.target.value)"
+                    class="form-control"
+                    formControlName="NID"
+                    id="NID"
+                    type="text"
                   />
                   <app-inline-errors
                     *ngIf="
@@ -45,7 +45,7 @@
                     [label]="'national id'"
                   >
                   </app-inline-errors>
-                  <span class="input-error" *ngIf="invalidId">
+                  <span *ngIf="invalidId" class="input-error">
                     invalid nid
                   </span>
                 </div>
@@ -54,10 +54,10 @@
                 <div class="form-group">
                   <label class="control-label label-required">First Name</label>
                   <input
-                    type="text"
-                    formControlName="foreName"
                     class="form-control"
+                    formControlName="foreName"
                     readonly="readonly"
+                    type="text"
                   />
                 </div>
               </div>
@@ -65,10 +65,10 @@
                 <div class="form-group">
                   <label class="control-label label-required">Last Name</label>
                   <input
-                    type="text"
-                    formControlName="surname"
                     class="form-control"
+                    formControlName="surname"
                     readonly="readonly"
+                    type="text"
                   />
                 </div>
               </div>
@@ -78,11 +78,11 @@
                   <div class="radio">
                     <label>
                       <input
-                        type="radio"
-                        formControlName="sex"
-                        value="m"
                         checked=""
                         disabled
+                        formControlName="sex"
+                        type="radio"
+                        value="m"
                       />
                       Male
                     </label>
@@ -90,11 +90,11 @@
                   <div class="radio">
                     <label>
                       <input
-                        type="radio"
-                        formControlName="sex"
-                        value="f"
                         checked=""
                         disabled
+                        formControlName="sex"
+                        type="radio"
+                        value="f"
                       />
                       Female
                     </label>
@@ -105,22 +105,22 @@
                 <div class="form-group">
                   <label class="control-label">Family Size</label>
                   <input
-                    type="number"
-                    formControlName="familySize"
                     class="form-control"
+                    formControlName="familySize"
                     min="0"
+                    type="number"
                   />
                 </div>
               </div>
             </section>
-            <section id="group" *ngIf="isGroup">
+            <section *ngIf="isGroup" id="group">
               <div class="col-xs-6">
                 <div class="form-group">
                   <label class="control-label label-required">Name</label>
                   <input
-                    type="text"
-                    formControlName="groupName"
                     class="form-control"
+                    formControlName="groupName"
+                    type="text"
                   />
                 </div>
               </div>
@@ -129,10 +129,10 @@
               <div class="form-group">
                 <label class="control-label">Phone Number</label>
                 <input
-                  type="text"
-                  formControlName="phone_number"
                   class="form-control"
+                  formControlName="phone_number"
                   placeholder="250780348088"
+                  type="text"
                 />
                 <app-inline-errors
                   *ngIf="
@@ -263,10 +263,10 @@
 
           End payment channels -->
           <div class="row">
-            <fieldset class="location" *ngIf="isGroup">
+            <fieldset *ngIf="isGroup" class="location">
               <legend>
                 <label class="control-label label-required"
-                  >&nbsp; Contact Person</label
+                >&nbsp; Contact Person</label
                 >
               </legend>
               <div formGroupName="groupContactPerson">
@@ -274,9 +274,9 @@
                   <div class="form-group">
                     <span class="">First Name</span>
                     <input
-                      type="text"
-                      formControlName="firstName"
                       class="form-control"
+                      formControlName="firstName"
+                      type="text"
                     />
                   </div>
                 </div>
@@ -284,9 +284,9 @@
                   <div class="form-group">
                     <span class="">Last Name</span>
                     <input
-                      type="text"
-                      formControlName="lastName"
                       class="form-control"
+                      formControlName="lastName"
+                      type="text"
                     />
                   </div>
                 </div>
@@ -294,44 +294,44 @@
                   <div class="form-group">
                     <span class="">Phone Number</span>
                     <input
-                      type="text"
-                      formControlName="phone"
                       class="form-control"
+                      formControlName="phone"
+                      type="text"
                     />
                   </div>
                 </div>
               </div>
             </fieldset>
-            <div class="col-xs-12" *ngIf="createFromPending"></div>
+            <div *ngIf="createFromPending" class="col-xs-12"></div>
             <ng-container *ngIf="!isUserCWSOfficer; else onCWSLevel">
               <div
                 *ngFor="let request of formRequests.controls; let i = index"
                 formArrayName="requests"
               >
-                <fieldset class="request" [formGroupName]="i">
+                <fieldset [formGroupName]="i" class="request">
                   <legend>
                     <label class="control-label label-required"
-                      >&nbsp;Land</label
+                    >&nbsp;Land</label
                     >
                   </legend>
                   <input
-                    type="hidden"
-                    formControlName="fertilizer_need"
                     class="form-control"
+                    formControlName="fertilizer_need"
+                    type="hidden"
                   />
                   <input
-                    type="hidden"
-                    formControlName="fertilizer_allocate"
                     class="form-control"
+                    formControlName="fertilizer_allocate"
+                    type="hidden"
                   />
                   <div class="row">
                     <div class="col-xs-6">
                       <div class="form-group">
                         <label class="control-label">Number of Trees</label>
                         <input
-                          type="text"
-                          formControlName="numberOfTrees"
                           class="form-control"
+                          formControlName="numberOfTrees"
+                          type="text"
                         />
                         <div
                           *ngIf="
@@ -378,9 +378,9 @@
                         <div class="form-group">
                           <span class="">Province</span>
                           <select
+                            (change)="onChangeProvince(i)"
                             class="form-control"
                             formControlName="prov_id"
-                            (change)="onChangeProvince(i)"
                           >
                             <option value=""></option>
                             <option
@@ -412,9 +412,9 @@
                         <div class="form-group">
                           <span class="">District</span>
                           <select
+                            (change)="onChangeDistrict(i)"
                             class="form-control"
                             formControlName="dist_id"
-                            (change)="onChangeDistrict(i)"
                           >
                             <option value=""></option>
                             <option
@@ -446,9 +446,9 @@
                         <div class="form-group">
                           <span class="">Sector</span>
                           <select
+                            (change)="onChangeSector(i)"
                             class="form-control"
                             formControlName="sect_id"
-                            (change)="onChangeSector(i)"
                           >
                             <option value=""></option>
                             <option
@@ -480,9 +480,9 @@
                         <div class="form-group">
                           <span class="">Cell</span>
                           <select
+                            (change)="onChangeCell(i)"
                             class="form-control"
                             formControlName="cell_id"
-                            (change)="onChangeCell(i)"
                           >
                             <option value=""></option>
                             <option
@@ -546,13 +546,13 @@
                       </div>
                     </div>
                     <div
-                      class="form-group col-xs-12"
                       *ngIf="!createFromPending"
+                      class="form-group col-xs-12"
                     >
                       <button
+                        (click)="removeRequest(i)"
                         class="btn btn-danger pull-right"
                         type="button"
-                        (click)="removeRequest(i)"
                       >
                         Remove
                       </button>
@@ -563,7 +563,7 @@
             </ng-container>
             <ng-template #onCWSLevel>
               <div class="modal-body" style="margin-top: 30px">
-                <form [formGroup]="createForm" (ngSubmit)="onSubmit()">
+                <form (ngSubmit)="onSubmit()" [formGroup]="createForm">
                   <div
                     class="row text-muted well well-sm no-shadow"
                     style="margin: 10px auto"
@@ -577,187 +577,259 @@
                       <div class="form-group">
                         <label class="control-label">Land UPI Number</label>
                         <input
-                          type="text"
-                          formControlName="upiNumber"
-                          class="form-control"
-                          placeholder="00/000/00/000"
                           (input)="validateUPI($event)"
+                          class="form-control"
+                          formControlName="upiNumber"
+                          placeholder="00/000/00/000"
+                          type="text"
                         />
+                        <app-inline-errors
+                          *ngIf="
+                            createForm.controls.upiNumber.invalid &&
+                            (createForm.controls.upiNumber.dirty ||
+                              createForm.controls.upiNumber.touched)
+                          "
+                                  [errors]="createForm.controls.upiNumber.errors"
+                                  [label]="'Upi Number'"
+                                >
+                        </app-inline-errors>
                       </div>
                     </div>
                     <div class="col-xs-6">
                       <div class="form-group">
                         <label class="control-label">Land Owner Names</label>
                         <input
-                          type="text"
-                          formControlName="landOwner"
                           class="form-control"
+                          formControlName="landOwner"
+                          type="text"
                         />
                       </div>
                     </div>
-                    <div formGroupName="tree_location">
-                      <div class="col-xs-2">
-                        <div class="form-group">
-                          <span class="">Province</span>
-                          <select
-                            class="form-control"
-                            formControlName="prov_id"
-                          >
-                            <option value=""></option>
-                            <option
-                              *ngFor="let province of provinces"
-                              value="{{ province._id }}"
+                    <div class="col-xs-12">
+                      <div formGroupName="tree_location">
+                        <div class="col-xs-2">
+                          <div class="form-group">
+                            <span class="">Province</span>
+                            <select
+                              class="form-control"
+                              formControlName="prov_id"
                             >
-                              {{ province.namee }}
-                            </option>
-                          </select>
-                          <div
-                            *ngIf="
+                              <option value=""></option>
+                              <option
+                                *ngFor="let province of provinces"
+                                value="{{ province._id }}"
+                              >
+                                {{ province.namee }}
+                              </option>
+                            </select>
+                            <div
+                              *ngIf="!checkIfUpiinValidZoning.prov_id"
+                              class="input-error"
+                            >
+                              <div
+                                *ngIf="
+                                !checkIfUpiinValidZoning.prov_id
+                              "
+                              >
+                                UPI Province does not belong to CWS zoning
+                              </div>
+                            </div>
+                            <div
+                              *ngIf="
                               getTreeLocationInput('prov_id').invalid &&
                               (getTreeLocationInput('prov_id').dirty ||
                                 getTreeLocationInput('prov_id').touched)
                             "
-                            class="input-error"
-                          >
-                            <div
-                              *ngIf="
+                              class="input-error"
+                            >
+                              <div
+                                *ngIf="
                                 getTreeLocationInput('prov_id').errors.required
                               "
-                            >
-                              Province is required.
+                              >
+                                Province is required.
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                      <div class="col-xs-2">
-                        <div class="form-group">
-                          <span class="">District</span>
-                          <select
-                            class="form-control"
-                            formControlName="dist_id"
-                          >
-                            <option value=""></option>
-                            <option
-                              *ngFor="let district of districts"
-                              value="{{ district._id }}"
+                        <div class="col-xs-2">
+                          <div class="form-group">
+                            <span class="">District</span>
+                            <select
+                              class="form-control"
+                              formControlName="dist_id"
                             >
-                              {{ district.name }}
-                            </option>
-                          </select>
-                          <div
-                            *ngIf="
+                              <option value=""></option>
+                              <option
+                                *ngFor="let district of districts"
+                                value="{{ district._id }}"
+                              >
+                                {{ district.name }}
+                              </option>
+                            </select>
+                            <div
+                              *ngIf="!checkIfUpiinValidZoning.dist_id"
+                              class="input-error"
+                            >
+                              <div
+                                *ngIf="
+                                !checkIfUpiinValidZoning.dist_id
+                              "
+                              >
+                                UPI District does not belong to CWS zoning
+                              </div>
+                            </div>
+                            <div
+                              *ngIf="
                               getTreeLocationInput('dist_id').invalid &&
                               (getTreeLocationInput('dist_id').dirty ||
                                 getTreeLocationInput('dist_id').touched)
                             "
-                            class="input-error"
-                          >
-                            <div
-                              *ngIf="
+                              class="input-error"
+                            >
+                              <div
+                                *ngIf="
                                 getTreeLocationInput('dist_id').errors.required
                               "
-                            >
-                              District is required.
+                              >
+                                District is required.
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                      <div class="col-xs-2">
-                        <div class="form-group">
-                          <span class="">Sector</span>
-                          <select
-                            class="form-control"
-                            formControlName="sect_id"
-                          >
-                            <option value=""></option>
-                            <option
-                              *ngFor="let sector of sectors"
-                              value="{{ sector._id }}"
+                        <div class="col-xs-2">
+                          <div class="form-group">
+                            <span class="">Sector</span>
+                            <select
+                              class="form-control"
+                              formControlName="sect_id"
                             >
-                              {{ sector.name }}
-                            </option>
-                          </select>
-                          <div
-                            *ngIf="
+                              <option value=""></option>
+                              <option
+                                *ngFor="let sector of sectors"
+                                value="{{ sector._id }}"
+                              >
+                                {{ sector.name }}
+                              </option>
+                            </select>
+                            <div
+                              *ngIf="!checkIfUpiinValidZoning.sect_id"
+                              class="input-error"
+                            >
+                              <div
+                                *ngIf="
+                                !checkIfUpiinValidZoning.sect_id
+                              "
+                              >
+                                UPI Sector does not belong to CWS zoning
+                              </div>
+                            </div>
+                            <div
+                              *ngIf="
                               getTreeLocationInput('sect_id').invalid &&
                               (getTreeLocationInput('sect_id').dirty ||
                                 getTreeLocationInput('sect_id').touched)
                             "
-                            class="input-error"
-                          >
-                            <div
-                              *ngIf="
+                              class="input-error"
+                            >
+                              <div
+                                *ngIf="
                                 getTreeLocationInput('sect_id').errors.required
                               "
-                            >
-                              Sector is required.
+                              >
+                                Sector is required.
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                      <div class="col-xs-2">
-                        <div class="form-group">
-                          <span class="">Cell</span>
-                          <select
-                            class="form-control"
-                            formControlName="cell_id"
-                          >
-                            <option value=""></option>
-                            <option
-                              *ngFor="let cell of cells"
-                              value="{{ cell._id }}"
+                        <div class="col-xs-2">
+                          <div class="form-group">
+                            <span class="">Cell</span>
+                            <select
+                              class="form-control"
+                              formControlName="cell_id"
                             >
-                              {{ cell.name }}
-                            </option>
-                          </select>
-                          <div
-                            *ngIf="
+                              <option value=""></option>
+                              <option
+                                *ngFor="let cell of cells"
+                                value="{{ cell._id }}"
+                              >
+                                {{ cell.name }}
+                              </option>
+                            </select>
+                            <div
+                              *ngIf="!checkIfUpiinValidZoning.cell_id"
+                              class="input-error"
+                            >
+                              <div
+                                *ngIf="
+                                !checkIfUpiinValidZoning.cell_id
+                              "
+                              >
+                                UPI Cell does not belong to CWS zoning
+                              </div>
+                            </div>
+                            <div
+                              *ngIf="
                               getTreeLocationInput('cell_id').invalid &&
                               (getTreeLocationInput('cell_id').dirty ||
                                 getTreeLocationInput('cell_id').touched)
                             "
-                            class="input-error"
-                          >
-                            <div
-                              *ngIf="
+                              class="input-error"
+                            >
+                              <div
+                                *ngIf="
                                 getTreeLocationInput('cell_id').errors.required
                               "
-                            >
-                              Cell is required.
+                              >
+                                Cell is required.
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                      <div class="col-xs-2">
-                        <div class="form-group">
-                          <span class="">village</span>
-                          <select
-                            class="form-control"
-                            formControlName="village_id"
-                          >
-                            <option value=""></option>
-                            <option
-                              *ngFor="let village of villages"
-                              value="{{ village._id }}"
+                        <div class="col-xs-2">
+                          <div class="form-group">
+                            <span class="">village</span>
+                            <select
+                              class="form-control"
+                              formControlName="village_id"
                             >
-                              {{ village.name }}
-                            </option>
-                          </select>
-                          <div
-                            *ngIf="
+                              <option value=""></option>
+                              <option
+                                *ngFor="let village of villages"
+                                value="{{ village._id }}"
+                              >
+                                {{ village.name }}
+                              </option>
+                            </select>
+                            <div
+                              *ngIf="!checkIfUpiinValidZoning.village_id"
+                              class="input-error"
+                            >
+                              <div
+                                *ngIf="
+                                !checkIfUpiinValidZoning.village_id
+                              "
+                              >
+                                UPI Village does not belong to CWS zoning
+                              </div>
+                            </div>
+                            <div
+                              *ngIf="
                               getTreeLocationInput('village_id').invalid &&
                               (getTreeLocationInput('village_id').dirty ||
                                 getTreeLocationInput('village_id').touched)
                             "
-                            class="input-error"
-                          >
-                            <div
-                              *ngIf="
+                              class="input-error"
+                            >
+                              <div
+                                *ngIf="
                                 getTreeLocationInput('village_id').errors
                                   .required
                               "
-                            >
-                              Village is required.
+                              >
+                                Village is required.
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -766,26 +838,26 @@
                     <div class="col-xs-6">
                       <div class="form-group">
                         <label class="control-label"
-                          >Longitude Geo Coordinate</label
+                        >Longitude Geo Coordinate</label
                         >
                         <input
-                          type="text"
-                          formControlName="longitudeCoordinate"
                           class="form-control"
+                          formControlName="longitudeCoordinate"
                           placeholder="00.0000000"
+                          type="text"
                         />
                       </div>
                     </div>
                     <div class="col-xs-6">
                       <div class="form-group">
                         <label class="control-label"
-                          >Latitude Geo Coordinate</label
+                        >Latitude Geo Coordinate</label
                         >
                         <input
-                          type="text"
-                          formControlName="latitudeCoordinate"
                           class="form-control"
+                          formControlName="latitudeCoordinate"
                           placeholder="00.0000000"
+                          type="text"
                         />
                       </div>
                     </div>
@@ -936,8 +1008,8 @@
                           CERTIFICATION DETAILS
                         </span>
                         <button
-                          class="btn btn-success btn-sm"
                           (click)="addCertificate()"
+                          class="btn btn-success btn-sm"
                           type="button"
                         >
                           <i class="fa fa-plus-circle"></i> Add certificate
@@ -951,16 +1023,16 @@
                       "
                       formArrayName="certificates"
                     >
-                      <div class="row" [formGroupName]="i">
+                      <div [formGroupName]="i" class="row">
                         <div class="col-xs-5">
                           <div class="form-group">
                             <label class="control-label"
-                              >Certificate Name</label
+                            >Certificate Name</label
                             >
                             <input
-                              type="text"
-                              formControlName="name"
                               class="form-control"
+                              formControlName="name"
+                              type="text"
                             />
                             <div
                               *ngIf="
@@ -987,18 +1059,18 @@
                         <div class="col-xs-5">
                           <div class="form-group">
                             <label class="control-label"
-                              >Certificate Identification Number</label
+                            >Certificate Identification Number</label
                             >
                             <input
-                              type="text"
-                              formControlName="identificationNumber"
                               class="form-control"
+                              formControlName="identificationNumber"
                               style="width: 90%; display: inline"
+                              type="text"
                             />
                             <button
+                              (click)="removeCertificate(i)"
                               class="btn btn-danger btn-sm inline-btn"
                               type="button"
-                              (click)="removeCertificate(i)"
                             >
                               <i class="fa fa-minus-circle"></i>
                             </button>
@@ -1028,9 +1100,9 @@
                     </div>
                   </div>
                   <input
-                    type="hidden"
-                    formControlName="fertilizer_allocate"
                     class="form-control"
+                    formControlName="fertilizer_allocate"
+                    type="hidden"
                   />
                   <div class="row">
                     <div class="col-xs-6"></div>
@@ -1045,13 +1117,13 @@
   </div>
   <div class="row">
     <div class="col-xs-12">
-      <a class="btn btn-warning btn-margin pull-right" (click)="onCancel()"
-        >Cancel</a
+      <a (click)="onCancel()" class="btn btn-warning btn-margin pull-right"
+      >Cancel</a
       >
       <button
+        [disabled]="!submit || loading"
         class="btn btn-success pull-right btn-md"
         type="submit"
-        [disabled]="!submit || loading"
       >
         <span *ngIf="!loading; else other_content">Save</span>
         <ng-template #other_content>
