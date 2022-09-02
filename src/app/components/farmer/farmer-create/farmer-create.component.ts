@@ -394,7 +394,7 @@ export class FarmerCreateComponent
                 } else {
                   this.createForm.controls.tree_location
                     .get('prov_id')
-                    .setValue(this.province._id, {emitEvent: true});
+                    .setValue(this.province._id, {emitEvent: false});
 
                   this.locationService
                     .getDistrictByName(
@@ -416,7 +416,7 @@ export class FarmerCreateComponent
                         } else {
                           this.createForm.controls.tree_location
                             .get('dist_id')
-                            .setValue(this.district._id, {emitEvent: true});
+                            .setValue(this.district._id, {emitEvent: false});
                           this.locationService
                             .getSectorByName(
                               this.titleCase(
@@ -433,7 +433,7 @@ export class FarmerCreateComponent
                               () => {
                                 this.createForm.controls.tree_location
                                   .get('sect_id')
-                                  .setValue(this.sector._id, {emitEvent: true});
+                                  .setValue(this.sector._id, {emitEvent: false});
                                 this.createForm.controls.tree_location.get('sect_id').disable()
                                 this.locationService
                                   .getCellByName(
@@ -452,7 +452,7 @@ export class FarmerCreateComponent
                                       this.createForm.controls.tree_location
                                         .get('cell_id')
                                         .setValue(this.cell._id, {
-                                          emitEvent: true,
+                                          emitEvent: false,
                                         });
                                       this.createForm.controls.tree_location.get('cell_id').disable()
                                       this.locationService
