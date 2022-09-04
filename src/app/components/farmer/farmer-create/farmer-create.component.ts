@@ -82,6 +82,7 @@ export class FarmerCreateComponent
   sector: any;
   cell: any;
   village: any;
+  locationIds: any;
 
   public requestList: FormArray;
 
@@ -156,6 +157,13 @@ export class FarmerCreateComponent
         sect_id: [''],
         cell_id: [''],
         village_id: [''],
+      }),
+      location_if_upi: this.formBuilder.group({
+        prov_id: [{value: '', disabled: true}],
+        dist_id: [{value: '', disabled: true}],
+        sect_id: [{value: '', disabled: true}],
+        cell_id: [{value: '', disabled: true}],
+        village_id: [{value: '', disabled: true}],
       }),
       upiNumber: [''],
       landOwner: [''],
@@ -354,7 +362,7 @@ export class FarmerCreateComponent
     if(upi.length > 0) {
       this.createForm.controls.upiNumber.setErrors({invalid: true});
     }
-    this.initial();
+    // this.initial();
     this.checkIfUpiinValidZoning = {
       prov_id: true,
       dist_id: true,
@@ -362,9 +370,6 @@ export class FarmerCreateComponent
       cell_id: true,
       village_id: true
     };
-    this.createForm.controls.tree_location.get('village_id').enable();
-    this.createForm.controls.tree_location.get('cell_id').enable();
-    this.createForm.controls.tree_location.get('sect_id').enable();
 
     if (upi.length >= 15) {
       const body = {
@@ -376,131 +381,72 @@ export class FarmerCreateComponent
           // Reset Validators
           this.createForm.controls.upiNumber.setErrors(null);
 
-          this.locationService
-            .getProvinceByName(
-              this.upi.parcelLocation.province.provinceName.toUpperCase()
-            )
-            .subscribe(
-              (pr) => {
-                this.province = pr[0];
-              },
-              (err) => {
-              },
-              () => {
+          const payload = {
+            province: this.upi.parcelLocation.province.provinceName.toUpperCase(),
+            district: this.titleCase(this.upi.parcelLocation.district.districtName),
+            sector: this.titleCase(this.upi.parcelLocation.sector.sectorName),
+            cell: this.titleCase(this.upi.parcelLocation.cell.cellName),
+            village: this.titleCase(this.upi.parcelLocation.village.villageName),
+          }
 
-                if (this.province._id !== this.createForm.controls.tree_location.get('prov_id').value) {
-                  this.checkIfUpiinValidZoning.prov_id = false
-                  this.createForm.controls.upiNumber.setErrors({Invalid: true});
-                } else {
-                  this.createForm.controls.tree_location
-                    .get('prov_id')
-                    .setValue(this.province._id, {emitEvent: false});
+          this.locationService.getZoningIDS(payload).subscribe(
+            (pr)=> {
+              this.province = pr;
+            },
+            () => {},
+            () => {
 
-                  this.locationService
-                    .getDistrictByName(
-                      this.titleCase(
-                        this.upi.parcelLocation.district.districtName
-                      )
-                    )
-                    .subscribe(
-                      (dst) => {
-                        this.district = dst[0];
-                      },
-                      (err) => {
-                      },
-                      () => {
 
-                        if (this.district._id !== this.createForm.controls.tree_location.get('dist_id').value) {
-                          this.checkIfUpiinValidZoning.dist_id = false
-                          this.createForm.controls.upiNumber.setErrors({Invalid: true});
-                        } else {
-                          this.createForm.controls.tree_location
-                            .get('dist_id')
-                            .setValue(this.district._id, {emitEvent: false});
-                          this.locationService
-                            .getSectorByName(
-                              this.titleCase(
-                                this.upi.parcelLocation.sector.sectorName
-                              ),
-                              this.district.id
-                            )
-                            .subscribe(
-                              (sect) => {
-                                this.sector = sect[0];
-                              },
-                              (err) => {
-                              },
-                              () => {
-                                this.createForm.controls.tree_location
-                                  .get('sect_id')
-                                  .setValue(this.sector._id, {emitEvent: false});
-                                this.createForm.controls.tree_location.get('sect_id').disable()
-                                this.locationService
-                                  .getCellByName(
-                                    this.titleCase(
-                                      this.upi.parcelLocation.cell.cellName
-                                    ),
-                                    this.sector.id
-                                  )
-                                  .subscribe(
-                                    (cel) => {
-                                      this.cell = cel[0];
-                                    },
-                                    (err) => {
-                                    },
-                                    () => {
-                                      this.createForm.controls.tree_location
-                                        .get('cell_id')
-                                        .setValue(this.cell._id, {
-                                          emitEvent: false,
-                                        });
-                                      this.createForm.controls.tree_location.get('cell_id').disable()
-                                      this.locationService
-                                        .getVillageByName(
-                                          this.titleCase(
-                                            this.upi.parcelLocation.village
-                                              .villageName
-                                          ),
-                                          this.cell.id
-                                        )
-                                        .subscribe(
-                                          (vil) => {
-                                            this.village = vil[0];
-                                          },
-                                          (err) => {
-                                          },
-                                          () => {
+              const villagesSet = [];
+              this.org.coveredSectors.map((sector) => {
+                sector.coveredVillages.map((village) => {
+                  villagesSet.push(village.village_id);
+                });
+              });
 
-                                            const villagesSet = [];
-                                            this.org.coveredSectors.map((sector) => {
-                                              sector.coveredVillages.map((village) => {
-                                                villagesSet.push(village.village_id);
-                                              });
-                                            });
-
-                                            // Check if UPI Location is in covered villages.
-                                            if (villagesSet.includes(this.village._id)) { // If yes, use location.
-                                              this.createForm.controls.tree_location
-                                                .get('village_id')
-                                                .setValue(this.village._id);
-                                              this.createForm.controls.tree_location.get('village_id').disable();
-                                            } else { // If no, don't populate location && show message.
-                                              this.checkIfUpiinValidZoning.village_id = false;
-                                              this.createForm.controls.upiNumber.setErrors({Invalid: true});
-                                            }
-                                          }
-                                        );
-                                    }
-                                  );
-                              }
-                            );
-                        }  // End of else district in zoning condition
-
-                      } // End of else province in zoning condition
-                    );
-                }
+              if (this.province.province_id !== this.org.location.prov_id._id) {
+                this.checkIfUpiinValidZoning.prov_id = false
+                this.createForm.controls.upiNumber.setErrors({Invalid: true});
               }
-            );
+              else if (this.province.district_id !== this.org.location.dist_id._id){
+                this.checkIfUpiinValidZoning.dist_id = false
+                this.createForm.controls.upiNumber.setErrors({Invalid: true});
+              }
+              else if (!villagesSet.includes(this.province.village_id))  { // If yes, use location.
+                this.checkIfUpiinValidZoning.village_id = false
+                this.createForm.controls.upiNumber.setErrors({Invalid: true});
+              }
+              else {
+
+                this.provinces = [{
+                  _id: this.province.province_id,
+                  namee: this.titleCase(this.upi.parcelLocation.province.provinceName)
+                }];
+                this.districts = [{
+                  _id: this.province.district_id,
+                  name: this.titleCase(this.upi.parcelLocation.district.districtName)
+                }];
+                this.sectors = [{
+                  _id: this.province.sector_id,
+                  name: this.titleCase(this.upi.parcelLocation.sector.sectorName)
+                }];
+                this.cells = [{
+                  _id: this.province.cell_id,
+                  name: this.titleCase(this.upi.parcelLocation.cell.cellName)
+                }];
+                this.villages = [{
+                  _id: this.province.village_id,
+                  name: this.titleCase(this.upi.parcelLocation.village.villageName)
+                }];
+
+                this.createForm.controls.location_if_upi.get('prov_id').setValue(this.province.province_id);
+                this.createForm.controls.location_if_upi.get('dist_id').setValue(this.province.district_id);
+                this.createForm.controls.location_if_upi.get('sect_id').setValue(this.province.sector_id);
+                this.createForm.controls.location_if_upi.get('cell_id').setValue(this.province.cell_id);
+                this.createForm.controls.location_if_upi.get('village_id').setValue(this.province.village_id);
+              }
+            }
+          );
 
           this.createForm.controls.landOwner.setValue(
             this.upi.representative.surname +
@@ -603,7 +549,20 @@ export class FarmerCreateComponent
 
   onSubmit() {
     this.createForm.markAllAsTouched();
-    console.log(this.createForm)
+
+    if (this.createForm.controls.upiNumber.value) {
+      this.createForm.controls.tree_location.get('prov_id').clearValidators();
+      this.createForm.controls.tree_location.get('prov_id').updateValueAndValidity();
+      this.createForm.controls.tree_location.get('dist_id').clearValidators();
+      this.createForm.controls.tree_location.get('dist_id').updateValueAndValidity();
+      this.createForm.controls.tree_location.get('sect_id').clearValidators();
+      this.createForm.controls.tree_location.get('sect_id').updateValueAndValidity();
+      this.createForm.controls.tree_location.get('cell_id').clearValidators();
+      this.createForm.controls.tree_location.get('cell_id').updateValueAndValidity();
+      this.createForm.controls.tree_location.get('village_id').clearValidators();
+      this.createForm.controls.tree_location.get('village_id').updateValueAndValidity();
+    }
+
     if (this.createForm.valid) {
       this.loading = true;
       if (this.createFromPending) {
@@ -642,8 +601,11 @@ export class FarmerCreateComponent
           item['upiNumber'.toString()] = temp.upiNumber;
           item['treeAges'.toString()] = temp.treeAges;
           item['numberOfTrees'.toString()] = temp.numberOfTrees;
+          if(this.createForm.controls.upiNumber.value)
+            item['location'.toString()] = temp.location_if_upi;
+          else item['location'.toString()] = temp.tree_location;
           delete item.tree_location;
-          item['location'.toString()] = temp.tree_location;
+          delete item.location_if_upi;
           return this.helperService.cleanObject(item);
         });
         farmer['certificates'.toString()] = temp.certificates;
@@ -745,7 +707,7 @@ export class FarmerCreateComponent
             upiNumber: temp.upiNumber,
             treeAges: temp.treeAges,
             numberOfTrees: temp.numberOfTrees,
-            location: temp.tree_location,
+            location: this.createForm.controls.upiNumber.value? temp.location_if_upi: temp.tree_location,
             ...(temp.certificates.length > 0 && {certificates: temp.certificates})
           }
         ];
@@ -1038,7 +1000,7 @@ export class FarmerCreateComponent
     const value = this.getRequestsFormGroup(index).controls.location.get(
       'dist_id'.toString()
     ).value;
-    if (value !== '') {
+    if (value !== '' && this.createForm.controls.upiNumber.value < 15) {
       if (this.isUserSiteManager && !this.isUserCWSOfficer) {
         const temp = [];
         this.site.coveredAreas.coveredSectors.map((sector) => {
@@ -1073,7 +1035,7 @@ export class FarmerCreateComponent
     const value = this.getRequestsFormGroup(index).controls.location.get(
       'sect_id'.toString()
     ).value;
-    if (value !== '') {
+    if (value !== '' && this.createForm.controls.upiNumber.value < 15) {
       if (this.isUserCWSOfficer) {
         this.filterCustomCells(this.org, index);
       } else {
@@ -1098,7 +1060,7 @@ export class FarmerCreateComponent
     const value = this.getRequestsFormGroup(index).controls.location.get(
       'cell_id'.toString()
     ).value;
-    if (value !== '') {
+    if (value !== '' && this.createForm.controls.upiNumber.value < 15) {
       if (this.isUserCWSOfficer) {
         this.locationService
           .getVillages(value)
@@ -1355,13 +1317,6 @@ export class FarmerCreateComponent
   }
 
   initial() {
-    // this.locationService
-    //   .getProvinces()
-    //   .toPromise()
-    //   .then((data) => {
-    //     this.provinces = data;
-    //   });
-
     this.locationService.getProvinces().subscribe((data) => {
       this.provinces = data;
       this.locationService
