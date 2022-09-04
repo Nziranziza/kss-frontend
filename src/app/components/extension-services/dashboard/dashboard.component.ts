@@ -134,7 +134,7 @@ export class DashboardComponent extends BasicComponent implements OnInit {
   initialValue = "";
   keyword = "organizationName";
   groupKeyword = "groupName";
-  agronomistKeyword = "fullNames";
+  agronomistKeyword = "fullName";
   nurseryKeyword = "nurseryName";
   seasons: any[];
   currentSeason: any;
@@ -237,7 +237,7 @@ export class DashboardComponent extends BasicComponent implements OnInit {
     this.route.params.subscribe((params) => {
       this.organisationId = params["organisationId".toString()];
       console.log(this.organisationId);
-      this.starterBody = {referenceId : params["organisationId".toString()]};
+      this.starterBody = { referenceId: params["organisationId".toString()] };
     });
     this.initial();
     this.basicInit(this.authenticationService.getCurrentUser().info.org_id);
@@ -402,26 +402,17 @@ export class DashboardComponent extends BasicComponent implements OnInit {
     lat: number;
     lng: number;
   }[] = [
-    {
-      id: 1,
-      lat: -1.9485423,
-      lng: 30.0613514,
-    },
-  ];
+      {
+        id: 1,
+        lat: -1.9485423,
+        lng: 30.0613514,
+      },
+    ];
 
   selectMarker(id: string) {
     this.farmService.getLand(id).subscribe((data) => {
       this.farmDetails = data.data;
       this.clickedMarker = true;
-      this.loading = false;
-    });
-  }
-
-  getFarmerGroup(body: any) {
-    this.loading = true;
-    this.groupService.all(body).subscribe((data) => {
-      this.groups = data.data;
-      this.groups.unshift({ groupName: "all groups", _id: "" });
       this.loading = false;
     });
   }
@@ -449,12 +440,10 @@ export class DashboardComponent extends BasicComponent implements OnInit {
 
   // initials
   initial() {
-    this.getTrainers();
+    this.getTrainings({});
     this.getNurseries();
-    this.getTrainings();
     this.getOrganisations();
     this.getFarms(this.starterBody);
-    this.getFarmerGroup(this.starterBody);
     this.seasonService.all().subscribe((data) => {
       this.seasons = data.content;
       this.currentSeason = this.authenticationService.getCurrentSeason();
@@ -474,13 +463,8 @@ export class DashboardComponent extends BasicComponent implements OnInit {
     this.getGapAdoptionStats(body);
     this.getVisitsStats(body);
     this.getSeedlingStats(body);
-    if (this.newOrg != "") {  
-      this.getFarmerGroup({ reference: this.newOrg });
-    }
-    if (this.organisationId != null) {  
-      this.getFarmerGroup({ reference: this.organisationId});
-    }
     this.getFarmsStats(body);
+    this.getTrainings(body);
     delete body.date;
     this.getFarms(body);
   }
@@ -614,10 +598,24 @@ export class DashboardComponent extends BasicComponent implements OnInit {
     this.getTrainingsStats(body);
   }
 
-  getTrainings(): void {
+  getTrainings(body: any): void {
     this.loading = true;
-    this.trainingService.all().subscribe((data) => {
+    this.trainingService.allByDashboardFilter(body).subscribe((data) => {
       this.trainings = data.data;
+      this.trainers = [{ groupName: "all trainers", _id: "" }];
+      this.groups = [{ groupName: "all groups", _id: "" }];
+      data.data.map((training) => {
+        training.trainers.map((trainer) => {
+          if (this.trainers.every(data => data["_id"] !== trainer._id)) {
+            this.trainers.push(trainer);
+          }
+        })
+        training.groups.map((group) => {
+          if (this.groups.every(data => data["_id"] !== group._id)) {
+            this.groups.push(group);
+          }
+        })
+      });
       this.loading = false;
     });
   }
@@ -702,14 +700,6 @@ export class DashboardComponent extends BasicComponent implements OnInit {
     this.loading = true;
     this.gapService.getGapsStats(body).subscribe((data) => {
       this.gapAdoptionStats = data.data;
-      this.loading = false;
-    });
-  }
-
-  getTrainers() {
-    this.loading = true;
-    this.userService.allAgronomist({}).subscribe((data) => {
-      this.trainers = data.data;
       this.loading = false;
     });
   }
@@ -805,11 +795,34 @@ export class DashboardComponent extends BasicComponent implements OnInit {
       });
 
     this.dashboardForm.controls.training_id.valueChanges.subscribe((value) => {
-      if (value !== "") {
-        this.mainBody.trainingId = value;
-      }
       if (this.selectedAgronomist != "") {
         this.mainBody.trainerId = this.dashboardForm.value.trainerId;
+      }
+      if (value !== "") {
+        this.trainers = [];
+        this.groups = [];
+        this.mainBody.trainingId = value;
+        this.trainings.map((training) => {
+          if (training.trainingId === value) {
+            this.trainers.push(...training.trainers);
+            this.groups.push(...training.groups);
+          }
+        })
+      } else if (value === "") {
+        this.trainers = [{ groupName: "all trainers", _id: "" }];
+        this.groups = [{ groupName: "all groups", _id: "" }];
+        this.trainings.map((training) => {
+          training.trainers.map((trainer) => {
+            if (this.trainers.every(data => data["_id"] !== trainer._id)) {
+              this.trainers.push(trainer);
+            }
+          })
+          training.groups.map((group) => {
+            if (this.groups.every(data => data["_id"] !== group._id)) {
+              this.groups.push(group);
+            }
+          })
+        });
       }
       this.getTrainingsStats(this.mainBody);
       delete this.mainBody.trainingId;
