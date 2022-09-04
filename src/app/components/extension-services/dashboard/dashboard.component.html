@@ -219,7 +219,7 @@
                     <option value="" selected>All trainings</option>
                     <option
                       *ngFor="let training of trainings; let i = index"
-                      value="{{ training._id }}"
+                      value="{{ training.trainingId }}"
                     >
                       {{ training.trainingName | titlecase }}
                     </option>
@@ -245,7 +245,7 @@
                     </ng-autocomplete>
 
                     <ng-template #itemTemplate4 let-item>
-                      <a [innerHTML]="item.fullNames" style="height: 20px"></a>
+                      <a [innerHTML]="item.fullName" style="height: 20px"></a>
                     </ng-template>
 
                     <ng-template #notFoundTemplate4 let-notFound>
