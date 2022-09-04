@@ -122,7 +122,6 @@ export class FarmerGroupCreateComponent
     });
     this.basicInit(this.authenticationService.getCurrentUser().info.org_id);
     this.onChanges();
-    this.initial();
   }
 
   onSubmit() {
@@ -150,6 +149,7 @@ export class FarmerGroupCreateComponent
       this.errors = this.helper.getFormValidationErrors(this.createForm);
     }
   }
+
   initial() {
     this.locationService.getProvinces().subscribe((data) => {
       this.provinces = data;

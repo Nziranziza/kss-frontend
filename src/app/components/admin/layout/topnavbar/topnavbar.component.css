@@ -28,7 +28,7 @@
 
 .header-name-text {
   text-align: center;
-  font: normal normal normal 16px/18px Helvetica Neue;
+  font: normal normal normal 16px/18px Helvetica Neue, Helvetica, Arial, sans-serif;
   letter-spacing: 0px;
   color: #e1a33e;
   opacity: 1;
