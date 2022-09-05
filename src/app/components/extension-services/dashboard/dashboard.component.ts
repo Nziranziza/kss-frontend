@@ -67,17 +67,21 @@ export class DashboardComponent extends BasicComponent implements OnInit {
       ["Female", 0],
       ["Male", 0],
     ],
+    dummyData: [
+      ["Female", 50],
+      ["Male", 50],
+    ],
     options: {
       colors: ["#FF69F6", "#35A1FF"],
       legend: { position: "none" },
       pieHole: 0.3,
       backgroundColor: { fill: "transparent" },
       chartArea: {
-        left: 5,
+        left: 20,
         top: 20,
         bottom: 20,
         width: "100%",
-        height: "150",
+        height: "140",
       },
     },
     columnNames: ["female", "male"],
@@ -92,22 +96,26 @@ export class DashboardComponent extends BasicComponent implements OnInit {
       ["Variety 2", 0],
       ["Variety 3", 0],
     ],
+    dummyData: [
+      ["Variety 1", 100],
+    ],
     options: {
       colors: ["#F5B23F", "#FF990A"],
       legend: { position: "none" },
-      pieHole: 0.3,
+      pieHole: 0.4,
       backgroundColor: { fill: "transparent" },
       chartArea: {
         left: 5,
         top: 20,
         bottom: 20,
         width: "100%",
-        height: "160",
+        height: "200",
       },
     },
+    color: "black",
     columnNames: ["Variety1", "Variety2"],
     width: "100%",
-    height: 180,
+    height: 220,
   };
 
   selectedFarmDetails: any;
@@ -542,15 +550,15 @@ export class DashboardComponent extends BasicComponent implements OnInit {
   }
 
   selectAgronomistEvent(item) {
-    this.selectedAgronomist = item._id;
+    this.selectedAgronomist = item.userId;
     if (this.selectedGroup !== "") {
       this.mainBody.groupId = this.selectedGroup;
     }
     if (this.dashboardForm.value.trainingId != "") {
       this.mainBody.trainingId = this.dashboardForm.value.trainingId;
     }
-    if (item._id != "") {
-      this.mainBody.trainerId = item._id;
+    if (item.userId != "") {
+      this.mainBody.trainerId = item.userId;
     }
     this.getTrainingsStats(this.mainBody);
     delete this.mainBody.groupId;
@@ -813,7 +821,7 @@ export class DashboardComponent extends BasicComponent implements OnInit {
         this.groups = [{ groupName: "all groups", _id: "" }];
         this.trainings.map((training) => {
           training.trainers.map((trainer) => {
-            if (this.trainers.every(data => data["_id"] !== trainer._id)) {
+            if (this.trainers.every(data => data["userId"] !== trainer.userId)) {
               this.trainers.push(trainer);
             }
           })
