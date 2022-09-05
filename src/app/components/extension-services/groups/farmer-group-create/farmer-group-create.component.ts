@@ -128,6 +128,8 @@ export class FarmerGroupCreateComponent
     this.createForm.markAllAsTouched();
     if (this.createForm.valid) {
       const value = JSON.parse(JSON.stringify(this.createForm.value));
+      value.location.prov_id = this.org.location.prov_id._id;
+      value.location.dist_id = this.org.location.dist_id._id;
       value.org_id = this.authenticationService.getCurrentUser().info.org_id;
       value.meetingSchedule.meetingDay = +value.meetingSchedule.meetingDay;
       const members = [];
@@ -159,10 +161,10 @@ export class FarmerGroupCreateComponent
           this.districts = dt;
           this.createForm.controls.location
             .get('prov_id'.toString())
-            .patchValue(this.org.location.prov_id._id, { emitEvent: false })
+            .patchValue(this.org.location.prov_id._id, { emitEvent: true })
           this.createForm.controls.location
             .get('dist_id'.toString())
-            .patchValue(this.org.location.dist_id._id, { emitEvent: false });
+            .patchValue(this.org.location.dist_id._id, { emitEvent: true });
           this.sectors = this.filterZoningSectors(this.org.coveredSectors);
         });
     });
