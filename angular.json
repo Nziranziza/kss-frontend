@@ -79,15 +79,15 @@
                   "with": "src/environments/environment.staging.ts"
                 }
               ],
-              "optimization": true,
+              "optimization": false,
               "outputHashing": "all",
-              "sourceMap": false,
-              "extractCss": true,
+              "sourceMap": true,
+              "extractCss": false,
               "namedChunks": false,
-              "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
+              "aot": false,
+              "extractLicenses": false,
+              "vendorChunk": true,
+              "buildOptimizer": false,
               "budgets": [
                 {
                   "type": "initial",
@@ -109,7 +109,7 @@
               "browserTarget": "basic-angular:build:production"
             },
             "staging": {
-              "browserTarget": "staging:build:production"
+              "browserTarget": "staging:build:staging"
             }
           }
         },

@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {
   AuthenticationService,
@@ -12,9 +12,8 @@ import {
   SiteService,
   TrainingService,
 } from 'src/app/core';
-import {jsPDF} from 'jspdf';
-import html2canvas from 'html2canvas';
-import {saveAs} from 'file-saver';
+import {DatePipe} from '@angular/common';
+import {isUndefined} from "util";
 
 @Component({
   selector: 'app-reports',
@@ -23,9 +22,7 @@ import {saveAs} from 'file-saver';
 })
 export class ReportsComponent extends BasicComponent implements OnInit {
   newOrg: any;
-  coveredSectors: any = [];
-  coveredVillages: any = [];
-  coveredCells: any = [];
+  newData: any;
   selectedGroup: any;
   dataCsv: any;
   dataPdf: any;
@@ -39,7 +36,8 @@ export class ReportsComponent extends BasicComponent implements OnInit {
     private groupService: GroupService,
     private trainingService: TrainingService,
     private reportService: ReportService,
-    private siteService: SiteService
+    private siteService: SiteService,
+    private datePipe: DatePipe
   ) {
     super(locationService, organisationService);
   }
@@ -62,7 +60,6 @@ export class ReportsComponent extends BasicComponent implements OnInit {
   // @ts-ignore
   dt5Trigger: Subject = new Subject();
   groups: any[] = [];
-  seasons: any[] = [];
   currentSeason: any;
   stats: any = {};
   basePath: any;
@@ -72,9 +69,9 @@ export class ReportsComponent extends BasicComponent implements OnInit {
   reportBody: any;
   dataFile: any;
   reportGenerated = false;
-  showHeaders = false;
   initialValue = '';
-  sectorIndex = 0;
+  currentDate: any;
+  seasonStartingDate: any;
   keyword = 'organizationName';
   groupKeyword = 'groupName';
   weekDays: string[] = [
@@ -89,37 +86,36 @@ export class ReportsComponent extends BasicComponent implements OnInit {
 
   ngOnInit() {
     this.dtOptions,
-    this.dt2Options,
-    this.dt3Options,
-    (this.dt4Options = {
-      pagingType: 'full_numbers',
-      pageLength: 10,
-    });
+      this.dt2Options,
+      this.dt3Options,
+      this.dt4Options = {
+        pagingType: 'full_numbers',
+        pageLength: 10,
+      };
     this.reportForm = this.formBuilder.group({
-      filterByType: [''],
       reportFor: [''],
-      cws: [''],
-      location: this.formBuilder.group({
-        prov_id: [''],
-        dist_id: [''],
-        sect_id: [''],
-        cell_id: [''],
-        village_id: [''],
-      }),
-      date: this.formBuilder.group({
-        from: [''],
-        to: [''],
-      }),
-      trainingFilters: this.formBuilder.group({
-        trainingModule: [''],
-        gender: [''],
-      }),
+      filter: this.formBuilder.group({
+        locationBy: [''],
+        location: this.formBuilder.group({
+          prov_id: [''],
+          dist_id: [''],
+          sect_id: [''],
+          cell_id: [''],
+          village_id: [''],
+        }),
+        cws: this.formBuilder.group({
+          groupId: [''],
+          org_id: ['']
+        }),
+        date: [''],
+        training: this.formBuilder.group({
+          trainingId: ['']
+        }),
+      })
     });
-    this.seasonService.all().subscribe((data) => {
-      this.seasons = data.content;
-      this.currentSeason = this.authenticationService.getCurrentSeason();
-    });
-    this.basicInit(this.authenticationService.getCurrentUser().info.org_id);
+    this.seasonStartingDate = this.datePipe.transform(this.authenticationService.getCurrentSeason().created_at, 'yyyy-MM-dd');
+    this.currentDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
+    this.basicInit();
     this.initial();
     this.onChanges();
   }
@@ -127,7 +123,6 @@ export class ReportsComponent extends BasicComponent implements OnInit {
   initial() {
     this.getTrainings();
     this.getOrganisations();
-    this.getFarmerGroup();
   }
 
   getTrainings(): void {
@@ -141,9 +136,6 @@ export class ReportsComponent extends BasicComponent implements OnInit {
   getOrganisations() {
     this.organisationService.all().subscribe((data) => {
       if (data) {
-        this.organisations = data.content.filter((org) =>
-          org.organizationRole.includes(1)
-        );
         this.organisations.unshift({
           organizationName: 'all cws',
           _id: '',
@@ -152,60 +144,86 @@ export class ReportsComponent extends BasicComponent implements OnInit {
     });
   }
 
-  getFarmerGroup() {
-    this.loading = true;
-    this.groupService.all({}).subscribe((data) => {
-      this.groups = data.data;
-      this.groups.unshift({groupName: 'all groups', _id: ''});
-      this.loading = false;
-    });
-  }
-
   selectEvent(item) {
-    this.newOrg = item._id;
-    const newData = this.organisations.filter((org) => org._id === item._id);
-    this.reportBody.reference = this.newOrg;
-    this.coveredSectors = newData[0].coveredSectors;
-    this.coveredCells =
-      newData[0].coveredSectors[this.sectorIndex].coveredCells;
-    this.coveredVillages =
-      newData[0].coveredSectors[this.sectorIndex].coveredVillages;
-
-    this.getStats(this.reportForm.value.reportFor, this.reportBody);
+    if(item._id !== '') {
+      this.newOrg = item._id;
+      this.newData = this.organisations.find((org) => org._id === item._id);
+      this.locationSectors = this.filterZoningSectors(this.newData.coveredSectors);
+      this.locationVillages = [];
+      this.locationCells = [];
+      this.reportBody.reference = this.newOrg;
+      if (this.reportForm.controls.filter.get('locationBy').value === 'cws' && this.newOrg) {
+        this.groupService.list({
+          ...this.getLocation(),
+          ...(this.newOrg && {reference: this.newOrg}),
+        }).subscribe((data) => {
+          this.groups = data.data;
+          this.groups.unshift({
+            groupName: 'all groups',
+            _id: '',
+          });
+        });
+      }
+    } else {
+      this.newOrg = undefined;
+    }
+    this.getStats();
   }
 
   deselectEvent() {
-    this.newOrg = '';
-    this.getStats(this.reportForm.value.reportFor, {});
+    this.newOrg = undefined;
+    this.getStats();
   }
 
   selectGroupEvent(item) {
-    this.selectedGroup = item._id;
+    if(item._id !== '') {
+      this.selectedGroup = item._id;
+    } else {
+      this.selectedGroup = undefined;
+    }
+    this.getStats();
   }
 
   deselectGroupEvent(item) {
-    this.selectedGroup = '';
+    this.selectedGroup = undefined;
   }
 
   onChanges() {
     this.reportForm.get('reportFor').valueChanges.subscribe((value) => {
+      this.reportForm.get('reportFor').patchValue(value, {emitEvent: false});
       this.reportBody = {};
       this.stats = {};
       this.reportsTableData = [];
-      this.getStats(value, this.reportBody);
+      this.getStats();
     });
-    this.reportForm.controls.location
-      .get('prov_id'.toString())
+    this.reportForm.controls.filter.get('training.trainingId'.toString()).valueChanges.subscribe((value) => {
+      this.reportForm.controls.filter.get('training.trainingId'.toString()).patchValue(value, {emitEvent: false});
+      this.getStats();
+    });
+    this.reportForm.controls.filter.get('date').valueChanges.subscribe((value) => {
+      this.reportForm.controls.filter.get('date').patchValue(value, {emitEvent: false});
+      this.getStats();
+    });
+    this.reportForm.controls.filter.get('locationBy').valueChanges.subscribe((value) => {
+      this.reportForm.controls.filter.get('locationBy').patchValue(value, {emitEvent: false});
+      if (value !== 'cws') {
+        this.resetCWSFilter();
+      }
+      this.locationChangDistrict(this.reportForm.get('filter') as FormGroup, value);
+      this.reportForm.controls.filter.get('location.sect_id').setValue('', {emitEvent: false});
+      this.reportForm.controls.filter.get('location.cell_id').setValue('', {emitEvent: false});
+      this.reportForm.controls.filter.get('location.village_id').setValue('', {emitEvent: false});
+      this.locationSectors = [];
+      this.locationCells = [];
+      this.locationVillages = [];
+      this.getStats();
+    });
+    this.reportForm.controls.filter
+      .get('location.prov_id'.toString())
       .valueChanges.subscribe((value) => {
-      this.locationChangeProvince(this.reportForm, value);
-      this.reportBody.location = {
-        prov_id: value,
-      };
-      this.getStats(this.reportForm.value.reportFor, {
-        location: {
-          prov_id: value,
-        },
-      });
+      this.reportForm.controls.filter
+        .get('location.prov_id'.toString()).patchValue(value, {emitEvent: false});
+      this.locationChangeProvince(this.reportForm.get('filter') as FormGroup, value);
       this.siteService
         .getZone({prov_id: value, searchBy: 'province'})
         .subscribe((data) => {
@@ -219,19 +237,16 @@ export class ReportsComponent extends BasicComponent implements OnInit {
             });
           }
         });
+      this.getStats();
+    }, () => {
+    }, () => {
     });
-    this.reportForm.controls.location
-      .get('dist_id'.toString())
+    this.reportForm.controls.filter
+      .get('location.dist_id'.toString())
       .valueChanges.subscribe((value) => {
-      this.reportBody.location = {
-        dist_id: value,
-      };
-      this.locationChangDistrict(this.reportForm, value);
-      this.getStats(this.reportForm.value.reportFor, {
-        location: {
-          dist_id: value,
-        },
-      });
+      this.reportForm.controls.filter
+        .get('location.dist_id'.toString()).patchValue(value, {emitEvent: false});
+      this.locationChangDistrict(this.reportForm.get('filter') as FormGroup, value);
       this.siteService
         .getZone({dist_id: value, searchBy: 'district'})
         .subscribe((data) => {
@@ -245,70 +260,162 @@ export class ReportsComponent extends BasicComponent implements OnInit {
             });
           }
         });
+      this.getStats();
     });
-    this.reportForm.controls.location
-      .get('sect_id'.toString())
+    this.reportForm.controls.filter
+      .get('location.sect_id'.toString())
       .valueChanges.subscribe((value) => {
-      this.reportBody.location = {
-        sect_id: value,
-      };
-      this.locationChangSector(this.reportForm, value);
-      this.getStats(this.reportForm.value.reportFor, {
-        location: {
-          sect_id: value,
-        },
-      });
-    });
-
-    this.reportForm.controls.location
-      .get('cell_id'.toString())
-      .valueChanges.subscribe((value) => {
-      this.reportBody.location = {
-        cell_id: value,
-      };
-      this.locationChangCell(this.reportForm, value);
-      this.getStats(this.reportForm.value.reportFor, {
-        location: {
-          cell_id: value,
-        },
-      });
+      this.reportForm.controls.filter
+        .get('location.sect_id'.toString()).patchValue(value, {emitEvent: false});
+      if (!isUndefined(this.newOrg) && (this.newOrg !== '')) {
+        this.locationCells = this.filterZoningCells(this.newData.coveredSectors, value);
+      } else {
+        this.locationChangSector(this.reportForm.get('filter') as FormGroup, value);
+      }
+      if (this.reportForm.controls.filter.get('locationBy').value === 'cws' && this.newOrg) {
+        this.groupService.list({
+          ...(this.newOrg && {reference: this.newOrg}),
+          ...{location: {sect_id: value}}
+        }).subscribe((data) => {
+          this.groups = data.data;
+        });
+      }
+      this.getStats();
     });
 
-    this.reportForm.controls.location
-      .get('village_id'.toString())
+    this.reportForm.controls.filter
+      .get('location.cell_id'.toString())
       .valueChanges.subscribe((value) => {
-      this.reportBody.location = {
-        village_id: value,
-      };
-      this.getStats(this.reportForm.value.reportFor, {
-        location: {
-          village_id: value,
-        },
+      this.reportForm.controls.filter
+        .get('location.cell_id'.toString()).patchValue(value, {emitEvent: false});
+      this.locationService.getVillages(value).subscribe((data) => {
+        this.locationVillages = data;
+        if (!isUndefined(this.newOrg) && (this.newOrg !== '')) {
+          this.locationVillages = this.filterZoningVillages(this.newData.coveredSectors, this.reportForm.controls.filter
+            .get('location.sect_id'.toString()).value, this.locationVillages);
+        }
       });
+      if (this.reportForm.controls.filter.get('locationBy').value === 'cws' && this.newOrg) {
+        this.groupService.list({
+          ...(this.newOrg && {reference: this.newOrg}),
+          ...{location: {cell_id: value}}
+        }).subscribe((data) => {
+          this.groups = data.data;
+        });
+      }
+      this.getStats();
+    });
+
+    this.reportForm.controls.filter
+      .get('location.village_id'.toString())
+      .valueChanges.subscribe((value) => {
+      this.reportForm.controls.filter
+        .get('location.village_id'.toString()).patchValue(value, {emitEvent: false});
+      if (this.reportForm.controls.filter.get('locationBy').value === 'cws' && this.newOrg) {
+        this.groupService.list({
+          ...(this.newOrg && {reference: this.newOrg}),
+          ...{location: {village_id: value}}
+        }).subscribe((data) => {
+          this.groups = data.data;
+        });
+      }
+      this.getStats();
     });
   }
 
-  getStats(value: any, body: any) {
+  getLocation() {
+    const value = JSON.parse(JSON.stringify(this.reportForm.value));
+    return {
+      ...(value.filter.location.prov_id !== '' &&
+        {location: {prov_id: value.filter.location.prov_id}}),
+      ...(value.filter.location.dist_id !== '' &&
+        {location: {dist_id: value.filter.location.dist_id}}),
+      ...(value.filter.location.sect_id !== '' &&
+        {location: {sect_id: value.filter.location.sect_id}}),
+      ...(value.filter.location.cell_id !== '' &&
+        {location: {cell_id: value.filter.location.cell_id}}),
+      ...(value.filter.location.village_id !== '' &&
+        {location: {village_id: value.filter.location.village_id}})
+    };
+  }
+
+
+  formatDate(date) {
+    const d = new Date(date);
+    let month = '' + (d.getMonth() + 1);
+    let day = '' + d.getDate();
+    const year = d.getFullYear();
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+    return [year, month, day].join('-');
+  }
+
+  getStats() {
+    const value = this.reportForm.get('reportFor').value;
+    let body = this.getLocation();
+    const form = JSON.parse(JSON.stringify(this.reportForm.value));
     if (value === 'Farmer Groups') {
+      body = {
+        ...body,
+        ...(this.newOrg && {reference: this.newOrg})
+      };
+      this.reportBody = body;
       this.reportService.groupStats(body).subscribe((data) => {
         this.stats = data.data[0];
       });
     } else if (value === 'Trainings') {
+      const date = form.filter.date;
+      body = {
+        ...body,
+        ...(this.newOrg && {reference: this.newOrg}),
+        ...(form.filter.training.trainingId !== '' && {trainingId: form.filter.training.trainingId}),
+        ...(this.selectedGroup && {groupId: this.selectedGroup}),
+        ...(form.filter.date !== '' && {
+          date: {
+            from: date[0],
+            to: date[1],
+          }
+        })
+      };
+      this.reportBody = body;
       this.reportService.trainingStats(body).subscribe((data) => {
         this.stats = data.data[0];
       });
     } else if (value === 'Farm Visits') {
+      const date = form.filter.date;
+      body = {
+        ...body,
+        ...(this.newOrg && {reference: this.newOrg}),
+        ...(this.selectedGroup && {groupId: this.selectedGroup}),
+        ...(form.filter.date !== '' && {
+          date: {
+            from: date[0],
+            to: date[1],
+          }
+        })
+      };
+      this.reportBody = body;
       this.reportService.visitStats(body).subscribe((data) => {
         this.stats = data.data[0];
       });
     } else if (value === 'Coffee Farmers') {
-      body.searchBy = 'farmer';
+      body = {
+        ...body,
+        ...(this.newOrg && {org_id: this.newOrg}),
+        ...{searchBy: 'farmer'}
+      };
+      this.reportBody = body;
       this.reportService.farmStats(body).subscribe((data) => {
         this.stats = data.data[0];
         console.log(data);
       });
     } else if (value === 'Coffee Farms') {
-      body.searchBy = 'farm';
+      body = {
+        ...body,
+        ...(this.newOrg && {org_id: this.newOrg}),
+        ...{searchBy: 'farm'}
+      };
+      this.reportBody = body;
       this.reportService.farmStats(body).subscribe((data) => {
         this.stats = data.data[0];
         console.log(data);
@@ -318,51 +425,6 @@ export class ReportsComponent extends BasicComponent implements OnInit {
 
   downloadCsv() {
     this.generateFinalReport();
-  }
-
-  downloadFile() {
-    const data = this.dataCsv;
-    console.log(data);
-    const replacer = (key, value) => (value === null ? '' : value); // specify how you want to handle null values here
-    const header = Object.keys(data[0]);
-    const csv = data.map((row) =>
-      header
-        .map((fieldName) => JSON.stringify(row[fieldName], replacer))
-        .join(',')
-    );
-    csv.unshift(header.join(','));
-    const csvArray = csv.join('\r\n');
-
-    const blob = new Blob([csvArray], {type: 'text/csv'});
-    saveAs(blob, 'myFile.csv');
-  }
-
-  downloadPdfFile() {
-    const base64String = this.dataPdf;
-    console.log(base64String);
-    const source = `data:application/pdf;base64,${base64String}`;
-    const link = document.createElement('a');
-    link.href = source;
-    link.download = `sks-report.pdf`;
-    link.click();
-  }
-
-  downloadPdf() {
-    this.showHeaders = true;
-    html2canvas(document.getElementById('downloadFile')).then((canvas) => {
-      // Few necessary setting options
-      const imgWidth = 208;
-      const pageHeight = 295;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      const heightLeft = imgHeight;
-
-      const contentDataURL = canvas.toDataURL('image/png');
-      const pdf = new jsPDF('p', 'mm', 'a4'); // A4 size page of PDF
-      const position = 0;
-      pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
-      pdf.save('sks-report.pdf'); // Generated PDF
-    });
-    this.showHeaders = false;
   }
 
   generateReport() {
@@ -495,4 +557,12 @@ export class ReportsComponent extends BasicComponent implements OnInit {
         });
     }
   }
+
+  resetCWSFilter() {
+    this.groups = [];
+    this.selectedGroup = undefined;
+    this.newOrg = undefined;
+    this.newData = undefined;
+  }
+
 }
