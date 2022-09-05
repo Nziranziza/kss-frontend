@@ -79,7 +79,8 @@ footer {
   width: 100%;
 }
 .homepage-section .sliders img {
-  height: 750px;
+  max-width: 100%;
+  max-height: 100%;
   opacity: 1;
 }
 
@@ -130,7 +131,7 @@ footer {
 }
 
 .homepage-section .impact {
-  height: 580px;
+  min-height: 580px;
   padding: 50px;
   background: #4f210d0a 0% 0% no-repeat padding-box;
   opacity: 1;
@@ -160,7 +161,7 @@ footer {
 }
 
 .homepage-section .features {
-  height: 600px;
+  min-height: 600px;
   padding: 50px;
   background: #f2eee7 0% 0% no-repeat padding-box;
 }
