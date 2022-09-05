@@ -138,10 +138,16 @@ export class GapCreateComponent
    */
 
   chooseIfApplicable(event, sectionIndex: number, qstIndex: number) {
+    for(const form of this.getSectionQuestions(sectionIndex).controls){
+      form.get('is_not_applicable').setValue(false);
+    }
     this.getSectionQuestions(sectionIndex).at(qstIndex).get('is_not_applicable').setValue(event.target.checked);
   }
 
   chooseIfAnswerApplicable(event, sectionIndex: number, qstIndex: number, answIndex: number) {
+    for(const form of this.getQuestionAnswers(sectionIndex, qstIndex).controls){
+      form.get('is_not_applicable').setValue(false);
+    }
     this.getQuestionAnswers(sectionIndex, qstIndex).at(answIndex).get('is_not_applicable').setValue(event.target.checked);
   }
 

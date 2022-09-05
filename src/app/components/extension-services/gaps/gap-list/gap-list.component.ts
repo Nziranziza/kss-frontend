@@ -9,7 +9,7 @@ import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { GapDeleteModal } from '../gap-delete-modal/gap-delete-modal.component';
-import { ViewGapComponent } from "../view-gap/view-gap.component";
+import { ViewGapComponent } from '../view-gap/view-gap.component';
 
 @Component({
   selector: 'app-gap-list',
@@ -55,6 +55,7 @@ export class GapListComponent
 
   ngOnInit() {
     this.getGap();
+    this.dtTrigger.next();
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 25,
@@ -74,17 +75,16 @@ export class GapListComponent
       this.gaps.map((gap) => {
         this.overallWeight += gap.gap_weight * gap.adoptionRate / 100;
       })
-      let bestAdopted = data.data.reduce((max, gap) => max.adoptionRate > gap.adoptionRate ? max : gap);
+      const bestAdopted = data.data.reduce((max, gap) => max.adoptionRate > gap.adoptionRate ? max : gap);
       if (bestAdopted.gap_name){
         this.mostAdopted = bestAdopted.gap_name;
       }
-      this.dtTrigger.next();
       this.loading = false;
     });
 
     this.config = {
       itemsPerPage: 10,
-      currentPage: 0 + 1,
+      currentPage: 1,
       totalItems: this.gaps.length,
     };
   }
