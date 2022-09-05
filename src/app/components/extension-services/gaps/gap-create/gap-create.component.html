@@ -197,7 +197,7 @@
                             class="form-control"
                             formControlName="weight"
                             placeholder=""
-                            type="text"
+                            type="number"
                           />
                           <app-inline-errors
                             *ngIf="getQuestionField('weight', i, x).invalid && (getQuestionField('weight', i, x).dirty || getQuestionField('weight', i, x).touched)"
@@ -326,7 +326,7 @@
                                   formControlName="weight"
                                   name="weight"
                                   placeholder=""
-                                  type="text"
+                                  type="number"
                                 />
                                 <app-inline-errors
                                   *ngIf="getAnswerField('weight', i, x, y).invalid && (getAnswerField('weight', i, x, y).dirty || getAnswerField('weight', i, x, y).touched)"
