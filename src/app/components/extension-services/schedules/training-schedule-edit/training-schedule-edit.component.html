@@ -67,18 +67,6 @@
             >
             <div class="row">
               <div class="col-sm-6">
-                <label class="control-label"> Province </label>
-                <div class="confirm-text-box confirm-text">
-                  <div *ngFor="let province of locationProvinces">
-                    <span
-                      *ngIf="
-                        scheduleTraining.value.location.prov_id == province._id
-                      "
-                    >
-                      {{ province.namee }}
-                    </span>
-                  </div>
-                </div>
                 <label class="control-label"> Sector </label>
                 <div class="confirm-text-box confirm-text">
                   <div *ngFor="let sector of locationSectors">
@@ -106,18 +94,6 @@
                 </div>
               </div>
               <div class="col-sm-6">
-                <label class="control-label label-required"> District </label>
-                <div class="confirm-text-box confirm-text">
-                  <div *ngFor="let district of locationDistricts">
-                    <span
-                      *ngIf="
-                        scheduleTraining.value.location.dist_id == district._id
-                      "
-                    >
-                      {{ district.name }}
-                    </span>
-                  </div>
-                </div>
                 <label class="control-label"> Cell </label>
                 <div class="confirm-text-box confirm-text">
                   <div *ngFor="let cell of locationCells">

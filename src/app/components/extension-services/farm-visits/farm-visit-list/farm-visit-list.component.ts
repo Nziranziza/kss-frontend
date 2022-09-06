@@ -18,8 +18,7 @@ import { ViewFarmVisitComponent } from '../view-farm-visit/view-farm-visit.compo
 })
 export class FarmVisitListComponent
   extends BasicComponent
-  implements OnInit, OnDestroy
-{
+  implements OnInit, OnDestroy {
   constructor(
     private messageService: MessageService,
     private visitService: VisitService,
@@ -51,7 +50,7 @@ export class FarmVisitListComponent
   // @ts-ignore
   @ViewChild(DataTableDirective, { static: false })
   dtElement: DataTableDirective;
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void { }
 
   ngOnInit() {
     this.getVisits();
@@ -92,6 +91,7 @@ export class FarmVisitListComponent
     this.visitService.sendSms(data).subscribe(() => {
       this.loading = false;
     });
+    this.loading = false;
   }
 
   openDeleteModal(visit: any, warning?: any) {
@@ -106,12 +106,6 @@ export class FarmVisitListComponent
       if (results.confirmed) {
         this.visitService.delete(visit._id).subscribe(
           () => {
-            this.loading = true;
-            // const body = {
-            //   reference:
-            //     this.authenticationService.getCurrentUser().info.org_id,
-            // };
-
             this.getVisits();
             this.setMessage('Schedule successfully Cancelled!');
           },
