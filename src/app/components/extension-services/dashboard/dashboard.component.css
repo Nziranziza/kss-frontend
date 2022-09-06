@@ -44,7 +44,7 @@
 
 .header-location-text {
   text-align: center;
-  font: normal normal bold 14px/17px Helvetica Neue;
+  font: normal normal bold 14px/17px Helvetica Neue, Helvetica, Arial, sans-serif;
   letter-spacing: 0px;
   color: #333333;
   opacity: 1;
@@ -67,14 +67,14 @@
 
 .filter-title-text {
   text-align: left;
-  font: normal normal normal 24px/29px Helvetica Neue;
+  font: normal normal normal 24px/29px Helvetica Neue, Helvetica, Arial, sans-serif;
   letter-spacing: 0px;
   color: #333333;
   margin-bottom: 10px;
 }
 
 .filter-title-text .bold {
-  font: normal normal bold 24px/29px Helvetica Neue;
+  font: normal normal bold 24px/29px Helvetica Neue, Helvetica, Arial, sans-serif;
 }
 
 .btn-dashboard {
@@ -83,13 +83,13 @@
   background: #4f210d 0% 0% no-repeat padding-box;
   color: white;
   border-radius: 3px;
-  font: normal 10px/15px Helvetica Neue;
+  font: normal 10px/15px Helvetica Neue, Helvetica, Arial, sans-serif;
   opacity: 1;
 }
 
 .form-control-small {
   height: 28px;
-  font: normal 10px/15px Helvetica Neue;
+  font: normal 10px/15px Helvetica Neue, Helvetica, Arial, sans-serif;
   border: 1px solid #4f210d;
 }
 
@@ -99,12 +99,12 @@
 
 .ng-autocomplete ::ng-deep .autocomplete-container {
   height: 28px;
-  font: normal 10px/15px Helvetica Neue;
+  font: normal 10px/15px Helvetica Neue, Helvetica, Arial, sans-serif;
 }
 
 .ng-autocomplete ::ng-deep .autocomplete-container .input-container input {
   height: 28px;
-  font: normal 10px/15px Helvetica Neue;
+  font: normal 10px/15px Helvetica Neue, Helvetica, Arial, sans-serif;
   border: 1px solid #4f210d;
   color: #333333;
   border-radius: 3px;
@@ -117,12 +117,12 @@
   ul
   li
   a {
-  font: normal 10px/15px Helvetica Neue;
+  font: normal 10px/15px Helvetica Neue, Helvetica, Arial, sans-serif;
   color: #333333;
 }
 
 .ng-autocomplete ::ng-deep .autocomplete-container .input-container .x i {
-  font: normal 10px/15px Helvetica Neue;
+  font: normal 10px/15px Helvetica Neue, Helvetica, Arial, sans-serif;
   color: #333333;
 }
 
@@ -133,7 +133,7 @@
 
 .label-header-text {
   text-align: center;
-  font: normal 10px Helvetica Neue;
+  font: normal 10px Helvetica Neue, Helvetica, Arial, sans-serif;
   letter-spacing: 0px;
   color: #4f210d;
   opacity: 1;

@@ -73,7 +73,6 @@ export class TrainingListComponent
     this.loading = true;
     this.trainingService.all().subscribe((data) => {
       this.trainings = data.data;
-      console.log(this.trainings);
       this.loading = false;
       this.dtTrigger.next();
     });

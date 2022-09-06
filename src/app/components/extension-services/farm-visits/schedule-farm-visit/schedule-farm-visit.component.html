@@ -17,13 +17,15 @@
               <div class="confirm-text-box confirm-text">
                 <li *ngFor="let farms of selectedFarms; let i = index">
                   {{
-                    farms.farmer +
+                    farms?.farmer +
                       " Location " +
                       farms?.location?.dist_id?.name +
                       " > " +
                       farms?.location?.sect_id?.name +
                       " > " +
-                      farms?.location?.cell_id?.name + " UPI " + farms.upiNumber 
+                      farms?.location?.cell_id?.name +
+                      " UPI " +
+                      farms?.upiNumber
                   }}
                 </li>
               </div>
@@ -148,7 +150,7 @@
           >
           </app-inline-errors>
           <span
-            style="font: normal 10px Helvetica Neue; color: #ff2c2c"
+            style="font: normal 10px Helvetica Neue, Helvetica, Arial, sans-serif; color: #ff2c2c"
             *ngIf="
               scheduleVisit.value.farmerGroup != '' && farmers?.length <= 0
             "
@@ -252,7 +254,7 @@
                 </fieldset>
               </div>
               <span
-                style="font: normal 10px Helvetica Neue; color: #ff2c2c"
+                style="font: normal 10px Helvetica Neue, Helvetica, Arial, sans-serif; color: #ff2c2c"
                 *ngIf="selectedFarms?.length <= 0"
               >
                 select at least one farm</span
@@ -506,6 +508,7 @@
                 [owlDateTimeTrigger]="dt1"
                 [owlDateTime]="dt1"
                 formControlName="visitDate"
+                [min]="newDate"
                 class="form-control"
                 placeholder="Dd/mm/yyyy"
               />
@@ -586,6 +589,15 @@
                   [label]="'end time'"
                 >
                 </app-inline-errors>
+                <span
+                  style="font: normal 10px Helvetica Neue, Helvetica, Arial, sans-serif; color: red"
+                  *ngIf="scheduleVisit.controls.endTime.touched &&
+                    scheduleVisit.controls.startTime.value >=
+                    scheduleVisit.controls.endTime.value
+                  "
+                >
+                  End Time cannot be less than Start Time
+                </span>
               </div>
             </div>
           </div>
@@ -636,6 +648,10 @@
         class="btn"
         (click)="open(content)"
         [disabled]="loading"
+        *ngIf="
+          scheduleVisit.controls.startTime.value <
+          scheduleVisit.controls.endTime.value
+        "
         style="
           width: 250px;
           height: 50px;

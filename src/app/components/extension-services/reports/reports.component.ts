@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {
@@ -13,7 +13,7 @@ import {
   TrainingService,
 } from 'src/app/core';
 import {DatePipe} from '@angular/common';
-import {isUndefined} from "util";
+import {isUndefined} from 'util';
 
 @Component({
   selector: 'app-reports',
@@ -44,6 +44,7 @@ export class ReportsComponent extends BasicComponent implements OnInit {
 
   loading = false;
   reportForm: FormGroup;
+  @ViewChild('orgAuto') orgAuto: any;
   dtOptions: DataTables.Settings = {};
   // @ts-ignore
   dtTrigger: Subject = new Subject();
@@ -221,6 +222,10 @@ export class ReportsComponent extends BasicComponent implements OnInit {
     this.reportForm.controls.filter
       .get('location.prov_id'.toString())
       .valueChanges.subscribe((value) => {
+      console.log(this.reportForm.value);
+      if(this.orgAuto) {
+        this.orgAuto.clear();
+      }
       this.reportForm.controls.filter
         .get('location.prov_id'.toString()).patchValue(value, {emitEvent: false});
       this.locationChangeProvince(this.reportForm.get('filter') as FormGroup, value);
@@ -406,8 +411,7 @@ export class ReportsComponent extends BasicComponent implements OnInit {
       };
       this.reportBody = body;
       this.reportService.farmStats(body).subscribe((data) => {
-        this.stats = data.data[0];
-        console.log(data);
+        this.stats = data.data;
       });
     } else if (value === 'Coffee Farms') {
       body = {
@@ -417,8 +421,7 @@ export class ReportsComponent extends BasicComponent implements OnInit {
       };
       this.reportBody = body;
       this.reportService.farmStats(body).subscribe((data) => {
-        this.stats = data.data[0];
-        console.log(data);
+        this.stats = data.data;
       });
     }
   }
@@ -452,20 +455,16 @@ export class ReportsComponent extends BasicComponent implements OnInit {
     } else if (this.reportForm.value.reportFor === 'Coffee Farmers') {
       this.reportsTableData = [];
       this.reportBody.searchBy = 'farmer';
-      console.log('-------');
       this.reportService.farmSummary(this.reportBody).subscribe((data) => {
         this.reportsTableData = data.data;
-        console.log(data);
         this.dt3Trigger.next();
         this.reportGenerated = true;
       });
     } else if (this.reportForm.value.reportFor === 'Coffee Farms') {
       this.reportsTableData = [];
-      console.log('-------');
       this.reportBody.searchBy = 'farm';
       this.reportService.farmSummary(this.reportBody).subscribe((data) => {
         this.reportsTableData = data.data;
-        console.log(data);
         this.dt3Trigger.next();
         this.reportGenerated = true;
       });
@@ -526,34 +525,34 @@ export class ReportsComponent extends BasicComponent implements OnInit {
       this.reportService
         .farmDownload(this.reportBody, 'xlsx')
         .subscribe((data) => {
-          this.dataFile = data.data.file;
+          this.dataFile = data.data.data;
         });
       this.reportService
         .farmDownload(this.reportBody, 'csv')
         .subscribe((data) => {
-          this.dataCsv = data.data.file;
+          this.dataCsv = data.data.data;
         });
       this.reportService
         .farmDownload(this.reportBody, 'pdf')
         .subscribe((data) => {
-          this.dataPdf = data.data.file;
+          this.dataPdf = data.data.data;
         });
     } else if (this.reportForm.value.reportFor === 'Coffee Farms') {
       this.reportBody.searchBy = 'farm';
       this.reportService
         .farmDownload(this.reportBody, 'xlsx')
         .subscribe((data) => {
-          this.dataFile = data.data.file;
+          this.dataFile = data.data.data;
         });
       this.reportService
         .farmDownload(this.reportBody, 'csv')
         .subscribe((data) => {
-          this.dataCsv = data.data.file;
+          this.dataCsv = data.data.data;
         });
       this.reportService
         .farmDownload(this.reportBody, 'pdf')
         .subscribe((data) => {
-          this.dataPdf = data.data.file;
+          this.dataPdf = data.data.data;
         });
     }
   }

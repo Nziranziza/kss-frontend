@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   AuthenticationService,
   BasicComponent,
@@ -10,7 +10,7 @@ import {
   MessageService,
   OrganisationService, UserService
 } from '../../../../core';
-import {isEmptyObject} from 'jquery';
+import { isEmptyObject } from 'jquery';
 
 @Component({
   selector: 'app-farmer-group-edit',
@@ -18,16 +18,19 @@ import {isEmptyObject} from 'jquery';
   styleUrls: ['./farmer-group-edit.component.css']
 })
 export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
+  districts: any[] = [];
+  createForm: any[] = [];
+  sectors: any[] = [];
 
   constructor(private formBuilder: FormBuilder,
-              private router: Router, private organisationService: OrganisationService,
-              private messageService: MessageService,
-              private route: ActivatedRoute,
-              private userService: UserService,
-              private groupService: GroupService,
-              private authenticationService: AuthenticationService,
-              protected locationService: LocationService,
-              private helper: HelperService) {
+    private router: Router, private organisationService: OrganisationService,
+    private messageService: MessageService,
+    private route: ActivatedRoute,
+    private userService: UserService,
+    private groupService: GroupService,
+    private authenticationService: AuthenticationService,
+    protected locationService: LocationService,
+    private helper: HelperService) {
     super(locationService, organisationService);
   }
 
@@ -46,21 +49,21 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
   time: any;
   id: string;
   searchFields = [
-    {value: 'reg_number', name: 'registration number'},
-    {value: 'nid', name: 'NID'},
-    {value: 'forename', name: 'first name'},
-    {value: 'surname', name: 'last name'},
-    {value: 'groupname', name: 'group name'},
-    {value: 'phone_number', name: 'phone number'},
+    { value: 'reg_number', name: 'registration number' },
+    { value: 'nid', name: 'NID' },
+    { value: 'forename', name: 'first name' },
+    { value: 'surname', name: 'last name' },
+    { value: 'groupname', name: 'group name' },
+    { value: 'phone_number', name: 'phone number' },
   ];
   days = [
-    {value: 1, name: 'monday'},
-    {value: 2, name: 'tuesday'},
-    {value: 3, name: 'wednesday'},
-    {value: 4, name: 'thursday'},
-    {value: 5, name: 'friday'},
-    {value: 6, name: 'saturday'},
-    {value: 7, name: 'sunday'}
+    { value: 1, name: 'monday' },
+    { value: 2, name: 'tuesday' },
+    { value: 3, name: 'wednesday' },
+    { value: 4, name: 'thursday' },
+    { value: 5, name: 'friday' },
+    { value: 6, name: 'saturday' },
+    { value: 7, name: 'sunday' }
   ];
 
   ngOnInit() {
@@ -101,12 +104,18 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
         searchBy: ['reg_number'],
       }),
     });
+
+    this.organisationService.get(this.authenticationService.getCurrentUser().info.org_id).subscribe((data) => {
+      this.org = data.content;
+      this.initial();
+    });
     this.route.params.subscribe(params => {
       this.id = params['id'.toString()];
       this.groupService.get(params['id'.toString()]).subscribe(data => {
         const members = data.data.members;
         members.map((member) => {
-          const item = {userInfo: {
+          const item = {
+            userInfo: {
               regNumber: '',
               groupName: '',
               foreName: '',
@@ -120,7 +129,7 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
           if (member.groupName) {
             item.userInfo.groupName = member.groupName;
           } else {
-            item.userInfo.foreName  = member.firstName ;
+            item.userInfo.foreName = member.firstName;
             item.userInfo.surname = member.lastName;
           }
           item.userInfo.phone_number = member.phoneNumber;
@@ -129,10 +138,10 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
         this.editForm.patchValue(data.data);
         this.editForm.controls.location
           .get("prov_id".toString())
-          .setValue(data.data.location.prov_id._id);
+          .setValue(data.data.location.prov_id._id, { emitEvent: false });
         this.editForm.controls.location
           .get("dist_id".toString())
-          .setValue(data.data.location.dist_id._id);
+          .setValue(data.data.location.dist_id._id, { emitEvent: false });
         this.editForm.controls.location
           .get("sect_id".toString())
           .setValue(data.data.location.sect_id._id);
@@ -154,6 +163,8 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
       const value = JSON.parse(JSON.stringify(this.editForm.value));
       value.org_id = this.authenticationService.getCurrentUser().info.org_id;
       value.meetingSchedule.meetingDay = +value.meetingSchedule.meetingDay;
+      value.location.prov_id = this.org.location.prov_id._id;
+      value.location.dist_id = this.org.location.dist_id._id;
       const members = [];
       this.groupMembers.map((member) => {
         members.push(member.userInfo._id);
@@ -173,6 +184,24 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
     } else {
       this.errors = this.helper.getFormValidationErrors(this.editForm);
     }
+  }
+
+  initial() {
+    this.locationService.getProvinces().subscribe((data) => {
+      this.provinces = data;
+      this.locationService
+        .getDistricts(this.org.location.prov_id._id)
+        .subscribe((dt) => {
+          this.districts = dt;
+          this.editForm.controls.location
+            .get('prov_id'.toString())
+            .patchValue(this.org.location.prov_id._id)
+          this.editForm.controls.location
+            .get('dist_id'.toString())
+            .patchValue(this.org.location.dist_id._id);
+          this.sectors = this.filterZoningSectors(this.org.coveredSectors);
+        });
+    });
   }
 
   selectAllResults(isChecked: boolean) {
@@ -236,7 +265,7 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
   removeMembersToGroup() {
     this.groupMembers.forEach((item) => {
       if (item.selected) {
-        this.groupMembers = this.groupMembers.filter( el => el.userInfo._id != item.userInfo._id);
+        this.groupMembers = this.groupMembers.filter(el => el.userInfo._id != item.userInfo._id);
       }
     });
   }
@@ -308,50 +337,50 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
     this.filterForm.controls.searchByLocation
       .get('sect_id'.toString())
       .valueChanges.subscribe((value) => {
-      if (value !== '') {
-        this.locationService.getCells(value).subscribe((data) => {
-          this.basicCoveredCells = this.filterZoningCells(this.basicOrg.coveredSectors, value);
+        if (value !== '') {
+          this.locationService.getCells(value).subscribe((data) => {
+            this.basicCoveredCells = this.filterZoningCells(this.basicOrg.coveredSectors, value);
+            this.basicCoveredVillages = null;
+            this.filterForm.controls.searchByLocation
+              .get('village_id'.toString()).setValue('', { emitEvent: false });
+          });
+        } else {
+          this.basicCoveredCells = null;
           this.basicCoveredVillages = null;
           this.filterForm.controls.searchByLocation
-            .get('village_id'.toString()).setValue('', {emitEvent: false});
-        });
-      } else {
-        this.basicCoveredCells = null;
-        this.basicCoveredVillages = null;
-        this.filterForm.controls.searchByLocation
-          .get('cell_id'.toString()).setValue('', {emitEvent: false});
-        this.filterForm.controls.searchByLocation
-          .get('village_id'.toString()).setValue('', {emitEvent: false});
-      }
-    });
+            .get('cell_id'.toString()).setValue('', { emitEvent: false });
+          this.filterForm.controls.searchByLocation
+            .get('village_id'.toString()).setValue('', { emitEvent: false });
+        }
+      });
     this.filterForm.controls.searchOption
       .valueChanges.subscribe((value) => {
-      if (value !== '' && value === 'location') {
-        this.searchByLocation = true;
-        this.filterForm.controls.searchByTerm.get('term').setValue('');
-      } else {
-        this.filterForm.controls.searchByLocation
-          .get('sect_id'.toString()).setValue('', {emitEvent: false});
-        this.filterForm.controls.searchByLocation
-          .get('cell_id'.toString()).setValue('', {emitEvent: false});
-        this.filterForm.controls.searchByLocation
-          .get('village_id'.toString()).setValue('', {emitEvent: false});
-        this.searchByLocation = false;
-      }
-    });
+        if (value !== '' && value === 'location') {
+          this.searchByLocation = true;
+          this.filterForm.controls.searchByTerm.get('term').setValue('');
+        } else {
+          this.filterForm.controls.searchByLocation
+            .get('sect_id'.toString()).setValue('', { emitEvent: false });
+          this.filterForm.controls.searchByLocation
+            .get('cell_id'.toString()).setValue('', { emitEvent: false });
+          this.filterForm.controls.searchByLocation
+            .get('village_id'.toString()).setValue('', { emitEvent: false });
+          this.searchByLocation = false;
+        }
+      });
     this.filterForm.controls.searchByLocation
       .get('cell_id'.toString())
       .valueChanges.subscribe((value) => {
-      if (value !== '') {
-        this.locationService.getVillages(value).subscribe((data) => {
-          const id = this.filterForm.controls.searchByLocation
-            .get('sect_id'.toString()).value;
-          this.basicCoveredVillages = this.filterZoningVillages(this.basicOrg.coveredSectors, id, data);
-          this.filterForm.controls.searchByLocation
-            .get('village_id'.toString()).setValue('', {emitEvent: false});
+        if (value !== '') {
+          this.locationService.getVillages(value).subscribe((data) => {
+            const id = this.filterForm.controls.searchByLocation
+              .get('sect_id'.toString()).value;
+            this.basicCoveredVillages = this.filterZoningVillages(this.basicOrg.coveredSectors, id, data);
+            this.filterForm.controls.searchByLocation
+              .get('village_id'.toString()).setValue('', { emitEvent: false });
 
-        });
-      }
-    });
+          });
+        }
+      });
   }
 }

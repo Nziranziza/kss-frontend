@@ -17,13 +17,13 @@
               <div class="confirm-text-box confirm-text">
                 <li *ngFor="let farms of selectedFarms; let i = index">
                   {{
-                    farms.farmer +
-                      " -- UPI/Location " +
+                    farms?.farmer +
+                      " -- Location " +
                       farms?.location?.dist_id?.name +
                       " > " +
                       farms?.location?.sect_id?.name +
                       " > " +
-                      farms?.location?.cell_id?.name
+                      farms?.location?.cell_id?.name + " -- UPI " + farms?.upiNumber
                   }}
                 </li>
               </div>
@@ -141,7 +141,7 @@
           >
           </app-inline-errors>
           <span
-            style="font: normal 10px Helvetica Neue; color: #ff2c2c"
+            style="font: normal 10px Helvetica Neue, Helvetica, Arial, sans-serif; color: #ff2c2c"
             *ngIf="
               scheduleVisit.value.farmerGroup != '' && farmers?.length <= 0
             "
@@ -245,7 +245,7 @@
                 </fieldset>
               </div>
               <span
-                style="font: normal 10px Helvetica Neue; color: #ff2c2c"
+                style="font: normal 10px Helvetica Neue, Helvetica, Arial, sans-serif; color: #ff2c2c"
                 *ngIf="selectedFarms?.length <= 0 && savedFarmList.length <=0"
               >
                 select at least one farm</span
@@ -498,6 +498,7 @@
               <input
                 [owlDateTimeTrigger]="dt1"
                 [owlDateTime]="dt1"
+                [min]="newDate"
                 formControlName="visitDate"
                 class="form-control"
                 placeholder="Dd/mm/yyyy"
@@ -561,6 +562,7 @@
                 <input
                   [owlDateTimeTrigger]="dt4"
                   class="form-control"
+                  [min]="startTime"
                   formControlName="endTime"
                   [owlDateTime]="dt4"
                 />
@@ -569,6 +571,15 @@
                   [scrollStrategy]="scrollStrategy"
                   #dt4
                 ></owl-date-time>
+                <span
+                  style="font: normal 10px Helvetica Neue, Helvetica, Arial, sans-serif; color: red"
+                  *ngIf="
+                    scheduleVisit.controls.startTime.value >=
+                    scheduleVisit.controls.endTime.value
+                  "
+                >
+                 End Time can not be less the Start Time
+                </span>
                 <app-inline-errors
                   *ngIf="
                     scheduleVisit.controls.endTime.invalid &&

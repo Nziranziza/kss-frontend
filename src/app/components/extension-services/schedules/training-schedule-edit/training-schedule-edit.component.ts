@@ -29,6 +29,7 @@ export class TrainingScheduleEditComponent
   editContactForm: FormGroup;
   selectedStartDate: string;
   selectedEndDate: string;
+  newDate: Date = new Date();
   constructor(
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
@@ -65,14 +66,14 @@ export class TrainingScheduleEditComponent
   scheduleData: any;
 
   ngOnInit() {
-    this.getGroups();
+    this.getTrainings();
     this.scheduleTraining = this.formBuilder.group({
       trainingModule: ["", Validators.required],
       trainer: ["", Validators.required],
       description: [""],
       location: this.formBuilder.group({
-        prov_id: [""],
-        dist_id: [""],
+        prov_id: [{ value: '', disabled: true }],
+        dist_id: [{ value: '', disabled: true }],
         sect_id: [""],
         cell_id: [""],
         village_id: [""],
@@ -83,6 +84,7 @@ export class TrainingScheduleEditComponent
       startTime: [""],
       endTime: [""],
     });
+    this.newDate.setDate(this.newDate.getDate() - 1);
     this.parameters = {
       length: 10,
       start: 0,
@@ -114,7 +116,7 @@ export class TrainingScheduleEditComponent
     this.onChanges();
     this.addContacts();
     this.getTrainers();
-    this.getFarmerGroup();
+    this.getFarmerGroup({ reference: this.authenticationService.getCurrentUser().info.org_id });
   }
 
   getSchedules() {
@@ -206,7 +208,7 @@ export class TrainingScheduleEditComponent
     });
   }
 
-  getGroups(): void {
+  getTrainings(): void {
     this.loading = true;
     this.trainingService.all().subscribe((data) => {
       this.trainings = data.data;
@@ -226,12 +228,10 @@ export class TrainingScheduleEditComponent
       });
   }
 
-  getFarmerGroup() {
+  getFarmerGroup(body: any) {
     this.loading = true;
     this.groupService
-      .list({
-        reference: this.authenticationService.getCurrentUser().info.org_id,
-      })
+      .all(body)
       .subscribe((data) => {
         this.farmerGroups = data.data;
         this.loading = false;
@@ -315,12 +315,10 @@ export class TrainingScheduleEditComponent
           name: this.authenticationService.getCurrentUser().info.surname,
         },
       };
-      console.log(data);
       this.userService
         .updateMemberContact(traineData.value.groupId, data)
         .subscribe((data) => {
           this.loading = false;
-          console.log(data);
         });
     } else {
       this.errors = this.helper.getFormValidationErrors(this.editContactForm);
@@ -410,6 +408,9 @@ export class TrainingScheduleEditComponent
   }
 
   onChanges() {
+    let body: any = {
+      reference: this.authenticationService.getCurrentUser().info.org_id
+    }
     this.scheduleTraining.controls.location
       .get("prov_id".toString())
       .valueChanges.subscribe((value) => {
@@ -434,6 +435,9 @@ export class TrainingScheduleEditComponent
       .get("sect_id".toString())
       .valueChanges.subscribe((value) => {
         if (value !== "") {
+          body.location = {
+            sect_id: value,
+          }
           this.locationService.getCells(value).subscribe((data) => {
             this.basicCoveredCells = this.filterZoningCells(
               this.basicOrg.coveredSectors,
@@ -454,11 +458,15 @@ export class TrainingScheduleEditComponent
             .get("village_id".toString())
             .setValue("", { emitEvent: false });
         }
+        this.getFarmerGroup(body);
       });
     this.filterForm.controls.searchByLocation
       .get("cell_id".toString())
       .valueChanges.subscribe((value) => {
         if (value !== "") {
+          body.location = {
+            cell_id: value,
+          }
           this.locationService.getVillages(value).subscribe((data) => {
             const id = this.filterForm.controls.searchByLocation.get(
               "sect_id".toString()
@@ -472,7 +480,29 @@ export class TrainingScheduleEditComponent
               .get("village_id".toString())
               .setValue("", { emitEvent: false });
           });
+        } else {
+          body.location = {
+            sect_id: this.filterForm.controls.searchByLocation
+              .get("sect_id".toString()).value,
+          }
         }
+        this.getFarmerGroup(body);
+      });
+
+      this.filterForm.controls.searchByLocation
+      .get("village_id".toString())
+      .valueChanges.subscribe((value) => {
+        if (value !== "") {
+          body.location = {
+            village_id: value,
+          }
+        } else {
+          body.location = {
+            cell_id: this.filterForm.controls.searchByLocation
+              .get("cell_id".toString()).value,
+          }
+        }
+        this.getFarmerGroup(body);
       });
 
     this.filterForm.controls.searchByLocation
@@ -512,11 +542,17 @@ export class TrainingScheduleEditComponent
       },
       venueName: this.scheduleTraining.value.location.venue,
       startTime:
-        this.formatDate(this.scheduleTraining.value.trainingStartDate) +
+        this.formatDate(
+          new Date(this.scheduleTraining.controls.trainingStartDate.value)
+            .toLocaleDateString('pt-br').split('/').reverse().join('-')
+        ) +
         "T" +
         this.formatTime(this.scheduleTraining.value.startTime),
       endTime:
-        this.formatDate(this.scheduleTraining.value.trainingEndDate) +
+        this.formatDate(
+          new Date(this.scheduleTraining.controls.trainingEndDate.value)
+            .toLocaleDateString('pt-br').split('/').reverse().join('-')
+        ) +
         "T" +
         this.formatTime(this.scheduleTraining.value.endTime),
       referenceId: this.authenticationService.getCurrentUser().info.org_id,

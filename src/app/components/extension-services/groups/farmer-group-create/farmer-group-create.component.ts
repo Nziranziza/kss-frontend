@@ -26,8 +26,9 @@ import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 })
 export class FarmerGroupCreateComponent
   extends BasicComponent
-  implements OnInit
-{
+  implements OnInit {
+  sectors: any[] = [];
+  districts: any[] = [];
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
@@ -88,8 +89,8 @@ export class FarmerGroupCreateComponent
         meetingTime: [""],
       }),
       location: this.formBuilder.group({
-        prov_id: ["", Validators.required],
-        dist_id: [""],
+        prov_id: [{ value: '', disabled: true }],
+        dist_id: [{ value: '', disabled: true }],
         sect_id: [""],
         cell_id: [""],
         village_id: [""],
@@ -115,6 +116,10 @@ export class FarmerGroupCreateComponent
         searchBy: ["reg_number"],
       }),
     });
+    this.organisationService.get(this.authenticationService.getCurrentUser().info.org_id).subscribe((data) => {
+      this.org = data.content;
+      this.initial();
+    });
     this.basicInit(this.authenticationService.getCurrentUser().info.org_id);
     this.onChanges();
   }
@@ -123,6 +128,8 @@ export class FarmerGroupCreateComponent
     this.createForm.markAllAsTouched();
     if (this.createForm.valid) {
       const value = JSON.parse(JSON.stringify(this.createForm.value));
+      value.location.prov_id = this.org.location.prov_id._id;
+      value.location.dist_id = this.org.location.dist_id._id;
       value.org_id = this.authenticationService.getCurrentUser().info.org_id;
       value.meetingSchedule.meetingDay = +value.meetingSchedule.meetingDay;
       const members = [];
@@ -143,6 +150,24 @@ export class FarmerGroupCreateComponent
     } else {
       this.errors = this.helper.getFormValidationErrors(this.createForm);
     }
+  }
+
+  initial() {
+    this.locationService.getProvinces().subscribe((data) => {
+      this.provinces = data;
+      this.locationService
+        .getDistricts(this.org.location.prov_id._id)
+        .subscribe((dt) => {
+          this.districts = dt;
+          this.createForm.controls.location
+            .get('prov_id'.toString())
+            .patchValue(this.org.location.prov_id._id, { emitEvent: true })
+          this.createForm.controls.location
+            .get('dist_id'.toString())
+            .patchValue(this.org.location.dist_id._id, { emitEvent: true });
+          this.sectors = this.filterZoningSectors(this.org.coveredSectors);
+        });
+    });
   }
 
   selectAllResults(isChecked: boolean) {
@@ -259,7 +284,7 @@ export class FarmerGroupCreateComponent
         delete this.parameters.search;
       }
       this.organisationService.getFarmers(this.parameters).subscribe(
-        (data) => {         
+        (data) => {
           this.searchResults = data.data;
           this.loading = false;
         },
@@ -278,7 +303,7 @@ export class FarmerGroupCreateComponent
         this.locationChangeProvince(this.createForm, value);
       });
     this.createForm.controls.leaderPhoneNumber.valueChanges.subscribe((value) => {
-      if (value === "07"){
+      if (value === "07") {
         this.createForm.controls.leaderPhoneNumber.setValue("2507")
       }
     })

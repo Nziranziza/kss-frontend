@@ -18,16 +18,16 @@
           <h1>{{ gaps.length }}</h1>
         </div>
       </div>
-      <div class="col-sm-4" *ngIf="false">
+      <div class="col-sm-4">
         <div class="text-center stats-box middle-box">
           <h3>Most Adopted Gap</h3>
-          <h1>-</h1>
+          <h1>{{ this.mostAdopted }}</h1>
         </div>
       </div>
-      <div class="col-sm-4" *ngIf="false">
+      <div class="col-sm-4">
         <div class="text-center stats-box third-box">
           <h3>Adoption Overall Score</h3>
-          <h1>-</h1>
+          <h1>{{ this.overallWeight }}</h1>
         </div>
       </div>
     </div>
@@ -51,6 +51,7 @@
               <th>GAP Name</th>
               <th>GAP Overall Weight</th>
               <th>Observations/Adoption</th>
+              <th>Adoption Rate</th>
               <th>Status</th>
               <th>Actions</th>
             </tr>
@@ -62,7 +63,8 @@
                 <td>{{ gap.gap_name.toUpperCase() }}</td>
                 <td>{{ gap.gap_weight }}</td>
                 <td>{{ gap.sections.length }}</td>
-                <td>{{ gap.status}}</td>
+                <td>{{ gap.adoptionRate }}</td>
+                <td>{{ gap.status }}</td>
                 <td>
                   <button
                     appRequiredSeason

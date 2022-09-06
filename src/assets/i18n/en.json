@@ -50,5 +50,7 @@
   "attach_files": "Attach Files",
   "click_drag_pdf_file": "Click or Drag PDF File to this area to upload",
   "pattern": "not valid",
-  "owner_number": "Owner Phone Number"
+  "owner_number": "Owner Phone Number",
+  "owlDateTimeParse": "not valid date",
+  "owlDateTimeMin": "in the past"
 }

@@ -150,6 +150,10 @@ export abstract class BasicComponent {
       this.locationCells = null;
       this.locationVillages = null;
     }
+    form.controls.location.get('dist_id'.toString()).setValue('', {emitEvent: false});
+    form.controls.location.get('sect_id'.toString()).setValue('', {emitEvent: false});
+    form.controls.location.get('cell_id'.toString()).setValue('', {emitEvent: false});
+    form.controls.location.get('village_id'.toString()).setValue('', {emitEvent: false});
   }
 
   locationChangDistrict(form: FormGroup, value: string) {
@@ -164,6 +168,9 @@ export abstract class BasicComponent {
       this.locationCells = null;
       this.locationVillages = null;
     }
+    form.controls.location.get('sect_id'.toString()).setValue('', {emitEvent: false});
+    form.controls.location.get('cell_id'.toString()).setValue('', {emitEvent: false});
+    form.controls.location.get('village_id'.toString()).setValue('', {emitEvent: false});
   }
 
   locationChangSector(form: FormGroup, value: string) {
@@ -176,6 +183,8 @@ export abstract class BasicComponent {
       this.locationCells = null;
       this.locationVillages = null;
     }
+    form.controls.location.get('cell_id'.toString()).setValue('', {emitEvent: false});
+    form.controls.location.get('village_id'.toString()).setValue('', {emitEvent: false});
   }
 
   locationChangCell(form: FormGroup, value: string) {
@@ -186,6 +195,7 @@ export abstract class BasicComponent {
     } else {
       this.locationVillages = null;
     }
+    form.controls.location.get('village_id'.toString()).setValue('', {emitEvent: false});
   }
 
 
@@ -202,5 +212,4 @@ export abstract class BasicComponent {
       });
     }
   }
-
 }

@@ -82,7 +82,7 @@
           <div class="col-xs-3" style="margin-top: 5px">
             <div class="ng-autocomplete">
               <ng-autocomplete
-                #origin
+                #orgAuto
                 [data]="organisations"
                 [searchKeyword]="keyword"
                 (selected)="selectEvent($event)"
@@ -103,10 +103,11 @@
               </ng-template>
             </div>
           </div>
-          <div class="col-xs-3" style="margin-top: 5px">
+          <div class="col-xs-3" style="margin-top: 5px" *ngIf="reportForm.value.reportFor !== 'Farmer Groups' &&
+            reportForm.value.reportFor !== 'Coffee Farmers' &&
+            reportForm.value.reportFor !== 'Coffee Farms'">
           <div
-            class="ng-autocomplete"
-            *ngIf="reportForm.value.reportFor !== 'Farmer Groups'">
+            class="ng-autocomplete">
             <ng-autocomplete
               #origin
               [data]="groups"

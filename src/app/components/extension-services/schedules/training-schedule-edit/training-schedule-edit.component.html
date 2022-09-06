@@ -470,6 +470,7 @@
                           [owlDateTimeTrigger]="dt1"
                           [owlDateTime]="dt1"
                           formControlName="trainingStartDate"
+                          [min]="newDate"
                           class="form-control"
                           placeholder="Dd/mm/yyyy"
                         />
@@ -678,7 +679,7 @@
                     <table class="row-border hover table table-striped">
                       <thead>
                         <tr
-                          class="font: normal normal medium 9px/10px Helvetica Neue;"
+                          class="font: normal normal medium 9px/10px Helvetica Neue, Helvetica, Arial, sans-serif;"
                         >
                           <th>#</th>
                           <th>Farmer Names</th>
@@ -805,7 +806,7 @@
 
                           <td
                             style="
-                              font: normal normal bold 10px/14px Helvetica Neue;
+                              font: normal normal bold 10px/14px Helvetica Neue, Helvetica, Arial, sans-serif;
                             "
                           >
                             <span *ngIf="trainee.attendance === 'attended'">

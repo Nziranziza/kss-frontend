@@ -56,7 +56,7 @@
               trainingsStats.totalPresent > 0
                 ? (trainingsStats.totalPresent * 100) /
                   trainingsStats.totalInvitees
-                : 0 | number: "1.1-1"
+                : (0 | number: "1.1-1")
             }}%
           </h1>
         </div>
@@ -93,7 +93,9 @@
               </div>
               <label class="control-label"> Village </label>
               <div class="confirm-text-box confirm-text">
-                {{ training.location ? training.location.village_id?.name : "" }}
+                {{
+                  training.location ? training.location.village_id?.name : ""
+                }}
               </div>
             </div>
             <div class="col-sm-6">
@@ -169,10 +171,11 @@
               >
                 No
               </td>
-              <td style="text-align: center; color: red">{{trainee.smsStatus}}</td>
+              <td style="text-align: center; color: red">
+                {{ trainee.smsStatus == "NOT_SENT" ? "Not Sent" : "Sent" }}
+              </td>
             </tr>
           </thead>
-          <tbody></tbody>
         </table>
       </div>
     </div>

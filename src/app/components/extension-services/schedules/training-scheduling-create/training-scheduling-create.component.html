@@ -289,7 +289,7 @@
                     <select class="form-control" formControlName="prov_id">
                       <option value=""></option>
                       <option
-                        *ngFor="let province of locationProvinces"
+                        *ngFor="let province of provinces"
                         value="{{ province._id }}"
                       >
                         {{ province.namee | titlecase }}
@@ -318,7 +318,7 @@
                     <select class="form-control" formControlName="dist_id">
                       <option value=""></option>
                       <option
-                        *ngFor="let district of locationDistricts"
+                        *ngFor="let district of districts"
                         value="{{ district._id }}"
                       >
                         {{ district.name | titlecase }}
@@ -347,7 +347,7 @@
                     <select class="form-control" formControlName="sect_id">
                       <option value=""></option>
                       <option
-                        *ngFor="let sector of locationSectors"
+                        *ngFor="let sector of sectors"
                         value="{{ sector._id }}"
                       >
                         {{ sector.name | titlecase }}
@@ -470,6 +470,7 @@
                           [owlDateTimeTrigger]="dt1"
                           [owlDateTime]="dt1"
                           formControlName="trainingStartDate"
+                          [min]="newDate"
                           class="form-control"
                           placeholder="Dd/mm/yyyy"
                         />
@@ -575,6 +576,18 @@
                           [label]="'end time'"
                         >
                         </app-inline-errors>
+                        <span
+                          style="font: normal 10px Helvetica Neue, Helvetica, Arial, sans-serif; color: red"
+                          *ngIf="
+                            scheduleTraining.controls.endTime.touched &&
+                            scheduleTraining.controls.startTime.value >=
+                              scheduleTraining.controls.endTime.value &&
+                            scheduleTraining.controls.trainingStartDate.value >=
+                              scheduleTraining.controls.trainingEndDate.value
+                          "
+                        >
+                          end time cannot be in the past
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -678,7 +691,7 @@
                     <table class="row-border hover table table-striped">
                       <thead>
                         <tr
-                          class="font: normal normal medium 9px/10px Helvetica Neue;"
+                          class="font: normal normal medium 9px/10px Helvetica Neue, Helvetica, Arial, sans-serif;"
                         >
                           <th>#</th>
                           <th>Farmer Names</th>
@@ -805,7 +818,7 @@
 
                           <td
                             style="
-                              font: normal normal bold 10px/14px Helvetica Neue;
+                              font: normal normal bold 10px/14px Helvetica Neue, Helvetica, Arial, sans-serif;
                             "
                           >
                             <span *ngIf="trainee.attendance === 'attended'">
@@ -931,6 +944,14 @@
         class="btn btn-success"
         (click)="open(content)"
         style="width: 250px; height: 50px"
+        *ngIf="
+          !(
+            scheduleTraining.controls.startTime.value >=
+              scheduleTraining.controls.endTime.value &&
+            scheduleTraining.controls.trainingStartDate.value >=
+              scheduleTraining.controls.trainingEndDate.value
+          )
+        "
       >
         SCHEDULE A TRAINING
       </button>

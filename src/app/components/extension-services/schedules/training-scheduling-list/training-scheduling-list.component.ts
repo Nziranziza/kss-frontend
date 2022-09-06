@@ -74,7 +74,6 @@ export class TrainingSchedulingListComponent
       .subscribe((data) => {
         this.schedules = data.data;
         this.dtTrigger.next();
-        this.loading = false;
       });
 
     this.config = {
@@ -82,6 +81,7 @@ export class TrainingSchedulingListComponent
       currentPage: 0 + 1,
       totalItems: this.schedules.length,
     };
+    this.loading = false;
   }
 
   open(content) {
