@@ -144,10 +144,10 @@ export class TrainingSchedulingCreateComponent
           this.districts = dt;
           this.scheduleTraining.controls.location
             .get('prov_id'.toString())
-            .patchValue(this.org.location.prov_id._id, { emitEvent: false })
+            .patchValue(this.org.location.prov_id._id, { emitEvent: true })
           this.scheduleTraining.controls.location
             .get('dist_id'.toString())
-            .patchValue(this.org.location.dist_id._id, { emitEvent: false });
+            .patchValue(this.org.location.dist_id._id, { emitEvent: true });
           this.sectors = this.filterZoningSectors(this.org.coveredSectors);
         });
     });
@@ -475,8 +475,8 @@ export class TrainingSchedulingCreateComponent
       ).value,
       description: this.scheduleTraining.value.description,
       location: {
-        prov_id: this.scheduleTraining.value.location.prov_id,
-        dist_id: this.scheduleTraining.value.location.dist_id,
+        prov_id: this.org.location.prov_id._id,
+        dist_id: this.org.location.dist_id._id,
         sect_id: this.scheduleTraining.value.location.sect_id,
         cell_id: this.scheduleTraining.value.location.cell_id,
         village_id: this.scheduleTraining.value.location.village_id,

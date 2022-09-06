@@ -159,8 +159,6 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
       const value = JSON.parse(JSON.stringify(this.editForm.value));
       value.org_id = this.authenticationService.getCurrentUser().info.org_id;
       value.meetingSchedule.meetingDay = +value.meetingSchedule.meetingDay;
-      value.location.prov_id = this.org.location.prov_id._id;
-      value.location.dist_id = this.org.location.dist_id._id;
       const members = [];
       this.groupMembers.map((member) => {
         members.push(member.userInfo._id);

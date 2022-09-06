@@ -270,6 +270,7 @@ export class ScheduleFarmVisitComponent implements OnInit {
       this.visitService.create(data).subscribe(
         (data) => {
           this.success(dataValues.description, data.data._id);
+          this.loading = false;
         },
         (err) => {
           this.error("farm visit");

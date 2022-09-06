@@ -72,8 +72,8 @@ export class TrainingScheduleEditComponent
       trainer: ["", Validators.required],
       description: [""],
       location: this.formBuilder.group({
-        prov_id: [{ value: '', disabled: true }],
-        dist_id: [{ value: '', disabled: true }],
+        prov_id: [''],
+        dist_id: [''],
         sect_id: [""],
         cell_id: [""],
         village_id: [""],
@@ -111,6 +111,9 @@ export class TrainingScheduleEditComponent
         searchBy: ["reg_number"],
       }),
     });
+    this.organisationService.get(this.authenticationService.getCurrentUser().info.org_id).subscribe((data) => {
+      this.org = data.content;
+    });
     this.getSchedules();
     this.basicInit(this.authenticationService.getCurrentUser().info.org_id);
     this.onChanges();
@@ -123,7 +126,6 @@ export class TrainingScheduleEditComponent
     this.trainingService.getSchedule(this.id).subscribe((data) => {
       if (data && data.data) {
         this.scheduleData = data.data;
-        console.log(this.scheduleData);
         this.scheduleTraining.controls.trainingModule.setValue(
           this.trainings
             .map(function (e) {
@@ -184,7 +186,8 @@ export class TrainingScheduleEditComponent
             contact: trainee.phoneNumber,
             attendance: trainee.attended ? "attended" : "not attended",
             groupId: trainee.groupId,
-            selected: true,
+            selected: true
+            // _id: trainee._id
           };
           this.selectedTrainees.push(data);
         });
@@ -489,7 +492,7 @@ export class TrainingScheduleEditComponent
         this.getFarmerGroup(body);
       });
 
-      this.filterForm.controls.searchByLocation
+    this.filterForm.controls.searchByLocation
       .get("village_id".toString())
       .valueChanges.subscribe((value) => {
         if (value !== "") {
@@ -514,6 +517,7 @@ export class TrainingScheduleEditComponent
       });
   }
 
+
   onSubmit() {
     this.loading = true;
     const data = {
@@ -528,17 +532,19 @@ export class TrainingScheduleEditComponent
           this.trainers[this.scheduleTraining.value.trainer].phoneNumber,
         organisationName:
           this.authenticationService.getCurrentUser().orgInfo.orgName,
+        _id: this.scheduleData.trainer._id
       },
       groupId: this.filterForm.controls.searchByLocation.get(
         "farmerGroup".toString()
       ).value,
       description: this.scheduleTraining.value.description,
       location: {
-        prov_id: this.scheduleTraining.value.location.prov_id,
-        dist_id: this.scheduleTraining.value.location.dist_id,
+        prov_id: this.org.location.prov_id._id,
+        dist_id: this.org.location.dist_id._id,
         sect_id: this.scheduleTraining.value.location.sect_id,
         cell_id: this.scheduleTraining.value.location.cell_id,
         village_id: this.scheduleTraining.value.location.village_id,
+        _id: this.scheduleData.location._id
       },
       venueName: this.scheduleTraining.value.location.venue,
       startTime:
@@ -557,10 +563,14 @@ export class TrainingScheduleEditComponent
         this.formatTime(this.scheduleTraining.value.endTime),
       referenceId: this.authenticationService.getCurrentUser().info.org_id,
       trainees: this.selectedTrainees.map((item) => {
-        return {
+        let obj: any = {
           userId: item.userId,
           groupId: item.groupId,
         };
+        // if (item._id) {
+        //   obj._id = item._id;
+        // };
+        return obj;
       }),
     };
     this.trainingService.editSchedule(data, this.id).subscribe((data) => {
