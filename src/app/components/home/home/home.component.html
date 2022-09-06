@@ -12,8 +12,51 @@
   </div>
 </header>
 <div class="homepage-section">
-  <div class="sliders">
-    <img src="assets/dist/img/sks/slide2.jpg" alt="Slide 2" />
+  <div id="carousel-generic" class="carousel slide" data-ride="carousel">
+    <div class="carousel-inner">
+      <div class="item active">
+        <div
+          class="img"
+          style="
+            background: linear-gradient(
+                rgba(41, 41, 41, 0.5),
+                rgba(41, 41, 41, 0.5)
+              ),
+              url('assets/dist/img/sks/slide2.jpg') no-repeat center;
+            background-size: cover;
+          "
+        >
+          <div class="carousel-caption">Rwanda Coffee</div>
+        </div>
+      </div>
+      <div class="item">
+        <div
+          class="img"
+          style="
+            background: linear-gradient(
+                rgba(41, 41, 41, 0.5),
+                rgba(41, 41, 41, 0.5)
+              ),
+              url('assets/dist/img/sks/tea-plantation.png') no-repeat center;
+            background-size: cover;
+          "
+        >
+          <div class="carousel-caption">Rwanda Tea</div>
+        </div>
+      </div>
+    </div>
+    <a class="left carousel-control" href="#carousel-generic" data-slide="prev">
+      <!--<span class="fa fa-angle-left"></span>-->
+      &nbsp;
+    </a>
+    <a
+      class="right carousel-control"
+      href="#carousel-generic"
+      data-slide="next"
+    >
+      <!--<span class="fa fa-angle-right"></span>-->
+      &nbsp;
+    </a>
   </div>
   <div class="about">
     <div class="about-title text-center bold">About SKS</div>
@@ -141,6 +184,77 @@
             Agro Input Quantities distributed per year
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+  <div class="features">
+    <div class="about-title text-center bold" style="color: #4f210d">
+      Features
+    </div>
+    <div class="row">
+      <div class="col-md-4 col-xs-6">
+        <span class="text-center">
+          <div class="features-box">
+            <img
+              src="assets/dist/img/sks/ico_feature_valuechainregistration.svg"
+            />
+            <div class="text-center">
+              Value Chain Stakeholders’ Registration
+              <span>(Farmers, District Cash Crops)</span>
+            </div>
+          </div>
+        </span>
+      </div>
+      <div class="col-md-4 col-xs-6">
+        <span class="text-center">
+          <div class="features-box">
+            <img src="assets/dist/img/sks/ico_feature_distribution.svg" />
+            <div class="text-center">Agro-input Distribution</div>
+          </div>
+        </span>
+      </div>
+      <div class="col-md-4 col-xs-6">
+        <span class="text-center">
+          <div class="features-box">
+            <img src="assets/dist/img/sks/ico_feature_cashcroprecord.svg" />
+            <div class="text-center">Cash Crop Production Recording</div>
+          </div>
+        </span>
+      </div>
+      <div class="col-md-4 col-xs-6">
+        <span class="text-center">
+          <div class="features-box">
+            <img
+              src="assets/dist/img/sks/ico_feature_warehousemanagement.svg"
+            />
+            <div class="text-center">Warehouse Management</div>
+          </div>
+        </span>
+      </div>
+      <div class="col-md-4 col-xs-6">
+        <span class="text-center">
+          <div class="features-box">
+            <img src="assets/dist/img/sks/ico_feature_export.svg" />
+            <div class="text-center">Export Operations Management</div>
+          </div>
+        </span>
+      </div>
+      <div class="col-md-4 col-xs-6">
+        <span class="text-center">
+          <div class="features-box">
+            <img src="assets/dist/img/sks/ico_feature_bireports.svg" />
+            <div class="text-center">Business Intelligence Reports</div>
+          </div>
+        </span>
+      </div>
+      <div class="col-md-4 col-xs-6"></div>
+      <div class="col-md-4 col-xs-6">
+        <span class="text-center">
+          <div class="features-box">
+            <img src="assets/dist/img/sks/ico_feature_extensionserv.svg" />
+            <div class="text-center">Extensions Services</div>
+          </div>
+        </span>
       </div>
     </div>
   </div>
