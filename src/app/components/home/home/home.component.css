@@ -72,8 +72,8 @@ footer {
 }
 
 .homepage-section {
-  opacity: 1;
   width: 100%;
+  overflow: hidden;
 }
 .homepage-section .sliders {
   width: 100%;
@@ -122,6 +122,7 @@ footer {
   font-size: 40px;
   color: #e1a33e;
   height: 66px;
+  margin-top: -40px;
 }
 
 .about-logo {
@@ -213,4 +214,65 @@ footer {
 
 .img-fluid {
   margin-left: 30%;
+}
+
+.homepage-section .features {
+  min-height: 580px;
+  padding: 50px;
+  background: #f2eee7 0% 0% no-repeat padding-box;
+  opacity: 1;
+}
+
+.carousel-caption {
+  font-size: 60px;
+  font-weight: bolder;
+  top: 45%;
+  text-align: center;
+}
+.homepage-section .carousel {
+  height: 750px;
+  top: -60px;
+}
+.homepage-section .carousel .carousel-inner {
+  height: 750px;
+}
+.carousel .item,
+.img {
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+}
+
+.features-box {
+  width: 390px;
+  height: 150px;
+  margin-bottom: 20px;
+  /* UI Properties */
+  background: #ffffff 0% 0% no-repeat padding-box;
+  border: 2px solid #e1a33e;
+  border-radius: 7px;
+  opacity: 1;
+}
+
+.features-box img {
+  width: 50px;
+  height: 52px;
+  margin-top: 20px;
+}
+
+.features-box div {
+  margin-top: 15px;
+  text-align: center;
+  font: normal normal medium 22px/20px Helvetica Neue;
+  letter-spacing: 0px;
+  color: black;
+  font-size: 20px;
+}
+
+.features-box div span {
+  margin-top: -10px;
+  font-size: 16px;
 }

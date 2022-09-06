@@ -75,6 +75,9 @@ export class DashboardComponent extends BasicComponent implements OnInit {
       colors: ["#FF69F6", "#35A1FF"],
       legend: { position: "none" },
       pieHole: 0.3,
+      pieSliceTextStyle: {
+        color: 'black',
+      },
       backgroundColor: { fill: "transparent" },
       chartArea: {
         left: 20,
@@ -103,6 +106,9 @@ export class DashboardComponent extends BasicComponent implements OnInit {
       colors: ["#F5B23F", "#FF990A"],
       legend: { position: "none" },
       pieHole: 0.4,
+      pieSliceTextStyle: {
+        color: 'black',
+      },
       backgroundColor: { fill: "transparent" },
       chartArea: {
         left: 5,
@@ -112,7 +118,6 @@ export class DashboardComponent extends BasicComponent implements OnInit {
         height: "200",
       },
     },
-    color: "black",
     columnNames: ["Variety1", "Variety2"],
     width: "100%",
     height: 220,
