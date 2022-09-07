@@ -356,6 +356,7 @@ export class OrganisationFarmersComponent
     this.organisationService
       .getAllFarmers(this.organisationId)
       .subscribe((data) => {
+        this.downloadingAll = false;
         data.content.map((item) => {
           const temp = {
             NAMES: item.userInfo.surname + '  ' + item.userInfo.foreName,
@@ -372,7 +373,6 @@ export class OrganisationFarmersComponent
           };
           this.allFarmers.push(temp);
         });
-        this.downloadingAll = false;
       });
   }
 

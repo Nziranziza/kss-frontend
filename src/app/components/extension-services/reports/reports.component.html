@@ -1,5 +1,10 @@
 <form [formGroup]="reportForm">
   <div class="row">
+    <!--
+    --------------------------------STEP 1 -----------------------------------
+                      Select the collection to be reported
+    --------------------------------------------------------------------------
+    -->
     <div class="col-xs-4">
       <div>
         <h5 class="label-required">Filter Reports for</h5>
@@ -14,8 +19,13 @@
       </div>
     </div>
   </div>
+  <!--
+  -------------------------------- STEP 2 ----------------------------------
+                Select area of reporting by location and CWS
+  --------------------------------------------------------------------------
+  -->
   <div class="row">
-    <div class="col-xs-8" *ngIf="reportForm.value.reportFor !== ''">
+    <div class="col-xs-10" *ngIf="reportForm.value.reportFor !== ''" formGroupName="filter">
       <div class="row">
         <div class="col-xs-6">
           <h5 class="label-required text-center">Filters</h5>
@@ -25,8 +35,7 @@
                 <option value="" selected>All provinces</option>
                 <option
                   *ngFor="let province of locationProvinces"
-                  value="{{ province._id }}"
-                >
+                  value="{{ province._id }}">
                   {{ province.namee | titlecase }}
                 </option>
               </select>
@@ -49,7 +58,7 @@
             <h5 class="label-required text-center">Filter by CWS</h5>
             <input
               type="radio"
-              formControlName="filterByType"
+              formControlName="locationBy"
               value="cws"
               style="margin-top: 5px"
             />
@@ -60,7 +69,7 @@
             <h5 class="label-required text-center">Filter by sector</h5>
             <input
               type="radio"
-              formControlName="filterByType"
+              formControlName="locationBy"
               value="sector"
               style="margin-top: 5px"
             />
@@ -69,19 +78,17 @@
       </div>
       <div class="row">
         <span
-          *ngIf="reportForm.value.filterByType === 'cws'"
-          formGroupName="filterByCws"
-        >
+          *ngIf="reportForm.value.filter.locationBy === 'cws'">
           <div class="col-xs-3" style="margin-top: 5px">
             <div class="ng-autocomplete">
               <ng-autocomplete
-                #origin
+                #orgAuto
                 [data]="organisations"
                 [searchKeyword]="keyword"
                 (selected)="selectEvent($event)"
                 (inputCleared)="deselectEvent()"
                 [initialValue]="initialValue"
-                placeholder="All Coffee Washing Stations"
+                placeholder="All CWS"
                 [itemTemplate]="itemTemplate"
                 [notFoundTemplate]="notFoundTemplate"
                 style="height: 10px"
@@ -96,55 +103,44 @@
               </ng-template>
             </div>
           </div>
-          <div class="col-xs-3" style="margin-top: 5px">
-            <select class="form-control">
-              <option value="" selected>All Covered Sector</option>
-              <option
-                *ngFor="let sector of coveredSectors; let i = index"
-                value="{{ sector?.sectorId._id }}"
-              >
-                {{
-                  sector.sectorId.name
-                    ? sector.sectorId.name
-                    : (sector.sectorId | titlecase)
-                }}
-              </option>
-            </select>
+          <div class="col-xs-3" style="margin-top: 5px" *ngIf="reportForm.value.reportFor !== 'Farmer Groups' &&
+            reportForm.value.reportFor !== 'Coffee Farmers' &&
+            reportForm.value.reportFor !== 'Coffee Farms'">
+          <div
+            class="ng-autocomplete">
+            <ng-autocomplete
+              #origin
+              [data]="groups"
+              [searchKeyword]="groupKeyword"
+              (selected)="selectGroupEvent($event)"
+              (inputCleared)="deselectGroupEvent($event)"
+              [initialValue]="initialValue"
+              placeholder="All groups"
+              [itemTemplate]="itemTemplate"
+              [notFoundTemplate]="notFoundTemplate"
+              style="height: 10px"
+            >
+            </ng-autocomplete>
+
+            <ng-template #itemTemplate let-item>
+              <a [innerHTML]="item.groupName" style="height: 20px"></a>
+            </ng-template>
+
+            <ng-template #notFoundTemplate let-notFound>
+              <div [innerHTML]="notFound"></div>
+            </ng-template>
           </div>
-          <div class="col-xs-3" style="margin-top: 5px">
-            <select class="form-control">
-              <option value="" selected>All Covered Cells</option>
-              <option
-                *ngFor="let sector of coveredCells; let i = index"
-                value="{{ sector?.cell_id }}"
-              >
-                {{ sector.name ? sector.name : (sector | titlecase) }}
-              </option>
-            </select>
-          </div>
-          <div class="col-xs-3" style="margin-top: 5px">
-            <select class="form-control">
-              <option value="" selected>All Covered Villages</option>
-              <option
-                *ngFor="let sector of coveredVillages; let i = index"
-                value="{{ sector?.village_id }}"
-              >
-                {{ sector.name ? sector.name : (sector | titlecase) }}
-              </option>
-            </select>
-          </div>
+        </div>
         </span>
         <span
-          *ngIf="reportForm.value.filterByType === 'sector'"
-          formGroupName="location"
-        >
+          *ngIf="reportForm.value.filter.locationBy === 'sector' || reportForm.value.filter.locationBy === 'cws'"
+          formGroupName="location">
           <div class="col-xs-3" style="margin-top: 5px">
             <select class="form-control" formControlName="sect_id">
               <option value="" selected>All sectors</option>
               <option
                 *ngFor="let sector of locationSectors"
-                value="{{ sector._id }}"
-              >
+                value="{{ sector._id }}">
                 {{ sector.name | titlecase }}
               </option>
             </select>
@@ -168,98 +164,38 @@
               </option>
             </select>
           </div>
-          <div class="col-xs-3" style="margin-top: 5px">
-            <div
-              class="ng-autocomplete"
-              *ngIf="reportForm.value.reportFor !== 'Farmer Groups'"
-            >
-              <ng-autocomplete
-                #origin
-                [data]="groups"
-                [searchKeyword]="groupKeyword"
-                (selected)="selectGroupEvent($event)"
-                (inputCleared)="deselectGroupEvent()"
-                [initialValue]="initialValue"
-                placeholder="All groups"
-                [itemTemplate]="itemTemplate"
-                [notFoundTemplate]="notFoundTemplate"
-                style="height: 10px"
-              >
-              </ng-autocomplete>
-
-              <ng-template #itemTemplate let-item>
-                <a [innerHTML]="item.groupName" style="height: 20px"></a>
-              </ng-template>
-
-              <ng-template #notFoundTemplate let-notFound>
-                <div [innerHTML]="notFound"></div>
-              </ng-template>
-            </div>
-          </div>
         </span>
         <span
-          *ngIf="reportForm.value.reportFor === 'Trainings'"
-          formGroupName="trainingFilters"
-        >
-          <div class="col-xs-4" style="margin-top: 5px">
-            <select class="form-control">
-              <option value="" selected>Training Module</option>
+          *ngIf="reportForm.value.reportFor === 'Trainings'"  formGroupName="training">
+          <div class="col-xs-3" style="margin-top: 5px">
+            <select class="form-control" formControlName="trainingId">
+              <option value="" selected>All Module</option>
               <option
                 *ngFor="let training of trainings; let i = index"
-                value="{{ training._id }}"
-              >
+                value="{{ training._id }}">
                 {{ training.trainingName | titlecase }}
               </option>
             </select>
           </div>
-          <div class="col-xs-4" style="margin-top: 5px">
-            <select class="form-control">
-              <option value="" selected>All Status</option>
-            </select>
-          </div>
-          <div class="col-xs-4" style="margin-top: 5px">
-            <select class="form-control">
-              <option value="" selected>All Gender</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-            </select>
-          </div>
         </span>
-        <span
-          *ngIf="reportForm.value.reportFor == 'to be defined'"
-          formGroupName="seasonFilters"
-        >
-          <div class="col-xs-6" style="margin-top: 5px">
-            <select class="form-control">
-              <option value="" selected>Choose Season</option>
-              <option
-                *ngFor="let season of seasons"
-                value="season._id"
-                selected
-              >
-                {{ season.season }}
-              </option>
-            </select>
-          </div>
-          <div class="col-xs-3" style="margin-top: 5px">
-            <input
-              [owlDateTimeTrigger]="dt1"
-              [owlDateTime]="dt1"
-              formControlName="startDate"
-              class="form-control"
-              placeholder="Dd/mm/yyyy"
-            />
-            <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
-          </div>
-          <div class="col-xs-3" style="margin-top: 5px">
-            <input
-              [owlDateTimeTrigger]="dt2"
-              [owlDateTime]="dt2"
-              formControlName="endDate"
-              class="form-control"
-              placeholder="Dd/mm/yyyy"
-            />
-            <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
+        <span *ngIf="reportForm.value.reportFor == 'Trainings' || reportForm.value.reportFor == 'Farm Visits'">
+            <div class="col-xs-3 col-small-padding">
+            <div class="form-group" style="margin-top: 5px">
+              <input
+                [selectMode]="'range'"
+                [owlDateTimeTrigger]="dt8"
+                [owlDateTime]="dt8"
+                formControlName="date"
+                class="form-control form-control-small"
+                placeholder="From: Dd/mm/yyyy ~ To: Dd/mm/yyyy"
+                [min]="seasonStartingDate"
+                [max]="currentDate"
+              />
+              <owl-date-time
+                #dt8
+                [pickerType]="'calendar'"
+              ></owl-date-time>
+            </div>
           </div>
         </span>
         <span *ngIf="reportForm.value.reportFor !== ''">
@@ -267,8 +203,7 @@
             <button
               class="btn btn-default"
               type="button"
-              (click)="generateReport(); downloadCsv()"
-            >
+              (click)="generateReport(); downloadCsv()">
               GENERATE REPORT
             </button>
           </div>
@@ -277,7 +212,7 @@
     </div>
   </div>
   <div class="summary-box">
-    <h3 class="text-center">{{ reportForm.value.reportFor }} Summary Box</h3>
+    <h3 class="text-center">{{ reportForm.value.reportFor }}</h3>
     <div class="row" style="margin-top: -15px">
       <span *ngIf="reportForm.value.reportFor === 'Farmer Groups'">
         <div class="col-sm-6 text-center">
@@ -320,8 +255,8 @@
           <h4>Total Farmers</h4>
           <h3>
             {{
-              stats?.statistics?.male?.farmers +
-                stats?.statistics?.female?.farmers || 0
+            stats?.statistics?.male?.farmers +
+            stats?.statistics?.female?.farmers || 0
             }}
           </h3>
           <div class="row">
@@ -339,8 +274,8 @@
           <h4>Total Farms</h4>
           <h3>
             {{
-              stats?.statistics?.male?.numberOfLands +
-                stats?.statistics?.female?.numberOfLands || 0
+            stats?.statistics?.male?.numberOfLands +
+            stats?.statistics?.female?.numberOfLands || 0
             }}
           </h3>
           <div class="row">
@@ -359,8 +294,8 @@
           <h4>Total Trees</h4>
           <h3>
             {{
-              stats?.statistics?.male?.numberOfTrees +
-                stats?.statistics?.female?.numberOfTrees || 0
+            stats?.statistics?.male?.numberOfTrees +
+            stats?.statistics?.female?.numberOfTrees || 0
             }}
           </h3>
           <div class="row">
@@ -399,14 +334,14 @@
       style="margin-left: 10px"
       [href]="'data:application/octet-stream;base64,' + dataFile | safe"
       download="generalReport.xlsx"
-      >export to XLS</a
+    >export to XLS</a
     >
   </div>
   <div class="box" id="downloadFile">
     <div class="box-header" *ngIf="reportsTableData.length > 0">
-      <img src="assets/dist/img/sks/tecnoserve.png" style="width: 140px" />
+      <img src="assets/dist/img/sks/tecnoserve.png" style="width: 140px"/>
     </div>
-    <h4 class="text-center">{{ reportForm.value.reportFor }} Summary</h4>
+    <h4 class="text-center">{{ reportForm.value.reportFor }} Details </h4>
     <div
       class="box-body table-responsive"
       *ngIf="
@@ -415,40 +350,40 @@
       "
     >
       <table
+        datatable
         [dtOptions]="dtOptions"
         [dtTrigger]="dtTrigger"
-        class="row-border hover table table-striped"
-      >
+        class="row-border hover table table-striped">
         <thead>
-          <tr>
-            <th>Date Added</th>
-            <th>Training Module Title</th>
-            <th>Date/Time of the training</th>
-            <th>Location of the training</th>
-            <th>Trainer</th>
-            <th>Group</th>
-            <th>Trainees</th>
-            <th>Status</th>
-          </tr>
+        <tr>
+          <th>Date Added</th>
+          <th>Training Module Title</th>
+          <th>Date/Time of the training</th>
+          <th>Location of the training</th>
+          <th>Trainer</th>
+          <th>Group</th>
+          <th>Trainees</th>
+          <th>Status</th>
+        </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let schedule of reportsTableData">
-            <td>{{ schedule.createdAt | date: "short" }}</td>
-            <td>{{ schedule.trainingId.trainingName }}</td>
-            <td>{{ schedule.startTime | date: "short" }}</td>
-            <td>
-              {{ schedule.location.prov_id?.namek }} >
-              {{ schedule.location.dist_id?.name }} >
-              {{ schedule.location.sect_id?.name }} >
-              {{ schedule.location.cell_id?.name }} >
-              {{ schedule.location.village_id?.name }} >
-              {{ schedule.venueName }}
-            </td>
-            <td>{{ schedule.trainer.fullName }}</td>
-            <td>{{ schedule.groupId.groupName }}</td>
-            <td>{{ schedule.trainees.length || 1 }} trainees</td>
-            <td>{{ schedule.status }}</td>
-          </tr>
+        <tr *ngFor="let schedule of reportsTableData">
+          <td>{{ schedule.createdAt | date: "short" }}</td>
+          <td>{{ schedule.trainingId.trainingName }}</td>
+          <td>{{ schedule.startTime | date: "short" }}</td>
+          <td>
+            {{ schedule.location.prov_id?.namek }} >
+            {{ schedule.location.dist_id?.name }} >
+            {{ schedule.location.sect_id?.name }} >
+            {{ schedule.location.cell_id?.name }} >
+            {{ schedule.location.village_id?.name }} >
+            {{ schedule.venueName }}
+          </td>
+          <td>{{ schedule.trainer.fullName }}</td>
+          <td>{{ schedule.groupId.groupName }}</td>
+          <td>{{ schedule.trainees.length || 1 }} trainees</td>
+          <td>{{ schedule.status }}</td>
+        </tr>
         </tbody>
       </table>
     </div>
@@ -467,23 +402,23 @@
         class="row-border hover table table-striped"
       >
         <thead>
-          <tr>
-            <th>Date added</th>
-            <th>Group name</th>
-            <th>Leader names & contact</th>
-            <th>Address</th>
-            <th>Group size</th>
-            <th>Meeting Day</th>
-            <th>status</th>
-          </tr>
+        <tr>
+          <th>Date added</th>
+          <th>Group name</th>
+          <th>Leader names & contact</th>
+          <th>Address</th>
+          <th>Group size</th>
+          <th>Meeting Day</th>
+          <th>status</th>
+        </tr>
         </thead>
         <tbody>
-          <ng-container *ngFor="let group of reportsTableData">
-            <tr>
-              <td>{{ group.createdAt | date: "y/LL/d - h:mm" }}</td>
-              <td>{{ group.groupName }}</td>
-              <td>{{ group.leaderNames }} > {{ group.leaderPhoneNumber }}</td>
-              <td>
+        <ng-container *ngFor="let group of reportsTableData">
+          <tr>
+            <td>{{ group.createdAt | date: "y/LL/d - h:mm" }}</td>
+            <td>{{ group.groupName }}</td>
+            <td>{{ group.leaderNames }} > {{ group.leaderPhoneNumber }}</td>
+            <td>
                 <span style="text-transform: capitalize">
                   {{ group.location.prov_id?.namek }} >
                   {{ group.location.dist_id?.name }} >
@@ -491,27 +426,27 @@
                   {{ group.location.cell_id?.name }} >
                   {{ group.location.village_id?.name }}
                 </span>
-              </td>
-              <td>
-                <span>{{ group.members.length + " " + "farmers" }}</span>
-              </td>
-              <td>
-                every {{ weekDays[group.meetingSchedule?.meetingDay - 1] }}
-              </td>
-              <td>
+            </td>
+            <td>
+              <span>{{ group.members.length + " " + "farmers" }}</span>
+            </td>
+            <td>
+              every {{ weekDays[group.meetingSchedule?.meetingDay - 1] }}
+            </td>
+            <td>
                 <span class="profile-text">
                   <ng-container *ngIf="!group.active; else inactive"
-                    ><span style="color: green; font-weight: bold">active</span>
+                  ><span style="color: green; font-weight: bold">active</span>
                   </ng-container>
                   <ng-template #inactive
-                    ><span style="color: #b21717; font-weight: bold"
-                      >inactive</span
-                    ></ng-template
+                  ><span style="color: #b21717; font-weight: bold"
+                  >inactive</span
+                  ></ng-template
                   >
                 </span>
-              </td>
-            </tr>
-          </ng-container>
+            </td>
+          </tr>
+        </ng-container>
         </tbody>
       </table>
     </div>
@@ -530,35 +465,35 @@
         class="row-border hover table table-striped"
       >
         <thead>
-          <tr>
-            <th>Date Added</th>
-            <th>GAP to be Covered</th>
-            <th>Visitor</th>
-            <th>Date and Time of the visit</th>
-            <th>Score</th>
-            <th>Status</th>
-          </tr>
+        <tr>
+          <th>Date Added</th>
+          <th>GAP to be Covered</th>
+          <th>Visitor</th>
+          <th>Date and Time of the visit</th>
+          <th>Score</th>
+          <th>Status</th>
+        </tr>
         </thead>
         <tbody>
-          <ng-container *ngFor="let visit of reportsTableData">
-            <tr>
-              <td>{{ visit.createdAt | date: "short" }}</td>
-              <td>
-                {{ visit.gap.gap_name }}
-              </td>
-              <td>
-                {{ visit.visitor.firstName }} {{ visit.visitor.lastName }}
-              </td>
-              <td>{{ visit.date | date: "short" }}</td>
-              <td>
-                {{
-                  (visit.overall_score * 100) / visit.overall_weight
-                    | number: "1.0-1"
-                }}%
-              </td>
-              <td>{{ visit.status || "Pending" }}</td>
-            </tr>
-          </ng-container>
+        <ng-container *ngFor="let visit of reportsTableData">
+          <tr>
+            <td>{{ visit.createdAt | date: "short" }}</td>
+            <td>
+              {{ visit.gap.gap_name }}
+            </td>
+            <td>
+              {{ visit.visitor.firstName }} {{ visit.visitor.lastName }}
+            </td>
+            <td>{{ visit.date | date: "short" }}</td>
+            <td>
+              {{
+              (visit.overall_score * 100) / visit.overall_weight
+                | number: "1.0-1"
+              }}%
+            </td>
+            <td>{{ visit.status || "Pending" }}</td>
+          </tr>
+        </ng-container>
         </tbody>
       </table>
     </div>
@@ -577,40 +512,40 @@
         class="row-border hover table table-striped"
       >
         <thead>
-          <tr>
-            <th>Farmer Name</th>
-            <th>Farmer Location</th>
-            <th>Reg Number</th>
-            <th>NID</th>
-            <th>Gender</th>
-            <th>Contact</th>
-            <th>Total Trees</th>
-            <th>Fertilizer Need</th>
-            <th>Fertilizer Allocated</th>
-          </tr>
+        <tr>
+          <th>Farmer Name</th>
+          <th>Farmer Location</th>
+          <th>Reg Number</th>
+          <th>NID</th>
+          <th>Gender</th>
+          <th>Contact</th>
+          <th>Total Trees</th>
+          <th>Fertilizer Need</th>
+          <th>Fertilizer Allocated</th>
+        </tr>
         </thead>
         <tbody>
-          <ng-container *ngFor="let data of reportsTableData">
-            <tr>
-              <td>
-                {{ data?.userInfo?.foreName + " " + data.userInfo.surname }}
-              </td>
-              <td>
-                {{ data.userInfo?.location?.prov_id?.namek }} >
-                {{ data.userInfo.location?.dist_id.name }} >
-                {{ data.userInfo.location?.sect_id.name }} >
-                {{ data.userInfo.location?.cell_id.name }} >
-                {{ data.userInfo.location?.village_id.name }}
-              </td>
-              <td>{{ data?.userInfo?.regNumber }}</td>
-              <td>{{ data?.userInfo?.NID }}</td>
-              <td>{{ data?.userInfo?.sex }}</td>
-              <td>{{ data?.userInfo?.phone_number }}</td>
-              <td>{{ data.requestInfo[0]?.numberOfTrees }}</td>
-              <td>{{ data.requestInfo[0]?.fertilizer_need }}</td>
-              <td>{{ data.requestInfo[0]?.fertilizer_allocate }}</td>
-            </tr>
-          </ng-container>
+        <ng-container *ngFor="let data of reportsTableData">
+          <tr>
+            <td>
+              {{ data?.userInfo?.foreName + " " + data.userInfo.surname }}
+            </td>
+            <td>
+              {{ data.userInfo?.location?.prov_id?.namek }} >
+              {{ data.userInfo.location?.dist_id.name }} >
+              {{ data.userInfo.location?.sect_id.name }} >
+              {{ data.userInfo.location?.cell_id.name }} >
+              {{ data.userInfo.location?.village_id.name }}
+            </td>
+            <td>{{ data?.userInfo?.regNumber }}</td>
+            <td>{{ data?.userInfo?.NID }}</td>
+            <td>{{ data?.userInfo?.sex }}</td>
+            <td>{{ data?.userInfo?.phone_number }}</td>
+            <td>{{ data.requestInfo[0]?.numberOfTrees }}</td>
+            <td>{{ data.requestInfo[0]?.fertilizer_need }}</td>
+            <td>{{ data.requestInfo[0]?.fertilizer_allocate }}</td>
+          </tr>
+        </ng-container>
         </tbody>
       </table>
     </div>
@@ -629,32 +564,32 @@
         class="row-border hover table table-striped"
       >
         <thead>
-          <tr>
-            <th>Farmer Name</th>
-            <th>Farm Location</th>
-            <th>Total Trees</th>
-            <th>Fertilizer Need</th>
-            <th>Fertilizer Allocated</th>
-          </tr>
+        <tr>
+          <th>Farmer Name</th>
+          <th>Farm Location</th>
+          <th>Total Trees</th>
+          <th>Fertilizer Need</th>
+          <th>Fertilizer Allocated</th>
+        </tr>
         </thead>
         <tbody>
-          <ng-container *ngFor="let data of reportsTableData">
-            <tr>
-              <td>
-                {{ data?.userInfo?.foreName + " " + data.userInfo?.surname }}
-              </td>
-              <td>
-                {{ data.requestInfo[0].location.prov_id.namek }} >
-                {{ data.requestInfo[0].location.dist_id.name }} >
-                {{ data.requestInfo[0].location.sect_id.name }} >
-                {{ data.requestInfo[0].location.cell_id.name }} >
-                {{ data.requestInfo[0].location.village_id.name }}
-              </td>
-              <td>{{ data.requestInfo[0]?.numberOfTrees }}</td>
-              <td>{{ data.requestInfo[0]?.fertilizer_need }}</td>
-              <td>{{ data.requestInfo[0]?.fertilizer_allocate }}</td>
-            </tr>
-          </ng-container>
+        <ng-container *ngFor="let data of reportsTableData">
+          <tr>
+            <td>
+              {{ data?.userInfo?.foreName + " " + data.userInfo?.surname }}
+            </td>
+            <td>
+              {{ data.requestInfo[0].location.prov_id.namek }} >
+              {{ data.requestInfo[0].location.dist_id.name }} >
+              {{ data.requestInfo[0].location.sect_id.name }} >
+              {{ data.requestInfo[0].location.cell_id.name }} >
+              {{ data.requestInfo[0].location.village_id.name }}
+            </td>
+            <td>{{ data.requestInfo[0]?.numberOfTrees }}</td>
+            <td>{{ data.requestInfo[0]?.fertilizer_need }}</td>
+            <td>{{ data.requestInfo[0]?.fertilizer_allocate }}</td>
+          </tr>
+        </ng-container>
         </tbody>
       </table>
     </div>
