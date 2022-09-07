@@ -49,3 +49,7 @@ form .input-required {
   margin-top: 5px;
   margin-left: 5px;
 }
+
+.small-spacing {
+  padding: 0 2px 0 0px;
+}

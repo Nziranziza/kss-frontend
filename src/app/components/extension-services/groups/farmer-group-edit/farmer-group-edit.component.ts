@@ -104,11 +104,6 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
         searchBy: ['reg_number'],
       }),
     });
-
-    this.organisationService.get(this.authenticationService.getCurrentUser().info.org_id).subscribe((data) => {
-      this.org = data.content;
-      this.initial();
-    });
     this.route.params.subscribe(params => {
       this.id = params['id'.toString()];
       this.groupService.get(params['id'.toString()]).subscribe(data => {
@@ -135,22 +130,23 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
           item.userInfo.phone_number = member.phoneNumber;
           this.groupMembers.push(item);
         });
-        this.editForm.patchValue(data.data);
         this.editForm.controls.location
           .get("prov_id".toString())
-          .setValue(data.data.location.prov_id._id, { emitEvent: false });
+          .setValue(data.data.location.prov_id._id, { emitEvent: true });
         this.editForm.controls.location
           .get("dist_id".toString())
-          .setValue(data.data.location.dist_id._id, { emitEvent: false });
+          .setValue(data.data.location.dist_id._id, { emitEvent: true });
         this.editForm.controls.location
           .get("sect_id".toString())
-          .setValue(data.data.location.sect_id._id);
+          .setValue(data.data.location.sect_id._id, { emitEvent: true });
         this.editForm.controls.location
           .get("cell_id".toString())
-          .setValue(data.data.location.cell_id._id);
+          .setValue(data.data.location.cell_id._id, { emitEvent: true });
         this.editForm.controls.location
           .get("village_id".toString())
-          .setValue(data.data.location.village_id._id);
+          .setValue(data.data.location.village_id._id, { emitEvent: true });
+        delete data.data.location
+        this.editForm.patchValue(data.data);
       });
     });
     this.basicInit(this.authenticationService.getCurrentUser().info.org_id);
@@ -163,8 +159,6 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
       const value = JSON.parse(JSON.stringify(this.editForm.value));
       value.org_id = this.authenticationService.getCurrentUser().info.org_id;
       value.meetingSchedule.meetingDay = +value.meetingSchedule.meetingDay;
-      value.location.prov_id = this.org.location.prov_id._id;
-      value.location.dist_id = this.org.location.dist_id._id;
       const members = [];
       this.groupMembers.map((member) => {
         members.push(member.userInfo._id);
@@ -184,24 +178,6 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
     } else {
       this.errors = this.helper.getFormValidationErrors(this.editForm);
     }
-  }
-
-  initial() {
-    this.locationService.getProvinces().subscribe((data) => {
-      this.provinces = data;
-      this.locationService
-        .getDistricts(this.org.location.prov_id._id)
-        .subscribe((dt) => {
-          this.districts = dt;
-          this.editForm.controls.location
-            .get('prov_id'.toString())
-            .patchValue(this.org.location.prov_id._id)
-          this.editForm.controls.location
-            .get('dist_id'.toString())
-            .patchValue(this.org.location.dist_id._id);
-          this.sectors = this.filterZoningSectors(this.org.coveredSectors);
-        });
-    });
   }
 
   selectAllResults(isChecked: boolean) {

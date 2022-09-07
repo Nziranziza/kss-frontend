@@ -518,7 +518,55 @@
           <p>Total Visited Farms</p>
           <h4>{{ visitStats.totalVisits }}</h4>
         </div>
-
+        <div
+          class="chart-visit-box"
+          style="padding: 10px; margin-left: 5%; margin-right: 5%"
+          *ngIf="visitStats.totalVisits == 0"
+        >
+          <span class="text-center">
+            <div style="font: normal 16px Helvetica Neue">Visited Farmers</div>
+            <div style="font: normal 20px Helvetica Neue">
+              {{ visitStats.totalFarmersVisited }}
+            </div>
+          </span>
+          <div class="row">
+            <div class="col-xs-2 text-center">
+              <br />
+              <br />
+              <i
+                class="fa fa-male fa-3x"
+                aria-hidden="true"
+                style="color: #35a1ff"
+              ></i>
+              <p style="margin-left: 5px">{{ visitStats.maleFarmVisits }}</p>
+            </div>
+            <div class="col-xs-8" style="margin-top: -10px; margin-left: -15%">
+              <google-chart
+                #visitChart
+                [type]="graph.type"
+                [data]="graph.dummyData"
+                [options]="graph.options"
+                [width]="graph.width"
+                [columns]="graph.columnNames"
+                [height]="graph.height"
+                [color]="graph.color"
+              >
+              </google-chart>
+            </div>
+            <div class="col-xs-2 text-center" style="margin-left: 15%">
+              <br />
+              <br />
+              <i
+                class="fa fa-female fa-3x"
+                aria-hidden="true"
+                style="color: #ff69f6"
+              ></i>
+              <p style="margin-left: 5px" class="text-center">
+                {{ visitStats.femaleFarmVisits }}
+              </p>
+            </div>
+          </div>
+        </div>
         <div
           class="chart-visit-box"
           style="padding: 10px; margin-left: 5%; margin-right: 5%"
@@ -541,7 +589,7 @@
               ></i>
               <p style="margin-left: 5px">{{ visitStats.maleFarmVisits }}</p>
             </div>
-            <div class="col-xs-8" style="margin-left: -76px; margin-top: -10px">
+            <div class="col-xs-8" style="margin-left: -15%; margin-top: -10px">
               <google-chart
                 #visitChart
                 [type]="graph.type"
@@ -553,7 +601,7 @@
               >
               </google-chart>
             </div>
-            <div class="col-xs-2 text-center" style="margin-left: 70px">
+            <div class="col-xs-2 text-center" style="margin-left: 15%">
               <br />
               <br />
               <i
@@ -706,7 +754,7 @@
           </span>
         </div>
         <div class="row">
-          <div class="col-xs-6">
+          <div class="col-xs-4">
             <div class="text-center">
               <p>Seedling Distributed</p>
               <h4>{{ totalSeedlings }}</h4>
@@ -716,7 +764,24 @@
               <h4>{{ seedling.totalQuantity }}</h4>
             </div>
           </div>
-          <div class="col-xs-6">
+          <div class="col-xs-8">
+            <div
+              class="text-center"
+              style="margin-top: -10px"
+              *ngIf="totalSeedlings == 0"
+            >
+              <google-chart
+                #seedChart
+                [type]="seedlingGraph.type"
+                [data]="seedlingGraph.dummyData"
+                [options]="seedlingGraph.options"
+                [width]="seedlingGraph.width"
+                [columns]="seedlingGraph.columnNames"
+                [height]="seedlingGraph.height"
+                [color]="graph.color"
+              >
+              </google-chart>
+            </div>
             <div
               class="text-center"
               style="margin-top: -10px; margin-left: -65px"
@@ -724,12 +789,13 @@
             >
               <google-chart
                 #seedChart
-                [type]="graph.type"
+                [type]="seedlingGraph.type"
                 [data]="seedlingGraph.data"
                 [options]="seedlingGraph.options"
-                [width]="graph.width"
+                [width]="seedlingGraph.width"
                 [columns]="seedlingGraph.columnNames"
-                [height]="graph.height"
+                [height]="seedlingGraph.height"
+                [color]="graph.color"
               >
               </google-chart>
             </div>
