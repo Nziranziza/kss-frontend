@@ -401,7 +401,8 @@
         <tr>
           <th>Date added</th>
           <th>Group name</th>
-          <th>Leader names & contact</th>
+          <th>Leader names</th>
+          <th> Leader Contact </th>
           <th>Province</th>
           <th>District</th>
           <th>Sector</th>
@@ -416,7 +417,8 @@
           <tr style="text-transform: capitalize">
             <td>{{ group.createdAt | date: "y/LL/d - h:mm" }}</td>
             <td>{{ group.groupName }}</td>
-            <td>{{ group.leaderNames }} > {{ group.leaderPhoneNumber }}</td>
+            <td>{{ group.leaderNames }}</td>
+            <td>{{ group.leaderPhoneNumber }}</td>
             <td>{{ group.location.prov_id?.namek }}</td>
             <td>{{ group.location.dist_id?.name }}</td>
             <td>{{ group.location.sect_id?.name }}</td>
