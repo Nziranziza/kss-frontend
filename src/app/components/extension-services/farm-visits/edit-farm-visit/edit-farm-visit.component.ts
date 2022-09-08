@@ -92,7 +92,6 @@ export class EditFarmVisitComponent implements OnInit {
   getVisits() {
     this.visitService.one(this.id).subscribe((data) => {
       this.visits = data.data;
-      console.log(this.visits);
       this.savedFarmList = data.data.farms;
       this.scheduleVisit.controls.startTime.setValue(
         new Date(data.data.date.split("T")[0] +
@@ -130,6 +129,7 @@ export class EditFarmVisitComponent implements OnInit {
         this.farmerGroups = data.data;
         this.loading = false;
       });
+    this.loading = false;
   }
 
   onGapSelect(item: any) {
@@ -211,6 +211,7 @@ export class EditFarmVisitComponent implements OnInit {
         console.log(this.agronomist);
         this.loading = false;
       });
+    this.loading = false;
   }
 
   selectFarms(isChecked: boolean, i: number) {
@@ -238,6 +239,7 @@ export class EditFarmVisitComponent implements OnInit {
       this.gaps = newData;
       this.loading = false;
     });
+    this.loading = false;
   }
 
   onChanges() {
@@ -313,6 +315,7 @@ export class EditFarmVisitComponent implements OnInit {
         }
       );
     } else {
+      this.loading = false;
       this.errors = this.helper.getFormValidationErrors(this.scheduleVisit);
     }
   }

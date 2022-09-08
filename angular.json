@@ -109,7 +109,7 @@
               "browserTarget": "basic-angular:build:production"
             },
             "staging": {
-              "browserTarget": "staging:build:production"
+              "browserTarget": "staging:build:staging"
             }
           }
         },

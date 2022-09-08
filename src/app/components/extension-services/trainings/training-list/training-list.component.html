@@ -103,7 +103,13 @@
                   </div>
                 </td>
                 <td>{{ training.materials.length }} files</td>
-                <td>Active</td>
+                <td>
+                  {{
+                    training.status == "scheduled"
+                      ? "Scheduled"
+                      : "Not Scheduled"
+                  }}
+                </td>
                 <td>
                   <button
                     appRequiredSeason
@@ -116,6 +122,7 @@
                     appRequiredSeason
                     (click)="openDeleteModal(training._id)"
                     class="btn btn-action-no-border btn-margin"
+                    *ngIf="training.status !== 'scheduled'"
                   >
                     <em class="fa fa-trash"></em>
                   </button>

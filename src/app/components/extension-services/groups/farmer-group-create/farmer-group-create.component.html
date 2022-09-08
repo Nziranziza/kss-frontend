@@ -6,7 +6,7 @@
       <div class="box-body">
         <form [formGroup]="createForm">
           <div class="row">
-            <div class="col-xs-6">
+            <div class="col-md-12 col-lg-6">
               <div class="form-group">
                 <label class="control-label label-required">Group name</label>
                 <input
@@ -16,7 +16,11 @@
                   (mouseout)="checkNameStatus()"
                 />
                 <div
-                  style="font: normal 10px Helvetica Neue, Helvetica, Arial, sans-serif; color: #ff2c2c"
+                  style="
+                    font: normal 10px Helvetica Neue, Helvetica, Arial,
+                      sans-serif;
+                    color: #ff2c2c;
+                  "
                   *ngIf="nameAlreadyExist"
                 >
                   group already exists
@@ -34,7 +38,7 @@
               </div>
             </div>
             <span *ngIf="!nameAlreadyExist && createForm.value.groupName != ''">
-              <div class="col-xs-6" formGroupName="location">
+              <div class="col-md-12 col-lg-6" formGroupName="location">
                 <div class="row">
                   <div
                     class="col-xs-2"
@@ -181,7 +185,7 @@
                     </div>
                   </div>
                   <div
-                    class="col-xs-2"
+                    class="col-xs-3"
                     id="location-village"
                     style="padding: 0 2px 0 0px"
                   >
@@ -200,7 +204,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-xs-3">
+              <div class="col-xs-12 col-md-6 col-lg-3">
                 <div class="form-group">
                   <label class="control-label label-required"
                     >Group leader names</label
@@ -222,7 +226,7 @@
                   </app-inline-errors>
                 </div>
               </div>
-              <div class="col-xs-3">
+              <div class="col-xs-12 col-md-6 col-lg-3">
                 <div class="form-group">
                   <label class="control-label label-required"
                     >Group leader phone number</label
@@ -246,7 +250,10 @@
                 </div>
               </div>
               <ng-container formGroupName="meetingSchedule">
-                <div class="col-xs-2" style="padding: 0 2px 0 0px">
+                <div
+                  class="col-xs-12 col-md-4 col-lg-2"
+                  style="padding: 0 2px 0 0px"
+                >
                   <div class="form-group">
                     <label class="control-label label-required"
                       >Meeting day</label
@@ -278,7 +285,10 @@
                     </app-inline-errors>
                   </div>
                 </div>
-                <div class="col-xs-1" style="padding: 0 2px 0 0px">
+                <div
+                  class="col-xs-12 col-md-2 col-lg-1"
+                  style="padding: 0 2px 0 0px"
+                >
                   <div class="form-group">
                     <label class="control-label label-required">Time</label>
                     <input
@@ -311,7 +321,10 @@
                   </div>
                 </div>
               </ng-container>
-              <div class="col-xs-3" style="padding: 0px 20px 0px 2px">
+              <div
+                class="col-xs-12 col-md-6 col-lg-3"
+                style="padding: 0px 20px 0px 2px"
+              >
                 <div class="form-group">
                   <label class="control-label label-required"
                     >Description</label
@@ -340,7 +353,7 @@
           class="row"
           *ngIf="!nameAlreadyExist && createForm.value.groupName != ''"
         >
-          <div class="col-xs-6">
+          <div class="col-md-12 col-lg-6">
             <fieldset style="margin-right: 0 !important">
               <legend>
                 <label class="control-label">&nbsp; SEARCH FARMERS</label>
@@ -526,7 +539,7 @@
               </button>
             </fieldset>
           </div>
-          <div class="col-xs-6">
+          <div class="col-md-12 col-lg-6">
             <fieldset style="margin-left: 0 !important">
               <legend>
                 <label class="control-label">&nbsp; GROUP FARMERS</label>

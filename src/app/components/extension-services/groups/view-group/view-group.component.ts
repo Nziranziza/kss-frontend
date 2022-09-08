@@ -6,24 +6,20 @@ import {
   PLATFORM_ID,
   Inject,
   Input,
-} from "@angular/core";
-import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
-import { BasicComponent, GroupService, MessageService } from "src/app/core";
-import { isPlatformBrowser } from "@angular/common";
+} from '@angular/core';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { BasicComponent, GroupService, MessageService } from 'src/app/core';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
-  selector: "app-view-group",
-  templateUrl: "./view-group.component.html",
-  styleUrls: ["./view-group.component.css"],
+  selector: 'app-view-group',
+  templateUrl: './view-group.component.html',
+  styleUrls: ['./view-group.component.css'],
 })
 export class ViewGroupComponent
   extends BasicComponent
   implements OnInit, OnDestroy
 {
-  closeResult = "";
-  groupDetails: any;
-  modal: NgbActiveModal;
-  @Input() id: string;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
@@ -33,26 +29,23 @@ export class ViewGroupComponent
   ) {
     super();
     if (isPlatformBrowser(this.platformId)) {
-      this.modal = this.injector.get(NgbActiveModal, { size: "lg" });
+      this.modal = this.injector.get(NgbActiveModal, { size: 'lg' });
     }
   }
-
-  ngOnDestroy(): void {}
-
-  ngOnInit() {
-    this.getVisits();
-    this.setMessage(this.messageService.getMessage());
-  }
+  closeResult = '';
+  groupDetails: any;
+  modal: NgbActiveModal;
+  @Input() id: string;
 
   results: any[] = [];
   weekDays: string[] = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday",
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday',
   ];
   gaps: any;
   loading = false;
@@ -66,14 +59,21 @@ export class ViewGroupComponent
     femaleOldTotal: 0,
   };
 
+  ngOnDestroy(): void {}
+
+  ngOnInit() {
+    this.getVisits();
+    this.setMessage(this.messageService.getMessage());
+  }
+
   getVisits() {
     this.groupService.get(this.id).subscribe((data) => {
       this.groupDetails = data.data;
       this.groupDetails.members.forEach((member) => {
         member.nid
           ? (member.age = new Date().getFullYear() - member.nid.substring(1, 5))
-          : (member.age = 0);
-        if (member.sex == "m" || member.sex == "M") {
+          : (member.age = '-');
+        if (member.sex == 'm' || member.sex == 'M') {
           this.totalByGender.maleTotal += 1;
           if (member.age <= 30) {
             this.totalByGender.maleYouthTotal += 1;
@@ -87,7 +87,7 @@ export class ViewGroupComponent
       });
       this.totalByGender.maleOldTotal =
         this.totalByGender.maleTotal - this.totalByGender.maleYouthTotal;
-      this.totalByGender.femaleOldTotal =
+        this.totalByGender.femaleOldTotal =
         this.totalByGender.femaleTotal - this.totalByGender.femaleYouthTotal;
     });
   }

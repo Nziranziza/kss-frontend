@@ -18,7 +18,7 @@
             <th>Email</th>
             <th>Phone number</th>
             <th></th>
-            <th>Actions</th>
+            <th> <span class="pull-right"> Actions </span></th>
           </tr>
           </thead>
           <tbody>
@@ -55,7 +55,7 @@
               <td class="actions no-wrap text-right">
                 <a routerLink="/admin/organisations/details/{{organisation._id}}/{{ organisation._id }}/dashboard" class="btn btn-info btn-sm"
                    *ngIf="isOrgCWS(organisation)"><i
-                  class="fa fa-users"></i> Details </a>
+                  class="fa fa-university"></i> Details </a>
                 <a routerLink="/admin/cws-pending-farmers/{{organisation._id}}"
                    class="btn btn-warning btn-margin btn-sm" *ngIf="isOrgCWS(organisation)"><i
                   class="fa fa-users"></i> Pending farmers</a>

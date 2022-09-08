@@ -6,22 +6,22 @@ import {
   Inject,
   PLATFORM_ID,
   Injector,
-} from "@angular/core";
-import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
-import { UserService } from "src/app/core";
-import { isPlatformBrowser } from "@angular/common";
+} from '@angular/core';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { UserService } from 'src/app/core';
+import { isPlatformBrowser } from '@angular/common';
 import {
   OrganisationService,
   AuthorisationService,
   AuthenticationService,
   MessageService,
-} from "src/app/core";
-import { DataTableDirective } from "angular-datatables";
+} from 'src/app/core';
+import { DataTableDirective } from 'angular-datatables';
 
 @Component({
-  selector: "app-change-user-org",
-  templateUrl: "./change-user-org.component.html",
-  styleUrls: ["./change-user-org.component.css"],
+  selector: 'app-change-user-org',
+  templateUrl: './change-user-org.component.html',
+  styleUrls: ['./change-user-org.component.css'],
 })
 export class ChangeUserOrgComponent implements OnInit {
   // TO:DO Build Models for organisations and user
@@ -33,15 +33,15 @@ export class ChangeUserOrgComponent implements OnInit {
   // Id for the new organisation
   newOrg: String;
   organisations = [];
-  isSending: boolean = false;
+  isSending = false;
 
   // Autocomplete
   // @ts-ignore
   @ViewChild(DataTableDirective, { static: false })
   dtElement: DataTableDirective;
-  @ViewChild("origin") origin: any;
-  initialValue = "";
-  keyword = "organizationName";
+  @ViewChild('origin') origin: any;
+  initialValue = '';
+  keyword = 'organizationName';
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
@@ -66,7 +66,7 @@ export class ChangeUserOrgComponent implements OnInit {
     if (this.newOrg) {
       // TO:DO Send data to the API
       let userData = this.user;
-      userData["org_id".toString()] = this.newOrg;
+      userData['org_id'.toString()] = this.newOrg;
       userData = {
         org_id: userData.org_id,
         id: userData._id,
@@ -78,7 +78,7 @@ export class ChangeUserOrgComponent implements OnInit {
 
       this.userService.updateBasic(userData).subscribe(
         () => {
-          this.messageService.setMessage("user successfully updated.");
+          this.messageService.setMessage('user successfully updated.');
           this.isSending = false;
           this.modal.close(this.newOrg);
         },
@@ -88,7 +88,7 @@ export class ChangeUserOrgComponent implements OnInit {
       );
     } else {
       // TO:DO Display Message in the template
-      alert("Please new organisation");
+      alert('Please new organisation');
     }
   }
 
@@ -107,6 +107,6 @@ export class ChangeUserOrgComponent implements OnInit {
   }
 
   deselectEvent() {
-    this.newOrg = "";
+    this.newOrg = '';
   }
 }

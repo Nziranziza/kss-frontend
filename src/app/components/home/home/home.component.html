@@ -12,15 +12,58 @@
   </div>
 </header>
 <div class="homepage-section">
-  <div class="sliders">
-    <img src="assets/dist/img/sks/slide2.jpg" alt="Slide 2" />
+  <div id="carousel-generic" class="carousel slide" data-ride="carousel">
+    <div class="carousel-inner">
+      <div class="item active">
+        <div
+          class="img"
+          style="
+            background: linear-gradient(
+                rgba(41, 41, 41, 0.5),
+                rgba(41, 41, 41, 0.5)
+              ),
+              url('assets/dist/img/sks/slide2.jpg') no-repeat center;
+            background-size: cover;
+          "
+        >
+          <div class="carousel-caption"></div>
+        </div>
+      </div>
+      <div class="item">
+        <div
+          class="img"
+          style="
+            background: linear-gradient(
+                rgba(41, 41, 41, 0.5),
+                rgba(41, 41, 41, 0.5)
+              ),
+              url('assets/dist/img/sks/coffee-plantation.png') no-repeat center;
+            background-size: cover;
+          "
+        >
+          <div class="carousel-caption"></div>
+        </div>
+      </div>
+    </div>
+    <a class="left carousel-control" href="#carousel-generic" data-slide="prev">
+      <!--<span class="fa fa-angle-left"></span>-->
+      &nbsp;
+    </a>
+    <a
+      class="right carousel-control"
+      href="#carousel-generic"
+      data-slide="next"
+    >
+      <!--<span class="fa fa-angle-right"></span>-->
+      &nbsp;
+    </a>
   </div>
   <div class="about">
     <div class="about-title text-center bold">About SKS</div>
     <div class="row">
-      <div class="col-md-8 col-xs-12">
+      <div class="col-xs-12 col-md-8">
         <div class="about-texts">
-          <span class="text">
+          <div class="text">
             <span class="bold">Smart Kungahara System (SKS)</span> is a product
             developed through a Public Private Partnership between BK Techouse
             and National Agricultural Export Development Board (NAEB ) which
@@ -33,10 +76,10 @@
             relevant analytics to ease decision making processes, promote green
             economy via cashless payments and unlock access to agriculture
             insurance and financial services to the smallholder farmer.
-          </span>
+          </div>
         </div>
       </div>
-      <div class="col-md-4 col-xs-12">
+      <div class="hidden-xs hidden-sm col-md-4">
         <div>
           <img
             src="assets/dist/img/sks/sks_logo.svg"
@@ -45,37 +88,45 @@
           />
         </div>
       </div>
-    </div>
-    <br />
-    <div class="partners">
-      <div class="row">
-        <div class="col-md-3 col-xs-6">
-          <img
-            src="assets/dist/img/sks/sks_partner_minagri.png"
-            class="partner-image"
-            alt="partner"
-          />
-        </div>
-        <div class="col-md-3 col-xs-6">
-          <img
-            src="assets/dist/img/sks/sks_partner_naeb.png"
-            class="partner-image"
-            alt="partner"
-          />
-        </div>
-        <div class="col-md-3 col-xs-6">
-          <img
-            src="assets/dist/img/sks/tecnoserve.png"
-            class="partner-image"
-            alt="partner"
-          />
-        </div>
-        <div class="col-md-3 col-xs-6">
-          <img
-            src="assets/dist/img/sks/sks_partner_mtn.png"
-            class="partner-image"
-            alt="partner"
-          />
+      <div class="col-xs-12">
+        <br />
+        <div class="row">
+          <div class="col-xs-12 col-sm-6 col-md-3">
+            <div class="text-center">
+              <img
+                src="assets/dist/img/sks/sks_partner_minagri.png"
+                class="partner-image"
+                alt="partner"
+              />
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-6 col-md-3">
+            <div class="text-center">
+              <img
+                src="assets/dist/img/sks/sks_partner_naeb.png"
+                class="partner-image"
+                alt="partner"
+              />
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-6 col-md-3">
+            <div class="text-center">
+              <img
+                src="assets/dist/img/sks/tecnoserve.png"
+                style="height: 59px; width: 314px; margin-top: 10px"
+                alt="partner"
+              />
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-6 col-md-3">
+            <div class="text-center">
+              <img
+                src="assets/dist/img/sks/sks_partner_mtn.png"
+                class="partner-image"
+                alt="partner"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -85,7 +136,7 @@
       Impact of SKS
     </div>
     <div class="row">
-      <div class="col-md-4 col-xs-6">
+      <div class="col-xs-12 col-sm-6 col-md-4">
         <div class="box text-center">
           <img
             src="assets/dist/img/sks/ico_impact_farmers.png"
@@ -96,7 +147,7 @@
           <div class="impact-sub">Coffee Farmers</div>
         </div>
       </div>
-      <div class="col-md-4 col-xs-6">
+      <div class="col-xs-12 col-sm-6 col-md-4">
         <div class="box text-center">
           <img
             src="assets/dist/img/sks/ico_impact_cws.svg"
@@ -107,7 +158,7 @@
           <div class="impact-sub">Coffee Washing Stations</div>
         </div>
       </div>
-      <div class="col-md-4 col-xs-6">
+      <div class="col-xs-12 col-sm-6 col-md-4">
         <div class="box text-center">
           <img
             src="assets/dist/img/sks/ico_impact_locations.svg"
@@ -118,7 +169,7 @@
           <div class="impact-sub">District Cash Crops</div>
         </div>
       </div>
-      <div class="col-md-6 col-xs-6">
+      <div class="col-xs-12 col-sm-6">
         <div class="box text-center">
           <img
             src="assets/dist/img/sks/ico_impact_cherries.svg"
@@ -129,7 +180,7 @@
           <div class="impact-sub">Cherries Collected</div>
         </div>
       </div>
-      <div class="col-md-6 col-xs-6">
+      <div class="col-xs-12 col-sm-6">
         <div class="box text-center">
           <img
             src="assets/dist/img/sks/ico_impact_cws.svg"
@@ -141,6 +192,77 @@
             Agro Input Quantities distributed per year
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+  <div class="features">
+    <div class="about-title text-center bold" style="color: #4f210d">
+      Features
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-sm-6 col-md-4">
+        <span class="text-center">
+          <div class="features-box">
+            <img
+              src="assets/dist/img/sks/ico_feature_valuechainregistration.svg"
+            />
+            <div class="text-center">
+              Value Chain Stakeholders’ Registration
+              <span>(Farmers, District Cash Crops)</span>
+            </div>
+          </div>
+        </span>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-4">
+        <span class="text-center">
+          <div class="features-box">
+            <img src="assets/dist/img/sks/ico_feature_distribution.svg" />
+            <div class="text-center">Agro-input Distribution</div>
+          </div>
+        </span>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-4">
+        <span class="text-center">
+          <div class="features-box">
+            <img src="assets/dist/img/sks/ico_feature_cashcroprecord.svg" />
+            <div class="text-center">Cash Crop Production Recording</div>
+          </div>
+        </span>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-4">
+        <span class="text-center">
+          <div class="features-box">
+            <img
+              src="assets/dist/img/sks/ico_feature_warehousemanagement.svg"
+            />
+            <div class="text-center">Warehouse Management</div>
+          </div>
+        </span>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-4">
+        <span class="text-center">
+          <div class="features-box">
+            <img src="assets/dist/img/sks/ico_feature_export.svg" />
+            <div class="text-center">Export Operations Management</div>
+          </div>
+        </span>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-4">
+        <span class="text-center">
+          <div class="features-box">
+            <img src="assets/dist/img/sks/ico_feature_bireports.svg" />
+            <div class="text-center">Business Intelligence Reports</div>
+          </div>
+        </span>
+      </div>
+      <div class="hidden-sm col-md-4"></div>
+      <div class="col-xs-12 col-sm-6 col-md-4">
+        <span class="text-center">
+          <div class="features-box">
+            <img src="assets/dist/img/sks/ico_feature_extensionserv.svg" />
+            <div class="text-center">Extensions Services</div>
+          </div>
+        </span>
       </div>
     </div>
   </div>
