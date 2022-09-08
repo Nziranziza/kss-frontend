@@ -362,6 +362,21 @@ export class EditFarmerRequestComponent implements OnInit {
 
   onSubmit() {
     this.editFarmerRequestForm.markAllAsTouched();
+
+    if (this.editFarmerRequestForm.controls.upiNumber.value) {
+      this.editFarmerRequestForm.controls.location.get('prov_id').clearValidators();
+      this.editFarmerRequestForm.controls.location.get('prov_id').updateValueAndValidity();
+      this.editFarmerRequestForm.controls.location.get('dist_id').clearValidators();
+      this.editFarmerRequestForm.controls.location.get('dist_id').updateValueAndValidity();
+      this.editFarmerRequestForm.controls.location.get('sect_id').clearValidators();
+      this.editFarmerRequestForm.controls.location.get('sect_id').updateValueAndValidity();
+      this.editFarmerRequestForm.controls.location.get('cell_id').clearValidators();
+      this.editFarmerRequestForm.controls.location.get('cell_id').updateValueAndValidity();
+      this.editFarmerRequestForm.controls.location.get('village_id').clearValidators();
+      this.editFarmerRequestForm.controls.location.get('village_id').updateValueAndValidity();
+    }
+
+    console.log(this.editFarmerRequestForm);
     if (this.editFarmerRequestForm.valid) {
       this.loading = true;
       const request = this.editFarmerRequestForm.getRawValue();
@@ -462,6 +477,7 @@ export class EditFarmerRequestComponent implements OnInit {
         (data) => {
           this.upi = data.data;
           // Reset Validators
+          this.editFarmerRequestForm.controls.upiNumber.setErrors(null);
           this.editFarmerRequestForm.controls.upiNumber.setErrors(null);
 
           const payload = {
