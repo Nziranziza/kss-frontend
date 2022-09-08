@@ -75,29 +75,21 @@ footer {
   width: 100%;
   overflow: hidden;
 }
+
 .homepage-section .sliders {
   width: 100%;
 }
+
 .homepage-section .sliders img {
   max-width: 100%;
   max-height: 100%;
   opacity: 1;
 }
 
-.homepage-section .about {
-  height: 500px;
+.about {
+  min-height: 430px;
   padding: 20px;
-}
-
-.homepage-section .about .partners {
-  margin-left: 100px;
-  margin-right: 20px;
-  margin-top: 80px;
-}
-
-.partner-image {
-  width: 171px;
-  height: 80px;
+  position: relative;
 }
 
 .bold {
@@ -108,7 +100,7 @@ footer {
   text-align: left;
   margin-left: 40px;
   letter-spacing: 0px;
-  height: 36px;
+  min-height: 36px;
   color: #000000;
   font: normal normal medium 30px/40px Helvetica Neue, Helvetica, Arial,
     sans-serif;
@@ -131,8 +123,7 @@ footer {
   width: 441px;
 }
 
-.homepage-section .impact {
-  min-height: 580px;
+.impact {
   padding: 50px;
   background: #4f210d0a 0% 0% no-repeat padding-box;
   opacity: 1;
@@ -161,8 +152,7 @@ footer {
   color: #4f210d;
 }
 
-.homepage-section .features {
-  min-height: 600px;
+.features {
   padding: 50px;
   background: #f2eee7 0% 0% no-repeat padding-box;
 }
@@ -216,7 +206,7 @@ footer {
   margin-left: 30%;
 }
 
-.homepage-section .features {
+.features {
   min-height: 580px;
   padding: 50px;
   background: #f2eee7 0% 0% no-repeat padding-box;
@@ -229,13 +219,16 @@ footer {
   top: 45%;
   text-align: center;
 }
-.homepage-section .carousel {
+
+.carousel {
   height: 750px;
   top: -60px;
 }
-.homepage-section .carousel .carousel-inner {
+
+.carousel .carousel-inner {
   height: 750px;
 }
+
 .carousel .item,
 .img {
   background-repeat: no-repeat;
@@ -247,14 +240,18 @@ footer {
 }
 
 .features-box {
-  width: 390px;
-  height: 150px;
+  min-width: 300px;
+  min-height: 150px;
   margin-bottom: 20px;
   /* UI Properties */
   background: #ffffff 0% 0% no-repeat padding-box;
   border: 2px solid #e1a33e;
   border-radius: 7px;
   opacity: 1;
+}
+
+.partner-image {
+  height: 80px;
 }
 
 .features-box img {

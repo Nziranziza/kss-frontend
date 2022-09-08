@@ -228,7 +228,7 @@
     <div class="col-xs-12">
       <div class="box">
         <div class="box-body">
-          <div class="col-sm-6">
+          <div class="col-md-12 col-lg-6">
             <div class="form-group">
               <label class="control-label label-required"
                 >Select Training Module</label
@@ -255,7 +255,7 @@
             </div>
           </div>
           <span *ngIf="scheduleTraining.value.trainingModule">
-            <div class="col-sm-6">
+            <div class="col-md-12 col-lg-6">
               <div class="form-group">
                 <label class="control-label label-required"
                   >Select Trainer</label
@@ -457,15 +457,15 @@
               </div>
             </div>
 
-            <div class="col-sm-7">
+            <div class="col-md-12 col-lg-7">
               <div class="row">
-                <div class="col-sm-6">
+                <div class="col-md-12 col-lg-6">
                   <div class="form-group">
                     <label class="control-label label-required"
                       >Starting Date and Time of the training</label
                     >
                     <div class="row">
-                      <div class="col-sm-6">
+                      <div class="col-xs-6">
                         <input
                           [owlDateTimeTrigger]="dt1"
                           [owlDateTime]="dt1"
@@ -494,7 +494,7 @@
                         >
                         </app-inline-errors>
                       </div>
-                      <div class="col-sm-6">
+                      <div class="col-xs-6">
                         <input
                           [owlDateTimeTrigger]="dt2"
                           class="form-control"
@@ -520,14 +520,14 @@
                   </div>
                 </div>
 
-                <div class="col-sm-6">
+                <div class="col-md-12 col-lg-6">
                   <div class="form-group">
                     <label class="control-label label-required"
                       >End Date and Time of the training</label
                     >
 
                     <div class="row">
-                      <div class="col-sm-6">
+                      <div class="col-xs-6">
                         <input
                           [owlDateTimeTrigger]="dt3"
                           [owlDateTime]="dt3"
@@ -555,7 +555,7 @@
                         >
                         </app-inline-errors>
                       </div>
-                      <div class="col-sm-6">
+                      <div class="col-xs-6">
                         <input
                           [owlDateTimeTrigger]="dt4"
                           class="form-control"
@@ -577,7 +577,11 @@
                         >
                         </app-inline-errors>
                         <span
-                          style="font: normal 10px Helvetica Neue, Helvetica, Arial, sans-serif; color: red"
+                          style="
+                            font: normal 10px Helvetica Neue, Helvetica, Arial,
+                              sans-serif;
+                            color: red;
+                          "
                           *ngIf="
                             scheduleTraining.controls.endTime.touched &&
                             scheduleTraining.controls.startTime.value >=
@@ -595,7 +599,7 @@
               </div>
             </div>
 
-            <div class="col-sm-5">
+            <div class="col-md-12 col-lg-5">
               <div class="form-group">
                 <label class="control-label label-required">Description</label>
                 <input
@@ -606,7 +610,7 @@
               </div>
             </div>
 
-            <div class="col-sm-6">
+            <div class="col-md-12 col-lg-6">
               <fieldset style="margin: 0px -3px 0px -3px !important">
                 <legend style="width: 13em">
                   <label class="control-label label-required"
@@ -818,7 +822,8 @@
 
                           <td
                             style="
-                              font: normal normal bold 10px/14px Helvetica Neue, Helvetica, Arial, sans-serif;
+                              font: normal normal bold 10px/14px Helvetica Neue,
+                                Helvetica, Arial, sans-serif;
                             "
                           >
                             <span *ngIf="trainee.attendance === 'attended'">
@@ -867,7 +872,7 @@
               </fieldset>
             </div>
 
-            <div class="col-sm-6">
+            <div class="col-md-12 col-lg-6">
               <fieldset style="margin: 0px -3px 0px -3px !important">
                 <legend style="width: 13em">
                   <label class="control-label">&nbsp; SELECTED TRAINEES </label>

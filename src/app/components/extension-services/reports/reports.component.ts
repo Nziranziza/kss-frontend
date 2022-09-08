@@ -355,6 +355,16 @@ export class ReportsComponent extends BasicComponent implements OnInit {
     return [year, month, day].join('-');
   }
 
+  sumTrees (requestInfo) {
+    return requestInfo.reduce((sum, object) => {
+      return sum + object.numberOfTrees;
+    }, 0 )
+  }
+
+  getAge(nid) {
+   return new Date().getFullYear() - nid.substring(1, 5);
+  }
+
   getStats() {
     const value = this.reportForm.get('reportFor').value;
     let body = this.getLocation();
