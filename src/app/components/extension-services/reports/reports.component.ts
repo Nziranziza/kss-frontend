@@ -1,6 +1,6 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
-import {Subject} from 'rxjs';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { Subject } from 'rxjs';
 import {
   AuthenticationService,
   BasicComponent,
@@ -12,8 +12,8 @@ import {
   SiteService,
   TrainingService,
 } from 'src/app/core';
-import {DatePipe} from '@angular/common';
-import {isUndefined} from 'util';
+import { DatePipe } from '@angular/common';
+import { isUndefined } from 'util';
 
 @Component({
   selector: 'app-reports',
@@ -146,7 +146,7 @@ export class ReportsComponent extends BasicComponent implements OnInit {
   }
 
   selectEvent(item) {
-    if(item._id !== '') {
+    if (item._id !== '') {
       this.newOrg = item._id;
       this.newData = this.organisations.find((org) => org._id === item._id);
       this.locationSectors = this.filterZoningSectors(this.newData.coveredSectors);
@@ -156,7 +156,7 @@ export class ReportsComponent extends BasicComponent implements OnInit {
       if (this.reportForm.controls.filter.get('locationBy').value === 'cws' && this.newOrg) {
         this.groupService.list({
           ...this.getLocation(),
-          ...(this.newOrg && {reference: this.newOrg}),
+          ...(this.newOrg && { reference: this.newOrg }),
         }).subscribe((data) => {
           this.groups = data.data;
           this.groups.unshift({
@@ -177,7 +177,7 @@ export class ReportsComponent extends BasicComponent implements OnInit {
   }
 
   selectGroupEvent(item) {
-    if(item._id !== '') {
+    if (item._id !== '') {
       this.selectedGroup = item._id;
     } else {
       this.selectedGroup = undefined;
@@ -191,29 +191,29 @@ export class ReportsComponent extends BasicComponent implements OnInit {
 
   onChanges() {
     this.reportForm.get('reportFor').valueChanges.subscribe((value) => {
-      this.reportForm.get('reportFor').patchValue(value, {emitEvent: false});
+      this.reportForm.get('reportFor').patchValue(value, { emitEvent: false });
       this.reportBody = {};
       this.stats = {};
       this.reportsTableData = [];
       this.getStats();
     });
     this.reportForm.controls.filter.get('training.trainingId'.toString()).valueChanges.subscribe((value) => {
-      this.reportForm.controls.filter.get('training.trainingId'.toString()).patchValue(value, {emitEvent: false});
+      this.reportForm.controls.filter.get('training.trainingId'.toString()).patchValue(value, { emitEvent: false });
       this.getStats();
     });
     this.reportForm.controls.filter.get('date').valueChanges.subscribe((value) => {
-      this.reportForm.controls.filter.get('date').patchValue(value, {emitEvent: false});
+      this.reportForm.controls.filter.get('date').patchValue(value, { emitEvent: false });
       this.getStats();
     });
     this.reportForm.controls.filter.get('locationBy').valueChanges.subscribe((value) => {
-      this.reportForm.controls.filter.get('locationBy').patchValue(value, {emitEvent: false});
+      this.reportForm.controls.filter.get('locationBy').patchValue(value, { emitEvent: false });
       if (value !== 'cws') {
         this.resetCWSFilter();
       }
       this.locationChangDistrict(this.reportForm.get('filter') as FormGroup, value);
-      this.reportForm.controls.filter.get('location.sect_id').setValue('', {emitEvent: false});
-      this.reportForm.controls.filter.get('location.cell_id').setValue('', {emitEvent: false});
-      this.reportForm.controls.filter.get('location.village_id').setValue('', {emitEvent: false});
+      this.reportForm.controls.filter.get('location.sect_id').setValue('', { emitEvent: false });
+      this.reportForm.controls.filter.get('location.cell_id').setValue('', { emitEvent: false });
+      this.reportForm.controls.filter.get('location.village_id').setValue('', { emitEvent: false });
       this.locationSectors = [];
       this.locationCells = [];
       this.locationVillages = [];
@@ -222,125 +222,125 @@ export class ReportsComponent extends BasicComponent implements OnInit {
     this.reportForm.controls.filter
       .get('location.prov_id'.toString())
       .valueChanges.subscribe((value) => {
-      console.log(this.reportForm.value);
-      if(this.orgAuto) {
-        this.orgAuto.clear();
-      }
-      this.reportForm.controls.filter
-        .get('location.prov_id'.toString()).patchValue(value, {emitEvent: false});
-      this.locationChangeProvince(this.reportForm.get('filter') as FormGroup, value);
-      this.siteService
-        .getZone({prov_id: value, searchBy: 'province'})
-        .subscribe((data) => {
-          if (data) {
-            this.organisations = data.content.filter((org) =>
-              org.organizationRole.includes(1)
-            );
-            this.organisations.unshift({
-              organizationName: 'all cws',
-              _id: '',
-            });
-          }
-        });
-      this.getStats();
-    }, () => {
-    }, () => {
-    });
+        console.log(this.reportForm.value);
+        if (this.orgAuto) {
+          this.orgAuto.clear();
+        }
+        this.reportForm.controls.filter
+          .get('location.prov_id'.toString()).patchValue(value, { emitEvent: false });
+        this.locationChangeProvince(this.reportForm.get('filter') as FormGroup, value);
+        this.siteService
+          .getZone({ prov_id: value, searchBy: 'province' })
+          .subscribe((data) => {
+            if (data) {
+              this.organisations = data.content.filter((org) =>
+                org.organizationRole.includes(1)
+              );
+              this.organisations.unshift({
+                organizationName: 'all cws',
+                _id: '',
+              });
+            }
+          });
+        this.getStats();
+      }, () => {
+      }, () => {
+      });
     this.reportForm.controls.filter
       .get('location.dist_id'.toString())
       .valueChanges.subscribe((value) => {
-      this.reportForm.controls.filter
-        .get('location.dist_id'.toString()).patchValue(value, {emitEvent: false});
-      this.locationChangDistrict(this.reportForm.get('filter') as FormGroup, value);
-      this.siteService
-        .getZone({dist_id: value, searchBy: 'district'})
-        .subscribe((data) => {
-          if (data) {
-            this.organisations = data.content.filter((org) =>
-              org.organizationRole.includes(1)
-            );
-            this.organisations.unshift({
-              organizationName: 'all cws',
-              _id: '',
-            });
-          }
-        });
-      this.getStats();
-    });
+        this.reportForm.controls.filter
+          .get('location.dist_id'.toString()).patchValue(value, { emitEvent: false });
+        this.locationChangDistrict(this.reportForm.get('filter') as FormGroup, value);
+        this.siteService
+          .getZone({ dist_id: value, searchBy: 'district' })
+          .subscribe((data) => {
+            if (data) {
+              this.organisations = data.content.filter((org) =>
+                org.organizationRole.includes(1)
+              );
+              this.organisations.unshift({
+                organizationName: 'all cws',
+                _id: '',
+              });
+            }
+          });
+        this.getStats();
+      });
     this.reportForm.controls.filter
       .get('location.sect_id'.toString())
       .valueChanges.subscribe((value) => {
-      this.reportForm.controls.filter
-        .get('location.sect_id'.toString()).patchValue(value, {emitEvent: false});
-      if (!isUndefined(this.newOrg) && (this.newOrg !== '')) {
-        this.locationCells = this.filterZoningCells(this.newData.coveredSectors, value);
-      } else {
-        this.locationChangSector(this.reportForm.get('filter') as FormGroup, value);
-      }
-      if (this.reportForm.controls.filter.get('locationBy').value === 'cws' && this.newOrg) {
-        this.groupService.list({
-          ...(this.newOrg && {reference: this.newOrg}),
-          ...{location: {sect_id: value}}
-        }).subscribe((data) => {
-          this.groups = data.data;
-        });
-      }
-      this.getStats();
-    });
+        this.reportForm.controls.filter
+          .get('location.sect_id'.toString()).patchValue(value, { emitEvent: false });
+        if (!isUndefined(this.newOrg) && (this.newOrg !== '')) {
+          this.locationCells = this.filterZoningCells(this.newData.coveredSectors, value);
+        } else {
+          this.locationChangSector(this.reportForm.get('filter') as FormGroup, value);
+        }
+        if (this.reportForm.controls.filter.get('locationBy').value === 'cws' && this.newOrg) {
+          this.groupService.list({
+            ...(this.newOrg && { reference: this.newOrg }),
+            ...{ location: { sect_id: value } }
+          }).subscribe((data) => {
+            this.groups = data.data;
+          });
+        }
+        this.getStats();
+      });
 
     this.reportForm.controls.filter
       .get('location.cell_id'.toString())
       .valueChanges.subscribe((value) => {
-      this.reportForm.controls.filter
-        .get('location.cell_id'.toString()).patchValue(value, {emitEvent: false});
-      this.locationService.getVillages(value).subscribe((data) => {
-        this.locationVillages = data;
-        if (!isUndefined(this.newOrg) && (this.newOrg !== '')) {
-          this.locationVillages = this.filterZoningVillages(this.newData.coveredSectors, this.reportForm.controls.filter
-            .get('location.sect_id'.toString()).value, this.locationVillages);
-        }
-      });
-      if (this.reportForm.controls.filter.get('locationBy').value === 'cws' && this.newOrg) {
-        this.groupService.list({
-          ...(this.newOrg && {reference: this.newOrg}),
-          ...{location: {cell_id: value}}
-        }).subscribe((data) => {
-          this.groups = data.data;
+        this.reportForm.controls.filter
+          .get('location.cell_id'.toString()).patchValue(value, { emitEvent: false });
+        this.locationService.getVillages(value).subscribe((data) => {
+          this.locationVillages = data;
+          if (!isUndefined(this.newOrg) && (this.newOrg !== '')) {
+            this.locationVillages = this.filterZoningVillages(this.newData.coveredSectors, this.reportForm.controls.filter
+              .get('location.sect_id'.toString()).value, this.locationVillages);
+          }
         });
-      }
-      this.getStats();
-    });
+        if (this.reportForm.controls.filter.get('locationBy').value === 'cws' && this.newOrg) {
+          this.groupService.list({
+            ...(this.newOrg && { reference: this.newOrg }),
+            ...{ location: { cell_id: value } }
+          }).subscribe((data) => {
+            this.groups = data.data;
+          });
+        }
+        this.getStats();
+      });
 
     this.reportForm.controls.filter
       .get('location.village_id'.toString())
       .valueChanges.subscribe((value) => {
-      this.reportForm.controls.filter
-        .get('location.village_id'.toString()).patchValue(value, {emitEvent: false});
-      if (this.reportForm.controls.filter.get('locationBy').value === 'cws' && this.newOrg) {
-        this.groupService.list({
-          ...(this.newOrg && {reference: this.newOrg}),
-          ...{location: {village_id: value}}
-        }).subscribe((data) => {
-          this.groups = data.data;
-        });
-      }
-      this.getStats();
-    });
+        this.reportForm.controls.filter
+          .get('location.village_id'.toString()).patchValue(value, { emitEvent: false });
+        if (this.reportForm.controls.filter.get('locationBy').value === 'cws' && this.newOrg) {
+          this.groupService.list({
+            ...(this.newOrg && { reference: this.newOrg }),
+            ...{ location: { village_id: value } }
+          }).subscribe((data) => {
+            this.groups = data.data;
+          });
+        }
+        this.getStats();
+      });
   }
 
   getLocation() {
     const value = JSON.parse(JSON.stringify(this.reportForm.value));
     return {
       ...(value.filter.location.prov_id !== '' &&
-        {location: {prov_id: value.filter.location.prov_id}}),
+        { location: { prov_id: value.filter.location.prov_id } }),
       ...(value.filter.location.dist_id !== '' &&
-        {location: {dist_id: value.filter.location.dist_id}}),
+        { location: { dist_id: value.filter.location.dist_id } }),
       ...(value.filter.location.sect_id !== '' &&
-        {location: {sect_id: value.filter.location.sect_id}}),
+        { location: { sect_id: value.filter.location.sect_id } }),
       ...(value.filter.location.cell_id !== '' &&
-        {location: {cell_id: value.filter.location.cell_id}}),
+        { location: { cell_id: value.filter.location.cell_id } }),
       ...(value.filter.location.village_id !== '' &&
-        {location: {village_id: value.filter.location.village_id}})
+        { location: { village_id: value.filter.location.village_id } })
     };
   }
 
@@ -355,14 +355,14 @@ export class ReportsComponent extends BasicComponent implements OnInit {
     return [year, month, day].join('-');
   }
 
-  sumTrees (requestInfo) {
+  sumTrees(requestInfo) {
     return requestInfo.reduce((sum, object) => {
       return sum + object.numberOfTrees;
-    }, 0 )
+    }, 0)
   }
 
   getAge(nid) {
-   return new Date().getFullYear() - nid.substring(1, 5);
+    return new Date().getFullYear() - nid.substring(1, 5);
   }
 
   getStats() {
@@ -372,19 +372,20 @@ export class ReportsComponent extends BasicComponent implements OnInit {
     if (value === 'Farmer Groups') {
       body = {
         ...body,
-        ...(this.newOrg && {reference: this.newOrg})
+        ...(this.newOrg && { reference: this.newOrg })
       };
       this.reportBody = body;
       this.reportService.groupStats(body).subscribe((data) => {
         this.stats = data.data[0];
+        console.log(data.data);
       });
     } else if (value === 'Trainings') {
       const date = form.filter.date;
       body = {
         ...body,
-        ...(this.newOrg && {reference: this.newOrg}),
-        ...(form.filter.training.trainingId !== '' && {trainingId: form.filter.training.trainingId}),
-        ...(this.selectedGroup && {groupId: this.selectedGroup}),
+        ...(this.newOrg && { reference: this.newOrg }),
+        ...(form.filter.training.trainingId !== '' && { trainingId: form.filter.training.trainingId }),
+        ...(this.selectedGroup && { groupId: this.selectedGroup }),
         ...(form.filter.date !== '' && {
           date: {
             from: date[0],
@@ -394,14 +395,33 @@ export class ReportsComponent extends BasicComponent implements OnInit {
       };
       this.reportBody = body;
       this.reportService.trainingStats(body).subscribe((data) => {
-        this.stats = data.data[0];
+        let numberOfTrainees = 0;
+        let numberOfAttendedTrainees = 0;
+        let totalMales = 0;
+        let maleNumberOfAttendedTrainees = 0;
+        let femaleNumberOfAttendedTrainees = 0;
+        let totalFemales = 0;
+        data.data.forEach((data) => {
+          numberOfTrainees += data.numberOfTrainees;
+          numberOfAttendedTrainees += data.numberOfAttendedTrainees;
+          if (data.gender == "M" || data.gender == "m") {
+            totalMales += data.numberOfTrainees;
+            maleNumberOfAttendedTrainees += data.numberOfAttendedTrainees;
+          }
+
+          if (data.gender == "F" || data.gender == "f") {
+            totalFemales += data.numberOfTrainees;
+            femaleNumberOfAttendedTrainees += data.numberOfAttendedTrainees;
+          }
+        })
+        this.stats = { numberOfTrainees, numberOfAttendedTrainees, totalMales, totalFemales, maleNumberOfAttendedTrainees, femaleNumberOfAttendedTrainees };
       });
     } else if (value === 'Farm Visits') {
       const date = form.filter.date;
       body = {
         ...body,
-        ...(this.newOrg && {reference: this.newOrg}),
-        ...(this.selectedGroup && {groupId: this.selectedGroup}),
+        ...(this.newOrg && { reference: this.newOrg }),
+        ...(this.selectedGroup && { groupId: this.selectedGroup }),
         ...(form.filter.date !== '' && {
           date: {
             from: date[0],
@@ -416,8 +436,8 @@ export class ReportsComponent extends BasicComponent implements OnInit {
     } else if (value === 'Coffee Farmers') {
       body = {
         ...body,
-        ...(this.newOrg && {org_id: this.newOrg}),
-        ...{searchBy: 'farmer'}
+        ...(this.newOrg && { org_id: this.newOrg }),
+        ...{ searchBy: 'farmer' }
       };
       this.reportBody = body;
       this.reportService.farmStats(body).subscribe((data) => {
@@ -426,8 +446,8 @@ export class ReportsComponent extends BasicComponent implements OnInit {
     } else if (value === 'Coffee Farms') {
       body = {
         ...body,
-        ...(this.newOrg && {org_id: this.newOrg}),
-        ...{searchBy: 'farm'}
+        ...(this.newOrg && { org_id: this.newOrg }),
+        ...{ searchBy: 'farm' }
       };
       this.reportBody = body;
       this.reportService.farmStats(body).subscribe((data) => {

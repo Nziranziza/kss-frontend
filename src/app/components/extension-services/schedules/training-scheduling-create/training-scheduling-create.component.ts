@@ -15,6 +15,7 @@ import {
 } from "../../../../core";
 import { isEmptyObject } from "jquery";
 import { Router } from "@angular/router";
+import { SuccessModalComponent } from "src/app/shared";
 
 @Component({
   selector: "app-training-scheduling-create",
@@ -506,7 +507,27 @@ export class TrainingSchedulingCreateComponent
     };
     this.trainingService.scheduleTraining(data).subscribe((data) => {
       this.successDatails = data.data;
+      this.success(this.successDatails.description, this.successDatails._id);
       this.loading = false;
+    },
+      (err) => {
+        this.loading = false;
+        this.errors = err.errors;
+      });
+  }
+
+  success(name, id) {
+    const modalRef = this.modal.open(SuccessModalComponent, {
+      ariaLabelledBy: "modal-basic-title",
+    });
+    modalRef.componentInstance.message = "has been Scheduled";
+    modalRef.componentInstance.title = "Thank you Training";
+    modalRef.componentInstance.name = name;
+    modalRef.componentInstance.messageEnabled = true;
+    modalRef.componentInstance.smsId = id;
+    modalRef.componentInstance.serviceName = "Training";
+    modalRef.result.finally(() => {
+      this.router.navigateByUrl("admin/training/schedule/list");
     });
   }
 
@@ -536,6 +557,7 @@ export class TrainingSchedulingCreateComponent
     var minutes = date.getMinutes();
     hours = hours % 24;
     hours = hours ? hours : 24; // the hour '0' should be '24'
+    hours = hours < 10 ? "0" + hours : hours;
     minutes = minutes < 10 ? "0" + minutes : minutes;
     var strTime = hours + ":" + minutes;
     return strTime;
