@@ -67,30 +67,6 @@
             >
             <div class="row">
               <div class="col-sm-6">
-                <label class="control-label"> Province </label>
-                <div class="confirm-text-box confirm-text">
-                  <div *ngFor="let province of locationProvinces">
-                    <span
-                      *ngIf="
-                        scheduleTraining.value.location.prov_id == province._id
-                      "
-                    >
-                      {{ province.namee }}
-                    </span>
-                  </div>
-                </div>
-                <label class="control-label"> Sector </label>
-                <div class="confirm-text-box confirm-text">
-                  <div *ngFor="let sector of locationSectors">
-                    <span
-                      *ngIf="
-                        scheduleTraining.value.location.sect_id == sector._id
-                      "
-                    >
-                      {{ sector.name }}
-                    </span>
-                  </div>
-                </div>
                 <label class="control-label"> Village </label>
                 <div class="confirm-text-box confirm-text">
                   <div *ngFor="let village of locationVillages">
@@ -200,7 +176,7 @@
       <div class="col-sm-3">
         <button
           class="btn btn-secondary btn-lg submit"
-          (click)="onSubmit(); modal.dismiss('cancel click'); open(ccontent)"
+          (click)="onSubmit(); modal.dismiss('cancel click')"
           [disabled]="loading"
         >
           <span *ngIf="!loading; else other_content">Confirm</span>

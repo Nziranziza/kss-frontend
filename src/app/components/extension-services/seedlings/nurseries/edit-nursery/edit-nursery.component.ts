@@ -57,9 +57,12 @@ export class EditNurseryComponent extends BasicComponent implements OnInit {
     this.addNursery = this.formBuilder.group({
       nurseryName: ["", Validators.required],
       ownerName: ["", Validators.required],
-      ownerNumber: ["", Validators.required],
+      ownerNumber: ["", [Validators.required, Validators.pattern("[0-9]{12}")]],
       representativeName: ["", Validators.required],
-      representativeNumber: ["", Validators.required],
+      representativeNumber: [
+        "",
+        [Validators.required, Validators.pattern("[0-9]{12}")],
+      ],
       siteAvailability: ["no"],
       agronomist: [""],
       stockData: new FormArray([], Validators.required),
@@ -200,6 +203,7 @@ export class EditNurseryComponent extends BasicComponent implements OnInit {
       germinationRate: [{ value: "", disabled: true }],
       distributed: [{ value: "", disabled: true }],
       sowingDate: [""],
+      prickedQty: [""],
     });
   }
 
@@ -224,6 +228,18 @@ export class EditNurseryComponent extends BasicComponent implements OnInit {
       .valueChanges.subscribe((value) => {
         this.locationChangCell(this.addNursery, value);
       });
+    this.addNursery.controls.ownerNumber.valueChanges.subscribe((value) => {
+      if (value === "07") {
+        this.addNursery.controls.ownerNumber.setValue("2507");
+      }
+    });
+    this.addNursery.controls.representativeNumber.valueChanges.subscribe(
+      (value) => {
+        if (value === "07") {
+          this.addNursery.controls.representativeNumber.setValue("2507");
+        }
+      }
+    );
   }
 
   onCreate() {
@@ -254,15 +270,13 @@ export class EditNurseryComponent extends BasicComponent implements OnInit {
           village_id: this.addNursery.value.location.village_id,
         },
         stocks: this.addNursery.value.stockData.map((data) => {
-          return {
-            varietyId: data.variety,
-            seeds: data.seed,
-            _id: data.id,
-            prickedQty: data.prickedQty,
-            germinationRate: data.germinationRate,
-            pickedDate: data.pickingDate,
-            sowingDate: data.sowingDate,
-          };
+          let newData: any = { _id: data.id, seeds: data.seed, varietyId: data.variety, };
+          data.germinationRate !== "" ? newData.germinationRate = data.germinationRate : "";
+          data.variety !== "" ? newData.varietyId = data.variety : "";
+          data.prickedQty !== "" ? newData.prickedQty = data.prickedQty : "";
+          data.pickingDate !== "" ? newData.pickedDate = data.pickingDate : "";
+          data.sowingDate !== "" ? newData.sowingDate = data.sowingDate : "";
+          return newData;
         }),
       };
       this.seedlingService.update(this.id, data).subscribe(

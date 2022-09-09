@@ -248,10 +248,26 @@
         <div class="col-sm-6 text-center">
           <h4>Total Trainees</h4>
           <h3>{{ stats?.numberOfTrainees || 0 }}</h3>
+          <div class="col-sm-6 text-center">
+            <h4>Male</h4>
+            <h3>{{ stats?.totalMales || 0 }}</h3>
+          </div>
+          <div class="col-sm-6 text-center">
+            <h4>Female</h4>
+            <h3>{{ stats?.totalFemales || 0 }}</h3>
+          </div>
         </div>
         <div class="col-sm-6 text-center">
           <h4>Total Attended Trainees</h4>
           <h3>{{ stats?.numberOfAttendedTrainees || 0 }}</h3>
+          <div class="col-sm-6 text-center">
+            <h4>Male</h4>
+            <h3>{{ stats?.maleNumberOfAttendedTrainees || 0 }}</h3>
+          </div>
+          <div class="col-sm-6 text-center">
+            <h4>Female</h4>
+            <h3>{{ stats?.femaleNumberOfAttendedTrainees || 0 }}</h3>
+          </div>
         </div>
       </span>
       <span *ngIf="reportForm.value.reportFor === 'Farm Visits'">
@@ -270,8 +286,8 @@
           <h4>Total Farmers</h4>
           <h3>
             {{
-            stats?.statistics?.male?.farmers +
-            stats?.statistics?.female?.farmers || 0
+              stats?.statistics?.male?.farmers +
+                stats?.statistics?.female?.farmers || 0
             }}
           </h3>
         </div>
@@ -280,8 +296,8 @@
           <h4>Total Trees</h4>
           <h3>
             {{
-            stats?.statistics?.male?.numberOfTrees +
-            stats?.statistics?.female?.numberOfTrees || 0
+              stats?.statistics?.male?.numberOfTrees +
+                stats?.statistics?.female?.numberOfTrees || 0
             }}
           </h3>
         </div>
@@ -292,8 +308,8 @@
           <h4>Total Farms</h4>
           <h3>
             {{
-            stats?.statistics?.male?.numberOfLands +
-            stats?.statistics?.female?.numberOfLands || 0
+              stats?.statistics?.male?.numberOfLands +
+                stats?.statistics?.female?.numberOfLands || 0
             }}
           </h3>
         </div>
@@ -302,8 +318,8 @@
           <h4>Total Trees</h4>
           <h3>
             {{
-            stats?.statistics?.male?.numberOfTrees +
-            stats?.statistics?.female?.numberOfTrees || 0
+              stats?.statistics?.male?.numberOfTrees +
+                stats?.statistics?.female?.numberOfTrees || 0
             }}
           </h3>
         </div>
@@ -332,12 +348,12 @@
       style="margin-left: 10px"
       [href]="'data:application/octet-stream;base64,' + dataFile | safe"
       download="generalReport.xlsx"
-    >export to XLS</a
+      >export to XLS</a
     >
   </div>
   <div class="box" id="downloadFile">
     <div class="box-header" *ngIf="reportsTableData.length > 0">
-      <img src="assets/dist/img/sks/tecnoserve.png" style="width: 140px"/>
+      <img src="assets/dist/img/sks/tecnoserve.png" style="width: 140px" />
     </div>
     <h4 class="text-center">{{ reportForm.value.reportFor }} Details</h4>
     <div
@@ -354,32 +370,38 @@
         class="row-border hover table table-striped"
       >
         <thead>
-        <tr>
-          <th>Farmer Names</th>
-          <th>Gender</th>
-          <th>Age</th>
-          <th>Training Title</th>
-          <th>Date of training</th>
-          <th>Venue</th>
-          <th>Trainer</th>
-          <th>Group</th>
-          <th>Attended</th>
-        </tr>
+          <tr>
+            <th>Farmer Names</th>
+            <th>Gender</th>
+            <th>Age</th>
+            <th>Training Title</th>
+            <th>Date of training</th>
+            <th>Venue</th>
+            <th>Trainer</th>
+            <th>Group</th>
+            <th>Attended</th>
+          </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let schedule of reportsTableData">
-          <td>{{ schedule.trainees.foreName + ' ' + schedule.trainees.surName}}</td>
-          <td>{{ schedule.trainees.gender }}</td>
-          <td> {{ schedule.trainees.NID ? getAge(schedule.trainees.NID) : "-" }}</td>
-          <td>{{ schedule.trainingId.trainingName }}</td>
-          <td>{{ schedule.startTime | date: "short" }}</td>
-          <td>
-            {{ schedule.venueName }}
-          </td>
-          <td>{{ schedule.trainer.fullName }}</td>
-          <td>{{ schedule.groupId.groupName }}</td>
-          <td>{{ schedule.trainees.attended?  "attended": "not attended" }}</td>
-        </tr>
+          <tr *ngFor="let schedule of reportsTableData">
+            <td>
+              {{ schedule.trainees.foreName + " " + schedule.trainees.surName }}
+            </td>
+            <td>{{ schedule.trainees.gender }}</td>
+            <td>
+              {{ schedule.trainees.NID ? getAge(schedule.trainees.NID) : "-" }}
+            </td>
+            <td>{{ schedule.trainingId.trainingName }}</td>
+            <td>{{ schedule.startTime | date: "short" }}</td>
+            <td>
+              {{ schedule.venueName }}
+            </td>
+            <td>{{ schedule.trainer.fullName }}</td>
+            <td>{{ schedule.groupId.groupName }}</td>
+            <td>
+              {{ schedule.trainees.attended ? "attended" : "not attended" }}
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -398,40 +420,40 @@
         class="row-border hover table table-striped"
       >
         <thead>
-        <tr>
-          <th>Date added</th>
-          <th>Group name</th>
-          <th>Leader names</th>
-          <th>Leader Contact </th>
-          <th>Province</th>
-          <th>District</th>
-          <th>Sector</th>
-          <th>Cell</th>
-          <th>Village</th>
-          <th>Group size</th>
-          <th>Meeting Day</th>
-        </tr>
+          <tr>
+            <th>Date added</th>
+            <th>Group name</th>
+            <th>Leader names</th>
+            <th>Leader Contact</th>
+            <th>Province</th>
+            <th>District</th>
+            <th>Sector</th>
+            <th>Cell</th>
+            <th>Village</th>
+            <th>Group size</th>
+            <th>Meeting Day</th>
+          </tr>
         </thead>
         <tbody>
-        <ng-container *ngFor="let group of reportsTableData">
-          <tr style="text-transform: capitalize">
-            <td>{{ group.createdAt | date: "y/LL/d - h:mm" }}</td>
-            <td>{{ group.groupName }}</td>
-            <td>{{ group.leaderNames }}</td>
-            <td>{{ group.leaderPhoneNumber }}</td>
-            <td>{{ group.location.prov_id?.namek }}</td>
-            <td>{{ group.location.dist_id?.name }}</td>
-            <td>{{ group.location.sect_id?.name }}</td>
-            <td>{{ group.location.cell_id?.name }}</td>
-            <td>{{ group.location.village_id?.name }}</td>
-            <td>
-              <span>{{ group.members.length + " " + "farmers" }}</span>
-            </td>
-            <td>
-              {{ weekDays[group.meetingSchedule?.meetingDay - 1] }}
-            </td>
-          </tr>
-        </ng-container>
+          <ng-container *ngFor="let group of reportsTableData">
+            <tr style="text-transform: capitalize">
+              <td>{{ group.createdAt | date: "y/LL/d - h:mm" }}</td>
+              <td>{{ group.groupName }}</td>
+              <td>{{ group.leaderNames }}</td>
+              <td>{{ group.leaderPhoneNumber }}</td>
+              <td>{{ group.location.prov_id?.namek }}</td>
+              <td>{{ group.location.dist_id?.name }}</td>
+              <td>{{ group.location.sect_id?.name }}</td>
+              <td>{{ group.location.cell_id?.name }}</td>
+              <td>{{ group.location.village_id?.name }}</td>
+              <td>
+                <span>{{ group.members.length + " " + "farmers" }}</span>
+              </td>
+              <td>
+                {{ weekDays[group.meetingSchedule?.meetingDay - 1] }}
+              </td>
+            </tr>
+          </ng-container>
         </tbody>
       </table>
     </div>
@@ -450,45 +472,45 @@
         class="row-border hover table table-striped"
       >
         <thead>
-        <tr>
-          <th>Date</th>
-          <th>UPI</th>
-          <th>Farmer names</th>
-          <th>Province</th>
-          <th>District</th>
-          <th>Sector</th>
-          <th>Cell</th>
-          <th>Village</th>
-          <th>Extension officer</th>
-          <th>Gap</th>
-          <th>Adoption</th>
-        </tr>
+          <tr>
+            <th>Date</th>
+            <th>UPI</th>
+            <th>Farmer names</th>
+            <th>Province</th>
+            <th>District</th>
+            <th>Sector</th>
+            <th>Cell</th>
+            <th>Village</th>
+            <th>Extension officer</th>
+            <th>Gap</th>
+            <th>Adoption</th>
+          </tr>
         </thead>
         <tbody>
-        <ng-container *ngFor="let visit of reportsTableData">
-          <tr>
-            <td>{{ visit.createdAt | date: "short" }}</td>
-            <td>{{ visit.farm.upiNumber }}</td>
-            <td>{{ visit.owner.lastName + ' ' + visit.owner.firstName }}</td>
-            <td>{{ visit.farm.location.prov_id.namek }}</td>
-            <td>{{ visit.farm.location.dist_id.name }}</td>
-            <td>{{ visit.farm.location.sect_id.name }}</td>
-            <td>{{ visit.farm.location.cell_id.name }} </td>
-            <td>{{ visit.farm.location.village_id.name }}</td>
-            <td>
-              {{ visit.visitor.firstName }} {{ visit.visitor.lastName }}
-            </td>
-            <td>
-              {{ visit.gap.gap_name }}
-            </td>
-            <td>
-              {{
-              (visit.overall_score * 100) / visit.overall_weight
-                | number: "1.0-1"
-              }}%
-            </td>
-          </tr>
-        </ng-container>
+          <ng-container *ngFor="let visit of reportsTableData">
+            <tr>
+              <td>{{ visit.createdAt | date: "short" }}</td>
+              <td>{{ visit.farm.upiNumber }}</td>
+              <td>{{ visit.owner.lastName + " " + visit.owner.firstName }}</td>
+              <td>{{ visit.farm.location.prov_id.namek }}</td>
+              <td>{{ visit.farm.location.dist_id.name }}</td>
+              <td>{{ visit.farm.location.sect_id.name }}</td>
+              <td>{{ visit.farm.location.cell_id.name }}</td>
+              <td>{{ visit.farm.location.village_id.name }}</td>
+              <td>
+                {{ visit.visitor.firstName }} {{ visit.visitor.lastName }}
+              </td>
+              <td>
+                {{ visit.gap.gap_name }}
+              </td>
+              <td>
+                {{
+                  (visit.overall_score * 100) / visit.overall_weight
+                    | number: "1.0-1"
+                }}%
+              </td>
+            </tr>
+          </ng-container>
         </tbody>
       </table>
     </div>
@@ -507,64 +529,66 @@
         class="row-border hover table table-striped"
       >
         <thead>
-        <tr>
-          <th>Farmer Names</th>
-          <th>NID</th>
-          <th>Reg Number</th>
-          <th>Phone Number</th>
-          <th>Gender</th>
-          <th>Province</th>
-          <th>District</th>
-          <th>Sector</th>
-          <th>Cell</th>
-          <th>Village</th>
-          <th>Status</th>
-          <th>Trees #</th>
-          <th>Farms #</th>
-        </tr>
+          <tr>
+            <th>Farmer Names</th>
+            <th>NID</th>
+            <th>Reg Number</th>
+            <th>Phone Number</th>
+            <th>Gender</th>
+            <th>Province</th>
+            <th>District</th>
+            <th>Sector</th>
+            <th>Cell</th>
+            <th>Village</th>
+            <th>Status</th>
+            <th>Trees #</th>
+            <th>Farms #</th>
+          </tr>
         </thead>
         <tbody>
-        <ng-container *ngFor="let data of reportsTableData">
-          <tr>
-            <td>
-              {{ data?.userInfo?.type === 2
-              ? data?.userInfo?.groupName
-              : data?.userInfo?.foreName + ' ' + data.userInfo?.surname }}
-            </td>
-            <td>{{ data?.userInfo?.NID }}</td>
-            <td>{{ data?.userInfo?.regNumber }}</td>
-            <td>{{ data?.userInfo?.phone_number }}</td>
-            <td>{{ data?.userInfo?.sex }}</td>
-            <td>
-              {{ data.userInfo?.location?.prov_id?.namek }}
-            </td>
-            <td>
-              {{ data.userInfo.location?.dist_id.name }}
-            </td>
-            <td>
-              {{ data.userInfo.location?.sect_id.name }}
-            </td>
-            <td>
-              {{ data.userInfo.location?.cell_id.name }}
-            </td>
-            <td>
-              {{ data.userInfo.location?.village_id.name }}
-            </td>
-            <td>
-              {{
-              data.userInfo.userInfo
-                ? data.userInfo.userInfo.status
-                : "active"
-              }}
-            </td>
-            <td>
-              {{ sumTrees(data.requestInfo) }}
-            </td>
-            <td>
-              {{ data.requestInfo.length }}
-            </td>
-          </tr>
-        </ng-container>
+          <ng-container *ngFor="let data of reportsTableData">
+            <tr>
+              <td>
+                {{
+                  data?.userInfo?.type === 2
+                    ? data?.userInfo?.groupName
+                    : data?.userInfo?.foreName + " " + data.userInfo?.surname
+                }}
+              </td>
+              <td>{{ data?.userInfo?.NID }}</td>
+              <td>{{ data?.userInfo?.regNumber }}</td>
+              <td>{{ data?.userInfo?.phone_number }}</td>
+              <td>{{ data?.userInfo?.sex }}</td>
+              <td>
+                {{ data.userInfo?.location?.prov_id?.namek }}
+              </td>
+              <td>
+                {{ data.userInfo.location?.dist_id.name }}
+              </td>
+              <td>
+                {{ data.userInfo.location?.sect_id.name }}
+              </td>
+              <td>
+                {{ data.userInfo.location?.cell_id.name }}
+              </td>
+              <td>
+                {{ data.userInfo.location?.village_id.name }}
+              </td>
+              <td>
+                {{
+                  data.userInfo.userInfo
+                    ? data.userInfo.userInfo.status
+                    : "active"
+                }}
+              </td>
+              <td>
+                {{ sumTrees(data.requestInfo) }}
+              </td>
+              <td>
+                {{ data.requestInfo.length }}
+              </td>
+            </tr>
+          </ng-container>
         </tbody>
       </table>
     </div>
@@ -583,53 +607,52 @@
         class="row-border hover table table-striped"
       >
         <thead>
-        <tr>
-          <th>Farmer names</th>
-          <th>Reg Number</th>
-          <th>UPI Number</th>
-          <th>Province</th>
-          <th>District</th>
-          <th>Sector</th>
-          <th>Cell</th>
-          <th>Village</th>
-          <th>Status</th>
-          <th>Total Trees</th>
-        </tr>
+          <tr>
+            <th>Farmer names</th>
+            <th>Reg Number</th>
+            <th>UPI Number</th>
+            <th>Province</th>
+            <th>District</th>
+            <th>Sector</th>
+            <th>Cell</th>
+            <th>Village</th>
+            <th>Status</th>
+            <th>Total Trees</th>
+          </tr>
         </thead>
         <tbody>
-        <ng-container *ngFor="let data of reportsTableData">
-          <tr *ngFor="let farm of data.requestInfo">
-            <td>
-              {{ data?.userInfo?.type === 2
-              ? data?.userInfo?.groupName
-              : data?.userInfo?.foreName + ' ' + data.userInfo?.surname }}
-            </td>
-            <td>{{ data?.userInfo?.regNumber }}</td>
-            <td>{{ farm.upiNumber }}</td>
-            <td>
-              {{ farm.location.prov_id.namek }}
-            </td>
-            <td>
-              {{ farm.location.dist_id.name }}
-            </td>
-            <td>
-              {{ farm.location.sect_id.name }}
-            </td>
-            <td>
-              {{ farm.location.cell_id.name }}
-            </td>
-            <td>
-              {{ farm.location.village_id.name }}
-            </td>
-            <td>
-              {{ farm.status
-              ? farm.status
-              : "active"
-              }}
-            </td>
-            <td>{{ farm?.numberOfTrees }}</td>
-          </tr>
-        </ng-container>
+          <ng-container *ngFor="let data of reportsTableData">
+            <tr *ngFor="let farm of data.requestInfo">
+              <td>
+                {{
+                  data?.userInfo?.type === 2
+                    ? data?.userInfo?.groupName
+                    : data?.userInfo?.foreName + " " + data.userInfo?.surname
+                }}
+              </td>
+              <td>{{ data?.userInfo?.regNumber }}</td>
+              <td>{{ farm.upiNumber }}</td>
+              <td>
+                {{ farm.location.prov_id.namek }}
+              </td>
+              <td>
+                {{ farm.location.dist_id.name }}
+              </td>
+              <td>
+                {{ farm.location.sect_id.name }}
+              </td>
+              <td>
+                {{ farm.location.cell_id.name }}
+              </td>
+              <td>
+                {{ farm.location.village_id.name }}
+              </td>
+              <td>
+                {{ farm.status ? farm.status : "active" }}
+              </td>
+              <td>{{ farm?.numberOfTrees }}</td>
+            </tr>
+          </ng-container>
         </tbody>
       </table>
     </div>

@@ -148,6 +148,16 @@
                   formControlName="ownerName"
                   class="form-control"
                 />
+                <app-inline-errors
+                  *ngIf="
+                    addNursery.controls.ownerName.invalid &&
+                    (addNursery.controls.ownerName.dirty ||
+                      addNursery.controls.ownerName.touched)
+                  "
+                  [errors]="addNursery.controls.ownerName.errors"
+                  [label]="'owner name'"
+                >
+                </app-inline-errors>
               </div>
             </div>
             <div class="col-sm-6">
@@ -159,7 +169,18 @@
                   type="text"
                   formControlName="ownerNumber"
                   class="form-control"
+                  placeholder="250"
                 />
+                <app-inline-errors
+                  *ngIf="
+                    addNursery.controls.ownerNumber.invalid &&
+                    (addNursery.controls.ownerNumber.dirty ||
+                      addNursery.controls.ownerNumber.touched)
+                  "
+                  [errors]="addNursery.controls.ownerNumber.errors"
+                  [label]="'owner phone number'"
+                >
+                </app-inline-errors>
               </div>
             </div>
           </div>
@@ -176,6 +197,16 @@
                   formControlName="representativeName"
                   class="form-control"
                 />
+                <app-inline-errors
+                  *ngIf="
+                    addNursery.controls.representativeName.invalid &&
+                    (addNursery.controls.representativeName.dirty ||
+                      addNursery.controls.representativeName.touched)
+                  "
+                  [errors]="addNursery.controls.representativeName.errors"
+                  [label]="'manager name'"
+                >
+                </app-inline-errors>
               </div>
             </div>
             <div class="col-sm-6">
@@ -187,7 +218,18 @@
                   type="text"
                   formControlName="representativeNumber"
                   class="form-control"
+                  placeholder="250"
                 />
+                <app-inline-errors
+                  *ngIf="
+                    addNursery.controls.representativeNumber.invalid &&
+                    (addNursery.controls.representativeNumber.dirty ||
+                      addNursery.controls.representativeNumber.touched)
+                  "
+                  [errors]="addNursery.controls.representativeNumber.errors"
+                  [label]="'manager phone number'"
+                >
+                </app-inline-errors>
               </div>
             </div>
           </div>
