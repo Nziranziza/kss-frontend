@@ -402,7 +402,7 @@
           <th>Date added</th>
           <th>Group name</th>
           <th>Leader names</th>
-          <th> Leader Contact </th>
+          <th>Leader Contact </th>
           <th>Province</th>
           <th>District</th>
           <th>Sector</th>
@@ -513,7 +513,6 @@
           <th>Reg Number</th>
           <th>Phone Number</th>
           <th>Gender</th>
-          <th>Contact</th>
           <th>Province</th>
           <th>District</th>
           <th>Sector</th>
@@ -532,10 +531,10 @@
               ? data?.userInfo?.groupName
               : data?.userInfo?.foreName + ' ' + data.userInfo?.surname }}
             </td>
-            <td>{{ data?.userInfo?.regNumber }}</td>
             <td>{{ data?.userInfo?.NID }}</td>
-            <td>{{ data?.userInfo?.sex }}</td>
+            <td>{{ data?.userInfo?.regNumber }}</td>
             <td>{{ data?.userInfo?.phone_number }}</td>
+            <td>{{ data?.userInfo?.sex }}</td>
             <td>
               {{ data.userInfo?.location?.prov_id?.namek }}
             </td>
