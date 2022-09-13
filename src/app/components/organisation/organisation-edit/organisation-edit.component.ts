@@ -371,7 +371,6 @@ export class OrganisationEditComponent extends BasicComponent implements OnInit 
         this.selectedPartners = data
           .map((checked, index) => checked ? this.partners[index]._id : null)
           .filter(value => value !== null);
-        console.log(this.selectedPartners);
       });
     this.editForm.controls['organizationRole'.toString()].valueChanges.subscribe(
       (data) => {

@@ -55,12 +55,10 @@ export class ReportService {
   }
 
   farmSummary(body: any): Observable<any> {
-    console.log(body);
     return this.apiService.post('/coffeefarmers/report/download', body);
   }
 
   farmDownload(body: any, type: string): Observable<any> {
-    console.log(body);
     return this.apiService.post('/coffeefarmers/report/download/' + type, body);
   }
 }

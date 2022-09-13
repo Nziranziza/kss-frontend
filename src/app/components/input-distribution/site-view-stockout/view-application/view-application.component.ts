@@ -63,7 +63,6 @@ export class ViewApplicationComponent
       pageLength: 25,
     };
     this.recipients = this.groupBy(this.stockOut.recipients, 'regNumber');
-    console.log(this.recipients)
     if (this.objectKeys(this.recipients)[0] !== undefined) {
       this.createExcelData(this.stockOut.recipients);
     }
@@ -150,7 +149,6 @@ export class ViewApplicationComponent
   }
 
   createExcelData(stockouts) {
-    console.log(stockouts);
     stockouts.map((item) => {
       const temp = {
         REG_NUMBER: item.regNumber,

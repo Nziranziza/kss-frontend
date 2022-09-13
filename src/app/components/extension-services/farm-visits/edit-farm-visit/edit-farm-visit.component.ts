@@ -208,7 +208,6 @@ export class EditFarmVisitComponent implements OnInit {
       })
       .subscribe((data) => {
         this.agronomist = data.data;
-        console.log(this.agronomist);
         this.loading = false;
       });
     this.loading = false;

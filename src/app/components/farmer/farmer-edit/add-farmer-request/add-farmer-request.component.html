@@ -18,7 +18,7 @@
       <div class="col-md-12">
         <span class="land-info-title"> LAND IDENTIFICATIONS </span>
       </div>
-      <div class="col-xs-6">
+      <div class="col-md-6">
         <div class="form-group">
           <label class="control-label">Land UPI number</label>
           <input
@@ -30,14 +30,14 @@
           />
         </div>
       </div>
-      <div class="col-xs-6">
+      <div class="col-md-6">
         <div class="form-group">
           <label class="control-label">Land Owner Names</label>
           <input class="form-control" formControlName="landOwner" type="text"/>
         </div>
       </div>
       <div *ngIf="!showUPILocations; else locationIfUpi" formGroupName="location">
-        <div class="col-xs-2">
+        <div class="col-md-2">
           <div class="form-group">
             <span class="">Province</span>
             <select class="form-control" formControlName="prov_id">
@@ -63,7 +63,7 @@
             </div>
           </div>
         </div>
-        <div class="col-xs-2">
+        <div class="col-md-2">
           <div class="form-group">
             <span class="">District</span>
             <select class="form-control" formControlName="dist_id">
@@ -89,7 +89,7 @@
             </div>
           </div>
         </div>
-        <div class="col-xs-2">
+        <div class="col-md-2">
           <div class="form-group">
             <span class="">Sector</span>
             <select class="form-control" formControlName="sect_id">
@@ -112,7 +112,7 @@
             </div>
           </div>
         </div>
-        <div class="col-xs-2">
+        <div class="col-md-2">
           <div class="form-group">
             <span class="">Cell</span>
             <select class="form-control" formControlName="cell_id">
@@ -135,7 +135,7 @@
             </div>
           </div>
         </div>
-        <div class="col-xs-2">
+        <div class="col-md-2">
           <div class="form-group">
             <span class="">village</span>
             <select class="form-control" formControlName="village_id">
@@ -164,7 +164,7 @@
       </div>
       <ng-template #locationIfUpi class="col-sm-12">
         <div class="row" formGroupName="location_if_upi">
-          <div class="col-xs-2">
+          <div class="col-md-2">
             <div class="form-group">
               <span class="">Province</span>
               <select
@@ -183,7 +183,7 @@
               </div>
             </div>
           </div>
-          <div class="col-xs-2">
+          <div class="col-md-2">
             <div class="form-group">
               <span class="">District</span>
               <select
@@ -202,7 +202,7 @@
               </div>
             </div>
           </div>
-          <div class="col-xs-2">
+          <div class="col-md-2">
             <div class="form-group">
               <span class="">Sector</span>
               <select
@@ -221,7 +221,7 @@
               </div>
             </div>
           </div>
-          <div class="col-xs-2">
+          <div class="col-md-2">
             <div class="form-group">
               <span class="">Cell</span>
               <select
@@ -240,7 +240,7 @@
               </div>
             </div>
           </div>
-          <div class="col-xs-2">
+          <div class="col-md-2">
             <div class="form-group">
               <span class="">village</span>
               <select
@@ -261,7 +261,7 @@
           </div>
         </div>
       </ng-template>
-      <div class="col-xs-6">
+      <div class="col-md-6">
         <div class="form-group">
           <label class="control-label">Longitude geo coordinate</label>
           <input
@@ -272,7 +272,7 @@
           />
         </div>
       </div>
-      <div class="col-xs-6">
+      <div class="col-md-6">
         <div class="form-group">
           <label class="control-label">Latitude geo coordinate</label>
           <input
@@ -295,97 +295,106 @@
         <div *ngIf="!validForm">Please validate number of trees</div>
       </div>
       <div class="col-md-12">
-        <table class="table varieties-table">
-          <tbody>
-          <tr>
-            <td style="padding-left: 0">
-              <span> <b>Number of trees </b> </span>
+        <div class="varieties-table">
+          <div class="row">
+            <div class="col-sm-6 col-md-3">
+              <div style="margin-top: 10px"> <b>Number of trees </b> </div>
               <div style="margin-bottom: 10px; margin-top: 10px">
                 <input
-                  class="form-control"
-                  formControlName="numberOfTrees"
-                  min="0"
                   type="number"
+                  min="0"
+                  formControlName="numberOfTrees"
+                  class="form-control"
                 />
                 <div
                   *ngIf="
-                      createForm.controls.numberOfTrees.invalid &&
-                      (createForm.controls.numberOfTrees.dirty ||
-                        createForm.controls.numberOfTrees.touched)
-                    "
+                    createForm.controls.numberOfTrees.invalid &&
+                    (createForm.controls.numberOfTrees.dirty ||
+                      createForm.controls.numberOfTrees.touched)
+                  "
                   class="input-error"
                 >
                   <div
-                    *ngIf="createForm.controls.numberOfTrees.errors.required"
+                    *ngIf="
+                      createForm.controls.numberOfTrees.errors
+                        .required
+                    "
                   >
                     Number of trees is required.
                   </div>
-                  <div *ngIf="createForm.controls.numberOfTrees.errors.min">
+                  <div
+                    *ngIf="
+                      createForm.controls.numberOfTrees.errors.min
+                    "
+                  >
                     Number of trees must be greater than zero.
                   </div>
                   <div
-                    *ngIf="createForm.controls.numberOfTrees.errors.pattern"
+                    *ngIf="
+                      createForm.controls.numberOfTrees.errors
+                        .pattern
+                    "
                   >
                     Number of trees must be an integer.
                   </div>
                 </div>
               </div>
-            </td>
+            </div>
             <ng-container *ngIf="treeVarieties">
-              <td
-                *ngFor="let control of formTreeAges?.controls; let i = index"
+              <div
+                class="col-sm-6 col-md-3"
+                *ngFor="let control of formTreeAges.controls; let i = index"
                 formArrayName="treeAges"
               >
-                <div [formGroupName]="i" style="display: block">
-                    <span
-                    >Trees age <b>{{ ranges[i] }} Years</b></span
-                    >
+                <div style="display: block" [formGroupName]="i">
+                  <div
+                    style="margin-top: 10px">Trees age <b>{{ ranges[i] }} Years</b></div
+                  >
                   <div style="margin-bottom: 10px; margin-top: 10px">
                     <input
-                      class="form-control"
-                      disabled
-                      formControlName="numOfTrees"
-                      min="0"
                       type="number"
+                      formControlName="numOfTrees"
+                      class="form-control"
+                      min="0"
+                      disabled
                     />
                   </div>
                   <div
                     *ngFor="
-                        let ctrl of formTreeVarieties(i).controls;
-                        let v = index
-                      "
+                      let ctrl of formTreeVarieties(i).controls;
+                      let v = index
+                    "
                     formArrayName="varieties"
                   >
-                    <div [formGroupName]="v" style="display: table-row">
+                    <div style="display: table-row" [formGroupName]="v">
                       <label
                         style="
-                            font-weight: lighter;
-                            display: table-cell;
-                            width: 70%;
-                            font-size: smaller;
-                          "
+                          font-weight: lighter;
+                          display: table-cell;
+                          width: 50%;
+                          font-size: smaller;
+                        "
                       >
-                        <input formControlName="selected" type="checkbox"/>
+                        <input type="checkbox" formControlName="selected" />
                         {{ treeVarieties[v].name | titlecase }}
                       </label>
                       <div style="display: table-cell; width: auto">
                         <input
-                          (change)="updateList(i, v)"
-                          (keyup)="updateList(i, v)"
-                          class="form-control v-number"
-                          formControlName="number"
-                          min="0"
                           type="number"
+                          formControlName="number"
+                          class="form-control v-number"
+                          min="0"
+                          (keyup)="updateList(i, v)"
+                          (change)="updateList(i, v)"
                         />
                       </div>
                     </div>
                   </div>
                 </div>
-              </td>
+              </div>
             </ng-container>
-          </tr>
-          </tbody>
-        </table>
+          </div>
+        </div>
       </div>
     </div>
     <div
@@ -409,7 +418,7 @@
         formArrayName="certificates"
       >
         <div [formGroupName]="i" class="row">
-          <div class="col-xs-5">
+          <div class="col-md-5">
             <div class="form-group">
               <label class="control-label">Certificate Name</label>
               <input class="form-control" formControlName="name" type="text"/>
@@ -431,7 +440,7 @@
               </div>
             </div>
           </div>
-          <div class="col-xs-5">
+          <div class="col-md-5">
             <div class="form-group">
               <label class="control-label"
               >Certificate Identification Number</label
@@ -480,10 +489,10 @@
       type="hidden"
     />
     <div class="row">
-      <div class="col-xs-6"></div>
+      <div class="col-md-6"></div>
     </div>
     <div class="row">
-      <div class="col-xs-12">
+      <div class="col-md-12">
         <button
           (click)="modal.dismiss()"
           class="btn btn-warning btn-margin pull-right"

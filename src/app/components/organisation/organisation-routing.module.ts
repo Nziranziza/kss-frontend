@@ -65,22 +65,22 @@ const routes: Routes = [
         resolve: { orgCoveredArea: CoveredAreaResolverService },
         children: [
           {
-            path: ":organisationId/dashboard",
+            path: "dashboard",
             component: DashboardComponent,
           },
           {
-            path: ":organisationId/farmers",
+            path: "farmers",
             component: OrganisationFarmersComponent,
           },
           {
-            path: ":organisationId/suppliers",
+            path: "suppliers",
             component: OrganisationSuppliersComponent,
           },
           {
-            path: ":organisationId/cherries",
+            path: "cherries",
             component: ParchmentListComponent,
           },
-          { path: ":organisationId/users", component: UserListComponent },
+          { path: "users", component: UserListComponent },
         ],
       },
     ],

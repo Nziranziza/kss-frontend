@@ -1,3 +1,7 @@
 .has-feedback .form-control-feedback {
-    pointer-events: initial;
+  pointer-events: initial;
+}
+
+.login-box {
+  max-width: 100%;
 }

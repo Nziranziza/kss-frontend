@@ -56,7 +56,6 @@ export class TrainingScheduleViewComponent
   getTraining() {
     this.trainingService.getSchedule(this.id).subscribe((data) => {
       this.training = data.data;
-      console.log(this.training);
     });
   }
 
