@@ -222,7 +222,6 @@ export class ReportsComponent extends BasicComponent implements OnInit {
     this.reportForm.controls.filter
       .get('location.prov_id'.toString())
       .valueChanges.subscribe((value) => {
-        console.log(this.reportForm.value);
         if (this.orgAuto) {
           this.orgAuto.clear();
         }
@@ -377,7 +376,6 @@ export class ReportsComponent extends BasicComponent implements OnInit {
       this.reportBody = body;
       this.reportService.groupStats(body).subscribe((data) => {
         this.stats = data.data[0];
-        console.log(data.data);
       });
     } else if (value === 'Trainings') {
       const date = form.filter.date;

@@ -113,7 +113,6 @@ export class TrainingListComponent
             this.setMessage("Training successfully deleted!");
           },
           (err) => {
-            console.log(err);
             this.setMessage(err.errors);
           }
         );

@@ -19,43 +19,43 @@
           </div>
           <div class="col-sm-12 col-centered">
             <div class="row">
-              <div class="col-xs-2">
+              <div class="col-md-2">
                 <label class="control-label label-required">Province</label>
                 <div class="confirm-text-box confirm-text">
                   {{ addNursery.value.location.prov_id }}
                 </div>
               </div>
-              <div class="col-xs-2">
+              <div class="col-md-2">
                 <label class="control-label label-required">District</label>
                 <div class="confirm-text-box confirm-text">
                   {{ addNursery.value.location.prov_id }}
                 </div>
               </div>
-              <div class="col-xs-2">
+              <div class="col-md-2">
                 <label class="control-label label-required">Sector</label>
                 <div class="confirm-text-box confirm-text">
                   {{ addNursery.value.location.prov_id }}
                 </div>
               </div>
-              <div class="col-xs-2" id="location-cell">
+              <div class="col-md-2" id="location-cell">
                 <label class="control-label label-required">Cell</label>
                 <div class="confirm-text-box confirm-text">
                   {{ addNursery.value.location.prov_id }}
                 </div>
               </div>
-              <div class="col-xs-2" id="location-village">
+              <div class="col-md-2" id="location-village">
                 <label class="control-label label-required">Village</label>
                 <div class="confirm-text-box confirm-text">
                   {{ addNursery.value.location.prov_id }}
                 </div>
               </div>
-              <div class="col-xs-1" id="location-latitude">
+              <div class="col-md-1" id="location-latitude">
                 <label class="control-label label-required">Lat</label>
                 <div class="confirm-text-box confirm-text">
                   {{ addNursery.value.location.prov_id }}
                 </div>
               </div>
-              <div class="col-xs-1" id="location-longitude">
+              <div class="col-md-1" id="location-longitude">
                 <label class="control-label label-required">Long</label>
                 <div class="confirm-text-box confirm-text">
                   {{ addNursery.value.location.prov_id }}
@@ -158,7 +158,7 @@
                       {{ addNursery.value.nurseryName }}
                     </div>
                   </div>
-                  <div class="col-xs-2" style="margin-top: 10px">
+                  <div class="col-sm-2" style="margin-top: 10px">
                     <div class="confirm-text-box confirm-text">
                       {{ addNursery.value.nurseryName }}
                     </div>
@@ -255,10 +255,10 @@
           </div>
         </div>
         <span *ngIf="addNursery.value.nurseryName != ''">
-          <div class="col-sm-11 col-centered">
+          <div class="col-sm-11 col-centered" style="max-width: 95%">
             <div class="row" formGroupName="location">
               <div
-                class="col-xs-2"
+                class="col-md-2"
                 id="location-province"
                 style="padding: 0 2px 0 15px"
               >
@@ -276,7 +276,7 @@
                 </div>
               </div>
               <div
-                class="col-xs-2"
+                class="col-md-2"
                 id="location-district"
                 style="padding: 0 2px 0 0px"
               >
@@ -294,7 +294,7 @@
                 </div>
               </div>
               <div
-                class="col-xs-2"
+                class="col-md-2"
                 id="location-sector"
                 style="padding: 0 2px 0 0px"
               >
@@ -312,7 +312,7 @@
                 </div>
               </div>
               <div
-                class="col-xs-2"
+                class="col-md-2"
                 id="location-cell"
                 style="padding: 0 2px 0 0px"
               >
@@ -330,7 +330,7 @@
                 </div>
               </div>
               <div
-                class="col-xs-2"
+                class="col-md-2"
                 id="location-village"
                 style="padding: 0 2px 0 0px"
               >
@@ -348,7 +348,7 @@
                 </div>
               </div>
               <div
-                class="col-xs-1"
+                class="col-md-1"
                 id="location-latitude"
                 style="padding: 0 2px 0 0px"
               >
@@ -362,7 +362,7 @@
                 </div>
               </div>
               <div
-                class="col-xs-1"
+                class="col-md-1"
                 id="location-longitude"
                 style="padding: 0 10px 0 0px"
               >
@@ -475,7 +475,7 @@
               </div>
             </div>
           </div>
-          <div class="col-sm-11 col-centered">
+          <div class="col-sm-11 col-centered" style="max-width: 92%">
             <label class="control-label label-required"
               >Record Seeds/Seedlings Information</label
             >
@@ -619,7 +619,7 @@
                       formControlName="recordedSeedling"
                     />
                   </div>
-                  <div class="col-xs-1 text-center" style="margin-top: 10px">
+                  <div class="col-sm-1 text-center" style="margin-top: 10px">
                     <button
                       class="btn btn-danger btn-sm pull-right"
                       type="button"

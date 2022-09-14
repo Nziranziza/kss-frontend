@@ -76,8 +76,17 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
     this.initiateParameters();
     this.seasonStartingDate = this.datePipe.transform(this.authenticationService.getCurrentSeason().created_at, 'yyyy-MM-dd');
     this.currentDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
-    this.route.queryParams.subscribe((params) => {
-      this.cwsDashes = params['cwsDashes'.toString()];
+    this.route.params.subscribe((params) => {
+      if (!params['organisationId'.toString()]) {
+        this.route.parent.params.subscribe((params) => {
+          if (params['organisationId'.toString()]) {
+          this.parameters['org_id'.toString()] = params['organisationId'.toString()];
+          this.cwsDashes = 'hello';
+        }
+        });
+      } else {
+        this.parameters['org_id'.toString()] = params['organisationId'.toString()];
+      }
     });
     this.config = {
       itemsPerPage: 10,

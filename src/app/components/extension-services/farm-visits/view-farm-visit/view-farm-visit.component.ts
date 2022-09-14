@@ -60,7 +60,6 @@ export class ViewFarmVisitComponent
   getVisits() {
     this.visitService.one(this.id).subscribe((data) => {
       this.visits = data.data;
-      console.log(this.visits);
     });
   }
 }

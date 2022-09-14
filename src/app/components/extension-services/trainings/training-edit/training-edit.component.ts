@@ -123,7 +123,6 @@ export class TrainingEditComponent
             url: data.data[i],
           });
         }
-        console.log(this.results);
         this.loading = false;
       },
       (err) => {

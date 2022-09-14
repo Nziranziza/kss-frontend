@@ -87,7 +87,6 @@ export class UserCreateComponent implements OnInit {
       this.possibleRoles = Object.keys(data.content).map(key => {
         return { name: key, value: data.content[key] };
       });
-      console.log(this.possibleRoles);
       this.getRoles();
     });
     this.route.params.subscribe(params => {

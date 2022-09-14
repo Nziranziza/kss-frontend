@@ -1,20 +1,20 @@
 <div class="filter-title-text">
-  Dashboard > <span class="bold"> {{ org?.organizationName }} </span>
+  <span class="bold"> {{ org?.organizationName }} </span>
 </div>
 <div class="row">
-  <div class="col-sm-12 stats-section">
+  <div class="col-md-12 stats-section">
     <div class="row">
-      <div class="col-sm-12 text-center stats-title">CWS Summary</div>
-      <div class="col-sm-4" style="padding: 0 5px 0 5px">
+      <div class="col-md-12 text-center stats-title">CWS Summary</div>
+      <div class="col-md-4" style="padding: 0 5px 0 5px">
         <div class="text-center stats-box">
           <div class="stats-box-title">CWS Details</div>
           <div class="stats-box-details-title">{{ org?.organizationName }}</div>
           <div class="stats-box-divider"></div>
           <div class="row">
-            <div class="col-sm-2">
+            <div class="col-md-2">
               <div class="stats-box-details-left">Location</div>
             </div>
-            <div class="col-sm-10">
+            <div class="col-md-10">
               <div class="stats-box-details-right">
                 Province:
                 <span class="bold"> {{ org?.location.prov_id.namek }} </span>
@@ -39,10 +39,10 @@
           </div>
           <div class="stats-box-divider"></div>
           <div class="row">
-            <div class="col-sm-2">
+            <div class="col-md-2">
               <div class="stats-box-details-left">Contacts</div>
             </div>
-            <div class="col-sm-10">
+            <div class="col-md-10">
               <div class="stats-box-details-right">
                 Email: <span class="bold"> {{ org?.email }} </span>
               </div>
@@ -53,24 +53,24 @@
           </div>
         </div>
       </div>
-      <div class="col-sm-4" style="padding: 0 5px 0 0px">
+      <div class="col-md-4" style="padding: 0 5px 0 0px">
         <div class="text-center stats-box">
           <div style="height: 180px">
             <div class="stats-box-title">Covered Locations</div>
             <div class="row stats-box-details-left" style="margin-top: 10px">
-              <div class="col-sm-3">Sectors</div>
-              <div class="col-sm-9">Cells</div>
+              <div class="col-xs-3">Sectors</div>
+              <div class="col-xs-9">Cells</div>
             </div>
             <span *ngFor="let area of orgCoveredArea; let i = index">
               <span>
                 <div class="stats-box-divider-table"></div>
                 <div class="row">
-                  <div class="col-sm-3">
+                  <div class="col-xs-3">
                     <div class="stats-box-location-sectors">
                       {{ area?.name }}
                     </div>
                   </div>
-                  <div class="col-sm-9">
+                  <div class="col-xs-9">
                     <div class="stats-box-location-cells">
                       <span *ngFor="let cell of area.covCells; let i = index">
                         <span>{{ cell?.name }}, </span>
@@ -84,19 +84,19 @@
 <!--          <button class="stats-box-button">View more details</button>-->
         </div>
       </div>
-      <div class="col-sm-4" style="padding: 0 5px 0 0px">
+      <div class="col-md-4" style="padding: 0 5px 0 0px">
         <div class="text-center stats-box">
           <div class="stats-box-title" style="margin-bottom: 8px">
             CWS Stats
           </div>
           <div class="row">
-            <div class="col-sm-6">
+            <div class="col-md-6">
               <div class="stats-box-cws">
                 <div class="row">
-                  <div class="col-sm-5">
+                  <div class="col-xs-5">
                     <div class="stats-box-cws-names">Farmers</div>
                   </div>
-                  <div class="col-sm-7">
+                  <div class="col-xs-7">
                     <div class="stats-box-cws-tots">
                       {{ cwsSummary.uniqueFarmersCount | number }}
                     </div>
@@ -106,10 +106,10 @@
               <div class="stats-box-divider-table"></div>
               <div class="stats-box-cws">
                 <div class="row">
-                  <div class="col-sm-5">
+                  <div class="col-xs-5">
                     <div class="stats-box-cws-names">Trees</div>
                   </div>
-                  <div class="col-sm-7">
+                  <div class="col-xs-7">
                     <div class="stats-box-cws-tots">
                       {{ cwsSummary.totalNumberOfTrees | number }}
                     </div>
@@ -118,13 +118,13 @@
               </div>
               <div class="stats-box-divider-table"></div>
             </div>
-            <div class="col-sm-6">
+            <div class="col-md-6">
               <div class="stats-box-cws">
                 <div class="row">
-                  <div class="col-sm-5">
+                  <div class="col-xs-5">
                     <div class="stats-box-cws-rnames">Received Cherries</div>
                   </div>
-                  <div class="col-sm-7">
+                  <div class="col-xs-7">
                     <div class="stats-box-cws-tots">
                       {{ cwsSummary.totalCherries | number }}
                       <span class="stats-box-cws-kgs"> Kgs </span>
@@ -135,10 +135,10 @@
               <div class="stats-box-divider-table"></div>
               <div class="stats-box-cws">
                 <div class="row">
-                  <div class="col-sm-5">
+                  <div class="col-xs-5">
                     <div class="stats-box-cws-rnames">Produced Parchements</div>
                   </div>
-                  <div class="col-sm-7">
+                  <div class="col-xs-7">
                     <div class="stats-box-cws-tots">
                       {{ cwsSummary.totalParchments | number }}
                       <span class="stats-box-cws-kgs"> Kgs </span>
@@ -150,10 +150,10 @@
               <div class="stats-box-divider-table"></div>
               <div class="stats-box-cws">
                 <div class="row">
-                  <div class="col-sm-5">
+                  <div class="col-xs-5">
                     <div class="stats-box-cws-rnames">Expected Parchements</div>
                   </div>
-                  <div class="col-sm-7">
+                  <div class="col-xs-7">
                     <div class="stats-box-cws-tots">
                       {{ cwsSummary.expectedParchments | number }}
                       <span class="stats-box-cws-kgs"> Kgs </span>
@@ -183,7 +183,7 @@
   <ul class="nav nav-tabs" role="tablist">
     <li
       role="presentation"
-      routerLink="/admin/organisations/details/{{ organisationId }}/{{
+      routerLink="/admin/organisations/details/{{
         organisationId
       }}/dashboard"
       routerLinkActive="active"
@@ -195,10 +195,9 @@
     <li
       role="presentation"
       appInternal
-      routerLink="/admin/organisations/details/{{ organisationId }}/{{
+      routerLink="/admin/organisations/details/{{
         organisationId
       }}/farmers"
-      [queryParams]="{ cwsDashes: 'hello' }"
       routerLinkActive="active"
     >
       <a role="tab" data-toggle="tab"><span>Farmers</span></a>
@@ -207,10 +206,9 @@
       role="presentation"
       appInternal
       *appHasPermission="[[4, 1], 0, [8, 1], [1, 1]]"
-      routerLink="/admin/organisations/details/{{ organisationId }}/{{
+      routerLink="/admin/organisations/details/{{
         organisationId
       }}/suppliers"
-      [queryParams]="{ cwsDashes: 'hello' }"
       aria-controls="suppliers"
       routerLinkActive="active"
     >
@@ -220,10 +218,10 @@
       role="presentation"
       appInternal
       *appHasPermission="[[4, 1], 0, [8, 1], [1, 1]]"
-      routerLink="/admin/organisations/details/{{ organisationId }}/{{
+      routerLink="/admin/organisations/details/{{
         organisationId
       }}/cherries"
-      [queryParams]="{ cwsDashes: 'hello' }"
+      
       routerLinkActive="active"
     >
       <a role="tab" data-toggle="tab"><span>Cherries & Parchments</span></a>
@@ -232,10 +230,9 @@
       role="presentation"
       appInternal
       *appHasPermission="[[4, 1], 0, [8, 1], [1, 1]]"
-      routerLink="/admin/organisations/details/{{ organisationId }}/{{
+      routerLink="/admin/organisations/details/{{
         organisationId
       }}/users"
-      [queryParams]="{ cwsDashes: 'hello' }"
       routerLinkActive="active"
     >
       <a role="tab" data-toggle="tab"><span>Users</span></a>

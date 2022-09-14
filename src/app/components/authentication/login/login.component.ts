@@ -122,7 +122,7 @@ export class LoginComponent extends BasicComponent implements OnInit, OnDestroy 
   afterLogInRedirect() {
     const orgId = this.authenticationService.getCurrentUser().info.org_id;
     if (this.authorisationService.isCWSUser()) {
-      this.router.navigateByUrl('admin/cws-farmers/' + orgId);
+      this.router.navigateByUrl('admin/organisations/details/' + orgId + '/dashboard');
     } else if (this.authorisationService.isDryMillUser()) {
       this.router.navigateByUrl('admin/drymill/parchment/list');
     } else if (this.authorisationService.isSWAdmin()) {
@@ -131,8 +131,10 @@ export class LoginComponent extends BasicComponent implements OnInit, OnDestroy 
       this.router.navigateByUrl('admin/warehouse/dispatches');
     } else if (this.authorisationService.isSiteManager()) {
       this.router.navigateByUrl('admin/input/site/distribution');
+    } else if (this.authorisationService.isTechnoServeAdmin()) {
+      this.router.navigateByUrl('admin/dashboard/extension');
     } else {
-      this.router.navigateByUrl('admin/dashboard');
+      this.router.navigateByUrl('admin/organisations');
     }
   }
 }

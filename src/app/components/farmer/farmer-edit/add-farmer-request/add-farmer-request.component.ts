@@ -565,8 +565,6 @@ export class AddFarmerRequestComponent
     // First validate high level
     this.createForm.markAllAsTouched();
 
-    console.log(this.createForm);
-
     if (this.createForm.controls.upiNumber.value) {
       this.createForm.controls.location.get('prov_id').clearValidators();
       this.createForm.controls.location.get('prov_id').updateValueAndValidity();
@@ -579,8 +577,6 @@ export class AddFarmerRequestComponent
       this.createForm.controls.location.get('village_id').clearValidators();
       this.createForm.controls.location.get('village_id').updateValueAndValidity();
     }
-
-    console.log(this.createForm);
 
     this.loading = true;
 
