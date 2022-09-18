@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-xs-12">
+  <div class="col-md-12" style="min-height: 40px">
     <h3>
       <a
         *appHasPermission="[0, [8, 2], 6, [1, 1], [1, 14]]"
@@ -66,7 +66,7 @@
       <!-- /.box-header -->
       <div class="box-body collapse" id="box-body">
         <div class="row">
-          <div class="col-sm-2 col-xs-6">
+          <div class="col-sm-12 col-md-2">
             <p class="text-left">
               <strong
                 >SEASON:
@@ -77,7 +77,7 @@
             </p>
           </div>
           <!-- /.col -->
-          <div class="col-sm-6 col-xs-12">
+          <div class="col-sm-12 col-md-6">
             <div class="row">
               <div class="col-sm-8">
                 <div class="row">
@@ -97,8 +97,8 @@
               </div>
             </div>
             <div class="row">
-              <div class="col-sm-12">Location</div>
-              <div class="col-sm-12">
+              <div class="col-md-12">Location</div>
+              <div class="col-md-12">
                 <span class="details-row-title-sm" style="margin-left: 0px"
                   >Province
                 </span>
@@ -135,7 +135,7 @@
               </div>
             </div>
           </div>
-          <div class="col-sm-4">
+          <div class="col-md-4">
             <p>Covered sectors</p>
             <div *ngFor="let area of orgCoveredArea">
               <span class="details-row-title-sm" style="margin-left: 0px">
@@ -159,7 +159,7 @@
       <!-- ./box-body -->
       <div class="box-footer">
         <div class="row">
-          <div class="col-sm-2 col-xs-4 top-col-statistics">
+          <div class="col-xs-12 col-sm-4 col-md-2 top-col-statistics">
             <div class="description-block border-right">
               <h5 class="description-header text-green">
                 {{ cwsSummary.totalNumberOfTrees | number }}
@@ -169,7 +169,7 @@
             <!-- /.description-block -->
           </div>
           <!-- /.col -->
-          <div class="col-sm-2 col-xs-4 top-col-statistics">
+          <div class="col-xs-12 col-sm-4 col-md-2 top-col-statistics">
             <div class="description-block border-right">
               <h5 class="description-header text-blue">
                 {{ cwsSummary.uniqueFarmersCount | number }}
@@ -178,7 +178,7 @@
             </div>
             <!-- /.description-block -->
           </div>
-          <div class="col-sm-2 col-xs-4 top-col-statistics">
+          <div class="col-xs-12 col-sm-4 col-md-2 top-col-statistics">
             <div class="description-block border-right">
               <h5 class="description-header text-red">
                 {{ cwsSummary.totalCherries | number }} &#13199;
@@ -192,7 +192,7 @@
             </div>
             <!-- /.description-block -->
           </div>
-          <div class="col-sm-2 col-xs-4 top-col-statistics">
+          <div class="col-xs-12 col-sm-4 col-md-2 top-col-statistics">
             <div class="description-block border-right">
               <h5 class="description-header text-light-blue">
                 {{ cwsSummary.totalParchments | number }} &#13199;
@@ -201,7 +201,7 @@
             </div>
             <!-- /.description-block -->
           </div>
-          <div class="col-sm-2 col-xs-4 top-col-statistics">
+          <div class="col-xs-12 col-sm-4 col-md-2 top-col-statistics">
             <div class="description-block border-right">
               <ng-container
                 *ngIf="
@@ -231,7 +231,7 @@
             </div>
             <!-- /.description-block -->
           </div>
-          <div class="col-sm-2 col-xs-4 top-col-statistics">
+          <div class="col-xs-12 col-sm-4 col-md-2 top-col-statistics">
             <div class="description-block">
               <button
                 class="btn btn-link"
@@ -249,7 +249,7 @@
     </div>
     <!-- /.box -->
   </div>
-  <div class="col-xs-12">
+  <div class="col-md-12">
     <div class="col-sm-12 text-center">
       <h3><b>Filter or Search Farmers</b></h3>
     </div>
@@ -257,7 +257,7 @@
       <form [formGroup]="filterForm">
         <div class="row">
           <div formGroupName="searchByLocation">
-            <div class="col-xs-2">
+            <div class="col-md-2">
               <div class="form-group">
                 <div class="">
                   <select class="form-control" formControlName="searchBy">
@@ -271,7 +271,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-xs-2">
+            <div class="col-md-2">
               <div class="form-group">
                 <div class="">
                   <select class="form-control" formControlName="prov_id">
@@ -286,7 +286,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-xs-2">
+            <div class="col-md-2">
               <div class="form-group">
                 <div class="">
                   <select class="form-control" formControlName="dist_id">
@@ -312,7 +312,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-xs-2">
+            <div class="col-md-2">
               <div class="form-group">
                 <div class="">
                   <select class="form-control" formControlName="sect_id">
@@ -327,7 +327,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-xs-2">
+            <div class="col-md-2">
               <div class="form-group">
                 <div class="">
                   <select class="form-control" formControlName="cell_id">
@@ -339,7 +339,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-xs-2">
+            <div class="col-md-2">
               <div class="form-group">
                 <div class="">
                   <select class="form-control" formControlName="village_id">
@@ -403,7 +403,7 @@
 </div>
 <app-list-errors [errorList]="errors"></app-list-errors>
 <div class="row">
-  <div class="col-xs-12">
+  <div class="col-md-12">
     <div class="box">
       <div class="box-body table-responsive">
         <app-loader *ngIf="loading"></app-loader>

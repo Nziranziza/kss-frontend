@@ -376,7 +376,6 @@ export class EditFarmerRequestComponent implements OnInit {
       this.editFarmerRequestForm.controls.location.get('village_id').updateValueAndValidity();
     }
 
-    console.log(this.editFarmerRequestForm);
     if (this.editFarmerRequestForm.valid) {
       this.loading = true;
       const request = this.editFarmerRequestForm.getRawValue();

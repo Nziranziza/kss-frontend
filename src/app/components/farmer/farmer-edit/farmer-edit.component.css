@@ -5,6 +5,10 @@
   height: 100%;
 }
 
+.no-shadow {
+  width: 100%;
+}
+
 .well i {
   color: #4F210D;
   font-size: large;

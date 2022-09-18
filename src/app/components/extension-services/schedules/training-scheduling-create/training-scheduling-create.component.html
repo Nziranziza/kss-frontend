@@ -67,30 +67,6 @@
             >
             <div class="row">
               <div class="col-sm-6">
-                <label class="control-label"> Province </label>
-                <div class="confirm-text-box confirm-text">
-                  <div *ngFor="let province of locationProvinces">
-                    <span
-                      *ngIf="
-                        scheduleTraining.value.location.prov_id == province._id
-                      "
-                    >
-                      {{ province.namee }}
-                    </span>
-                  </div>
-                </div>
-                <label class="control-label"> Sector </label>
-                <div class="confirm-text-box confirm-text">
-                  <div *ngFor="let sector of locationSectors">
-                    <span
-                      *ngIf="
-                        scheduleTraining.value.location.sect_id == sector._id
-                      "
-                    >
-                      {{ sector.name }}
-                    </span>
-                  </div>
-                </div>
                 <label class="control-label"> Village </label>
                 <div class="confirm-text-box confirm-text">
                   <div *ngFor="let village of locationVillages">
@@ -200,7 +176,7 @@
       <div class="col-sm-3">
         <button
           class="btn btn-secondary btn-lg submit"
-          (click)="onSubmit(); modal.dismiss('cancel click'); open(ccontent)"
+          (click)="onSubmit(); modal.dismiss('cancel click')"
           [disabled]="loading"
         >
           <span *ngIf="!loading; else other_content">Confirm</span>
@@ -283,7 +259,7 @@
             </div>
             <div class="col-sm-12" formGroupName="location">
               <div class="row">
-                <div class="col-xs-2" id="location-province">
+                <div class="col-md-2" id="location-province">
                   <div class="form-group">
                     <label class="control-label label-required">Province</label>
                     <select class="form-control" formControlName="prov_id">
@@ -312,7 +288,7 @@
                     </app-inline-errors>
                   </div>
                 </div>
-                <div class="col-xs-2" id="location-district">
+                <div class="col-md-2" id="location-district">
                   <div class="form-group">
                     <label class="control-label label-required">District</label>
                     <select class="form-control" formControlName="dist_id">
@@ -341,7 +317,7 @@
                     </app-inline-errors>
                   </div>
                 </div>
-                <div class="col-xs-2" id="location-sector">
+                <div class="col-md-2" id="location-sector">
                   <div class="form-group">
                     <label class="control-label label-required">Sector</label>
                     <select class="form-control" formControlName="sect_id">
@@ -370,7 +346,7 @@
                     </app-inline-errors>
                   </div>
                 </div>
-                <div class="col-xs-2" id="location-cell">
+                <div class="col-md-2" id="location-cell">
                   <div class="form-group">
                     <label class="control-label label-required">Cell</label>
                     <select class="form-control" formControlName="cell_id">
@@ -399,7 +375,7 @@
                     </app-inline-errors>
                   </div>
                 </div>
-                <div class="col-xs-2" id="location-village">
+                <div class="col-md-2" id="location-village">
                   <div class="form-group">
                     <label class="control-label label-required">Village</label>
                     <select class="form-control" formControlName="village_id">
@@ -429,7 +405,7 @@
                     </app-inline-errors>
                   </div>
                 </div>
-                <div class="col-xs-2" id="venue">
+                <div class="col-md-2" id="venue">
                   <div class="form-group">
                     <label class="control-label label-required">Venue</label>
                     <input
@@ -623,7 +599,7 @@
                   style="text-align: center"
                 >
                   <div class="row" formGroupName="searchByLocation">
-                    <div class="col-xs-3" id="location-sector">
+                    <div class="col-md-3" id="location-sector">
                       <div class="form-group">
                         <label class="control-label">Sector</label>
                         <select class="form-control" formControlName="sect_id">
@@ -637,7 +613,7 @@
                         </select>
                       </div>
                     </div>
-                    <div class="col-xs-3" id="location-cell">
+                    <div class="col-md-3" id="location-cell">
                       <div class="form-group">
                         <label class="control-label">Cell</label>
                         <select class="form-control" formControlName="cell_id">
@@ -651,7 +627,7 @@
                         </select>
                       </div>
                     </div>
-                    <div class="col-xs-3" id="location-village">
+                    <div class="col-md-3" id="location-village">
                       <div class="form-group">
                         <label class="control-label">Village</label>
                         <select
@@ -669,7 +645,7 @@
                       </div>
                     </div>
 
-                    <div class="col-xs-3">
+                    <div class="col-md-3">
                       <div class="form-group">
                         <label class="control-label">Farmer Group</label>
                         <span *ngIf="scheduleTraining.value.trainingModule">

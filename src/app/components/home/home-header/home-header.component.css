@@ -23,9 +23,3 @@
   font-size: 24px;
   font-weight: bold;
 }
-
-@media screen and (max-device-width: 900px) {
-  .navbar {
-    background: #3F71A7 !important;
-  }
-}

@@ -14,10 +14,10 @@
             />
           </div>
         </div>
-        <div class="col-sm-11 col-centered">
+        <div class="col-sm-11 col-centered" style="max-width: 95%">
           <div class="row" formGroupName="location">
             <div
-              class="col-xs-2"
+              class="col-md-2"
               id="location-province"
               style="padding: 0 2px 0 15px"
             >
@@ -35,7 +35,7 @@
               </div>
             </div>
             <div
-              class="col-xs-2"
+              class="col-md-2"
               id="location-district"
               style="padding: 0 2px 0 0px"
             >
@@ -53,7 +53,7 @@
               </div>
             </div>
             <div
-              class="col-xs-2"
+              class="col-md-2"
               id="location-sector"
               style="padding: 0 2px 0 0px"
             >
@@ -71,7 +71,7 @@
               </div>
             </div>
             <div
-              class="col-xs-2"
+              class="col-md-2"
               id="location-cell"
               style="padding: 0 2px 0 0px"
             >
@@ -89,7 +89,7 @@
               </div>
             </div>
             <div
-              class="col-xs-2"
+              class="col-md-2"
               id="location-village"
               style="padding: 0 2px 0 0px"
             >
@@ -107,7 +107,7 @@
               </div>
             </div>
             <div
-              class="col-xs-1"
+              class="col-md-1"
               id="location-latitude"
               style="padding: 0 2px 0 0px"
             >
@@ -121,7 +121,7 @@
               </div>
             </div>
             <div
-              class="col-xs-1"
+              class="col-md-1"
               id="location-longitude"
               style="padding: 0 10px 0 0px"
             >
@@ -148,6 +148,16 @@
                   formControlName="ownerName"
                   class="form-control"
                 />
+                <app-inline-errors
+                  *ngIf="
+                    addNursery.controls.ownerName.invalid &&
+                    (addNursery.controls.ownerName.dirty ||
+                      addNursery.controls.ownerName.touched)
+                  "
+                  [errors]="addNursery.controls.ownerName.errors"
+                  [label]="'owner name'"
+                >
+                </app-inline-errors>
               </div>
             </div>
             <div class="col-sm-6">
@@ -159,7 +169,18 @@
                   type="text"
                   formControlName="ownerNumber"
                   class="form-control"
+                  placeholder="250"
                 />
+                <app-inline-errors
+                  *ngIf="
+                    addNursery.controls.ownerNumber.invalid &&
+                    (addNursery.controls.ownerNumber.dirty ||
+                      addNursery.controls.ownerNumber.touched)
+                  "
+                  [errors]="addNursery.controls.ownerNumber.errors"
+                  [label]="'owner phone number'"
+                >
+                </app-inline-errors>
               </div>
             </div>
           </div>
@@ -176,6 +197,16 @@
                   formControlName="representativeName"
                   class="form-control"
                 />
+                <app-inline-errors
+                  *ngIf="
+                    addNursery.controls.representativeName.invalid &&
+                    (addNursery.controls.representativeName.dirty ||
+                      addNursery.controls.representativeName.touched)
+                  "
+                  [errors]="addNursery.controls.representativeName.errors"
+                  [label]="'manager name'"
+                >
+                </app-inline-errors>
               </div>
             </div>
             <div class="col-sm-6">
@@ -187,12 +218,23 @@
                   type="text"
                   formControlName="representativeNumber"
                   class="form-control"
+                  placeholder="250"
                 />
+                <app-inline-errors
+                  *ngIf="
+                    addNursery.controls.representativeNumber.invalid &&
+                    (addNursery.controls.representativeNumber.dirty ||
+                      addNursery.controls.representativeNumber.touched)
+                  "
+                  [errors]="addNursery.controls.representativeNumber.errors"
+                  [label]="'manager phone number'"
+                >
+                </app-inline-errors>
               </div>
             </div>
           </div>
         </div>
-        <div class="col-sm-11 col-centered">
+        <div class="col-sm-11 col-centered" style="max-width: 92%">
           <label class="control-label label-required"
             >Record Seeds/Seedlings Information</label
           >
@@ -349,7 +391,7 @@
                   />
                 </div>
                 <div
-                  class="col-xs-2"
+                  class="col-sm-2"
                   style="margin-top: 10px; padding: 0 2px 0 0px"
                 >
                   <input
@@ -359,7 +401,7 @@
                   />
                 </div>
                 <div
-                  class="col-xs-1"
+                  class="col-sm-1"
                   style="margin-top: 10px; padding: 0 2px 0 0px"
                 >
                   <input

@@ -37,7 +37,6 @@ export class PreviewDeliveriesListComponent implements OnInit {
     this.userId = this.authenticationService.getCurrentUser().info._id;
     this.selectedDeliveries = this.paymentProcessingService.getSelectedDeliveries();
     this.paymentList = this.selectedDeliveries.reduce((results, supplier) => {
-      console.log(supplier)
       if (supplier.selected) {
         const element: any = {
           foreName: supplier.userInfo.type === 2 ? supplier.userInfo.groupName : supplier.userInfo.foreName,
@@ -61,7 +60,6 @@ export class PreviewDeliveriesListComponent implements OnInit {
       return results;
     }, []);
 
-    console.log(this.paymentList)
     this.paymentRequest = {
       totalAmountPaid: this.totalAmountPaid,
       org_id: this.organisationId,

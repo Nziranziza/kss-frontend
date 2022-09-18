@@ -58,6 +58,11 @@ export class AuthorisationService {
     return !!(this.userRoles.includes(1) && this.userRoles.includes(8));
   }
 
+  isTechnoServeAdmin() {
+    this.userRoles = this.authenticationService.getCurrentUser().parameters.role;
+    return !!(this.userRoles.includes(11) && +this.authenticationService.getCurrentUser().parameters.type === 1);
+  }
+
   isTechouseUser() {
     this.userRoles = this.authenticationService.getCurrentUser().parameters.role;
     return !!this.userRoles.includes(0);

@@ -119,10 +119,14 @@ export class OrganisationFarmersComponent
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
-      this.organisationId = params['organisationId'.toString()];
-    });
-    this.route.queryParams.subscribe((params) => {
-      this.cwsDashes = params['cwsDashes'.toString()];
+      if (!params['organisationId'.toString()]) {
+        this.route.parent.params.subscribe((params) => {
+          this.organisationId = params['organisationId'.toString()];
+          this.cwsDashes = 'hello';
+        });
+      } else {
+        this.organisationId = params['organisationId'.toString()];
+      }
     });
     this.parameters = {
       length: 10,

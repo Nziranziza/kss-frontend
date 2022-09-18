@@ -39,11 +39,11 @@
         <app-list-message [message]="message"></app-list-message>
         <app-list-errors [errorList]="errors"></app-list-errors>
         <div class="row">
-          <div class="col-xs-12">
+          <div class="col-md-12">
             <div class="box">
               <div class="box-body">
                 <div class="row">
-                  <div class="col-xs-6">
+                  <div class="col-md-6">
                     <div class="form-group">
                       <label class="control-label label-required">Type</label>
                       <div class="radio">
@@ -71,7 +71,7 @@
                 </div>
                 <div class="row">
                   <section id="personal" *ngIf="!isGroup">
-                    <div class="col-xs-6">
+                    <div class="col-md-6">
                       <div class="form-group">
                         <label class="control-label label-required">NID</label>
                         <input
@@ -96,7 +96,7 @@
                         </span>
                       </div>
                     </div>
-                    <div class="col-xs-6">
+                    <div class="col-md-6">
                       <div class="form-group">
                         <label class="control-label label-required"
                           >First name</label
@@ -109,7 +109,7 @@
                         />
                       </div>
                     </div>
-                    <div class="col-xs-6">
+                    <div class="col-md-6">
                       <div class="form-group">
                         <label class="control-label label-required"
                           >Last name</label
@@ -122,7 +122,7 @@
                         />
                       </div>
                     </div>
-                    <div class="col-xs-6">
+                    <div class="col-md-6">
                       <div class="form-group">
                         <label class="control-label label-required"
                           >Gender</label
@@ -153,7 +153,7 @@
                         </div>
                       </div>
                     </div>
-                    <div class="col-xs-6">
+                    <div class="col-md-6">
                       <div class="form-group">
                         <label class="control-label">Phone number</label>
                         <input
@@ -173,7 +173,7 @@
                         </app-inline-errors>
                       </div>
                     </div>
-                    <div class="col-xs-6">
+                    <div class="col-md-6">
                       <div class="form-group">
                         <label class="control-label">Family size</label>
                         <input
@@ -186,7 +186,7 @@
                     </div>
                   </section>
                   <section id="group" *ngIf="isGroup">
-                    <div class="col-xs-6">
+                    <div class="col-md-6">
                       <div class="form-group">
                         <label class="control-label label-required">Name</label>
                         <input
@@ -197,7 +197,7 @@
                       </div>
                     </div>
                   </section>
-                  <div class="col-xs-6">
+                  <div class="col-md-6">
                     <div class="form-group">
                       <label class="control-label">Status</label>
                       <select class="form-control" formControlName="active">
@@ -216,7 +216,7 @@
                       >
                     </legend>
                     <div formGroupName="groupContactPerson">
-                      <div class="col-xs-4">
+                      <div class="col-md-4">
                         <div class="form-group">
                           <span class="">First name</span>
                           <input
@@ -226,7 +226,7 @@
                           />
                         </div>
                       </div>
-                      <div class="col-xs-4">
+                      <div class="col-md-4">
                         <div class="form-group">
                           <span class="">Last name</span>
                           <input
@@ -236,7 +236,7 @@
                           />
                         </div>
                       </div>
-                      <div class="col-xs-4">
+                      <div class="col-md-4">
                         <div class="form-group">
                           <span class="">Phone number</span>
                           <input
@@ -251,7 +251,7 @@
                 </div>
                 <div class="row">
                   <div formGroupName="location">
-                    <div class="col-xs-2">
+                    <div class="col-md-2">
                       <div class="form-group">
                         <label class="control-label">Province</label>
                         <select class="form-control" formControlName="prov_id">
@@ -265,7 +265,7 @@
                         </select>
                       </div>
                     </div>
-                    <div class="col-xs-2">
+                    <div class="col-md-2">
                       <div class="form-group">
                         <label class="control-label">District</label>
                         <select class="form-control" formControlName="dist_id">
@@ -279,7 +279,7 @@
                         </select>
                       </div>
                     </div>
-                    <div class="col-xs-2">
+                    <div class="col-md-2">
                       <div class="form-group">
                         <label class="control-label">Sector</label>
                         <select class="form-control" formControlName="sect_id">
@@ -293,7 +293,7 @@
                         </select>
                       </div>
                     </div>
-                    <div class="col-xs-2">
+                    <div class="col-md-2">
                       <div class="form-group">
                         <label class="control-label">Cell</label>
                         <select class="form-control" formControlName="cell_id">
@@ -307,7 +307,7 @@
                         </select>
                       </div>
                     </div>
-                    <div class="col-xs-2">
+                    <div class="col-md-2">
                       <div class="form-group">
                         <label class="control-label">Village</label>
                         <select
@@ -331,7 +331,7 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-xs-12">
+          <div class="col-md-12">
             <button
               class="btn btn-warning btn-margin pull-right"
               (click)="modal.dismiss()"
@@ -362,12 +362,12 @@
                 (ngSubmit)="onEditChannel()"
               >
                 <div class="row">
-                  <div class="col-xs-12">
+                  <div class="col-md-12">
                     <h5>Edit payment channel</h5>
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-xs-3">
+                  <div class="col-md-3">
                     <div class="form-group">
                       <span class="label-required">Channel</span>
                       <select class="form-control" formControlName="channelId">
@@ -380,7 +380,7 @@
                       </select>
                     </div>
                   </div>
-                  <div class="col-xs-3">
+                  <div class="col-md-3">
                     <div class="form-group">
                       <span class="label-required"> Subscription number </span>
                       <input
@@ -391,7 +391,7 @@
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-xs-12">
+                  <div class="col-md-12">
                     <button class="btn btn-success pull-right">Save</button>
                   </div>
                 </div>
@@ -406,17 +406,17 @@
         *ngIf="!showEditPaymentChannelForm"
       >
         <div class="row">
-          <div class="col-xs-12">
+          <div class="col-md-12">
             <div class="box">
               <div class="box-body">
                 <!------------------------------------ Payment channels ---------------------------------->
                 <div class="row">
-                  <div class="col-xs-12">
+                  <div class="col-md-12">
                     <h5>Add payment channels</h5>
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-xs-12">
+                  <div class="col-md-12">
                     <button
                       class="btn btn-success btn-sm"
                       (click)="addPaymentChannel()"
@@ -435,7 +435,7 @@
                   formArrayName="paymentChannels"
                 >
                   <div class="row" [formGroupName]="i">
-                    <div class="col-xs-2">
+                    <div class="col-md-2">
                       <div class="form-group">
                         <span class="label-required">Channel</span>
                         <select
@@ -452,7 +452,7 @@
                         </select>
                       </div>
                     </div>
-                    <div class="col-xs-3">
+                    <div class="col-md-3">
                       <div class="form-group">
                         <span class="label-required">
                           Subscription number
@@ -463,7 +463,7 @@
                         />
                       </div>
                     </div>
-                    <div class="form-group col-xs-1">
+                    <div class="form-group col-md-1">
                       <button
                         class="btn btn-danger btn-sm pull-left"
                         type="button"
@@ -481,7 +481,7 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-xs-12">
+          <div class="col-md-12">
             <button
               class="btn btn-warning btn-margin pull-right"
               (click)="modal.dismiss()"

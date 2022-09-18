@@ -32,6 +32,7 @@ export class UserListComponent
   org: any;
   isCWSAdmin: boolean;
   currentUser: any;
+  cwsDashes: string;
 
   constructor(
     private route: ActivatedRoute,
@@ -49,7 +50,14 @@ export class UserListComponent
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
-      this.organisationId = params["organisationId".toString()];
+      if (!params['organisationId'.toString()]) {
+        this.route.parent.params.subscribe((params) => {
+          this.organisationId = params['organisationId'.toString()];
+          this.cwsDashes = 'hello';
+        });
+      } else {
+        this.organisationId = params['organisationId'.toString()];
+      }
     });
     this.isCWSAdmin = this.authorisationService.isCWSAdmin();
     this.currentUser = this.authenticationService.getCurrentUser();

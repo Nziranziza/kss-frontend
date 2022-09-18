@@ -79,7 +79,6 @@ export class FarmerEditComponent extends BasicComponent implements OnInit, OnDes
     modalRef.componentInstance.farmerId = this.id;
     modalRef.result.finally(() => {
       this.getFarmer(this.id);
-      console.log('------');
     });
   }
 
