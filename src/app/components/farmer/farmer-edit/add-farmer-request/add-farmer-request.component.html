@@ -28,6 +28,19 @@
             placeholder="00/000/00/000"
             type="text"
           />
+          <div
+            *ngIf="
+              createForm.controls.upiNumber.invalid &&
+              (createForm.controls.upiNumber.dirty ||
+              createForm.controls.upiNumber.touched)"
+            class="input-error"
+          >
+            <div
+              *ngIf="createForm.controls.upiNumber.invalid"
+            >
+              Upi is invalid.
+            </div>
+          </div>
         </div>
       </div>
       <div class="col-md-6">

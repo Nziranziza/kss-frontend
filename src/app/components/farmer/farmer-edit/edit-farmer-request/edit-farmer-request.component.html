@@ -21,6 +21,25 @@
       <div class="col-md-6">
         <div class="form-group">
           <label class="control-label">Land UPI number</label>
+<<<<<<< HEAD
+          <input type="text" formControlName="upiNumber" class="form-control" placeholder="00/000/00/000"
+                 (input)="validateUPI($event)">
+          <div
+            *ngIf="
+              editFarmerRequestForm.controls.upiNumber.invalid &&
+              (editFarmerRequestForm.controls.upiNumber.dirty ||
+              editFarmerRequestForm.controls.upiNumber.touched)"
+            class="input-error"
+          >
+            <div
+              *ngIf="
+                editFarmerRequestForm.controls.upiNumber.invalid
+              "
+            >
+              Upi is invalid.
+            </div>
+          </div>
+=======
           <input
             type="text"
             formControlName="upiNumber"
@@ -28,6 +47,7 @@
             placeholder="00/000/00/000"
             (input)="validateUPI($event)"
           />
+>>>>>>> cc8a75a952248c36072d2daf0bde2c12b72c5924
         </div>
       </div>
       <div class="col-md-6">
@@ -52,6 +72,10 @@
                 {{ province.namee }}
               </option>
             </select>
+<<<<<<< HEAD
+            <div *ngIf="!checkIfUpiinValidZoning.prov_id" class="input-error">
+              <div>UPI Province not in CWS Covered Area.</div>
+=======
             <div
               *ngIf="
                 getLocationInput('prov_id').invalid &&
@@ -63,6 +87,7 @@
               <div *ngIf="getLocationInput('prov_id').errors.required">
                 Province is required.
               </div>
+>>>>>>> cc8a75a952248c36072d2daf0bde2c12b72c5924
             </div>
           </div>
         </div>
@@ -78,6 +103,10 @@
                 {{ district.name }}
               </option>
             </select>
+<<<<<<< HEAD
+            <div *ngIf="!checkIfUpiinValidZoning.dist_id" class="input-error">
+              <div>UPI District not in CWS Covered Area.</div>
+=======
             <div
               *ngIf="
                 getLocationInput('dist_id').invalid &&
@@ -89,6 +118,7 @@
               <div *ngIf="getLocationInput('dist_id').errors.required">
                 District is required.
               </div>
+>>>>>>> cc8a75a952248c36072d2daf0bde2c12b72c5924
             </div>
           </div>
         </div>
@@ -101,6 +131,10 @@
                 {{ sector.name }}
               </option>
             </select>
+<<<<<<< HEAD
+            <div *ngIf="!checkIfUpiinValidZoning.sect_id" class="input-error">
+              <div>UPI Sector not in CWS Covered Area.</div>
+=======
             <div
               *ngIf="
                 getLocationInput('sect_id').invalid &&
@@ -112,6 +146,7 @@
               <div *ngIf="getLocationInput('sect_id').errors.required">
                 Sector is required.
               </div>
+>>>>>>> cc8a75a952248c36072d2daf0bde2c12b72c5924
             </div>
           </div>
         </div>
@@ -124,6 +159,10 @@
                 {{ cell.name }}
               </option>
             </select>
+<<<<<<< HEAD
+            <div *ngIf="!checkIfUpiinValidZoning.cell_id" class="input-error">
+              <div>UPI Cell not in CWS Covered Area.</div>
+=======
             <div
               *ngIf="
                 getLocationInput('cell_id').invalid &&
@@ -135,6 +174,7 @@
               <div *ngIf="getLocationInput('cell_id').errors.required">
                 Cell is required.
               </div>
+>>>>>>> cc8a75a952248c36072d2daf0bde2c12b72c5924
             </div>
           </div>
         </div>
@@ -150,6 +190,10 @@
                 {{ village.name }}
               </option>
             </select>
+<<<<<<< HEAD
+            <div *ngIf="!checkIfUpiinValidZoning.village_id" class="input-error">
+              <div>UPI Village not in CWS Covered Area.</div>
+=======
             <div
               *ngIf="
                 getLocationInput('village_id').invalid &&
@@ -161,6 +205,7 @@
               <div *ngIf="getLocationInput('village_id').errors.required">
                 Village is required.
               </div>
+>>>>>>> cc8a75a952248c36072d2daf0bde2c12b72c5924
             </div>
           </div>
         </div>
