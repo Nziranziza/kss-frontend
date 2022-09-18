@@ -63,4 +63,8 @@ export class SiteService {
   delete(id: string): Observable<any> {
     return this.apiService.delete('/site/' + id);
   }
+
+  getCWSDispatchPlan(id: string): Observable< any >{
+    return this.apiService.get('/v1.1/sites/dispatch-plan/' + id);
+  }
 }

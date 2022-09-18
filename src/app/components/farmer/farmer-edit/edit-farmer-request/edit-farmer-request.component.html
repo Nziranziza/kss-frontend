@@ -17,6 +17,21 @@
           <label class="control-label">Land UPI number</label>
           <input type="text" formControlName="upiNumber" class="form-control" placeholder="00/000/00/000"
                  (input)="validateUPI($event)">
+          <div
+            *ngIf="
+              editFarmerRequestForm.controls.upiNumber.invalid &&
+              (editFarmerRequestForm.controls.upiNumber.dirty ||
+              editFarmerRequestForm.controls.upiNumber.touched)"
+            class="input-error"
+          >
+            <div
+              *ngIf="
+                editFarmerRequestForm.controls.upiNumber.invalid
+              "
+            >
+              Upi is invalid.
+            </div>
+          </div>
         </div>
       </div>
       <div class="col-xs-6">
@@ -34,12 +49,8 @@
               <option *ngFor="let province of provinces" value="{{province._id}}">{{province.namee}}
               </option>
             </select>
-            <div
-              *ngIf="getLocationInput('prov_id').invalid && (getLocationInput('prov_id').dirty || getLocationInput('prov_id').touched)"
-              class="input-error">
-              <div *ngIf="getLocationInput('prov_id').errors.required">
-                Province is required.
-              </div>
+            <div *ngIf="!checkIfUpiinValidZoning.prov_id" class="input-error">
+              <div>UPI Province not in CWS Covered Area.</div>
             </div>
           </div>
         </div>
@@ -51,12 +62,8 @@
               <option *ngFor="let district of districts" value="{{district._id}}">{{district.name}}
               </option>
             </select>
-            <div
-              *ngIf="getLocationInput('dist_id').invalid && (getLocationInput('dist_id').dirty || getLocationInput('dist_id').touched)"
-              class="input-error">
-              <div *ngIf="getLocationInput('dist_id').errors.required">
-                District is required.
-              </div>
+            <div *ngIf="!checkIfUpiinValidZoning.dist_id" class="input-error">
+              <div>UPI District not in CWS Covered Area.</div>
             </div>
           </div>
         </div>
@@ -67,12 +74,8 @@
               <option value=""></option>
               <option *ngFor="let sector of sectors" value="{{sector._id}}">{{sector.name}}</option>
             </select>
-            <div
-              *ngIf="getLocationInput('sect_id').invalid && (getLocationInput('sect_id').dirty || getLocationInput('sect_id').touched)"
-              class="input-error">
-              <div *ngIf="getLocationInput('sect_id').errors.required">
-                Sector is required.
-              </div>
+            <div *ngIf="!checkIfUpiinValidZoning.sect_id" class="input-error">
+              <div>UPI Sector not in CWS Covered Area.</div>
             </div>
           </div>
         </div>
@@ -83,12 +86,8 @@
               <option value=""></option>
               <option *ngFor="let cell of cells" value="{{ cell._id }}">{{cell.name}}</option>
             </select>
-            <div
-              *ngIf="getLocationInput('cell_id').invalid && (getLocationInput('cell_id').dirty || getLocationInput('cell_id').touched)"
-              class="input-error">
-              <div *ngIf="getLocationInput('cell_id').errors.required">
-                Cell is required.
-              </div>
+            <div *ngIf="!checkIfUpiinValidZoning.cell_id" class="input-error">
+              <div>UPI Cell not in CWS Covered Area.</div>
             </div>
           </div>
         </div>
@@ -99,12 +98,8 @@
               <option value=""></option>
               <option *ngFor="let village of villages" value="{{village._id}}">{{village.name}}</option>
             </select>
-            <div
-              *ngIf="getLocationInput('village_id').invalid && (getLocationInput('village_id').dirty || getLocationInput('village_id').touched)"
-              class="input-error">
-              <div *ngIf="getLocationInput('village_id').errors.required">
-                Village is required.
-              </div>
+            <div *ngIf="!checkIfUpiinValidZoning.village_id" class="input-error">
+              <div>UPI Village not in CWS Covered Area.</div>
             </div>
           </div>
         </div>

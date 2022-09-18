@@ -1,11 +1,19 @@
 import {Component, Inject, Injector, Input, OnInit, PLATFORM_ID} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {HelperService} from '../../../../core/helpers';
+import {
+  AuthenticationService,
+  BasicComponent,
+  ConfirmDialogService,
+  HelperService,
+  InputDistributionService,
+  MessageService,
+  Organisation,
+  OrganisationService,
+} from '../../../../core';
+
+import {StockOut} from '../../../../core/models/stockout.model';
 import {isPlatformBrowser} from '@angular/common';
-import {ConfirmDialogService, InputDistributionService, MessageService} from '../../../../core/services';
-import {AuthenticationService} from '../../../../core/services';
-import {BasicComponent} from '../../../../core/library';
 
 @Component({
   selector: 'app-record-distribution',
@@ -25,7 +33,7 @@ export class RecordDistributionComponent extends BasicComponent implements OnIni
   updateRequestForm: FormGroup;
   errors: string [];
   message: string;
-  stockOuts = [];
+  stockOuts: StockOut[] = [];
   comments = [
     {value: 1, description: 'Kudakorera kawa'},
     {value: 2, description: 'Kutagira ibiti bya kawa'},
@@ -34,6 +42,8 @@ export class RecordDistributionComponent extends BasicComponent implements OnIni
     {value: 5, description: 'Yongerewe ifumbire iyo yahawe ntihagije'},
     {value: 6, description: 'Akora ubuhinzi bwa kawa bw umwimerere'}
   ];
+  org: Organisation;
+  isLoading = false;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
@@ -41,7 +51,8 @@ export class RecordDistributionComponent extends BasicComponent implements OnIni
     private authenticationService: AuthenticationService,
     private messageService: MessageService,
     private confirmDialogService: ConfirmDialogService,
-    private helper: HelperService, private inputDistributionService: InputDistributionService) {
+    private helper: HelperService, private inputDistributionService: InputDistributionService,
+    private organisationService: OrganisationService) {
     super();
     if (isPlatformBrowser(this.platformId)) {
       this.modal = this.injector.get(NgbActiveModal);
@@ -52,17 +63,26 @@ export class RecordDistributionComponent extends BasicComponent implements OnIni
     this.distributionForm = this.formBuilder.group({
       quantity: ['', Validators.required],
       stockOutId: [''],
-      treesAtDistribution: [this.numberOfTrees, [ Validators.required, Validators.min(0), Validators.max(100000) ]],
+      treesAtDistribution: [this.numberOfTrees, [Validators.required, Validators.min(0), Validators.max(100000)]],
       comment: ['7']
     });
     this.updateRequestForm = this.formBuilder.group({
-      treesAtDistribution: [this.numberOfTrees, [ Validators.required, Validators.min(0), Validators.max(100000) ]],
+      treesAtDistribution: [this.numberOfTrees, [Validators.required, Validators.min(0), Validators.max(100000)]],
       comment: ['7']
     });
-    this.inputDistributionService.getSiteStockOuts(this.siteId)
+
+    // Get Organisation information for the logged-in user, so we can get stock outs for cws
+    this.organisationService.get(this.authenticationService.getCurrentUser().info.org_id).subscribe(data => {
+      this.org = data.content;
+      this.getStockOuts();
+    });
+  }
+
+  getStockOuts() {
+    this.inputDistributionService.getCwsStockOuts(this.org._id, this.siteId)
       .subscribe((data) => {
-        data.content.map((stock) => {
-          if (stock.input.inputType === 'Fertilizer' && stock.returnedQty === 0) {
+        data.data.map((stock) => {
+          if (stock.inputId.inputType === 'Fertilizer' && stock.returnedQty === 0) {
             this.stockOuts.push(stock);
           }
         });
@@ -90,6 +110,7 @@ export class RecordDistributionComponent extends BasicComponent implements OnIni
 
   onSubmit() {
     if (this.distributionForm.valid) {
+      this.isLoading = true;
       const record = JSON.parse(JSON.stringify(this.distributionForm.value));
       record['documentId'.toString()] = this.documentId;
       record['farmerRequestId'.toString()] = this.requestId;
@@ -101,6 +122,7 @@ export class RecordDistributionComponent extends BasicComponent implements OnIni
           res => {
             if (res) {
               this.inputDistributionService.recordDistributionAndUpdate(record).subscribe(() => {
+                  this.isLoading = false;
                   this.modal.close('Fertilizer distributed.');
                   this.distributionForm.reset();
                 },
@@ -127,7 +149,7 @@ export class RecordDistributionComponent extends BasicComponent implements OnIni
 
   getDestination(destinations) {
     let str = '';
-    destinations.map ((dest) => {
+    destinations.map((dest) => {
       str = str + ' - ' + dest.cell_id.name;
     });
     return str;

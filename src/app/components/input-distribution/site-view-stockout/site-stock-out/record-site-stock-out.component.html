@@ -55,9 +55,17 @@
     </div>
     <div class="row">
       <div class="col-sm-6">
-        <div class="form-group">
+        <div class="form-group"
+             [ngClass]="{ 'has-error': getField('totalQty').invalid
+              && (getField('totalQty').dirty || getField('totalQty').touched) }">
           <label class="control-label label-required">Total quantity</label>
           <input type="number" formControlName="totalQty" class="form-control" min="1">
+          <app-inline-errors
+            *ngIf="getField('totalQty').invalid && (getField('totalQty').dirty || getField('totalQty').touched)"
+            [errors]="getField('totalQty').errors"
+            [label]="'Quantity'"
+          >
+          </app-inline-errors>
         </div>
       </div>
       <div class="col-xs-6">
