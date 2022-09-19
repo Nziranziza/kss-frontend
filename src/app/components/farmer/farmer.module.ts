@@ -7,7 +7,7 @@ import {FarmerDetailsComponent} from './farmer-details/farmer-details.component'
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {NgxPaginationModule} from 'ngx-pagination';
 import {OrderModule} from 'ngx-order-pipe';
-import {FarmerCreateComponent} from './farmer-create/farmer-create.component';
+
 import {FarmerEditComponent} from './farmer-edit/farmer-edit.component';
 import {FarmerLandsComponent} from './farmer-lands/farmer-lands.component';
 import {EditFarmerProfileComponent} from './farmer-edit/edit-farmer-profile/edit-farmer-profile.component';
@@ -17,6 +17,7 @@ import {FarmerNeedApprovalListComponent} from './farmer-need-approval-list/farme
 import {PendingFarmerListComponent} from './pending-farmer/pending-farmer-list/pending-farmer-list.component';
 import {FarmerAdministrativeListComponent} from './farmer-administrative-list/farmer-administrative-list.component';
 import {GoogleChartsModule} from 'angular-google-charts';
+import {FarmerCreateComponent} from './farmer-create/farmer-create.component';
 
 @NgModule({
   declarations: [FarmerListComponent, FarmerDetailsComponent, FarmerCreateComponent,

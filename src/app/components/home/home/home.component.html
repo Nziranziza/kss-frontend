@@ -1,20 +1,311 @@
-<div class="home">
-  <app-home-header></app-home-header>
-  <div class="container">
+<header class="sks_nav">
+  <span class="logo"><img src="assets/dist/img/sks/logo-updated.png" /> </span>
+  <div class="navbar-custom-menu">
+    <ul class="nav navbar-nav">
+      <!-- Notifications -->
+      <li class="user-footer">
+        <div class="pull-left">
+          <button class="header-button" [routerLink]="['/login']">Login</button>
+        </div>
+      </li>
+    </ul>
+  </div>
+</header>
+<div class="homepage-section">
+  <div id="carousel-generic" class="carousel slide" data-ride="carousel">
+    <div class="carousel-inner">
+      <div class="item active">
+        <div
+          class="img"
+          style="
+            background: linear-gradient(
+                rgba(41, 41, 41, 0.5),
+                rgba(41, 41, 41, 0.5)
+              ),
+              url('assets/dist/img/sks/slide2.jpg') no-repeat center;
+            background-size: cover;
+          "
+        >
+          <div class="carousel-caption"></div>
+        </div>
+      </div>
+      <div class="item">
+        <div
+          class="img"
+          style="
+            background: linear-gradient(
+                rgba(41, 41, 41, 0.5),
+                rgba(41, 41, 41, 0.5)
+              ),
+              url('assets/dist/img/sks/coffee-plantation.png') no-repeat center;
+            background-size: cover;
+          "
+        >
+          <div class="carousel-caption"></div>
+        </div>
+      </div>
+    </div>
+    <a class="left carousel-control" href="#carousel-generic" data-slide="prev">
+      <!--<span class="fa fa-angle-left"></span>-->
+      &nbsp;
+    </a>
+    <a
+      class="right carousel-control"
+      href="#carousel-generic"
+      data-slide="next"
+    >
+      <!--<span class="fa fa-angle-right"></span>-->
+      &nbsp;
+    </a>
+  </div>
+  <div class="about">
+    <div class="about-title text-center bold">About SKS</div>
     <div class="row">
-      <div class="col-xs-12">
-        <div class="logo">
+      <div class="col-xs-12 col-md-8">
+        <div class="about-texts">
           <div class="text">
-            <span>
-            </span>
+            <span class="bold">Smart Kungahara System (SKS)</span> is a product
+            developed through a Public Private Partnership between BK Techouse
+            and National Agricultural Export Development Board (NAEB ) which
+            aims to digitalize cash crop value chains such as coffee, tea and
+            horticulture by creating the stakeholders’ database, monitor the
+            farmers’ agro-input distribution at all levels, track the farmers’
+            production supply, manage the production treatment centers
+            operations ( e.g.: Coffee washing stations, dry mills, sorting and
+            export warehouse), create transparency and efficiency, generate
+            relevant analytics to ease decision making processes, promote green
+            economy via cashless payments and unlock access to agriculture
+            insurance and financial services to the smallholder farmer.
+          </div>
+        </div>
+      </div>
+      <div class="hidden-xs hidden-sm col-md-4">
+        <div>
+          <img
+            src="assets/dist/img/sks/sks_logo.svg"
+            alt="Logo 2"
+            class="about-logo"
+          />
+        </div>
+      </div>
+      <div class="col-xs-12">
+        <br />
+        <div class="row">
+          <div class="col-xs-12 col-sm-6 col-md-3">
+            <div class="text-center">
+              <img
+                src="assets/dist/img/sks/sks_partner_minagri.png"
+                class="partner-image"
+                alt="partner"
+              />
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-6 col-md-3">
+            <div class="text-center">
+              <img
+                src="assets/dist/img/sks/sks_partner_naeb.png"
+                class="partner-image"
+                alt="partner"
+              />
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-6 col-md-3">
+            <div class="text-center">
+              <img
+                src="assets/dist/img/sks/tecnoserve.png"
+                style="height: 59px; width: 314px; margin-top: 10px"
+                alt="partner"
+              />
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-6 col-md-3">
+            <div class="text-center">
+              <img
+                src="assets/dist/img/sks/sks_partner_mtn.png"
+                class="partner-image"
+                alt="partner"
+              />
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <app-home-footer></app-home-footer>
+  <div class="impact">
+    <div class="about-title text-center bold" style="color: #4f210d">
+      Impact of SKS
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-sm-6 col-md-4">
+        <div class="box text-center">
+          <img
+            src="assets/dist/img/sks/ico_impact_farmers.png"
+            class="impact-ico"
+            alt="Farmers 2"
+          />
+          <div class="impact-title bold">340,000+</div>
+          <div class="impact-sub">Coffee Farmers</div>
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-4">
+        <div class="box text-center">
+          <img
+            src="assets/dist/img/sks/ico_impact_cws.svg"
+            class="impact-ico"
+            alt="Farmers 2"
+          />
+          <div class="impact-title bold">300+</div>
+          <div class="impact-sub">Coffee Washing Stations</div>
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-4">
+        <div class="box text-center">
+          <img
+            src="assets/dist/img/sks/ico_impact_locations.svg"
+            class="impact-ico"
+            alt="Farmers 2"
+          />
+          <div class="impact-title bold">25+</div>
+          <div class="impact-sub">District Cash Crops</div>
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-6">
+        <div class="box text-center">
+          <img
+            src="assets/dist/img/sks/ico_impact_cherries.svg"
+            class="impact-ico"
+            alt="Farmers 2"
+          />
+          <div class="impact-title bold">+70,000 metric tons</div>
+          <div class="impact-sub">Cherries Collected</div>
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-6">
+        <div class="box text-center">
+          <img
+            src="assets/dist/img/sks/ico_impact_cws.svg"
+            class="impact-ico"
+            alt="Farmers 2"
+          />
+          <div class="impact-title bold">+2,400 metric tons</div>
+          <div class="text-center impact-sub">
+            Agro Input Quantities distributed per year
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="features">
+    <div class="about-title text-center bold" style="color: #4f210d">
+      Features
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-sm-6 col-md-4">
+        <span class="text-center">
+          <div class="features-box">
+            <img
+              src="assets/dist/img/sks/ico_feature_valuechainregistration.svg"
+            />
+            <div class="text-center">
+              Value Chain Stakeholders’ Registration
+              <span>(Farmers, District Cash Crops)</span>
+            </div>
+          </div>
+        </span>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-4">
+        <span class="text-center">
+          <div class="features-box">
+            <img src="assets/dist/img/sks/ico_feature_distribution.svg" />
+            <div class="text-center">Agro-input Distribution</div>
+          </div>
+        </span>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-4">
+        <span class="text-center">
+          <div class="features-box">
+            <img src="assets/dist/img/sks/ico_feature_cashcroprecord.svg" />
+            <div class="text-center">Cash Crop Production Recording</div>
+          </div>
+        </span>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-4">
+        <span class="text-center">
+          <div class="features-box">
+            <img
+              src="assets/dist/img/sks/ico_feature_warehousemanagement.svg"
+            />
+            <div class="text-center">Warehouse Management</div>
+          </div>
+        </span>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-4">
+        <span class="text-center">
+          <div class="features-box">
+            <img src="assets/dist/img/sks/ico_feature_export.svg" />
+            <div class="text-center">Export Operations Management</div>
+          </div>
+        </span>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-4">
+        <span class="text-center">
+          <div class="features-box">
+            <img src="assets/dist/img/sks/ico_feature_bireports.svg" />
+            <div class="text-center">Business Intelligence Reports</div>
+          </div>
+        </span>
+      </div>
+      <div class="hidden-sm col-md-4"></div>
+      <div class="col-xs-12 col-sm-6 col-md-4">
+        <span class="text-center">
+          <div class="features-box">
+            <img src="assets/dist/img/sks/ico_feature_extensionserv.svg" />
+            <div class="text-center">Extensions Services</div>
+          </div>
+        </span>
+      </div>
+    </div>
+  </div>
 </div>
 
+<footer class="footer mt-auto py-3">
+  <div class="row">
+    <div class="col-sm-12 col-md-8 pl-4 footer_links">
+      <span class="col-sm-12">
+        <img
+          src="assets/dist/img/sks/logo-updated.png"
+          alt=""
+          style="
+            display: inline-block;
+            border: 0px solid red;
+            float: left;
+            height: 50px;
+            margin-left: 10px;
+            margin-right: 10px;
+          "
+        />
+        <a href="#">homepage</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#"
+          >About Us</a
+        >&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#">Terms & Conditions</a
+        >&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#">Privacy Policy</a
+        >&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#">Contact Us</a
+        >&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;Get Support:
+        <strong>Call 3800</strong>
+      </span>
 
+      <span class="col-sm-12 footer_copyrights"
+        >Copyright © 2022 NAEB - All Rights Reserved</span
+      >
+    </div>
 
-
+    <div class="col-sm-12 col-md-4">
+      <a href="https://www.bktechouse.rw/" target="_blank">
+        <div class="footer_powered">POWERED BY</div>
+        <img
+          src="../../../../assets/dist/img/sks/bkt-logo.svg"
+          alt=""
+          class="img-fluid"
+      /></a>
+    </div>
+  </div>
+</footer>

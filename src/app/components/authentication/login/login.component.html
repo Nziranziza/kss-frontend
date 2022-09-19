@@ -5,35 +5,70 @@
       <div class="col-xs-12">
         <div class="logo">
           <div class="text">
-            <span>
-            </span>
+            <span> </span>
           </div>
         </div>
       </div>
       <div class="col-xs-12">
         <div class="login-box">
           <div class="login-box-body">
-            <p class="login-box-msg">Please provide your credentials to login</p>
+            <p class="login-box-msg">
+              Please provide your credentials to login
+            </p>
             <app-list-errors [errorList]="errors"></app-list-errors>
             <app-list-message [message]="message"></app-list-message>
             <app-list-warnings [warning]="warning"></app-list-warnings>
             <form [formGroup]="authForm" (ngSubmit)="onSubmit()">
               <div class="form-group has-feedback">
-                <input type="text" formControlName="email" class="form-control"
-                       placeholder="Email"/>
-                <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                <input
+                  type="text"
+                  formControlName="email"
+                  class="form-control"
+                  placeholder="Email"
+                />
+                <span
+                  class="glyphicon glyphicon-envelope form-control-feedback"
+                ></span>
               </div>
               <div class="form-group has-feedback">
-                <input type="password" formControlName="password" class="form-control"
-                       placeholder="*********************"/>
-                <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                <input
+                  type="password"
+                  formControlName="password"
+                  *ngIf="!viewPasswordEnabled"
+                  class="form-control"
+                  placeholder="*********************"
+                />
+                <input
+                  type="text"
+                  formControlName="password"
+                  *ngIf="viewPasswordEnabled"
+                  class="form-control"
+                  placeholder="Enter your Password"
+                />
+                <a
+                  *ngIf="!viewPasswordEnabled"
+                  type="button"
+                  class="glyphicon glyphicon-eye-open form-control-feedback"
+                  (click)="viewPassword()"
+                  style="cursor: pointer; display: block"
+                ></a>
+                <a
+                  *ngIf="viewPasswordEnabled"
+                  type="button"
+                  class="glyphicon glyphicon-eye-close form-control-feedback"
+                  (click)="viewPassword()"
+                  style="cursor: pointer; display: block"
+                ></a>
               </div>
               <div class="row">
-                <div class="col-xs-8">
-                </div>
+                <div class="col-xs-8"></div>
                 <!-- /.col -->
                 <div class="col-xs-12">
-                  <button class="btn btn-success btn-block btn-flat action-button action-button" type="submit">Login
+                  <button
+                    class="btn btn-success btn-block btn-flat action-button action-button"
+                    type="submit"
+                  >
+                    Login
                   </button>
                 </div>
                 <!-- /.col -->
@@ -54,4 +89,3 @@
   <app-home-footer></app-home-footer>
 </div>
 <!-- /.home -->
-

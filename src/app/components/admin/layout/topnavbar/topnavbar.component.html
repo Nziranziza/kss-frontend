@@ -2,9 +2,16 @@
   <!-- Logo -->
   <span class="logo">
     <!-- mini logo for sidebar mini 50x50 pixels -->
-    <span class="logo-mini"><b>S</b>K</span>
+    <span class="logo-mini">
+      <img src="assets/dist/img/sks/logo-updated.png" style="height: 12px"
+    /></span>
     <!-- logo for regular state and mobile devices -->
-    <span class="logo-lg"><b>SMART</b> Kungahara</span>
+    <span class="logo-lg" style="margin-left: -25px"
+      ><img src="assets/dist/img/sks/logo-updated.png" style="height: 40px; width: 110px" />
+      <span class="header-name-box">
+        <span class="header-name-text"> Coffee </span>
+      </span>
+    </span>
   </span>
   <!-- Header Navbar: style can be found in header.less -->
   <nav class="navbar navbar-static-top">
@@ -17,7 +24,12 @@
       <ul class="nav navbar-nav">
         <!-- Notifications -->
         <li class="dropdown notifications-menu" [appRequiredRoles]="[6]">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+          <a
+            href="#"
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            aria-expanded="false"
+          >
             <i class="fa fa-bell-o"></i>
             <span class="label label-warning">{{ needOfApproval }}</span>
           </a>
@@ -25,13 +37,27 @@
             <li>
               <ul class="menu">
                 <li>
-                  <a [routerLink]="['/admin/farmers/need-approval/list', {needApproval:'updated'}]">
-                    <i class="fa fa-map-marker text-aqua"></i> <span class="text-yellow">{{ updatedLandToApprove }}</span> updated lands need to be approved
+                  <a
+                    [routerLink]="[
+                      '/admin/farmers/need-approval/list',
+                      { needApproval: 'updated' }
+                    ]"
+                  >
+                    <i class="fa fa-map-marker text-aqua"></i>
+                    <span class="text-yellow">{{ updatedLandToApprove }}</span>
+                    updated lands need to be approved
                   </a>
                 </li>
                 <li>
-                  <a [routerLink]="['/admin/farmers/need-approval/list', {needApproval:'new'}]">
-                    <i class="fa fa-map-marker text-aqua"></i> <span class="text-yellow"> {{ newLandToApprove }}</span> new lands need to be approved
+                  <a
+                    [routerLink]="[
+                      '/admin/farmers/need-approval/list',
+                      { needApproval: 'new' }
+                    ]"
+                  >
+                    <i class="fa fa-map-marker text-aqua"></i>
+                    <span class="text-yellow"> {{ newLandToApprove }}</span> new
+                    lands need to be approved
                   </a>
                 </li>
               </ul>
@@ -39,15 +65,58 @@
           </ul>
         </li>
         <li class="dropdown notifications-menu">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-            <i class="fa fa-caret-down" aria-hidden="true" style="font-weight: bolder"></i> &nbsp; Season  {{ currentSeason?.season }}
+          <a
+            href="#"
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <span class="hidden-xs">
+              <img src="assets/dist/img/sks/ico_language.svg" /> &nbsp;
+                English
+              &nbsp;</span>
+            <i
+              class="fa fa-caret-down"
+              aria-hidden="true"
+            ></i>
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <ul class="menu">
+                <li>
+                  <a type="button" (click)="setLanguage('en')">English </a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <!-- Languages Changing -->
+        <li class="dropdown notifications-menu">
+          <a
+            href="#"
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <i
+              class="fa fa-caret-down"
+              aria-hidden="true"
+              style="font-weight: bolder"
+            ></i>
+            &nbsp; Season {{ currentSeason?.season }}
           </a>
           <ul class="dropdown-menu">
             <li>
               <ul class="menu">
                 <li *ngFor="let season of seasons">
-                  <a type="button" (click)="changeSeason(season._id)" *ngIf="season._id !== currentSeason._id" style="cursor:pointer">
-                    <i class="fa fa-tint text-green" aria-hidden="true"></i> Season {{ season.season }}
+                  <a
+                    type="button"
+                    (click)="changeSeason(season._id)"
+                    *ngIf="season._id !== currentSeason._id"
+                    style="cursor: pointer"
+                  >
+                    <i class="fa fa-tint text-green" aria-hidden="true"></i>
+                    Season {{ season.season }}
                   </a>
                 </li>
               </ul>
@@ -58,12 +127,14 @@
         <li class="dropdown user user-menu">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
             <i class="fa fa-user"></i>
-            <span class="hidden-xs" style="font-weight: bolder">{{ surname | titlecase }}</span>
+            <span class="hidden-xs" style="font-weight: bolder">{{
+              surname | titlecase
+            }}</span>
           </a>
           <ul class="dropdown-menu">
             <!-- User image -->
             <li class="user-header">
-              <p style="font-weight: bold;">
+              <p style="font-weight: bold">
                 <i class="fa fa-university"></i>
                 <small> {{ orgName }}</small>
               </p>
@@ -71,10 +142,16 @@
             <!-- Menu Footer-->
             <li class="user-footer">
               <div class="pull-left">
-                <a routerLink="/admin/users/profile"  class="btn btn-default btn-flat">Profile</a>
+                <a
+                  routerLink="/admin/users/profile"
+                  class="btn btn-default btn-flat"
+                  >Profile</a
+                >
               </div>
               <div class="pull-right">
-                <button (click) = "onLogOut()" class="btn btn-default btn-flat">Sign out</button>
+                <button (click)="onLogOut()" class="btn btn-default btn-flat">
+                  Sign out
+                </button>
               </div>
             </li>
           </ul>

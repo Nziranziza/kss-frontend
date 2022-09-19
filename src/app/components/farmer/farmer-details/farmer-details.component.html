@@ -43,6 +43,18 @@
         <div class="col-sm-6">
           {{ farmer?.userInfo.regNumber }}<br>
         </div>
+        <div class="col-sm-6">
+          Total Trees
+        </div>
+        <div class="col-sm-6">
+          {{ totalTrees }}<br>
+        </div>
+        <div class="col-sm-6">
+          Total Land
+        </div>
+        <div class="col-sm-6">
+          {{ requests.length }}<br>
+        </div>
       </div>
       <div class="row" *ngIf="farmer.userInfo.type==2">
         <div class="col-sm-6">
@@ -63,6 +75,18 @@
         <div class="col-sm-6">
           {{ farmer?.userInfo.phone_number }}<br>
         </div>
+        <div class="col-sm-6">
+          Total Trees
+        </div>
+        <div class="col-sm-6">
+          {{ totalTrees }}<br>
+        </div>
+        <div class="col-sm-6">
+          Total Land
+        </div>
+        <div class="col-sm-6">
+          {{ requests.length }}<br>
+        </div>
       </div>
     </div>
     <div class="col-sm-4">
@@ -72,7 +96,7 @@
                       [data]="graph.data"
                       [options]="graph.options"
                       [width]="graph.width"
-                      [columnNames]="graph.columnNames"
+                      [columns]="graph.columnNames"
                       [height]="graph.height">
         </google-chart>
       </div>

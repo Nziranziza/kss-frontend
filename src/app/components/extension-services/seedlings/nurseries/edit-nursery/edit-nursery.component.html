@@ -1,0 +1,426 @@
+<app-list-errors [errorList]="errors"></app-list-errors>
+<div class="box">
+  <form [formGroup]="addNursery">
+    <div class="row">
+      <br />
+      <span *ngIf="addNursery.value.siteAvailability === 'no'">
+        <div class="col-sm-11 col-centered">
+          <div class="form-group">
+            <label class="control-label label-required">Site Name </label>
+            <input
+              type="text"
+              formControlName="nurseryName"
+              class="form-control"
+            />
+          </div>
+        </div>
+        <div class="col-sm-11 col-centered">
+          <div class="row" formGroupName="location">
+            <div
+              class="col-xs-2"
+              id="location-province"
+              style="padding: 0 2px 0 15px"
+            >
+              <div class="form-group">
+                <label class="control-label label-required">Province</label>
+                <select class="form-control" formControlName="prov_id">
+                  <option value=""></option>
+                  <option
+                    *ngFor="let province of locationProvinces"
+                    value="{{ province._id }}"
+                  >
+                    {{ province.namee | titlecase }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div
+              class="col-xs-2"
+              id="location-district"
+              style="padding: 0 2px 0 0px"
+            >
+              <div class="form-group">
+                <label class="control-label label-required">District</label>
+                <select class="form-control" formControlName="dist_id">
+                  <option value=""></option>
+                  <option
+                    *ngFor="let district of locationDistricts"
+                    value="{{ district._id }}"
+                  >
+                    {{ district.name | titlecase }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div
+              class="col-xs-2"
+              id="location-sector"
+              style="padding: 0 2px 0 0px"
+            >
+              <div class="form-group">
+                <label class="control-label label-required">Sector</label>
+                <select class="form-control" formControlName="sect_id">
+                  <option value=""></option>
+                  <option
+                    *ngFor="let sector of locationSectors"
+                    value="{{ sector._id }}"
+                  >
+                    {{ sector.name | titlecase }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div
+              class="col-xs-2"
+              id="location-cell"
+              style="padding: 0 2px 0 0px"
+            >
+              <div class="form-group">
+                <label class="control-label label-required">Cell</label>
+                <select class="form-control" formControlName="cell_id">
+                  <option value=""></option>
+                  <option
+                    *ngFor="let cell of locationCells"
+                    value="{{ cell._id }}"
+                  >
+                    {{ cell.name | titlecase }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div
+              class="col-xs-2"
+              id="location-village"
+              style="padding: 0 2px 0 0px"
+            >
+              <div class="form-group">
+                <label class="control-label label-required">Village</label>
+                <select class="form-control" formControlName="village_id">
+                  <option value=""></option>
+                  <option
+                    *ngFor="let village of locationVillages"
+                    value="{{ village._id }}"
+                  >
+                    {{ village.name | titlecase }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div
+              class="col-xs-1"
+              id="location-latitude"
+              style="padding: 0 2px 0 0px"
+            >
+              <div class="form-group">
+                <label class="control-label label-required">Lat</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="latitude"
+                />
+              </div>
+            </div>
+            <div
+              class="col-xs-1"
+              id="location-longitude"
+              style="padding: 0 10px 0 0px"
+            >
+              <div class="form-group">
+                <label class="control-label label-required">Long</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="longitude"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-11 col-centered">
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="control-label label-required"
+                  >Nursery Owner
+                </label>
+                <input
+                  type="text"
+                  formControlName="ownerName"
+                  class="form-control"
+                />
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="control-label label-required"
+                  >Owner Phone number</label
+                >
+                <input
+                  type="text"
+                  formControlName="ownerNumber"
+                  class="form-control"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-11 col-centered">
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="control-label label-required"
+                  >Responsible Manager</label
+                >
+                <input
+                  type="text"
+                  formControlName="representativeName"
+                  class="form-control"
+                />
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="control-label label-required"
+                  >Manager Phone number</label
+                >
+                <input
+                  type="text"
+                  formControlName="representativeNumber"
+                  class="form-control"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-11 col-centered">
+          <label class="control-label label-required"
+            >Record Seeds/Seedlings Information</label
+          >
+          <br />
+          <div class="row">
+            <div class="col-sm-1 text-center">
+              <label class="control-label">Variety</label>
+            </div>
+            <div class="col-sm-1 text-center" style="padding: 0 2px 0 0px">
+              <label class="control-label">Seed</label>
+            </div>
+            <div class="col-sm-1 text-center" style="padding: 0 2px 0 0px">
+              <label class="control-label">Expected Seedlings</label>
+            </div>
+            <div class="col-sm-1 text-center" style="padding: 0 2px 0 0px">
+              <label class="control-label">Sowing Date</label>
+            </div>
+            <div class="col-sm-2 text-center" style="padding: 0 2px 0 0px">
+              <label class="control-label">Germination rate </label>
+            </div>
+            <div class="col-sm-2 text-center" style="padding: 0 2px 0 0px">
+              <label class="control-label">Pricked out Seedlings </label>
+            </div>
+            <div class="col-sm-1 text-center" style="padding: 0 2px 0 0px">
+              <label class="control-label"> Success Rate</label>
+            </div>
+            <div class="col-sm-2 text-center" style="padding: 0 2px 0 0px">
+              <label class="control-label">Disributed Seedlings</label>
+            </div>
+            <div class="col-sm-1 text-center" style="padding: 0 2px 0 0px">
+              <label class="control-label">Prick-Out Date</label>
+            </div>
+          </div>
+          <div class="row">
+            <span
+              *ngFor="let stock of formData.controls; let i = index"
+              class="text-center"
+              formArrayName="stockData"
+            >
+              <span [formGroupName]="i">
+                <div
+                  class="col-sm-1"
+                  style="margin-top: 10px; padding: 0 2px 0 0px"
+                >
+                  <select
+                    class="form-control"
+                    formControlName="variety"
+                    disabled
+                  >
+                    <option
+                      *ngFor="let treeVariety of treeVarieties"
+                      value="{{ treeVariety._id }}"
+                      disabled
+                    >
+                      {{ treeVariety.name | titlecase }}
+                    </option>
+                  </select>
+                </div>
+                <div
+                  class="col-sm-1"
+                  style="margin-top: 10px; padding: 0 2px 0 0px"
+                >
+                  <input
+                    type="number"
+                    min="0"
+                    class="form-control"
+                    formControlName="seed"
+                    disabled
+                  />
+                </div>
+                <div
+                  class="col-sm-1"
+                  style="margin-top: 10px; padding: 0 2px 0 0px"
+                >
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="expectedSeedling"
+                  />
+                </div>
+                <div
+                  class="col-sm-1"
+                  style="margin-top: 10px; padding: 0 2px 0 0px"
+                >
+                  <input
+                    [owlDateTimeTrigger]="dt1"
+                    [owlDateTime]="dt1"
+                    formControlName="sowingDate"
+                    class="form-control"
+                    placeholder="Dd/mm/yyyy"
+                  />
+                  <owl-date-time
+                    [pickerType]="'calendar'"
+                    [scrollStrategy]="scrollStrategy"
+                    #dt1
+                  ></owl-date-time>
+                </div>
+                <div
+                  class="col-sm-2"
+                  style="margin-top: 10px; padding: 0 2px 0 0px"
+                >
+                  <select
+                    type="number"
+                    class="form-control"
+                    formControlName="germinationRate"
+                  >
+                    <option value="90+">
+                      Excellent
+                      <span class="pull-left" style="color: green">90+</span>
+                    </option>
+                    <option value="70-90">
+                      Very Good
+                      <span class="pull-left" style="color: blue">70~90</span>
+                    </option>
+                    <option value="50-70">
+                      Good
+                      <span class="pull-left" style="color: yellow">50~70</span>
+                    </option>
+                    <option value="30-50">
+                      Bad
+                      <span class="pull-left" style="color: orange">30~50</span>
+                    </option>
+                    <option value="0-30">
+                      Worse
+                      <span class="pull-left" style="color: red">0~30</span>
+                    </option>
+                  </select>
+                </div>
+                <div
+                  class="col-sm-2"
+                  style="margin-top: 10px; padding: 0 2px 0 0px"
+                >
+                  <input
+                    type="number"
+                    min="0"
+                    class="form-control"
+                    formControlName="prickedQty"
+                    max="{{ stock.controls.expectedSeedling.value }}"
+                  />
+                </div>
+                <div
+                  class="col-sm-1"
+                  style="margin-top: 10px; padding: 0 2px 0 0px"
+                >
+                  <input
+                    type="text"
+                    class="form-control"
+                    value="{{
+                      (stock.value.prickedQty * 100) /
+                        stock.controls.expectedSeedling.value || 0
+                        | number: '1.2-2'
+                    }}%"
+                    disabled
+                  />
+                </div>
+                <div
+                  class="col-xs-2"
+                  style="margin-top: 10px; padding: 0 2px 0 0px"
+                >
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="distributed"
+                  />
+                </div>
+                <div
+                  class="col-xs-1"
+                  style="margin-top: 10px; padding: 0 2px 0 0px"
+                >
+                  <input
+                    [owlDateTimeTrigger]="dt2"
+                    [owlDateTime]="dt2"
+                    class="form-control"
+                    formControlName="pickingDate"
+                    placeholder="Dd/mm/yyyy"
+                  />
+                  <owl-date-time
+                    [pickerType]="'calendar'"
+                    [scrollStrategy]="scrollStrategy"
+                    #dt2
+                  ></owl-date-time>
+                </div>
+              </span>
+            </span>
+          </div>
+        </div>
+      </span>
+    </div>
+    <div class="text-center" *ngIf="addNursery.value.siteAvailability === 'no'">
+      <br />
+      <br />
+      <button
+        type="button"
+        class="btn"
+        style="
+          width: 250px;
+          height: 50px;
+          margin-right: 10px;
+          background-color: #bababa;
+          color: #ffffff;
+        "
+        routerLink="/admin/seedling/nursery/list"
+      >
+        Cancel
+      </button>
+      <button
+        class="btn"
+        (click)="onCreate()"
+        [disabled]="loading"
+        style="
+          width: 250px;
+          height: 50px;
+          background-color: #4f210d;
+          color: #ffffff;
+        "
+        [disabled]="loading"
+      >
+        <span *ngIf="!loading; else other_content">Update Nursery</span>
+        <ng-template #other_content>
+          <div class="loader">
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+          </div>
+        </ng-template>
+      </button>
+    </div>
+    <br />
+  </form>
+</div>

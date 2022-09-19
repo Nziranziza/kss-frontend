@@ -87,7 +87,7 @@ body {
 }
 .content-wrapper {
   min-height: 100%;
-  background-color: #ecf0f5;
+  background-color: #ECF0F4 0% 0% no-repeat padding-box;
   z-index: 800;
 }
 .main-footer {

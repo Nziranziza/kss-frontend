@@ -2,7 +2,7 @@
   <div class="modal-body text-center" style="font-size: 1.5em">
     <i class="fa fa-check" style="color: #00a513; font-size: 4.5em"></i>
     <br />
-    Thank you Training <br />
+    Thank you <br />
     <span style="font-weight: bold">
       “ {{ createTraining.value.trainingName }} “
     </span>
@@ -40,7 +40,14 @@
             <div>
               <label class="control-label label-required">Associated GAP</label>
               <div class="confirm-text-box confirm-text">
-                {{ createTraining.value.adoptionGap }}
+                <li
+                  *ngFor="
+                    let gaps of createTraining.value.adoptionGap;
+                    let i = index
+                  "
+                >
+                  {{ gaps.name }}
+                </li>
               </div>
             </div>
             <div>
@@ -121,148 +128,140 @@
   </div>
 </ng-template>
 <h3>
-  Training Management > <span style="font-weight: bold"> Add a Training </span>
+  {{ "training_management" | translate }} >
+  <span style="font-weight: bold"> {{ "add_training" | translate }} </span>
 </h3>
+<app-list-message [message]="message"></app-list-message>
 <app-list-errors [errorList]="errors"></app-list-errors>
 <form [formGroup]="createTraining" (ngSubmit)="onSubmit()">
   <div class="row">
     <div class="col-xs-12">
       <div class="box">
         <div class="box-body">
-          <div class="col-sm-6">
-            <div class="form-group">
-              <label class="control-label label-required">Training Name</label>
-              <input
-                type="text"
-                formControlName="trainingName"
-                class="form-control"
-                [ngClass]="{
-                  'has-error':
-                    trainingName.invalid &&
-                    (trainingName.dirty || trainingName.touched)
-                }"
-              />
-              <div
-                *ngIf="
-                  trainingName.invalid &&
-                  (trainingName.dirty || trainingName.touched)
-                "
-                class="alert"
-              >
-                <div *ngIf="trainingName.errors['required']" style="color: red">
-                  *Training Name is required.
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6">
-            <div class="form-group">
-              <label class="control-label label-required"
-                >Training Description</label
-              >
-              <input
-                type="text"
-                formControlName="description"
-                class="form-control"
-                [ngClass]="{
-                  'has-error':
-                    description.invalid &&
-                    (description.dirty || description.touched)
-                }"
-              />
-              <div
-                *ngIf="
-                  description.invalid &&
-                  (description.dirty || description.touched)
-                "
-                class="alert"
-              >
-                <div *ngIf="description.errors['required']" style="color: red">
-                  *Description is required.
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-sm-6">
-            <div class="form-group">
-              <label class="control-label label-required">Associated GAP</label>
-
-              <ng-multiselect-dropdown
-                formControlName="adoptionGap"
-                [placeholder]="'select gap'"
-                [settings]="gapDropdownSettings"
-                [data]="gaps"
-                [(ngModel)]="createTraining.value.adoptionGap"
-                (onSelect)="onGapSelect($event)"
-              >
-              </ng-multiselect-dropdown>
-
-              <div
-                *ngIf="
-                  adoptionGap.invalid &&
-                  (adoptionGap.dirty || adoptionGap.touched)
-                "
-                class="alert"
-              >
-                <div *ngIf="adoptionGap.errors['required']" style="color: red">
-                  *Associated Gap is required.
-                </div>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="control-label label-required">Status</label>
-              <select class="form-control" formControlName="status">
-                <option value="" disabled>select status</option>
-                <option value="active" selected>Active</option>
-                <option value="inactive">Inactive</option>
-              </select>
-            </div>
-          </div>
-          <div class="col-sm-6">
-            <div class="form-group">
-              <label class="control-label label-required">Attach files</label>
-              <label for="file-input" class="training-file-input">
-                <img
-                  src="assets/dist/img/sks/ico_export.svg"
-                  class="training-file-input-icon"
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="control-label label-required">{{
+                  "training_name" | translate
+                }}</label>
+                <input
+                  type="text"
+                  formControlName="trainingName"
+                  class="form-control"
                 />
-                <div class="training-file-input-text">
-                  Click or Drag PDF File to this area to upload
-                </div>
-              </label>
-              <input
-                id="file-input"
-                type="file"
-                multiple
-                class="form-control"
-                style="display: none"
-                (change)="onFileSelected($event)"
-                accept="application/pdf"
-              />
-              <div class="training-file-list">
-                Attached file(s) to upload <br /><br />
-                <div
-                  *ngFor="let file of files; let i = index"
-                  style="padding-bottom: 6px"
+                <app-inline-errors
+                  *ngIf="
+                    createTraining.controls.trainingName.invalid &&
+                    (createTraining.controls.trainingName.dirty ||
+                      createTraining.controls.trainingName.touched)
+                  "
+                  [errors]="createTraining.controls.trainingName.errors"
+                  [label]="'training_name'"
                 >
-                  <span style="width: 75%; float: left">
-                    <img
-                      src="assets/dist/img/sks/ico_attach.svg"
-                      style="margin-right: 5px"
-                    />
-                    {{ file.name }}
-                  </span>
-                  <span style="margin-left: 40px; width: 12%; float: left">
-                    {{ file.size }}
-                  </span>
-                  <i
-                    class="fa fa-times"
-                    aria-hidden="true"
-                    (click)="removeSelectedFile(index)"
-                    style="color: red"
-                  ></i>
-                  <br />
+                </app-inline-errors>
+              </div>
+            </div>
+            <div
+              class="col-sm-6"
+              *ngIf="createTraining.value.trainingName != ''"
+            >
+              <div class="form-group">
+                <label class="control-label label-required">{{
+                  "training_description" | translate
+                }}</label>
+                <input
+                  type="text"
+                  formControlName="description"
+                  class="form-control"
+                />
+                <app-inline-errors
+                  *ngIf="
+                    createTraining.controls.description.invalid &&
+                    (createTraining.controls.description.dirty ||
+                      createTraining.controls.description.touched)
+                  "
+                  [errors]="createTraining.controls.description.errors"
+                  [label]="'description'"
+                >
+                </app-inline-errors>
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="createTraining.value.trainingName != ''">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="control-label label-required">{{
+                  "associated_gap" | translate
+                }}</label>
+
+                <ng-multiselect-dropdown
+                  formControlName="adoptionGap"
+                  [settings]="gapDropdownSettings"
+                  [data]="gaps"
+                  [(ngModel)]="createTraining.value.adoptionGap"
+                  (onSelect)="onGapSelect($event)"
+                >
+                </ng-multiselect-dropdown>
+
+                <app-inline-errors
+                  *ngIf="
+                    createTraining.controls.adoptionGap.invalid &&
+                    (createTraining.controls.adoptionGap.dirty ||
+                      createTraining.controls.adoptionGap.touched)
+                  "
+                  [errors]="createTraining.controls.adoptionGap.errors"
+                  [label]="'adoption_gap'"
+                >
+                </app-inline-errors>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="control-label label-required">{{
+                  "attach_files" | translate
+                }}</label>
+                <label for="file-input" class="training-file-input">
+                  <img
+                    src="assets/dist/img/sks/ico_export.svg"
+                    class="training-file-input-icon"
+                  />
+                  <div class="training-file-input-text">
+                    {{ "click_drag_pdf_file" | translate }}
+                  </div>
+                </label>
+                <input
+                  id="file-input"
+                  type="file"
+                  multiple
+                  class="form-control"
+                  style="display: none"
+                  (change)="onFileSelected($event)"
+                  accept="application/pdf"
+                />
+                <div class="training-file-list">
+                  Attached file(s) to upload <br /><br />
+                  <div
+                    *ngFor="let file of files; let i = index"
+                    style="padding-bottom: 6px"
+                  >
+                    <span style="width: 75%; float: left">
+                      <img
+                        src="assets/dist/img/sks/ico_attach.svg"
+                        style="margin-right: 5px"
+                      />
+                      {{ file.name }}
+                    </span>
+                    <span style="margin-left: 40px; width: 12%; float: left">
+                      {{ file.size }}
+                    </span>
+                    <i
+                      class="fa fa-times"
+                      aria-hidden="true"
+                      (click)="removeSelectedFile(index)"
+                      style="color: red"
+                    ></i>
+                    <br />
+                  </div>
                 </div>
               </div>
             </div>
@@ -271,14 +270,14 @@
       </div>
     </div>
   </div>
-  <div class="text-center">
+  <div class="text-center" *ngIf="createTraining.value.trainingName != ''">
     <button
       type="button"
       class="btn btn-success"
       style="width: 250px; height: 50px; margin-right: 10px"
       routerLink="/admin/training/list"
     >
-      Cancel
+      {{ "cancel" | translate }}
     </button>
     <button
       type="button"
@@ -286,7 +285,7 @@
       (click)="onFileUpload(content)"
       style="width: 250px; height: 50px"
     >
-      Add Training
+      {{ "add_training" | translate }}
     </button>
   </div>
 </form>

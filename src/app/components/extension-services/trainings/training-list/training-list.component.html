@@ -1,45 +1,74 @@
 <h3>
   <div class="row">
-    <div class="col-sm-8">Training Management</div>
+    <div class="col-sm-10">Training Management</div>
     <div class="col-sm-2">
       <a class="btn btn-success pull-right" routerLink="/admin/training/create"
         ><i class="fa fa-plus"></i> Add a Training
       </a>
     </div>
-    <div class="col-sm-2">
-      <a
-        class="btn btn-success pull-left"
-        routerLink="/admin/training/schedule/list"
-        ><i class="fa fa-calendar"></i> Scheduled Training
-      </a>
-    </div>
   </div>
 </h3>
+<div class="col-sm-12">
+  <app-list-message [message]="message"></app-list-message>
+  <app-list-errors [errorList]="errors"></app-list-errors>
+</div>
 <div class="col-sm-12 stats-section">
   <div class="row">
     <div class="col-sm-12 text-center stats-title">Training Summary</div>
-    <div class="col-sm-4">
+    <div class="col-sm-3">
       <div class="text-center stats-box">
         <h3>Trainings Added</h3>
         <h1>{{ trainings.length }}</h1>
       </div>
     </div>
-    <div class="col-sm-4">
-      <div class="text-center stats-box middle-box">
-        <h3>Scheduled Trainings</h3>
-        <h1>000</h1>
+    <div class="col-sm-3">
+      <div class="text-center stats-box">
+        <h3>Total Trainees</h3>
+        <h1>{{ trainingsStats?.totalInvitees }}</h1>
       </div>
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-3">
+      <div class="text-center stats-box middle-box">
+        <h3>Total Attended Trainees</h3>
+        <div class="row">
+          <div class="col-sm-5">
+            <h1 style="margin-top: -5px; margin-left: 5px">
+              {{ trainingsStats?.totalPresent }}
+            </h1>
+          </div>
+          <div class="col-sm-3">
+            <span style="white-space: pre"> Male </span>
+            {{ trainingsStats?.malePresent }}
+          </div>
+          <div class="col-sm-3">
+            <span style="white-space: pre"> Female </span>
+            {{ trainingsStats?.femalePresent }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-3">
       <div class="text-center stats-box third-box">
-        <h3>Trainings Given</h3>
-        <h1>000</h1>
+        <h3>Total Not Attended Trainees</h3>
+        <div class="row">
+          <div class="col-sm-5">
+            <h1 style="margin-top: -5px; margin-left: 5px">
+              {{ trainingsStats?.totalAbsent }}
+            </h1>
+          </div>
+          <div class="col-sm-3">
+            <span style="white-space: pre"> Male </span>
+            {{ trainingsStats?.maleAbsent }}
+          </div>
+          <div class="col-sm-3">
+            <span style="white-space: pre"> Female </span>
+            {{ trainingsStats?.femaleAbsent }}
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </div>
-<app-list-message [message]="message"></app-list-message>
-<app-list-errors [errorList]="errors"></app-list-errors>
 <div class="row">
   <div class="col-xs-12">
     <div class="box">
@@ -63,54 +92,51 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let training of trainings | paginate: config">
-              <td>{{ training.createdAt | date: "short" }}</td>
-              <td>{{ training.trainingName }}</td>
-              <td>{{ training.description }}</td>
-              <td>{{ training.adoptionGap }}</td>
-              <td>{{ training.materials.length }} files</td>
-              <td>Active</td>
-              <td>
-                <button
-                  appRequiredSeason
-                  class="btn btn-action-no-border btn-margin details-button"
-                  routerLink="/admin/training/details/{{ training._id }}"
-                >
-                  <em class="fa fa-eye"></em>
-                </button>
-                <button
-                  appRequiredSeason
-                  (click)="openDeleteModal(training)"
-                  class="btn btn-action-no-border btn-margin"
-                >
-                  <em class="fa fa-trash"></em>
-                </button>
-                <button
-                  class="btn btn-action-no-border btn-margin btn-sm details-button"
-                  routerLink="/admin/training/edit/{{ training._id }}"
-                >
-                  <em class="fa fa-pencil"></em>
-                </button>
-              </td>
-            </tr>
+            <ng-container *ngFor="let training of trainings">
+              <tr>
+                <td>{{ training.createdAt | date: "short" }}</td>
+                <td>{{ training.trainingName }}</td>
+                <td>{{ training.description }}</td>
+                <td>
+                  <div *ngFor="let adoption of training.adoptionGaps">
+                    {{ adoption?.gap_name }}
+                  </div>
+                </td>
+                <td>{{ training.materials.length }} files</td>
+                <td>
+                  {{
+                    training.status == "scheduled"
+                      ? "Scheduled"
+                      : "Not Scheduled"
+                  }}
+                </td>
+                <td>
+                  <button
+                    appRequiredSeason
+                    class="btn btn-action-no-border btn-margin details-button"
+                    (click)="openViewModal(training._id)"
+                  >
+                    <em class="fa fa-eye"></em>
+                  </button>
+                  <button
+                    appRequiredSeason
+                    (click)="openDeleteModal(training._id)"
+                    class="btn btn-action-no-border btn-margin"
+                    *ngIf="training.status !== 'scheduled'"
+                  >
+                    <em class="fa fa-trash"></em>
+                  </button>
+                  <button
+                    class="btn btn-action-no-border btn-margin btn-sm details-button"
+                    routerLink="/admin/training/edit/{{ training._id }}"
+                  >
+                    <em class="fa fa-pencil"></em>
+                  </button>
+                </td>
+              </tr>
+            </ng-container>
           </tbody>
         </table>
-      </div>
-      <div class="table-footer" style="width: 100%" *ngIf="showData">
-        <pagination-controls
-          class="custom-pagination"
-          [maxSize]="maxSize"
-          [directionLinks]="directionLinks"
-          [autoHide]="autoHide"
-          [responsive]="responsive"
-          [previousLabel]="labels.previousLabel"
-          [nextLabel]="labels.nextLabel"
-          [screenReaderPaginationLabel]="labels.screenReaderPaginationLabel"
-          [screenReaderPageLabel]="labels.screenReaderPageLabel"
-          [screenReaderCurrentLabel]="labels.screenReaderCurrentLabel"
-          (pageChange)="onPageChange($event)"
-        >
-        </pagination-controls>
       </div>
     </div>
   </div>

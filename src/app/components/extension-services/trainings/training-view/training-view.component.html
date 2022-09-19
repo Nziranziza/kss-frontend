@@ -1,23 +1,66 @@
-<div class="modal-body">
+<div class="modal-body extended-modal-body">
+  <div
+    (click)="modal.dismiss('cancel click')"
+    class="btn-modal-close text-center"
+  >
+    <em class="fa fa-close"></em>
+  </div>
   <div class="stats-section">
     <div class="row">
       <div class="col-sm-12 text-center stats-title">Statistics</div>
       <div class="col-sm-4">
         <div class="text-center stats-box">
-          <h3>attendance</h3>
-          <h1>000</h1>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div class="text-center stats-box middle-box">
-          <h3>rate</h3>
-          <h1>000</h1>
+          <h3>Attended Trainees</h3>
+          <div class="row">
+            <div class="col-sm-5">
+              <h1 style="margin-top: -5px; margin-left: 5px">
+                {{ trainingsStats.totalPresent }}
+              </h1>
+            </div>
+            <div class="col-sm-3">
+              <span style="white-space: pre"> Male </span>
+              {{ trainingsStats.malePresent }}
+            </div>
+            <div class="col-sm-3">
+              <span style="white-space: pre"> Female </span>
+              {{ trainingsStats.femalePresent }}
+            </div>
+          </div>
         </div>
       </div>
       <div class="col-sm-4">
         <div class="text-center stats-box third-box">
-          <h3>pending</h3>
-          <h1>000</h1>
+          <h3>Not Attended Trainees</h3>
+          <div class="row">
+            <div class="col-sm-5">
+              <h1 style="margin-top: -5px; margin-left: 5px">
+                {{ trainingsStats.totalAbsent }}
+              </h1>
+            </div>
+            <div class="col-sm-3">
+              <span style="white-space: pre"> Male </span>
+              {{ trainingsStats.maleAbsent }}
+            </div>
+            <div class="col-sm-3">
+              <span style="white-space: pre"> Female </span>
+              {{ trainingsStats.femaleAbsent }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="text-center stats-box middle-box">
+          <h3>Attendance Rate</h3>
+          <h1>
+            {{
+              trainingsStats.totalPresent > 0
+                ? (
+                    (trainingsStats.totalPresent * 100) /
+                    trainingsStats.totalInvitees
+                  ).toFixed(0)
+                : (0 | number: "1.1-1")
+            }}%
+          </h1>
         </div>
       </div>
     </div>
@@ -43,14 +86,8 @@
                 >
                 <div class="confirm-text-box confirm-text">
                   <li *ngFor="let gaps of training.adoptionGaps; let i = index">
-                    {{ gaps.name }}
+                    {{ gaps.gap_name }}
                   </li>
-                </div>
-              </div>
-              <div>
-                <label class="control-label label-required">Status</label>
-                <div class="confirm-text-box confirm-text">
-                  {{ training.status }}
                 </div>
               </div>
             </div>
@@ -98,6 +135,7 @@
     </div>
   </div>
   <div class="box">
+    <h4 class="text-center">List of Associated Schedule</h4>
     <div class="box-body table-responsive">
       <app-loader *ngIf="loading"></app-loader>
       <table
@@ -115,47 +153,24 @@
             <th>Trainer</th>
             <th>Trainees</th>
             <th>Status</th>
-            <th class="text-center">Actions / To Do about</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let schedule of training.schedules">
+          <tr *ngFor="let schedule of training.schedules | paginate: config">
             <td>{{ schedule.createdAt | date: "short" }}</td>
             <td>{{ schedule.trainingId.trainingName }}</td>
             <td>{{ schedule.startTime | date: "short" }}</td>
-            <td>{{ schedule.venueName }}</td>
-            <td>{{ schedule.trainer.fullName }}</td>
-            <td>{{ schedule.trainees.length }} trainees</td>
-            <td>{{ schedule.status }}</td>
             <td>
-              <button
-                appRequiredSeason
-                class="btn btn-action-no-border btn-margin details-button"
-                routerLink="/admin/training/schedule/view/{{ schedule._id }}"
-              >
-                <em class="fa fa-eye"></em>
-              </button>
-              <button
-                appRequiredSeason
-                (click)="openDeleteModal(schedule)"
-                class="btn btn-action-no-border btn-margin"
-              >
-                <em class="fa fa-close"></em>
-              </button>
-              <button
-                appRequiredSeason
-                (click)="open(content); selectedSchedule(schedule)"
-                class="btn btn-action-no-border btn-margin"
-              >
-                <em class="fa fa-envelope-o"></em>
-              </button>
-              <button
-                class="btn btn-action-no-border btn-margin btn-sm details-button"
-                routerLink="/admin/training/schedule/edit/{{ schedule._id }}"
-              >
-                <em class="fa fa-pencil"></em>
-              </button>
+              {{ schedule?.location.prov_id?.namek }} >
+              {{ schedule?.location.dist_id?.name }} >
+              {{ schedule?.location.sect_id?.name }} >
+              {{ schedule?.location.cell_id?.name }} >
+              {{ schedule?.location.village_id?.name }} >
+              {{ schedule?.venueName }}
             </td>
+            <td>{{ schedule?.trainer.fullName }}</td>
+            <td>{{ schedule?.trainees.length }} trainees</td>
+            <td>{{ schedule?.status }}</td>
           </tr>
         </tbody>
       </table>

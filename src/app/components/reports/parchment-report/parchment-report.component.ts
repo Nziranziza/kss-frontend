@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup} from '@angular/forms';
+import {FormBuilder, FormGroup} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AuthenticationService, ExcelServicesService, OrganisationService, OrganisationTypeService} from '../../../core';
 import {HelperService} from '../../../core';
@@ -12,6 +12,7 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ParchmentReportDetailComponent} from './parchment-report-detail/parchment-report-detail.component';
 import {DatePipe} from '@angular/common';
 import {Subject} from 'rxjs';
+import { ChartType } from 'angular-google-charts';
 
 @Component({
   selector: 'app-parchment-report',
@@ -33,7 +34,7 @@ export class ParchmentReportComponent extends BasicComponent implements OnInit {
   showReport = false;
   showDistrictAllCWS = false;
   graph1 = {
-    type: 'ComboChart',
+    type: ChartType.ComboChart,
     data: [],
     columnNames: ['CWS', 'Cherries', 'Parchments', 'Expected Parchments'],
     options: {

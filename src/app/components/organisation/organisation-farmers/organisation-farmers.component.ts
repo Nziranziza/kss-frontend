@@ -29,6 +29,7 @@ import {DataTableDirective} from 'angular-datatables';
 export class OrganisationFarmersComponent
   extends BasicComponent
   implements OnInit, OnDestroy {
+  cwsDashes: any;
   constructor(
     private organisationService: OrganisationService,
     private userService: UserService,
@@ -119,6 +120,9 @@ export class OrganisationFarmersComponent
   ngOnInit() {
     this.route.params.subscribe((params) => {
       this.organisationId = params['organisationId'.toString()];
+    });
+    this.route.queryParams.subscribe((params) => {
+      this.cwsDashes = params['cwsDashes'.toString()];
     });
     this.parameters = {
       length: 10,
@@ -352,6 +356,7 @@ export class OrganisationFarmersComponent
     this.organisationService
       .getAllFarmers(this.organisationId)
       .subscribe((data) => {
+        this.downloadingAll = false;
         data.content.map((item) => {
           const temp = {
             NAMES: item.userInfo.surname + '  ' + item.userInfo.foreName,
@@ -368,7 +373,6 @@ export class OrganisationFarmersComponent
           };
           this.allFarmers.push(temp);
         });
-        this.downloadingAll = false;
       });
   }
 
@@ -410,7 +414,7 @@ export class OrganisationFarmersComponent
           this.districts = dt;
           this.filterForm.controls.searchByLocation
             .get('prov_id'.toString())
-            .patchValue(this.org.location.prov_id._id);
+            .patchValue(this.org.location.prov_id._id, {emitEvent: false});
           if (this.searchLocationBy === 'farm') {
             this.filterForm.controls.searchByLocation
               .get('dist_id'.toString())

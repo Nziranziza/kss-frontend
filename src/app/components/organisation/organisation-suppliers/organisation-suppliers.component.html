@@ -10,7 +10,7 @@
 </div>
 <app-list-message [message]="message"></app-list-message>
 <div class="row">
-  <div class="col-md-12">
+  <div class="col-md-12" *ngIf="cwsDashes === undefined">
     <div class="box box-default">
       <div class="box-header with-border">
         <h3 class="box-title">{{org? org.organizationName : '' }} >> suppliers</h3>
@@ -207,7 +207,7 @@
             <th>National ID</th>
             <th>Phone number</th>
             <th>Reg number</th>
-            <th></th>
+            <th *ngIf="cwsDashes === undefined"></th>
           </tr>
           </thead>
           <tbody>

@@ -1,11 +1,15 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {AuthenticationService, BasicComponent} from '../../../core';
-import {MessageService} from '../../../core/services';
 import {HttpHeaders} from '@angular/common/http';
-import {AuthorisationService} from '../../../core/services';
-import {SeasonService} from '../../../core/services';
+import {
+  AuthenticationService,
+  AuthorisationService,
+  BasicComponent,
+  MessageService,
+  OrganisationService
+} from '../../../core';
+import {SeasonService} from '../../../core';
 
 declare var $;
 
@@ -17,6 +21,7 @@ declare var $;
 export class LoginComponent extends BasicComponent implements OnInit, OnDestroy {
 
   authForm: FormGroup;
+  viewPasswordEnabled = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -25,6 +30,7 @@ export class LoginComponent extends BasicComponent implements OnInit, OnDestroy 
     private formBuilder: FormBuilder,
     private messageService: MessageService,
     private authorisationService: AuthorisationService,
+    private organisationService: OrganisationService,
     private seasonService: SeasonService
   ) {
     super();
@@ -76,6 +82,10 @@ export class LoginComponent extends BasicComponent implements OnInit, OnDestroy 
     }
   }
 
+  viewPassword() {
+    this.viewPasswordEnabled = !this.viewPasswordEnabled;
+  }
+
   onSubmit() {
     if (!this.authForm.invalid) {
       const credentials = this.authForm.value;
@@ -87,11 +97,17 @@ export class LoginComponent extends BasicComponent implements OnInit, OnDestroy 
                 this.authenticationService.setCurrentSeason(item);
               }
             });
-            this.afterLogInRedirect();
           });
         },
         err => {
           this.setError(err.errors);
+        }, () => {
+          this.organisationService.getServices(this.authenticationService.getCurrentUser().info.org_id).subscribe((servicesDt) => {
+            const services = servicesDt.data;
+            this.authenticationService.setServices(services);
+          }, () => {},  () => {
+            this.afterLogInRedirect();
+          });
         });
 
     } else {
@@ -116,7 +132,7 @@ export class LoginComponent extends BasicComponent implements OnInit, OnDestroy 
     } else if (this.authorisationService.isSiteManager()) {
       this.router.navigateByUrl('admin/input/site/distribution');
     } else {
-      this.router.navigateByUrl('admin/organisations');
+      this.router.navigateByUrl('admin/dashboard');
     }
   }
 }

@@ -16,7 +16,7 @@
         <div class="form-group">
           <label class="control-label">Land UPI number</label>
           <input type="text" formControlName="upiNumber" class="form-control" placeholder="00/000/00/000"
-                 (input)="validateUPI($event.target.value)">
+                 (input)="validateUPI($event)">
         </div>
       </div>
       <div class="col-xs-6">
@@ -25,7 +25,7 @@
           <input type="text" formControlName="landOwner" class="form-control">
         </div>
       </div>
-      <div formGroupName="location">
+      <div formGroupName="location" *ngIf="!showUPILocations; else locationIfUpi">
         <div class="col-xs-2">
           <div class="form-group">
             <span class="">Province</span>
@@ -109,6 +109,105 @@
           </div>
         </div>
       </div>
+      <ng-template #locationIfUpi class="col-sm-12">
+        <div formGroupName="location_if_upi" class="row">
+          <div class="col-xs-2">
+            <div class="form-group">
+              <span class="">Province</span>
+              <select
+                class="form-control"
+                formControlName="prov_id"
+              >
+                <option
+                  *ngFor="let province of provinces"
+                  value="{{ province._id }}"
+                >
+                  {{ province.namee }}
+                </option>
+              </select>
+              <div *ngIf="!checkIfUpiinValidZoning.prov_id" class="input-error">
+                <div>UPI Province not in CWS Covered Area.</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-2">
+            <div class="form-group">
+              <span class="">District</span>
+              <select
+                class="form-control"
+                formControlName="dist_id"
+              >
+                <option
+                  *ngFor="let district of districts"
+                  value="{{ district._id }}"
+                >
+                  {{ district.name }}
+                </option>
+              </select>
+              <div *ngIf="!checkIfUpiinValidZoning.dist_id" class="input-error">
+                <div>UPI District not in CWS Covered Area.</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-2">
+            <div class="form-group">
+              <span class="">Sector</span>
+              <select
+                class="form-control"
+                formControlName="sect_id"
+              >
+                <option
+                  *ngFor="let sector of sectors"
+                  value="{{ sector._id }}"
+                >
+                  {{ sector.name }}
+                </option>
+              </select>
+              <div *ngIf="!checkIfUpiinValidZoning.sect_id" class="input-error">
+                <div>UPI Sector not in CWS Covered Area.</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-2">
+            <div class="form-group">
+              <span class="">Cell</span>
+              <select
+                class="form-control"
+                formControlName="cell_id"
+              >
+                <option
+                  *ngFor="let cell of cells"
+                  value="{{ cell._id }}"
+                >
+                  {{ cell.name }}
+                </option>
+              </select>
+              <div *ngIf="!checkIfUpiinValidZoning.cell_id" class="input-error">
+                <div>UPI Cell not in CWS Covered Area.</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-2">
+            <div class="form-group">
+              <span class="">village</span>
+              <select
+                class="form-control"
+                formControlName="village_id"
+              >
+                <option
+                  *ngFor="let village of villages"
+                  value="{{ village._id }}"
+                >
+                  {{ village.name }}
+                </option>
+              </select>
+              <div *ngIf="!checkIfUpiinValidZoning.village_id" class="input-error">
+                <div>UPI Village not in CWS Covered Area.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
       <div class="col-xs-6">
         <div class="form-group">
           <label class="control-label">Longitude geo coordinate</label>
@@ -125,7 +224,7 @@
         <div class="form-group">
           <label class="control-label">Status</label>
           <select class="form-control" formControlName="active">
-            <option value=""></option>
+            <option value="1">Active</option>
             <option value="1">active</option>
             <option value="0">inactive</option>
           </select>
@@ -150,7 +249,7 @@
             <td style="padding-left: 0;">
               <span> <b>Number of trees </b> </span>
               <div style="margin-bottom: 10px; margin-top: 10px;">
-                <input type="number" formControlName="numberOfTrees" class="form-control">
+                <input type="number" min="0" formControlName="numberOfTrees" class="form-control">
                 <div
                   *ngIf="editFarmerRequestForm.controls.numberOfTrees.invalid && (editFarmerRequestForm.controls.numberOfTrees.dirty || editFarmerRequestForm.controls.numberOfTrees.touched)"
                   class="input-error">
@@ -247,7 +346,21 @@
     <div class="row">
       <div class="col-xs-12">
         <button class="btn btn-warning btn-margin pull-right" (click)="modal.dismiss()" type="button">Cancel</button>
-        <button class="btn btn-success pull-right" [disabled]="!save" type="submit">Save</button>
+        <button
+          class="btn btn-success pull-right btn-md"
+          type="submit"
+          [disabled]="!save || loading"
+        >
+          <span *ngIf="!loading; else other_content">Save</span>
+          <ng-template #other_content>
+            <div class="loader">
+              <div class="line"></div>
+              <div class="line"></div>
+              <div class="line"></div>
+              <div class="line"></div>
+            </div>
+          </ng-template>
+        </button>
       </div>
     </div>
   </form>

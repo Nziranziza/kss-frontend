@@ -1,6 +1,6 @@
 <h3>
   Farmers Groups
-  <a class="btn btn-success" style="float: right" routerLink="/admin/farmers/group/create"><i
+  <a class="btn btn-success" style="float: right" routerLink="/admin/farmers/group/create" *appHasPermission="[1]"><i
     class="fa fa-plus"></i> Add a farmers group </a>
 </h3>
 
@@ -15,19 +15,19 @@
       <div class="col-sm-4">
         <div class="text-center stats-box">
           <h3>Farmers Groups</h3>
-          <h1>000</h1>
+          <h1>{{groups.length}}</h1>
         </div>
       </div>
       <div class="col-sm-4">
         <div class="text-center stats-box middle-box">
-          <h3>Training Attended</h3>
-          <h1>000</h1>
+          <h3>Group Members</h3>
+          <h1>{{groupMembersTotal}}</h1>
         </div>
       </div>
       <div class="col-sm-4">
         <div class="text-center stats-box third-box">
           <h3>Inactive Groups</h3>
-          <h1>000</h1>
+          <h1>0</h1>
         </div>
       </div>
     </div>
@@ -45,10 +45,10 @@
           <tr>
             <th>Date added</th>
             <th>Group name</th>
-            <th>Group leader names</th>
-            <th>Group leader contact</th>
+            <th>leader names & contact</th>
             <th>Address</th>
             <th>Group size</th>
+            <th>Meeting Day/Week</th>
             <th>Training <br/>
               attendance rate
             </th>
@@ -61,18 +61,18 @@
             <tr>
               <td> {{ group.createdAt | date:'y/LL/d - h:mm' }}</td>
               <td> {{ group.groupName }}</td>
-              <td> {{ group.leaderNames }}</td>
-              <td> {{ group.leaderPhoneNumber }}</td>
+              <td> {{ group.leaderNames }} > {{ group.leaderPhoneNumber }}</td>
               <td> <span style="text-transform: capitalize;">
-                {{ group.location.prov_id.namek }} >
-                {{ group.location.dist_id.name }} >
-                {{ group.location.sect_id.name }} >
-                {{ group.location.cell_id.name }} >
-                {{ group.location.village_id.name }}
+                {{ group.location.prov_id?.namek }} >
+                {{ group.location.dist_id?.name }} >
+                {{ group.location.sect_id?.name }} >
+                {{ group.location.cell_id?.name }} >
+                {{ group.location.village_id?.name }}
               </span>
               </td>
               <td><span>{{ group.members.length + ' ' + 'farmers'}}</span></td>
-              <td></td>
+              <td> {{ weekDays[group.meetingSchedule?.meetingDay - 1]}}</td>
+              <td> {{ group?.attendanceRate }} </td>
               <td>
                 <span class="profile-text">
                 <ng-container *ngIf="!group.active, else inactive"><span
@@ -85,15 +85,17 @@
                 <button
                   appRequiredSeason
                   class="btn btn-action-no-border btn-margin details-button"
+                  (click)="openViewModal(group._id)"
                 >
                   <em class="fa fa-eye"></em>
                 </button>
                 <button
                   (click)="openDelete(group)"
+                  *appHasPermission="[1]"
                   class="btn btn-action-no-border btn-margin">
                   <em class="fa fa-trash"></em>
                 </button>
-                <button class="btn btn-action-no-border btn-margin" [routerLink]="['/admin/farmers/group/edit', group._id]"
+                <button class="btn btn-action-no-border btn-margin" *appHasPermission="[1]" [routerLink]="['/admin/farmers/group/edit', group._id]"
                    style="margin-left: 10px;">
                   <em class="fa fa-pencil"></em>
                 </button>

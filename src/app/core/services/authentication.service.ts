@@ -21,6 +21,7 @@ export class AuthenticationService {
   setAuth(user: AuthUser) {
     localStorage.clear();
     this.jwtService.saveToken(user.token);
+    delete user.orgInfo.coveredSectors;
     this.setCurrentUser(user);
     this.setIsLoggedIn(true);
   }
@@ -71,6 +72,14 @@ export class AuthenticationService {
 
   setCurrentUser(user: AuthUser) {
     this.cookieService.set('user', JSON.stringify(user));
+  }
+
+  setServices(services: any) {
+
+    this.cookieService.set('services', JSON.stringify(services));
+  }
+  getServices() {
+    return JSON.parse(this.cookieService.get('services'));
   }
 
   isSeasonSet() {

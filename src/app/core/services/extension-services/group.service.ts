@@ -15,6 +15,9 @@ export class GroupService {
   list(body: any) {
     return this.apiService.post('/v1.1/groups/reference', body);
   }
+  all(body: any) {
+    return this.apiService.post('/v1.1/groups/report', body);
+  }
   post(body: any) {
     return this.apiService.put('/v1.1/groups', body);
   }
@@ -30,5 +33,9 @@ export class GroupService {
 
   getByName(body: any) {
     return this.apiService.post('/v1.1/groups/search', body);
+  }
+
+  checkNameStatus(body: any) {
+    return this.apiService.post('/v1.1/groups/exist', body);
   }
 }

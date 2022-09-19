@@ -27,10 +27,7 @@
             <div class="col-xs-2" *ngIf="!isCurrentUserDCC">
               <div class="form-group">
                 <div class="">
-                  <select
-                    class="form-control"
-                    formControlName="searchBy"
-                  >
+                  <select class="form-control" formControlName="searchBy">
                     <option value="farmer_location">
                       Search by farmer location
                     </option>
@@ -154,18 +151,17 @@
                 class="form-control"
                 placeholder="search.."
               />
-              <!-- <button
-            class="btn btn-warning pull-right btn-margin"
-            type="button"
-            (click)="onClearFilter()"
-          >
-            Clear
-          </button> -->
             </div>
           </div>
           <br />
           <button class="btn btn-action text-center" type="submit">
             <i class="fa fa-search"></i> Submit
+          </button>
+          <button
+            class="btn btn-warning btn-margin"
+            type="button"
+            (click)="onClearFilter()" >
+            Clear
           </button>
         </form>
       </div>
@@ -220,7 +216,7 @@
                   | paginate: config
               "
             >
-              <td></td>
+              <td>{{ farmer.userInfo.createdAt | date: "short" }}</td>
               <td *ngIf="farmer.userInfo.type === 2; else foreName">
                 {{ farmer.userInfo.groupName }}
               </td>
@@ -232,7 +228,19 @@
               <td>{{ farmer.userInfo.NID }}</td>
               <td>{{ farmer.userInfo.phone_number }}</td>
               <td>{{ farmer.userInfo.regNumber | uppercase }}</td>
-              <td></td>
+              <td>
+                {{ farmer.userInfo?.location?.prov_id.namek == null ? '-' :
+                  farmer.userInfo?.location?.prov_id.namek +
+                    " " +
+                    farmer.userInfo.location?.dist_id.name +
+                    " " +
+                    farmer.userInfo.location?.sect_id.name +
+                    " " +
+                    farmer.userInfo.location?.cell_id.name +
+                    " " +
+                    farmer.userInfo.location?.village_id.name
+                }}
+              </td>
               <td></td>
               <td></td>
               <td></td>

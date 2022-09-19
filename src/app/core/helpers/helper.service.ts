@@ -4,6 +4,7 @@ import {LocationService} from '../services';
 import {DatePipe} from '@angular/common';
 import {constant} from '../../../environments/constant';
 import * as moment from 'moment-timezone';
+import { TranslateService } from '@ngx-translate/core';
 
 
 @Injectable({
@@ -14,6 +15,7 @@ export class HelperService {
   constructor(
     private locationService: LocationService,
     private datePipe: DatePipe,
+    private translate: TranslateService
   ) {
   }
 
@@ -216,5 +218,13 @@ export class HelperService {
   setLocalTimeZone(time: string) {
     const momentTimeZone = moment(time);
     return momentTimeZone.tz(constant.timezone).format('YYYY-MM-DD').valueOf();
+  }
+
+  translateWord(word: string) {
+    let dataValue : string;
+    this.translate.get(word).subscribe((data) => {
+      dataValue = data;
+    });
+    return dataValue;
   }
 }

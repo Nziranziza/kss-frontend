@@ -10,7 +10,7 @@ import {
   ViewChild,
   ViewChildren
 } from '@angular/core';
-import {BasicComponent} from '../../../../core/library';
+import {BasicComponent} from '../../../../core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {DataTableDirective} from 'angular-datatables';
 import {Subject} from 'rxjs';
@@ -22,12 +22,12 @@ import {
   MessageService,
   OrganisationService,
   ParchmentService
-} from '../../../../core/services';
+} from '../../../../core';
 import {Router} from '@angular/router';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {PrepareGreenCoffeeService} from '../../../../core/services/prepare-green-coffee.service';
 import {DatePipe, isPlatformBrowser} from '@angular/common';
-import {HelperService} from '../../../../core/helpers';
+import {HelperService} from '../../../../core';
 import {isUndefined} from 'util';
 
 

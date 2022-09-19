@@ -4,7 +4,7 @@ import {CherrySupplyRoutingModule} from './cherry-supply-routing.module';
 import {CherrySupplyComponent} from './cherry-supply/cherry-supply.component';
 import {FusionChartsModule} from 'angular-fusioncharts';
 import {GoogleChartsModule} from 'angular-google-charts';
-import {OwlDateTimeModule, OwlNativeDateTimeModule} from 'ng-pick-datetime';
+import {OwlDateTimeModule, OwlNativeDateTimeModule} from 'ng-pick-datetime-ex';
 import {SharedModule} from '../../../shared';
 
 @NgModule({

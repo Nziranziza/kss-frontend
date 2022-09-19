@@ -19,14 +19,16 @@
           <tr *ngFor="let site of sites">
             <td> {{ site.siteName }}</td>
             <td>
-              <a class="btn btn-danger btn-margin btn-sm pull-right" 
+              <a class="btn btn-danger btn-margin btn-sm pull-right"
                 *appHasPermission="[0,6,5,[4,1],[4,2]]"
                 (click)="openDeleteModal(site)"
-                > 
+                >
                   <i class="fa fa-trash"></i>
               </a>
               <a class="btn btn-success btn-margin btn-sm pull-right" [routerLink]="['edit/', site._id]"
                  style="margin-left: 10px;"  *appHasPermission="[0,6,5,[4,1],[4,2]]"> Edit</a>
+              <a class="btn btn-success btn-margin btn-sm pull-right" [routerLink]="['dispatch-plan/', site._id]"
+                 style="margin-left: 10px;"  *appHasPermission="[0,6,5,[4,1],[4,2]]"> CWS Plan</a>
               <a routerLink="/admin/sites/{{site._id}}/pending-farmers" class="btn btn-margin btn-warning btn-sm pull-right" *appHasPermission="[0,6,5,8,[4,1],[4,2]]"><i
                 class="fa fa-users"></i> Pending farmers</a>
               <a routerLink="/admin/sites/{{site._id}}/farmers" class="btn btn-margin btn-info btn-sm pull-right" *appHasPermission="[0,6,5,8,[4,1],[4,2]]"><i

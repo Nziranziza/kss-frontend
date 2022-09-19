@@ -1,33 +1,35 @@
-import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   AuthenticationService,
   AuthorisationService,
   BasicComponent,
-  ConfirmDialogService, GroupService, MessageService,
-  OrganisationService,
-  SiteService, Training
+  GroupService,
+  MessageService,
 } from '../../../../core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {Subject} from 'rxjs';
-import {DataTableDirective} from 'angular-datatables';
-import {TrainingDeleteModal} from '../../trainings/training-delete-modal/training-delete-modal.component';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {ConfirmModalComponent} from '../../../../shared/layouts/confirm-modal/confirm-modal.component';
-import {error} from 'protractor';
+import { ActivatedRoute } from '@angular/router';
+import { Subject } from 'rxjs';
+
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ConfirmModalComponent } from '../../../../shared';
+import { ViewGroupComponent } from '../view-group/view-group.component';
 
 @Component({
   selector: 'app-farmer-group-list',
   templateUrl: './farmer-group-list.component.html',
-  styleUrls: ['./farmer-group-list.component.css']
+  styleUrls: ['./farmer-group-list.component.css'],
 })
-export class FarmerGroupListComponent extends BasicComponent implements OnInit, OnDestroy {
-
+export class FarmerGroupListComponent
+  extends BasicComponent
+  implements OnInit, OnDestroy
+{
   constructor(
-              private authorisationService: AuthorisationService,
-              private groupService: GroupService,
-              private route: ActivatedRoute,
-              private modal: NgbModal,
-              private authenticationService: AuthenticationService, private messageService: MessageService) {
+    private authorisationService: AuthorisationService,
+    private groupService: GroupService,
+    private route: ActivatedRoute,
+    private modal: NgbModal,
+    private authenticationService: AuthenticationService,
+    private messageService: MessageService
+  ) {
     super();
   }
   groups = [];
@@ -35,36 +37,47 @@ export class FarmerGroupListComponent extends BasicComponent implements OnInit, 
   dtOptions: DataTables.Settings = {};
   // @ts-ignore
   dtTrigger: Subject = new Subject();
+  groupMembersTotal = 0;
+  weekDays: string[] = [
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday',
+  ];
 
   ngOnInit() {
     this.listGroups();
     this.dtOptions = {
       pagingType: 'full_numbers',
-      pageLength: 10
+      pageLength: 10,
     };
     this.setMessage(this.messageService.getMessage());
   }
-
 
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
     this.messageService.clearMessage();
   }
 
-
   listGroups(): void {
     this.loading = true;
     const body = {
-      reference: this.authenticationService.getCurrentUser().info.org_id
+      reference: this.authenticationService.getCurrentUser().info.org_id,
     };
 
     this.groupService.list(body).subscribe((data) => {
       this.groups = data.data;
+      this.groups.forEach((group) => {
+        this.groupMembersTotal += group.members.length;
+      });
       this.dtTrigger.next();
     });
   }
 
-  openDelete(group: any, warning?: any ) {
+  openDelete(group: any, warning?: any) {
     const modalRef = this.modal.open(ConfirmModalComponent);
     modalRef.componentInstance.title = 'Delete group';
     modalRef.componentInstance.content =
@@ -74,10 +87,12 @@ export class FarmerGroupListComponent extends BasicComponent implements OnInit, 
     modalRef.componentInstance.warning = warning;
     modalRef.result.then((results) => {
       if (results.confirmed) {
-        this.groupService.delete(group._id).subscribe(() => {
+        this.groupService.delete(group._id).subscribe(
+          () => {
             this.loading = true;
             const body = {
-              reference: this.authenticationService.getCurrentUser().info.org_id
+              reference:
+                this.authenticationService.getCurrentUser().info.org_id,
             };
 
             this.groupService.list(body).subscribe((data) => {
@@ -87,10 +102,15 @@ export class FarmerGroupListComponent extends BasicComponent implements OnInit, 
             this.setMessage('Group successfully deleted!');
           },
           (err) => {
-          this.openDelete(group, err.message);
-        });
+            this.openDelete(group, err.message);
+          }
+        );
       }
     });
   }
 
+  openViewModal(id: string) {
+    const modalRef = this.modal.open(ViewGroupComponent);
+    modalRef.componentInstance.id = id;
+  }
 }

@@ -1,23 +1,64 @@
-<div class="modal-body">
+<div class="modal-body extended-modal-body">
+  <div
+    (click)="modal.dismiss('cancel click')"
+    class="btn-modal-close text-center"
+  >
+    <em class="fa fa-close"></em>
+  </div>
   <div class="stats-section">
     <div class="row">
       <div class="col-sm-12 text-center stats-title">Statistics</div>
       <div class="col-sm-4">
         <div class="text-center stats-box">
-          <h3>attendance</h3>
-          <h1>000</h1>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div class="text-center stats-box middle-box">
-          <h3>rate</h3>
-          <h1>000</h1>
+          <h3>Attended Trainees</h3>
+          <div class="row">
+            <div class="col-sm-5">
+              <h1 style="margin-top: -5px; margin-left: 5px">
+                {{ trainingsStats.totalPresent }}
+              </h1>
+            </div>
+            <div class="col-sm-3">
+              <span style="white-space: pre"> Male </span>
+              {{ trainingsStats.malePresent }}
+            </div>
+            <div class="col-sm-3">
+              <span style="white-space: pre"> Female </span>
+              {{ trainingsStats.femalePresent }}
+            </div>
+          </div>
         </div>
       </div>
       <div class="col-sm-4">
         <div class="text-center stats-box third-box">
-          <h3>pending</h3>
-          <h1>000</h1>
+          <h3>Not Attended Trainees</h3>
+          <div class="row">
+            <div class="col-sm-5">
+              <h1 style="margin-top: -5px; margin-left: 5px">
+                {{ trainingsStats.totalAbsent }}
+              </h1>
+            </div>
+            <div class="col-sm-3">
+              <span style="white-space: pre"> Male </span>
+              {{ trainingsStats.maleAbsent }}
+            </div>
+            <div class="col-sm-3">
+              <span style="white-space: pre"> Female </span>
+              {{ trainingsStats.femaleAbsent }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="text-center stats-box middle-box">
+          <h3>Attendance Rate</h3>
+          <h1>
+            {{
+              trainingsStats.totalPresent > 0
+                ? (trainingsStats.totalPresent * 100) /
+                  trainingsStats.totalInvitees
+                : (0 | number: "1.1-1")
+            }}%
+          </h1>
         </div>
       </div>
     </div>
@@ -44,25 +85,27 @@
             <div class="col-sm-6">
               <label class="control-label"> Province </label>
               <div class="confirm-text-box confirm-text">
-                {{ training.location ? training.location.prov_id.namek : "" }}
+                {{ training.location ? training.location.prov_id?.namek : "" }}
               </div>
               <label class="control-label"> Sector </label>
               <div class="confirm-text-box confirm-text">
-                {{ training.location ? training.location.sect_id.name : "" }}
+                {{ training.location ? training.location.sect_id?.name : "" }}
               </div>
               <label class="control-label"> Village </label>
               <div class="confirm-text-box confirm-text">
-                {{ training.location ? training.location.village_id.name : "" }}
+                {{
+                  training.location ? training.location.village_id?.name : ""
+                }}
               </div>
             </div>
             <div class="col-sm-6">
               <label class="control-label label-required"> District </label>
               <div class="confirm-text-box confirm-text">
-                {{ training.location ? training.location.dist_id.name : "" }}
+                {{ training.location ? training.location.dist_id?.name : "" }}
               </div>
               <label class="control-label"> Cell </label>
               <div class="confirm-text-box confirm-text">
-                {{ training.location ? training.location.cell_id.name : "" }}
+                {{ training.location ? training.location.cell_id?.name : "" }}
               </div>
               <label class="control-label"> Venue </label>
               <div class="confirm-text-box confirm-text">
@@ -81,7 +124,7 @@
             <div class="col-sm-6">
               <label class="control-label"> To </label>
               <div class="confirm-text-box confirm-text">
-                {{ training.endTime | date: "short"}}
+                {{ training.endTime | date: "short" }}
               </div>
             </div>
           </div>
@@ -96,6 +139,11 @@
           {{ training.trainer ? training.trainer.fullName : "" }}
         </div>
         <br />
+        <label class="control-label label-required">Group Name</label>
+        <div class="confirm-text-box confirm-text" style="margin-right: 20px">
+          {{ training.groupId?.groupName }}
+        </div>
+        <br />
         <h3 class="text-center">
           Trainees ( Total:
           {{ training.trainees ? training.trainees.length : 0 }} )
@@ -106,27 +154,28 @@
               <th>Farmer Names</th>
               <th>Contact</th>
               <th>Attended</th>
-              <th>Message Delivered</th>
+              <th>SMS Status</th>
             </tr>
             <tr *ngFor="let trainee of training.trainees; let i = index">
               <td>{{ trainee.foreName + " " + trainee.surName }}</td>
               <td>{{ trainee.phoneNumber }}</td>
               <td
                 style="text-align: center; color: green"
-                *ngIf="trainee.attendance"
+                *ngIf="trainee.attended"
               >
                 Yes
               </td>
               <td
                 style="text-align: center; color: red"
-                *ngIf="!trainee.attendance"
+                *ngIf="!trainee.attended"
               >
                 No
               </td>
-              <td style="text-align: center; color: red">No</td>
+              <td style="text-align: center; color: red">
+                {{ trainee.smsStatus == "NOT_SENT" ? "Not Sent" : "Sent" }}
+              </td>
             </tr>
           </thead>
-          <tbody></tbody>
         </table>
       </div>
     </div>

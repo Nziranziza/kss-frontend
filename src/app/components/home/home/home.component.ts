@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import objectFitImages from 'object-fit-images';
-
 declare var $;
 
 @Component({
@@ -18,5 +17,4 @@ export class HomeComponent implements OnInit {
       objectFitImages();
     });
   }
-
 }

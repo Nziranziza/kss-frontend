@@ -4,7 +4,7 @@ import {SharedModule} from '../../shared';
 import {InputDistributionRoutingModule} from './input-distribution-routing.module';
 import {DistributionPlanComponent} from './distribution-plan/distribution-plan.component';
 import {SiteDistributionComponent} from './site-distribution/site-distribution.component';
-import {OwlDateTimeModule, OwlNativeDateTimeModule} from 'ng-pick-datetime';
+import {OwlDateTimeModule, OwlNativeDateTimeModule} from 'ng-pick-datetime-ex';
 import {RecordSiteStockOutComponent} from './site-view-stockout/site-stock-out/record-site-stock-out.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {NgxPaginationModule} from 'ngx-pagination';

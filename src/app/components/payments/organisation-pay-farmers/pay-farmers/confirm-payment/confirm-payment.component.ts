@@ -37,7 +37,7 @@ export class ConfirmPaymentComponent extends BasicComponent implements OnInit {
   paymentRequest: any;
   isCashPaymentMode: boolean;
   paymentList: any;
-  isLoading: boolean = false;
+  isLoading = false;
 
   ngOnInit() {
     this.paymentSummary = this.paymentProcessingService.getSelectionStatistics();

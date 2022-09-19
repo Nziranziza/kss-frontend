@@ -1,45 +1,34 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { TrainingService, GapService } from '../../../../core';
-import { MessageService } from '../../../../core';
-import { HelperService } from '../../../../core';
-import { BasicComponent } from '../../../../core';
-import { IDropdownSettings } from 'ng-multiselect-dropdown';
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { TrainingService, GapService } from "../../../../core";
+import { HelperService } from "../../../../core";
+import { BasicComponent } from "../../../../core";
+import { IDropdownSettings } from "ng-multiselect-dropdown";
+import { SuccessModalComponent } from "../../../../shared";
+import { Router } from "@angular/router";
 
 @Component({
-  selector: 'app-training-create',
-  templateUrl: './training-create.component.html',
-  styleUrls: ['./training-create.component.css'],
+  selector: "app-training-create",
+  templateUrl: "./training-create.component.html",
+  styleUrls: ["./training-create.component.css"],
 })
 export class TrainingCreateComponent
   extends BasicComponent
-  implements OnInit, OnDestroy {
+  implements OnInit, OnDestroy
+{
   constructor(
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
     private trainingService: TrainingService,
     private gapService: GapService,
-    private helperService: HelperService,
-    private messageService: MessageService
+    private router: Router,
+    private helperService: HelperService
   ) {
     super();
   }
-
-  get trainingName() {
-    return this.createTraining.get('trainingName');
-  }
-  get description() {
-    return this.createTraining.get('description');
-  }
-  get adoptionGap() {
-    return this.createTraining.get('adoptionGap');
-  }
-  get status() {
-    return this.createTraining.get('status');
-  }
   createTraining: FormGroup;
-  closeResult = '';
+  closeResult = "";
   gapDropdownSettings: IDropdownSettings = {};
 
   files: any[] = [];
@@ -53,42 +42,65 @@ export class TrainingCreateComponent
   ngOnInit() {
     this.getGaps();
     this.createTraining = this.formBuilder.group({
-      trainingName: ['', Validators.required],
-      description: ['', Validators.required],
+      trainingName: ["", Validators.required],
+      description: ["", Validators.required],
       adoptionGap: [[], Validators.required],
-      status: ['active'],
+      status: ["active"],
     });
     this.gapDropdownSettings = {
       singleSelection: false,
-      idField: '_id',
-      textField: 'name',
-      selectAllText: 'Select All',
+      idField: "_id",
+      textField: "name",
+      selectAllText: "Select All",
       enableCheckAll: false,
-      unSelectAllText: 'UnSelect All',
+      unSelectAllText: "UnSelect All",
       itemsShowLimit: 6,
       allowSearchFilter: true,
     };
   }
 
+  get trainingName() {
+    return this.createTraining.get("trainingName");
+  }
+  get description() {
+    return this.createTraining.get("description");
+  }
+  get adoptionGap() {
+    return this.createTraining.get("adoptionGap");
+  }
+  get status() {
+    return this.createTraining.get("status");
+  }
+
   onGapSelect(item: any) {
-    console.log(item);
-    if (item._id === '') {
-      this.gapDropdownSettings.singleSelection = true;
+    const gapSelected = this.createTraining.get("adoptionGap".toString());
+    if (item._id === "") {
+      gapSelected.setValue(
+        [
+          {
+            _id: "",
+            name: "Not Applied",
+          },
+        ],
+        { emitEvent: false }
+      );
+    } else {
+      gapSelected.setValue(gapSelected.value.filter((e) => e._id !== ""));
     }
-    console.log(this.createTraining.get('adoptionGap'.toString()).value);
   }
   onDeGapSelect(item: any) {
-    if (item._id === '') {
+    if (item._id === "") {
       this.gapDropdownSettings.singleSelection = false;
     }
-    const gapSelected = this.createTraining.get('adoptionGap'.toString());
-    const gapOptions = gapSelected.value.filter(data => data._id !== item._id);
+    const gapSelected = this.createTraining.get("adoptionGap".toString());
+    const gapOptions = gapSelected.value.filter(
+      (data) => data._id !== item._id
+    );
     gapSelected.setValue(gapOptions, { emitEvent: false });
   }
   onGapSelectAll(items: any) {
-    const gapSelected = this.createTraining.get('adoptionGap'.toString());
+    const gapSelected = this.createTraining.get("adoptionGap".toString());
     gapSelected.setValue(items, { emitEvent: false });
-    console.log(this.createTraining.get('adoptionGap'.toString()).value);
   }
 
   onFileSelected(event) {
@@ -96,9 +108,9 @@ export class TrainingCreateComponent
       this.files.push({
         name: file.name,
         type: file.type,
-        url: '',
+        url: "",
         file,
-        size: Math.round(file.size / 1024) + ' ' + 'KB',
+        size: Math.round(file.size / 1024) + " " + "KB",
       });
     }
   }
@@ -106,12 +118,14 @@ export class TrainingCreateComponent
   getGaps(): void {
     this.loading = true;
     this.gapService.all().subscribe((data) => {
-      const newData: any[] = [{
-        _id : '',
-        name: 'Not Applied'
-      }];
-      data.data.forEach(data => {
-        newData.push({_id: data._id, name: data.name});
+      const newData: any[] = [
+        {
+          _id: "",
+          name: "Not Applied",
+        },
+      ];
+      data.data.forEach((gap) => {
+        newData.push({ _id: gap._id, name: gap.gap_name });
       });
       this.gaps = newData;
       this.loading = false;
@@ -122,14 +136,14 @@ export class TrainingCreateComponent
     const reader = new FileReader();
     return new Promise((resolve, reject) => {
       reader.addEventListener(
-        'load',
+        "load",
         () => {
           resolve(reader.result);
         },
         false
       );
       reader.addEventListener(
-        'error',
+        "error",
         (event) => {
           reject(event);
         },
@@ -148,7 +162,7 @@ export class TrainingCreateComponent
         });
         this.materials.push(data);
       }
-      this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' });
+      this.modalService.open(content, { ariaLabelledBy: "modal-basic-title" });
       this.trainingService
         .uploadMaterial({ materials: this.materials })
         .subscribe(
@@ -159,7 +173,6 @@ export class TrainingCreateComponent
           (err) => {
             this.loading = false;
             this.errors = err.errors;
-            console.log(err);
           }
         );
     } else {
@@ -178,7 +191,9 @@ export class TrainingCreateComponent
     const value = JSON.parse(JSON.stringify(this.createTraining.value));
     const adoptionGap = [];
     value.adoptionGap.forEach((adoption) => {
-      adoptionGap.push(adoption._id);
+      if (adoption._id != "") {
+        adoptionGap.push(adoption._id);
+      }
     });
     const materials = [];
     this.files.map((file, index) => {
@@ -188,16 +203,21 @@ export class TrainingCreateComponent
       });
     });
 
-    const data = {
+    let data: any = {
       trainingName: value.trainingName,
-      adoptionGaps: adoptionGap,
       description: value.description,
       materials,
     };
+
+    if (adoptionGap.length > 0) {
+      data.adoptionGaps = adoptionGap;
+    }
+
     this.trainingService.create(data).subscribe(
       (data) => {
         this.loading = false;
-        this.setMessage('Training successfully created.');
+        this.setMessage("Training successfully created.");
+        
       },
       (err) => {
         this.loading = false;
@@ -211,6 +231,18 @@ export class TrainingCreateComponent
   }
 
   open(content) {
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' });
+    this.modalService.open(content, { ariaLabelledBy: "modal-basic-title" });
+  }
+
+  success(name) {
+    const modalRef = this.modalService.open(SuccessModalComponent, {
+      ariaLabelledBy: "modal-basic-title",
+    });
+    modalRef.componentInstance.message = "has been added";
+    modalRef.componentInstance.title = "Thank you";
+    modalRef.componentInstance.name = name;
+    modalRef.result.finally(() => {
+      this.router.navigateByUrl("admin/training/list");
+    });
   }
 }

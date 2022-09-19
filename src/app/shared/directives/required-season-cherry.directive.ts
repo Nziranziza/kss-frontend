@@ -1,5 +1,5 @@
 import {Directive, ElementRef, OnInit, Renderer2} from '@angular/core';
-import {AuthenticationService} from '../../core/services';
+import {AuthenticationService} from '../../core';
 
 @Directive({
   selector: '[appRequiredSeasonCherry]'
@@ -10,7 +10,8 @@ export class RequiredSeasonCherryDirective  implements OnInit {
   }
 
   ngOnInit() {
-  /*  if (!this.authenticationService.getCurrentSeason().isCurrent &&
+      /*
+      if (!this.authenticationService.getCurrentSeason().isCurrent &&
       this.authenticationService.getCurrentSeason().season !== '2021A&B') {
       */
       if (!this.authenticationService.getCurrentSeason().isCurrent) {
