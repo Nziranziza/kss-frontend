@@ -6,6 +6,7 @@ import {SiteListComponent} from './site-list/site-list.component';
 import {SiteEditComponent} from './site-edit/site-edit.component';
 import {SiteFarmersComponent} from './site-farmers/site-farmers.component';
 import {SitePendingFarmersComponent} from './site-pending-farmers/site-pending-farmers.component';
+import {SiteDispatchPlanComponent} from './site-dispatch-plan/site-dispatch-plan.component';
 
 const routes: Routes = [
   {
@@ -23,6 +24,10 @@ const routes: Routes = [
       {
         path: 'sites/edit/:id',
         component: SiteEditComponent
+      },
+      {
+        path: 'sites/dispatch-plan/:id',
+        component: SiteDispatchPlanComponent
       },
       {
         path: 'sites/:siteId/farmers',
