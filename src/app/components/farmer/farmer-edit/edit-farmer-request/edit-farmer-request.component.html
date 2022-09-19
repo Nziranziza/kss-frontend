@@ -21,13 +21,23 @@
       <div class="col-md-6">
         <div class="form-group">
           <label class="control-label">Land UPI number</label>
-          <input
-            type="text"
-            formControlName="upiNumber"
-            class="form-control"
-            placeholder="00/000/00/000"
-            (input)="validateUPI($event)"
-          />
+          <input type="text" formControlName="upiNumber" class="form-control" placeholder="00/000/00/000"
+                 (input)="validateUPI($event)">
+          <div
+            *ngIf="
+              editFarmerRequestForm.controls.upiNumber.invalid &&
+              (editFarmerRequestForm.controls.upiNumber.dirty ||
+              editFarmerRequestForm.controls.upiNumber.touched)"
+            class="input-error"
+          >
+            <div
+              *ngIf="
+                editFarmerRequestForm.controls.upiNumber.invalid
+              "
+            >
+              Upi is invalid.
+            </div>
+          </div>
         </div>
       </div>
       <div class="col-md-6">

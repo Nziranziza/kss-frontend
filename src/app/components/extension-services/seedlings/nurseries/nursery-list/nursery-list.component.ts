@@ -19,8 +19,7 @@ import { ViewNurseryComponent } from "../view-nursery/view-nursery.component";
 })
 export class NurseryListComponent
   extends BasicComponent
-  implements OnInit, OnDestroy
-{
+  implements OnInit, OnDestroy {
   constructor(
     private messageService: MessageService,
     private trainingService: TrainingService,
@@ -30,7 +29,7 @@ export class NurseryListComponent
   ) {
     super();
   }
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void { }
 
   nurseries: any[] = [];
   schedule;
@@ -69,7 +68,7 @@ export class NurseryListComponent
     };
   }
 
-  getNurseries(): void {
+  getNurseries(deletetrigger: any = false): void {
     this.loading = true;
     this.seedlingService.all().subscribe((data) => {
       this.nurseries = data.data;
@@ -98,15 +97,16 @@ export class NurseryListComponent
       this.totalPrickedOut.map((total) => {
         this.prickedSum += total;
       });
-      this.dtTrigger.next();
+      deletetrigger ? " " : this.dtTrigger.next();
       this.loading = false;
     });
-
-    this.config = {
-      itemsPerPage: 10,
-      currentPage: 0 + 1,
-      totalItems: this.nurseries.length,
-    };
+    if (!deletetrigger) {
+      this.config = {
+        itemsPerPage: 10,
+        currentPage: 0 + 1,
+        totalItems: this.nurseries.length,
+      };
+    }
   }
 
   openDeleteModal(nursery: any, warning?: any) {
@@ -122,11 +122,7 @@ export class NurseryListComponent
         this.seedlingService.delete(nursery._id).subscribe(
           () => {
             this.loading = true;
-            const body = {
-              reference:
-                this.authenticationService.getCurrentUser().info.org_id,
-            };
-            this.getNurseries();
+            this.getNurseries(true);
             this.setMessage("Nursery successfully Deleted!");
           },
           (err) => {

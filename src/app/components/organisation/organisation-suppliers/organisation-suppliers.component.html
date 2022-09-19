@@ -60,7 +60,7 @@
               </div>
               <div class="col-sm-12">
                 <span class="details-row-title-sm" style="margin-left: 0px">Province </span> : <span
-                class="details-row-data-sm" *ngIf="org?.location.prov_id">{{ org?.location.prov_id.namek }}</span>
+                class="details-row-data-sm" *ngIf="org?.location.prov_id">{{ org?.location.prov_id.namek.toLowerCase()}}</span>
                 <span class="details-row-title-sm">District </span> : <span class="details-row-data-sm"
                                                                             *ngIf="org?.location.dist_id">{{ org?.location.dist_id.name }}</span>
                 <span class="details-row-title-sm">Sector </span> : <span class="details-row-data-sm"

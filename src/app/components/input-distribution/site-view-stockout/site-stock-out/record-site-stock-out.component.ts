@@ -27,6 +27,8 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
   currentDate: any;
   site: any;
   @Input() siteId;
+  @Input() totalStockOutFertilizer;
+  @Input() totalqty;
   org: any;
   isCWSDistributor: any;
   public destinationList: FormArray;
@@ -55,7 +57,7 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
     this.isCWSDistributor = this.authorisationService.isCWSDistributer();
     this.siteStockOutForm = this.formBuilder.group({
       destination: new FormArray([]),
-      totalQty: ['', Validators.required],
+      totalQty: ['', [Validators.required, Validators.max(this.totalqty - this.totalStockOutFertilizer)]],
       date: [this.datePipe.transform(this.currentDate, 'yyyy-MM-dd'), Validators.required],
     });
     if (this.isCWSDistributor) {
@@ -76,6 +78,10 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
       });
     }
     this.initial();
+  }
+
+  getField(fieldName: string) {
+    return this.siteStockOutForm.get(fieldName);
   }
 
   onSubmit() {

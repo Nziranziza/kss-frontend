@@ -90,20 +90,25 @@
               <th>Visitor</th>
               <th>Visit Date and Time</th>
               <th>Group</th>
+              <th>Score</th>
               <th>Actions</th>
             </tr>
           </thead>
-          <tbody style="font-size: 12px">
+          <tbody>
             <ng-container *ngFor="let visit of visits">
               <tr>
                 <td>{{ visit.createdAt | date: "short" }}</td>
                 <td>
-                  <div *ngFor="let farm of visit.farms" style="font-size: 10px">
-                    {{
-                      farm.owner.firstName
-                        ? farm.owner.firstName + " " + farm.owner.lastName
-                        : farm.owner.groupName
-                    }}
+                  <div *ngFor="let farm of visit.farms">
+                    <span class="text-capitalize">
+                      {{
+                        farm.owner.firstName
+                          ? farm.owner.firstName.toLowerCase() +
+                            " " +
+                            farm.owner.lastName.toLowerCase()
+                          : farm.owner.groupName.toLowerCase()
+                      }}
+                    </span>
                   </div>
                 </td>
                 <td>{{ visit.description }}</td>
@@ -113,17 +118,23 @@
                   </div>
                 </td>
                 <td>
-                  {{
-                    visit?.visitor?.firstName + " " + visit?.visitor?.lastName
-                  }}
+                  <span class="text-capitalize">
+                    {{
+                      visit?.visitor?.firstName.toLowerCase() +
+                        " " +
+                        visit?.visitor?.lastName.toLowerCase()
+                    }}
+                  </span>
                 </td>
                 <td>
                   {{ visit.date | date: "shortDate" }},
-                  <div> {{ visit?.expectedDuration.from }} to
-                  {{ visit?.expectedDuration.to }}
-                </div>
+                  <div>
+                    {{ visit?.expectedDuration.from }} to
+                    {{ visit?.expectedDuration.to }}
+                  </div>
                 </td>
                 <td>{{ visit?.groupId?.groupName }}</td>
+                <td>{{ visit?.overall_score ? visit?.overall_score : 0 }} % </td>
                 <td>
                   <button
                     appRequiredSeason
@@ -132,28 +143,30 @@
                   >
                     <em class="fa fa-eye"></em>
                   </button>
-                  <button
-                    appRequiredSeason
-                    class="btn btn-action-no-border btn-margin"
-                    (click)="openDeleteModal(visit)"
-                    *appHasPermission="[1]"
-                  >
-                    <em class="fa fa-trash"></em>
-                  </button>
-                  <button
-                    appRequiredSeason
-                    (click)="open(content); selectedSchedule(schedule)"
-                    class="btn btn-action-no-border btn-margin"
-                  >
-                    <em class="fa fa-envelope-o"></em>
-                  </button>
-                  <button
-                    *appHasPermission="[1]"
-                    class="btn btn-action-no-border btn-margin btn-sm details-button"
-                    routerLink="/admin/farm/visit/edit/{{ visit._id }}"
-                  >
-                    <em class="fa fa-pencil"></em>
-                  </button>
+                  <span *ngIf="visit.overall_score == 0 || !visit.overall_score">
+                    <button
+                      appRequiredSeason
+                      class="btn btn-action-no-border btn-margin"
+                      (click)="openDeleteModal(visit)"
+                      *appHasPermission="[1]"
+                    >
+                      <em class="fa fa-trash"></em>
+                    </button>
+                    <button
+                      appRequiredSeason
+                      (click)="open(content); selectedSchedule(schedule)"
+                      class="btn btn-action-no-border btn-margin"
+                    >
+                      <em class="fa fa-envelope-o"></em>
+                    </button>
+                    <button
+                      *appHasPermission="[1]"
+                      class="btn btn-action-no-border btn-margin btn-sm details-button"
+                      routerLink="/admin/farm/visit/edit/{{ visit._id }}"
+                    >
+                      <em class="fa fa-pencil"></em>
+                    </button>
+                  </span>
                 </td>
               </tr>
             </ng-container>

@@ -67,6 +67,30 @@
             >
             <div class="row">
               <div class="col-sm-6">
+                <label class="control-label label-required"> Province </label>
+                <div class="confirm-text-box confirm-text">
+                  <div *ngFor="let province of provinces">
+                    <span
+                      *ngIf="
+                      org?.location?.prov_id?._id == province._id
+                      "
+                    >
+                      {{ province.namee }}
+                    </span>
+                  </div>
+                </div>
+                <label class="control-label label-required"> Sector </label>
+                <div class="confirm-text-box confirm-text">
+                  <div *ngFor="let sector of sectors">
+                    <span
+                      *ngIf="
+                      scheduleTraining.value.location.sect_id == sector._id
+                      "
+                    >
+                      {{ sector.name }}
+                    </span>
+                  </div>
+                </div>
                 <label class="control-label"> Village </label>
                 <div class="confirm-text-box confirm-text">
                   <div *ngFor="let village of locationVillages">
@@ -84,10 +108,10 @@
               <div class="col-sm-6">
                 <label class="control-label label-required"> District </label>
                 <div class="confirm-text-box confirm-text">
-                  <div *ngFor="let district of locationDistricts">
+                  <div *ngFor="let district of districts">
                     <span
                       *ngIf="
-                        scheduleTraining.value.location.dist_id == district._id
+                      org?.location?.dist_id?._id == district._id
                       "
                     >
                       {{ district.name }}
@@ -166,7 +190,7 @@
       <div class="col-sm-3">
         <button
           type="button"
-          class="btn btn-danger btn-lg pull-left"
+          class="btn btn-lg pull-left"
           (click)="modal.dismiss()"
         >
           Cancel
@@ -175,7 +199,7 @@
       <div class="col-sm-6"></div>
       <div class="col-sm-3">
         <button
-          class="btn btn-secondary btn-lg submit"
+          class="btn btn-secondary btn-lg submit pull-right"
           (click)="onSubmit(); modal.dismiss('cancel click')"
           [disabled]="loading"
         >

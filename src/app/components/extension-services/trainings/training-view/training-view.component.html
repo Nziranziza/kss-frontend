@@ -158,17 +158,17 @@
         <tbody>
           <tr *ngFor="let schedule of training.schedules | paginate: config">
             <td>{{ schedule.createdAt | date: "short" }}</td>
-            <td>{{ schedule.trainingId.trainingName }}</td>
+            <td>{{ training.trainingName }}</td>
             <td>{{ schedule.startTime | date: "short" }}</td>
             <td>
-              {{ schedule?.location.prov_id?.namek }} >
+              {{ schedule?.location.prov_id?.namek.toLowerCase()}} >
               {{ schedule?.location.dist_id?.name }} >
               {{ schedule?.location.sect_id?.name }} >
               {{ schedule?.location.cell_id?.name }} >
               {{ schedule?.location.village_id?.name }} >
               {{ schedule?.venueName }}
             </td>
-            <td>{{ schedule?.trainer.fullName }}</td>
+            <td>{{ schedule?.trainer?.fullName?.toLowerCase() }}</td>
             <td>{{ schedule?.trainees.length }} trainees</td>
             <td>{{ schedule?.status }}</td>
           </tr>

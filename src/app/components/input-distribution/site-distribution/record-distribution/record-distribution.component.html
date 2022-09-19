@@ -1,5 +1,5 @@
 <div class="modal-header">
-  <i class="fa fa-times-circle close" style="font-size: 24px;" aria-label="Close" (click)="modal.dismiss()">
+  <i (click)="modal.dismiss()" aria-label="Close" class="fa fa-times-circle close" style="font-size: 24px;">
   </i>
 </div>
 <div class="modal-body">
@@ -66,8 +66,8 @@
                     </form>
                   </div>
                 -->
-                <div role="tabpanel" class="tab-pane active" id="distribute">
-                  <form [formGroup]="distributionForm" (ngSubmit)="onSubmit()">
+                <div class="tab-pane active" id="distribute" role="tabpanel">
+                  <form (ngSubmit)="onSubmit()" [formGroup]="distributionForm">
                     <div class="row" style="margin-top: 25px">
                       <div class="col-sm-3">
                         <div class="form-group">
@@ -75,9 +75,10 @@
                           <select class="form-control" formControlName="stockOutId">
                             <option></option>
                             <ng-container *ngFor="let stock of stockOuts">
-                              <option *ngIf="stock.input.inputType === 'Fertilizer'" value="{{stock._id}}">
+                              <option *ngIf="stock.inputId.inputType === 'Fertilizer'" value="{{stock._id}}">
                                 {{ stock.totalQuantity - stock.distributedQty | number : '1.0-2'}}
-                                Kg - {{ stock.created_at|date }} {{ stock.destination ? getDestination( stock.destination) : ' - ' + stock.location.cell_id.name }}
+                                Kg
+                                - {{ stock.created_at|date }} {{ stock.destination ? getDestination(stock.destination) : ' - ' + stock.location.cell_id.name }}
                               </option>
                             </ng-container>
                           </select>
@@ -86,14 +87,14 @@
                       <div class="col-sm-3">
                         <div class="form-group">
                           <span class="label-required">Quantity Fertilizer(Kg)</span> &nbsp; &nbsp;
-                          <input type="text" formControlName="quantity" class="form-control">
+                          <input class="form-control" formControlName="quantity" type="text">
                         </div>
                       </div>
                       <div class="col-sm-3">
                         <div class="form-group">
                           <span class="control-label label-required">Trees at distribution</span> &nbsp; &nbsp;
-                          <input type="number" formControlName="treesAtDistribution" class="form-control"
-                                 min="0" max="100000" placeholder="">
+                          <input class="form-control" formControlName="treesAtDistribution" max="100000"
+                                 min="0" placeholder="" type="number">
                         </div>
                       </div>
                       <div class="col-sm-3">
@@ -110,7 +111,7 @@
                     </div>
                     <div class="row">
                       <div class="col-sm-1" style="margin-top: 25px">
-                        <button class="btn btn-success btn-sm">save</button>
+                        <button [disabled]="isLoading" class="btn btn-success btn-sm">save</button>
                       </div>
                     </div>
                   </form>

@@ -80,14 +80,14 @@
                   <div>{{ schedule?.endTime | date: "short" }}</div>
                 </td>
                 <td>
-                  {{ schedule?.location.prov_id?.namek }} >
+                 <span class="text-capitalize"> {{ schedule?.location.prov_id?.namek.toLowerCase() }} </span> >
                   {{ schedule?.location.dist_id?.name }} >
                   {{ schedule?.location.sect_id?.name }} >
                   {{ schedule?.location.cell_id?.name }} >
                   {{ schedule?.location.village_id?.name }} >
                   {{ schedule.venueName }}
                 </td>
-                <td>{{ schedule?.trainer.fullName }}</td>
+                <td>{{ schedule?.trainer?.fullName?.toLowerCase() }}</td>
                 <td>{{ schedule?.trainees.length }} trainees</td>
                 <td>{{ schedule?.status }}</td>
                 <td>

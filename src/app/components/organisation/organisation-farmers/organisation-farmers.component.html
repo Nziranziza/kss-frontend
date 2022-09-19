@@ -106,7 +106,7 @@
                 <span
                   class="details-row-data-sm"
                   *ngIf="org?.location.prov_id"
-                  >{{ org?.location.prov_id.namek }}</span
+                  >{{ org?.location?.prov_id?.namek.toLowerCase()}}</span
                 >
                 <span class="details-row-title-sm">District </span> :
                 <span
@@ -464,8 +464,8 @@
               <td>{{ farmer.userInfo.phone_number }}</td>
               <td>{{ farmer.userInfo.regNumber | uppercase }}</td>
               <td>
-                {{ farmer.userInfo?.location?.prov_id.namek == null ? '-' :
-                  farmer.userInfo?.location?.prov_id.namek +
+                {{ farmer.userInfo?.location?.prov_id?.namek?.toLowerCase()== null ? '-' :
+                  farmer.userInfo?.location?.prov_id?.namek?.toLowerCase() +
                     " > " +
                     farmer.userInfo.location?.dist_id.name +
                     " > " +
