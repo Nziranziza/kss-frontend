@@ -355,16 +355,6 @@ export class TrainingSchedulingCreateComponent
       reference: this.authenticationService.getCurrentUser().info.org_id
     }
     this.scheduleTraining.controls.location
-      .get("prov_id".toString())
-      .valueChanges.subscribe((value) => {
-        this.locationChangeProvince(this.scheduleTraining, value);
-      });
-    this.scheduleTraining.controls.location
-      .get("dist_id".toString())
-      .valueChanges.subscribe((value) => {
-        this.locationChangDistrict(this.scheduleTraining, value);
-      });
-    this.scheduleTraining.controls.location
       .get("sect_id".toString())
       .valueChanges.subscribe((value) => {
         this.locationChangSector(this.scheduleTraining, value);
@@ -507,7 +497,7 @@ export class TrainingSchedulingCreateComponent
     };
     this.trainingService.scheduleTraining(data).subscribe((data) => {
       this.successDatails = data.data;
-      this.success(this.successDatails.description, this.successDatails._id);
+      this.success(data.data.description, data.data._id);
       this.loading = false;
     },
       (err) => {
@@ -525,7 +515,7 @@ export class TrainingSchedulingCreateComponent
     modalRef.componentInstance.name = name;
     modalRef.componentInstance.messageEnabled = true;
     modalRef.componentInstance.smsId = id;
-    modalRef.componentInstance.serviceName = "Training";
+    modalRef.componentInstance.serviceName = "training";
     modalRef.result.finally(() => {
       this.router.navigateByUrl("admin/training/schedule/list");
     });

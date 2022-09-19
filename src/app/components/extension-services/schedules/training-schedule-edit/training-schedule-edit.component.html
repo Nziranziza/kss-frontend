@@ -67,12 +67,24 @@
             >
             <div class="row">
               <div class="col-sm-6">
-                <label class="control-label"> Sector </label>
+                <label class="control-label label-required"> Province </label>
                 <div class="confirm-text-box confirm-text">
-                  <div *ngFor="let sector of locationSectors">
+                  <div *ngFor="let province of provinces">
                     <span
                       *ngIf="
-                        scheduleTraining.value.location.sect_id == sector._id
+                      org?.location?.prov_id?._id == province._id
+                      "
+                    >
+                      {{ province.namee }}
+                    </span>
+                  </div>
+                </div>
+                <label class="control-label label-required"> Sector </label>
+                <div class="confirm-text-box confirm-text">
+                  <div *ngFor="let sector of sectors">
+                    <span
+                      *ngIf="
+                      scheduleTraining.value.location.sect_id == sector._id
                       "
                     >
                       {{ sector.name }}
@@ -94,6 +106,18 @@
                 </div>
               </div>
               <div class="col-sm-6">
+                <label class="control-label label-required"> District </label>
+                <div class="confirm-text-box confirm-text">
+                  <div *ngFor="let district of districts">
+                    <span
+                      *ngIf="
+                      org?.location?.dist_id?._id == district._id
+                      "
+                    >
+                      {{ district.name }}
+                    </span>
+                  </div>
+                </div>
                 <label class="control-label"> Cell </label>
                 <div class="confirm-text-box confirm-text">
                   <div *ngFor="let cell of locationCells">
@@ -175,7 +199,7 @@
       <div class="col-sm-6"></div>
       <div class="col-sm-3">
         <button
-          class="btn btn-secondary btn-lg submit"
+          class="btn btn-secondary btn-lg submit pull-right"
           (click)="onSubmit(); modal.dismiss('cancel click')"
           [disabled]="loading"
         >
@@ -265,7 +289,7 @@
                     <select class="form-control" formControlName="prov_id">
                       <option value=""></option>
                       <option
-                        *ngFor="let province of locationProvinces"
+                        *ngFor="let province of provinces"
                         value="{{ province._id }}"
                       >
                         {{ province.namee | titlecase }}
@@ -294,7 +318,7 @@
                     <select class="form-control" formControlName="dist_id">
                       <option value=""></option>
                       <option
-                        *ngFor="let district of locationDistricts"
+                        *ngFor="let district of districts"
                         value="{{ district._id }}"
                       >
                         {{ district.name | titlecase }}
@@ -323,7 +347,7 @@
                     <select class="form-control" formControlName="sect_id">
                       <option value=""></option>
                       <option
-                        *ngFor="let sector of locationSectors"
+                        *ngFor="let sector of sectors"
                         value="{{ sector._id }}"
                       >
                         {{ sector.name | titlecase }}

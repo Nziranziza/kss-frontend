@@ -441,7 +441,7 @@
               <td>{{ group.groupName }}</td>
               <td>{{ group.leaderNames }}</td>
               <td>{{ group.leaderPhoneNumber }}</td>
-              <td>{{ group.location.prov_id?.namek }}</td>
+              <td>{{ group.location.prov_id?.namek.toLowerCase()}}</td>
               <td>{{ group.location.dist_id?.name }}</td>
               <td>{{ group.location.sect_id?.name }}</td>
               <td>{{ group.location.cell_id?.name }}</td>
@@ -492,7 +492,7 @@
               <td>{{ visit.createdAt | date: "short" }}</td>
               <td>{{ visit.farm.upiNumber }}</td>
               <td>{{ visit.owner.lastName + " " + visit.owner.firstName }}</td>
-              <td>{{ visit.farm.location.prov_id.namek }}</td>
+              <td>{{ visit.farm.location.prov_id.namek.toLowerCase()}}</td>
               <td>{{ visit.farm.location.dist_id.name }}</td>
               <td>{{ visit.farm.location.sect_id.name }}</td>
               <td>{{ visit.farm.location.cell_id.name }}</td>
@@ -560,7 +560,7 @@
               <td>{{ data?.userInfo?.phone_number }}</td>
               <td>{{ data?.userInfo?.sex }}</td>
               <td>
-                {{ data.userInfo?.location?.prov_id?.namek }}
+                {{ data.userInfo?.location?.prov_id?.namek.toLowerCase()}}
               </td>
               <td>
                 {{ data.userInfo.location?.dist_id.name }}
@@ -633,7 +633,7 @@
               <td>{{ data?.userInfo?.regNumber }}</td>
               <td>{{ farm.upiNumber }}</td>
               <td>
-                {{ farm.location.prov_id.namek }}
+                {{ farm.location.prov_id.namek.toLowerCase()}}
               </td>
               <td>
                 {{ farm.location.dist_id.name }}

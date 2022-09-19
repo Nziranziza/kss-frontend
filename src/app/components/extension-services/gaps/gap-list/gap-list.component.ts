@@ -42,7 +42,7 @@ export class GapListComponent
     screenReaderCurrentLabel: `You're on page`,
   };
   mostAdopted: any = '';
-  overallWeight: number = 0;
+  overallWeight = 0;
   config: any;
 
   dtOptions: any = {};

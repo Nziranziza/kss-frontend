@@ -22,7 +22,7 @@
               <div class="form-group">
                 <label class="control-label">Province</label>
                 <div class="confirm-text-box confirm-text">
-                  {{ nurseryDatas.location.prov_id.namek || "" }}
+                  {{ nurseryDatas.location.prov_id.namek.toLowerCase()|| "" }}
                 </div>
               </div>
             </div>
@@ -305,12 +305,12 @@
               </td>
               <td>
                 {{
-                  distribution?.farmer?.firstName +
+                  distribution?.farmer?.firstName.toLowerCase() +
                     " " +
-                    distribution?.farmer?.lastName
+                    distribution?.farmer?.lastName.toLowerCase()
                 }}
               </td>
-              <td>{{ distribution?.officer?.name }}</td>
+              <td>{{ distribution?.officer?.name?.toLowerCase() }}</td>
               <td>
                 <div
                   *ngFor="let dist of distribution.distributions; let i = index"

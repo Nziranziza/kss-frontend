@@ -7,7 +7,7 @@ import {
   Inject,
   Input,
 } from "@angular/core";
-import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
+import { NgbActiveModal, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { TrainingService, GapService, Training } from "../../../../core";
 import { MessageService } from "../../../../core";
 import { BasicComponent } from "../../../../core";
@@ -31,7 +31,8 @@ export class TrainingScheduleViewComponent
     @Inject(PLATFORM_ID) private platformId: object,
     private injector: Injector,
     private trainingService: TrainingService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private modalService: NgbModal
   ) {
     super();
     if (isPlatformBrowser(this.platformId)) {
@@ -69,5 +70,17 @@ export class TrainingScheduleViewComponent
         this.trainingsStats = data.data;
         this.loading = false;
       });
+  }
+
+  open(content) {
+    this.modalService.open(content, { size: "sm", windowClass: "modal-sm" });
+  }
+
+  sendMessage() {
+    this.loading = true;
+    let data = this.id;
+    this.trainingService.sendMessage(data).subscribe((data) => {
+      this.loading = false;
+    });
   }
 }

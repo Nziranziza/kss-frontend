@@ -138,7 +138,7 @@
           <td>{{farmer.request?.season?.name}}</td>
           <td>
             <span class="details-row-title-sm" style="margin-left: 0px">Province </span> : <span
-            class="details-row-data-sm" *ngIf="request.location.prov_id">{{ request.location.prov_id.namek }}</span>
+            class="details-row-data-sm" *ngIf="request.location.prov_id">{{ request.location.prov_id.namek.toLowerCase()}}</span>
             <span class="details-row-title-sm">District </span> : <span class="details-row-data-sm"
                                                                         *ngIf="request.location.dist_id">{{ request.location.dist_id.name }}</span>
             <span class="details-row-title-sm">Sector </span> : <span class="details-row-data-sm"

@@ -63,7 +63,7 @@
               <td> {{ group.groupName }}</td>
               <td> {{ group.leaderNames }} > {{ group.leaderPhoneNumber }}</td>
               <td> <span style="text-transform: capitalize;">
-                {{ group.location.prov_id?.namek }} >
+                {{ group.location.prov_id?.namek.toLowerCase() }} >
                 {{ group.location.dist_id?.name }} >
                 {{ group.location.sect_id?.name }} >
                 {{ group.location.cell_id?.name }} >
