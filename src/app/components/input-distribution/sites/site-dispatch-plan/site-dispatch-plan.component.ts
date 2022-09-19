@@ -146,8 +146,10 @@ export class SiteDispatchPlanComponent extends BasicComponent implements OnInit,
 
   onSubmit() {
     if (this.dispatchPlanForm.valid) {
+      // on submit
       const dispatchPlan = JSON.parse(JSON.stringify(this.dispatchPlanForm.value));
       dispatchPlan.seasonId = this.season._id;
+      dispatchPlan.fertilizers.inputId = this.fertilizer;
       delete dispatchPlan.qtyPesticides;
       this.siteService.updateDispatchPlan(this.id, dispatchPlan).subscribe((data) => {
         this.setMessage('Dispatch plan successfully updated');
@@ -176,7 +178,7 @@ export class SiteDispatchPlanComponent extends BasicComponent implements OnInit,
       const seasons = dt.content;
       seasons.forEach((item) => {
         if (item.isCurrent) {
-          this.fertilizer = item.seasonParams.inputName.inputName;
+          this.fertilizer = item.seasonParams.inputName._id;
           this.pesticides = item.seasonParams.pesticide;
           this.season = item;
         }
@@ -186,34 +188,38 @@ export class SiteDispatchPlanComponent extends BasicComponent implements OnInit,
         if(plan) {
           this.populateForm(plan);
         }
-        this.dispatchPlanForm.patchValue(plan, {emitEvent: false});
-        this.dispatchPlanForm.controls.qtyPesticides.patchValue(this.qtyPesticides, {emitEvent: false});
       }
     });
   }
 
   populateForm(plan) {
-    if (plan.pesticides) {
-      this.includePesticide = true;
-    }
-    const stations = new FormArray([]);
-    for (const station of this.cws) {
-      stations.push(
-        this.formBuilder.group({
-          org_id: [station.org_id],
-          name: [station.name],
-          qty: [0]
-        })
-      );
-    }
+
+    this.includeFertilizer = plan.fertilizers.qty > 0;
     for (const pesticide of plan.pesticides) {
+      const stations = new FormArray([]);
+      let subTotal = 0;
+      for (const station of this.cws) {
+        const qt = pesticide.cws.find((c) => c.org_id === station.org_id)?.qty
+        stations.push(
+          this.formBuilder.group({
+            org_id: [station.org_id],
+            name: [station.name],
+            qty: [qt ? qt: 0]
+          })
+        );
+        subTotal = subTotal + qt;
+      }
       (this.dispatchPlanForm.controls.pesticides as FormArray).push(
         this.formBuilder.group({
-          inputId: ['', Validators.required],
-          qty: [''],
+          inputId: [pesticide.inputId, Validators.required],
+          qty: [subTotal],
           cws: stations
         }));
       this.qtyPesticides = this.qtyPesticides + pesticide.qty;
+      this.includePesticide = this.qtyPesticides > 0;
+      if(this.includeFertilizer) {
+        this.dispatchPlanForm.controls.fertilizers.patchValue(plan.fertilizers, {emitEvent: false})
+      }
     }
   }
 
