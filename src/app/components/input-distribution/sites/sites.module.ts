@@ -16,10 +16,11 @@ import {SiteFarmersComponent} from './site-farmers/site-farmers.component';
 import {SitePendingFarmersComponent} from './site-pending-farmers/site-pending-farmers.component';
 import {SiteDetailsComponent} from './site-details/site-details.component';
 import { DeleteSiteModal } from './delete-site-modal/delete-site-modal-component';
+import { SiteDispatchPlanComponent } from './site-dispatch-plan/site-dispatch-plan.component';
 
 @NgModule({
   declarations: [SiteListComponent, SiteCreateComponent,
-    SiteEditComponent, SiteFarmersComponent, SitePendingFarmersComponent, SiteDetailsComponent, DeleteSiteModal],
+    SiteEditComponent, SiteFarmersComponent, SitePendingFarmersComponent, SiteDetailsComponent, DeleteSiteModal, SiteDispatchPlanComponent],
   imports: [
     CommonModule,
     OrganisationRoutingModule,
