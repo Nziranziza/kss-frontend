@@ -1,6 +1,6 @@
-import { Component, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {
   AuthenticationService,
   GapService,
@@ -8,16 +8,16 @@ import {
   HelperService,
   UserService,
   VisitService,
-} from "src/app/core";
-import { IDropdownSettings } from "ng-multiselect-dropdown";
-import { Router } from "@angular/router";
-import { SuccessModalComponent } from "../../../../shared";
-import { ScrollStrategy, ScrollStrategyOptions } from "@angular/cdk/overlay";
+} from 'src/app/core';
+import { IDropdownSettings } from 'ng-multiselect-dropdown';
+import { Router } from '@angular/router';
+import { SuccessModalComponent } from '../../../../shared';
+import { ScrollStrategy, ScrollStrategyOptions } from '@angular/cdk/overlay';
 @Component({
-  selector: "app-schedule-farm-visit",
-  templateUrl: "./schedule-farm-visit.component.html",
+  selector: 'app-schedule-farm-visit',
+  templateUrl: './schedule-farm-visit.component.html',
   styleUrls: [
-    "../../schedules/training-scheduling-create/training-scheduling-create.component.css",
+    '../../schedules/training-scheduling-create/training-scheduling-create.component.css',
   ],
 })
 export class ScheduleFarmVisitComponent implements OnInit {
@@ -59,26 +59,26 @@ export class ScheduleFarmVisitComponent implements OnInit {
 
   ngOnInit() {
     this.scheduleVisit = this.formBuilder.group({
-      farmerGroup: ["", Validators.required],
-      agronomist: ["", Validators.required],
-      description: ["", Validators.required],
-      adoptionGap: ["", Validators.required],
-      status: [""],
+      farmerGroup: ['', Validators.required],
+      agronomist: ['', Validators.required],
+      description: ['', Validators.required],
+      adoptionGap: ['', Validators.required],
+      status: [''],
       date: this.formBuilder.group({
-        visitDate: ["", Validators.required],
+        visitDate: ['', Validators.required],
       }),
-      startTime: ["", Validators.required],
-      endTime: ["", Validators.required],
+      startTime: ['', Validators.required],
+      endTime: ['', Validators.required],
     });
     this.newDate.setDate(this.newDate.getDate() - 1);
 
     this.gapDropdownSettings = {
       singleSelection: false,
-      idField: "_id",
-      textField: "name",
+      idField: '_id',
+      textField: 'name',
       enableCheckAll: false,
-      selectAllText: "Select All",
-      unSelectAllText: "UnSelect All",
+      selectAllText: 'Select All',
+      unSelectAllText: 'UnSelect All',
       itemsShowLimit: 6,
       allowSearchFilter: true,
     };
@@ -101,30 +101,30 @@ export class ScheduleFarmVisitComponent implements OnInit {
   }
 
   onGapSelect(item: any) {
-    const gapSelected = this.scheduleVisit.get("adoptionGap".toString());
-    if (item._id === "") {
+    const gapSelected = this.scheduleVisit.get('adoptionGap'.toString());
+    if (item._id === '') {
       gapSelected.setValue(
         [
           {
-            _id: "",
-            name: "Not Applied",
+            _id: '',
+            name: 'Not Applied',
           },
         ],
         { emitEvent: false }
       );
     } else {
-      gapSelected.setValue(gapSelected.value.filter((e) => e._id !== ""));
+      gapSelected.setValue(gapSelected.value.filter((e) => e._id !== ''));
     }
   }
   onDeGapSelect(item: any) {
-    const gapSelected = this.scheduleVisit.get("adoptionGap".toString());
+    const gapSelected = this.scheduleVisit.get('adoptionGap'.toString());
     const gapOptions = gapSelected.value.filter(
       (data) => data._id !== item._id
     );
     gapSelected.setValue(gapOptions, { emitEvent: false });
   }
   onGapSelectAll(items: any) {
-    const gapSelected = this.scheduleVisit.get("adoptionGap".toString());
+    const gapSelected = this.scheduleVisit.get('adoptionGap'.toString());
     gapSelected.setValue(items, { emitEvent: false });
   }
 
@@ -135,16 +135,16 @@ export class ScheduleFarmVisitComponent implements OnInit {
     };
     this.farmList = [];
     this.farmers = [];
-    this.groupService.getByName(data).subscribe((data) => {
-      this.farmerGroupId = data.data._id;
-      data.data.members.forEach((member) => {
+    this.groupService.getByName(data).subscribe((newdata) => {
+      this.farmerGroupId = newdata.data._id;
+      newdata.data.members.forEach((member) => {
         member.openDialog = false;
         this.farmers.push(member);
         member.farms.forEach((farm) => {
           farm.requestInfo.forEach((info) => {
             this.farmList.push({
               farmer: member.firstName
-                ? member.firstName + " " + member.lastName
+                ? member.firstName + ' ' + member.lastName
                 : member.groupContactPersonNames,
               farm: info,
               owner: member.userId,
@@ -195,12 +195,12 @@ export class ScheduleFarmVisitComponent implements OnInit {
     this.gapService.all().subscribe((data) => {
       const newData: any[] = [
         {
-          _id: "",
-          name: "Not Applied",
+          _id: '',
+          name: 'Not Applied',
         },
       ];
-      data.data.forEach((data) => {
-        newData.push({ _id: data._id, name: data.gap_name });
+      data.data.forEach((newdata) => {
+        newData.push({ _id: newdata._id, name: newdata.gap_name });
       });
       this.gaps = newData;
       this.loading = false;
@@ -209,7 +209,7 @@ export class ScheduleFarmVisitComponent implements OnInit {
 
   onChanges() {
     this.scheduleVisit
-      .get("farmerGroup".toString())
+      .get('farmerGroup'.toString())
       .valueChanges.subscribe((value) => {
         this.getFarms(value);
       });
@@ -220,17 +220,17 @@ export class ScheduleFarmVisitComponent implements OnInit {
     if (this.scheduleVisit.valid && this.selectedFarms.length > 0) {
       this.formatedStartDate =
         this.formatDate(
-          this.scheduleVisit.controls.date.get("visitDate".toString()).value
-        ).split("T")[0] +
-        " " +
-        this.formatTime(this.scheduleVisit.get("startTime".toString()).value);
+          this.scheduleVisit.controls.date.get('visitDate'.toString()).value
+        ).split('T')[0] +
+        ' ' +
+        this.formatTime(this.scheduleVisit.get('startTime'.toString()).value);
       this.formatedEndDate =
         this.formatDate(
-          this.scheduleVisit.controls.date.get("visitDate".toString()).value
-        ).split("T")[0] +
-        " " +
-        this.formatTime(this.scheduleVisit.get("endTime".toString()).value);
-      this.modalService.open(content, { ariaLabelledBy: "modal-basic-title" });
+          this.scheduleVisit.controls.date.get('visitDate'.toString()).value
+        ).split('T')[0] +
+        ' ' +
+        this.formatTime(this.scheduleVisit.get('endTime'.toString()).value);
+      this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' });
     } else {
       this.errors = this.helper.getFormValidationErrors(this.scheduleVisit);
     }
@@ -242,22 +242,22 @@ export class ScheduleFarmVisitComponent implements OnInit {
       const dataValues = JSON.parse(JSON.stringify(this.scheduleVisit.value));
       const adoptionGap = [];
       dataValues.adoptionGap.forEach((adoption) => {
-        if (adoption._id != "") {
+        if (adoption._id !== '') {
           adoptionGap.push(adoption._id);
         }
       });
-      let data: any = {
-        farms: this.selectedFarms.map((data) => {
+      const data: any = {
+        farms: this.selectedFarms.map((newdata) => {
           return {
-            farmId: data.farm._id,
-            owner: data.owner,
+            farmId: newdata.farm._id,
+            owner: newdata.owner,
           };
         }),
         description: dataValues.description,
         org_id: this.authenticationService.getCurrentUser().info.org_id,
         visitor: dataValues.agronomist,
         groupId: this.farmerGroupId,
-        observation: "observation",
+        observation: 'observation',
         date: dataValues.date.visitDate,
         expectedDuration: {
           from: this.formatTime(dataValues.startTime),
@@ -268,12 +268,12 @@ export class ScheduleFarmVisitComponent implements OnInit {
         data.gaps = adoptionGap;
       }
       this.visitService.create(data).subscribe(
-        (data) => {
-          this.success(dataValues.description, data.data._id);
+        (newdata) => {
+          this.success(newdata.data.description, newdata.data._id);
           this.loading = false;
         },
         (err) => {
-          this.error("farm visit");
+          this.error('farm visit');
           this.loading = false;
         }
       );
@@ -284,52 +284,52 @@ export class ScheduleFarmVisitComponent implements OnInit {
 
   success(name, id) {
     const modalRef = this.modal.open(SuccessModalComponent, {
-      ariaLabelledBy: "modal-basic-title",
+      ariaLabelledBy: 'modal-basic-title',
     });
-    modalRef.componentInstance.message = "has been added";
-    modalRef.componentInstance.title = "Thank you farm visit schedule";
+    modalRef.componentInstance.message = 'has been added';
+    modalRef.componentInstance.title = 'Thank you farm visit schedule';
     modalRef.componentInstance.name = name;
     modalRef.componentInstance.messageEnabled = true;
     modalRef.componentInstance.smsId = id;
-    modalRef.componentInstance.serviceName = "visit";
+    modalRef.componentInstance.serviceName = 'visit';
     modalRef.result.finally(() => {
-      this.router.navigateByUrl("admin/farm/visit/list");
+      this.router.navigateByUrl('admin/farm/visit/list');
     });
   }
 
   error(name) {
     const modalRef = this.modal.open(SuccessModalComponent, {
-      ariaLabelledBy: "modal-basic-title",
+      ariaLabelledBy: 'modal-basic-title',
     });
-    modalRef.componentInstance.message = "failed to be scheduled";
+    modalRef.componentInstance.message = 'failed to be scheduled';
     modalRef.componentInstance.title =
-      "check the information again and try again";
+      'check the information again and try again';
     modalRef.componentInstance.name = name;
     modalRef.result.finally(() => {
-      this.router.navigateByUrl("admin/farm/visit/list");
+      this.router.navigateByUrl('admin/farm/visit/list');
     });
   }
 
   formatDate(date) {
-    var d = new Date(date),
-      month = "" + (d.getMonth() + 1),
-      day = "" + d.getDate(),
-      year = d.getFullYear();
+    const d = new Date(date);
+    let month = '' + (d.getMonth() + 1);
+    let day = '' + d.getDate();
+    const year = d.getFullYear();
 
-    if (month.length < 2) month = "0" + month;
-    if (day.length < 2) day = "0" + day;
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
 
-    return [year, month, day].join("-");
+    return [year, month, day].join('-');
   }
 
   formatTime(date) {
-    let currentDate = new Date(date);
-    var hours = currentDate.getHours();
-    var minutes = currentDate.getMinutes();
+    const currentDate = new Date(date);
+    let hours = currentDate.getHours();
+    let minutes: string = currentDate.getMinutes().toString();
     hours = hours % 24;
     hours = hours ? hours : 24; // the hour '0' should be '12'
-    minutes = minutes < 10 ? 0 + minutes : minutes;
-    var strTime = hours + ":" + minutes;
+    minutes = parseInt(minutes, 10) < 10 ? '0' + minutes : minutes;
+    const strTime = hours + ':' + minutes;
     return strTime;
   }
 }

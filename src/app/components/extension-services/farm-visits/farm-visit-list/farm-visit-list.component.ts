@@ -60,21 +60,39 @@ export class FarmVisitListComponent
     };
   }
 
-  getVisits(): void {
+  getVisits(deletetrigger = false): void {
     this.loading = true;
     this.visitService
       .all(this.authenticationService.getCurrentUser().info.org_id)
       .subscribe((data) => {
-        this.visits = data.data;
-        this.dtTrigger.next();
+        const newData = data.data.map((newdata) => {
+          newdata.overall_score = 0;
+          newdata.farms.map((farm) => {
+            let overallWeight = 0;
+            farm.evaluatedGaps.map((gap) => {
+              overallWeight += gap.overall_weight;
+            })
+            farm.evaluatedGaps.map((gap) => {
+              newdata.overall_score += gap.overall_score * 100 / overallWeight;
+            })
+          })
+          newdata.overall_score = newdata.overall_score / newdata.gaps.length;
+          const newFarmData = newdata.farms.filter((v, i, a) => a.findIndex(farm => (farm.owner.userId === v.owner.userId)) === i);
+          newdata.farms = newFarmData;
+          return newdata;
+        });
+        this.visits = newData;
+        if (!deletetrigger) { this.dtTrigger.next() };
         this.loading = false;
       });
     this.loading = false;
-    this.config = {
-      itemsPerPage: 10,
-      currentPage: 1,
-      totalItems: this.visits.length,
-    };
+    if (!deletetrigger) {
+      this.config = {
+        itemsPerPage: 10,
+        currentPage: 1,
+        totalItems: this.visits.length,
+      };
+    }
   }
 
   open(content) {
@@ -106,7 +124,7 @@ export class FarmVisitListComponent
       if (results.confirmed) {
         this.visitService.delete(visit._id).subscribe(
           () => {
-            this.getVisits();
+            this.getVisits(true);
             this.setMessage('Schedule successfully Cancelled!');
           },
           (err) => {
