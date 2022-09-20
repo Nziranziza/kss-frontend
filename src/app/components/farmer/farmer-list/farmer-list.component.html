@@ -1,12 +1,12 @@
 <div class="row action-bar">
-  <div class="col-xs-12">
+  <div class="col-md-12">
     <div class="row">
-      <div class="col-xs-6 vcenter">
+      <div class="col-md-6 vcenter">
         <h3>
           {{ title }}
         </h3>
       </div>
-      <div class="col-xs-6 vcenter">
+      <div class="col-md-6 vcenter">
         <a
           appRequiredSeason
           class="btn btn-success btn-margin pull-right"
@@ -16,7 +16,7 @@
       </div>
     </div>
   </div>
-  <div class="col-xs-12">
+  <div class="col-md-12">
     <div class="col-sm-12 text-center">
       <h3><b>Filter or Search Farmers</b></h3>
     </div>
@@ -24,7 +24,7 @@
       <form [formGroup]="filterForm">
         <div class="row">
           <div formGroupName="searchByLocation">
-            <div class="col-xs-2" *ngIf="!isCurrentUserDCC">
+            <div class="col-md-2" *ngIf="!isCurrentUserDCC">
               <div class="form-group">
                 <div class="">
                   <select class="form-control" formControlName="searchBy">
@@ -38,7 +38,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-xs-2" *ngIf="!isCurrentUserDCC">
+            <div class="col-md-2" *ngIf="!isCurrentUserDCC">
               <div class="form-group">
                 <div class="">
                   <select class="form-control" formControlName="prov_id">
@@ -53,7 +53,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-xs-2">
+            <div class="col-md-2">
               <div class="form-group">
                 <div class="">
                   <select
@@ -84,7 +84,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-xs-2">
+            <div class="col-md-2">
               <div class="form-group">
                 <div class="">
                   <select class="form-control" formControlName="sect_id">
@@ -99,7 +99,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-xs-2">
+            <div class="col-md-2">
               <div class="form-group">
                 <div class="">
                   <select class="form-control" formControlName="cell_id">
@@ -111,7 +111,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-xs-2">
+            <div class="col-md-2">
               <div class="form-group">
                 <div class="">
                   <select class="form-control" formControlName="village_id">
@@ -174,7 +174,7 @@
   *ngIf="errors.length > 0"
 ></app-list-errors>
 <div class="row">
-  <div class="col-xs-12">
+  <div class="col-md-12">
     <div></div>
     <div class="box">
       <div class="box-body table-responsive table-condensed">
@@ -229,8 +229,8 @@
               <td>{{ farmer.userInfo.phone_number }}</td>
               <td>{{ farmer.userInfo.regNumber | uppercase }}</td>
               <td>
-                {{ farmer.userInfo?.location?.prov_id.namek == null ? '-' :
-                  farmer.userInfo?.location?.prov_id.namek +
+                {{ farmer.userInfo?.location?.prov_id.namek.toLowerCase()== null ? '-' :
+                  farmer.userInfo?.location?.prov_id.namek.toLowerCase()+
                     " " +
                     farmer.userInfo.location?.dist_id.name +
                     " " +

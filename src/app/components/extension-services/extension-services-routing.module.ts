@@ -104,7 +104,7 @@ const routes: Routes = [
         component: EditNurseryComponent,
       },
       {
-        path: "dashboard",
+        path: "dashboard/extension",
         component: DashboardComponent,
       },
       {

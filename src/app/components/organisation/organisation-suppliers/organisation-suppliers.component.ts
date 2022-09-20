@@ -73,11 +73,15 @@ export class OrganisationSuppliersComponent extends BasicComponent implements On
 
   ngOnInit() {
     this.seasonStartingTime = this.authenticationService.getCurrentSeason().created_at;
-    this.route.params.subscribe(params => {
-      this.organisationId = params['organisationId'.toString()];
-    });
-    this.route.queryParams.subscribe((params) => {
-      this.cwsDashes = params['cwsDashes'.toString()];
+    this.route.params.subscribe((params) => {
+      if (!params['organisationId'.toString()]) {
+        this.route.parent.params.subscribe((params) => {
+          this.organisationId = params['organisationId'.toString()];
+          this.cwsDashes = 'hello';
+        });
+      } else {
+        this.organisationId = params['organisationId'.toString()];
+      }
     });
     this.route.queryParams.subscribe(params => {
       this.toFilterDate = params['to'.toString()] ? new Date(params['to'.toString()])

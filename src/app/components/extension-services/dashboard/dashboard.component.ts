@@ -247,11 +247,11 @@ export class DashboardComponent extends BasicComponent implements OnInit {
       cws_id: [""],
       covered_sector: [""],
     });
-    this.route.params.subscribe((params) => {
+    this.route.parent.params.subscribe((params) => {
       this.organisationId = params["organisationId".toString()];
-      console.log(this.organisationId);
       this.starterBody = { referenceId: params["organisationId".toString()] };
     });
+
     this.initial();
     this.basicInit(this.authenticationService.getCurrentUser().info.org_id);
     this.onChanges();
@@ -676,7 +676,6 @@ export class DashboardComponent extends BasicComponent implements OnInit {
       });
       this.loading = false;
     });
-    console.log(this.farms);
   }
 
   getFarmsStats(body: any) {

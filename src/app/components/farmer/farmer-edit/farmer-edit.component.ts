@@ -79,7 +79,6 @@ export class FarmerEditComponent extends BasicComponent implements OnInit, OnDes
     modalRef.componentInstance.farmerId = this.id;
     modalRef.result.finally(() => {
       this.getFarmer(this.id);
-      console.log('------');
     });
   }
 
@@ -142,12 +141,9 @@ export class FarmerEditComponent extends BasicComponent implements OnInit, OnDes
           });
         });
         this.requests = this.farmer.request.requestInfo.filter((req) => {
-          return req;
-
-          // TODO: Uncomment this!! this is highly needed.
-          // if (villagesSet.includes(req.location.village_id._id)) {
-          //   return req;
-          // }
+          if (villagesSet.includes(req.location.village_id._id)) {
+            return req;
+          }
         });
         this.totalTrees = this.requests.reduce( (tot, record) => {
           return tot + record.numberOfTrees;

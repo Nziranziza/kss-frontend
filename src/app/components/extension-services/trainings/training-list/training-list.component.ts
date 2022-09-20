@@ -104,16 +104,13 @@ export class TrainingListComponent
         this.trainingService.delete(trainingId).subscribe(
           () => {
             this.loading = true;
-            const body = {
-              reference:
-                this.authenticationService.getCurrentUser().info.org_id,
-            };
-
-            this.getTrainingList();
+            this.trainingService.all().subscribe((data) => {
+              this.trainings = data.data;
+              this.loading = false;
+            });
             this.setMessage("Training successfully deleted!");
           },
           (err) => {
-            console.log(err);
             this.setMessage(err.errors);
           }
         );

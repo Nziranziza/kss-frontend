@@ -7,7 +7,7 @@
 </div>
 <app-list-message [message]="message"></app-list-message>
 <div class="row">
-  <div class="col-sm-12">
+  <div class="col-md-12">
     <button class="btn btn-default btn-margin pull-right" (click)="editProfile(farmer.userInfo)">
       <i class="fa fa-pencil"></i> Profile
     </button>
@@ -27,106 +27,106 @@
   </div>
 </div>
 <div class="row aligned-row">
-  <div class="col-sm-4 invoice-col">
+  <div class="col-sm-12 col-md-4 invoice-col">
     <div class="row text-muted well well-sm no-shadow" style="margin: 10px auto;">
-      <div class="col-sm-12">
+      <div class="col-xs-12">
         <i class="fa fa-user" style="margin-bottom: 15px;"></i>
       </div>
-      <div class="col-sm-6">
+      <div class="col-xs-6">
         <span class="profile-label">REG number</span>
       </div>
-      <div class="col-sm-6">
+      <div class="col-xs-6">
         <span class="profile-text">{{ farmer?.userInfo.regNumber | uppercase }}</span>
       </div>
-      <div class="col-sm-6">
+      <div class="col-xs-6">
         <span class="profile-label">Status</span>
       </div>
-      <div class="col-sm-6">
+      <div class="col-xs-6">
         <span class="profile-text">
            <ng-container *ngIf="farmer?.userInfo.active!== 0, else inactive"><span style="color: green; font-weight: bold">active</span>
             </ng-container>
             <ng-template #inactive><span style="color: #b21717; font-weight: bold">inactive</span></ng-template>
         </span>
       </div>
-      <div class="col-sm-6">
+      <div class="col-xs-6">
         <span class="profile-label">Total Trees</span>
       </div>
-      <div class="col-sm-6">
+      <div class="col-xs-6">
         <span class="profile-text">{{ totalTrees }}</span>
       </div>
-      <div class="col-sm-6">
+      <div class="col-xs-6">
         <span class="profile-label">Total Land</span>
       </div>
-      <div class="col-sm-6">
+      <div class="col-xs-6">
         <span class="profile-text">{{ requests.length }}</span>
       </div>
     </div>
   </div>
-  <div class="col-sm-4 invoice-col" >
+  <div class="col-sm-12 col-md-4 invoice-col" >
     <div class="row text-muted well well-sm no-shadow" style="margin: 10px auto;" *ngIf="farmerType===2">
-      <div class="col-sm-12">
+      <div class="col-xs-12">
         <i class="fa fa-id-card-o" style="margin-bottom: 15px;"></i>
       </div>
-      <div class="col-sm-6">
+      <div class="col-xs-6">
         <span class="profile-label"> Group name </span>
       </div>
-      <div class="col-sm-6">
+      <div class="col-xs-6">
         <span class="profile-text">{{ farmer?.userInfo.groupName }}</span>
       </div>
-      <div class="col-sm-6">
+      <div class="col-xs-6">
         <span class="profile-label">Phone number</span>
       </div>
-      <div class="col-sm-6">
+      <div class="col-xs-6">
         <span class="profile-text">{{ farmer?.userInfo.phone_number }}</span>
       </div>
     </div>
     <div class="row text-muted well well-sm no-shadow" style="margin: 10px auto;" *ngIf="farmerType===1">
-      <div class="col-sm-12">
+      <div class="col-xs-12">
         <i class="fa fa-id-card-o" style="margin-bottom: 15px;"></i>
       </div>
-      <div class="col-sm-6">
+      <div class="col-xs-6">
         <span class="profile-label">First name</span>
       </div>
-      <div class="col-sm-6">
+      <div class="col-xs-6">
         <span class="profile-text">{{ farmer?.userInfo.foreName | titlecase }}</span>
       </div>
-      <div class="col-sm-6">
+      <div class="col-xs-6">
         <span class="profile-label">Last name</span>
       </div>
-      <div class="col-sm-6">
+      <div class="col-xs-6">
         <span class="profile-text">{{ farmer?.userInfo.surname }} </span>
       </div>
-      <div class="col-sm-6">
+      <div class="col-xs-6">
         <span class="profile-label">NID</span>
       </div>
-      <div class="col-sm-6">
+      <div class="col-xs-6">
         <span class="profile-text">{{ farmer?.userInfo.NID }} </span>
       </div>
-      <div class="col-sm-6">
+      <div class="col-xs-6">
         <span class="profile-label">Phone number </span>
       </div>
-      <div class="col-sm-6">
+      <div class="col-xs-6">
         <span class="profile-text">{{ farmer?.userInfo?.phone_number }}</span>
       </div>
-      <div class="col-sm-6">
+      <div class="col-xs-6">
         <span class="profile-label">Family size</span>
       </div>
-      <div class="col-sm-6">
+      <div class="col-xs-6">
         <span class="profile-text">{{ farmer?.userInfo?.familySize }}</span>
       </div>
     </div>
   </div>
-  <div class="col-sm-4 invoice-col">
+  <div class="col-sm-12 col-md-4 invoice-col">
     <div class="row text-muted well well-sm no-shadow" style="margin: 10px auto;">
-      <div class="col-sm-12">
+      <div class="col-xs-12">
         <i class="fa fa-map-marker" style="margin-bottom: 15px;"></i>
       </div>
-      <div class="col-sm-6">
+      <div class="col-xs-6">
         <span class="profile-label">Location</span>
       </div>
-      <div class="col-sm-6">
+      <div class="col-xs-6">
         <span class="details-row-title-sm">Province </span> : <span
-        class="details-row-data-sm">{{ farmer?.userInfo.location?.prov_id?.namek }}</span>
+        class="details-row-data-sm">{{ farmer?.userInfo.location?.prov_id?.namek.toLowerCase()}}</span>
         <br/>
         <span class="details-row-title-sm">District </span> : <span
         class="details-row-data-sm">{{ farmer?.userInfo.location?.dist_id?.name }}</span>
@@ -173,7 +173,7 @@
           <td>{{farmer.request.season.name}}</td>
           <td>
             <span class="details-row-title-sm" style="margin-left: 0">Province </span> : <span
-            class="details-row-data-sm" *ngIf="request.location?.prov_id">{{ request.location?.prov_id?.namek }}</span>
+            class="details-row-data-sm" *ngIf="request.location?.prov_id">{{ request.location?.prov_id?.namek.toLowerCase()}}</span>
             <span class="details-row-title-sm">District </span> : <span
             class="details-row-data-sm">{{ request.location?.dist_id?.name }}</span>
             <span class="details-row-title-sm">Sector </span> : <span

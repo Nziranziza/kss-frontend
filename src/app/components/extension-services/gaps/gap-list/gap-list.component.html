@@ -60,7 +60,7 @@
             <ng-container *ngFor="let gap of gaps | paginate: config">
               <tr>
                 <td>{{ gap.createdAt | date: "short" }}</td>
-                <td>{{ gap.gap_name.toUpperCase() }}</td>
+                <td>{{ gap.gap_name }}</td>
                 <td>{{ gap.gap_weight }}</td>
                 <td>{{ gap.sections.length }}</td>
                 <td>{{ gap.adoptionRate }}</td>

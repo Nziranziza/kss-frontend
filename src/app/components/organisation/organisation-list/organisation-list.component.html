@@ -53,7 +53,7 @@
                 <span class="details-row-data">{{ organisation.streetNumber }}</span>
               </td>
               <td class="actions no-wrap text-right">
-                <a routerLink="/admin/organisations/details/{{organisation._id}}/{{ organisation._id }}/dashboard" class="btn btn-info btn-sm"
+                <a routerLink="/admin/organisations/details/{{organisation._id}}/dashboard" class="btn btn-info btn-sm"
                    *ngIf="isOrgCWS(organisation)"><i
                   class="fa fa-university"></i> Details </a>
                 <a routerLink="/admin/cws-pending-farmers/{{organisation._id}}"

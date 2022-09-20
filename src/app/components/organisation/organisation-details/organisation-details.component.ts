@@ -87,7 +87,6 @@ export class OrganisationDetailsComponent
     this.isUserCWSOfficer = this.authorisationService.isCWSUser();
     this.organisationService.get(this.organisationId).subscribe((data) => {
       this.org = data.content;
-      console.log(this.org);
     });
     this.organisationService
       .getCwsSummary(this.organisationId)

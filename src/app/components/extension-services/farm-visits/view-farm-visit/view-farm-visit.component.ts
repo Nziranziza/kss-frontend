@@ -1,4 +1,4 @@
-import { isPlatformBrowser } from "@angular/common";
+import { isPlatformBrowser } from '@angular/common';
 import {
   Component,
   Inject,
@@ -7,27 +7,26 @@ import {
   OnDestroy,
   OnInit,
   PLATFORM_ID,
-} from "@angular/core";
-import { FormBuilder, FormGroup } from "@angular/forms";
-import { ActivatedRoute, Router } from "@angular/router";
-import { NgbActiveModal, NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { VisitService, GapService, Training } from "../../../../core";
-import { MessageService } from "../../../../core";
-import { BasicComponent } from "../../../../core";
+} from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { VisitService, GapService, Training } from '../../../../core';
+import { MessageService } from '../../../../core';
+import { BasicComponent } from '../../../../core';
 
 @Component({
-  selector: "app-view-farm-visit",
-  templateUrl: "./view-farm-visit.component.html",
+  selector: 'app-view-farm-visit',
+  templateUrl: './view-farm-visit.component.html',
   styleUrls: [
-    "../../schedules/training-scheduling-create/training-scheduling-create.component.css",
+    '../../schedules/training-scheduling-create/training-scheduling-create.component.css',
   ],
 })
 export class ViewFarmVisitComponent
   extends BasicComponent
-  implements OnInit, OnDestroy
-{
+  implements OnInit, OnDestroy {
   createTraining: FormGroup;
-  closeResult = "";
+  closeResult = '';
   visits: any;
   modal: NgbActiveModal;
   @Input() id: string;
@@ -45,22 +44,27 @@ export class ViewFarmVisitComponent
     }
   }
 
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void { }
 
   ngOnInit() {
     this.getVisits();
     this.setMessage(this.messageService.getMessage());
   }
 
-  results: any[] = [];
-  gaps: any;
-  loading = false;
-  dataReturned: any[] = [];
-
   getVisits() {
     this.visitService.one(this.id).subscribe((data) => {
+      data.data.farms.map((farm) => {
+        let overallWeight = 0;
+        farm.overall_score = 0;
+        farm.evaluatedGaps.map((gap) => {
+          overallWeight += gap.overall_weight;
+        })
+        farm.evaluatedGaps.map((gap) => {
+          farm.overall_score += gap.overall_score * 100 / overallWeight;
+        })
+        return farm
+      })
       this.visits = data.data;
-      console.log(this.visits);
     });
   }
 }

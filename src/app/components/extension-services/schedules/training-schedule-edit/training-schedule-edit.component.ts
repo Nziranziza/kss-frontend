@@ -15,6 +15,7 @@ import {
 } from "../../../../core";
 import { isEmptyObject } from "jquery";
 import { ActivatedRoute, Router } from "@angular/router";
+import { SuccessModalComponent } from "src/app/shared";
 
 @Component({
   selector: "app-training-schedule-edit",
@@ -30,6 +31,8 @@ export class TrainingScheduleEditComponent
   selectedStartDate: string;
   selectedEndDate: string;
   newDate: Date = new Date();
+  sectors: any[];
+  districts: any;
   constructor(
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
@@ -72,8 +75,8 @@ export class TrainingScheduleEditComponent
       trainer: ["", Validators.required],
       description: [""],
       location: this.formBuilder.group({
-        prov_id: [''],
-        dist_id: [''],
+        prov_id: [{value: "", disabled: true }],
+        dist_id: [{value: "", disabled: true }],
         sect_id: [""],
         cell_id: [""],
         village_id: [""],
@@ -141,15 +144,24 @@ export class TrainingScheduleEditComponent
         this.scheduleTraining.controls.location
           .get("venue".toString())
           .setValue(this.scheduleData.venueName, { emitEvent: false });
-        this.scheduleTraining.controls.location
-          .get("prov_id".toString())
-          .setValue(this.scheduleData.location.prov_id._id);
-        this.scheduleTraining.controls.location
-          .get("dist_id".toString())
-          .setValue(this.scheduleData.location.dist_id._id);
+        this.locationService.getProvinces().subscribe((data) => {
+          this.provinces = data;
+          this.locationService
+            .getDistricts(this.scheduleData.location.prov_id._id)
+            .subscribe((dt) => {
+              this.districts = dt;
+              this.scheduleTraining.controls.location
+                .get('prov_id'.toString())
+                .patchValue(this.scheduleData.location.prov_id._id, { emitEvent: true })
+              this.scheduleTraining.controls.location
+                .get('dist_id'.toString())
+                .patchValue(this.scheduleData.location.dist_id._id, { emitEvent: true });
+              this.sectors = this.filterZoningSectors(this.org.coveredSectors);
+            });
+        });
         this.scheduleTraining.controls.location
           .get("sect_id".toString())
-          .setValue(this.scheduleData.location.sect_id._id);
+          .setValue(this.scheduleData.location.sect_id._id, { emitEvent: true });
         this.scheduleTraining.controls.location
           .get("cell_id".toString())
           .setValue(this.scheduleData.location.cell_id._id);
@@ -415,16 +427,6 @@ export class TrainingScheduleEditComponent
       reference: this.authenticationService.getCurrentUser().info.org_id
     }
     this.scheduleTraining.controls.location
-      .get("prov_id".toString())
-      .valueChanges.subscribe((value) => {
-        this.locationChangeProvince(this.scheduleTraining, value);
-      });
-    this.scheduleTraining.controls.location
-      .get("dist_id".toString())
-      .valueChanges.subscribe((value) => {
-        this.locationChangDistrict(this.scheduleTraining, value);
-      });
-    this.scheduleTraining.controls.location
       .get("sect_id".toString())
       .valueChanges.subscribe((value) => {
         this.locationChangSector(this.scheduleTraining, value);
@@ -575,8 +577,13 @@ export class TrainingScheduleEditComponent
     };
     this.trainingService.editSchedule(data, this.id).subscribe((data) => {
       this.successDatails = data.data;
+      this.success(this.successDatails.description, this.successDatails._id);
       this.loading = false;
-    });
+    },
+      (err) => {
+        this.loading = false;
+        this.errors = err.errors;
+      });
   }
 
   sendMessage() {
@@ -585,6 +592,21 @@ export class TrainingScheduleEditComponent
     this.trainingService.sendMessage(data).subscribe((data) => {
       this.router.navigateByUrl("admin/training/schedule/list");
       this.loading = false;
+    });
+  }
+
+  success(name, id) {
+    const modalRef = this.modal.open(SuccessModalComponent, {
+      ariaLabelledBy: "modal-basic-title",
+    });
+    modalRef.componentInstance.message = "has been Scheduled";
+    modalRef.componentInstance.title = "Thank you Training";
+    modalRef.componentInstance.name = name;
+    modalRef.componentInstance.messageEnabled = true;
+    modalRef.componentInstance.smsId = id;
+    modalRef.componentInstance.serviceName = "training";
+    modalRef.result.finally(() => {
+      this.router.navigateByUrl("admin/training/schedule/list");
     });
   }
 
@@ -605,6 +627,7 @@ export class TrainingScheduleEditComponent
     var minutes = date.getMinutes();
     hours = hours % 24;
     hours = hours ? hours : 24; // the hour '0' should be '24'
+    hours = hours < 10 ? "0" + hours : hours;
     minutes = minutes < 10 ? "0" + minutes : minutes;
     var strTime = hours + ":" + minutes;
     return strTime;

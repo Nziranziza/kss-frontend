@@ -19,8 +19,7 @@ import { TrainingScheduleViewComponent } from "../training-schedule-view/trainin
 })
 export class TrainingSchedulingListComponent
   extends BasicComponent
-  implements OnInit, OnDestroy
-{
+  implements OnInit, OnDestroy {
   constructor(
     private messageService: MessageService,
     private trainingService: TrainingService,
@@ -67,20 +66,21 @@ export class TrainingSchedulingListComponent
     this.messageService.clearMessage();
   }
 
-  getSchedules(): void {
+  getSchedules(deleteTrigger = false): void {
     this.loading = true;
     this.trainingService
       .allSchedule(this.authenticationService.getCurrentUser().info.org_id)
       .subscribe((data) => {
         this.schedules = data.data;
-        this.dtTrigger.next();
+        deleteTrigger ? "" : this.dtTrigger.next();
       });
-
-    this.config = {
-      itemsPerPage: 10,
-      currentPage: 0 + 1,
-      totalItems: this.schedules.length,
-    };
+    if (!deleteTrigger) {
+      this.config = {
+        itemsPerPage: 10,
+        currentPage: 0 + 1,
+        totalItems: this.schedules.length,
+      };
+    }
     this.loading = false;
   }
 
@@ -113,12 +113,7 @@ export class TrainingSchedulingListComponent
         this.trainingService.deleteSchedule(group._id).subscribe(
           () => {
             this.loading = true;
-            const body = {
-              reference:
-                this.authenticationService.getCurrentUser().info.org_id,
-            };
-
-            this.getSchedules();
+            this.getSchedules(true);
             this.setMessage("Schedule successfully Deleted!");
           },
           (err) => {

@@ -23,6 +23,7 @@ import { SuccessModalComponent } from "src/app/shared";
 export class EditFarmVisitComponent implements OnInit {
   scheduleVisit: FormGroup;
   errors: any;
+  successDetails: any;
   constructor(
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
@@ -208,7 +209,6 @@ export class EditFarmVisitComponent implements OnInit {
       })
       .subscribe((data) => {
         this.agronomist = data.data;
-        console.log(this.agronomist);
         this.loading = false;
       });
     this.loading = false;
@@ -306,17 +306,18 @@ export class EditFarmVisitComponent implements OnInit {
       adoptionGap.length > 0 ? data.gaps = adoptionGap : data.gaps = [];
       this.visitService.edit(this.id, data).subscribe(
         (data) => {
-          this.loading = false;
+          this.successDetails = data.data;
           this.success(data.data.description, data.data._id);
+          this.loading = false;
         },
         (err) => {
-          this.loading = false;
           this.errors = err.errors;
+          this.loading = false;
         }
       );
     } else {
-      this.loading = false;
       this.errors = this.helper.getFormValidationErrors(this.scheduleVisit);
+      this.loading = false;
     }
   }
 

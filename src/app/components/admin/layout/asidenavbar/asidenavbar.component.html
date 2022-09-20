@@ -5,13 +5,15 @@
 
     <ul class="sidebar-menu tree" data-widget="tree">
       <li routerLinkActive="active" *appHasPermission="[[11, 1]]">
-        <a routerLink="/admin/dashboard">
+        <a routerLink="/admin/dashboard/extension">
           <i class="fa fa-dashboard" aria-hidden="true"></i>
           <span>{{ "dashboard" | translate }}</span>
         </a>
       </li>
       <li routerLinkActive="active" *appHasPermission="[1]">
-        <a routerLink="/admin/organisations/details/{{ user.org_id }}/{{ user.org_id }}/dashboard">
+        <a
+          routerLink="/admin/organisations/details/{{ user.org_id }}/dashboard"
+        >
           <i class="fa fa-dashboard" aria-hidden="true"></i>
           <span>{{ "dashboard" | translate }}</span>
         </a>
@@ -27,7 +29,7 @@
           5,
           11,
           [8, 1],
-          [1, 1],
+          [1, 1]
         ]"
       >
         {{ "COFFEE WASHING STATIONS" | translate }}
@@ -52,12 +54,7 @@
         </a>
       </li>
 
-      <li
-        routerLinkActive="active"
-        *appHasPermission="[
-          [1]
-        ]"
-      >
+      <li routerLinkActive="active" *appHasPermission="[[1]]">
         <a routerLink="/admin/organisations">
           <i class="fa fa-university" aria-hidden="true"></i>
           <span>{{ "Organisations" | translate }}</span>
@@ -396,21 +393,11 @@
           </li>
         </ul>
       </li>
-
-      <li
-        routerLinkActive="active"
-        *appHasPermission="[[4, 1], [4, 11], [4, 12], 0, 6, 5]"
-      >
-        <a routerLink="/admin/cherries/parchments/report">
-          <i class="fa fa-bar-chart-o"></i>
-          <span>Cherries supply</span>
-        </a>
-      </li>
       <li
         class="header"
         *appHasPermission="[
           [8, 2],
-          [8, 1]
+          1
         ]"
       >
         SITES
@@ -451,7 +438,7 @@
           routerLinkActive="active"
           *appHasPermission="[
             [8, 2],
-            [1, 1]
+            1
           ]"
         >
           <a href="#">
@@ -468,7 +455,7 @@
               routerLinkActive="active"
               *appHasPermission="[
                 [8, 2],
-                [1, 1]
+                1
               ]"
             >
               <a routerLink="/admin/input/site/distribution/{{ site._id }}">
@@ -480,7 +467,7 @@
               routerLinkActive="active"
               *appHasPermission="[
                 [8, 2],
-                [1, 1]
+                1
               ]"
             >
               <a routerLink="/admin/input/site/dispatches/{{ site._id }}">
@@ -492,7 +479,7 @@
               routerLinkActive="active"
               *appHasPermission="[
                 [8, 2],
-                [1, 1]
+                1
               ]"
             >
               <a routerLink="/admin/input/site/stock-outs/{{ site._id }}">
@@ -558,7 +545,16 @@
       <li
         class="treeview"
         routerLinkActive="active"
-        *appHasPermission="[0, 6, [4, 1], [4, 11], [4, 12], 5, 8, [[8, 1], 1, 'NOT']]"
+        *appHasPermission="[
+          0,
+          6,
+          [4, 1],
+          [4, 11],
+          [4, 12],
+          5,
+          8,
+          [[8, 1], 1, 'NOT']
+        ]"
       >
         <a href="#">
           <i class="fa fa-bar-chart-o"></i> <span>Input progress reports</span>
