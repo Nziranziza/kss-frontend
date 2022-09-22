@@ -1,6 +1,7 @@
 <h3>
   {{ title }}
-  <button class="btn btn-success btn-margin pull-right" (click)="exportPlan()"><i class="fa fa-download"></i> Export</button>
+  <button class="btn btn-success btn-margin pull-right" (click)="distributionExport()"><i class="fa fa-download"></i>Administrative Report</button>
+  <button class="btn btn-success btn-margin pull-right" (click)="siteExport()"><i class="fa fa-download"></i>Washing Station Report</button>
 </h3>
 <app-list-errors [errorList]="errors"></app-list-errors>
 <app-list-message [message]="message"></app-list-message>
