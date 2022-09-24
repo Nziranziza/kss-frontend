@@ -1,22 +1,21 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { TrainingService, GapService } from "../../../../core";
-import { HelperService } from "../../../../core";
-import { BasicComponent } from "../../../../core";
-import { IDropdownSettings } from "ng-multiselect-dropdown";
-import { SuccessModalComponent } from "../../../../shared";
-import { Router } from "@angular/router";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { TrainingService, GapService } from '../../../../core';
+import { HelperService } from '../../../../core';
+import { BasicComponent } from '../../../../core';
+import { IDropdownSettings } from 'ng-multiselect-dropdown';
+import { SuccessModalComponent } from '../../../../shared';
+import { Router } from '@angular/router';
 
 @Component({
-  selector: "app-training-create",
-  templateUrl: "./training-create.component.html",
-  styleUrls: ["./training-create.component.css"],
+  selector: 'app-training-create',
+  templateUrl: './training-create.component.html',
+  styleUrls: ['./training-create.component.css'],
 })
 export class TrainingCreateComponent
   extends BasicComponent
-  implements OnInit, OnDestroy
-{
+  implements OnInit, OnDestroy {
   constructor(
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
@@ -28,7 +27,7 @@ export class TrainingCreateComponent
     super();
   }
   createTraining: FormGroup;
-  closeResult = "";
+  closeResult = '';
   gapDropdownSettings: IDropdownSettings = {};
 
   files: any[] = [];
@@ -37,69 +36,69 @@ export class TrainingCreateComponent
   gaps: any[] = [];
   loading = false;
 
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void { }
 
   ngOnInit() {
     this.getGaps();
     this.createTraining = this.formBuilder.group({
-      trainingName: ["", Validators.required],
-      description: ["", Validators.required],
+      trainingName: ['', Validators.required],
+      description: ['', Validators.required],
       adoptionGap: [[], Validators.required],
-      status: ["active"],
+      status: ['active'],
     });
     this.gapDropdownSettings = {
       singleSelection: false,
-      idField: "_id",
-      textField: "name",
-      selectAllText: "Select All",
+      idField: '_id',
+      textField: 'name',
+      selectAllText: 'Select All',
       enableCheckAll: false,
-      unSelectAllText: "UnSelect All",
+      unSelectAllText: 'UnSelect All',
       itemsShowLimit: 6,
       allowSearchFilter: true,
     };
   }
 
   get trainingName() {
-    return this.createTraining.get("trainingName");
+    return this.createTraining.get('trainingName');
   }
   get description() {
-    return this.createTraining.get("description");
+    return this.createTraining.get('description');
   }
   get adoptionGap() {
-    return this.createTraining.get("adoptionGap");
+    return this.createTraining.get('adoptionGap');
   }
   get status() {
-    return this.createTraining.get("status");
+    return this.createTraining.get('status');
   }
 
   onGapSelect(item: any) {
-    const gapSelected = this.createTraining.get("adoptionGap".toString());
-    if (item._id === "") {
+    const gapSelected = this.createTraining.get('adoptionGap'.toString());
+    if (item._id === '') {
       gapSelected.setValue(
         [
           {
-            _id: "",
-            name: "Not Applied",
+            _id: '',
+            name: 'Not Applied',
           },
         ],
         { emitEvent: false }
       );
     } else {
-      gapSelected.setValue(gapSelected.value.filter((e) => e._id !== ""));
+      gapSelected.setValue(gapSelected.value.filter((e) => e._id !== ''));
     }
   }
   onDeGapSelect(item: any) {
-    if (item._id === "") {
+    if (item._id === '') {
       this.gapDropdownSettings.singleSelection = false;
     }
-    const gapSelected = this.createTraining.get("adoptionGap".toString());
+    const gapSelected = this.createTraining.get('adoptionGap'.toString());
     const gapOptions = gapSelected.value.filter(
       (data) => data._id !== item._id
     );
     gapSelected.setValue(gapOptions, { emitEvent: false });
   }
   onGapSelectAll(items: any) {
-    const gapSelected = this.createTraining.get("adoptionGap".toString());
+    const gapSelected = this.createTraining.get('adoptionGap'.toString());
     gapSelected.setValue(items, { emitEvent: false });
   }
 
@@ -108,9 +107,9 @@ export class TrainingCreateComponent
       this.files.push({
         name: file.name,
         type: file.type,
-        url: "",
+        url: '',
         file,
-        size: Math.round(file.size / 1024) + " " + "KB",
+        size: Math.round(file.size / 1024) + ' ' + 'KB',
       });
     }
   }
@@ -120,8 +119,8 @@ export class TrainingCreateComponent
     this.gapService.all().subscribe((data) => {
       const newData: any[] = [
         {
-          _id: "",
-          name: "Not Applied",
+          _id: '',
+          name: 'Not Applied',
         },
       ];
       data.data.forEach((gap) => {
@@ -136,14 +135,14 @@ export class TrainingCreateComponent
     const reader = new FileReader();
     return new Promise((resolve, reject) => {
       reader.addEventListener(
-        "load",
+        'load',
         () => {
           resolve(reader.result);
         },
         false
       );
       reader.addEventListener(
-        "error",
+        'error',
         (event) => {
           reject(event);
         },
@@ -157,12 +156,12 @@ export class TrainingCreateComponent
     if (this.createTraining.valid) {
       this.loading = true;
       for (let i = 0; i < this.files.length; i++) {
-        const data = await this.readBase64(this.files[i].file).then((data) => {
-          return data;
+        const data = await this.readBase64(this.files[i].file).then((newdata) => {
+          return newdata;
         });
         this.materials.push(data);
       }
-      this.modalService.open(content, { ariaLabelledBy: "modal-basic-title" });
+      this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' });
       this.trainingService
         .uploadMaterial({ materials: this.materials })
         .subscribe(
@@ -191,19 +190,21 @@ export class TrainingCreateComponent
     const value = JSON.parse(JSON.stringify(this.createTraining.value));
     const adoptionGap = [];
     value.adoptionGap.forEach((adoption) => {
-      if (adoption._id != "") {
+      if (adoption._id !== '') {
         adoptionGap.push(adoption._id);
       }
     });
     const materials = [];
-    this.files.map((file, index) => {
-      materials.push({
-        fileName: file.name,
-        url: this.results[index],
+    if (this.results.length > 0) {
+      this.files.map((file, index) => {
+        materials.push({
+          fileName: file.name,
+          url: this.results[index],
+        });
       });
-    });
+    }
 
-    let data: any = {
+    const data: any = {
       trainingName: value.trainingName,
       description: value.description,
       materials,
@@ -214,10 +215,10 @@ export class TrainingCreateComponent
     }
 
     this.trainingService.create(data).subscribe(
-      (data) => {
+      (newdata) => {
         this.loading = false;
-        this.setMessage("Training successfully created.");
-        
+        this.setMessage('Training successfully created.');
+
       },
       (err) => {
         this.loading = false;
@@ -231,18 +232,18 @@ export class TrainingCreateComponent
   }
 
   open(content) {
-    this.modalService.open(content, { ariaLabelledBy: "modal-basic-title" });
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' });
   }
 
   success(name) {
     const modalRef = this.modalService.open(SuccessModalComponent, {
-      ariaLabelledBy: "modal-basic-title",
+      ariaLabelledBy: 'modal-basic-title',
     });
-    modalRef.componentInstance.message = "has been added";
-    modalRef.componentInstance.title = "Thank you";
+    modalRef.componentInstance.message = 'has been added';
+    modalRef.componentInstance.title = 'Thank you';
     modalRef.componentInstance.name = name;
     modalRef.result.finally(() => {
-      this.router.navigateByUrl("admin/training/list");
+      this.router.navigateByUrl('admin/training/list');
     });
   }
 }

@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Subject } from 'rxjs';
 import {
   AuthenticationService,
+  AuthorisationService,
   BasicComponent,
   GroupService,
   LocationService,
@@ -14,13 +15,14 @@ import {
 } from 'src/app/core';
 import { DatePipe } from '@angular/common';
 import { isUndefined } from 'util';
+import { DataTableDirective } from 'angular-datatables';
 
 @Component({
   selector: 'app-reports',
   templateUrl: './reports.component.html',
   styleUrls: ['./reports.component.css'],
 })
-export class ReportsComponent extends BasicComponent implements OnInit {
+export class ReportsComponent extends BasicComponent implements OnInit, AfterViewInit {
   newOrg: any;
   newData: any;
   selectedGroup: any;
@@ -37,29 +39,21 @@ export class ReportsComponent extends BasicComponent implements OnInit {
     private trainingService: TrainingService,
     private reportService: ReportService,
     private siteService: SiteService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private authorisationService: AuthorisationService
   ) {
     super(locationService, organisationService);
   }
 
   loading = false;
   reportForm: FormGroup;
+  @ViewChild(DataTableDirective, { static: false })
+  dtElement: DataTableDirective;
+  dtInstance: DataTables.Api;
   @ViewChild('orgAuto') orgAuto: any;
   dtOptions: DataTables.Settings = {};
   // @ts-ignore
   dtTrigger: Subject = new Subject();
-  dt2Options: DataTables.Settings = {};
-  // @ts-ignore
-  dt2Trigger: Subject = new Subject();
-  dt3Options: DataTables.Settings = {};
-  // @ts-ignore
-  dt3Trigger: Subject = new Subject();
-  dt4Options: DataTables.Settings = {};
-  // @ts-ignore
-  dt4Trigger: Subject = new Subject();
-  dt5Options: DataTables.Settings = {};
-  // @ts-ignore
-  dt5Trigger: Subject = new Subject();
   groups: any[] = [];
   currentSeason: any;
   stats: any = {};
@@ -84,15 +78,10 @@ export class ReportsComponent extends BasicComponent implements OnInit {
     'Saturday',
     'Sunday',
   ];
+  isCWSUser = false;
+  orgName = '';
 
   ngOnInit() {
-    this.dtOptions,
-      this.dt2Options,
-      this.dt3Options,
-      this.dt4Options = {
-        pagingType: 'full_numbers',
-        pageLength: 10,
-      };
     this.reportForm = this.formBuilder.group({
       reportFor: [''],
       filter: this.formBuilder.group({
@@ -114,11 +103,17 @@ export class ReportsComponent extends BasicComponent implements OnInit {
         }),
       })
     });
+    this.isCWSUser = this.authorisationService.isCWSUser();
+    this.orgName = this.authenticationService.getCurrentUser().orgInfo.orgName;
     this.seasonStartingDate = this.datePipe.transform(this.authenticationService.getCurrentSeason().created_at, 'yyyy-MM-dd');
     this.currentDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
     this.basicInit();
     this.initial();
     this.onChanges();
+  }
+
+  ngAfterViewInit(): void {
+    // this.dtTrigger.next();
   }
 
   initial() {
@@ -136,11 +131,18 @@ export class ReportsComponent extends BasicComponent implements OnInit {
 
   getOrganisations() {
     this.organisationService.all().subscribe((data) => {
+      this.organisations = data.content;
       if (data) {
         this.organisations.unshift({
           organizationName: 'all cws',
           _id: '',
         });
+        if (this.isCWSUser) {
+          this.selectEvent({
+            _id: this.authenticationService.getCurrentUser().info.org_id,
+            organizationName: this.orgName
+          })
+        }
       }
     });
   }
@@ -168,7 +170,7 @@ export class ReportsComponent extends BasicComponent implements OnInit {
     } else {
       this.newOrg = undefined;
     }
-    this.getStats();
+    this.isCWSUser ? this.getStats() : console.log('');
   }
 
   deselectEvent() {
@@ -368,6 +370,7 @@ export class ReportsComponent extends BasicComponent implements OnInit {
     const value = this.reportForm.get('reportFor').value;
     let body = this.getLocation();
     const form = JSON.parse(JSON.stringify(this.reportForm.value));
+    this.isCWSUser ? this.newOrg = this.authenticationService.getCurrentUser().info.org_id : this.newOrg = this.newOrg;
     if (value === 'Farmer Groups') {
       body = {
         ...body,
@@ -399,20 +402,26 @@ export class ReportsComponent extends BasicComponent implements OnInit {
         let maleNumberOfAttendedTrainees = 0;
         let femaleNumberOfAttendedTrainees = 0;
         let totalFemales = 0;
-        data.data.forEach((data) => {
-          numberOfTrainees += data.numberOfTrainees;
-          numberOfAttendedTrainees += data.numberOfAttendedTrainees;
-          if (data.gender == "M" || data.gender == "m") {
-            totalMales += data.numberOfTrainees;
-            maleNumberOfAttendedTrainees += data.numberOfAttendedTrainees;
+        data.data.forEach((newdata) => {
+          numberOfTrainees += newdata.numberOfTrainees;
+          numberOfAttendedTrainees += newdata.numberOfAttendedTrainees;
+          if (newdata.gender === 'M' || newdata.gender === 'm') {
+            totalMales += newdata.numberOfTrainees;
+            maleNumberOfAttendedTrainees += newdata.numberOfAttendedTrainees;
           }
 
-          if (data.gender == "F" || data.gender == "f") {
+          if (newdata.gender === 'F' || newdata.gender === 'f') {
             totalFemales += data.numberOfTrainees;
-            femaleNumberOfAttendedTrainees += data.numberOfAttendedTrainees;
+            femaleNumberOfAttendedTrainees += newdata.numberOfAttendedTrainees;
           }
         })
-        this.stats = { numberOfTrainees, numberOfAttendedTrainees, totalMales, totalFemales, maleNumberOfAttendedTrainees, femaleNumberOfAttendedTrainees };
+        this.stats = {
+          numberOfTrainees,
+          numberOfAttendedTrainees,
+          totalMales, totalFemales,
+          maleNumberOfAttendedTrainees,
+          femaleNumberOfAttendedTrainees
+        };
       });
     } else if (value === 'Farm Visits') {
       const date = form.filter.date;
@@ -463,21 +472,20 @@ export class ReportsComponent extends BasicComponent implements OnInit {
       this.reportsTableData = [];
       this.reportService.groupSummary(this.reportBody).subscribe((data) => {
         this.reportsTableData = data.data;
-        this.dtTrigger.next();
+
         this.reportGenerated = true;
       });
     } else if (this.reportForm.value.reportFor === 'Trainings') {
       this.reportsTableData = [];
       this.reportService.trainingSummary(this.reportBody).subscribe((data) => {
         this.reportsTableData = data.data;
-        this.dt2Trigger.next();
         this.reportGenerated = true;
       });
     } else if (this.reportForm.value.reportFor === 'Farm Visits') {
       this.reportsTableData = [];
       this.reportService.visitSummary(this.reportBody).subscribe((data) => {
         this.reportsTableData = data.data;
-        this.dt3Trigger.next();
+
         this.reportGenerated = true;
       });
     } else if (this.reportForm.value.reportFor === 'Coffee Farmers') {
@@ -485,7 +493,7 @@ export class ReportsComponent extends BasicComponent implements OnInit {
       this.reportBody.searchBy = 'farmer';
       this.reportService.farmSummary(this.reportBody).subscribe((data) => {
         this.reportsTableData = data.data;
-        this.dt3Trigger.next();
+
         this.reportGenerated = true;
       });
     } else if (this.reportForm.value.reportFor === 'Coffee Farms') {
@@ -493,10 +501,14 @@ export class ReportsComponent extends BasicComponent implements OnInit {
       this.reportBody.searchBy = 'farm';
       this.reportService.farmSummary(this.reportBody).subscribe((data) => {
         this.reportsTableData = data.data;
-        this.dt3Trigger.next();
+
         this.reportGenerated = true;
       });
     }
+    this.dtOptions = {
+      pagingType: 'full_numbers',
+      pageLength: 25,
+    };
   }
 
   generateFinalReport() {
@@ -591,5 +603,4 @@ export class ReportsComponent extends BasicComponent implements OnInit {
     this.newOrg = undefined;
     this.newData = undefined;
   }
-
 }
