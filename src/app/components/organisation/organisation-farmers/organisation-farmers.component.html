@@ -278,8 +278,7 @@
                     <option value="" selected="selected">All provinces</option>
                     <option
                       *ngFor="let province of provinces"
-                      value="{{ province._id }}"
-                    >
+                      value="{{ province._id }}">
                       {{ province.namee | titlecase }}
                     </option>
                   </select>
@@ -379,18 +378,17 @@
                 class="form-control"
                 placeholder="search.."
               />
-              <!--
-              <button
-              class="btn btn-warning pull-right btn-margin"
-              type="button"
-              (click)="onClearFilter()">
-              Clear
-              </button>
-            --></div>
+             </div>
           </div>
           <br />
           <button class="btn btn-action text-center" type="submit">
             <i class="fa fa-search"></i> Submit
+          </button>
+          <button
+            class="btn btn-warning text-center btn-margin"
+            type="button"
+            (click)="onClearFilter()">
+            Clear
           </button>
         </form>
       </div>
@@ -552,8 +550,7 @@
             [screenReaderPaginationLabel]="labels.screenReaderPaginationLabel"
             [screenReaderPageLabel]="labels.screenReaderPageLabel"
             [screenReaderCurrentLabel]="labels.screenReaderCurrentLabel"
-            (pageChange)="onPageChange($event)"
-          >
+            (pageChange)="onPageChange($event)"          >
           </pagination-controls>
         </div>
       </div>
