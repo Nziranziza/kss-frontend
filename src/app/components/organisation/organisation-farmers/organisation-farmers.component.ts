@@ -178,10 +178,10 @@ export class OrganisationFarmersComponent
           this.cwsSummary = data.content[0];
         }
       });
-    if (this.authenticationService.getCurrentUser().orgInfo.distributionSite) {
+    if (this.authenticationService.getCurrentUser().orgInfo.distributionSites) {
       this.siteService
         .get(
-          this.authenticationService.getCurrentUser().orgInfo.distributionSite
+          this.authenticationService.getCurrentUser().orgInfo.distributionSites
         )
         .subscribe((data) => {
           this.site = data.content;

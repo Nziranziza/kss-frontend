@@ -43,8 +43,8 @@
               <div class="stats-box-details-left">Contacts</div>
             </div>
             <div class="col-md-10">
-              <div class="stats-box-details-right">
-                Email: <span class="bold"> {{ org?.email }} </span>
+              <div class="stats-box-details-right text-lowercase">
+                Email: <span class="bold"> {{ org?.email?.toLowerCase() }} </span>
               </div>
               <div class="stats-box-details-right">
                 Phone: <span class="bold"> {{ org?.phone_number }} </span>
