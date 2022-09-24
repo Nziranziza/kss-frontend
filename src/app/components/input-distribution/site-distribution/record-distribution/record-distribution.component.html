@@ -1,0 +1,126 @@
+<div class="modal-header">
+  <i (click)="modal.dismiss()" aria-label="Close" class="fa fa-times-circle close" style="font-size: 24px;">
+  </i>
+</div>
+<div class="modal-body">
+  <app-list-errors [errorList]="errors"></app-list-errors>
+  <div class="row">
+    <div class=" col-md-3 col-sm-6 ">
+      <div class="row">
+        <div class="col-sm-6">
+          <br>
+          REG number
+        </div>
+        <div class="col-sm-6">
+          <br>
+          <span style="font-weight: bold;">{{ regNumber }}</span><br>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="container custom-tabs">
+        <div class="row">
+          <div class="col-md-12" style="padding-right: 0px; padding-left: 0px; margin-top: 15px">
+            <div class="card" style="border: none !important;">
+              <ul class="nav nav-tabs" role="tablist">
+                <!--
+                  <li role="presentation" class="active"><a href="#update-trees" aria-controls="update-trees" role="tab"
+                  data-toggle="tab"><span>Update trees</span></a></li>
+                -->
+                <!--<li role="presentation">
+                  <a aria-controls="distribute" role="tab"
+                                           data-toggle="tab"><span>Distribute</span></a>
+                </li>-->
+              </ul>
+              <div class="tab-content">
+                <!--
+                  <div role="tabpanel" class="tab-pane active" id="update-trees">
+                    <form [formGroup]="updateRequestForm" (ngSubmit)="updateRequestAtDistribution()">
+                      <div class="row">
+                        <div class="col-sm-3">
+                          <div class="form-group">
+                            <span class="control-label label-required">Trees at distribution</span> &nbsp; &nbsp;
+                            <input type="text" formControlName="treesAtDistribution" class="form-control"
+                                   placeholder="">
+                          </div>
+                        </div>
+                        <div class="col-sm-3">
+                          <div class="form-group">
+                            <span class="control-label label-required">Comment</span> &nbsp; &nbsp;
+                            <select class="form-control" formControlName="comment">
+                              <option></option>
+                              <option *ngFor="let comment of comments" value="{{comment.value}}">
+                                {{comment.description}}
+                              </option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="col-sm-4" style="margin-top: 25px">
+                          <div class="form-group">
+                            <button class="btn btn-success btn-sm btn-margin">save</button>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                -->
+                <div class="tab-pane active" id="distribute" role="tabpanel">
+                  <form (ngSubmit)="onSubmit()" [formGroup]="distributionForm">
+                    <div class="row" style="margin-top: 25px">
+                      <div class="col-sm-3">
+                        <div class="form-group">
+                          <span class="label-required">Stock</span> &nbsp; &nbsp;
+                          <select class="form-control" formControlName="stockOutId">
+                            <option></option>
+                            <ng-container *ngFor="let stock of stockOuts">
+                              <option *ngIf="stock.inputId.inputType === 'Fertilizer'" value="{{stock._id}}">
+                                {{ stock.totalQuantity - stock.distributedQty | number : '1.0-2'}}
+                                Kg
+                                - {{ stock.created_at|date }} {{ stock.destination ? getDestination(stock.destination) : ' - ' + stock.location.cell_id.name }}
+                              </option>
+                            </ng-container>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-sm-3">
+                        <div class="form-group">
+                          <span class="label-required">Quantity Fertilizer(Kg)</span> &nbsp; &nbsp;
+                          <input class="form-control" formControlName="quantity" type="text">
+                        </div>
+                      </div>
+                      <div class="col-sm-3">
+                        <div class="form-group">
+                          <span class="control-label label-required">Trees at distribution</span> &nbsp; &nbsp;
+                          <input class="form-control" formControlName="treesAtDistribution" max="100000"
+                                 min="0" placeholder="" type="number">
+                        </div>
+                      </div>
+                      <div class="col-sm-3">
+                        <div class="form-group">
+                          <span class="control-label">Comment</span> &nbsp; &nbsp;
+                          <select class="form-control" formControlName="comment">
+                            <option value="7">No comment</option>
+                            <option *ngFor="let comment of comments" value="{{comment.value}}">
+                              {{comment.description}}
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-sm-1" style="margin-top: 25px">
+                        <button [disabled]="isLoading" class="btn btn-success btn-sm">save</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

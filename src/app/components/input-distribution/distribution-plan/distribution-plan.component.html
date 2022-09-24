@@ -1,0 +1,141 @@
+<h3>
+  {{ title }}
+  <button class="btn btn-success btn-margin pull-right" (click)="distributionExport()"><i class="fa fa-download"></i>Administrative Report</button>
+  <button class="btn btn-success btn-margin pull-right" (click)="siteExport()"><i class="fa fa-download"></i>Washing Station Report</button>
+</h3>
+<app-list-errors [errorList]="errors"></app-list-errors>
+<app-list-message [message]="message"></app-list-message>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box box-default">
+      <div class="box-body">
+        <form [formGroup]="filterForm">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="row">
+                <div formGroupName="location">
+                  <div class="col-xs-2" *ngIf="!isCurrentUserDCC">
+                    <div class="form-group">
+                      <span class="">Province</span>
+                      <div class="input-group input-group-sm">
+                        <select class="form-control" formControlName="prov_id">
+                          <option value="" selected="selected">ALL PROVINCES</option>
+                          <option *ngFor="let prov of provinces" value="{{prov._id}}">{{prov.namee}}</option>
+                        </select>
+                        <span class="input-group-btn">
+                      <button type="button" class="btn btn-default btn-flat" (click)="onSubmit('province')">
+                        <i class="fa fa-search"></i>
+                      </button>
+                    </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-2">
+                    <div class="form-group">
+                      <span class="">District</span>
+                      <div class="input-group input-group-sm">
+                        <select class="form-control" formControlName="dist_id" disabled="true"
+                                *ngIf="isCurrentUserDCC; else enabled">
+                          <option value=""></option>
+                          <option *ngFor="let dist of districts" value="{{dist._id}}">{{dist.name}}</option>
+                        </select>
+                        <ng-template #enabled>
+                          <select class="form-control" formControlName="dist_id">
+                            <option value=""></option>
+                            <option *ngFor="let dist of districts" value="{{dist._id}}">{{dist.name}}</option>
+                          </select>
+                        </ng-template>
+                        <span class="input-group-btn">
+                      <button type="button" class="btn btn-default btn-flat" (click)="onSubmit('district')"
+                              [disabled]="!distId">
+                        <i class="fa fa-search"></i>
+                      </button>
+                    </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <app-loader *ngIf="loading"></app-loader>
+        <div class="row">
+          <div class="col-sm-2 col-xs-4">
+            <div class="description-block border-right">
+              <h5 class="description-header text-green">{{ totalTrees | number }}</h5>
+              <span class="description-text">TREES</span>
+            </div>
+            <!-- /.description-block -->
+          </div>
+          <!-- /.col -->
+          <div class="col-sm-2 col-xs-4">
+            <div class="description-block border-right">
+              <h5 class="description-header text-blue">{{ totalFertilizerNeeded | number:'1.0-1' }}</h5>
+              <span class="description-text">NEEDED FERTILIZER (KG)</span>
+            </div>
+            <!-- /.description-block -->
+          </div>
+          <!-- /.col -->
+          <div class="col-sm-2 col-xs-4">
+            <div class="description-block border-right">
+              <h5 class="description-header text-blue">{{ totalFertilizerAllocated | number:'1.0-1' }}</h5>
+              <span class="description-text">ALLOCATED FERTILIZER (KG)</span>
+            </div>
+            <!-- /.description-block -->
+          </div>
+          <!-- /.col -->
+          <div class="col-sm-2 col-xs-4">
+            <div class="description-block border-right">
+              <h5 class="description-header text-blue">{{ totalFarmers | number }}</h5>
+              <span class="description-text">FARMERS</span>
+            </div>
+            <!-- /.description-block -->
+          </div>
+          <!-- /.col -->
+          <div class="col-sm-2 col-xs-4">
+            <div class="description-block">
+              <h5 class="description-header text-blue">{{ totalNumberOfLands | number }}</h5>
+              <span class="description-text">LANDS</span>
+            </div>
+            <!-- /.description-block -->
+          </div>
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body" *ngIf="showPlan">
+        <div class="row">
+          <div class="col-sm-12 col-xs-12">
+            <table class="table table-striped">
+              <thead>
+              <tr>
+                <th>Location</th>
+                <th>Number of trees</th>
+                <th>Number of farmers</th>
+                <th>Fertilizer needed</th>
+                <th>Fertilizer allocated</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let plan of plans;">
+                <td>{{plan.location}}</td>
+                <td>{{plan.numberOfTrees | number }}</td>
+                <td>{{plan.numberOfFarmers | number }}</td>
+                <td>{{plan.fertilizerNeed | number:'1.0-1' }} Kg</td>
+                <td>{{plan.fertilizerAllocated | number:'1.0-1' }} Kg</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- ./box-body -->
+    </div>
+    <!-- /.box -->
+  </div>
+  <!-- /.col -->
+</div>
+

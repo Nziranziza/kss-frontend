@@ -1,0 +1,100 @@
+<div class="modal-body extended-modal-body">
+  <div
+    (click)="modal.dismiss('cancel click')"
+    class="btn-modal-close text-center"
+  >
+    <em class="fa fa-close"></em>
+  </div>
+  <h3>Visit Details</h3>
+  <div class="box">
+    <div class="box-body box-confirm">
+      <div class="row">
+        <div class="col-xs-12">
+          <div style="margin-bottom: 10px">
+            <label class="control-label">Farm to visit</label>
+            <div class="confirm-text-box confirm-text">
+              <table class="row-border hover table">
+                <thead>
+                  <tr>
+                    <th>Owner</th>
+                    <th>Phone Number</th>
+                    <th>Location</th>
+                    <th>UPI</th>
+                    <th>Score</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let farm of visits?.farms; let i = index">
+                    <td>
+                      {{ farm.owner?.firstName + " " + farm.owner?.lastName }}
+                    </td>
+                    <td>{{ farm.owner?.phoneNumber }}</td>
+                    <td>
+                      {{
+                        farm?.location?.prov_id?.namek.toLowerCase()+
+                          " > " +
+                          farm?.location?.dist_id?.name +
+                          " > " +
+                          farm?.location?.sect_id?.name +
+                          " > " +
+                          farm?.location?.cell_id?.name +
+                          " > " +
+                          farm?.location?.village_id?.name
+                      }}
+                    </td>
+                    <td>
+                      {{ farm?.upiNumber }}
+                    </td>
+                    <td> {{farm?.overall_score }} % </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div style="margin-bottom: 10px">
+            <label class="control-label"
+              >GAP to be covered during the visit</label
+            >
+            <div class="confirm-text-box confirm-text">
+              <table class="row-border hover table">
+                <thead>
+                  <tr>
+                    <th>Gap Name</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let gap of visits?.gaps; let i = index">
+                    <td>{{ gap.gap_name }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div style="margin-bottom: 10px">
+            <label class="control-label">Agronomist who will visit</label>
+            <div class="confirm-text-box confirm-text">
+              {{ visits?.visitor.firstName + " " + visits?.visitor.lastName }}
+            </div>
+          </div>
+          <div style="margin-bottom: 10px">
+            <label class="control-label">Date and Time of the visit</label>
+            <div class="confirm-text-box confirm-text">
+              {{ visits?.date | date: "shortDate" }} <br />
+              From :
+              {{ visits?.expectedDuration ? visits.expectedDuration.from : "" }}
+              <br />
+              To :
+              {{ visits?.expectedDuration ? visits.expectedDuration.to : "" }}
+            </div>
+          </div>
+          <div style="margin-bottom: 10px">
+            <label class="control-label">Visit Description</label>
+            <div class="confirm-text-box confirm-text">
+              {{ visits?.description }} <br />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

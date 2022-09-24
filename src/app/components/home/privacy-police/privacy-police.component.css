@@ -1,0 +1,49 @@
+@page {  }
+table { border-collapse:collapse; border-spacing:0; empty-cells:show }
+td, th { vertical-align:top; font-size:12pt;}
+h1, h2, h3, h4, h5, h6 { clear:both;}
+ol, ul { margin:0; padding:0;}
+li { list-style: none; margin:0; padding:0;}
+/* "li span.odfLiEnd" - IE 7 issue*/
+li span. { clear: both; line-height:0; width:0; height:0; margin:0; padding:0; }
+span.footnodeNumber { padding-right:1em; }
+span.annotation_style_by_filter { font-size:95%; font-family:Arial; background-color:#fff000;  margin:0; border:0; padding:0;  }
+span.heading_numbering { margin-right: 0.8rem; }* { margin:0;}
+.fr1 { font-size:11pt; font-family:Calibri; text-align:center; vertical-align:top; writing-mode:horizontal-tb; direction:ltr; margin-left:0in; margin-right:0in; margin-top:0in; margin-bottom:0in; background-color:transparent; padding:0in; border-style:none; }
+.P1 { font-size:11pt; line-height:100%; margin-bottom:0in; margin-top:0in; text-align:center ! important; font-family:Calibri; writing-mode:horizontal-tb; direction:ltr; }
+.P10 { font-size:10pt; line-height:100%; margin-bottom:0in; margin-left:0.5in; margin-right:0in; margin-top:0in; text-align:left ! important; text-indent:0in; font-family:Calibri; writing-mode:horizontal-tb; direction:ltr; color:#262626; }
+.P11 { font-size:11pt; line-height:108%; margin-bottom:0.111in; margin-top:0in; text-align:center ! important; font-family:Calibri; writing-mode:horizontal-tb; direction:ltr; }
+.P12 { font-size:10pt; line-height:108%; margin-bottom:0.111in; margin-top:0in; text-align:left ! important; font-family:Calibri; writing-mode:horizontal-tb; direction:ltr; font-weight:bold; }
+.P13 { font-size:11pt; line-height:100%; margin-bottom:0in; margin-top:0in; text-align:center ! important; font-family:Calibri; writing-mode:horizontal-tb; direction:ltr; text-decoration:underline; font-weight:bold; }
+.P14 { font-size:11pt; line-height:100%; margin-bottom:0in; margin-top:0in; text-align:left ! important; font-family:Calibri; writing-mode:horizontal-tb; direction:ltr; }
+.P15 { font-size:11pt; line-height:100%; margin-bottom:0in; margin-top:0in; text-align:center ! important; font-family:Calibri; writing-mode:horizontal-tb; direction:ltr; }
+.P16 { font-size:10pt; line-height:100%; margin-bottom:0in; margin-top:0in; text-align:left ! important; font-family:Calibri; writing-mode:horizontal-tb; direction:ltr; color:#262626; font-style:italic; }
+.P17 { font-size:10pt; line-height:100%; margin-bottom:0in; margin-top:0in; text-align:left ! important; font-family:Calibri; writing-mode:horizontal-tb; direction:ltr; color:#262626; font-weight:bold; }
+.P18 { font-size:10pt; line-height:100%; margin-bottom:0in; margin-top:0in; text-align:left ! important; font-family:Calibri; writing-mode:horizontal-tb; direction:ltr; color:#262626; }
+.P19 { font-size:10pt; line-height:100%; margin-bottom:0in; margin-top:0in; text-align:left ! important; font-family:Calibri; writing-mode:horizontal-tb; direction:ltr; color:#262626; }
+.P20 { font-size:10pt; line-height:100%; margin-bottom:0in; margin-top:0in; text-align:left ! important; font-family:Calibri; writing-mode:horizontal-tb; direction:ltr; color:#262626; text-decoration:underline; }
+.P21 { font-size:10pt; line-height:100%; margin-bottom:0in; margin-top:0in; text-align:left ! important; font-family:Calibri; writing-mode:horizontal-tb; direction:ltr; color:#262626; font-weight:bold; }
+.P22 { font-size:11pt; line-height:108%; margin-bottom:0.111in; margin-top:0in; text-align:center ! important; font-family:Calibri; writing-mode:horizontal-tb; direction:ltr; }
+.P3 { font-size:11pt; line-height:100%; margin-bottom:0in; margin-left:0.5in; margin-right:0in; margin-top:0in; text-align:left ! important; text-indent:0in; font-family:Calibri; writing-mode:horizontal-tb; direction:ltr; }
+.P4 { font-size:11pt; line-height:100%; margin-bottom:0in; margin-left:0.5in; margin-right:0in; margin-top:0in; text-align:left ! important; text-indent:0in; font-family:Calibri; writing-mode:horizontal-tb; direction:ltr; }
+.P5 { font-size:11pt; line-height:100%; margin-bottom:0in; margin-left:0.5in; margin-right:0in; margin-top:0in; text-align:left ! important; text-indent:0in; font-family:Calibri; writing-mode:horizontal-tb; direction:ltr; }
+.P6 { font-size:11pt; line-height:100%; margin-bottom:0in; margin-left:0.5in; margin-right:0in; margin-top:0in; text-align:left ! important; text-indent:0in; font-family:Calibri; writing-mode:horizontal-tb; direction:ltr; }
+.P7 { font-size:11pt; line-height:100%; margin-bottom:0in; margin-left:0.5in; margin-right:0in; margin-top:0in; text-align:left ! important; text-indent:0in; font-family:Calibri; writing-mode:horizontal-tb; direction:ltr; }
+.P8 { font-size:11pt; line-height:100%; margin-bottom:0in; margin-left:0.5in; margin-right:0in; margin-top:0in; text-align:left ! important; text-indent:0in; font-family:Calibri; writing-mode:horizontal-tb; direction:ltr; }
+.P9 { font-size:11pt; line-height:100%; margin-bottom:0in; margin-left:0.5in; margin-right:0in; margin-top:0in; text-align:left ! important; text-indent:0in; font-family:Calibri; writing-mode:horizontal-tb; direction:ltr; }
+.Standard { font-size:11pt; font-family:Calibri; writing-mode:horizontal-tb; direction:ltr; margin-top:0in; margin-bottom:0.111in; line-height:108%; text-align:left ! important; }
+.Table1 { width:6.4931in; margin-left:0in; margin-top:0in; margin-bottom:0in; margin-right:auto;writing-mode:horizontal-tb; direction:ltr; }
+.Table1_A1 { padding-left:0.075in; padding-right:0.075in; padding-top:0in; padding-bottom:0in; border-width:0.0176cm; border-style:solid; border-color:#bfbfbf; }
+.Table1_A { width:3.2465in; }
+.Table1_B { width:3.2458in; }
+.Internet_20_link { color:#0563c1; text-decoration:underline; }
+.T1 { text-decoration:underline; font-weight:bold; }
+.T2 { color:#262626; font-size:10pt; font-style:italic; }
+.T3 { color:#262626; font-size:10pt; }
+.T4 { color:#262626; font-size:10pt; font-weight:bold; }
+.T5 { color:#262626; font-size:10pt; font-weight:bold; }
+.T6 { color:#262626; font-size:10pt; }
+.T7 { color:#262626; font-size:10pt; text-decoration:underline; }
+.T8 { color:#262626; font-size:10pt; font-weight:bold; }
+.T9 { font-size:10pt; }
+/* ODF styles with no properties representable as CSS */

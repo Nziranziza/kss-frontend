@@ -1,0 +1,22 @@
+{
+    "dashboard": "Dashboard",
+    "reports": "Reports",
+    "sms_dashboard": "SMS Dashboard",
+    "registration": "Registration",
+    "users": "Users",
+    "organizations": "Organizations",
+    "extension_services": "Extension Services",
+    "farmer_groups": "Farmer Groups",
+    "gap_management": "Gap Management",
+    "training_scheduling": "Training Scheduling",
+    "farm_visit": "Farm Visit",
+    "farm_visit_schedeling": "Farm Visit Schedeling",
+    "planting_operation": "Planting Operation",
+    "nurseries": "Nurseries",
+    "general": "General",
+    "sign_out": "Sign Out",
+    "wet_processing": "Wet Processing",
+    "farmers": "Farmers",
+    "parchments": "Parchments",
+    "payments": "Payments"
+}

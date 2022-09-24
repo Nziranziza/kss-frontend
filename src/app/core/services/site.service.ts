@@ -48,6 +48,10 @@ export class SiteService {
     return this.apiService.post('/site/list', body);
   }
 
+  updateDispatchPlan(id: string, body: any): Observable<any> {
+    return this.apiService.put('/v1.1/sites/dispatch-plan/' + id, body);
+  }
+
   getSectorAllocatedFertilizer(sectorId: string) {
     return this.apiService.get('/site/sector/allocated/' + sectorId);
   }
@@ -62,5 +66,9 @@ export class SiteService {
 
   delete(id: string): Observable<any> {
     return this.apiService.delete('/site/' + id);
+  }
+
+  getCWSDispatchPlan(id: string): Observable< any >{
+    return this.apiService.get('/v1.1/sites/dispatch-plan/' + id);
   }
 }

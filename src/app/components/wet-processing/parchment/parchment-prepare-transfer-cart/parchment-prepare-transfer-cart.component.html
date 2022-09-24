@@ -1,0 +1,193 @@
+<div class="row">
+  <div class="col-xs-12">
+    <h3>
+      Prepare parchments transfer
+    </h3>
+  </div>
+</div>
+<app-list-message [message]="message"></app-list-message>
+<app-list-errors [errorList]="errors"></app-list-errors>
+<div class="row filter-form" style="margin-top: 15px;">
+  <form [formGroup]="filterForm" (ngSubmit)="onFilter()">
+    <div class="col-md-2 input-required">
+      <select class="form-control" formControlName="type">
+        <option value="">select type</option>
+        <option *ngFor="let type of coffeeTypes" value="{{type._id}}"> {{ type.name }}</option>
+      </select>
+      <span class="asterisk"></span>
+    </div>
+    <div class="col-md-2 input-required">
+      <select class="form-control" formControlName="grade">
+        <option value="">select grade</option>
+        <option value="A"> A</option>
+        <option value="B"> B</option>
+        <option value="C"> C</option>
+      </select>
+      <span class="asterisk"></span>
+    </div>
+    <ng-container formGroupName="producedDate">
+      <div class="col-md-1">
+        <div class="form-inline">
+          <label class="control-label label-optional">Produced </label>
+        </div>
+      </div>
+      <div class="col-md-1">
+        <div class="form-group">
+          <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="from" class="form-control"
+                 placeholder="from .." [min]="seasonStartingDate" [max]="currentDate">
+          <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+        </div>
+      </div>
+      <div class="col-md-1">
+        <div class="form-group">
+          <input [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" formControlName="to" class="form-control label-optional"
+                 placeholder="to .." [min]="seasonStartingDate" [max]="currentDate">
+          <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
+        </div>
+      </div>
+    </ng-container>
+    <div class="col-md-2">
+      <div class="form-group">
+        <input type="number" formControlName="amount" class="form-control label-required"
+               placeholder="quantity .. (optional)">
+      </div>
+    </div>
+    <div class="col-md-3">
+      <button class="btn btn-warning btn-margin pull-right" type="button" (click)="onClearFilter()"> Clear</button>
+
+      <button class="btn btn-success btn-margin pull-right" type="submit"><i class="fa fa-filter"></i> Select</button>
+    </div>
+  </form>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <app-loader *ngIf="loading"></app-loader>
+    <table class="row-border hover table table-striped">
+      <thead>
+      <tr>
+        <td> Coffee type</td>
+        <td> Coffee grade</td>
+        <td> Qty</td>
+        <td> Lots</td>
+        <td></td>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td> {{ cartItemInfo.coffeeType.name }} </td>
+        <td> {{ cartItemInfo.coffeeGrade }} </td>
+        <td> {{ cartItemInfo.totalKgs + ' &#13199;'}} </td>
+        <td>
+          <button *ngFor="let lot of cartItem; let i = index" type="button" class="btn btn-sm btn-link"
+                  ngbPopover="{{ 'Remaining Qty : ' + lot.remainingQty + '&#13199; ' + ' ; Qty to transfer : ' + lot.amountToTransfer + ' &#13199; ' }}" container="body">
+            {{ lot.lotNumber }}
+          </button>
+        </td>
+        <td>
+          <button class="btn btn-default btn-margin btn-sm pull-right" (click)="resetSelection()"
+                  type="button">
+            <i class="fa fa-remove" aria-hidden="true"></i>
+          </button>
+          <button class="btn btn-success btn-margin btn-sm pull-right" (click)="addCartItemToCart()"
+                  type="button">
+            <i class="fa fa-cart-plus" aria-hidden="true"></i>
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="box">
+      <div class="box-header with-border" style="min-height: 35px;">
+        <h3 class="box-title"> Cart </h3>
+        <div class="box-tools pull-right">
+          <a class="btn btn-box-tool" data-target="#box-body" data-toggle="collapse" style="padding: 10px; height: auto">
+            <span class="badge bg-light-blue-gradient">{{ cart.length }} items</span>
+            {{ totalAmountToTransfer | number }} &#13199;
+          </a>
+        </div>
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body collapse in" id="box-body">
+        <table class="row-border hover table table-striped">
+          <thead>
+          <tr>
+            <td> Coffee type</td>
+            <td> Coffee grade</td>
+            <td> Qty</td>
+            <td> Lots</td>
+            <td></td>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let item of cart; let i = index">
+            <td> {{ item.cartItemInfo.coffeeType.name }} </td>
+            <td> {{ item.cartItemInfo.coffeeGrade }} </td>
+            <td> {{ item.cartItemInfo.totalKgs }}  &#13199;</td>
+            <td>
+              <button *ngFor="let lot of item.cartItem; let i = index" type="button" class="btn btn-sm btn-link"
+                      ngbPopover="{{ 'Remaining Qty : ' + lot.remainingQty + '&#13199; ' + ' ; Qty to transfer : ' + lot.amountToTransfer + ' &#13199; ' }}" container="body">
+                {{ lot.lotNumber }}
+              </button>
+            </td>
+            <td>
+              <button class="btn btn-default btn-margin btn-sm pull-right" (click)="cancelCartItem(i)" type="button">
+                <i class="fa fa-remove" aria-hidden="true"></i>
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <div class="row" style="margin-top: 15px;">
+          <form [formGroup]="transferForm" (ngSubmit)="onTransfer()">
+            <div class="col-md-2">
+              <select class="form-control" formControlName="destOrgId">
+                <option value="">select destination</option>
+                <ng-container *ngFor="let organisation of organisations">
+                  <option value="{{organisation._id}}"> {{
+                    organisation?.organizationName }}
+                  </option>
+                </ng-container>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <div class="form-inline">
+                <div class="radio">
+                  <label>
+                    <input type="radio" formControlName="transferType" value="sold" checked="">
+                    Sold
+                  </label>
+                </div>
+                <div class="radio">
+                  <label>
+                    <input type="radio" formControlName="transferType" value="processing" checked="">
+                    Processing
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <ng-container *ngIf="transferForm.get('appliedCertificates')['controls'].length">
+                <label class="control-label">Applied certificates</label>
+                <div class="checkbox" formArrayName="appliedCertificates"
+                     *ngFor="let role of transferForm.get('appliedCertificates')['controls']; let i = index">
+                  <label>
+                    <input type="checkbox" formControlName="{{i}}">
+                    {{ certificates[i].name }}
+                  </label>
+                </div>
+              </ng-container>
+            </div>
+            <div class="col-md-2">
+              <button class="btn btn-success btn-margin pull-right" type="submit"><i class="fa fa-truck"></i> Transfer
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

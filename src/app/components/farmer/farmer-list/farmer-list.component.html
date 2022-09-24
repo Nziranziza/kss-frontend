@@ -1,0 +1,301 @@
+<div class="row action-bar">
+  <div class="col-md-12">
+    <div class="row">
+      <div class="col-md-6 vcenter">
+        <h3>
+          {{ title }}
+        </h3>
+      </div>
+      <div class="col-md-6 vcenter">
+        <a
+          appRequiredSeason
+          class="btn btn-success btn-margin pull-right"
+          routerLink="/admin/farmers/create"
+          ><i class="fa fa-plus"></i> New Farmer
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12">
+    <div class="col-sm-12 text-center">
+      <h3><b>Filter or Search Farmers</b></h3>
+    </div>
+    <div class="background-search">
+      <form [formGroup]="filterForm">
+        <div class="row">
+          <div formGroupName="searchByLocation">
+            <div class="col-md-2" *ngIf="!isCurrentUserDCC">
+              <div class="form-group">
+                <div class="">
+                  <select class="form-control" formControlName="searchBy">
+                    <option value="farmer_location">
+                      Search by farmer location
+                    </option>
+                    <option value="farm_location">
+                      Search by farm location
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2" *ngIf="!isCurrentUserDCC">
+              <div class="form-group">
+                <div class="">
+                  <select class="form-control" formControlName="prov_id">
+                    <option value="" selected="selected">ALL PROVINCES</option>
+                    <option
+                      *ngFor="let province of provinces"
+                      value="{{ province._id }}"
+                    >
+                      {{ province.namee }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <div class="">
+                  <select
+                    class="form-control"
+                    formControlName="dist_id"
+                    disabled="true"
+                    *ngIf="isCurrentUserDCC; else enabled"
+                  >
+                    <option value=""></option>
+                    <option
+                      *ngFor="let district of districts"
+                      value="{{ district._id }}"
+                    >
+                      {{ district.name }}
+                    </option>
+                  </select>
+                  <ng-template #enabled>
+                    <select class="form-control" formControlName="dist_id">
+                      <option value=""></option>
+                      <option
+                        *ngFor="let district of districts"
+                        value="{{ district._id }}"
+                      >
+                        {{ district.name }}
+                      </option>
+                    </select>
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <div class="">
+                  <select class="form-control" formControlName="sect_id">
+                    <option value=""></option>
+                    <option
+                      *ngFor="let sector of sectors"
+                      value="{{ sector._id }}"
+                    >
+                      {{ sector.name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <div class="">
+                  <select class="form-control" formControlName="cell_id">
+                    <option value=""></option>
+                    <option *ngFor="let cell of cells" value="{{ cell._id }}">
+                      {{ cell.name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <div class="">
+                  <select class="form-control" formControlName="village_id">
+                    <option value="All Villages"></option>
+                    <option
+                      *ngFor="let village of villages"
+                      value="{{ village._id }}"
+                    >
+                      {{ village.name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+      <div class="col-sm-12 text-center">
+        <form [formGroup]="filterForm" (ngSubmit)="onFilter()">
+          <div formGroupName="searchByTerm">
+            <div class="form-inline">
+              <select
+                class="form-control"
+                formControlName="searchBy"
+                style="margin-right: 10px"
+              >
+                <option
+                  *ngFor="let field of searchFields"
+                  value="{{ field.value }}"
+                >
+                  {{ field.name }}
+                </option>
+              </select>
+              <input
+                type="text"
+                formControlName="term"
+                class="form-control"
+                placeholder="search.."
+              />
+            </div>
+          </div>
+          <br />
+          <button class="btn btn-action text-center" type="submit">
+            <i class="fa fa-search"></i> Submit
+          </button>
+          <button
+            class="btn btn-warning btn-margin"
+            type="button"
+            (click)="onClearFilter()" >
+            Clear
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<app-list-message [message]="message"></app-list-message>
+<app-list-errors
+  [errorList]="errors"
+  *ngIf="errors.length > 0"
+></app-list-errors>
+<div class="row">
+  <div class="col-md-12">
+    <div></div>
+    <div class="box">
+      <div class="box-body table-responsive table-condensed">
+        <app-loader *ngIf="loading"></app-loader>
+        <table class="row-border hover table table-striped table-condensed">
+          <thead>
+            <tr>
+              <th>Date Added</th>
+              <th (click)="setOrder('userInfo.foreName')">
+                Farmer Name <i class="fa fa-sort sorting"></i>
+              </th>
+              <th (click)="setOrder('userInfo.surname')">
+                ID Number <i class="fa fa-sort sorting"></i>
+              </th>
+              <th (click)="setOrder('userInfo.NID')">
+                Phone Number <i class="fa fa-sort sorting"></i>
+              </th>
+              <th (click)="setOrder('userInfo.phone_number')">
+                Reg Number <i class="fa fa-sort sorting"></i>
+              </th>
+              <th (click)="setOrder('userInfo.regNumber')">
+                Location Address <i class="fa fa-sort sorting"></i>
+              </th>
+              <th (click)="setOrder('userInfo.regNumber')">
+                Farmer Group <i class="fa fa-sort sorting"></i>
+              </th>
+              <th (click)="setOrder('userInfo.regNumber')">
+                Lands <i class="fa fa-sort sorting"></i>
+              </th>
+              <th>Status</th>
+              <th class="text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody *ngIf="showData">
+            <tr
+              *ngFor="
+                let farmer of farmers
+                  | orderBy: order:reverse:'case-insensitive'
+                  | paginate: config
+              "
+            >
+              <td>{{ farmer.userInfo.createdAt | date: "short" }}</td>
+              <td *ngIf="farmer.userInfo.type === 2; else foreName">
+                {{ farmer.userInfo.groupName }}
+              </td>
+              <ng-template #foreName>
+                <td>
+                  {{ farmer.userInfo.foreName }} {{ farmer.userInfo.surname }}
+                </td>
+              </ng-template>
+              <td>{{ farmer.userInfo.NID }}</td>
+              <td>{{ farmer.userInfo.phone_number }}</td>
+              <td>{{ farmer.userInfo.regNumber | uppercase }}</td>
+              <td>
+                {{ farmer.userInfo?.location?.prov_id.namek.toLowerCase()== null ? '-' :
+                  farmer.userInfo?.location?.prov_id.namek.toLowerCase()+
+                    " " +
+                    farmer.userInfo.location?.dist_id.name +
+                    " " +
+                    farmer.userInfo.location?.sect_id.name +
+                    " " +
+                    farmer.userInfo.location?.cell_id.name +
+                    " " +
+                    farmer.userInfo.location?.village_id.name
+                }}
+              </td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td class="text-center">
+                <button
+                  appRequiredSeason
+                  class="btn btn-action-no-border btn-margin details-button"
+                  *appHasPermission="[[4, 1], 0, [8, 1], [1, 1]]"
+                  routerLink="/admin/farmers/edit/{{ farmer.request._id }}"
+                >
+                  <em class="fa fa-pencil"></em>
+                </button>
+                <!--<button
+                  appRequiredSeason
+                  class="btn btn-action-no-border btn-margin"
+                  *appHasPermission="[[4, 1], 0, [8, 1], [1, 1]]"
+                >
+                  <em class="fa fa-trash"></em>
+                </button>-->
+                <button
+                  *ngIf="hasRequest(farmer)"
+                  class="btn btn-action-no-border btn-margin btn-sm details-button"
+                  (click)="viewDetails(farmer)"
+                >
+                  <em class="fa fa-eye"></em>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div
+          style="width: 100%; border-top: 1px solid #0a0a0a"
+          *ngIf="showData"
+        >
+          <div style="clear: both; float: left; padding-top: 0.755em">
+            Showing {{ (config.currentPage - 1) * config.itemsPerPage + 1 }} to
+            {{ config.currentPage * config.itemsPerPage }} of
+            {{ config.totalItems }} entries
+          </div>
+          <pagination-controls
+            class="custom-pagination"
+            [maxSize]="maxSize"
+            [directionLinks]="directionLinks"
+            [autoHide]="autoHide"
+            [responsive]="responsive"
+            [previousLabel]="labels.previousLabel"
+            [nextLabel]="labels.nextLabel"
+            [screenReaderPaginationLabel]="labels.screenReaderPaginationLabel"
+            [screenReaderPageLabel]="labels.screenReaderPageLabel"
+            [screenReaderCurrentLabel]="labels.screenReaderCurrentLabel"
+            (pageChange)="onPageChange($event)"
+          >
+          </pagination-controls>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

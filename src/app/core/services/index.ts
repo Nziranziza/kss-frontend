@@ -1,5 +1,5 @@
 export * from './api.service';
-export * from './guards/authorisation-guard.service';
+export * from '../guards/authorisation-guard.service';
 export * from './jwt.service';
 export * from './authentication.service';
 export * from './organisation.service';
@@ -20,4 +20,7 @@ export * from './season.service';
 export * from './site.service';
 export * from './user.service';
 export * from './warehouse.service';
+export * from './farm.services';
+export * from './extension-services';
+
 

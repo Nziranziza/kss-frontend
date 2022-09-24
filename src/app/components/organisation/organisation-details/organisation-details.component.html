@@ -1,0 +1,245 @@
+<div class="filter-title-text">
+  <span class="bold"> {{ org?.organizationName }} </span>
+</div>
+<div class="row">
+  <div class="col-md-12 stats-section">
+    <div class="row">
+      <div class="col-md-12 text-center stats-title">CWS Summary</div>
+      <div class="col-md-4" style="padding: 0 5px 0 5px">
+        <div class="text-center stats-box">
+          <div class="stats-box-title">CWS Details</div>
+          <div class="stats-box-details-title">{{ org?.organizationName }}</div>
+          <div class="stats-box-divider"></div>
+          <div class="row">
+            <div class="col-md-2">
+              <div class="stats-box-details-left">Location</div>
+            </div>
+            <div class="col-md-10">
+              <div class="stats-box-details-right">
+                Province:
+                <span class="bold"> {{ org?.location.prov_id.namek.toLowerCase()}} </span>
+              </div>
+              <div class="stats-box-details-right">
+                District:
+                <span class="bold"> {{ org?.location.dist_id.name }} </span>
+              </div>
+              <div class="stats-box-details-right">
+                Sector:
+                <span class="bold"> {{ org?.location.sect_id.name }} </span>
+              </div>
+              <div class="stats-box-details-right">
+                Cell:
+                <span class="bold"> {{ org?.location.cell_id.name }} </span>
+              </div>
+              <div class="stats-box-details-right">
+                Village:
+                <span class="bold"> {{ org?.location.village_id.name }} </span>
+              </div>
+            </div>
+          </div>
+          <div class="stats-box-divider"></div>
+          <div class="row">
+            <div class="col-md-2">
+              <div class="stats-box-details-left">Contacts</div>
+            </div>
+            <div class="col-md-10">
+              <div class="stats-box-details-right text-lowercase">
+                Email: <span class="bold"> {{ org?.email?.toLowerCase() }} </span>
+              </div>
+              <div class="stats-box-details-right">
+                Phone: <span class="bold"> {{ org?.phone_number }} </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4" style="padding: 0 5px 0 0px">
+        <div class="text-center stats-box">
+          <div style="height: 180px">
+            <div class="stats-box-title">Covered Locations</div>
+            <div class="row stats-box-details-left" style="margin-top: 10px">
+              <div class="col-xs-3">Sectors</div>
+              <div class="col-xs-9">Cells</div>
+            </div>
+            <span *ngFor="let area of orgCoveredArea; let i = index">
+              <span>
+                <div class="stats-box-divider-table"></div>
+                <div class="row">
+                  <div class="col-xs-3">
+                    <div class="stats-box-location-sectors">
+                      {{ area?.name }}
+                    </div>
+                  </div>
+                  <div class="col-xs-9">
+                    <div class="stats-box-location-cells">
+                      <span *ngFor="let cell of area.covCells; let i = index">
+                        <span>{{ cell?.name }}, </span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </div>
+<!--          <button class="stats-box-button">View more details</button>-->
+        </div>
+      </div>
+      <div class="col-md-4" style="padding: 0 5px 0 0px">
+        <div class="text-center stats-box">
+          <div class="stats-box-title" style="margin-bottom: 8px">
+            CWS Stats
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="stats-box-cws">
+                <div class="row">
+                  <div class="col-xs-5">
+                    <div class="stats-box-cws-names">Farmers</div>
+                  </div>
+                  <div class="col-xs-7">
+                    <div class="stats-box-cws-tots">
+                      {{ cwsSummary.uniqueFarmersCount | number }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="stats-box-divider-table"></div>
+              <div class="stats-box-cws">
+                <div class="row">
+                  <div class="col-xs-5">
+                    <div class="stats-box-cws-names">Trees</div>
+                  </div>
+                  <div class="col-xs-7">
+                    <div class="stats-box-cws-tots">
+                      {{ cwsSummary.totalNumberOfTrees | number }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="stats-box-divider-table"></div>
+            </div>
+            <div class="col-md-6">
+              <div class="stats-box-cws">
+                <div class="row">
+                  <div class="col-xs-5">
+                    <div class="stats-box-cws-rnames">Received Cherries</div>
+                  </div>
+                  <div class="col-xs-7">
+                    <div class="stats-box-cws-tots">
+                      {{ cwsSummary.totalCherries | number }}
+                      <span class="stats-box-cws-kgs"> Kgs </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="stats-box-divider-table"></div>
+              <div class="stats-box-cws">
+                <div class="row">
+                  <div class="col-xs-5">
+                    <div class="stats-box-cws-rnames">Produced Parchements</div>
+                  </div>
+                  <div class="col-xs-7">
+                    <div class="stats-box-cws-tots">
+                      {{ cwsSummary.totalParchments | number }}
+                      <span class="stats-box-cws-kgs"> Kgs </span>
+                    </div>
+                    <div class="stats-box-cws-desc">0 %</div>
+                  </div>
+                </div>
+              </div>
+              <div class="stats-box-divider-table"></div>
+              <div class="stats-box-cws">
+                <div class="row">
+                  <div class="col-xs-5">
+                    <div class="stats-box-cws-rnames">Expected Parchements</div>
+                  </div>
+                  <div class="col-xs-7">
+                    <div class="stats-box-cws-tots">
+                      {{ cwsSummary.expectedParchments | number }}
+                      <span class="stats-box-cws-kgs"> Kgs </span>
+                    </div>
+                    <div class="stats-box-cws-asc">
+                      {{
+                        (cwsSummary.totalParchments /
+                          cwsSummary.expectedParchments) *
+                          100 | number: "1.0-1"
+                      }}
+                      % Completion
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="stats-box-divider-table"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<br />
+<br />
+<div class="custom-tabs">
+  <ul class="nav nav-tabs" role="tablist">
+    <li
+      role="presentation"
+      routerLink="/admin/organisations/details/{{
+        organisationId
+      }}/dashboard"
+      routerLinkActive="active"
+    >
+      <a aria-controls="dashboard" role="tab" data-toggle="tab"
+        ><span>CWS Dashboard</span></a
+      >
+    </li>
+    <li
+      role="presentation"
+      appInternal
+      routerLink="/admin/organisations/details/{{
+        organisationId
+      }}/farmers"
+      routerLinkActive="active"
+    >
+      <a role="tab" data-toggle="tab"><span>Farmers</span></a>
+    </li>
+    <li
+      role="presentation"
+      appInternal
+      *appHasPermission="[[4, 1], 0, [8, 1], [1, 1]]"
+      routerLink="/admin/organisations/details/{{
+        organisationId
+      }}/suppliers"
+      aria-controls="suppliers"
+      routerLinkActive="active"
+    >
+      <a role="tab" data-toggle="tab"><span>Suppliers</span></a>
+    </li>
+    <li
+      role="presentation"
+      appInternal
+      *appHasPermission="[[4, 1], 0, [8, 1], [1, 1]]"
+      routerLink="/admin/organisations/details/{{
+        organisationId
+      }}/cherries"
+      
+      routerLinkActive="active"
+    >
+      <a role="tab" data-toggle="tab"><span>Cherries & Parchments</span></a>
+    </li>
+    <li
+      role="presentation"
+      appInternal
+      *appHasPermission="[[4, 1], 0, [8, 1], [1, 1]]"
+      routerLink="/admin/organisations/details/{{
+        organisationId
+      }}/users"
+      routerLinkActive="active"
+    >
+      <a role="tab" data-toggle="tab"><span>Users</span></a>
+    </li>
+  </ul>
+  <div class="tab-content">
+    <!-- Routed view  -->
+    <router-outlet></router-outlet>
+  </div>
+</div>
