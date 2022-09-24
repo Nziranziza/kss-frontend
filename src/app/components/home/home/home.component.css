@@ -1,0 +1,275 @@
+.logo {
+  pointer-events: none;
+  margin-left: 5px;
+  height: 50px;
+}
+
+.logo img {
+  margin-top: 5px;
+  height: 50px;
+  width: 128px;
+}
+
+header nav {
+  display: inline-block;
+  /* border-bottom: 2px solid #190ec7; */
+}
+
+.sks_nav {
+  background-color: #4f210d;
+  height: 60px;
+}
+
+.sks_nav div.vr {
+  border: 1px solid rgb(255 255 255 / 8%) !important;
+}
+
+.sks_nav button.navbar-toggler {
+  outline: none;
+  background-color: #4f210d !important;
+  color: #fff;
+}
+
+footer {
+  /* border: 2px solid red; */
+  padding-left: 10px;
+  padding-right: 10px;
+  background-color: #bfaea7 !important;
+}
+
+.footer_links {
+  font-size: 14px;
+  /* color: #cbcbcb; */
+}
+
+.footer_links a {
+  color: #4f210d;
+  border-bottom: 1px solid transparent;
+  text-decoration: none;
+}
+
+.footer_links a:hover {
+  color: #000000;
+  border-bottom: 1px solid #4f210d;
+  text-decoration: none;
+}
+
+.footer_links strong {
+  color: #000000;
+}
+
+.footer_copyrights {
+  display: block;
+  font-size: 12px;
+  text-align: left;
+  padding-left: 10px;
+  padding-top: 10px;
+}
+
+.footer_powered {
+  text-align: right;
+  /* padding:10px; */
+}
+
+.homepage-section {
+  width: 100%;
+  overflow: hidden;
+}
+
+.homepage-section .sliders {
+  width: 100%;
+}
+
+.homepage-section .sliders img {
+  max-width: 100%;
+  max-height: 100%;
+  opacity: 1;
+}
+
+.about {
+  min-height: 430px;
+  padding: 20px;
+  position: relative;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.about-texts {
+  text-align: left;
+  margin-left: 40px;
+  letter-spacing: 0px;
+  min-height: 36px;
+  color: #000000;
+  font: normal normal medium 30px/40px Helvetica Neue, Helvetica, Arial,
+    sans-serif;
+}
+
+.about-texts .text {
+  font-size: 20px;
+}
+
+.about-title {
+  font-size: 40px;
+  color: #e1a33e;
+  height: 66px;
+  margin-top: -40px;
+}
+
+.about-logo {
+  margin-top: 20px;
+  height: 146px;
+  width: 441px;
+}
+
+.impact {
+  padding: 50px;
+  background: #4f210d0a 0% 0% no-repeat padding-box;
+  opacity: 1;
+}
+
+.impact .box {
+  width: 90%;
+  height: 190px;
+  border-radius: 10px;
+  background: transparent;
+}
+
+.impact-ico {
+  margin-top: 15px;
+  width: 80px;
+  height: 83px;
+}
+
+.impact-title {
+  color: #4f210d;
+  font-size: 30px;
+}
+
+.impact-sub {
+  font-size: 20px;
+  color: #4f210d;
+}
+
+.features {
+  padding: 50px;
+  background: #f2eee7 0% 0% no-repeat padding-box;
+}
+
+.header-button {
+  background: #4f210d 0% 0% no-repeat padding-box;
+  border: 1px solid #ffffff;
+  border-radius: 7px;
+  width: 160px;
+  height: 45px;
+  color: #e1a33e;
+  font-size: 15px;
+  opacity: 1;
+}
+
+.navbar-custom-menu {
+  margin-right: 10px;
+  margin-top: 8px;
+  float: right;
+}
+
+.footer_powered {
+  text-align: center;
+  font: normal normal medium 10px/13px Montserrat;
+  letter-spacing: 9.71px;
+  color: #4f210d;
+  opacity: 1;
+}
+
+.footer_copyrights {
+  /* UI Properties */
+  text-align: left;
+  font: normal normal 600 13px/19px Montserrat;
+  letter-spacing: 0px;
+  color: #4f210d;
+  margin-left: 25%;
+  float: center;
+  opacity: 1;
+}
+
+.footer_links {
+  /* UI Properties */
+  text-align: left;
+  font: normal normal 600 18px/23px Montserrat;
+  letter-spacing: 0px;
+  color: #4f210d;
+  opacity: 1;
+}
+
+.img-fluid {
+  margin-left: 30%;
+}
+
+.features {
+  min-height: 580px;
+  padding: 50px;
+  background: #f2eee7 0% 0% no-repeat padding-box;
+  opacity: 1;
+}
+
+.carousel-caption {
+  font-size: 60px;
+  font-weight: bolder;
+  top: 45%;
+  text-align: center;
+}
+
+.carousel {
+  height: 750px;
+  top: -60px;
+}
+
+.carousel .carousel-inner {
+  height: 750px;
+}
+
+.carousel .item,
+.img {
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+}
+
+.features-box {
+  min-width: 300px;
+  min-height: 150px;
+  margin-bottom: 20px;
+  /* UI Properties */
+  background: #ffffff 0% 0% no-repeat padding-box;
+  border: 2px solid #e1a33e;
+  border-radius: 7px;
+  opacity: 1;
+}
+
+.partner-image {
+  height: 80px;
+}
+
+.features-box img {
+  width: 50px;
+  height: 52px;
+  margin-top: 20px;
+}
+
+.features-box div {
+  margin-top: 15px;
+  text-align: center;
+  font: normal normal medium 22px/20px Helvetica Neue;
+  letter-spacing: 0px;
+  color: black;
+  font-size: 20px;
+}
+
+.features-box div span {
+  margin-top: -10px;
+  font-size: 16px;
+}

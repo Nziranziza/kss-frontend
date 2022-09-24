@@ -1,0 +1,186 @@
+<h3>
+  {{ title }}
+</h3>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-body">
+        <div class="col-xs-12">
+          <app-list-errors [errorList]="errors"></app-list-errors>
+          <app-list-message [message]="message"></app-list-message>
+          <app-list-warnings [warning]="warning"></app-list-warnings>
+        </div>
+        <form [formGroup]="filterForm">
+          <div class="row">
+            <div class="col-sm-12">
+              <div formGroupName="date">
+                <div class="col-xs-3">
+                  <div class="form-group">
+                    <label class="control-label label-required">From date</label>
+                    <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="from" class="form-control" [min]="seasonStartingTime" [max]="currentDate">
+                    <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+                  </div>
+                </div>
+                <div class="col-xs-3">
+                  <div class="form-group">
+                    <label class="control-label label-required">to</label>
+                    <input [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" formControlName="to" class="form-control" [min]="seasonStartingTime" [max]="currentDate">
+                    <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div formGroupName="location">
+                <div class="col-xs-2" *ngIf="!isCurrentUserDCC">
+                  <div class="form-group">
+                    <span class="">Province</span>
+                    <div class="input-group input-group-sm">
+                      <select class="form-control" formControlName="prov_id">
+                        <option value="all provinces" selected="selected">ALL PROVINCES</option>
+                        <option value="all districts">ALL DISTRICTS</option>
+                        <option value="all cws">ALL CWS</option>
+                        <option *ngFor="let province of provinces" value="{{province._id}}">{{province.namee}}</option>
+                      </select>
+                      <span class="input-group-btn">
+                      <button type="button" class="btn btn-default btn-flat" (click)="onSubmit('province')">
+                        <i class="fa fa-search"></i>
+                      </button>
+                    </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xs-2">
+                  <div class="form-group">
+                    <span class="">District</span>
+                    <div class="input-group input-group-sm">
+                      <select class="form-control" formControlName="dist_id" disabled="true"
+                              *ngIf="isCurrentUserDCC; else enabled">
+                        <option value=""></option>
+                        <option value="all cws" *ngIf="showDistrictAllCWS">ALL CWS</option>
+                        <option *ngFor="let district of districts" value="{{district._id}}">{{district.name}}</option>
+                      </select>
+                      <ng-template #enabled>
+                        <select class="form-control" formControlName="dist_id">
+                          <option value=""></option>
+                          <option value="all cws" *ngIf="showDistrictAllCWS">ALL CWS</option>
+                          <option *ngFor="let district of districts" value="{{district._id}}">{{district.name}}</option>
+                        </select>
+                      </ng-template>
+                      <span class="input-group-btn">
+                      <button type="button" class="btn btn-default btn-flat" (click)="onSubmit('district')"
+                              [disabled]="!distId">
+                        <i class="fa fa-search"></i>
+                      </button>
+                    </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xs-2">
+                  <div class="form-group">
+                    <span class="">Sector</span>
+                    <div class="input-group input-group-sm">
+                      <select class="form-control" formControlName="sect_id">
+                        <option value=""></option>
+                        <option *ngFor="let sector of sectors" value="{{sector._id}}">{{sector.name}}</option>
+                      </select>
+                      <span class="input-group-btn">
+                      <button type="button" class="btn btn-default btn-flat" (click)="onSubmit('sector')"
+                              [disabled]="!sectorId">
+                        <i class="fa fa-search"></i>
+                      </button>
+                    </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div style="margin: 15px">
+                <app-loader *ngIf="loading"></app-loader>
+              </div>
+            </div>
+          </div>
+          <div class="box-footer" style="margin: 15px;">
+            <div class="row">
+              <div class="col-sm-2 col-xs-4 top-col-statistics">
+                <div class="description-block border-right">
+                  <h5 class="description-header text-green">{{ total.cherriesQty | number }}  &#13199;</h5>
+                  <span class="description-text">RECEIVED CHERRIES</span>
+                </div>
+                <!-- /.description-block -->
+              </div>
+              <!-- /.col -->
+              <div class="col-sm-2 col-xs-4 top-col-statistics">
+                <div class="description-block border-right">
+                  <h5 class="description-header text-blue">{{ total.expectedParchmentsQty | number }}  &#13199;</h5>
+                  <span class="description-text">EXPECTED PARCHMENTS</span>
+                </div>
+                <!-- /.description-block -->
+              </div>
+              <div class="col-sm-2 col-xs-4 top-col-statistics">
+                <div class="description-block border-right">
+                  <h5 class="description-header text-red">{{ total.parchmentsQty | number }} &#13199;</h5>
+                  <span class="description-text">PRODUCED PARCHMENTS</span>
+                </div>
+                <!-- /.description-block -->
+              </div>
+            </div>
+            <!-- /.row -->
+          </div>
+          <button class="btn btn-success btn-margin pull-right" (click)="exportReport()"><i class="fa fa-download"></i> Export</button>
+          <div class="row">
+            <div class="col-sm-12">
+              <ng-container *ngIf=" subRegionFilter && subRegionFilter.location.searchBy !== 'all cws' ;else inTable ">
+                <div style="margin: 0 auto; width: fit-content; float: left" *ngIf="showReport" class="img-responsive">
+                <google-chart #chart
+                              [type]="graph1.type"
+                              [data]="graph1.data"
+                              [options]="graph1.options"
+                              [width]="graph1.width"
+                              [columns]="graph1.columnNames"
+                              [height]="graph1.height"
+                              on-select="selectHandler($event)">
+                </google-chart>
+              </div>
+              </ng-container>
+              <ng-template #inTable>
+                <div style="margin: 0 auto; width: fit-content; float: left" *ngIf="showReport" class="img-responsive">
+                  <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped">
+                    <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Cherries (Kg)</th>
+                      <th>Parchments (Kg)</th>
+                      <th>Expected Parchments (Kg)</th>
+                      <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr  *ngFor="let dt of graph1.data; let i = index">
+                      <td>{{ dt[0] }}</td>
+                      <td>{{ dt[1] }}</td>
+                      <td>{{ dt[2] }}</td>
+                      <td>{{ dt[3] }}</td>
+                      <td>
+                        <a routerLink="/admin/cws-suppliers/{{this.regionIds[i]}}"
+                           [queryParams]="{ from: this.fromFilterDate , to: this.toFilterDate}" class="btn btn-info btn-sm">
+                          <i class="fa fa-users"></i> Suppliers</a>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+

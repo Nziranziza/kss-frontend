@@ -1,0 +1,231 @@
+Started by upstream project "sks-dev-frontend-sonar-code-scan-quality-check" build number 115
+originally caused by:
+ Started by an SCM change
+Running as SYSTEM
+[EnvInject] - Loading node environment variables.
+Building on the built-in node in workspace /var/lib/jenkins/workspace/sks-dev-frontend-build-push-Docker-image
+[WS-CLEANUP] Deleting project workspace...
+[WS-CLEANUP] Deferred wipeout is used...
+[WS-CLEANUP] Done
+No emails were triggered.
+[sks-dev-frontend-build-push-Docker-image] $ /bin/sh -xe /tmp/jenkins3662631653926833004.sh
++ cd /var/lib/jenkins/workspace/sks-dev-frontend-sonar-code-scan-quality-check
++ ls -lrt
+total 48
+-rw-r--r-- 1 jenkins jenkins  829 Jul 19 14:33 shipitFile.js
+-rw-r--r-- 1 jenkins jenkins 1055 Jul 19 14:33 README.md
+-rw-r--r-- 1 jenkins jenkins 2794 Jul 19 14:33 package.json
+drwxr-xr-x 3 jenkins jenkins 4096 Jul 19 14:33 e2e
+-rw-r--r-- 1 jenkins jenkins 1341 Jul 19 14:33 Dockerfile
+-rw-r--r-- 1 jenkins jenkins 5999 Jul 19 14:33 angular.json
+-rw-r--r-- 1 jenkins jenkins 1621 Jul 19 14:33 tslint.json
+-rw-r--r-- 1 jenkins jenkins  496 Jul 19 14:33 tsconfig.json
+drwxr-xr-x 5 jenkins jenkins 4096 Jul 19 14:33 src
+-rw-r--r-- 1 jenkins jenkins  933 Jul 19 14:36 smartkungahara.rw.conf
+-rw-r--r-- 1 jenkins jenkins 1912 Jul 19 14:36 nginx.conf
++ sudo docker build -t sks-frontend-dev:sks-frontend-dev-c20ac4db3c16966f3ae6aacd840f964d9328b310 .
+Sending build context to Docker daemon  147.2MB
+
+Step 1/21 : FROM ubuntu:20.04
+ ---> 20fffa419e3a
+Step 2/21 : RUN apt-get update && apt-get install -y sudo
+ ---> Using cache
+ ---> f0b2237f2ac6
+Step 3/21 : RUN adduser --disabled-password --gecos '' docker-deployer
+ ---> Using cache
+ ---> 89c7c63787b7
+Step 4/21 : RUN adduser docker-deployer sudo
+ ---> Using cache
+ ---> c7b8d26b7c14
+Step 5/21 : RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+ ---> Using cache
+ ---> d40b3f465e8f
+Step 6/21 : USER docker-deployer
+ ---> Using cache
+ ---> 700afe11402c
+Step 7/21 : RUN sudo apt-get update &&     DEBIAN_FRONTEND=noninteractive sudo apt-get install -y tzdata &&     sudo apt-get update &&     sudo apt-get install -y curl apt-transport-https ca-certificates build-essential &&     curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash - &&     sudo apt-get install -y nodejs &&     sudo apt-get update -y && sudo apt upgrade -y &&     sudo npm install -g @angular/cli
+ ---> Using cache
+ ---> 245d60b8d03f
+Step 8/21 : RUN sudo apt-get update &&     sudo apt-get install nginx -y &&     sudo service nginx restart
+ ---> Using cache
+ ---> b89c19fe9125
+Step 9/21 : WORKDIR /home/docker-deployer/
+ ---> Using cache
+ ---> 1d12748f3918
+Step 10/21 : COPY smartkungahara.rw.conf /etc/nginx/sites-available/
+ ---> Using cache
+ ---> f501d8a55744
+Step 11/21 : RUN sudo ln -s /etc/nginx/sites-available/smartkungahara.rw.conf /etc/nginx/sites-enabled
+ ---> Using cache
+ ---> 0ad6def80929
+Step 12/21 : RUN sudo rm -rf /etc/nginx/sites-available/default
+ ---> Using cache
+ ---> 83e8bd37b1ae
+Step 13/21 : RUN sudo rm -rf /etc/nginx/sites-enabled/default
+ ---> Using cache
+ ---> 211faa51120a
+Step 14/21 : RUN sudo service nginx restart
+ ---> Using cache
+ ---> 8ef51766e413
+Step 15/21 : WORKDIR /home/docker-deployer/
+ ---> Using cache
+ ---> cdcb842bc45f
+Step 16/21 : COPY --chown=docker-deployer:docker-deployer ./package.json ./
+ ---> Using cache
+ ---> ed9bbb317672
+Step 17/21 : COPY --chown=docker-deployer:docker-deployer . .
+ ---> 2569c61fb645
+Step 18/21 : EXPOSE 5050
+ ---> Running in a5c4762d80af
+Removing intermediate container a5c4762d80af
+ ---> b4988c1a8c1a
+Step 19/21 : RUN npm i --legacy-peer-deps
+ ---> Running in e07d509ce765
+[91mnpm[0m[91m WARN deprecated querystring@0.2.0: The querystring API is considered Legacy. new code should use the URLSearchParams API instead.
+[0m[91mnpm WARN deprecated stable@0.1.8: Modern JS already guarantees Array#sort() is a stable sort, so this library is deprecated. See the compatibility table on MDN: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#browser_compatibility
+[0m[91mnpm WARN deprecated har-validator@5.1.5: this library is no longer supported
+[0m[91mnpm WARN deprecated urix@0.1.0: Please see https://github.com/lydell/urix#deprecated
+[0m[91mnpm WARN [0m[91mdeprecated source-map-resolve@0.5.3: See https://github.com/lydell/source-map-resolve#deprecated
+[0m[91mnpm WARN deprecated source-map-url@0.4.1: See https://github.com/lydell/source-map-url#deprecated
+[0m[91mnpm WARN deprecated resolve-url@0.2.1: https://github.com/lydell/resolve-url#deprecated
+[0m[91mnpm WARN deprecated flatten@1.0.3: flatten is deprecated in favor of utility frameworks such as lodash.
+[0m[91mnpm WARN deprecated request@2.88.2: request has been deprecated, see https://github.com/request/request/issues/3142
+[0m[91mnpm WARN deprecated @types/googlemaps@3.43.3: Types for the Google Maps browser API have moved to @types/google.maps. Note: these types are not for the googlemaps npm package, which is a Node API.
+[0m[91mnpm WARN [0m[91mdeprecated @types/moment-timezone@0.5.30: This is a stub types definition. moment-timezone provides its own type definitions, so you do not need this installed.
+[0m[91mnpm WARN [0m[91mdeprecated @types/moment@2.13.0: This is a stub types definition for Moment (https://github.com/moment/moment). Moment provides its own type definitions, so you don't need @types/moment installed!
+[0m[91mnpm WARN deprecated[0m[91m uuid@3.4.0: Please upgrade  to version 7 or higher.  Older versions may use Math.random() in certain circumstances, which is known to be problematic.  See https://v8.dev/blog/math-random for details.
+[0m[91mnpm WARN deprecated uuid@3.4.0: Please upgrade  to version 7 or higher.  Older versions may use Math.random() in certain circumstances, which is known to be problematic.  See https://v8.dev/blog/math-random for details.
+[0m[91mnpm WARN deprecated chokidar@2.1.8: Chokidar 2 does not receive security updates since 2019. Upgrade to chokidar 3 with 15x fewer dependencies
+[0m[91mnpm WARN[0m[91m [0m[91mdeprecated[0m[91m tslint@6.1.3: TSLint has been deprecated in favor of ESLint. Please see https://github.com/palantir/tslint/issues/4534 for more information.
+[0m[91mnpm WARN deprecated core-js@3.16.0: core-js@<3.23.3 is no longer maintained and not recommended for usage due to the number of issues. Because of the V8 engine whims, feature detection in old core-js versions could cause a slowdown up to 100x even if nothing is polyfilled. Some versions have web compatibility issues. Please, upgrade your dependencies to the actual version of core-js.
+[0m
+added 1631 packages, and audited 1632 packages in 5m
+
+123 packages are looking for funding
+  run `npm fund` for details
+
+17 vulnerabilities (13 moderate, 2 high, 2 critical)
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+[91mnpm notice 
+npm notice New minor version of npm available! 8.11.0 -> 8.14.0
+npm notice Changelog: <https://github.com/npm/cli/releases/tag/v8.14.0>
+npm notice Run `npm install -g npm@8.14.0` to update!
+npm notice 
+[0mRemoving intermediate container e07d509ce765
+ ---> 800156d41f78
+Step 20/21 : RUN ng build --prod --aot --configuration=staging
+ ---> Running in c646dbbff267
+[91mYour global Angular CLI version (14.0.6) is greater than your local version (12.2.17). The local Angular CLI version is used.
+
+To disable this warning use "ng config -g cli.warnings.versionMismatch false".
+[0m[91mOption "--prod" is deprecated: Use "--configuration production" instead.[0m[91m
+[0m[91mOption "extractCss" is deprecated: Deprecated since version 11.0. No longer required to disable CSS extraction for HMR.
+[0m[91m- Generating browser application bundles (phase: setup)...
+[0m[91m[33mWarning:[0m Entry point 'ng-pick-datetime-ex' contains deep imports into '/home/docker-deployer/node_modules/dayjs/plugin/localeData', '/home/docker-deployer/node_modules/dayjs/plugin/objectSupport', '/home/docker-deployer/node_modules/dayjs/plugin/localizedFormat', '/home/docker-deployer/node_modules/dayjs/plugin/utc'. This is probably not a problem, but may cause the compilation of entry points to be out of order.
+[0m[91mCompiling @angular/core : es2015 as esm2015
+[0m[91mCompiling @angular/cdk/keycodes : es2015 as esm2015
+[0m[91mCompiling @angular/animations : es2015 as esm2015
+[0m[91mCompiling @angular/cdk/observers : es2015 as esm2015
+Compiling @angular/cdk/collections : es2015 as esm2015
+[0m[91mCompiling @angular/common : es2015 as esm2015
+[0m[91mCompiling @angular/animations/browser : es2015 as esm2015
+[0m[91mCompiling ngx-order-pipe : es2015 as esm2015
+[0m[91mCompiling @angular/cdk/platform : es2015 as esm2015
+[0m[91mCompiling @angular/cdk/bidi : es2015 as esm2015
+[0m[91mCompiling @angular/forms : es2015 as esm2015
+[0m[91mCompiling @angular/platform-browser : es2015 as esm2015
+[0m[91mCompiling @angular/cdk/a11y : es2015 as esm2015
+[0m[91mCompiling @angular/cdk/scrolling : es2015 as esm2015
+[0m[91mCompiling @angular/cdk/portal : es2015 as esm2015
+[0m[91mCompiling @angular/platform-browser/animations : es2015 as esm2015
+[0m[91mCompiling @angular/common/http : es2015 as esm2015
+[0m[91mCompiling @angular/material/core : es2015 as esm2015
+[0m[91mCompiling @angular/cdk/overlay : es2015 as esm2015
+[0m[91mCompiling @angular/platform-browser-dynamic : es2015 as esm2015
+[0m[91mCompiling @angular/router : es2015 as esm2015
+[0m[91mCompiling ngx-cookie-service : es2015 as esm2015
+[0m[91mCompiling @angular/material/dialog : es2015 as esm2015
+[0m[91mCompiling @angular/material/icon : es2015 as esm2015
+[0m[91mCompiling @ng-bootstrap/ng-bootstrap : es2015 as esm2015
+[0m[91mCompiling angular-datatables : module as esm5
+[0m[91mCompiling ngx-pagination : module as esm5
+[0m[91mCompiling ng-pick-datetime-ex : es2015 as esm2015
+[0m[91mCompiling angular-fusioncharts : main as esm5
+[0m[91mCompiling ng-multiselect-dropdown : es2015 as esm2015
+[0m[91mCompiling @angular/google-maps : es2015 as esm2015
+[0m[91mCompiling angular-in-memory-web-api : es2015 as esm2015
+[0m[91m✔ Browser application bundle generation complete.
+[0m[91m✔ Browser application bundle generation complete.
+[0m[91m
+Warning: /home/docker-deployer/src/app/core/helpers/helper.service.ts depends on 'moment-timezone'. CommonJS or AMD dependencies can cause optimization bailouts.
+For more info see: https://angular.io/guide/build#configuring-commonjs-dependencies
+
+/home/docker-deployer/src/app/components/payments/organisation-pay-farmers/pay-farmers/pay-farmers.component.css - Warning: Css Minimizer Plugin:  > /home/docker-deployer/src/app/components/payments/organisation-pay-farmers/pay-farmers/pay-farmers.component.css:205:1: warning: Unexpected "/"
+    205 │ */
+        ╵  ^
+
+ 
+
+
+[0m[91m
+./node_modules/angular-google-charts/fesm2015/angular-google-charts.mjs - Error: Module build failed (from ./node_modules/@angular-devkit/build-angular/src/babel/webpack-loader.js):
+TypeError: Cannot create property 'message' on string '/home/docker-deployer/node_modules/angular-google-charts/fesm2015/angular-google-charts.mjs: This application depends upon a library published using Angular version 14.0.3, which requires Angular version 14.0.0 or newer to work correctly.
+Consider upgrading your application to use a more recent version of Angular.
+  261 |     }
+  262 |     ChartEditorComponent.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.3", ngImport: i0, type: ChartEditorComponent, deps: [{ token: ScriptLoaderService }], target: i0.ɵɵFactoryTarget.Component });
+> 263 |     ChartEditorComponent.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "14.0.3", type: ChartEditorComponent, selector: "chart-editor", host: { classAttribute: "chart-editor" }, ngImport: i0, template: `<ng-content></ng-content>`, isInline: true, changeDetection: i0.ChangeDetectionStrategy.OnPush });
+      |                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  264 |     return ChartEditorComponent;
+  265 | })();
+  266 | i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.3", ngImport: i0, type: ChartEditorComponent, decorators: [{'
+    at run (/home/docker-deployer/node_modules/@babel/core/lib/transformation/index.js:37:15)
+    at run.next (<anonymous>)
+    at Function.transform (/home/docker-deployer/node_modules/@babel/core/lib/transform.js:25:41)
+    at transform.next (<anonymous>)
+    at step (/home/docker-deployer/node_modules/gensync/index.js:261:32)
+    at /home/docker-deployer[0m[91m/node_modules/gensync/index.js:273:13
+    at async.call.result.err.err (/home/docker-deployer/node_modules/gensync/index.js:223:11)
+    at /home/docker-deployer/node_modules/gensync/index.js:189:28
+    at /home/docker-deployer/node_modules/@babel/core/lib/gensync-utils/async.js:73:7
+    at /home/docker-deployer/node_modules/gensync/index.js:113:33
+
+Error: node_modules/angular-google-charts/lib/components/chart-editor/chart-editor.component.d.ts:27:18 - error TS2314: Generic type 'ɵɵComponentDeclaration' requires 7 type argument(s).
+
+27     static ɵcmp: i0.ɵɵComponentDeclaration<ChartEditorComponent, "chart-editor", never, {}, {}, never, ["*"], false>;
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Error: node_modules/angular-google-charts/lib/components/chart-wrapper/chart-wrapper.component.d.ts:36:18 - error TS2314: Generic type 'ɵɵComponentDeclaration' requires 7 type argument(s).
+
+36     static ɵcmp: i0.ɵɵComponentDeclaration<ChartWrapperComponent, "chart-wrapper", ["chartWrapper"], { "specs": "specs"; }, { "error": "error"; "ready": "ready"; "select": "select"; }, never, never, false>;
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Error: node_modules/angular-google-charts/lib/components/control-wrapper/control-wrapper.component.d.ts:86:18 - error TS2314: Generic type 'ɵɵComponentDeclaration' requires 7 type argument(s).
+
+86     static ɵcmp: i0.ɵɵComponentDeclaration<ControlWrapperComponent, "control-wrapper", ["controlWrapper"], { "for": "for"; "type": "type"; "options": "options"; "state": "state"; }, { "error": "error"; "ready": "ready"; "stateChange": "stateChange"; }, never, never, false>;
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Error: node_modules/angular-google-charts/lib/components/dashboard/dashboard.component.d.ts:56:18 - error TS2314: Generic type 'ɵɵComponentDeclaration' requires 7 type argument(s).
+
+56     static ɵcmp: i0.ɵɵComponentDeclaration<DashboardComponent, "dashboard", ["dashboard"], { "data": "data"; "columns": "columns"; "formatters": "formatters"; }, { "ready": "ready"; "error": "error"; }, ["controlWrappers"], ["*"], false>;
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Error: node_modules/angular-google-charts/lib/components/google-chart/google-chart.component.d.ts:107:18 - error TS2314: Generic type 'ɵɵComponentDeclaration' requires 7 type argument(s).
+
+107     static ɵcmp: i0.ɵɵComponentDeclaration<GoogleChartComponent, "google-chart", ["googleChart"], { "type": "type"; "data": "data"; "columns": "columns"; "title": "title"; "width": "width"; "height": "height"; "options": "options"; "formatters": "formatters"; "dynamicResize": "dynamicResize"; }, { "ready": "ready"; "error": "error"; "select": "select"; "mouseover": "mouseover"; "mouseleave": "mouseleave"; }, never, never, false>;
+                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+[0mThe command '/bin/sh -c ng build --prod --aot --configuration=staging' returned a non-zero code: 1
+Build step 'Execute shell' marked build as failure
+Email was triggered for: Failure - Any
+Sending email for trigger: Failure - Any
+Sending email to: j.rukundo@bk.rw y.mugenga@bk.rw dkayisire@bk.rw enyirimana@bk.rw dmassawe@bk.rw amutabazi@bk.rw sbyiringiro@bk.rw

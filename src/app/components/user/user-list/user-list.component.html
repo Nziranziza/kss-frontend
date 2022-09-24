@@ -1,0 +1,54 @@
+<h3>
+  {{org? org.organizationName : '' }}  >>  Users
+  <a class="btn btn-success pull-right" *appHasPermission="[[4,1],0,[8,1],[1,1],[11,1]]" routerLink="/admin/organisations/{{organisationId}}/users/create"><i class="fa fa-plus"></i> New user</a>
+</h3>
+<app-list-message [message]="message"></app-list-message>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-body table-responsive">
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped">
+        <thead>
+          <tr>
+            <th>First name</th>
+            <th>Last name</th>
+            <th>Email</th>
+            <th>Phone number</th>
+            <th>Reg number</th>
+            <th>NID</th>
+            <th>Gender</th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <ng-container  *ngFor="let user of users">
+          <tr>
+            <td> {{ user.foreName }}</td>
+            <td> {{ user.surname }}</td>
+            <td> {{ user.email }}</td>
+            <td> {{ user.phone_number }}</td>
+            <td> {{ user.regNumber }}</td>
+            <td> {{ user.NID }}</td>
+            <td> {{ user.sex }}</td>
+            <td class="actions no-wrap text-right">
+              <button class="btn btn-default btn-margin btn-sm pull-right details-button" (click)="viewDetails(user)">...</button>
+              <a class="btn btn-success btn-sm btn-margin" routerLink="/admin/organisations/{{organisationId}}/users/edit/{{user._id}}" *appHasPermission="[[4,1],0]" style="margin-left: 10px;" >
+                Edit
+              </a>
+              <ng-container *ngIf="currentUser.info._id != user._id">
+                <a class="btn btn-success btn-sm btn-margin" routerLink="/admin/organisations/{{organisationId}}/users/edit/{{user._id}}" *appHasPermission="[[8,1],[1,1],[11,1]]" style="margin-left: 10px;" >
+                  Edit
+                </a>
+              </ng-container>
+              <a class="btn btn-success btn-sm btn-margin" (click)="changeUsersOrganisation(user)" *appHasPermission="[[4,1],0]" style="margin-left: 10px;" >
+                Chng Org
+              </a>
+            </td>
+          </tr>
+          </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

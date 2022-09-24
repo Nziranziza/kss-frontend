@@ -42,7 +42,7 @@ export class DryProcessingService {
   }
 
   cancelTransferItem(id: string) {
-    return this.apiService.delete('/greencoffe/delete/transfer/item/' + id);
+    return this.apiService.delete('/greencoffee/delete/transfer/item/' + id);
   }
 
   getGreenCoffeeStockSummary(body: any) {
@@ -82,7 +82,7 @@ export class DryProcessingService {
   }
 
   printDeliveryNote(id: string): Observable<any> {
-    return this.apiService.get('/greencoffee/download/deliveries/note/' + id);
+    return this.apiService.get('/greencoffee/download/delivery/note/' + id);
   }
 
   getTransferHistory(body: any): Observable<any> {

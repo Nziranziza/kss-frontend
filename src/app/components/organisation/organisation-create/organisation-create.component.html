@@ -1,0 +1,214 @@
+<h3>
+  Create organisation
+</h3>
+<app-list-errors [errorList]="errors"></app-list-errors>
+<form [formGroup]="createForm" (ngSubmit)="onSubmit()">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-body">
+          <div class="col-xs-6">
+            <div class="form-group">
+              <label class="control-label label-required">Name</label>
+              <input type="text" formControlName="organizationName" class="form-control">
+            </div>
+          </div>
+          <div class="col-xs-6">
+            <div class="form-group">
+              <label class="control-label">Email</label>
+              <input type="text" formControlName="email" class="form-control">
+            </div>
+          </div>
+          <div class="col-xs-6">
+            <div class="form-group">
+              <label class="control-label label-required">phone number</label>
+              <input type="text" formControlName="phone_number" class="form-control">
+            </div>
+          </div>
+          <div class="col-xs-6">
+            <div class="form-group">
+              <label class="control-label">street number</label>
+              <input type="text" formControlName="streetNumber" class="form-control">
+            </div>
+          </div>
+          <div class="col-xs-6">
+            <div class="form-group">
+              <label class="control-label label-required">Organisation type</label>
+              <select class="form-control" formControlName="genreId">
+                <option *ngFor="let genre of genres" value="{{genre._id}}">{{genre.genre}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-xs-6">
+            <label class="control-label label-required">Partners</label>
+            <ng-container *ngIf="createForm.get('organizationPartner')['controls'].length">
+              <div class="checkbox" formArrayName="organizationPartner"
+                   *ngFor="let partner of createForm.get('organizationPartner')['controls']; let i = index">
+                <label *ngIf="partners[i].organizationName">
+                  <input type="checkbox" formControlName="{{i}}">
+                  {{ partners[i].organizationName | uppercase }}
+                </label>
+              </div>
+            </ng-container>
+          </div>
+          <div class="col-xs-6">
+            <label class="control-label label-required">Roles</label>
+            <ng-container *ngIf="createForm.get('organizationRole')['controls'].length">
+              <div class="checkbox" formArrayName="organizationRole"
+                   *ngFor="let role of createForm.get('organizationRole')['controls']; let i = index">
+                <label *ngIf="possibleRoles[i].name != 'FARMER'">
+                  <input type="checkbox" formControlName="{{i}}">
+                  {{possibleRoles[i].name}}
+                </label>
+              </div>
+            </ng-container>
+          </div>
+          <ng-container *ngIf="hasExpiration">
+
+            <div class="col-xs-6">
+              <div class="form-group">
+                <label class="control-label label-required">starting date</label>
+                <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="contractStartingDate"
+                       class="form-control">
+                <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <div class="form-group">
+                <label class="control-label label-required">expiration date</label>
+                <input [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" formControlName="contractEndingDate"
+                       class="form-control">
+                <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
+              </div>
+            </div>
+          </ng-container>
+          <fieldset class="location" *ngIf="needLocation">
+            <legend>
+              <label class="control-label label-required">&nbsp; Location</label></legend>
+            <div formGroupName="location">
+              <div class="col-xs-2" id="location-province">
+                <div class="form-group">
+                  <span class="">Province</span>
+                  <select class="form-control" formControlName="prov_id">
+                    <option value=""></option>
+                    <option *ngFor="let province of provinces" value="{{province._id}}">{{province.namee}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xs-2" id="location-district">
+                <div class="form-group">
+                  <span class="">District</span>
+                  <select class="form-control" formControlName="dist_id">
+                    <option value=""></option>
+                    <option *ngFor="let district of districts" value="{{district._id}}">{{district.name}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xs-2" id="location-sector">
+                <div class="form-group">
+                  <span class="">Sector</span>
+                  <select class="form-control" formControlName="sect_id">
+                    <option value=""></option>
+                    <option *ngFor="let sector of sectors" value="{{sector._id}}">{{sector.name}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xs-2" id="location-cell">
+                <div class="form-group">
+                  <span class="">Cell</span>
+                  <select class="form-control" formControlName="cell_id">
+                    <option value=""></option>
+                    <option *ngFor="let cell of cells" value="{{cell._id}}">{{cell.name}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xs-2" id="location-village">
+                <div class="form-group">
+                  <span class="">Village</span>
+                  <select class="form-control" formControlName="village_id">
+                    <option value=""></option>
+                    <option *ngFor="let village of villages" value="{{village._id}}">{{village.name}}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+          <div class="col-xs-12" *ngIf="coverVillages">
+            <button class="btn btn-success btn-circle btn-lg pull-right" (click)="addCoveredSector()" type="button"><i
+              class="fa fa-plus"></i></button>
+          </div>
+          <section *ngIf="coverVillages">
+            <div class="col-xs-12" *ngFor="let sector of formCoveredSectors.controls; let i=index"
+                 formArrayName="coveredSectors" style="padding-left: 0px; padding-right: 0px;">
+              <fieldset class="request" [formGroupName]="i">
+                <legend><label class="control-label label-required">&nbsp;Covered Sector</label></legend>
+                <div class="row">
+                  <div class="col-xs-4">
+                    <div class="form-group">
+                      <label class="control-label">Sector</label>
+                      <select class="form-control" formControlName="sectorId" (change)="onChangeSector(i)">
+                        <option value=""></option>
+                        <option *ngFor="let sector of sectors" value="{{sector._id}}">{{sector.name}}</option>
+                      </select>
+                      <div
+                        *ngIf="getCoveredSectorsFormGroup(i).controls.sectorId.invalid && (getCoveredSectorsFormGroup(i).controls.sectorId.dirty || getCoveredSectorsFormGroup(i).controls.sectorId.touched)"
+                        class="input-error">
+                        <div *ngIf="getCoveredSectorsFormGroup(i).controls.sectorId.errors.required">
+                          Sector is required.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xs-4">
+                    <div class="form-group">
+                      <label class="label-required">Covered cells</label>
+                      <p>
+                        <span
+                          style="color: #f2a73c; font-size: 12px;"> [ {{ selectedCoveredCells[i].join(', ') }} ]</span>
+                      </p>
+                      <select multiple="multiple" class="form-control"
+                              [size]="coveredCellsSet[i]?.length" formControlName="coveredCells">
+                        <option *ngFor="let cell of coveredCellsSet[i]" value="{{cell._id}}"
+                                (mousedown)="onMouseDownCell(i, $event, cell)" (mousemove)="$event.preventDefault()">
+                          {{cell.name}}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-xs-4">
+                    <div class="form-group">
+                      <label class="label-required">Covered villages</label>
+                      <p>
+                        <span
+                          style="color: #f2a73c; font-size: 12px;"> [ {{ selectedCoveredVillages[i].join(', ') }}
+                          ]</span>
+                      </p>
+                      <select multiple="multiple" class="form-control"
+                              formControlName="coveredVillages" [size]="coveredVillagesSet[i]?.length">
+                        <option *ngFor="let village of coveredVillagesSet[i]" value="{{village._id}}"
+                                (mousedown)="onMouseDownVillage(i, $event, village)"
+                                (mousemove)="$event.preventDefault()">
+                          {{village.name}}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group col-xs-12">
+                    <button class="btn btn-danger pull-right" type="button" (click)="removeCoveredSector(i)"> Remove
+                    </button>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <a class="btn btn-warning btn-margin pull-right" routerLink="/admin/organisations">Cancel</a>
+      <button class="btn btn-success pull-right">Save</button>
+    </div>
+  </div>
+</form>

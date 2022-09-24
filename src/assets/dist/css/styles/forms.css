@@ -1,0 +1,55 @@
+form .input-required .asterisk:before {
+  color: #ff0f0f;
+  content: "*";
+  position: relative;
+  margin-left: 5px;
+}
+
+form .input-required input,
+form .input-required select,
+form .input-required textarea {
+  width: 95%;
+}
+
+form .input-required {
+  display: flex;
+}
+
+.box-confirm {
+  background: #edeae8 0% 0% no-repeat padding-box;
+  border-radius: 7px;
+  opacity: 1;
+  padding-left: 4px;
+}
+
+.confirm-text-box {
+  width: 100%;
+  min-height: 20px;
+  background: #ffffff 0% 0% no-repeat padding-box;
+  border-radius: 3px;
+  opacity: 1;
+}
+.confirm-text {
+  text-align: left;
+  font: normal normal bold 12px/32px Helvetica Neue, Helvetica, Arial, sans-serif;
+  letter-spacing: 0px;
+  color: #000000;
+  opacity: 1;
+  padding-left: 10px;
+}
+
+.confirm-text-area {
+    min-height: 105px;
+}
+
+.control-label {
+  font: normal normal medium 10px/30px Helvetica Neue, Helvetica, Arial, sans-serif;
+  color: #4F210D;
+  opacity: 1;
+  margin-top: 5px;
+  margin-left: 5px;
+}
+
+.small-spacing {
+  padding: 0 2px 0 0px;
+}
