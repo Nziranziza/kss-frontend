@@ -33,7 +33,7 @@ export class SiteEditComponent implements OnInit{
   selectedCoveredCWS = [];
   selectedCoveredSectors = [];
   id: string;
-  totalAllocatedQty = 0;
+  // totalAllocatedQty = 0;
   afterInitial = 0;
 
   ngOnInit() {
@@ -47,7 +47,7 @@ export class SiteEditComponent implements OnInit{
         cell_id: [''],
         village_id: [''],
       }),
-      allocatedQty: [this.totalAllocatedQty],
+      /*allocatedQty: [this.totalAllocatedQty],*/
       coveredAreas: this.formBuilder.group({
         coveredSectors: [[]],
         coveredCWS: [[]],
@@ -72,14 +72,10 @@ export class SiteEditComponent implements OnInit{
         this.selectedCoveredSectors = [];
         site.coveredAreas.coveredSectors.map((sector) => {
           restoreCoveredSectors.push(sector.sect_id);
-          if (isUndefined(site.allocatedQty)) {
-            this.siteService.getSectorAllocatedFertilizer(sector.sect_id).subscribe((qty) => {
+            /*this.siteService.getSectorAllocatedFertilizer(sector.sect_id).subscribe((qty) => {
               this.totalAllocatedQty = this.totalAllocatedQty + qty.content[0].totalFertilizerAllocated;
               this.editForm.controls.allocatedQty.setValue(this.totalAllocatedQty);
-            });
-          } else {
-            this.totalAllocatedQty = site.allocatedQty;
-          }
+            });*/
           this.selectedCoveredSectors.push(sector.name);
         });
         site.coveredAreas.coveredSectors = restoreCoveredSectors;
@@ -111,15 +107,17 @@ export class SiteEditComponent implements OnInit{
               site['location'.toString()]['village_id'.toString()] = site.location.village_id._id;
             }
           }
-          this.editForm.patchValue(site);
+          this.editForm.patchValue(site, {emitEvent: false});
           this.editForm.controls.coveredAreas.get('coveredSectors'.toString()).patchValue(site.coveredAreas.coveredSectors);
           this.editForm.controls.coveredAreas.get('coveredCWS'.toString()).patchValue(site.coveredAreas.coveredCWS);
         });
-        if (site.location.cell_id) {
+
+        if (site.location.sect_id) {
           this.locationService.getCells(site.location.sect_id._id).subscribe((cells) => {
             this.cells = cells;
           });
         }
+
         if (site.location.village_id) {
           this.locationService.getVillages(site.location.cell_id._id).subscribe((villages) => {
             this.villages = villages;
@@ -194,10 +192,10 @@ export class SiteEditComponent implements OnInit{
     event.target['selected'.toString()] = !event.target['selected'.toString()];
     if (event.target['selected'.toString()]) {
       this.editForm.controls.coveredAreas.get('coveredSectors'.toString()).value.push(item._id);
-      this.siteService.getSectorAllocatedFertilizer(item._id).subscribe((data) => {
+      /*this.siteService.getSectorAllocatedFertilizer(item._id).subscribe((data) => {
         this.totalAllocatedQty = this.totalAllocatedQty + data.content[0].totalFertilizerAllocated;
         this.editForm.controls.allocatedQty.setValue(this.totalAllocatedQty);
-      });
+      });*/
       this.selectedCoveredSectors.push(item.name);
       this.getZoneByLocation();
     } else {
@@ -205,10 +203,10 @@ export class SiteEditComponent implements OnInit{
       i = this.editForm.value.coveredAreas.coveredSectors.indexOf(item._id);
       if (i > -1) {
         this.editForm.controls.coveredAreas.get('coveredSectors'.toString()).value.splice(i, 1);
-        this.siteService.getSectorAllocatedFertilizer(item._id).subscribe((data) => {
+        /*this.siteService.getSectorAllocatedFertilizer(item._id).subscribe((data) => {
           this.totalAllocatedQty = this.totalAllocatedQty - data.content[0].totalFertilizerAllocated;
           this.editForm.controls.allocatedQty.setValue(this.totalAllocatedQty);
-        });
+        });*/
         this.selectedCoveredSectors.splice(i, 1);
         this.getZoneByLocation();
       }
