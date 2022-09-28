@@ -21,7 +21,6 @@ export class AuthenticationService {
   setAuth(user: AuthUser) {
     localStorage.clear();
     this.jwtService.saveToken(user.token);
-    delete user.orgInfo.coveredSectors;
     this.setCurrentUser(user);
     this.setIsLoggedIn(true);
   }

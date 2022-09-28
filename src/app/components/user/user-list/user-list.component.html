@@ -25,7 +25,7 @@
           <tr>
             <td> {{ user.foreName }}</td>
             <td> {{ user.surname }}</td>
-            <td> {{ user.email }}</td>
+            <td class="text-lowercase"> {{ user.email?.toLowerCase() }}</td>
             <td> {{ user.phone_number }}</td>
             <td> {{ user.regNumber }}</td>
             <td> {{ user.NID }}</td>

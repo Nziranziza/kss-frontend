@@ -59,8 +59,8 @@ export class FarmerEditComponent extends BasicComponent implements OnInit, OnDes
     this.isUserSiteManager = this.authorisationService.isSiteManager();
     this.isCWSOfficer = this.authorisationService.isCWSAdmin();
     this.isUserDCC = this.authorisationService.isDistrictCashCropOfficer();
-    if (this.authenticationService.getCurrentUser().orgInfo.distributionSite) {
-      this.siteService.get(this.authenticationService.getCurrentUser().orgInfo.distributionSite).subscribe((site) => {
+    if (this.authenticationService.getCurrentUser().orgInfo.distributionSites) {
+      this.siteService.get(this.authenticationService.getCurrentUser().orgInfo.distributionSites).subscribe((site) => {
         this.site = site.content;
       });
     }

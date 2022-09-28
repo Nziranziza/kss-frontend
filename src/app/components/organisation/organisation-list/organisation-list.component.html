@@ -25,7 +25,7 @@
           <ng-container *ngFor="let organisation of organisations">
             <tr *ngIf="organisation.organizationRole.indexOf(0) > -1 && isSuperAdmin">
               <td> {{ organisation.organizationName }}</td>
-              <td> {{ organisation.email }}</td>
+              <td class="text-lowercase"> {{ organisation.email?.toLowerCase() }}</td>
               <td> {{ organisation.phone_number }}</td>
               <td>
                 <span class="details-row-title">Genre : </span>
@@ -44,7 +44,7 @@
             </tr>
             <tr *ngIf="isNotSuperOrganisation(organisation) && organisation.status != 6">
               <td> {{ organisation.organizationName }}</td>
-              <td> {{ organisation.email }}</td>
+              <td class="text-lowercase"> {{ organisation.email?.toLowerCase() }}</td>
               <td> {{ organisation.phone_number }}</td>
               <td>
                 <span class="details-row-title">Genre : </span>
@@ -56,9 +56,6 @@
                 <a routerLink="/admin/organisations/details/{{organisation._id}}/dashboard" class="btn btn-info btn-sm"
                    *ngIf="isOrgCWS(organisation)"><i
                   class="fa fa-university"></i> Details </a>
-                <a routerLink="/admin/cws-pending-farmers/{{organisation._id}}"
-                   class="btn btn-warning btn-margin btn-sm" *ngIf="isOrgCWS(organisation)"><i
-                  class="fa fa-users"></i> Pending farmers</a>
                 <a routerLink="/admin/organisations/{{organisation._id}}/users"
                    *appHasPermission="[[4,1],0,[8,1],[1,1]]" class="btn btn-info btn-sm"
                    style="margin-left: 10px"><i

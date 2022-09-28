@@ -135,7 +135,7 @@
                   <tbody>
                   <tr *ngFor="let supplier of suppliers">
                     <td> {{ supplier.name }}</td>
-                    <td> {{ supplier.email }}</td>
+                    <td class="text-lowercase"> {{ supplier.email?.toLowerCase() }}</td>
                     <td> {{ supplier.phone_number }}</td>
                     <td> {{ supplier.TIN_number }}</td>
                     <td class="actions no-wrap text-right">

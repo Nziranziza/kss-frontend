@@ -214,10 +214,10 @@ export class FarmerCreateComponent
       this.addressProvinces = data;
     });
 
-    if (this.authenticationService.getCurrentUser().orgInfo.distributionSite) {
+    if (this.authenticationService.getCurrentUser().orgInfo.distributionSites) {
       this.siteService
         .get(
-          this.authenticationService.getCurrentUser().orgInfo.distributionSite
+          this.authenticationService.getCurrentUser().orgInfo.distributionSites
         )
         .subscribe((site) => {
           this.site = site.content;
@@ -318,7 +318,7 @@ export class FarmerCreateComponent
       } else if (this.isUserSiteManager && !this.isUserCWSOfficer) {
         this.siteService
           .get(
-            this.authenticationService.getCurrentUser().orgInfo.distributionSite
+            this.authenticationService.getCurrentUser().orgInfo.distributionSites
           )
           .subscribe((site) => {
             this.site = site.content;

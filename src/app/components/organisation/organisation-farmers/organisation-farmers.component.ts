@@ -180,10 +180,10 @@ export class OrganisationFarmersComponent
           this.cwsSummary = data.content[0];
         }
       });
-    if (this.authenticationService.getCurrentUser().orgInfo.distributionSite) {
+    if (this.authenticationService.getCurrentUser().orgInfo.distributionSites) {
       this.siteService
         .get(
-          this.authenticationService.getCurrentUser().orgInfo.distributionSite
+          this.authenticationService.getCurrentUser().orgInfo.distributionSites
         )
         .subscribe((data) => {
           this.site = data.content;
@@ -368,7 +368,7 @@ export class OrganisationFarmersComponent
         this.downloadingAll = false;
         data.content.map((item) => {
           const temp = {
-            NAMES: item.userInfo.userType === 2 ? (item.userInfo.surname + '  ' + item.userInfo.foreName) : item.userInfo.groupName,
+            NAMES: item.userInfo.type === 2 ? item.userInfo.groupName: (item.userInfo.surname + '  ' + item.userInfo.foreName),
             SEX: item.userInfo.sex,
             NID: item.userInfo.NID,
             PHONE: item.userInfo.phone_number,
