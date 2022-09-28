@@ -1,13 +1,13 @@
 import {Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {AuthenticationService, AuthorisationService, ConfirmDialogService} from '../../../../core/services';
-import {SiteService} from '../../../../core/services';
+import {AuthenticationService, AuthorisationService, ConfirmDialogService} from '../../../../core';
+import {SiteService} from '../../../../core';
 import {Subject} from 'rxjs';
-import {MessageService} from '../../../../core/services';
+import {MessageService} from '../../../../core';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {SiteDetailsComponent} from '../site-details/site-details.component';
 import { DeleteSiteModal } from '../delete-site-modal/delete-site-modal-component';
-import {BasicComponent} from '../../../../core/library';
+import {BasicComponent} from '../../../../core';
 import { DataTableDirective } from 'angular-datatables';
 
 @Component({

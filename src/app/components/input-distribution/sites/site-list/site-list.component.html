@@ -29,8 +29,8 @@
                  style="margin-left: 10px;"  *appHasPermission="[0,6,5,[4,1],[4,2]]"> Edit</a>
               <a class="btn btn-success btn-margin btn-sm pull-right" [routerLink]="['dispatch-plan/', site._id]"
                  style="margin-left: 10px;"  *appHasPermission="[0,6,5,[4,1],[4,2]]"> CWS Plan</a>
-              <a routerLink="/admin/sites/{{site._id}}/pending-farmers" class="btn btn-margin btn-warning btn-sm pull-right" *appHasPermission="[0,6,5,8,[4,1],[4,2]]"><i
-                class="fa fa-users"></i> Pending farmers</a>
+              <!-- <a routerLink="/admin/sites/{{site._id}}/pending-farmers" class="btn btn-margin btn-warning btn-sm pull-right" *appHasPermission="[0,6,5,8,[4,1],[4,2]]"><i
+                class="fa fa-users"></i> Pending farmers</a>-->
               <a routerLink="/admin/sites/{{site._id}}/farmers" class="btn btn-margin btn-info btn-sm pull-right" *appHasPermission="[0,6,5,8,[4,1],[4,2]]"><i
                 class="fa fa-users"></i> Farmers</a>
               <button class="btn btn-default btn-sm pull-right details-button" (click)="viewDetails(site)">...</button>

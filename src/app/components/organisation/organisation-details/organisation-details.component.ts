@@ -1,7 +1,7 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { FormBuilder } from "@angular/forms";
-import { ActivatedRoute } from "@angular/router";
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {
   BasicComponent,
   OrganisationService,
@@ -14,13 +14,14 @@ import {
   HelperService,
   FarmerService,
   AuthorisationService,
-} from "src/app/core";
-import { Subject } from "rxjs";
+} from 'src/app/core';
 
+
+declare var $;
 @Component({
-  selector: "app-organisation-details",
-  templateUrl: "./organisation-details.component.html",
-  styleUrls: ["./organisation-details.component.css"],
+  selector: 'app-organisation-details',
+  templateUrl: './organisation-details.component.html',
+  styleUrls: ['./organisation-details.component.css'],
 })
 export class OrganisationDetailsComponent
   extends BasicComponent
@@ -76,7 +77,10 @@ export class OrganisationDetailsComponent
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
-      this.organisationId = params["organisationId".toString()];
+      this.organisationId = params['organisationId'.toString()];
+    });
+    $(document).ready(() => {
+      $('[data-toggle="popover"]').popover();
     });
     this.parameters = {
       length: 10,
@@ -107,6 +111,19 @@ export class OrganisationDetailsComponent
     this.setMessage(this.messageService.getMessage());
     this.orgCoveredArea = this.route.snapshot.data.orgCoveredArea;
     this.currentSeason = this.authenticationService.getCurrentSeason();
+  }
+  getVillagesName(cell) {
+    let villages = '';
+    if (cell.covVillages) {
+      cell.covVillages.forEach((village, index) => {
+        if (index === 0) {
+          villages = villages + village.name;
+        } else {
+          villages = villages + ', ' + village.name;
+        }
+      });
+    }
+    return villages;
   }
 
   ngOnDestroy(): void {
