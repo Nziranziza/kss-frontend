@@ -3,6 +3,8 @@
   <a class="btn btn-success pull-right" routerLink="/admin/sites/create" *appHasPermission="[0,5,[4,1],[4,2]]"><i class="fa fa-plus"></i> New site</a>
 </h3>
 <app-list-message [message]="message"></app-list-message>
+<app-list-warnings [warning]="warning"></app-list-warnings>
+
 <div class="row">
   <div class="col-xs-12">
     <div class="box">

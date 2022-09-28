@@ -42,7 +42,7 @@ export class SiteListComponent extends BasicComponent implements OnInit, OnDestr
       pageLength: 25
     };
     this.getAllSites();
-    this.message = this.messageService.getMessage();
+    this.setMessage(this.messageService.getMessage());
   }
 
   getAllSites(): void {
@@ -77,8 +77,9 @@ export class SiteListComponent extends BasicComponent implements OnInit, OnDestr
   openDeleteModal(site: any){
     const modalRef = this.modal.open(DeleteSiteModal);
     modalRef.componentInstance.site = site;
-    modalRef.result.finally(() => {
+    modalRef.result.then((results) => {
       // Re render Datatable
+      this.setWarning(results.message);
       this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
         dtInstance.destroy();
       });
