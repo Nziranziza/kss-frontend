@@ -28,7 +28,7 @@ export class SiteCreateComponent implements OnInit {
   sectors: any;
   cells: any;
   villages: any;
-  // totalAllocatedQty = 0;
+  totalAllocatedQty = 0;
   selectedCoveredSectors = [];
   selectedCoveredCWS = [];
   coveredSectorsSet = [];
@@ -44,7 +44,7 @@ export class SiteCreateComponent implements OnInit {
         cell_id: [''],
         village_id: [''],
       }),
-      // allocatedQty: [this.totalAllocatedQty],
+      allocatedQty: [this.totalAllocatedQty],
       coveredAreas: this.formBuilder.group({
         coveredSectors: [[]],
         coveredCWS: [[]],
@@ -121,10 +121,10 @@ export class SiteCreateComponent implements OnInit {
     event.target['selected'.toString()] = !event.target['selected'.toString()];
     if (event.target['selected'.toString()]) {
       this.createForm.controls.coveredAreas.get('coveredSectors'.toString()).value.push(item._id);
-      /*this.siteService.getSectorAllocatedFertilizer(item._id).subscribe((data) => {
+      this.siteService.getSectorAllocatedFertilizer(item._id).subscribe((data) => {
         this.totalAllocatedQty = this.totalAllocatedQty + data.content[0].totalFertilizerAllocated;
         this.createForm.controls.allocatedQty.setValue(this.totalAllocatedQty);
-      });*/
+      });
       this.selectedCoveredSectors.push(item.name);
       this.getZoneByLocation();
     } else {
@@ -132,10 +132,10 @@ export class SiteCreateComponent implements OnInit {
       i = this.createForm.value.coveredAreas.coveredSectors.indexOf(item._id);
       if (i > -1) {
         this.createForm.controls.coveredAreas.get('coveredSectors'.toString()).value.splice(i, 1);
-       /* this.siteService.getSectorAllocatedFertilizer(item._id).subscribe((data) => {
+        this.siteService.getSectorAllocatedFertilizer(item._id).subscribe((data) => {
           this.totalAllocatedQty = this.totalAllocatedQty - data.content[0].totalFertilizerAllocated;
           this.createForm.controls.allocatedQty.setValue(this.totalAllocatedQty);
-        });*/
+        });
         this.selectedCoveredSectors.splice(i, 1);
         this.getZoneByLocation();
       }

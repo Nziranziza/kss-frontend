@@ -34,7 +34,7 @@
         <div class="col-xs-6">
           <h5 class="label-required text-center">Filters</h5>
           <div class="row" formGroupName="location">
-            <div class="col-xs-6" id="location-province" *ngIf="!isCWSUser">
+            <div class="col-xs-6" id="location-province">
               <select class="form-control" formControlName="prov_id">
                 <option value="" selected>All provinces</option>
                 <option
@@ -45,7 +45,7 @@
                 </option>
               </select>
             </div>
-            <div class="col-xs-6" *ngIf="!isCWSUser">
+            <div class="col-xs-6">
               <select class="form-control" formControlName="dist_id">
                 <option value="" selected>All districts</option>
                 <option
@@ -58,7 +58,7 @@
             </div>
           </div>
         </div>
-        <div class="col-xs-3" *ngIf="!isCWSUser">
+        <div class="col-xs-3">
           <div class="text-center">
             <h5 class="label-required text-center">Filter by CWS</h5>
             <input
@@ -69,7 +69,7 @@
             />
           </div>
         </div>
-        <div class="col-xs-3" *ngIf="!isCWSUser">
+        <div class="col-xs-3">
           <div class="text-center">
             <h5 class="label-required text-center">Filter by sector</h5>
             <input
@@ -82,7 +82,7 @@
         </div>
       </div>
       <div class="row">
-        <span *ngIf="reportForm.value.filter.locationBy === 'cws' || isCWSUser">
+        <span *ngIf="reportForm.value.filter.locationBy === 'cws'">
           <div class="col-xs-3" style="margin-top: 5px">
             <div class="ng-autocomplete">
               <ng-autocomplete
@@ -92,8 +92,7 @@
                 (selected)="selectEvent($event)"
                 (inputCleared)="deselectEvent()"
                 [initialValue]="initialValue"
-                placeholder="{{ !isCWSUser ? 'All CWS' : orgName }}"
-                disabled="isCWSUser"
+                placeholder="All CWS"
                 [itemTemplate]="itemTemplate"
                 [notFoundTemplate]="notFoundTemplate"
                 style="height: 10px"
@@ -145,8 +144,7 @@
         <span
           *ngIf="
             reportForm.value.filter.locationBy === 'sector' ||
-            reportForm.value.filter.locationBy === 'cws' ||
-            isCWSUser
+            reportForm.value.filter.locationBy === 'cws'
           "
           formGroupName="location"
         >
@@ -233,437 +231,430 @@
       </div>
     </div>
   </div>
+  <div class="summary-box">
+    <h3 class="text-center">{{ reportForm.value.reportFor }}</h3>
+    <div class="row" style="margin-top: -15px">
+      <span *ngIf="reportForm.value.reportFor === 'Farmer Groups'">
+        <div class="col-sm-6 text-center">
+          <h4>Total Groups</h4>
+          <h3>{{ stats?.numberOfGroups || 0 }}</h3>
+        </div>
+        <div class="col-sm-6 text-center">
+          <h4>Total Members</h4>
+          <h3>{{ stats?.numberOfMembers || 0 }}</h3>
+        </div>
+      </span>
+      <span *ngIf="reportForm.value.reportFor === 'Trainings'">
+        <div class="col-sm-6 text-center">
+          <h4>Total Trainees</h4>
+          <h3>{{ stats?.numberOfTrainees || 0 }}</h3>
+          <div class="col-sm-6 text-center">
+            <h4>Male</h4>
+            <h3>{{ stats?.totalMales || 0 }}</h3>
+          </div>
+          <div class="col-sm-6 text-center">
+            <h4>Female</h4>
+            <h3>{{ stats?.totalFemales || 0 }}</h3>
+          </div>
+        </div>
+        <div class="col-sm-6 text-center">
+          <h4>Total Attended Trainees</h4>
+          <h3>{{ stats?.numberOfAttendedTrainees || 0 }}</h3>
+          <div class="col-sm-6 text-center">
+            <h4>Male</h4>
+            <h3>{{ stats?.maleNumberOfAttendedTrainees || 0 }}</h3>
+          </div>
+          <div class="col-sm-6 text-center">
+            <h4>Female</h4>
+            <h3>{{ stats?.femaleNumberOfAttendedTrainees || 0 }}</h3>
+          </div>
+        </div>
+      </span>
+      <span *ngIf="reportForm.value.reportFor === 'Farm Visits'">
+        <div class="col-sm-6 text-center">
+          <h4>Total Visits</h4>
+          <h3>{{ stats?.numberOfFarmVisits || 0 }}</h3>
+        </div>
+        <div class="col-sm-6 text-center">
+          <h4>Total Visited Farmers</h4>
+          <h3>{{ stats?.numberOfFarmVisits || 0 }}</h3>
+        </div>
+      </span>
+
+      <span *ngIf="reportForm.value.reportFor === 'Coffee Farmers'">
+        <div class="col-sm-6 text-center">
+          <h4>Total Farmers</h4>
+          <h3>
+            {{
+              stats?.statistics?.male?.farmers +
+                stats?.statistics?.female?.farmers || 0
+            }}
+          </h3>
+        </div>
+
+        <div class="col-sm-6 text-center">
+          <h4>Total Trees</h4>
+          <h3>
+            {{
+              stats?.statistics?.male?.numberOfTrees +
+                stats?.statistics?.female?.numberOfTrees || 0
+            }}
+          </h3>
+        </div>
+      </span>
+
+      <span *ngIf="reportForm.value.reportFor === 'Coffee Farms'">
+        <div class="col-sm-6 text-center">
+          <h4>Total Farms</h4>
+          <h3>
+            {{
+              stats?.statistics?.male?.numberOfLands +
+                stats?.statistics?.female?.numberOfLands || 0
+            }}
+          </h3>
+        </div>
+
+        <div class="col-sm-6 text-center">
+          <h4>Total Trees</h4>
+          <h3>
+            {{
+              stats?.statistics?.male?.numberOfTrees +
+                stats?.statistics?.female?.numberOfTrees || 0
+            }}
+          </h3>
+        </div>
+      </span>
+    </div>
+  </div>
+  <div class="text-center" style="margin-top: 5px" *ngIf="reportGenerated">
+    <a
+      class="btn btn-default"
+      style="margin-left: 10px"
+      [href]="'data:application/pdf;base64,' + dataPdf | safe"
+      download="generalReport.pdf"
+    >
+      export to PDF
+    </a>
+    <a
+      class="btn btn-default"
+      style="margin-left: 10px"
+      [href]="'data:application/octet-stream;base64,' + dataCsv | safe"
+      download="generalReport.csv"
+    >
+      export to CSV
+    </a>
+    <a
+      class="btn btn-default"
+      style="margin-left: 10px"
+      [href]="'data:application/octet-stream;base64,' + dataFile | safe"
+      download="generalReport.xlsx"
+      >export to XLS</a
+    >
+  </div>
+  <div class="box" id="downloadFile">
+    <div class="box-header" *ngIf="reportsTableData.length > 0">
+      <img src="assets/dist/img/sks/tecnoserve.png" style="width: 140px" />
+    </div>
+    <h4 class="text-center">{{ reportForm.value.reportFor }} Details</h4>
+    <div
+      class="box-body table-responsive"
+      *ngIf="
+        reportForm.value.reportFor === 'Trainings' &&
+        reportsTableData.length > 0
+      "
+    >
+      <table
+        datatable
+        [dtOptions]="dtOptions"
+        [dtTrigger]="dtTrigger"
+        class="row-border hover table table-striped"
+      >
+        <thead>
+          <tr>
+            <th>Farmer Names</th>
+            <th>Gender</th>
+            <th>Age</th>
+            <th>Training Title</th>
+            <th>Date of training</th>
+            <th>Venue</th>
+            <th>Trainer</th>
+            <th>Group</th>
+            <th>Attended</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let schedule of reportsTableData">
+            <td>
+              {{ schedule.trainees.foreName + " " + schedule.trainees.surName }}
+            </td>
+            <td>{{ schedule.trainees.gender }}</td>
+            <td>
+              {{ schedule.trainees.NID ? getAge(schedule.trainees.NID) : "-" }}
+            </td>
+            <td>{{ schedule.trainingId.trainingName }}</td>
+            <td>{{ schedule.startTime | date: "short" }}</td>
+            <td>
+              {{ schedule.venueName }}
+            </td>
+            <td>{{ schedule.trainer.fullName }}</td>
+            <td>{{ schedule.groupId.groupName }}</td>
+            <td>
+              {{ schedule.trainees.attended ? "attended" : "not attended" }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div
+      class="box-body table-responsive"
+      *ngIf="
+        reportForm.value.reportFor === 'Farmer Groups' &&
+        reportsTableData.length > 0
+      "
+    >
+      <app-loader *ngIf="loading"></app-loader>
+      <table
+        datatable
+        [dtOptions]="dt2Options"
+        [dtTrigger]="dt2Trigger"
+        class="row-border hover table table-striped"
+      >
+        <thead>
+          <tr>
+            <th>Date added</th>
+            <th>Group name</th>
+            <th>Leader names</th>
+            <th>Leader Contact</th>
+            <th>Province</th>
+            <th>District</th>
+            <th>Sector</th>
+            <th>Cell</th>
+            <th>Village</th>
+            <th>Group size</th>
+            <th>Meeting Day</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let group of reportsTableData">
+            <tr style="text-transform: capitalize">
+              <td>{{ group.createdAt | date: "y/LL/d - h:mm" }}</td>
+              <td>{{ group.groupName }}</td>
+              <td>{{ group.leaderNames }}</td>
+              <td>{{ group.leaderPhoneNumber }}</td>
+              <td>{{ group.location.prov_id?.namek.toLowerCase()}}</td>
+              <td>{{ group.location.dist_id?.name }}</td>
+              <td>{{ group.location.sect_id?.name }}</td>
+              <td>{{ group.location.cell_id?.name }}</td>
+              <td>{{ group.location.village_id?.name }}</td>
+              <td>
+                <span>{{ group.members.length + " " + "farmers" }}</span>
+              </td>
+              <td>
+                {{ weekDays[group.meetingSchedule?.meetingDay - 1] }}
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+    <div
+      class="box-body table-responsive"
+      *ngIf="
+        reportForm.value.reportFor === 'Farm Visits' &&
+        reportsTableData.length > 0
+      "
+    >
+      <app-loader *ngIf="loading"></app-loader>
+      <table
+        datatable
+        [dtOptions]="dt3Options"
+        [dtTrigger]="dt3Trigger"
+        class="row-border hover table table-striped"
+      >
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>UPI</th>
+            <th>Farmer names</th>
+            <th>Province</th>
+            <th>District</th>
+            <th>Sector</th>
+            <th>Cell</th>
+            <th>Village</th>
+            <th>Extension officer</th>
+            <th>Gap</th>
+            <th>Adoption</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let visit of reportsTableData">
+            <tr>
+              <td>{{ visit.createdAt | date: "short" }}</td>
+              <td>{{ visit.farm.upiNumber }}</td>
+              <td>{{ visit.owner.lastName + " " + visit.owner.firstName }}</td>
+              <td>{{ visit.farm.location.prov_id.namek.toLowerCase()}}</td>
+              <td>{{ visit.farm.location.dist_id.name }}</td>
+              <td>{{ visit.farm.location.sect_id.name }}</td>
+              <td>{{ visit.farm.location.cell_id.name }}</td>
+              <td>{{ visit.farm.location.village_id.name }}</td>
+              <td>
+                {{ visit.visitor.firstName }} {{ visit.visitor.lastName }}
+              </td>
+              <td>
+                {{ visit.gap.gap_name }}
+              </td>
+              <td>
+                {{
+                  (visit.overall_score * 100) / visit.overall_weight
+                    | number: "1.0-1"
+                }}%
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+    <div
+      class="box-body table-responsive"
+      *ngIf="
+        reportForm.value.reportFor === 'Coffee Farmers' &&
+        reportsTableData.length > 0
+      "
+    >
+      <app-loader *ngIf="loading"></app-loader>
+      <table
+        datatable
+        [dtOptions]="dt4Options"
+        [dtTrigger]="dt4Trigger"
+        class="row-border hover table table-striped"
+      >
+        <thead>
+          <tr>
+            <th>Farmer Names</th>
+            <th>NID</th>
+            <th>Reg Number</th>
+            <th>Phone Number</th>
+            <th>Gender</th>
+            <th>Province</th>
+            <th>District</th>
+            <th>Sector</th>
+            <th>Cell</th>
+            <th>Village</th>
+            <th>Status</th>
+            <th>Trees #</th>
+            <th>Farms #</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let data of reportsTableData">
+            <tr>
+              <td>
+                {{
+                  data?.userInfo?.type === 2
+                    ? data?.userInfo?.groupName
+                    : data?.userInfo?.foreName + " " + data.userInfo?.surname
+                }}
+              </td>
+              <td>{{ data?.userInfo?.NID }}</td>
+              <td>{{ data?.userInfo?.regNumber }}</td>
+              <td>{{ data?.userInfo?.phone_number }}</td>
+              <td>{{ data?.userInfo?.sex }}</td>
+              <td>
+                {{ data.userInfo?.location?.prov_id?.namek.toLowerCase()}}
+              </td>
+              <td>
+                {{ data.userInfo.location?.dist_id.name }}
+              </td>
+              <td>
+                {{ data.userInfo.location?.sect_id.name }}
+              </td>
+              <td>
+                {{ data.userInfo.location?.cell_id.name }}
+              </td>
+              <td>
+                {{ data.userInfo.location?.village_id.name }}
+              </td>
+              <td>
+                {{
+                  data.userInfo.userInfo
+                    ? data.userInfo.userInfo.status
+                    : "active"
+                }}
+              </td>
+              <td>
+                {{ sumTrees(data.requestInfo) }}
+              </td>
+              <td>
+                {{ data.requestInfo.length }}
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+    <div
+      class="box-body table-responsive"
+      *ngIf="
+        reportForm.value.reportFor === 'Coffee Farms' &&
+        reportsTableData.length > 0
+      "
+    >
+      <app-loader *ngIf="loading"></app-loader>
+      <table
+        datatable
+        [dtOptions]="dt5Options"
+        [dtTrigger]="dt5Trigger"
+        class="row-border hover table table-striped"
+      >
+        <thead>
+          <tr>
+            <th>Farmer names</th>
+            <th>Reg Number</th>
+            <th>UPI Number</th>
+            <th>Province</th>
+            <th>District</th>
+            <th>Sector</th>
+            <th>Cell</th>
+            <th>Village</th>
+            <th>Status</th>
+            <th>Total Trees</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let data of reportsTableData">
+            <tr *ngFor="let farm of data.requestInfo">
+              <td>
+                {{
+                  data?.userInfo?.type === 2
+                    ? data?.userInfo?.groupName
+                    : data?.userInfo?.foreName + " " + data.userInfo?.surname
+                }}
+              </td>
+              <td>{{ data?.userInfo?.regNumber }}</td>
+              <td>{{ farm.upiNumber }}</td>
+              <td>
+                {{ farm.location.prov_id.namek.toLowerCase()}}
+              </td>
+              <td>
+                {{ farm.location.dist_id.name }}
+              </td>
+              <td>
+                {{ farm.location.sect_id.name }}
+              </td>
+              <td>
+                {{ farm.location.cell_id.name }}
+              </td>
+              <td>
+                {{ farm.location.village_id.name }}
+              </td>
+              <td>
+                {{ farm.status ? farm.status : "active" }}
+              </td>
+              <td>{{ farm?.numberOfTrees }}</td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </form>
-<!--
-  -------------------------------- SUMMARY BOX ----------------------------------
-                             Box with Report Summary
-  ------------------------------------------------------------------------------
--->
-<div class="summary-box">
-  <h3 class="text-center">{{ reportForm.value.reportFor }}</h3>
-  <div class="row" style="margin-top: -15px">
-    <span *ngIf="reportForm.value.reportFor === 'Farmer Groups'">
-      <div class="col-sm-6 text-center">
-        <h4>Total Groups</h4>
-        <h3>{{ stats?.numberOfGroups || 0 }}</h3>
-      </div>
-      <div class="col-sm-6 text-center">
-        <h4>Total Members</h4>
-        <h3>{{ stats?.numberOfMembers || 0 }}</h3>
-      </div>
-    </span>
-    <span *ngIf="reportForm.value.reportFor === 'Trainings'">
-      <div class="col-sm-6 text-center">
-        <h4>Total Trainees</h4>
-        <h3>{{ stats?.numberOfTrainees || 0 }}</h3>
-        <div class="col-sm-6 text-center">
-          <h4>Male</h4>
-          <h3>{{ stats?.totalMales || 0 }}</h3>
-        </div>
-        <div class="col-sm-6 text-center">
-          <h4>Female</h4>
-          <h3>{{ stats?.totalFemales || 0 }}</h3>
-        </div>
-      </div>
-      <div class="col-sm-6 text-center">
-        <h4>Total Attended Trainees</h4>
-        <h3>{{ stats?.numberOfAttendedTrainees || 0 }}</h3>
-        <div class="col-sm-6 text-center">
-          <h4>Male</h4>
-          <h3>{{ stats?.maleNumberOfAttendedTrainees || 0 }}</h3>
-        </div>
-        <div class="col-sm-6 text-center">
-          <h4>Female</h4>
-          <h3>{{ stats?.femaleNumberOfAttendedTrainees || 0 }}</h3>
-        </div>
-      </div>
-    </span>
-    <span *ngIf="reportForm.value.reportFor === 'Farm Visits'">
-      <div class="col-sm-6 text-center">
-        <h4>Total Visits</h4>
-        <h3>{{ stats?.numberOfFarmVisits || 0 }}</h3>
-      </div>
-      <div class="col-sm-6 text-center">
-        <h4>Total Visited Farmers</h4>
-        <h3>{{ stats?.numberOfFarmVisits || 0 }}</h3>
-      </div>
-    </span>
-
-    <span *ngIf="reportForm.value.reportFor === 'Coffee Farmers'">
-      <div class="col-sm-6 text-center">
-        <h4>Total Farmers</h4>
-        <h3>
-          {{
-            stats?.statistics?.male?.farmers +
-              stats?.statistics?.female?.farmers || 0
-          }}
-        </h3>
-      </div>
-
-      <div class="col-sm-6 text-center">
-        <h4>Total Trees</h4>
-        <h3>
-          {{
-            stats?.statistics?.male?.numberOfTrees +
-              stats?.statistics?.female?.numberOfTrees || 0
-          }}
-        </h3>
-      </div>
-    </span>
-
-    <span *ngIf="reportForm.value.reportFor === 'Coffee Farms'">
-      <div class="col-sm-6 text-center">
-        <h4>Total Farms</h4>
-        <h3>
-          {{
-            stats?.statistics?.male?.numberOfLands +
-              stats?.statistics?.female?.numberOfLands || 0
-          }}
-        </h3>
-      </div>
-
-      <div class="col-sm-6 text-center">
-        <h4>Total Trees</h4>
-        <h3>
-          {{
-            stats?.statistics?.male?.numberOfTrees +
-              stats?.statistics?.female?.numberOfTrees || 0
-          }}
-        </h3>
-      </div>
-    </span>
-  </div>
-</div>
-<div class="text-center" style="margin-top: 5px" *ngIf="reportGenerated">
-  <a
-    class="btn btn-default"
-    style="margin-left: 10px"
-    [href]="'data:application/pdf;base64,' + dataPdf | safe"
-    download="generalReport.pdf"
-  >
-    export to PDF
-  </a>
-  <a
-    class="btn btn-default"
-    style="margin-left: 10px"
-    [href]="'data:application/octet-stream;base64,' + dataCsv | safe"
-    download="generalReport.csv"
-  >
-    export to CSV
-  </a>
-  <a
-    class="btn btn-default"
-    style="margin-left: 10px"
-    [href]="'data:application/octet-stream;base64,' + dataFile | safe"
-    download="generalReport.xlsx"
-    >export to XLS</a
-  >
-</div>
-<!--
-  -------------------------------- TABLE BOX ----------------------------------
-                          Different tables of all report
-  ----------------------------------------------------------------------------
--->
-<div class="box" id="downloadFile">
-  <div class="box-header" *ngIf="reportsTableData.length > 0">
-    <img src="assets/dist/img/sks/tecnoserve.png" style="width: 140px" />
-  </div>
-  <h4 class="text-center">{{ reportForm.value.reportFor }} Details</h4>
-  <div
-    class="box-body table-responsive"
-    *ngIf="
-      reportForm.value.reportFor === 'Trainings' && reportsTableData.length > 0
-    "
-  >
-    <table
-      datatable
-      [dtOptions]="dtOptions"
-      [dtTrigger]="dtTrigger1"
-      class="row-border hover table table-striped"
-    >
-      <thead>
-        <tr>
-          <th>Farmer Names</th>
-          <th>Gender</th>
-          <th>Age</th>
-          <th>Training Title</th>
-          <th>Date of training</th>
-          <th>Venue</th>
-          <th>Trainer</th>
-          <th>Group</th>
-          <th>Attended</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let schedule of reportsTableData">
-          <td>
-            {{ schedule.trainees.foreName + " " + schedule.trainees.surName }}
-          </td>
-          <td>{{ schedule.trainees.gender }}</td>
-          <td>
-            {{ schedule.trainees.NID ? getAge(schedule.trainees.NID) : "-" }}
-          </td>
-          <td>{{ schedule.trainingId.trainingName }}</td>
-          <td>{{ schedule.startTime | date: "short" }}</td>
-          <td>
-            {{ schedule.venueName }}
-          </td>
-          <td>{{ schedule.trainer.fullName }}</td>
-          <td>{{ schedule.groupId.groupName }}</td>
-          <td>
-            {{ schedule.trainees.attended ? "attended" : "not attended" }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div
-    class="box-body table-responsive"
-    *ngIf="
-      reportForm.value.reportFor === 'Farmer Groups' &&
-      reportsTableData.length > 0
-    "
-  >
-    <app-loader *ngIf="loading"></app-loader>
-    <table
-      datatable
-      [dtOptions]="dtOptions"
-      [dtTrigger]="dtTrigger2"
-      class="row-border hover table table-striped"
-    >
-      <thead>
-        <tr>
-          <th>Date added</th>
-          <th>Group name</th>
-          <th>Leader names</th>
-          <th>Leader Contact</th>
-          <th>Province</th>
-          <th>District</th>
-          <th>Sector</th>
-          <th>Cell</th>
-          <th>Village</th>
-          <th>Group size</th>
-          <th>Meeting Day</th>
-        </tr>
-      </thead>
-      <tbody>
-        <ng-container *ngFor="let group of reportsTableData">
-          <tr style="text-transform: capitalize">
-            <td>{{ group.createdAt | date: "y/LL/d - h:mm" }}</td>
-            <td>{{ group.groupName }}</td>
-            <td>{{ group.leaderNames }}</td>
-            <td>{{ group.leaderPhoneNumber }}</td>
-            <td>{{ group.location.prov_id?.namek.toLowerCase() }}</td>
-            <td>{{ group.location.dist_id?.name }}</td>
-            <td>{{ group.location.sect_id?.name }}</td>
-            <td>{{ group.location.cell_id?.name }}</td>
-            <td>{{ group.location.village_id?.name }}</td>
-            <td>
-              <span>{{ group.members.length + " " + "farmers" }}</span>
-            </td>
-            <td>
-              {{ weekDays[group.meetingSchedule?.meetingDay - 1] }}
-            </td>
-          </tr>
-        </ng-container>
-      </tbody>
-    </table>
-  </div>
-  <div
-    class="box-body table-responsive"
-    *ngIf="
-      reportForm.value.reportFor === 'Farm Visits' &&
-      reportsTableData.length > 0
-    "
-  >
-    <app-loader *ngIf="loading"></app-loader>
-    <table
-      datatable
-      [dtOptions]="dtOptions"
-      [dtTrigger]="dtTrigger3"
-      class="row-border hover table table-striped"
-    >
-      <thead>
-        <tr>
-          <th>Date</th>
-          <th>UPI</th>
-          <th>Farmer names</th>
-          <th>Province</th>
-          <th>District</th>
-          <th>Sector</th>
-          <th>Cell</th>
-          <th>Village</th>
-          <th>Extension officer</th>
-          <th>Gap</th>
-          <th>Adoption</th>
-        </tr>
-      </thead>
-      <tbody>
-        <ng-container *ngFor="let visit of reportsTableData">
-          <tr>
-            <td>{{ visit.createdAt | date: "short" }}</td>
-            <td>{{ visit.farm.upiNumber }}</td>
-            <td>{{ visit.owner.lastName + " " + visit.owner.firstName }}</td>
-            <td>{{ visit.farm.location.prov_id.namek.toLowerCase() }}</td>
-            <td>{{ visit.farm.location.dist_id.name }}</td>
-            <td>{{ visit.farm.location.sect_id.name }}</td>
-            <td>{{ visit.farm.location.cell_id.name }}</td>
-            <td>{{ visit.farm.location.village_id.name }}</td>
-            <td>{{ visit.visitor.firstName }} {{ visit.visitor.lastName }}</td>
-            <td>
-              {{ visit.gap.gap_name }}
-            </td>
-            <td>
-              {{
-                (visit.overall_score * 100) / visit.overall_weight
-                  | number: "1.0-1"
-              }}%
-            </td>
-          </tr>
-        </ng-container>
-      </tbody>
-    </table>
-  </div>
-  <div
-    class="box-body table-responsive"
-    *ngIf="
-      reportForm.value.reportFor === 'Coffee Farmers' &&
-      reportsTableData.length > 0
-    "
-  >
-    <app-loader *ngIf="loading"></app-loader>
-    <table
-      datatable
-      [dtOptions]="dtOptions"
-      [dtTrigger]="dtTrigger4"
-      class="row-border hover table table-striped"
-    >
-      <thead>
-        <tr>
-          <th>Farmer Names</th>
-          <th>NID</th>
-          <th>Reg Number</th>
-          <th>Phone Number</th>
-          <th>Gender</th>
-          <th>Province</th>
-          <th>District</th>
-          <th>Sector</th>
-          <th>Cell</th>
-          <th>Village</th>
-          <th>Status</th>
-          <th>Trees #</th>
-          <th>Farms #</th>
-        </tr>
-      </thead>
-      <tbody>
-        <ng-container *ngFor="let data of reportsTableData">
-          <tr>
-            <td>
-              {{
-                data?.userInfo?.type === 2
-                  ? data?.userInfo?.groupName
-                  : data?.userInfo?.foreName + " " + data.userInfo?.surname
-              }}
-            </td>
-            <td>{{ data?.userInfo?.NID }}</td>
-            <td>{{ data?.userInfo?.regNumber }}</td>
-            <td>{{ data?.userInfo?.phone_number }}</td>
-            <td>{{ data?.userInfo?.sex }}</td>
-            <td>
-              {{ data.userInfo?.location?.prov_id?.namek.toLowerCase() }}
-            </td>
-            <td>
-              {{ data.userInfo.location?.dist_id.name }}
-            </td>
-            <td>
-              {{ data.userInfo.location?.sect_id.name }}
-            </td>
-            <td>
-              {{ data.userInfo.location?.cell_id.name }}
-            </td>
-            <td>
-              {{ data.userInfo.location?.village_id.name }}
-            </td>
-            <td>
-              {{
-                data.userInfo.userInfo
-                  ? data.userInfo.userInfo.status
-                  : "active"
-              }}
-            </td>
-            <td>
-              {{ sumTrees(data.requestInfo) }}
-            </td>
-            <td>
-              {{ data.requestInfo.length }}
-            </td>
-          </tr>
-        </ng-container>
-      </tbody>
-    </table>
-  </div>
-  <div
-    class="box-body table-responsive"
-    *ngIf="
-      reportForm.value.reportFor === 'Coffee Farms' &&
-      reportsTableData.length > 0
-    "
-  >
-    <app-loader *ngIf="loading"></app-loader>
-    <table
-      datatable
-      [dtOptions]="dtOptions"
-      [dtTrigger]="dtTrigger5"
-      class="row-border hover table table-striped"
-    >
-      <thead>
-        <tr>
-          <th>Farmer names</th>
-          <th>Reg Number</th>
-          <th>UPI Number</th>
-          <th>Province</th>
-          <th>District</th>
-          <th>Sector</th>
-          <th>Cell</th>
-          <th>Village</th>
-          <th>Status</th>
-          <th>Total Trees</th>
-        </tr>
-      </thead>
-      <tbody>
-        <ng-container *ngFor="let data of reportsTableData">
-          <tr *ngFor="let farm of data.requestInfo">
-            <td>
-              {{
-                data?.userInfo?.type === 2
-                  ? data?.userInfo?.groupName
-                  : data?.userInfo?.foreName + " " + data.userInfo?.surname
-              }}
-            </td>
-            <td>{{ data?.userInfo?.regNumber }}</td>
-            <td>{{ farm.upiNumber }}</td>
-            <td>
-              {{ farm.location.prov_id.namek.toLowerCase() }}
-            </td>
-            <td>
-              {{ farm.location.dist_id.name }}
-            </td>
-            <td>
-              {{ farm.location.sect_id.name }}
-            </td>
-            <td>
-              {{ farm.location.cell_id.name }}
-            </td>
-            <td>
-              {{ farm.location.village_id.name }}
-            </td>
-            <td>
-              {{ farm.status ? farm.status : "active" }}
-            </td>
-            <td>{{ farm?.numberOfTrees }}</td>
-          </tr>
-        </ng-container>
-      </tbody>
-    </table>
-  </div>
-</div>

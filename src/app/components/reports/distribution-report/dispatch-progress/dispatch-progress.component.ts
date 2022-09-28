@@ -263,11 +263,11 @@ export class DispatchProgressComponent
   siteExport() {
     this.inputDistributionService.siteExport().subscribe((data) => {
       const byteArray = new Uint8Array(atob(data.data).split('').map(char => char.charCodeAt(0)));
-      const newBlob = new Blob([byteArray], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+      const newBlob = new Blob([byteArray], {type: 'application/pdf'});
       const linkElement = document.createElement('a');
       const url = URL.createObjectURL(newBlob);
       linkElement.setAttribute('href', url);
-      linkElement.setAttribute('download', data.fileName + '.xlsx');
+      linkElement.setAttribute('download', data.fileName + '.pdf');
       const clickEvent = new MouseEvent('click', {
         view: window,
         bubbles: true,
@@ -280,11 +280,11 @@ export class DispatchProgressComponent
   distributionExport() {
     this.inputDistributionService.distributionExport().subscribe((data) => {
       const byteArray = new Uint8Array(atob(data.data).split('').map(char => char.charCodeAt(0)));
-      const newBlob = new Blob([byteArray], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+      const newBlob = new Blob([byteArray], {type: 'application/pdf'});
       const linkElement = document.createElement('a');
       const url = URL.createObjectURL(newBlob);
       linkElement.setAttribute('href', url);
-      linkElement.setAttribute('download', data.fileName + '.xlsx');
+      linkElement.setAttribute('download', data.fileName + '.pdf');
       const clickEvent = new MouseEvent('click', {
         view: window,
         bubbles: true,

@@ -1,9 +1,8 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Subject } from 'rxjs';
 import {
   AuthenticationService,
-  AuthorisationService,
   BasicComponent,
   GroupService,
   LocationService,
@@ -15,14 +14,13 @@ import {
 } from 'src/app/core';
 import { DatePipe } from '@angular/common';
 import { isUndefined } from 'util';
-import { DataTableDirective } from 'angular-datatables';
 
 @Component({
   selector: 'app-reports',
   templateUrl: './reports.component.html',
   styleUrls: ['./reports.component.css'],
 })
-export class ReportsComponent extends BasicComponent implements OnInit, AfterViewInit {
+export class ReportsComponent extends BasicComponent implements OnInit {
   newOrg: any;
   newData: any;
   selectedGroup: any;
@@ -39,21 +37,29 @@ export class ReportsComponent extends BasicComponent implements OnInit, AfterVie
     private trainingService: TrainingService,
     private reportService: ReportService,
     private siteService: SiteService,
-    private datePipe: DatePipe,
-    private authorisationService: AuthorisationService
+    private datePipe: DatePipe
   ) {
     super(locationService, organisationService);
   }
 
   loading = false;
   reportForm: FormGroup;
-  @ViewChild(DataTableDirective, { static: false })
-  dtElement: DataTableDirective;
-  dtInstance: DataTables.Api;
   @ViewChild('orgAuto') orgAuto: any;
   dtOptions: DataTables.Settings = {};
   // @ts-ignore
   dtTrigger: Subject = new Subject();
+  dt2Options: DataTables.Settings = {};
+  // @ts-ignore
+  dt2Trigger: Subject = new Subject();
+  dt3Options: DataTables.Settings = {};
+  // @ts-ignore
+  dt3Trigger: Subject = new Subject();
+  dt4Options: DataTables.Settings = {};
+  // @ts-ignore
+  dt4Trigger: Subject = new Subject();
+  dt5Options: DataTables.Settings = {};
+  // @ts-ignore
+  dt5Trigger: Subject = new Subject();
   groups: any[] = [];
   currentSeason: any;
   stats: any = {};
@@ -78,10 +84,15 @@ export class ReportsComponent extends BasicComponent implements OnInit, AfterVie
     'Saturday',
     'Sunday',
   ];
-  isCWSUser = false;
-  orgName = '';
 
   ngOnInit() {
+    this.dtOptions,
+      this.dt2Options,
+      this.dt3Options,
+      this.dt4Options = {
+        pagingType: 'full_numbers',
+        pageLength: 10,
+      };
     this.reportForm = this.formBuilder.group({
       reportFor: [''],
       filter: this.formBuilder.group({
@@ -103,17 +114,11 @@ export class ReportsComponent extends BasicComponent implements OnInit, AfterVie
         }),
       })
     });
-    this.isCWSUser = this.authorisationService.isCWSUser();
-    this.orgName = this.authenticationService.getCurrentUser().orgInfo.orgName;
     this.seasonStartingDate = this.datePipe.transform(this.authenticationService.getCurrentSeason().created_at, 'yyyy-MM-dd');
     this.currentDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
     this.basicInit();
     this.initial();
     this.onChanges();
-  }
-
-  ngAfterViewInit(): void {
-    // this.dtTrigger.next();
   }
 
   initial() {
@@ -131,18 +136,11 @@ export class ReportsComponent extends BasicComponent implements OnInit, AfterVie
 
   getOrganisations() {
     this.organisationService.all().subscribe((data) => {
-      this.organisations = data.content;
       if (data) {
         this.organisations.unshift({
           organizationName: 'all cws',
           _id: '',
         });
-        if (this.isCWSUser) {
-          this.selectEvent({
-            _id: this.authenticationService.getCurrentUser().info.org_id,
-            organizationName: this.orgName
-          })
-        }
       }
     });
   }
@@ -170,7 +168,7 @@ export class ReportsComponent extends BasicComponent implements OnInit, AfterVie
     } else {
       this.newOrg = undefined;
     }
-    this.isCWSUser ? this.getStats() : console.log('');
+    this.getStats();
   }
 
   deselectEvent() {
@@ -370,7 +368,6 @@ export class ReportsComponent extends BasicComponent implements OnInit, AfterVie
     const value = this.reportForm.get('reportFor').value;
     let body = this.getLocation();
     const form = JSON.parse(JSON.stringify(this.reportForm.value));
-    this.isCWSUser ? this.newOrg = this.authenticationService.getCurrentUser().info.org_id : this.newOrg = this.newOrg;
     if (value === 'Farmer Groups') {
       body = {
         ...body,
@@ -402,26 +399,20 @@ export class ReportsComponent extends BasicComponent implements OnInit, AfterVie
         let maleNumberOfAttendedTrainees = 0;
         let femaleNumberOfAttendedTrainees = 0;
         let totalFemales = 0;
-        data.data.forEach((newdata) => {
-          numberOfTrainees += newdata.numberOfTrainees;
-          numberOfAttendedTrainees += newdata.numberOfAttendedTrainees;
-          if (newdata.gender === 'M' || newdata.gender === 'm') {
-            totalMales += newdata.numberOfTrainees;
-            maleNumberOfAttendedTrainees += newdata.numberOfAttendedTrainees;
+        data.data.forEach((data) => {
+          numberOfTrainees += data.numberOfTrainees;
+          numberOfAttendedTrainees += data.numberOfAttendedTrainees;
+          if (data.gender == "M" || data.gender == "m") {
+            totalMales += data.numberOfTrainees;
+            maleNumberOfAttendedTrainees += data.numberOfAttendedTrainees;
           }
 
-          if (newdata.gender === 'F' || newdata.gender === 'f') {
+          if (data.gender == "F" || data.gender == "f") {
             totalFemales += data.numberOfTrainees;
-            femaleNumberOfAttendedTrainees += newdata.numberOfAttendedTrainees;
+            femaleNumberOfAttendedTrainees += data.numberOfAttendedTrainees;
           }
         })
-        this.stats = {
-          numberOfTrainees,
-          numberOfAttendedTrainees,
-          totalMales, totalFemales,
-          maleNumberOfAttendedTrainees,
-          femaleNumberOfAttendedTrainees
-        };
+        this.stats = { numberOfTrainees, numberOfAttendedTrainees, totalMales, totalFemales, maleNumberOfAttendedTrainees, femaleNumberOfAttendedTrainees };
       });
     } else if (value === 'Farm Visits') {
       const date = form.filter.date;
@@ -472,20 +463,21 @@ export class ReportsComponent extends BasicComponent implements OnInit, AfterVie
       this.reportsTableData = [];
       this.reportService.groupSummary(this.reportBody).subscribe((data) => {
         this.reportsTableData = data.data;
-
+        this.dtTrigger.next();
         this.reportGenerated = true;
       });
     } else if (this.reportForm.value.reportFor === 'Trainings') {
       this.reportsTableData = [];
       this.reportService.trainingSummary(this.reportBody).subscribe((data) => {
         this.reportsTableData = data.data;
+        this.dt2Trigger.next();
         this.reportGenerated = true;
       });
     } else if (this.reportForm.value.reportFor === 'Farm Visits') {
       this.reportsTableData = [];
       this.reportService.visitSummary(this.reportBody).subscribe((data) => {
         this.reportsTableData = data.data;
-
+        this.dt3Trigger.next();
         this.reportGenerated = true;
       });
     } else if (this.reportForm.value.reportFor === 'Coffee Farmers') {
@@ -493,7 +485,7 @@ export class ReportsComponent extends BasicComponent implements OnInit, AfterVie
       this.reportBody.searchBy = 'farmer';
       this.reportService.farmSummary(this.reportBody).subscribe((data) => {
         this.reportsTableData = data.data;
-
+        this.dt3Trigger.next();
         this.reportGenerated = true;
       });
     } else if (this.reportForm.value.reportFor === 'Coffee Farms') {
@@ -501,14 +493,10 @@ export class ReportsComponent extends BasicComponent implements OnInit, AfterVie
       this.reportBody.searchBy = 'farm';
       this.reportService.farmSummary(this.reportBody).subscribe((data) => {
         this.reportsTableData = data.data;
-
+        this.dt3Trigger.next();
         this.reportGenerated = true;
       });
     }
-    this.dtOptions = {
-      pagingType: 'full_numbers',
-      pageLength: 25,
-    };
   }
 
   generateFinalReport() {
@@ -603,4 +591,5 @@ export class ReportsComponent extends BasicComponent implements OnInit, AfterVie
     this.newOrg = undefined;
     this.newData = undefined;
   }
+
 }

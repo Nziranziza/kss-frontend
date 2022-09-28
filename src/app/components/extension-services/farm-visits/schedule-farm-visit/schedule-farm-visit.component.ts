@@ -164,7 +164,6 @@ export class ScheduleFarmVisitComponent implements OnInit {
   }
 
   viewDetails(i: number) {
-    this.farmDetails = [];
     this.farmDetails = this.farmList[i].farm;
     this.viewDetailsClicked = true;
   }

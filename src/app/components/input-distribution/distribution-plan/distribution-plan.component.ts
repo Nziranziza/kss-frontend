@@ -169,40 +169,6 @@ export class DistributionPlanComponent implements OnInit {
     this.excelService.exportAsExcelFile(this.plans, 'distribution plan');
   }
 
-  distributionExport() {
-    this.inputDistributionService.distributionExport().subscribe((data) => {
-      const byteArray = new Uint8Array(atob(data.data).split('').map(char => char.charCodeAt(0)));
-      const newBlob = new Blob([byteArray], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
-      const linkElement = document.createElement('a');
-      const url = URL.createObjectURL(newBlob);
-      linkElement.setAttribute('href', url);
-      linkElement.setAttribute('download', data.fileName + '.xlsx');
-      const clickEvent = new MouseEvent('click', {
-        view: window,
-        bubbles: true,
-        cancelable: false
-      });
-      linkElement.dispatchEvent(clickEvent);
-    });
-  }
-
-  siteExport() {
-    this.inputDistributionService.siteExport().subscribe((data) => {
-      const byteArray = new Uint8Array(atob(data.data).split('').map(char => char.charCodeAt(0)));
-      const newBlob = new Blob([byteArray], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
-      const linkElement = document.createElement('a');
-      const url = URL.createObjectURL(newBlob);
-      linkElement.setAttribute('href', url);
-      linkElement.setAttribute('download', data.fileName + '.xlsx');
-      const clickEvent = new MouseEvent('click', {
-        view: window,
-        bubbles: true,
-        cancelable: false
-      });
-      linkElement.dispatchEvent(clickEvent);
-    });
-  }
-
   initial() {
     this.locationService.getProvinces().subscribe((data) => {
       this.provinces = data;
