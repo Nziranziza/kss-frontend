@@ -47,6 +47,10 @@ export class InputDistributionService {
     return this.apiService.get('/inputapplication/' + siteId);
   }
 
+  getCwsStockOuts(orgId: string, siteId: string){
+    return this.apiService.get('/v1.1/input-applications/org/' + orgId + '/' + siteId);
+  }
+
   recordStockOut(body: any): Observable<any> {
     return this.apiService.post('/inputapplication/record_stockout', body);
   }

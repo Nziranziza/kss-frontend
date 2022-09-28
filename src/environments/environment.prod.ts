@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  api_url: 'https://smartkungahara.rw/api'
+  api_url: 'https://smartkungahara.rw/core/api'
 };
 

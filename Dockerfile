@@ -11,13 +11,12 @@ RUN sudo apt-get update && \
     DEBIAN_FRONTEND=noninteractive sudo apt-get install -y tzdata && \
     sudo apt-get update && \
     sudo apt-get install -y curl apt-transport-https ca-certificates build-essential && \
-    curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash - && \
+    curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash - && \
     sudo apt-get install -y nodejs && \
     sudo apt-get update -y && sudo apt upgrade -y && \
-    sudo npm install express --save &&\
-    sudo npm -g install create-react-app
+    sudo npm install -g @angular/cli
 
-RUN sudo npm install --global yarn
+
 RUN sudo apt-get update && \
     sudo apt-get install nginx -y && \
     sudo service nginx restart
@@ -34,6 +33,6 @@ COPY --chown=docker-deployer:docker-deployer ./package.json ./
 COPY --chown=docker-deployer:docker-deployer . .
 EXPOSE 5050
 
-RUN npm i --also=dev
-RUN npm run build
+RUN npm i --legacy-peer-deps
+RUN ng build --prod --aot --configuration=production
 RUN sudo service nginx restart

@@ -3,7 +3,8 @@
   "compilerOptions": {
     "outDir": "../out-tsc/app",
     "types": [ "node" ],
-    "typeRoots": [ "../node_modules/@types" ]
+    "typeRoots": [ "../node_modules/@types" ],
+    "paths": { "path": [ "./node_modules/path-browserify" ] }
   },
   "exclude": [
     "test.ts",

@@ -23,12 +23,24 @@ export class AuthorisationService {
     return this.hasAccess;
   }
 
+  hasServices(services: string[]): boolean {
+    let hasService = false;
+    const orgServices = this.authenticationService.getServices();
+    services.forEach((service) => {
+      // tslint:disable-next-line:triple-equals
+      if (orgServices.findIndex((el) => el.serviceName == service)) {
+        hasService = true;
+      }
+    });
+    return hasService;
+  }
+
   clear() {
     this.hasAccess = false;
   }
 
   isAdmin() {
-    return !!(this.authenticationService.getCurrentUser().parameters.type === 1);
+    return (this.authenticationService.getCurrentUser().parameters.type === 1);
   }
 
   isPartner() {
@@ -46,9 +58,19 @@ export class AuthorisationService {
     return !!(this.userRoles.includes(1) && this.userRoles.includes(8));
   }
 
+  isTechnoServeAdmin() {
+    this.userRoles = this.authenticationService.getCurrentUser().parameters.role;
+    return !!(this.userRoles.includes(11) && +this.authenticationService.getCurrentUser().parameters.type === 1);
+  }
+
   isTechouseUser() {
     this.userRoles = this.authenticationService.getCurrentUser().parameters.role;
     return !!this.userRoles.includes(0);
+  }
+
+  isTecnoserveUser() {
+    this.userRoles = this.authenticationService.getCurrentUser().parameters.role;
+    return !!this.userRoles.includes(11);
   }
 
   isDryMillUser() {

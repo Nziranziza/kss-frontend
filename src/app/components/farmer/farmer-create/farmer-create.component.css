@@ -1,0 +1,61 @@
+.varieties-table {
+    table-layout: fixed;
+  }
+
+  .varieties-table .form-control.v-number{
+    height: 20px;
+    padding: 0;
+  }
+
+  .land-info-title {
+    text-transform: uppercase;
+    color: #4F210D;
+    text-align: left;
+    font-size: 15px;
+    margin-bottom: 5px;
+    margin-right: 15px;
+    font-weight: bolder;
+  }
+
+  .text-muted {
+    color: #000000;
+  }
+
+
+.line {
+  animation: expand 1s ease-in-out infinite;
+  border-radius: 10px;
+  display: inline-block;
+  transform-origin: center center;
+  margin: 0 3px;
+  width: 3px;
+  height: 5px;
+}
+
+.line:nth-child(1) {
+  background: #4F210D;
+}
+
+.line:nth-child(2) {
+  animation-delay: 180ms;
+  background: #4F210D;
+}
+
+.line:nth-child(3) {
+  animation-delay: 360ms;
+  background: #4F210D;
+}
+
+.line:nth-child(4) {
+  animation-delay: 540ms;
+  background: #4F210D;
+}
+
+@keyframes expand {
+  0% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(2);
+  }
+}

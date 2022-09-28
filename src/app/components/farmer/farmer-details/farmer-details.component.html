@@ -1,0 +1,162 @@
+<div class="modal-header">
+  <i class="fa fa-times-circle close" style="font-size: 24px;" aria-label="Close" (click)="modal.dismiss()">
+  </i>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="col-xs-12">
+      <h3 class="page-header">
+        <i class="fa fa-user"></i> Farmer profile
+      </h3>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-4 invoice-col">
+      <div class="row" *ngIf="farmer.userInfo.type!==2">
+        <div class="col-sm-6">
+          First name
+        </div>
+        <div class="col-sm-6">
+          <strong>{{ farmer?.userInfo.foreName }}</strong><br>
+        </div>
+        <div class="col-sm-6">
+          Last name
+        </div>
+        <div class="col-sm-6">
+          {{ farmer?.userInfo.surname }}<br>
+        </div>
+        <div class="col-sm-6">
+          NID
+        </div>
+        <div class="col-sm-6">
+          {{ farmer?.userInfo.NID }}<br>
+        </div>
+        <div class="col-sm-6">
+          Phone number
+        </div>
+        <div class="col-sm-6">
+          {{ farmer?.userInfo.phone_number }}<br>
+        </div>
+        <div class="col-sm-6">
+          REG number
+        </div>
+        <div class="col-sm-6">
+          {{ farmer?.userInfo.regNumber }}<br>
+        </div>
+        <div class="col-sm-6">
+          Total Trees
+        </div>
+        <div class="col-sm-6">
+          {{ totalTrees }}<br>
+        </div>
+        <div class="col-sm-6">
+          Total Land
+        </div>
+        <div class="col-sm-6">
+          {{ requests.length }}<br>
+        </div>
+      </div>
+      <div class="row" *ngIf="farmer.userInfo.type==2">
+        <div class="col-sm-6">
+          Group name
+        </div>
+        <div class="col-sm-6">
+          <strong>{{ farmer?.userInfo.groupName }}</strong><br>
+        </div>
+        <div class="col-sm-6">
+          REG number
+        </div>
+        <div class="col-sm-6">
+          {{ farmer?.userInfo.regNumber }}<br>
+        </div>
+        <div class="col-sm-6">
+          Phone number
+        </div>
+        <div class="col-sm-6">
+          {{ farmer?.userInfo.phone_number }}<br>
+        </div>
+        <div class="col-sm-6">
+          Total Trees
+        </div>
+        <div class="col-sm-6">
+          {{ totalTrees }}<br>
+        </div>
+        <div class="col-sm-6">
+          Total Land
+        </div>
+        <div class="col-sm-6">
+          {{ requests.length }}<br>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="pull-left" style="margin-left: 15px; font-size: 14px" *ngIf="showProduction">
+        <google-chart #chart
+                      [type]="graph.type"
+                      [data]="graph.data"
+                      [options]="graph.options"
+                      [width]="graph.width"
+                      [columns]="graph.columnNames"
+                      [height]="graph.height">
+        </google-chart>
+      </div>
+    </div>
+    <div class="col-sm-4" *appHasPermission="[0,[8,1],[1,1]]">
+      <ng-container *ngIf="showSetPinButton; else loadingSetPinStatus">
+        <a class="btn btn-success btn-margin pull-right" *ngIf="!resetPin" (click)="enableResetPin(true)"><i
+          class="fa fa-check"></i>&nbsp; Enable pin reset
+        </a>
+        <a class="btn btn-warning btn-margin pull-right" *ngIf="resetPin" (click)="enableResetPin(false)"><i
+          class="fa fa-close"></i>&nbsp; Disable pin reset
+        </a>
+      </ng-container>
+      <ng-template #loadingSetPinStatus>
+        <app-spinner class="pull-right"></app-spinner>
+      </ng-template>
+    </div>
+  </div>
+  <br/> <br/>
+  <h6 class="page-header">
+    Lands
+  </h6>
+  <div class="row">
+    <div class="col-xs-12 table-responsive">
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th>Season</th>
+          <th>Location</th>
+          <th>Number of trees</th>
+          <th>Fertilizer needed</th>
+          <th>Fertilizer allocated</th>
+          <th>Trees at distribution</th>
+          <th>Comment</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let request of requests;">
+          <td>{{farmer.request?.season?.name}}</td>
+          <td>
+            <span class="details-row-title-sm" style="margin-left: 0px">Province </span> : <span
+            class="details-row-data-sm" *ngIf="request.location.prov_id">{{ request.location.prov_id.namek.toLowerCase()}}</span>
+            <span class="details-row-title-sm">District </span> : <span class="details-row-data-sm"
+                                                                        *ngIf="request.location.dist_id">{{ request.location.dist_id.name }}</span>
+            <span class="details-row-title-sm">Sector </span> : <span class="details-row-data-sm"
+                                                                      *ngIf="request.location.sect_id">{{ request.location.sect_id.name }}</span>
+            <span class="details-row-title-sm">Cell </span> : <span class="details-row-data-sm"
+                                                                    *ngIf="request.location.cell_id">{{ request.location.cell_id.name }}</span>
+            <span class="details-row-title-sm">Village </span> : <span class="details-row-data-sm"
+                                                                       *ngIf="request.location.village_id">{{ request.location.village_id.name }}</span>
+          </td>
+          <td>{{ request.numberOfTrees }}</td>
+          <td>{{ request.fertilizer_need | number:'1.0-1' }} Kg</td>
+          <td>{{ request.fertilizer_allocate | number:'1.0-1' }} Kg</td>
+          <td style="color: #F3A700">{{ request?.treesAtDistribution }} &nbsp; &nbsp;</td>
+          <td>{{ request.update_comments }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+

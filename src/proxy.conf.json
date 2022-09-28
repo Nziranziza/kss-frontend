@@ -1,0 +1,8 @@
+{
+  "/core/api": {
+    "target": "https://staging.smartkungahara.rw",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  }
+}
