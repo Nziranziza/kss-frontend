@@ -87,8 +87,8 @@
                     ><br />
                   </div>
                   <div class="col-sm-6">Email</div>
-                  <div class="col-sm-6 text-lowercase">
-                    <strong>{{ org?.email?.toLowerCase() }}</strong
+                  <div class="col-sm-6">
+                    <strong>{{ org?.email }}</strong
                     ><br />
                   </div>
                   <div class="col-sm-6">Telephone</div>
@@ -449,35 +449,35 @@
                   | paginate: config
               "
             >
-              <td>{{ farmer?.userInfo?.createdAt | date: "short" }}</td>
+              <td>{{ farmer.userInfo.createdAt | date: "short" }}</td>
               <td *ngIf="farmer.userInfo.type === 2; else foreName">
-                {{ farmer?.userInfo?.groupName }}
+                {{ farmer.userInfo.groupName }}
               </td>
               <ng-template #foreName>
                 <td>
-                  {{ farmer?.userInfo?.foreName }} {{ farmer?.userInfo?.surname }}
+                  {{ farmer.userInfo.foreName }} {{ farmer.userInfo.surname }}
                 </td>
               </ng-template>
-              <td>{{ farmer?.userInfo?.NID }}</td>
-              <td>{{ farmer?.userInfo?.phone_number }}</td>
-              <td>{{ farmer?.userInfo?.regNumber | uppercase }}</td>
+              <td>{{ farmer.userInfo.NID }}</td>
+              <td>{{ farmer.userInfo.phone_number }}</td>
+              <td>{{ farmer.userInfo.regNumber | uppercase }}</td>
               <td>
                 {{ farmer.userInfo?.location?.prov_id?.namek?.toLowerCase()== null ? '-' :
                   farmer.userInfo?.location?.prov_id?.namek?.toLowerCase() +
                     " > " +
-                    farmer.userInfo?.location?.dist_id?.name +
+                    farmer.userInfo.location?.dist_id.name +
                     " > " +
-                    farmer.userInfo?.location?.sect_id?.name +
+                    farmer.userInfo.location?.sect_id.name +
                     " > " +
-                    farmer.userInfo?.location?.cell_id?.name +
+                    farmer.userInfo.location?.cell_id.name +
                     " > " +
-                    farmer.userInfo?.location?.village_id?.name
+                    farmer.userInfo.location?.village_id.name
                 }}
               </td>
               <td></td>
               <td>
-                <div *ngFor="let land of farmer?.request?.requestInfo" style="font-size: 12px;">
-                  {{ land?.upiNumber }}
+                <div *ngFor="let land of farmer.request.requestInfo" style="font-size: 12px;">
+                  {{ land.upiNumber }}
                 </div>
               </td>
               <td>
