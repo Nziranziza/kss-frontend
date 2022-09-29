@@ -63,7 +63,7 @@ export class FarmVisitListComponent
   getVisits(deletetrigger = false): void {
     this.loading = true;
     this.visitService
-      .all(this.authenticationService.getCurrentUser().info.org_id)
+      .all({reference: this.authenticationService.getCurrentUser().info.org_id})
       .subscribe((data) => {
         const newData = data.data.map((newdata) => {
           newdata.overall_score = 0;

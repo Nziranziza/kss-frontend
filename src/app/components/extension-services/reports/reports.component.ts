@@ -80,6 +80,15 @@ export class ReportsComponent extends BasicComponent implements OnInit, AfterVie
   ];
   isCWSUser = false;
   orgName = '';
+  filterHeader: any = {
+    location: { prov_id: '', dist_id: '', sect_id: '', cell_id: '', village_id: '' },
+    cwsName: '',
+    groupName: '',
+    trainingName: ''
+  };
+  groupName = '';
+  trainingName = '';
+  cwsName = '';
 
   ngOnInit() {
     this.reportForm = this.formBuilder.group({
@@ -117,6 +126,13 @@ export class ReportsComponent extends BasicComponent implements OnInit, AfterVie
   }
 
   initial() {
+    if (this.isCWSUser) {
+      this.groupService.list(
+        { reference: this.authenticationService.getCurrentUser().info.org_id }
+      ).subscribe((newdata) => {
+        this.groups = newdata.data;
+      });
+    }
     this.getTrainings();
     this.getOrganisations();
   }
@@ -141,7 +157,7 @@ export class ReportsComponent extends BasicComponent implements OnInit, AfterVie
           this.selectEvent({
             _id: this.authenticationService.getCurrentUser().info.org_id,
             organizationName: this.orgName
-          })
+          });
         }
       }
     });
@@ -155,6 +171,7 @@ export class ReportsComponent extends BasicComponent implements OnInit, AfterVie
       this.locationVillages = [];
       this.locationCells = [];
       this.reportBody.reference = this.newOrg;
+      this.filterHeader.cwsName = item.organizationName;
       if (this.reportForm.controls.filter.get('locationBy').value === 'cws' && this.newOrg) {
         this.groupService.list({
           ...this.getLocation(),
@@ -169,26 +186,33 @@ export class ReportsComponent extends BasicComponent implements OnInit, AfterVie
       }
     } else {
       this.newOrg = undefined;
+      this.filterHeader.cwsName = '';
     }
     this.isCWSUser ? this.getStats() : console.log('');
   }
 
   deselectEvent() {
     this.newOrg = undefined;
+    this.filterHeader.cwsName = '';
     this.getStats();
   }
 
   selectGroupEvent(item) {
     if (item._id !== '') {
       this.selectedGroup = item._id;
+      this.reportBody.groupId = item._id;
+      this.filterHeader.groupName = item.groupName;
     } else {
       this.selectedGroup = undefined;
+      this.filterHeader.groupName = '';
     }
     this.getStats();
   }
 
   deselectGroupEvent(item) {
     this.selectedGroup = undefined;
+    delete this.reportBody.groupId;
+    this.filterHeader.groupName = '';
   }
 
   onChanges() {
@@ -201,6 +225,8 @@ export class ReportsComponent extends BasicComponent implements OnInit, AfterVie
     });
     this.reportForm.controls.filter.get('training.trainingId'.toString()).valueChanges.subscribe((value) => {
       this.reportForm.controls.filter.get('training.trainingId'.toString()).patchValue(value, { emitEvent: false });
+      const valueData: any = this.valueNames(value, this.trainings);
+      this.filterHeader.trainingName = valueData.trainingName;
       this.getStats();
     });
     this.reportForm.controls.filter.get('date').valueChanges.subscribe((value) => {
@@ -243,6 +269,15 @@ export class ReportsComponent extends BasicComponent implements OnInit, AfterVie
               });
             }
           });
+        this.filterHeader.location = {
+          prov_id: '',
+          dist_id: '',
+          sect_id: '',
+          cell_id: '',
+          village_id: '',
+        };
+        const valueData: any = this.valueNames(value, this.locationProvinces);
+        this.filterHeader.location.prov_id = valueData.namee;
         this.getStats();
       }, () => {
       }, () => {
@@ -266,11 +301,29 @@ export class ReportsComponent extends BasicComponent implements OnInit, AfterVie
               });
             }
           });
+        this.filterHeader.location = {
+          prov_id: this.filterHeader.location.prov_id,
+          dist_id: '',
+          sect_id: '',
+          cell_id: '',
+          village_id: '',
+        };
+        const valueData: any = this.valueNames(value, this.locationDistricts);
+        this.filterHeader.location.dist_id = valueData.name;
         this.getStats();
       });
     this.reportForm.controls.filter
       .get('location.sect_id'.toString())
       .valueChanges.subscribe((value) => {
+        this.filterHeader.location = {
+          prov_id: this.filterHeader.location.prov_id,
+          dist_id: this.filterHeader.location.dist_id,
+          sect_id: '',
+          cell_id: '',
+          village_id: '',
+        };
+        const valueData: any = this.valueNames(value, this.locationSectors);
+        this.filterHeader.location.sect_id = valueData.name;
         this.reportForm.controls.filter
           .get('location.sect_id'.toString()).patchValue(value, { emitEvent: false });
         if (!isUndefined(this.newOrg) && (this.newOrg !== '')) {
@@ -292,6 +345,15 @@ export class ReportsComponent extends BasicComponent implements OnInit, AfterVie
     this.reportForm.controls.filter
       .get('location.cell_id'.toString())
       .valueChanges.subscribe((value) => {
+        this.filterHeader.location = {
+          prov_id: this.filterHeader.location.prov_id,
+          dist_id: this.filterHeader.location.dist_id,
+          sect_id: this.filterHeader.location.sect_id,
+          cell_id: '',
+          village_id: '',
+        };
+        const valueData: any = this.valueNames(value, this.locationCells);
+        this.filterHeader.location.cell_id = valueData.name;
         this.reportForm.controls.filter
           .get('location.cell_id'.toString()).patchValue(value, { emitEvent: false });
         this.locationService.getVillages(value).subscribe((data) => {
@@ -315,6 +377,15 @@ export class ReportsComponent extends BasicComponent implements OnInit, AfterVie
     this.reportForm.controls.filter
       .get('location.village_id'.toString())
       .valueChanges.subscribe((value) => {
+        this.filterHeader.location = {
+          prov_id: this.filterHeader.location.prov_id,
+          dist_id: this.filterHeader.location.dist_id,
+          sect_id: this.filterHeader.location.sect_id,
+          cell_id: this.filterHeader.location.cell_id,
+          village_id: '',
+        };
+        const valueData: any = this.valueNames(value, this.locationVillages);
+        this.filterHeader.location.village_id = valueData.name;
         this.reportForm.controls.filter
           .get('location.village_id'.toString()).patchValue(value, { emitEvent: false });
         if (this.reportForm.controls.filter.get('locationBy').value === 'cws' && this.newOrg) {
@@ -327,6 +398,16 @@ export class ReportsComponent extends BasicComponent implements OnInit, AfterVie
         }
         this.getStats();
       });
+  }
+
+  valueNames(id: string, arr: any) {
+    let itemValue = '';
+    arr.map((item) => {
+      if (item._id === id) {
+        itemValue = item;
+      };
+    });
+    return itemValue;
   }
 
   getLocation() {
@@ -369,6 +450,7 @@ export class ReportsComponent extends BasicComponent implements OnInit, AfterVie
   getStats() {
     const value = this.reportForm.get('reportFor').value;
     let body = this.getLocation();
+    console.log(JSON.stringify(this.filterHeader));
     const form = JSON.parse(JSON.stringify(this.reportForm.value));
     this.isCWSUser ? this.newOrg = this.authenticationService.getCurrentUser().info.org_id : this.newOrg = this.newOrg;
     if (value === 'Farmer Groups') {
@@ -470,9 +552,11 @@ export class ReportsComponent extends BasicComponent implements OnInit, AfterVie
   generateReport() {
     if (this.reportForm.value.reportFor === 'Farmer Groups') {
       this.reportsTableData = [];
+      const dataNames: any = this.filterHeader;
+      delete dataNames.groupName;
+      delete dataNames.trainingName;
       this.reportService.groupSummary(this.reportBody).subscribe((data) => {
         this.reportsTableData = data.data;
-
         this.reportGenerated = true;
       });
     } else if (this.reportForm.value.reportFor === 'Trainings') {
@@ -483,13 +567,18 @@ export class ReportsComponent extends BasicComponent implements OnInit, AfterVie
       });
     } else if (this.reportForm.value.reportFor === 'Farm Visits') {
       this.reportsTableData = [];
+      const dataNames: any = this.filterHeader;
+      delete dataNames.groupName;
+      delete dataNames.trainingName;
       this.reportService.visitSummary(this.reportBody).subscribe((data) => {
         this.reportsTableData = data.data;
-
         this.reportGenerated = true;
       });
     } else if (this.reportForm.value.reportFor === 'Coffee Farmers') {
       this.reportsTableData = [];
+      const dataNames: any = this.filterHeader;
+      delete dataNames.groupName;
+      delete dataNames.trainingName;
       this.reportBody.searchBy = 'farmer';
       this.reportService.farmSummary(this.reportBody).subscribe((data) => {
         this.reportsTableData = data.data;
@@ -498,6 +587,9 @@ export class ReportsComponent extends BasicComponent implements OnInit, AfterVie
       });
     } else if (this.reportForm.value.reportFor === 'Coffee Farms') {
       this.reportsTableData = [];
+      const dataNames: any = this.filterHeader;
+      delete dataNames.groupName;
+      delete dataNames.trainingName;
       this.reportBody.searchBy = 'farm';
       this.reportService.farmSummary(this.reportBody).subscribe((data) => {
         this.reportsTableData = data.data;

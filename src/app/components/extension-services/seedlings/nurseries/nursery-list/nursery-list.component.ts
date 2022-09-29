@@ -70,7 +70,7 @@ export class NurseryListComponent
 
   getNurseries(deletetrigger: any = false): void {
     this.loading = true;
-    this.seedlingService.all().subscribe((data) => {
+    this.seedlingService.all(this.authenticationService.getCurrentUser().info.org_id).subscribe((data) => {
       this.nurseries = data.data;
       this.nurseries.map((nursery) => {
         let sum = 0;
