@@ -12,7 +12,15 @@
       </li>
       <li routerLinkActive="active" *appHasPermission="[1]">
         <a
+          *ngIf="authUser.orgInfo.hasExtensionAccess"
           routerLink="/admin/organisations/details/{{ user.org_id }}/dashboard"
+        >
+          <i class="fa fa-dashboard" aria-hidden="true"></i>
+          <span>{{ "dashboard" | translate }}</span>
+        </a>
+        <a
+          *ngIf="!authUser.orgInfo.hasExtensionAccess"
+          routerLink="/admin/organisations/details/{{ user.org_id }}/farmers"
         >
           <i class="fa fa-dashboard" aria-hidden="true"></i>
           <span>{{ "dashboard" | translate }}</span>
@@ -20,29 +28,13 @@
       </li>
       <li
         class="header"
-        *appHasPermission="[
-          [4, 1],
-          [4, 11],
-          [4, 12],
-          0,
-          6,
-          5,
-          11
-        ]"
+        *appHasPermission="[[4, 1], [4, 11], [4, 12], 0, 6, 5, 11]"
       >
         {{ " REGISTRATION " | translate }}
       </li>
       <li
         routerLinkActive="active"
-        *appHasPermission="[
-          [4, 1],
-          [4, 11],
-          [4, 12],
-          0,
-          6,
-          5,
-          11
-        ]"
+        *appHasPermission="[[4, 1], [4, 11], [4, 12], 0, 6, 5, 11]"
       >
         <a routerLink="/admin/organisations">
           <i class="fa fa-university" aria-hidden="true"></i>
@@ -271,10 +263,21 @@
           </li>
         </ul>
       </li>
-      <li class="header" *ngIf="authUser.orgInfo.hasExtensionAccess">
+      <li
+        class="header"
+        *ngIf="
+          authUser.orgInfo.hasExtensionAccess ||
+          authUser.parameters.role[0] == 11
+        "
+      >
         {{ "EXTENSION SERVICES" | translate }}
       </li>
-      <ng-template *ngIf="authUser.orgInfo.hasExtensionAccess">
+      <ng-template
+        [ngIf]="
+          authUser.orgInfo.hasExtensionAccess ||
+          authUser.parameters.role[0] == 11
+        "
+      >
         <li
           class="treeview"
           routerLinkActive="active"
@@ -284,8 +287,8 @@
             <i class="fa fa-users"></i>
             <span>{{ "farmer_groups" | translate }}</span>
             <span class="pull-right-container">
-            <i class="fa fa-angle-left pull-right"></i>
-          </span>
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
           </a>
           <ul class="treeview-menu">
             <li routerLinkActive="active" *appHasPermission="[11, 1]">
@@ -305,8 +308,8 @@
             <i class="fa fa-delicious"></i>
             <span>{{ "gap_management" | translate }}</span>
             <span class="pull-right-container">
-            <i class="fa fa-angle-left pull-right"></i>
-          </span>
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
           </a>
           <ul class="treeview-menu">
             <li routerLinkActive="active" *appHasPermission="[[1], [11, 1]]">
@@ -322,8 +325,8 @@
             <i class="fa fa-television"></i>
             <span>{{ "training_management" | translate }}</span>
             <span class="pull-right-container">
-            <i class="fa fa-angle-left pull-right"></i>
-          </span>
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
           </a>
           <ul class="treeview-menu">
             <li routerLinkActive="active" *appHasPermission="[[1], [11, 1]]">
@@ -346,10 +349,11 @@
           *appHasPermission="[11, 1]"
         >
           <a href="#">
-            <i class="fa fa-map"></i> <span>{{ "farm_visit" | translate }}</span>
+            <i class="fa fa-map"></i>
+            <span>{{ "farm_visit" | translate }}</span>
             <span class="pull-right-container">
-            <i class="fa fa-angle-left pull-right"></i>
-          </span>
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
           </a>
           <ul class="treeview-menu">
             <li routerLinkActive="active" *appHasPermission="[11, 1]">
@@ -369,18 +373,20 @@
             <i class="fa fa-leaf"></i>
             <span>{{ "planting_operation" | translate }}</span>
             <span class="pull-right-container">
-            <i class="fa fa-angle-left pull-right"></i>
-          </span>
-        </a>
-        <ul class="treeview-menu">
-          <li routerLinkActive="active" *appHasPermission="[11, 1]">
-            <a routerLink="/admin/seedling/nursery/list">
-              <i class="fa fa-circle-o"></i>
-              <span>{{ "nurseries" | translate }}</span>
-            </a>
-          </li>
-        </ul>
-      </ng-template>
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li routerLinkActive="active" *appHasPermission="[11, 1]">
+              <a routerLink="/admin/seedling/nursery/list">
+                <i class="fa fa-circle-o"></i>
+                <span>{{ "nurseries" | translate }}</span>
+              </a>
+            </li>
+          </ul>
+        </li></ng-template
+      >
+
       <li class="header" *appHasPermission="[[8, 2], 1]">SITES</li>
       <li
         class="treeview"
@@ -612,7 +618,7 @@
               <i class="fa fa-circle-o"></i>
               <span>Payments report</span>
             </a>
-          </li>         
+          </li>
           <li
             class="treeview"
             routerLinkActive="active"

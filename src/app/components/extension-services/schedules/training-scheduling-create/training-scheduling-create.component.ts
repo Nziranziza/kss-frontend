@@ -260,7 +260,7 @@ export class TrainingSchedulingCreateComponent
       };
       this.userService
         .updateMemberContact(traineData.value.groupId, data)
-        .subscribe((data) => {
+        .subscribe((newdata) => {
           this.loading = false;
         });
     } else {
@@ -495,9 +495,9 @@ export class TrainingSchedulingCreateComponent
         };
       }),
     };
-    this.trainingService.scheduleTraining(data).subscribe((data) => {
-      this.successDatails = data.data;
-      this.success(data.data.description, data.data._id);
+    this.trainingService.scheduleTraining(data).subscribe((newdata) => {
+      this.successDatails = newdata.data;
+      this.success(newdata.data.description, newdata.data._id);
       this.loading = false;
     },
       (err) => {
@@ -524,17 +524,17 @@ export class TrainingSchedulingCreateComponent
   sendMessage() {
     this.loading = true;
     const data = this.successDatails._id;
-    this.trainingService.sendMessage(data).subscribe((data) => {
+    this.trainingService.sendMessage(data).subscribe((newdata) => {
       this.router.navigateByUrl('admin/training/schedule/list');
       this.loading = false;
     });
   }
 
   formatDate(date) {
-    let d = new Date(date),
-      month = '' + (d.getMonth() + 1),
-      day = '' + d.getDate(),
-      year = d.getFullYear();
+    const d = new Date(date);
+    let month = '' + (d.getMonth() + 1);
+    let day = '' + d.getDate();
+    const year = d.getFullYear();
 
     if (month.length < 2) month = '0' + month;
     if (day.length < 2) day = '0' + day;
