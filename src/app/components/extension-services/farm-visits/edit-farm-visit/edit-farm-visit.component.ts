@@ -97,13 +97,14 @@ export class EditFarmVisitComponent implements OnInit {
       this.scheduleVisit.controls.startTime.setValue(
         new Date(data.data.date.split('T')[0] +
           'T' +
-          (parseInt(data.data.expectedDuration.from.split(':')[0]) - 2).toString() + ':' + data.data.expectedDuration.from.split(':')[1] +
+          (parseInt(data.data.expectedDuration.from.split(':')[0], 10) - 2).toString() + ':'
+           + data.data.expectedDuration.from.split(':')[1] +
           ':00.000Z')
       );
       this.scheduleVisit.controls.endTime.setValue(
         new Date(data.data.date.split('T')[0] +
           'T' +
-          (parseInt(data.data.expectedDuration.to.split(':')[0]) - 2).toString() + ':' + data.data.expectedDuration.to.split(':')[1] +
+          (parseInt(data.data.expectedDuration.to.split(':')[0], 10) - 2).toString() + ':' + data.data.expectedDuration.to.split(':')[1] +
           ':00.000Z')
       );
       this.scheduleVisit.controls.farmerGroup.setValue(
@@ -288,10 +289,10 @@ export class EditFarmVisitComponent implements OnInit {
       const data: any = {
         date: dataValues.date.visitDate,
         description: dataValues.description,
-        farms: farms.map((data) => {
+        farms: farms.map((newdata) => {
           return {
-            farmId: data.farm._id,
-            owner: data.owner,
+            farmId: newdata.farm._id,
+            owner: newdata.owner,
           };
         }),
         org_id: this.authenticationService.getCurrentUser().info.org_id,

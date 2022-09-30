@@ -14,6 +14,7 @@ import {
   HelperService,
   FarmerService,
   AuthorisationService,
+  AuthUser,
 } from 'src/app/core';
 
 
@@ -33,6 +34,7 @@ export class OrganisationDetailsComponent
   config: { itemsPerPage: any; currentPage: any; totalItems: number; };
   paginatedFarmers: any;
   showData: boolean;
+  authUser: AuthUser
   constructor(
     private organisationService: OrganisationService,
     private userService: UserService,
@@ -92,6 +94,7 @@ export class OrganisationDetailsComponent
     this.organisationService.get(this.organisationId).subscribe((data) => {
       this.org = data.content;
     });
+    this.authUser = this.authenticationService.getCurrentUser();
     this.organisationService
       .getCwsSummary(this.organisationId)
       .subscribe((data) => {

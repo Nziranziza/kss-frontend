@@ -58,28 +58,30 @@
             </div>
           </div>
         </div>
-        <div class="col-xs-3" *ngIf="!isCWSUser">
-          <div class="text-center">
-            <h5 class="label-required text-center">Filter by CWS</h5>
-            <input
-              type="radio"
-              formControlName="locationBy"
-              value="cws"
-              style="margin-top: 5px"
-            />
+        <span *ngIf="reportForm.value.filter.location.dist_id !== ''">
+          <div class="col-xs-3" *ngIf="!isCWSUser">
+            <div class="text-center">
+              <h5 class="label-required text-center">Filter by CWS</h5>
+              <input
+                type="radio"
+                formControlName="locationBy"
+                value="cws"
+                style="margin-top: 5px"
+              />
+            </div>
           </div>
-        </div>
-        <div class="col-xs-3" *ngIf="!isCWSUser">
-          <div class="text-center">
-            <h5 class="label-required text-center">Filter by sector</h5>
-            <input
-              type="radio"
-              formControlName="locationBy"
-              value="sector"
-              style="margin-top: 5px"
-            />
+          <div class="col-xs-3" *ngIf="!isCWSUser">
+            <div class="text-center">
+              <h5 class="label-required text-center">Filter by sector</h5>
+              <input
+                type="radio"
+                formControlName="locationBy"
+                value="sector"
+                style="margin-top: 5px"
+              />
+            </div>
           </div>
-        </div>
+        </span>
       </div>
       <div class="row">
         <span *ngIf="reportForm.value.filter.locationBy === 'cws' || isCWSUser">
@@ -93,7 +95,7 @@
                 (inputCleared)="deselectEvent()"
                 [initialValue]="initialValue"
                 placeholder="{{ !isCWSUser ? 'All CWS' : orgName }}"
-                disabled="isCWSUser"
+                [disabled]="isCWSUser"
                 [itemTemplate]="itemTemplate"
                 [notFoundTemplate]="notFoundTemplate"
                 style="height: 10px"
@@ -234,6 +236,8 @@
     </div>
   </div>
 </form>
+
+
 <!--
   -------------------------------- SUMMARY BOX ----------------------------------
                              Box with Report Summary

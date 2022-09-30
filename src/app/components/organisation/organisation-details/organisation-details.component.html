@@ -17,7 +17,9 @@
             <div class="col-md-10">
               <div class="stats-box-details-right">
                 Province:
-                <span class="bold"> {{ org?.location.prov_id.namek.toLowerCase()}} </span>
+                <span class="bold">
+                  {{ org?.location.prov_id.namek.toLowerCase() }}
+                </span>
               </div>
               <div class="stats-box-details-right">
                 District:
@@ -44,7 +46,8 @@
             </div>
             <div class="col-md-10">
               <div class="stats-box-details-right text-lowercase">
-                Email: <span class="bold"> {{ org?.email?.toLowerCase() }} </span>
+                Email:
+                <span class="bold"> {{ org?.email?.toLowerCase() }} </span>
               </div>
               <div class="stats-box-details-right">
                 Phone: <span class="bold"> {{ org?.phone_number }} </span>
@@ -73,10 +76,16 @@
                   <div class="col-xs-9">
                     <div class="stats-box-location-cells">
                       <span *ngFor="let cell of area.covCells; let i = index">
-                        <a type="button" class="btn btn-link" data-container="body"
+                        <a
+                          type="button"
+                          class="btn btn-link"
+                          data-container="body"
                           style="text-decoration: none; color: #0a0a0a"
-                          data-toggle="popover" data-placement="top" ngbPopover="{{ getVillagesName(cell) }}">
-                          {{cell.name}}
+                          data-toggle="popover"
+                          data-placement="top"
+                          ngbPopover="{{ getVillagesName(cell) }}"
+                        >
+                          {{ cell.name }}
                         </a>
                       </span>
                     </div>
@@ -164,9 +173,9 @@
                     </div>
                     <div class="stats-box-cws-asc">
                       {{
-                      (cwsSummary.totalParchments /
-                        cwsSummary.expectedParchments) *
-                      100 | number: "1.0-1"
+                        (cwsSummary.totalParchments /
+                          cwsSummary.expectedParchments) *
+                          100 | number: "1.0-1"
                       }}
                       % Completion
                     </div>
@@ -181,27 +190,26 @@
     </div>
   </div>
 </div>
-<br/>
-<br/>
+<br />
+<br />
 <div class="custom-tabs">
   <ul class="nav nav-tabs" role="tablist">
     <li
       role="presentation"
-      routerLink="/admin/organisations/details/{{
-        organisationId
-      }}/dashboard"
+      routerLink="/admin/organisations/details/{{ organisationId }}/dashboard"
       routerLinkActive="active"
+      *ngIf="
+        authUser.orgInfo.hasExtensionAccess || authUser.parameters.role[0] == 11
+      "
     >
       <a aria-controls="dashboard" role="tab" data-toggle="tab"
-      ><span>CWS Dashboard</span></a
+        ><span>CWS Dashboard</span></a
       >
     </li>
     <li
       role="presentation"
       appInternal
-      routerLink="/admin/organisations/details/{{
-        organisationId
-      }}/farmers"
+      routerLink="/admin/organisations/details/{{ organisationId }}/farmers"
       routerLinkActive="active"
     >
       <a role="tab" data-toggle="tab"><span>Farmers</span></a>
@@ -209,10 +217,8 @@
     <li
       role="presentation"
       appInternal
-      *appHasPermission="[[4, 1], 0, [8, 1], [1, 1]]"
-      routerLink="/admin/organisations/details/{{
-        organisationId
-      }}/suppliers"
+      *appHasPermission="[[4, 1], [4, 11], [4, 12], 0, 6, 5, 11]"
+      routerLink="/admin/organisations/details/{{ organisationId }}/suppliers"
       aria-controls="suppliers"
       routerLinkActive="active"
     >
@@ -221,11 +227,8 @@
     <li
       role="presentation"
       appInternal
-      *appHasPermission="[[4, 1], 0, [8, 1], [1, 1]]"
-      routerLink="/admin/organisations/details/{{
-        organisationId
-      }}/cherries"
-
+      *appHasPermission="[[4, 1], [4, 11], [4, 12], 0, 6, 5, 11]"
+      routerLink="/admin/organisations/details/{{ organisationId }}/cherries"
       routerLinkActive="active"
     >
       <a role="tab" data-toggle="tab"><span>Cherries & Parchments</span></a>
@@ -233,10 +236,8 @@
     <li
       role="presentation"
       appInternal
-      *appHasPermission="[[4, 1], 0, [8, 1], [1, 1]]"
-      routerLink="/admin/organisations/details/{{
-        organisationId
-      }}/users"
+      *appHasPermission="[[4, 1], [4, 11], [4, 12], 0, 6, 5, 11]"
+      routerLink="/admin/organisations/details/{{ organisationId }}/users"
       routerLinkActive="active"
     >
       <a role="tab" data-toggle="tab"><span>Users</span></a>
