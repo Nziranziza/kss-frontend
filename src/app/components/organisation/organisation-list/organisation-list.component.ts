@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {AuthenticationService, OrganisationService} from '../../../core';
+import {AuthenticationService, AuthUser, OrganisationService} from '../../../core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ConfirmDialogService} from '../../../core';
 import {Subject} from 'rxjs';
@@ -27,6 +27,7 @@ export class OrganisationListComponent extends BasicComponent implements OnInit,
   organisations = [];
   dtOptions: any = {};
   loading = false;
+  authUser: AuthUser
   // @ts-ignore
   dtTrigger: Subject = new Subject();
   // @ts-ignore
@@ -45,6 +46,7 @@ export class OrganisationListComponent extends BasicComponent implements OnInit,
       }, {}],
       responsive: true
     };
+    this.authUser = this.authenticationService.getCurrentUser();
     this.isSuperAdmin = this.authenticationService.getCurrentUser().parameters.role.includes(0);
     this.isNaebCoffeeValueChainOfficer = this.authorisationService.isNaebCoffeeValueChainOfficer();
     this.setMessage(this.messageService.getMessage());
