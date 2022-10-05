@@ -198,8 +198,7 @@
       role="presentation"
       routerLink="/admin/organisations/details/{{ organisationId }}/dashboard"
       routerLinkActive="active"
-      *ngIf="
-        authUser.orgInfo.hasExtensionAccess || authUser.parameters.role[0] == 11
+      *ngIf="authUser.orgInfo.hasExtensionAccess || authUser.parameters.role[0] == 11
       "
     >
       <a aria-controls="dashboard" role="tab" data-toggle="tab"
@@ -208,7 +207,6 @@
     </li>
     <li
       role="presentation"
-      appInternal
       routerLink="/admin/organisations/details/{{ organisationId }}/farmers"
       routerLinkActive="active"
     >
@@ -216,7 +214,6 @@
     </li>
     <li
       role="presentation"
-      appInternal
       *appHasPermission="[[4, 1], [4, 11], [4, 12], 0, 6, 5, 11]"
       routerLink="/admin/organisations/details/{{ organisationId }}/suppliers"
       aria-controls="suppliers"
@@ -226,7 +223,6 @@
     </li>
     <li
       role="presentation"
-      appInternal
       *appHasPermission="[[4, 1], [4, 11], [4, 12], 0, 6, 5, 11]"
       routerLink="/admin/organisations/details/{{ organisationId }}/cherries"
       routerLinkActive="active"
@@ -235,7 +231,6 @@
     </li>
     <li
       role="presentation"
-      appInternal
       *appHasPermission="[[4, 1], [4, 11], [4, 12], 0, 6, 5, 11]"
       routerLink="/admin/organisations/details/{{ organisationId }}/users"
       routerLinkActive="active"
