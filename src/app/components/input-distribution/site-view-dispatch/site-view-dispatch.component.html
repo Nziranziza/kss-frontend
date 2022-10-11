@@ -54,7 +54,7 @@
               </ng-container>
               <ng-template #confirm>
                 <button class="btn btn-success btn-margin btn-sm pull-right" (click)="confirmDispatch(dispatch)"
-                        type="button">
+                        type="button" *ngIf="isReceptionTeam">
                   <i class="fa fa-check-circle" aria-hidden="true"></i> Confirm
                 </button>
               </ng-template>

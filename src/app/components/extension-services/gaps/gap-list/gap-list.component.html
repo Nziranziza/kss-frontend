@@ -34,9 +34,6 @@
   </div>
   <div class="col-xs-12">
     <div class="box">
-      <div class="box-header">
-        <!-- <h6>Showing 1 t0 10 of 300 entries</h6> -->
-      </div>
       <div class="box-body table-responsive">
         <app-loader *ngIf="loading"></app-loader>
         <table
@@ -57,7 +54,7 @@
             </tr>
           </thead>
           <tbody>
-            <ng-container *ngFor="let gap of gaps | paginate: config">
+            <ng-container *ngFor="let gap of gaps">
               <tr>
                 <td>{{ gap.createdAt | date: "short" }}</td>
                 <td>{{ gap.gap_name }}</td>

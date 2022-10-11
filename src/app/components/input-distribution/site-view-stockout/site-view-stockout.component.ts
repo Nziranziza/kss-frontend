@@ -44,6 +44,10 @@ export class SiteViewStockoutComponent extends BasicComponent implements OnInit,
   org: Organisation;
   fertilizerPlan: DispatchPlan;
   pesticidePlan: DispatchPlan[];
+  cwsAllocatedFertilizer = 0;
+  cwsRemainingQty = 0;
+  cwsAllocatedPesticide = 0;
+  cwsRemainingPesticide = 0;
 
   ngOnInit() {
     this.dtOptions = {
@@ -68,17 +72,49 @@ export class SiteViewStockoutComponent extends BasicComponent implements OnInit,
     this.siteService.getCWSDispatchPlan(this.siteId).subscribe(data => {
       this.fertilizerPlan = data.data.fertilizers;
       this.pesticidePlan = data.data.pesticides;
+
+      // Get plan for logged in CWS
+      this.fertilizerPlan.cws.forEach(cws => {
+        if(cws.org_id === this.org._id){
+          this.cwsAllocatedFertilizer = cws.qty;
+        }
+      });
+
+      this.pesticidePlan.forEach(plan => {
+        plan.cws.forEach(cws => {
+          if(cws.org_id === this.org._id){
+            this.cwsAllocatedPesticide = this.cwsAllocatedPesticide + cws.qty;
+          }
+        })
+      });
     });
   }
 
   getStocks() {
     this.inputDistributionService.getCwsStockOuts(this.org._id, this.siteId).subscribe((data) => {
       this.stockOuts = data.data;
+
+      // Calculate Total Stocked out
+      this.calculateStatistics();
+
       this.dtTrigger.next();
     });
 
     this.inputDistributionService.getStock(constant.stocks.SITE, this.siteId).subscribe((data) => {
       this.stocks = data.content;
+    });
+  }
+
+  calculateStatistics(){
+    this.cwsRemainingQty = 0;
+    this.cwsRemainingPesticide = 0;
+    this.stockOuts.forEach(stockOut => {
+      if(stockOut.inputId.inputType === 'Fertilizer'){
+        this.cwsRemainingQty = this.cwsRemainingQty + stockOut.totalQuantity;
+      }
+      else{
+        this.cwsRemainingPesticide = this.cwsRemainingPesticide + stockOut.totalQuantity;
+      }
     });
   }
 
@@ -148,6 +184,8 @@ export class SiteViewStockoutComponent extends BasicComponent implements OnInit,
       this.inputDistributionService.getCwsStockOuts(this.org._id, this.siteId).subscribe((data) => {
         this.stockOuts = data.data;
         this.rerender();
+        // Calculate Total Stocked out
+        this.calculateStatistics();
       });
       this.message = this.messageService.getMessage();
       this.messageService.clearMessage();

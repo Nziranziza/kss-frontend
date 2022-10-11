@@ -8,10 +8,6 @@ import {
   OrganisationService,
   FarmService,
   SeedlingService,
-  TrainingService,
-  UserService,
-  VisitService,
-  GapService,
   HelperService,
 } from "src/app/core";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -49,7 +45,7 @@ export class EditNurseryComponent extends BasicComponent implements OnInit {
   agronomist: any[] = [];
   treeVarieties: any[] = [{ name: "", _id: "" }];
   nurserySites: any[] = [];
-  currentIndex: number = 0;
+  currentIndex = 0;
   id: string;
   oldDatas: any;
 
@@ -240,12 +236,38 @@ export class EditNurseryComponent extends BasicComponent implements OnInit {
         }
       }
     );
+    this.addNursery.controls.stockData.valueChanges.subscribe((value) => {
+      value.forEach((item, i) => {
+        if (item.prickedQty > 0) {
+          item.germinationRate = this.getGermination(
+            (item.prickedQty * 100) / (item.seed * 2500)
+          );
+          this.formData.controls[i]
+            .get("germinationRate")
+            .setValue(item.germinationRate, { emitEvent: false });
+        }
+      });
+    });
+  }
+
+  getGermination(value: number) {
+    let rate = "0-30";
+    if (value >= 90) {
+      rate = "90+";
+    } else if (value < 90 && value >= 70) {
+      rate = "70-90";
+    } else if (value < 70 && value >= 50) {
+      rate = "50-70";
+    } else if (value < 50 && value >= 30) {
+      rate = "30-50";
+    }
+    return rate;
   }
 
   onCreate() {
     this.addNursery.markAllAsTouched();
     if (this.addNursery.valid) {
-      let data = {
+      const data = {
         _id: this.id,
         nurseryName: this.addNursery.value.nurseryName,
         owner: {
@@ -269,13 +291,25 @@ export class EditNurseryComponent extends BasicComponent implements OnInit {
           cell_id: this.addNursery.value.location.cell_id,
           village_id: this.addNursery.value.location.village_id,
         },
-        stocks: this.addNursery.value.stockData.map((data) => {
-          let newData: any = { _id: data.id, seeds: data.seed, varietyId: data.variety, };
-          data.germinationRate !== "" ? newData.germinationRate = data.germinationRate : "";
-          data.variety !== "" ? newData.varietyId = data.variety : "";
-          data.prickedQty !== "" ? newData.prickedQty = data.prickedQty : "";
-          data.pickingDate !== "" ? newData.pickedDate = data.pickingDate : "";
-          data.sowingDate !== "" ? newData.sowingDate = data.sowingDate : "";
+        stocks: this.addNursery.value.stockData.map((newdata) => {
+          const newData: any = {
+            _id: newdata.id,
+            seeds: newdata.seed,
+            varietyId: newdata.variety,
+          };
+          newdata.germinationRate !== ""
+            ? (newData.germinationRate = newdata.germinationRate)
+            : "";
+          newdata.variety !== "" ? (newData.varietyId = newdata.variety) : "";
+          newdata.prickedQty !== ""
+            ? (newData.prickedQty = newdata.prickedQty)
+            : "";
+          newdata.pickingDate !== ""
+            ? (newData.pickedDate = newdata.pickingDate)
+            : "";
+          newdata.sowingDate !== ""
+            ? (newData.sowingDate = newdata.sowingDate)
+            : "";
           return newData;
         }),
       };
