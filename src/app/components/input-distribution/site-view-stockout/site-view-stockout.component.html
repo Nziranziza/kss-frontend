@@ -1,5 +1,38 @@
 <app-list-message [message]="message"></app-list-message>
 <app-list-errors [errorList]="errors"></app-list-errors>
+<div class="box-box-default stats-section">
+  <div class="row">
+    <div class="col-sm-12 text-center stats-title">CWS Input Dispatch Plan</div>
+    <div class="col-sm-12">
+      <div class="row stats-box">
+        <div class="col-sm-3">
+          <div class="text-center">
+            <h6>Allocated Fertilizer</h6>
+            <h4>{{ this.cwsAllocatedFertilizer }} Kg</h4>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="text-center">
+            <h6>Remaining Qty</h6>
+            <h4>{{ this.cwsAllocatedFertilizer - this.cwsRemainingQty }} Kg</h4>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="text-center">
+            <h6>Allocated Pesticide</h6>
+            <h4>{{ this.cwsAllocatedPesticide }}</h4>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="text-center">
+            <h6>Remaining Pesticide</h6>
+            <h4>{{ this.cwsAllocatedPesticide }}</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="box box-default" style="margin-top: 25px">
   <div class="box-header with-border">
     <h3 class="box-title">Available stocks</h3>
