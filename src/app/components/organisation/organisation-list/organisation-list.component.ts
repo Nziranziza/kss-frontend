@@ -35,6 +35,7 @@ export class OrganisationListComponent extends BasicComponent implements OnInit,
   dtElement: DataTableDirective;
   isSuperAdmin = false;
   isNaebCoffeeValueChainOfficer = false;
+  isCeparOffice = false;
 
   ngOnInit() {
     this.getAllOrganisations();
@@ -49,6 +50,8 @@ export class OrganisationListComponent extends BasicComponent implements OnInit,
     this.authUser = this.authenticationService.getCurrentUser();
     this.isSuperAdmin = this.authenticationService.getCurrentUser().parameters.role.includes(0);
     this.isNaebCoffeeValueChainOfficer = this.authorisationService.isNaebCoffeeValueChainOfficer();
+    this.isCeparOffice = this.authorisationService.isCeparUser()
+
     this.setMessage(this.messageService.getMessage());
   }
 
@@ -75,25 +78,9 @@ export class OrganisationListComponent extends BasicComponent implements OnInit,
           this.organisationService.destroy(body)
             .subscribe(() => {
                 this.setMessage('Organisation successful deleted!');
-                this.organisationService.all().subscribe(data => {
-                  if (data) {
-                    this.organisations = data.content;
-                    if (this.authorisationService.isNaebCoffeeValueChainOfficer()) {
-                      this.organisations = this.organisations.filter((org) => {
-                        return (
-                          org.organizationRole.indexOf(1) > -1 ||
-                          org.organizationRole.indexOf(2) > -1 ||
-                          org.organizationRole.indexOf(7) > -1 ||
-                          org.organizationRole.indexOf(9) > -1 ||
-                          org.organizationRole.indexOf(10) > -1
-                        );
-                      });
-                    }
-                    this.loading = false;
-                    this.rerender();
-                  }
-                });
-              },
+                   this.getAllOrganisations();
+                   this.rerender();
+                },
               (err) => {
                 this.setError(err.errors);
               });
@@ -111,15 +98,22 @@ export class OrganisationListComponent extends BasicComponent implements OnInit,
       this.siteService.getZone(body).subscribe(data => {
         if (data) {
           this.organisations = data.content;
-          this.dtTrigger.next();
-          this.loading = false;
+          if(this.dtElement.dtInstance) {
+            this.rerender();
+          } else {
+            this.dtTrigger.next();
+          }
         }
       });
     } else if (this.authorisationService.isPartner()) {
       this.organisationService.getPartners(this.authenticationService.getCurrentUser().info.org_id).subscribe(data => {
         if (data) {
           this.organisations = data.content;
-          this.dtTrigger.next();
+          if(this.dtElement.dtInstance) {
+            this.rerender();
+          } else {
+            this.dtTrigger.next();
+          }
           this.loading = false;
         }
       });
@@ -127,7 +121,11 @@ export class OrganisationListComponent extends BasicComponent implements OnInit,
       this.organisationService.get(this.authenticationService.getCurrentUser().info.org_id).subscribe(data => {
         if (data) {
           this.organisations.push(data.content);
-          this.dtTrigger.next();
+          if(this.dtElement.dtInstance) {
+            this.rerender();
+          } else {
+            this.dtTrigger.next();
+          }
           this.loading = false;
         }
       });
@@ -140,13 +138,24 @@ export class OrganisationListComponent extends BasicComponent implements OnInit,
               return (
                 org.organizationRole.indexOf(1) > -1 ||
                 org.organizationRole.indexOf(2) > -1 ||
-                org.organizationRole.indexOf(7) > -1 ||
                 org.organizationRole.indexOf(9) > -1 ||
                 org.organizationRole.indexOf(10) > -1
               );
             });
           }
-          this.dtTrigger.next();
+          if (this.authorisationService.isCeparUser()) {
+            this.organisations = this.organisations.filter((org) => {
+              return (
+                org.organizationRole.indexOf(1) > -1 ||
+                org.organizationRole.indexOf(5) > -1
+              );
+            });
+          }
+          if(this.dtElement.dtInstance) {
+            this.rerender();
+          } else {
+            this.dtTrigger.next();
+          }
           this.loading = false;
         }
       });

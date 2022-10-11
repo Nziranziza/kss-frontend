@@ -83,6 +83,11 @@ export class AuthorisationService {
     return !!this.userRoles.includes(5);
   }
 
+  isCeparAdmin() {
+    this.userRoles = this.authenticationService.getCurrentUser().parameters.role;
+    return !!(this.userRoles.includes(5) && +this.authenticationService.getCurrentUser().parameters.type === 1);
+  }
+
   isNaebUser() {
     this.userRoles = this.authenticationService.getCurrentUser().parameters.role;
     return !!(this.userRoles.includes(4));
