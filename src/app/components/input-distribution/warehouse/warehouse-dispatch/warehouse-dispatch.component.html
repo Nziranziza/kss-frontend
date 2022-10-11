@@ -14,7 +14,7 @@
         <ng-container formGroupName="location">
           <div class="col-xs-2">
             <div class="form-group">
-              <span class="">Province</span>
+              <span class="control-label">Province</span>
               <select class="form-control" formControlName="prov_id">
                 <option value=""></option>
                 <option *ngFor="let province of provinces" value="{{province._id}}">{{province.namee}}</option>
@@ -23,7 +23,7 @@
           </div>
           <div class="col-xs-2">
             <div class="form-group">
-              <span class="">District</span>
+              <span class="control-label">District</span>
               <select class="form-control" formControlName="dist_id">
                 <option value=""></option>
                 <option *ngFor="let district of districts" value="{{district._id}}">{{district.name}}</option>
@@ -33,7 +33,7 @@
         </ng-container>
         <div class="col-xs-2">
           <div class="form-group">
-            <label class="control-label label-required">Site</label>
+            <span class="label-required">Site</span>
             <select class="form-control" formControlName="siteId">
               <option value=""></option>
               <option *ngFor="let site of sites" value="{{site._id}}">{{site.siteName}}</option>

@@ -13,9 +13,9 @@ import {
   ConfirmDialogService,
   InputDistributionService,
   ExcelServicesService,
-} from '../../../../core/services';
+} from '../../../../core';
 import { isPlatformBrowser } from '@angular/common';
-import { BasicComponent } from '../../../../core/library';
+import { BasicComponent } from '../../../../core';
 import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
 import { DatePipe } from '@angular/common';

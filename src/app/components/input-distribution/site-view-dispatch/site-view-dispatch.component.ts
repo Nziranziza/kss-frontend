@@ -1,5 +1,11 @@
 import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {AuthenticationService, ConfirmDialogService, InputDistributionService, MessageService} from '../../../core/services';
+import {
+  AuthenticationService,
+  ConfirmDialogService,
+  InputDistributionService,
+  MessageService,
+  OrganisationService
+} from '../../../core/services';
 import {FormBuilder} from '@angular/forms';
 import {HelperService} from '../../../core/helpers';
 import {ConfirmDispatchComponent} from './confirm-dispatch/confirm-dispatch.component';
@@ -24,6 +30,7 @@ export class SiteViewDispatchComponent extends BasicComponent implements OnInit,
               private modal: NgbModal,
               private route: ActivatedRoute,
               private authenticationService: AuthenticationService,
+              private organisationService: OrganisationService,
               private inputDistributionService: InputDistributionService) {
 
     super();
@@ -37,6 +44,7 @@ export class SiteViewDispatchComponent extends BasicComponent implements OnInit,
   loading = false;
   table: any;
   siteId: string;
+  isReceptionTeam: boolean;
 
   // @ts-ignore
   @ViewChild(DataTableDirective, {static: false})
@@ -54,6 +62,11 @@ export class SiteViewDispatchComponent extends BasicComponent implements OnInit,
     this.route.params.subscribe(params => {
       this.siteId = params['siteId'.toString()];
     });
+    this.organisationService.
+    get(this.authenticationService.getCurrentUser().info.org_id).subscribe(data => {
+      this.isReceptionTeam = !!data.content.organizationRole.includes(7);
+    });
+
     this.router.routeReuseStrategy.shouldReuseRoute = () => {
       return false;
     };
