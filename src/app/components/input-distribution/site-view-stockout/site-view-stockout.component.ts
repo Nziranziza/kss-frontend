@@ -95,19 +95,26 @@ export class SiteViewStockoutComponent extends BasicComponent implements OnInit,
       this.stockOuts = data.data;
 
       // Calculate Total Stocked out
-      this.stockOuts.forEach(stockOut => {
-        if(stockOut.inputId.inputType === 'Fertilizer'){
-          this.cwsRemainingQty = this.cwsRemainingQty + stockOut.totalQuantity;
-        }
-        else{
-          this.cwsRemainingPesticide = this.cwsRemainingPesticide + stockOut.totalQuantity;
-        }
-      });
+      this.calculateStatistics();
+
       this.dtTrigger.next();
     });
 
     this.inputDistributionService.getStock(constant.stocks.SITE, this.siteId).subscribe((data) => {
       this.stocks = data.content;
+    });
+  }
+
+  calculateStatistics(){
+    this.cwsRemainingQty = 0;
+    this.cwsRemainingPesticide = 0;
+    this.stockOuts.forEach(stockOut => {
+      if(stockOut.inputId.inputType === 'Fertilizer'){
+        this.cwsRemainingQty = this.cwsRemainingQty + stockOut.totalQuantity;
+      }
+      else{
+        this.cwsRemainingPesticide = this.cwsRemainingPesticide + stockOut.totalQuantity;
+      }
     });
   }
 
@@ -177,6 +184,8 @@ export class SiteViewStockoutComponent extends BasicComponent implements OnInit,
       this.inputDistributionService.getCwsStockOuts(this.org._id, this.siteId).subscribe((data) => {
         this.stockOuts = data.data;
         this.rerender();
+        // Calculate Total Stocked out
+        this.calculateStatistics();
       });
       this.message = this.messageService.getMessage();
       this.messageService.clearMessage();
