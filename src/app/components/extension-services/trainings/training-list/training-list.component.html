@@ -12,55 +12,76 @@
   <app-list-message [message]="message"></app-list-message>
   <app-list-errors [errorList]="errors"></app-list-errors>
 </div>
-<div class="col-sm-12 stats-section">
+<div class="col-sm-12">
   <div class="row">
-    <div class="col-sm-12 text-center stats-title">Training Summary</div>
-    <div class="col-sm-3">
-      <div class="text-center stats-box">
-        <h3>Trainings Added</h3>
-        <h1>{{ trainings.length }}</h1>
+    <div class="col-sm-3" style="margin-top: 5px">
+      <div class="stats-box">
+        <div class="row">
+          <div class="col-xs-8">
+            <div class="stats-box-text-header">Trainings Added</div>
+          </div>
+          <div class="col-xs-2"></div>
+        </div>
+        <div class="stats-box-text-item">{{ trainings.length }}</div>
       </div>
     </div>
-    <div class="col-sm-3">
-      <div class="text-center stats-box">
-        <h3>Total Trainees</h3>
-        <h1>{{ trainingsStats?.totalInvitees }}</h1>
+    <div class="col-sm-3" style="margin-top: 5px">
+      <div class="stats-box">
+        <div class="row">
+          <div class="col-xs-8">
+            <div class="stats-box-text-header">Total Trainees</div>
+          </div>
+          <div class="col-xs-2"></div>
+        </div>
+        <div class="stats-box-text-item">
+          {{ trainingsStats?.totalInvitees }}
+        </div>
       </div>
     </div>
-    <div class="col-sm-3">
-      <div class="text-center stats-box middle-box">
-        <h3>Total Attended Trainees</h3>
+    <div class="col-sm-3" style="margin-top: 5px">
+      <div class="stats-box">
+        <div class="row">
+          <div class="col-xs-10">
+            <div class="stats-box-text-header">Total Attended Trainees</div>
+          </div>
+          <div class="col-xs-2"></div>
+        </div>
         <div class="row">
           <div class="col-sm-5">
-            <h1 style="margin-top: -5px; margin-left: 5px">
+            <div class="stats-box-text-item">
               {{ trainingsStats?.totalPresent }}
-            </h1>
+            </div>
           </div>
-          <div class="col-sm-3">
+          <div class="col-sm-3 text-center">
             <span style="white-space: pre"> Male </span>
             {{ trainingsStats?.malePresent }}
           </div>
-          <div class="col-sm-3">
+          <div class="col-sm-3 text-center">
             <span style="white-space: pre"> Female </span>
             {{ trainingsStats?.femalePresent }}
           </div>
         </div>
       </div>
     </div>
-    <div class="col-sm-3">
-      <div class="text-center stats-box third-box">
-        <h3>Total Not Attended Trainees</h3>
+    <div class="col-sm-3" style="margin-top: 5px">
+      <div class="stats-box">
+        <div class="row">
+          <div class="col-xs-10">
+            <div class="stats-box-text-header">Total Not Attended Trainees</div>
+          </div>
+          <div class="col-xs-2"></div>
+        </div>
         <div class="row">
           <div class="col-sm-5">
-            <h1 style="margin-top: -5px; margin-left: 5px">
+            <div class="stats-box-text-item">
               {{ trainingsStats?.totalAbsent }}
-            </h1>
+            </div>
           </div>
-          <div class="col-sm-3">
+          <div class="col-sm-3 text-center">
             <span style="white-space: pre"> Male </span>
             {{ trainingsStats?.maleAbsent }}
           </div>
-          <div class="col-sm-3">
+          <div class="col-sm-3 text-center">
             <span style="white-space: pre"> Female </span>
             {{ trainingsStats?.femaleAbsent }}
           </div>

@@ -518,29 +518,9 @@
           <p>Total Visited Farms</p>
           <h4>{{ visitStats.totalVisits }}</h4>
         </div>
-        <div
-          class="chart-visit-box"
-          style="padding: 10px; margin-left: 5%; margin-right: 5%"
-          *ngIf="visitStats.totalVisits == 0"
-        >
-          <span class="text-center">
-            <div style="font: normal 16px Helvetica Neue">Visited Farmers</div>
-            <div style="font: normal 20px Helvetica Neue">
-              {{ visitStats.totalFarmersVisited }}
-            </div>
-          </span>
-          <div class="row">
-            <div class="col-xs-2 text-center">
-              <br />
-              <br />
-              <i
-                class="fa fa-male fa-3x"
-                aria-hidden="true"
-                style="color: #35a1ff"
-              ></i>
-              <p style="margin-left: 5px">{{ visitStats.maleFarmVisits }}</p>
-            </div>
-            <div class="col-xs-8" style="margin-top: -10px; margin-left: -15%">
+        <div class="row">
+          <div class="col-md-6">
+            <ng-container *ngIf="visitStats.totalVisits == 0; else visitDatas">
               <google-chart
                 #visitChart
                 [type]="graph.type"
@@ -552,44 +532,12 @@
                 [color]="graph.color"
               >
               </google-chart>
-            </div>
-            <div class="col-xs-2 text-center" style="margin-left: 15%">
-              <br />
-              <br />
-              <i
-                class="fa fa-female fa-3x"
-                aria-hidden="true"
-                style="color: #ff69f6"
-              ></i>
-              <p style="margin-left: 5px" class="text-center">
-                {{ visitStats.femaleFarmVisits }}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div
-          class="chart-visit-box"
-          style="padding: 10px; margin-left: 5%; margin-right: 5%"
-          *ngIf="visitStats.totalVisits > 0"
-        >
-          <span class="text-center">
-            <div style="font: normal 16px Helvetica Neue">Visited Farmers</div>
-            <div style="font: normal 20px Helvetica Neue">
-              {{ visitStats.totalFarmersVisited }}
-            </div>
-          </span>
-          <div class="row">
-            <div class="col-xs-2 text-center">
-              <br />
-              <br />
-              <i
-                class="fa fa-male fa-3x"
-                aria-hidden="true"
-                style="color: #35a1ff"
-              ></i>
-              <p style="margin-left: 5px">{{ visitStats.maleFarmVisits }}</p>
-            </div>
-            <div class="col-xs-8" style="margin-left: -15%; margin-top: -10px">
+            </ng-container>
+            <ng-template
+              #visitDatas
+              class="text-center"
+              style="margin-top: -5px; margin: 0 auto"
+            >
               <google-chart
                 #visitChart
                 [type]="graph.type"
@@ -598,20 +546,36 @@
                 [width]="graph.width"
                 [columns]="graph.columnNames"
                 [height]="graph.height"
+                [color]="graph.color"
               >
               </google-chart>
-            </div>
-            <div class="col-xs-2 text-center" style="margin-left: 15%">
-              <br />
-              <br />
-              <i
-                class="fa fa-female fa-3x"
-                aria-hidden="true"
-                style="color: #ff69f6"
-              ></i>
-              <p style="margin-left: 5px" class="text-center">
-                {{ visitStats.femaleFarmVisits }}
-              </p>
+            </ng-template>
+          </div>
+          <div class="col-md-6">
+            <div
+              class="text-center trainees-box"
+              style="width: 60%; margin: 0 auto; margin-top: 8%"
+            >
+              <p>Farmers</p>
+              <h4>{{ visitStats.totalFarmersVisited || 0 }}</h4>
+              <div class="row">
+                <div class="col-xs-6">
+                  <i
+                    class="fa fa-male fa-2x"
+                    aria-hidden="true"
+                    style="color: #35a1ff"
+                  ></i>
+                  <p>{{ visitStats.maleFarmVisits }}</p>
+                </div>
+                <div class="col-xs-6">
+                  <i
+                    class="fa fa-female fa-2x"
+                    aria-hidden="true"
+                    style="color: #ff69f6"
+                  ></i>
+                  <p>{{ visitStats.femaleFarmVisits }}</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -851,7 +815,9 @@
               <h4>Owner</h4>
               <h6>
                 {{
-                  farmDetails?.user?.foreName?.toLowerCase() + " " + farmDetails?.user?.surname?.toLowerCase()
+                  farmDetails?.user?.foreName?.toLowerCase() +
+                    " " +
+                    farmDetails?.user?.surname?.toLowerCase()
                 }}
               </h6>
             </div>

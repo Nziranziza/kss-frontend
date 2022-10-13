@@ -81,15 +81,15 @@ export class DashboardComponent extends BasicComponent implements OnInit {
       backgroundColor: { fill: 'transparent' },
       chartArea: {
         left: 20,
-        top: 20,
-        bottom: 20,
-        width: '100%',
-        height: '140',
+        top: 10,
+        bottom: 10,
+        width: '80%',
+        height: '150',
       },
     },
     columnNames: ['female', 'male'],
-    width: '100%',
-    height: 150,
+    width: '80%',
+    height: 160,
   };
 
   seedlingGraph = {

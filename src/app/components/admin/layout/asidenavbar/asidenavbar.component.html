@@ -272,7 +272,7 @@
       <li
         class="header"
         *ngIf="
-          authUser.orgInfo.hasExtensionAccess ||
+          !authUser.orgInfo.hasExtensionAccess ||
           authUser.parameters.role[0] == 11
         "
       >
@@ -280,7 +280,7 @@
       </li>
       <ng-template
         [ngIf]="
-          authUser.orgInfo.hasExtensionAccess ||
+          !authUser.orgInfo.hasExtensionAccess ||
           authUser.parameters.role[0] == 11
         "
       >
