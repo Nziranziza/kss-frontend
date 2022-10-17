@@ -122,7 +122,7 @@ export class LoginComponent extends BasicComponent implements OnInit, OnDestroy 
   afterLogInRedirect() {
     const orgId = this.authenticationService.getCurrentUser().info.org_id;
     if (this.authorisationService.isCWSUser()) {
-      this.router.navigateByUrl('admin/organisations/details/' + orgId + '/farmers');
+      this.router.navigateByUrl('admin/organisations');
     } else if (this.authorisationService.isDryMillUser()) {
       this.router.navigateByUrl('admin/drymill/parchment/list');
     } else if (this.authorisationService.isSWAdmin()) {
