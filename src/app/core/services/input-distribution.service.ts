@@ -146,4 +146,8 @@ export class InputDistributionService {
   distributionExport(): Observable<any> {
     return this.apiService.get('/distributionstats/distributionreport');
   }
+
+  progressExport(): Observable<any> {
+    return this.apiService.get('/distributionstats/progressReport');
+  }
 }
