@@ -78,6 +78,9 @@ export class DashboardComponent extends BasicComponent implements OnInit {
       pieSliceTextStyle: {
         color: 'black',
       },
+      labels: {
+        display: false // not working
+      },
       backgroundColor: { fill: 'transparent' },
       chartArea: {
         left: 20,
@@ -360,12 +363,12 @@ export class DashboardComponent extends BasicComponent implements OnInit {
     lat: number;
     lng: number;
   }[] = [
-    {
-      id: 1,
-      lat: -1.9485423,
-      lng: 30.0613514,
-    },
-  ];
+      {
+        id: 1,
+        lat: -1.9485423,
+        lng: 30.0613514,
+      },
+    ];
 
   ngOnInit() {
     this.dashboardForm = this.formBuilder.group({
@@ -720,91 +723,91 @@ export class DashboardComponent extends BasicComponent implements OnInit {
     this.dashboardForm.controls.location
       .get('prov_id'.toString())
       .valueChanges.subscribe((value) => {
-      this.dashboardForm.controls.location
-        .get('dist_id'.toString())
-        .setValue('');
-      this.dashboardForm.controls.location
-        .get('sect_id'.toString())
-        .setValue('');
-      this.newOrg = '';
-      this.locationChangeProvince(this.dashboardForm, value);
-      if (value !== '') {
-        this.currentSelectedLocation = {
-          searchBy: 'prov_id',
-          locationId: value,
-        };
-        this.siteService
-          .getZone({ prov_id: value, searchBy: 'province' })
-          .subscribe((data) => {
-            if (data) {
-              this.organisations = data.content.filter((org) =>
-                org.organizationRole.includes(1)
-              );
-              this.organisations.unshift({
-                organizationName: 'all cws',
-                _id: '',
-              });
-            }
-          });
-      } else {
-        this.currentSelectedLocation = {
-          searchBy: '',
-          locationId: '',
-        };
-      }
-    });
+        this.dashboardForm.controls.location
+          .get('dist_id'.toString())
+          .setValue('');
+        this.dashboardForm.controls.location
+          .get('sect_id'.toString())
+          .setValue('');
+        this.newOrg = '';
+        this.locationChangeProvince(this.dashboardForm, value);
+        if (value !== '') {
+          this.currentSelectedLocation = {
+            searchBy: 'prov_id',
+            locationId: value,
+          };
+          this.siteService
+            .getZone({ prov_id: value, searchBy: 'province' })
+            .subscribe((data) => {
+              if (data) {
+                this.organisations = data.content.filter((org) =>
+                  org.organizationRole.includes(1)
+                );
+                this.organisations.unshift({
+                  organizationName: 'all cws',
+                  _id: '',
+                });
+              }
+            });
+        } else {
+          this.currentSelectedLocation = {
+            searchBy: '',
+            locationId: '',
+          };
+        }
+      });
     this.dashboardForm.controls.location
       .get('dist_id'.toString())
       .valueChanges.subscribe((value) => {
-      this.dashboardForm.controls.location
-        .get('sect_id'.toString())
-        .setValue('');
-      this.newOrg = '';
-      this.locationChangDistrict(this.dashboardForm, value);
-      if (value !== '') {
-        this.currentSelectedLocation = {
-          searchBy: 'dist_id',
-          locationId: value,
-        };
-        this.siteService
-          .getZone({ dist_id: value, searchBy: 'district' })
-          .subscribe((data) => {
-            if (data) {
-              this.organisations = data.content.filter((org) =>
-                org.organizationRole.includes(1)
-              );
-              this.organisations.unshift({
-                organizationName: 'all cws',
-                _id: '',
-              });
-            }
-          });
-      } else {
-        this.currentSelectedLocation = {
-          searchBy: 'prov_id',
-          locationId:
-          this.dashboardForm.controls.location.get('prov_id').value,
-        };
-      }
-    });
+        this.dashboardForm.controls.location
+          .get('sect_id'.toString())
+          .setValue('');
+        this.newOrg = '';
+        this.locationChangDistrict(this.dashboardForm, value);
+        if (value !== '') {
+          this.currentSelectedLocation = {
+            searchBy: 'dist_id',
+            locationId: value,
+          };
+          this.siteService
+            .getZone({ dist_id: value, searchBy: 'district' })
+            .subscribe((data) => {
+              if (data) {
+                this.organisations = data.content.filter((org) =>
+                  org.organizationRole.includes(1)
+                );
+                this.organisations.unshift({
+                  organizationName: 'all cws',
+                  _id: '',
+                });
+              }
+            });
+        } else {
+          this.currentSelectedLocation = {
+            searchBy: 'prov_id',
+            locationId:
+              this.dashboardForm.controls.location.get('prov_id').value,
+          };
+        }
+      });
     this.dashboardForm.controls.location
       .get('sect_id'.toString())
       .valueChanges.subscribe((value) => {
-      this.newOrg = '';
-      if (value !== '') {
-        this.locationChangSector(this.dashboardForm, value);
-        this.currentSelectedLocation = {
-          searchBy: 'sect_id',
-          locationId: value,
-        };
-      } else {
-        this.currentSelectedLocation = {
-          searchBy: 'dist_id',
-          locationId:
-          this.dashboardForm.controls.location.get('dist_id').value,
-        };
-      }
-    });
+        this.newOrg = '';
+        if (value !== '') {
+          this.locationChangSector(this.dashboardForm, value);
+          this.currentSelectedLocation = {
+            searchBy: 'sect_id',
+            locationId: value,
+          };
+        } else {
+          this.currentSelectedLocation = {
+            searchBy: 'dist_id',
+            locationId:
+              this.dashboardForm.controls.location.get('dist_id').value,
+          };
+        }
+      });
 
     this.dashboardForm.controls.training_id.valueChanges.subscribe((value) => {
       if (this.selectedAgronomist !== '') {
