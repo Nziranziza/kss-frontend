@@ -2,8 +2,8 @@
   {{ title }}
   <div class="row pull-right">
     <div class="col-sm-4">
-      <button class="btn btn-success btn-margin" (click)="distributionExport()"><i class="fa fa-download"></i>
-        <span *ngIf="!isLoadingReport1; else other_content">Administrative Report</span>
+      <button class="btn btn-success btn-margin" (click)="distributionExport()">
+        <span *ngIf="!isLoadingReport1; else other_content"><i class="fa fa-download"></i> Administrative Report</span>
         <ng-template #other_content>
           <div class="loader">
             <div class="line"></div>
@@ -15,8 +15,8 @@
       </button>
     </div>
     <div class="col-sm-4">
-      <button class="btn btn-success btn-margin" (click)="siteExport()"><i class="fa fa-download"></i>
-        <span *ngIf="!isLoadingReport2; else other_content">Washing Station Report</span>
+      <button class="btn btn-success btn-margin" (click)="siteExport()">
+        <span *ngIf="!isLoadingReport2; else other_content"><i class="fa fa-download"></i> Washing Station Report</span>
         <ng-template #other_content>
           <div class="loader">
             <div class="line"></div>
@@ -28,8 +28,8 @@
       </button>
     </div>
     <div class="col-sm-4">
-      <button class="btn btn-success btn-margin" (click)="progressExport()"><i class="fa fa-download"></i>
-        <span *ngIf="!isLoadingReport3; else other_content">Progress Report</span>
+      <button class="btn btn-success btn-margin" (click)="progressExport()">
+        <span *ngIf="!isLoadingReport3; else other_content"><i class="fa fa-download"></i>Progress Report</span>
         <ng-template #other_content>
           <div class="loader">
             <div class="line"></div>
