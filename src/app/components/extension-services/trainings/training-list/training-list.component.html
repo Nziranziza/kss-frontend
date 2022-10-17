@@ -2,8 +2,8 @@
   <div class="row">
     <div class="col-sm-10">Training Management</div>
     <div class="col-sm-2">
-      <a class="btn btn-success pull-right" routerLink="/admin/training/create"
-        ><i class="fa fa-plus"></i> Add a Training
+      <a class="btn btn-success pull-right" routerLink="/admin/training/create"><i class="fa fa-plus"></i> Add a
+        Training
       </a>
     </div>
   </div>
@@ -12,58 +12,78 @@
   <app-list-message [message]="message"></app-list-message>
   <app-list-errors [errorList]="errors"></app-list-errors>
 </div>
-<div class="col-sm-12 stats-section">
-  <div class="row">
-    <div class="col-sm-12 text-center stats-title">Training Summary</div>
-    <div class="col-sm-3">
-      <div class="text-center stats-box">
-        <h3>Trainings Added</h3>
-        <h1>{{ trainings.length }}</h1>
+
+<div class="row">
+  <div class="col-sm-3" style="margin-top: 5px">
+    <div class="stats-box">
+      <div class="row">
+        <div class="col-xs-8">
+          <div class="stats-box-text-header">Trainings Added</div>
+        </div>
+        <div class="col-xs-2"></div>
+      </div>
+      <div class="stats-box-text-item">{{ trainings.length }}</div>
+    </div>
+  </div>
+  <div class="col-sm-3" style="margin-top: 5px">
+    <div class="stats-box">
+      <div class="row">
+        <div class="col-xs-8">
+          <div class="stats-box-text-header">Total Trainees</div>
+        </div>
+        <div class="col-xs-2"></div>
+      </div>
+      <div class="stats-box-text-item">
+        {{ trainingsStats?.totalInvitees }}
       </div>
     </div>
-    <div class="col-sm-3">
-      <div class="text-center stats-box">
-        <h3>Total Trainees</h3>
-        <h1>{{ trainingsStats?.totalInvitees }}</h1>
+  </div>
+  <div class="col-sm-3" style="margin-top: 5px">
+    <div class="stats-box">
+      <div class="row">
+        <div class="col-xs-10">
+          <div class="stats-box-text-header">Total Attended Trainees</div>
+        </div>
+        <div class="col-xs-2"></div>
       </div>
-    </div>
-    <div class="col-sm-3">
-      <div class="text-center stats-box middle-box">
-        <h3>Total Attended Trainees</h3>
-        <div class="row">
-          <div class="col-sm-5">
-            <h1 style="margin-top: -5px; margin-left: 5px">
-              {{ trainingsStats?.totalPresent }}
-            </h1>
+      <div class="row">
+        <div class="col-sm-5">
+          <div class="stats-box-text-item">
+            {{ trainingsStats?.totalPresent }}
           </div>
-          <div class="col-sm-3">
-            <span style="white-space: pre"> Male </span>
-            {{ trainingsStats?.malePresent }}
-          </div>
-          <div class="col-sm-3">
-            <span style="white-space: pre"> Female </span>
-            {{ trainingsStats?.femalePresent }}
-          </div>
+        </div>
+        <div class="col-sm-3 text-center">
+          <span style="white-space: pre"> Male </span>
+          {{ trainingsStats?.malePresent }}
+        </div>
+        <div class="col-sm-3 text-center">
+          <span style="white-space: pre"> Female </span>
+          {{ trainingsStats?.femalePresent }}
         </div>
       </div>
     </div>
-    <div class="col-sm-3">
-      <div class="text-center stats-box third-box">
-        <h3>Total Not Attended Trainees</h3>
-        <div class="row">
-          <div class="col-sm-5">
-            <h1 style="margin-top: -5px; margin-left: 5px">
-              {{ trainingsStats?.totalAbsent }}
-            </h1>
+  </div>
+  <div class="col-sm-3" style="margin-top: 5px">
+    <div class="stats-box">
+      <div class="row">
+        <div class="col-xs-10">
+          <div class="stats-box-text-header">Total Not Attended Trainees</div>
+        </div>
+        <div class="col-xs-2"></div>
+      </div>
+      <div class="row">
+        <div class="col-sm-5">
+          <div class="stats-box-text-item">
+            {{ trainingsStats?.totalAbsent }}
           </div>
-          <div class="col-sm-3">
-            <span style="white-space: pre"> Male </span>
-            {{ trainingsStats?.maleAbsent }}
-          </div>
-          <div class="col-sm-3">
-            <span style="white-space: pre"> Female </span>
-            {{ trainingsStats?.femaleAbsent }}
-          </div>
+        </div>
+        <div class="col-sm-3 text-center">
+          <span style="white-space: pre"> Male </span>
+          {{ trainingsStats?.maleAbsent }}
+        </div>
+        <div class="col-sm-3 text-center">
+          <span style="white-space: pre"> Female </span>
+          {{ trainingsStats?.femaleAbsent }}
         </div>
       </div>
     </div>
@@ -74,12 +94,7 @@
     <div class="box">
       <div class="box-body table-responsive">
         <app-loader *ngIf="loading"></app-loader>
-        <table
-          datatable
-          [dtOptions]="dtOptions"
-          [dtTrigger]="dtTrigger"
-          class="row-border hover table table-striped"
-        >
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped">
           <thead>
             <tr>
               <th>Date Added</th>
@@ -111,25 +126,16 @@
                   }}
                 </td>
                 <td>
-                  <button
-                    appRequiredSeason
-                    class="btn btn-action-no-border btn-margin details-button"
-                    (click)="openViewModal(training._id)"
-                  >
+                  <button appRequiredSeason class="btn btn-action-no-border btn-margin details-button"
+                    (click)="openViewModal(training._id)">
                     <em class="fa fa-eye"></em>
                   </button>
-                  <button
-                    appRequiredSeason
-                    (click)="openDeleteModal(training._id)"
-                    class="btn btn-action-no-border btn-margin"
-                    *ngIf="training.status !== 'scheduled'"
-                  >
+                  <button appRequiredSeason (click)="openDeleteModal(training._id)"
+                    class="btn btn-action-no-border btn-margin" *ngIf="training.status !== 'scheduled'">
                     <em class="fa fa-trash"></em>
                   </button>
-                  <button
-                    class="btn btn-action-no-border btn-margin btn-sm details-button"
-                    routerLink="/admin/training/edit/{{ training._id }}"
-                  >
+                  <button class="btn btn-action-no-border btn-margin btn-sm details-button"
+                    routerLink="/admin/training/edit/{{ training._id }}">
                     <em class="fa fa-pencil"></em>
                   </button>
                 </td>

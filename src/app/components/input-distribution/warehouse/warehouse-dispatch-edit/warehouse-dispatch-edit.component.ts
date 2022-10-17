@@ -90,8 +90,10 @@ export class WarehouseDispatchEditComponent extends BasicComponent implements On
       this.dispatch = data.content;
       this.locationService.getDistricts(this.dispatch.destinationSite.location.prov_id._id).subscribe((districts) => {
         this.districts = districts;
-        this.updateDispatchForm.controls.location.get('prov_id').setValue(this.dispatch.destinationSite.location.prov_id._id);
-        this.updateDispatchForm.controls.location.get('dist_id').setValue(this.dispatch.destinationSite.location.dist_id._id);
+        this.updateDispatchForm.controls.location.get('prov_id')
+          .setValue(this.dispatch.destinationSite.location.prov_id._id, {emitEvent: false});
+        this.updateDispatchForm.controls.location.get('dist_id')
+          .setValue(this.dispatch.destinationSite.location.dist_id._id, {emitEvent: true});
         this.updateDispatchForm.controls.siteId.setValue(this.dispatch.destinationSite.siteId._id);
         this.updateDispatchForm.controls.entries.get('driver').setValue(this.dispatch.driverInfo.driver);
         this.updateDispatchForm.controls.entries.get('vehiclePlate').setValue(this.dispatch.driverInfo.vehiclePlate);

@@ -38,10 +38,6 @@ export class TopnavbarComponent implements OnInit {
   ngOnInit() {
     this.surname = this.authenticationService.getCurrentUser().info.surname;
     this.orgName = this.authenticationService.getCurrentUser().orgInfo.orgName;
-    this.seasonService.all().subscribe((data) => {
-      this.seasons = data.content;
-      this.currentSeason = this.authenticationService.getCurrentSeason();
-    });
     this.sharedDataService.changeApprovalFlag();
     this.subscription = this.sharedDataService
       .getEmittedApprovalFlag()
@@ -51,6 +47,13 @@ export class TopnavbarComponent implements OnInit {
         this.updatedLandToApprove = item.totalUpdatedLandToBeApproved;
         this.newLandToApprove = item.totalNewLandToApproved;
       });
+  }
+
+  ngAfterView(){
+    this.seasonService.all().subscribe((data) => {
+      this.seasons = data.content;
+      this.currentSeason = this.authenticationService.getCurrentSeason();
+    });
   }
 
   changeSeason(season: string) {

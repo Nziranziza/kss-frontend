@@ -102,7 +102,7 @@ export class OrganisationDetailsComponent
           this.cwsSummary = data.content[0];
         }
       });
-    if (this.authenticationService.getCurrentUser().orgInfo.distributionSites) {
+   /* if (this.authenticationService.getCurrentUser().orgInfo.distributionSites) {
       this.siteService
         .get(
           this.authenticationService.getCurrentUser().orgInfo.distributionSites
@@ -110,7 +110,7 @@ export class OrganisationDetailsComponent
         .subscribe((data) => {
           this.site = data.content;
         });
-    }
+    }*/
     this.setMessage(this.messageService.getMessage());
     this.orgCoveredArea = this.route.snapshot.data.orgCoveredArea;
     this.currentSeason = this.authenticationService.getCurrentSeason();
