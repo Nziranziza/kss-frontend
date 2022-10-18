@@ -42,12 +42,12 @@
         </a>
       </li>
 
-      <li routerLinkActive="active" *appHasPermission="[[1]]">
+       <!-- <li routerLinkActive="active" *appHasPermission="[[1]]">
         <a routerLink="/admin/organisations">
           <i class="fa fa-university" aria-hidden="true"></i>
           <span>{{ "Organisations" | translate }}</span>
-        </a>
-      </li>
+      </a>
+      </li>-->
       <li
         class="treeview"
         routerLinkActive="active"
@@ -520,11 +520,31 @@
           <span>Entries</span>
         </a>
       </li>
-      <li routerLinkActive="active" *appHasPermission="[0, [4, 10], 5]">
-        <a routerLink="/admin/warehouse/dispatches">
-          <i class="fa fa-code-fork" aria-hidden="true"></i>
-          <span>Dispatch</span>
+      <li
+        class="treeview"
+        routerLinkActive="active"
+       *appHasPermission="[0, [4, 10], 5]"
+      >
+        <a href="#">
+          <i class="fa fa-code-fork"></i><span>Dispatch</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
         </a>
+        <ul class="treeview-menu">
+          <li routerLinkActive="active">
+            <a routerLink="/admin/warehouse/dispatches">
+              <i class="fa fa-circle-o"></i>
+              <span>Dispatching</span>
+            </a>
+          </li>
+          <li routerLinkActive="active">
+            <a routerLink="/admin/input/distribution/progress">
+              <i class="fa fa-circle-o"></i>
+              <span>Report</span>
+            </a>
+          </li>
+        </ul>
       </li>
       <li class="header">{{ "GENERAL" | translate }}</li>
       <li class="treeview" routerLinkActive="active">
@@ -583,23 +603,6 @@
               </span>
             </a>
             <ul class="treeview-menu">
-              <li
-                routerLinkActive="active"
-                *appHasPermission="[
-                  0,
-                  6,
-                  [4, 1],
-                  [4, 11],
-                  [4, 12],
-                  5,
-                  [[8, 1], [1, 1], 'NOT']
-                ]"
-              >
-                <a routerLink="/admin/input/distribution/progress">
-                  <i class="fa fa-circle-o"></i>
-                  <span>Distribution</span>
-                </a>
-              </li>
               <li
                 routerLinkActive="active"
                 *appHasPermission="[
