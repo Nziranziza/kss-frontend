@@ -61,13 +61,13 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
       date: [this.datePipe.transform(this.currentDate, 'yyyy-MM-dd'), Validators.required],
     });
     if (this.isCWSDistributor) {
-      this.siteService.get(this.siteId).subscribe((site) => {
-        this.site = site.content;
-      });
       this.organisationService.get(this.authenticationService.getCurrentUser().info.org_id).subscribe(data => {
         this.org = data.content;
-        this.addDestination();
-        this.filterCustomSectors(this.org, 0);
+        this.siteService.get(this.siteId).subscribe((site) => {
+          this.site = site.content;
+          this.addDestination();
+          this.filterCustomSectors(this.org, 0);
+        });
       });
 
     } else {
