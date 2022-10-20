@@ -45,13 +45,17 @@
 <app-list-message [message]="message"></app-list-message>
 <app-list-errors [errorList]="errors"></app-list-errors>
 <div class="row">
-  <div class="col-sm-12 stats-section">
+  <div class="col-sm-12">
     <div class="row">
-      <div class="col-sm-12 text-center stats-title">Visits Summary</div>
       <div class="col-sm-4">
-        <div class="text-center stats-box">
-          <h3>Scheduled Visits</h3>
-          <h1>{{ visits.length }}</h1>
+        <div class="stats-box">
+          <div class="row">
+            <div class="col-xs-8">
+              <div class="stats-box-text-header">Scheduled Visits</div>
+            </div>
+            <div class="col-xs-2"></div>
+          </div>
+          <div class="stats-box-text-item">{{ visits.length }}</div>
         </div>
       </div>
       <div class="col-sm-4" *ngIf="false">
@@ -134,7 +138,7 @@
                   </div>
                 </td>
                 <td>{{ visit?.groupId?.groupName }}</td>
-                <td>{{ visit?.overall_score ? visit?.overall_score : 0 }} % </td>
+                <td>{{ visit?.overall_score ? visit?.overall_score : 0 }} %</td>
                 <td>
                   <button
                     appRequiredSeason
@@ -143,7 +147,9 @@
                   >
                     <em class="fa fa-eye"></em>
                   </button>
-                  <span *ngIf="visit.overall_score == 0 || !visit.overall_score">
+                  <span
+                    *ngIf="visit.overall_score == 0 || !visit.overall_score"
+                  >
                     <button
                       appRequiredSeason
                       class="btn btn-action-no-border btn-margin"

@@ -2,9 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {Router} from '@angular/router';
 import {AuthenticationService, ExcelServicesService, OrganisationService, OrganisationTypeService} from '../../../core/services';
-import {HelperService} from '../../../core/helpers';
+import {HelperService} from '../../../core';
 import {LocationService} from '../../../core/services';
-import {InputDistributionService} from '../../../core/services';
+import {InputDistributionService} from '../../../core';
 import {SiteService} from '../../../core/services';
 import {AuthorisationService} from '../../../core/services';
 import {Subject} from 'rxjs';
@@ -38,6 +38,9 @@ export class DistributionPlanComponent implements OnInit {
   dtOptions: any = {};
   // @ts-ignore
   dtTrigger: Subject = new Subject();
+  isLoadingReport1 = false;
+  isLoadingReport2 = false;
+  isLoadingReport3 = false;
 
 
   constructor(private formBuilder: FormBuilder, private siteService: SiteService,
@@ -170,37 +173,42 @@ export class DistributionPlanComponent implements OnInit {
   }
 
   distributionExport() {
+    this.isLoadingReport1 = true;
     this.inputDistributionService.distributionExport().subscribe((data) => {
-      const byteArray = new Uint8Array(atob(data.data).split('').map(char => char.charCodeAt(0)));
-      const newBlob = new Blob([byteArray], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
-      const linkElement = document.createElement('a');
-      const url = URL.createObjectURL(newBlob);
-      linkElement.setAttribute('href', url);
-      linkElement.setAttribute('download', data.fileName + '.xlsx');
-      const clickEvent = new MouseEvent('click', {
-        view: window,
-        bubbles: true,
-        cancelable: false
-      });
-      linkElement.dispatchEvent(clickEvent);
+      this.download(data);
+      this.isLoadingReport1 = false;
     });
   }
 
   siteExport() {
+    this.isLoadingReport2 = true;
     this.inputDistributionService.siteExport().subscribe((data) => {
-      const byteArray = new Uint8Array(atob(data.data).split('').map(char => char.charCodeAt(0)));
-      const newBlob = new Blob([byteArray], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
-      const linkElement = document.createElement('a');
-      const url = URL.createObjectURL(newBlob);
-      linkElement.setAttribute('href', url);
-      linkElement.setAttribute('download', data.fileName + '.xlsx');
-      const clickEvent = new MouseEvent('click', {
-        view: window,
-        bubbles: true,
-        cancelable: false
-      });
-      linkElement.dispatchEvent(clickEvent);
+      this.download(data);
+      this.isLoadingReport2 = false;
     });
+  }
+
+  progressExport() {
+    this.isLoadingReport3 = true;
+    this.inputDistributionService.progressExport().subscribe((data) => {
+      this.download(data);
+      this.isLoadingReport3 = false;
+    });
+  }
+
+  download(data){
+    const byteArray = new Uint8Array(atob(data.data).split('').map(char => char.charCodeAt(0)));
+    const newBlob = new Blob([byteArray], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+    const linkElement = document.createElement('a');
+    const url = URL.createObjectURL(newBlob);
+    linkElement.setAttribute('href', url);
+    linkElement.setAttribute('download', data.fileName + '.xlsx');
+    const clickEvent = new MouseEvent('click', {
+      view: window,
+      bubbles: true,
+      cancelable: false
+    });
+    linkElement.dispatchEvent(clickEvent);
   }
 
   initial() {

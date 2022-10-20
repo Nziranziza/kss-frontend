@@ -59,11 +59,11 @@ export class FarmerEditComponent extends BasicComponent implements OnInit, OnDes
     this.isUserSiteManager = this.authorisationService.isSiteManager();
     this.isCWSOfficer = this.authorisationService.isCWSAdmin();
     this.isUserDCC = this.authorisationService.isDistrictCashCropOfficer();
-    if (this.authenticationService.getCurrentUser().orgInfo.distributionSites) {
+    /*if (this.authenticationService.getCurrentUser().orgInfo.distributionSites) {
       this.siteService.get(this.authenticationService.getCurrentUser().orgInfo.distributionSites).subscribe((site) => {
         this.site = site.content;
       });
-    }
+    }*/
     this.organisationService.get(this.authenticationService.getCurrentUser().info.org_id).subscribe(data => {
       this.org = data.content;
     });
@@ -145,6 +145,7 @@ export class FarmerEditComponent extends BasicComponent implements OnInit, OnDes
             return req;
           }
         });
+
         this.totalTrees = this.requests.reduce( (tot, record) => {
           return tot + record.numberOfTrees;
         },0);

@@ -160,7 +160,7 @@ export class EditFarmerRequestComponent implements OnInit {
         });
       });
     } else if (this.isUserSiteManager) {
-      this.siteService.get(this.authenticationService.getCurrentUser().orgInfo.distributionSites).subscribe((site) => {
+      /*this.siteService.get(this.authenticationService.getCurrentUser().orgInfo.distributionSites).subscribe((site) => {
         this.site = site.content;
         this.site.coveredAreas.coveredSectors.map((sector) => {
           this.sectors.push({
@@ -168,7 +168,7 @@ export class EditFarmerRequestComponent implements OnInit {
             name: sector.name
           });
         });
-      });
+      });*/
 
     } else {
       this.locationService.getSectors(this.land.location.dist_id._id).subscribe((sectors) => {

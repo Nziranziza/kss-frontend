@@ -1,35 +1,48 @@
 <app-list-message [message]="message"></app-list-message>
 <app-list-errors [errorList]="errors"></app-list-errors>
-<div class="box-box-default stats-section">
-  <div class="row">
-    <div class="col-sm-12 text-center stats-title">CWS Input Dispatch Plan</div>
-    <div class="col-sm-12">
-      <div class="row stats-box">
-        <div class="col-sm-3">
-          <div class="text-center">
-            <h6>Allocated Fertilizer</h6>
-            <h4>{{ this.cwsAllocatedFertilizer }} Kg</h4>
-          </div>
+<div class="row">
+  <div class="col-sm-3">
+    <div class="stats-box">
+      <div class="row">
+        <div class="col-xs-8">
+          <div class="stats-box-text-header">Allocated Fertilizer</div>
         </div>
-        <div class="col-sm-3">
-          <div class="text-center">
-            <h6>Remaining Qty</h6>
-            <h4>{{ this.cwsAllocatedFertilizer - this.cwsRemainingQty }} Kg</h4>
-          </div>
-        </div>
-        <div class="col-sm-3">
-          <div class="text-center">
-            <h6>Allocated Pesticide</h6>
-            <h4>{{ this.cwsAllocatedPesticide }}</h4>
-          </div>
-        </div>
-        <div class="col-sm-3">
-          <div class="text-center">
-            <h6>Remaining Pesticide</h6>
-            <h4>{{ this.cwsAllocatedPesticide }}</h4>
-          </div>
-        </div>
+        <div class="col-xs-2"></div>
       </div>
+      <div class="stats-box-text-item">{{ this.cwsAllocatedFertilizer }} Kg</div>
+    </div>
+  </div>
+  <div class="col-sm-3">
+    <div class="stats-box">
+      <div class="row">
+        <div class="col-xs-8">
+          <div class="stats-box-text-header">Remaining Qty</div>
+        </div>
+        <div class="col-xs-2"></div>
+      </div>
+      <div class="stats-box-text-item">{{ this.cwsAllocatedFertilizer - this.cwsRemainingQty }} Kg</div>
+    </div>
+  </div>
+  <div class="col-sm-3">
+    <div class="stats-box">
+      <div class="row">
+        <div class="col-xs-8">
+          <div class="stats-box-text-header">Allocated Pesticide</div>
+        </div>
+        <div class="col-xs-2"></div>
+      </div>
+      <div class="stats-box-text-item">{{ this.cwsAllocatedPesticide  }}</div>
+    </div>
+  </div>
+  <div class="col-sm-3">
+    <div class="stats-box">
+      <div class="row">
+        <div class="col-xs-8">
+          <div class="stats-box-text-header">Remaining Pesticide</div>
+        </div>
+        <div class="col-xs-2"></div>
+      </div>
+      <div class="stats-box-text-item">{{ this.cwsAllocatedPesticide - this.cwsRemainingPesticide}}</div>
     </div>
   </div>
 </div>
@@ -38,44 +51,43 @@
     <h3 class="box-title">Available stocks</h3>
     <div class="box-tools pull-right">
       <button type="button" class="btn btn-box-tool" data-target="#box-body" data-toggle="collapse"><i
-        class="fa fa-expand"></i>
+          class="fa fa-expand"></i>
       </button>
     </div>
   </div>
   <div class="box-body collapse in" id="box-body" aria-expanded="true">
     <table class="row-border hover table table-striped" style="margin-top: 15px">
       <thead>
-      <tr>
-        <th>Stock</th>
-        <th>Name</th>
-        <th>Qty per item</th>
-        <th>Items</th>
-        <th>Total Qty</th>
-        <th>Available Qty</th>
-        <th>Total StockOut Qty</th>
-        <th></th>
-      </tr>
+        <tr>
+          <th>Stock</th>
+          <th>Name</th>
+          <th>Qty per item</th>
+          <th>Items</th>
+          <th>Total Qty</th>
+          <th>Available Qty</th>
+          <th>Total StockOut Qty</th>
+          <th></th>
+        </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let stock of stocks">
-        <td>{{ stock.inputId.inputType }}</td>
-        <td>{{ stock.inputId.inputName }}</td>
-        <td>{{ stock.quantityPerItem }}</td>
-        <td>{{ stock.items }}</td>
-        <td>{{ stock.items * stock.quantityPerItem }}</td>
-        <td>{{ stock.availableQty }}
-          <app-quantity-unit [inputType]="stock.inputId.inputType"></app-quantity-unit>
-        </td>
-        <td>{{getTotalStockedOut(stock) }}
-          <app-quantity-unit [inputType]="stock.inputId.inputType"></app-quantity-unit>
-        </td>
-        <td>
-          <button class="btn btn-success btn-margin btn-sm pull-right" (click)="stockOut(stock)"
-                  type="button">
-            Stock out
-          </button>
-        </td>
-      </tr>
+        <tr *ngFor="let stock of stocks">
+          <td>{{ stock.inputId.inputType }}</td>
+          <td>{{ stock.inputId.inputName }}</td>
+          <td>{{ stock.quantityPerItem }}</td>
+          <td>{{ stock.items }}</td>
+          <td>{{ stock.items * stock.quantityPerItem }}</td>
+          <td>{{ stock.availableQty }}
+            <app-quantity-unit [inputType]="stock.inputId.inputType"></app-quantity-unit>
+          </td>
+          <td>{{getTotalStockedOut(stock) }}
+            <app-quantity-unit [inputType]="stock.inputId.inputType"></app-quantity-unit>
+          </td>
+          <td>
+            <button class="btn btn-success btn-margin btn-sm pull-right" (click)="stockOut(stock)" type="button">
+              Stock out
+            </button>
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
@@ -87,35 +99,34 @@
   <div class="box-body">
     <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped">
       <thead>
-      <tr>
-        <th>Type</th>
-        <th>Quantity</th>
-        <th>Distributed Qty</th>
-        <th>Returned Qty</th>
-        <th>Date</th>
-        <th>Actions</th>
-      </tr>
+        <tr>
+          <th>Type</th>
+          <th>Quantity</th>
+          <th>Distributed Qty</th>
+          <th>Returned Qty</th>
+          <th>Date</th>
+          <th>Actions</th>
+        </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let stockOut of stockOuts">
-        <td>{{ stockOut.inputId.inputName }}</td>
-        <td>{{ stockOut.totalQuantity }}
-          <app-quantity-unit [inputType]="stockOut.inputId.inputType"></app-quantity-unit>
-        </td>
-        <td>{{ stockOut.distributedQty }}</td>
-        <td>{{ stockOut.returnedQty }}</td>
-        <td>{{ stockOut.date|date }}</td>
-        <td>
-          <button class="btn btn-success btn-margin btn-sm pull-right" (click)="returnStockOut(stockOut._id)">
-            Return
-          </button>
-          <button class="btn btn-success btn-margin btn-sm pull-right" (click)="viewApplication(stockOut._id)">
-            Applications
-          </button>
-        </td>
-      </tr>
+        <tr *ngFor="let stockOut of stockOuts">
+          <td>{{ stockOut.inputId.inputName }}</td>
+          <td>{{ stockOut.totalQuantity }}
+            <app-quantity-unit [inputType]="stockOut.inputId.inputType"></app-quantity-unit>
+          </td>
+          <td>{{ stockOut.distributedQty }}</td>
+          <td>{{ stockOut.returnedQty }}</td>
+          <td>{{ stockOut.date|date }}</td>
+          <td>
+            <button class="btn btn-success btn-margin btn-sm pull-right" (click)="returnStockOut(stockOut._id)">
+              Return
+            </button>
+            <button class="btn btn-success btn-margin btn-sm pull-right" (click)="viewApplication(stockOut._id)">
+              Applications
+            </button>
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
 </div>
-
