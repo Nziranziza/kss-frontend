@@ -2,10 +2,7 @@
   <div class="row">
     <div class="col-sm-10">Nursery Sites</div>
     <div class="col-sm-2">
-      <a
-        class="btn btn-success pull-left"
-        routerLink="/admin/seedling/nursery/create"
-      >
+      <a class="btn btn-success pull-right" routerLink="/admin/seedling/nursery/create">
         Add Nursery
       </a>
     </div>
@@ -13,49 +10,71 @@
 </h3>
 <app-list-message [message]="message"></app-list-message>
 <app-list-errors [errorList]="errors"></app-list-errors>
-<div class="col-sm-12 stats-section">
+<div class="col-sm-12">
   <div class="row">
-    <div class="col-sm-12 text-center stats-title">Nurseries Summary</div>
-    <div class="col-sm-12">
-      <div class="row stats-box">
-        <div class="col-sm-2">
-          <div class="text-center">
-            <h4>Nursery Sites Created</h4>
-            <h2>{{ nurseries.length }}</h2>
+    <div class="col-sm-2 small-spacing">
+      <div class="stats-box">
+        <div class="row">
+          <div class="col-xs-10">
+            <div class="stats-box-text-header">Nursery Sites</div>
+          </div>
+          <div class="col-xs-2"></div>
+        </div>
+        <div class="stats-box-text-item">{{ nurseries.length }}</div>
+      </div>
+    </div>
+    <div class="col-sm-2 small-spacing">
+      <div class="stats-box">
+        <div class="row">
+          <div class="col-xs-10">
+            <div class="stats-box-text-header">Provided Seeds</div>
+          </div>
+          <div class="col-xs-2"></div>
+        </div>
+        <div class="stats-box-text-item">{{ seedsSum }} Kg</div>
+      </div>
+    </div>
+    <div class="col-sm-2 small-spacing">
+      <div class="stats-box">
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="stats-box-text-header">Expected Seedlings</div>
           </div>
         </div>
-        <div class="col-sm-2">
-          <div class="text-center">
-            <h4>Total Provided Seeds</h4>
-            <h2>{{ seedsSum }} Kg</h2>
+        <div class="stats-box-text-item">{{ seedsSum * 2500 }}</div>
+      </div>
+    </div>
+    <div class="col-sm-2 small-spacing">
+      <div class="stats-box">
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="stats-box-text-header">Pricked Out Seedlings</div>
           </div>
         </div>
-        <div class="col-sm-2">
-          <div class="text-center">
-            <h4>Total Expected Seedlings</h4>
-            <h2>{{ seedsSum * 2500 }}</h2>
+        <div class="stats-box-text-item">{{ prickedSum }}</div>
+      </div>
+    </div>
+    <div class="col-sm-2 small-spacing">
+      <div class="stats-box">
+        <div class="row">
+          <div class="col-xs-10">
+            <div class="stats-box-text-header">Success Rate</div>
+          </div>
+          <div class="col-xs-2"></div>
+        </div>
+        <div class="stats-box-text-item">
+          {{ (prickedSum * 100) / (seedsSum * 2500) | number: "1.2-2" }}%
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-2 small-spacing">
+      <div class="stats-box">
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="stats-box-text-header">Distributed Seedlings</div>
           </div>
         </div>
-        <div class="col-sm-2">
-          <div class="text-center">
-            <h4>Total Pricked Out Seedlings</h4>
-            <h2>{{ prickedSum }}</h2>
-          </div>
-        </div>
-        <div class="col-sm-2">
-          <div class="text-center">
-            <h4>Average Success Rate</h4>
-            <h2>
-              {{ (prickedSum * 100) / (seedsSum * 2500) | number: "1.2-2" }}%
-            </h2>
-          </div>
-        </div>
-        <div class="col-sm-2">
-          <div class="text-center">
-            <h4>Total Distributed Seedlings</h4>
-            <h2>{{ distributeSum }}</h2>
-          </div>
-        </div>
+        <div class="stats-box-text-item">{{ distributeSum }}</div>
       </div>
     </div>
   </div>
@@ -65,12 +84,7 @@
     <div class="box">
       <div class="box-body table-responsive">
         <app-loader *ngIf="loading"></app-loader>
-        <table
-          datatable
-          [dtOptions]="dtOptions"
-          [dtTrigger]="dtTrigger"
-          class="row-border hover table table-striped"
-        >
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped">
           <thead>
             <tr>
               <th>Date Added</th>
@@ -94,24 +108,16 @@
                 <td>{{ totalSeeds[i] }} Kg</td>
                 <td>{{ nursery.status || "Active" }}</td>
                 <td>
-                  <button
-                    appRequiredSeason
-                    class="btn btn-action-no-border btn-margin details-button"
-                    (click)="openViewModal(nursery._id)"
-                  >
+                  <button appRequiredSeason class="btn btn-action-no-border btn-margin details-button"
+                    (click)="openViewModal(nursery._id)">
                     <em class="fa fa-eye"></em>
                   </button>
-                  <button
-                    appRequiredSeason
-                    (click)="openDeleteModal(nursery)"
-                    class="btn btn-action-no-border btn-margin"
-                  >
+                  <button appRequiredSeason (click)="openDeleteModal(nursery)"
+                    class="btn btn-action-no-border btn-margin">
                     <em class="fa fa-trash"></em>
                   </button>
-                  <button
-                    class="btn btn-action-no-border btn-margin btn-sm details-button"
-                    routerLink="/admin/seedling/nursery/edit/{{ nursery._id }}"
-                  >
+                  <button class="btn btn-action-no-border btn-margin btn-sm details-button"
+                    routerLink="/admin/seedling/nursery/edit/{{ nursery._id }}">
                     <em class="fa fa-pencil"></em>
                   </button>
                 </td>

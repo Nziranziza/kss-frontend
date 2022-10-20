@@ -11,48 +11,37 @@
         </a>
       </li>
       <li routerLinkActive="active" *appHasPermission="[1]">
-        <a
-          *ngIf="authUser.orgInfo.hasExtensionAccess"
-          routerLink="/admin/organisations/details/{{ user.org_id }}/dashboard"
-        >
+        <a *ngIf="authUser.orgInfo.hasExtensionAccess"
+           routerLink="/admin/organisations/details/{{ user.org_id }}/dashboard">
           <i class="fa fa-dashboard" aria-hidden="true"></i>
           <span>{{ "dashboard" | translate }}</span>
         </a>
-        <a
-          *ngIf="!authUser.orgInfo.hasExtensionAccess"
-          routerLink="/admin/organisations/details/{{ user.org_id }}/farmers"
-        >
+        <a *ngIf="!authUser.orgInfo.hasExtensionAccess"
+           routerLink="/admin/organisations/details/{{ user.org_id }}/farmers">
           <i class="fa fa-dashboard" aria-hidden="true"></i>
           <span>{{ "dashboard" | translate }}</span>
         </a>
       </li>
-      <li
-        class="header"
-        *appHasPermission="[[4, 1], [4, 11], [4, 12], 0, 6, 5, 11]"
-      >
+      <li class="header" *appHasPermission="[[4, 1], [4, 11], [4, 12], 0, 6, 5, 11]">
         {{ " REGISTRATION " | translate }}
       </li>
-      <li
-        routerLinkActive="active"
-        *appHasPermission="[[4, 1], [4, 11], [4, 12], 0, 6, 5, 11]"
-      >
+      <li routerLinkActive="active" *appHasPermission="[[4, 1], [4, 11], [4, 12], 0, 6, 5, 11]">
         <a routerLink="/admin/organisations">
           <i class="fa fa-university" aria-hidden="true"></i>
           <span>{{ "Organisations" | translate }}</span>
         </a>
       </li>
 
+      <!--
       <li routerLinkActive="active" *appHasPermission="[[1]]">
-        <a routerLink="/admin/organisations">
-          <i class="fa fa-university" aria-hidden="true"></i>
-          <span>{{ "Organisations" | translate }}</span>
-        </a>
-      </li>
-      <li
-        class="treeview"
-        routerLinkActive="active"
-        *appHasPermission="[[4, 1], [4, 11], 0, 6, 5]"
-      >
+       <a routerLink="/admin/organisations">
+         <i class="fa fa-university" aria-hidden="true"></i>
+         <span>{{ "Organisations" | translate }}</span>
+           </a>
+     </li>
+     -->
+      <li class="treeview" routerLinkActive="active" *appHasPermission="[[4, 1], [4, 11], 0, 6, 5]">
+
         <a href="#">
           <i class="fa fa-users"></i><span>Farmers</span>
           <span class="pull-right-container">
@@ -61,12 +50,10 @@
         </a>
         <ul class="treeview-menu">
           <li routerLinkActive="active" *appHasPermission="[6]">
-            <a
-              [routerLink]="[
+            <a [routerLink]="[
                 '/admin/farmers/need-approval/list',
                 { needApproval: 'updated' }
-              ]"
-            >
+              ]">
               <i class="fa fa-circle-o"></i>
               <span>Pending approval</span>
             </a>
@@ -91,14 +78,12 @@
           </li>-->
         </ul>
       </li>
-      <!--<li
-        class="header"
-        *appHasPermission="[1, [4, 1], [4, 11], [4, 12], 0, 6]"
-      >-->
+      <!--
       <li
         class="header"
-        *appHasPermission="[1]"
-      >
+        *appHasPermission="[1, [4, 1], [4, 11], [4, 12], 0, 6]">
+      -->
+      <li class="header" *appHasPermission="[1]">
         {{ "wet_processing" | translate }}
       </li>
       <li class="treeview" routerLinkActive="active" *appHasPermission="[1]">
@@ -169,7 +154,7 @@
           </li>
         </ul>
       </li>
-      <ng-container *ngIf="hasGreenCoffee">
+      <ng-container *ngIf="hasGreenCoffee" appInternal>
         <li class="treeview" routerLinkActive="active" *appHasPermission="[1]">
           <a href="#">
             <i class="fa fa-coffee"></i>
@@ -188,11 +173,7 @@
           </ul>
         </li>
       </ng-container>
-      <li
-        class="treeview"
-        routerLinkActive="active"
-        *appHasServices="['ONLINE_PAYMENT']"
-      >
+      <li class="treeview" routerLinkActive="active" *appHasServices="['ONLINE_PAYMENT']">
         <a href="#">
           <i class="fa fa-gg"></i> <span>E-Payments</span>
           <span class="pull-right-container">
@@ -235,7 +216,7 @@
           <span>Parchments</span>
         </a>
       </li>
-      <li class="treeview" routerLinkActive="active" *appHasPermission="[2]">
+      <li class="treeview" routerLinkActive="active" *appHasPermission="[2]" appInternal>
         <a href="#">
           <i class="fa fa-coffee"></i><span>Green coffee</span>
           <span class="pull-right-container">
@@ -269,26 +250,17 @@
           </li>
         </ul>
       </li>
-      <li
-        class="header"
-        *ngIf="
+      <li class="header"  appInternal *ngIf="
           authUser.orgInfo.hasExtensionAccess ||
           authUser.parameters.role[0] == 11
-        "
-      >
+        ">
         {{ "EXTENSION SERVICES" | translate }}
       </li>
-      <ng-template
-        [ngIf]="
+      <ng-template appInternal [ngIf]="
           authUser.orgInfo.hasExtensionAccess ||
           authUser.parameters.role[0] == 11
-        "
-      >
-        <li
-          class="treeview"
-          routerLinkActive="active"
-          *appHasPermission="[11, 1]"
-        >
+        ">
+        <li class="treeview" routerLinkActive="active" *appHasPermission="[11, 1]">
           <a href="#">
             <i class="fa fa-users"></i>
             <span>{{ "farmer_groups" | translate }}</span>
@@ -305,11 +277,7 @@
             </li>
           </ul>
         </li>
-        <li
-          class="treeview"
-          routerLinkActive="active"
-          *appHasPermission="[[1], [11, 1]]"
-        >
+        <li class="treeview" routerLinkActive="active" *appHasPermission="[[1], [11, 1]]">
           <a href="#">
             <i class="fa fa-delicious"></i>
             <span>{{ "gap_management" | translate }}</span>
@@ -349,11 +317,7 @@
             </li>
           </ul>
         </li>
-        <li
-          class="treeview"
-          routerLinkActive="active"
-          *appHasPermission="[11, 1]"
-        >
+        <li class="treeview" routerLinkActive="active" *appHasPermission="[11, 1]">
           <a href="#">
             <i class="fa fa-map"></i>
             <span>{{ "farm_visit" | translate }}</span>
@@ -370,11 +334,7 @@
             </li>
           </ul>
         </li>
-        <li
-          class="treeview"
-          routerLinkActive="active"
-          *appHasPermission="[11, 1]"
-        >
+        <li class="treeview" routerLinkActive="active" *appHasPermission="[11, 1]">
           <a href="#">
             <i class="fa fa-leaf"></i>
             <span>{{ "planting_operation" | translate }}</span>
@@ -390,20 +350,12 @@
               </a>
             </li>
           </ul>
-        </li></ng-template
-      >
+        </li>
+      </ng-template>
 
       <li class="header" *appHasPermission="[[8, 2], 1]">SITES</li>
-      <li
-        class="treeview"
-        routerLinkActive="active"
-        *appHasPermission="[[[8, 2], 1, 'NOT']]"
-      >
-        <a
-          href="#"
-          routerLinkActive="active"
-          *appHasPermission="[[[8, 2], 1, 'NOT']]"
-        >
+      <li class="treeview" routerLinkActive="active" *appHasPermission="[[[8, 2], 1, 'NOT']]">
+        <a href="#" routerLinkActive="active" *appHasPermission="[[[8, 2], 1, 'NOT']]">
           <i class="fa fa-users"></i><span>Farmers</span>
           <span class="pull-right-container">
             <i class="fa fa-angle-left pull-right"></i>
@@ -425,16 +377,10 @@
         </ul>
       </li>
       <ng-container *ngFor="let site of org.distributionSites">
-        <li
-          class="treeview"
-          routerLinkActive="active"
-          *appHasPermission="[[8, 2], 1]"
-        >
+        <li class="treeview" routerLinkActive="active" *appHasPermission="[[8, 2], 1]">
           <a href="#">
-            <i class="fa fa-circle-o text-yellow"></i
-            ><span style="text-transform: uppercase; font-weight: bold">
-              {{ site.siteName }}</span
-            >
+            <i class="fa fa-circle-o text-yellow"></i><span style="text-transform: uppercase; font-weight: bold">
+              {{ site.siteName }}</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
@@ -461,9 +407,7 @@
           </ul>
         </li>
       </ng-container>
-      <li
-        class="header"
-        *appHasPermission="[
+      <li class="header" *appHasPermission="[
           0,
           5,
           [4, 10],
@@ -472,13 +416,10 @@
           [[8, 1], 1, 'NOT'],
           [4, 1],
           6
-        ]"
-      >
+        ]">
         INPUT DISTRIBUTION
       </li>
-      <li
-        routerLinkActive="active"
-        *appHasPermission="[
+      <li routerLinkActive="active" *appHasPermission="[
           0,
           5,
           [4, 10],
@@ -488,16 +429,13 @@
           [4, 2],
           [[8, 1], 1, 'NOT'],
           6
-        ]"
-      >
+        ]">
         <a routerLink="/admin/sites">
           <i class="fa fa-square" aria-hidden="true"></i>
           <span>Sites</span>
         </a>
       </li>
-      <li
-        routerLinkActive="active"
-        *appHasPermission="[
+      <li routerLinkActive="active" *appHasPermission="[
           [4, 10],
           [4, 11],
           [4, 12],
@@ -506,8 +444,7 @@
           6,
           5,
           [[8, 1], 1, 'NOT']
-        ]"
-      >
+        ]">
         <a routerLink="/admin/input/distribution/plan">
           <i class="fa fa-history" aria-hidden="true"></i>
           <span>Distribution plan</span>
@@ -520,11 +457,31 @@
           <span>Entries</span>
         </a>
       </li>
-      <li routerLinkActive="active" *appHasPermission="[0, [4, 10], 5]">
-        <a routerLink="/admin/warehouse/dispatches">
-          <i class="fa fa-code-fork" aria-hidden="true"></i>
-          <span>Dispatch</span>
+      <li
+        class="treeview"
+        routerLinkActive="active"
+        *appHasPermission="[0, [4, 10], 5]"
+      >
+        <a href="#">
+          <i class="fa fa-code-fork"></i><span>Dispatch</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
         </a>
+        <ul class="treeview-menu">
+          <li routerLinkActive="active">
+            <a routerLink="/admin/warehouse/dispatches">
+              <i class="fa fa-circle-o"></i>
+              <span>Dispatching</span>
+            </a>
+          </li>
+          <li routerLinkActive="active">
+            <a routerLink="/admin/input/distribution/progress">
+              <i class="fa fa-circle-o"></i>
+              <span>Report</span>
+            </a>
+          </li>
+        </ul>
       </li>
       <li class="header">{{ "GENERAL" | translate }}</li>
       <li class="treeview" routerLinkActive="active">
@@ -536,11 +493,7 @@
         </a>
         <ul class="treeview-menu">
 
-          <li
-            class="treeview"
-            routerLinkActive="active"
-            *appHasPermission="[[4, 1], [4, 11], [4, 12], 0, 6]"
-          >
+          <li class="treeview" routerLinkActive="active" *appHasPermission="[[4, 1], [4, 11], [4, 12], 0, 6]">
             <a href="#">
               <i class="fa fa-circle-o"></i><span>Wet Processing Reports</span>
               <span class="pull-right-container">
@@ -548,10 +501,7 @@
               </span>
             </a>
             <ul class="treeview-menu">
-              <li
-                routerLinkActive="active"
-                *appHasPermission="[[4, 1], [4, 11], [4, 12], 0, 6]"
-              >
+              <li routerLinkActive="active" *appHasPermission="[[4, 1], [4, 11], [4, 12], 0, 6]">
                 <a routerLink="/admin/cherries/parchments/report">
                   <i class="fa fa-circle-o"></i>
                   <span>Cherry Supply</span>
@@ -561,10 +511,7 @@
           </li>
 
 
-          <li
-            class="treeview"
-            routerLinkActive="active"
-            *appHasPermission="[
+          <li class="treeview" routerLinkActive="active" *appHasPermission="[
               0,
               6,
               [4, 1],
@@ -572,9 +519,8 @@
               [4, 12],
               5,
               8,
-              [[8, 1], 1, 'NOT']
-            ]"
-          >
+             1
+            ]">
             <a href="#">
               <i class="fa fa-circle-o"></i>
               <span>Input progress reports</span>
@@ -583,45 +529,39 @@
               </span>
             </a>
             <ul class="treeview-menu">
-              <li
-                routerLinkActive="active"
-                *appHasPermission="[
+             <!-- <li routerLinkActive="active" *appHasPermission="[
                   0,
                   6,
                   [4, 1],
                   [4, 11],
                   [4, 12],
                   5,
+
                   [[8, 1], [1, 1], 'NOT']
-                ]"
-              >
+                ]">
                 <a routerLink="/admin/input/distribution/progress">
                   <i class="fa fa-circle-o"></i>
                   <span>Distribution</span>
                 </a>
-              </li>
-              <li
-                routerLinkActive="active"
-                *appHasPermission="[
+              </li>-->
+              <li routerLinkActive="active" *appHasPermission="[
                   0,
                   6,
                   [4, 1],
                   [4, 11],
                   [4, 12],
                   5,
+
                   [8, 1],
                   [8, 2],
-                  [[1, 1], [8, 1], 'AND']
-                ]"
-              >
+                  1
+                ]">
                 <a routerLink="/admin/input/application/progress">
                   <i class="fa fa-circle-o"></i>
                   <span>Fertilizer application</span>
                 </a>
               </li>
-              <li
-                routerLinkActive="active"
-                *appHasPermission="[
+              <li routerLinkActive="active" *appHasPermission="[
                   0,
                   6,
                   [4, 1],
@@ -630,9 +570,8 @@
                   5,
                   [8, 1],
                   [8, 2],
-                  [[1, 1], [8, 1], 'AND']
-                ]"
-              >
+                  1
+                ]">
                 <a routerLink="/admin/input/pesticide/application/progress">
                   <i class="fa fa-circle-o"></i>
                   <span>Pesticide application</span>
@@ -640,20 +579,13 @@
               </li>
             </ul>
           </li>
-          <li
-            routerLinkActive="active"
-            *appHasPermission="[[4, 1], [4, 11], [4, 12], 0]"
-          >
+          <li routerLinkActive="active" *appHasPermission="[[4, 1], [4, 11], [4, 12], 0]">
             <a routerLink="/admin/payment/reports">
               <i class="fa fa-circle-o"></i>
               <span>Payments report</span>
             </a>
           </li>
-          <li
-            class="treeview"
-            routerLinkActive="active"
-            *appHasPermission="[[4, 1], [4, 11], [4, 12], 0, 6]"
-          >
+          <li class="treeview" routerLinkActive="active" *appHasPermission="[[4, 1], [4, 11], [4, 12], 0, 6]">
             <a href="#">
               <i class="fa fa-circle-o"></i><span>Farmers Reports</span>
               <span class="pull-right-container">
@@ -670,10 +602,7 @@
                   <span>approval statistics</span>
                 </a>
               </li>-->
-              <li
-                routerLinkActive="active"
-                *appHasPermission="[[4, 1], [4, 11], [4, 12], 0, 6]"
-              >
+              <li routerLinkActive="active" *appHasPermission="[[4, 1], [4, 11], [4, 12], 0, 6]">
                 <a routerLink="/admin/report/farmers">
                   <i class="fa fa-circle-o"></i>
                   <span>Registration</span>
@@ -681,7 +610,7 @@
               </li>
             </ul>
           </li>
-          <li routerLinkActive="active" *appHasPermission="[[11, 1], 1, 0]">
+          <li routerLinkActive="active" *appHasPermission="[[11, 1], 1, 0]" appInternal>
             <a routerLink="/admin/reports">
               <i class="fa fa-circle-o" aria-hidden="true"></i>
               <span>{{ "extension service reports" | translate }}</span>
@@ -708,11 +637,7 @@
           <span>Settings</span>
         </a>
       </li>
-      <li
-        class="treeview"
-        routerLinkActive="active"
-        *appHasPermission="[4, 0, 5]"
-      >
+      <li class="treeview" routerLinkActive="active" *appHasPermission="[4, 0, 5]">
         <a href="#">
           <i class="fa fa-cogs"></i><span>Settings</span>
           <span class="pull-right-container">
@@ -720,19 +645,13 @@
           </span>
         </a>
         <ul class="treeview-menu">
-          <li
-            routerLinkActive="active"
-            *appHasPermission="[[4, 1], [4, 11], 0, 5]"
-          >
+          <li routerLinkActive="active" *appHasPermission="[[4, 1], [4, 11], 0, 5]">
             <a routerLink="/admin/distribution-parameters">
               <i class="fa fa-circle-o"></i>
               <span>Distribution</span>
             </a>
           </li>
-          <li
-            routerLinkActive="active"
-            *appHasPermission="[[4, 1], [4, 11], 0, 5]"
-          >
+          <li routerLinkActive="active" *appHasPermission="[[4, 1], [4, 11], 0, 5]">
             <a routerLink="/admin/season-parameters">
               <i class="fa fa-circle-o"></i>
               <span>Season parameters</span>
@@ -744,19 +663,13 @@
               <span>Organisation types</span>
             </a>
           </li>
-          <li
-            routerLinkActive="active"
-            *appHasPermission="[[4, 1], [4, 11], 0]"
-          >
+          <li routerLinkActive="active" *appHasPermission="[[4, 1], [4, 11], 0]">
             <a routerLink="/admin/coffee-type/list">
               <i class="fa fa-circle-o"></i>
               <span>Coffee types</span>
             </a>
           </li>
-          <li
-            routerLinkActive="active"
-            *appHasPermission="[[4, 1], [4, 11], 0]"
-          >
+          <li routerLinkActive="active" *appHasPermission="[[4, 1], [4, 11], 0]">
             <a routerLink="/admin/farm/tree-varieties/list">
               <i class="fa fa-circle-o"></i>
               <span>Tree varieties</span>

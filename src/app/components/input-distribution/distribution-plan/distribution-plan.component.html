@@ -1,7 +1,46 @@
 <h3>
   {{ title }}
-  <button class="btn btn-success btn-margin pull-right" (click)="distributionExport()"><i class="fa fa-download"></i>Administrative Report</button>
-  <button class="btn btn-success btn-margin pull-right" (click)="siteExport()"><i class="fa fa-download"></i>Washing Station Report</button>
+  <div class="row pull-right">
+    <div class="col-sm-4">
+      <button class="btn btn-success btn-margin" (click)="distributionExport()">
+        <span *ngIf="!isLoadingReport1; else other_content"><i class="fa fa-download"></i> Administrative Report</span>
+        <ng-template #other_content>
+          <div class="loader">
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+          </div>
+        </ng-template>
+      </button>
+    </div>
+    <div class="col-sm-4">
+      <button class="btn btn-success btn-margin" (click)="siteExport()">
+        <span *ngIf="!isLoadingReport2; else other_content"><i class="fa fa-download"></i> Washing Station Report</span>
+        <ng-template #other_content>
+          <div class="loader">
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+          </div>
+        </ng-template>
+      </button>
+    </div>
+    <div class="col-sm-4">
+      <button class="btn btn-success btn-margin" (click)="progressExport()">
+        <span *ngIf="!isLoadingReport3; else other_content"><i class="fa fa-download"></i>Progress Report</span>
+        <ng-template #other_content>
+          <div class="loader">
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+          </div>
+        </ng-template>
+      </button>
+    </div>
+  </div>
 </h3>
 <app-list-errors [errorList]="errors"></app-list-errors>
 <app-list-message [message]="message"></app-list-message>

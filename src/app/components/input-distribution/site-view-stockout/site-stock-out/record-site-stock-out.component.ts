@@ -71,11 +71,11 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
       });
 
     } else {
-      this.siteService.get(this.authenticationService.getCurrentUser().orgInfo.distributionSites).subscribe((site) => {
+     /* this.siteService.get(this.authenticationService.getCurrentUser().orgInfo.distributionSites).subscribe((site) => {
         this.site = site.content;
         this.addDestination();
         this.filterCustomSectors(this.site, 0);
-      });
+      });*/
     }
     this.initial();
   }

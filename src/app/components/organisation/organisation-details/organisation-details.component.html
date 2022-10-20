@@ -57,7 +57,7 @@
         </div>
       </div>
       <div class="col-md-4" style="padding: 0 5px 0 0px">
-        <div class="text-center stats-box">
+        <div class="text-center stats-box stats-scroll">
           <div style="height: 180px">
             <div class="stats-box-title">Covered Locations</div>
             <div class="row stats-box-details-left" style="margin-top: 10px">
@@ -231,7 +231,7 @@
     </li>
     <li
       role="presentation"
-      *appHasPermission="[[4, 1], [4, 11], [4, 12], 0, 6, 5, 11, [1,1]]"
+      *appHasPermission="[[4, 1], [4, 11], [4, 12], 0, [1,1]]"
       routerLink="/admin/organisations/details/{{ organisationId }}/users"
       routerLinkActive="active"
     >
