@@ -71,6 +71,9 @@ login-box-link:hover {
   color: #4f210d !important;
 }
 
+.skin-blue .main-header .navbar .sidebar-toggle:hover {
+  background-color: #4f210d !important;
+}
 .home .logo {
   background-image: url("../img/sks/logo-sks-coffee@2x.png");
   background-repeat: no-repeat;
