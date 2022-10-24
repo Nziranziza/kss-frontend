@@ -1,9 +1,9 @@
 import {Component, Inject, Injector, OnInit, PLATFORM_ID} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {HelperService} from '../../../../core/helpers';
+import {HelperService} from '../../../../core';
 import {isPlatformBrowser} from '@angular/common';
-import {SeasonService} from '../../../../core/services';
+import {SeasonService} from '../../../../core';
 
 @Component({
   selector: 'app-create-season',

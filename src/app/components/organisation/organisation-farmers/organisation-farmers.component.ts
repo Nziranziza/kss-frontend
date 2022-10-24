@@ -180,17 +180,10 @@ export class OrganisationFarmersComponent
           this.cwsSummary = data.content[0];
         }
       });
-    /*if (this.authenticationService.getCurrentUser().orgInfo.distributionSites) {
-      this.siteService
-        .get(
-          this.authenticationService.getCurrentUser().orgInfo.distributionSites
-        )
-        .subscribe((data) => {
-          this.site = data.content;
-        });
-    }*/
+
     this.setMessage(this.messageService.getMessage());
     this.orgCoveredArea = this.route.snapshot.data.orgCoveredAreaData;
+    console.log(this.authenticationService.getCurrentSeason());
     this.currentSeason = this.authenticationService.getCurrentSeason();
     this.getAllFarmers();
     this.getSetPinStatus();

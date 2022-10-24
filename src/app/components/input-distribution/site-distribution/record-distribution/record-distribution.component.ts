@@ -128,6 +128,7 @@ export class RecordDistributionComponent extends BasicComponent implements OnIni
                 },
                 (err) => {
                   this.setError(err.errors);
+                  this.isLoading = false;
                 });
 
             }
@@ -139,11 +140,13 @@ export class RecordDistributionComponent extends BasicComponent implements OnIni
           },
           (err) => {
             this.setError(err.errors);
+            this.isLoading = false;
           });
       }
 
     } else {
       this.setError(this.helper.getFormValidationErrors(this.distributionForm));
+      this.isLoading = false;
     }
   }
 
