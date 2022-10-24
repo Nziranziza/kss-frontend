@@ -111,12 +111,12 @@
                 <li *ngFor="let season of seasons">
                   <a
                     type="button"
-                    (click)="changeSeason(season._id)"
-                    *ngIf="season._id !== currentSeason._id"
+                    (click)="changeSeason(season?._id)"
+                    *ngIf="season?._id !== currentSeason?._id"
                     style="cursor: pointer"
                   >
                     <i class="fa fa-tint text-green" aria-hidden="true"></i>
-                    Season {{ season.season }}
+                    Season {{ season?.season }}
                   </a>
                 </li>
               </ul>
