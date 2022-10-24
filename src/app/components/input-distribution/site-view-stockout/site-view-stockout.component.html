@@ -4,10 +4,9 @@
   <div class="col-sm-3">
     <div class="stats-box">
       <div class="row">
-        <div class="col-xs-8">
+        <div class="col-xs-12">
           <div class="stats-box-text-header">Allocated Fertilizer</div>
         </div>
-        <div class="col-xs-2"></div>
       </div>
       <div class="stats-box-text-item">{{ this.cwsAllocatedFertilizer }} Kg</div>
     </div>
@@ -15,10 +14,9 @@
   <div class="col-sm-3">
     <div class="stats-box">
       <div class="row">
-        <div class="col-xs-8">
+        <div class="col-xs-12">
           <div class="stats-box-text-header">Remaining Qty</div>
         </div>
-        <div class="col-xs-2"></div>
       </div>
       <div class="stats-box-text-item">{{ this.cwsAllocatedFertilizer - this.cwsRemainingQty }} Kg</div>
     </div>
@@ -26,10 +24,9 @@
   <div class="col-sm-3">
     <div class="stats-box">
       <div class="row">
-        <div class="col-xs-8">
+        <div class="col-xs-12">
           <div class="stats-box-text-header">Allocated Pesticide</div>
         </div>
-        <div class="col-xs-2"></div>
       </div>
       <div class="stats-box-text-item">{{ this.cwsAllocatedPesticide  }}</div>
     </div>
@@ -37,10 +34,9 @@
   <div class="col-sm-3">
     <div class="stats-box">
       <div class="row">
-        <div class="col-xs-8">
+        <div class="col-xs-12">
           <div class="stats-box-text-header">Remaining Pesticide</div>
         </div>
-        <div class="col-xs-2"></div>
       </div>
       <div class="stats-box-text-item">{{ this.cwsAllocatedPesticide - this.cwsRemainingPesticide}}</div>
     </div>
@@ -55,8 +51,8 @@
       </button>
     </div>
   </div>
-  <div class="box-body collapse in" id="box-body" aria-expanded="true">
-    <table class="row-border hover table table-striped" style="margin-top: 15px">
+  <div class="box-body collapse in table-responsive" id="box-body" aria-expanded="true">
+    <table class="row-border hover table table-striped table-responsive table-sm" style="margin-top: 15px">
       <thead>
         <tr>
           <th>Stock</th>
@@ -83,7 +79,7 @@
             <app-quantity-unit [inputType]="stock.inputId.inputType"></app-quantity-unit>
           </td>
           <td>
-            <button class="btn btn-success btn-margin btn-sm pull-right" (click)="stockOut(stock)" type="button">
+            <button class="btn btn-success btn-margin btn-sm pull-left" (click)="stockOut(stock)" type="button">
               Stock out
             </button>
           </td>
@@ -96,8 +92,8 @@
   <div class="box-header with-border">
     <h3 class="box-title">List stock-outs</h3>
   </div>
-  <div class="box-body">
-    <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped">
+  <div class="box-body table-responsive">
+    <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped table-sm table-condensed">
       <thead>
         <tr>
           <th>Type</th>
