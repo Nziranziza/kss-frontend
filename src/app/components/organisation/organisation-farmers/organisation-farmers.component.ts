@@ -180,17 +180,10 @@ export class OrganisationFarmersComponent
           this.cwsSummary = data.content[0];
         }
       });
-    if (this.authenticationService.getCurrentUser().orgInfo.distributionSites) {
-      this.siteService
-        .get(
-          this.authenticationService.getCurrentUser().orgInfo.distributionSites
-        )
-        .subscribe((data) => {
-          this.site = data.content;
-        });
-    }
+
     this.setMessage(this.messageService.getMessage());
     this.orgCoveredArea = this.route.snapshot.data.orgCoveredAreaData;
+    console.log(this.authenticationService.getCurrentSeason());
     this.currentSeason = this.authenticationService.getCurrentSeason();
     this.getAllFarmers();
     this.getSetPinStatus();
@@ -378,7 +371,7 @@ export class OrganisationFarmersComponent
             SECTOR: item.request[0].location.sect_id.name,
             CELL: item.request[0].location.cell_id.name,
             VILLAGE: item.request[0].location.village_id.name,
-            NUMBER_OF_TREES: this.getNumberOfTrees(item.request),
+            NUMBER_OF_TREES: item.request? this.getNumberOfTrees(item.request): 0,
           };
           this.allFarmers.push(temp);
         });

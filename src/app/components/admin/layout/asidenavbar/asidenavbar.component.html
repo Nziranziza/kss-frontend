@@ -12,12 +12,12 @@
       </li>
       <li routerLinkActive="active" *appHasPermission="[1]">
         <a *ngIf="authUser.orgInfo.hasExtensionAccess"
-          routerLink="/admin/organisations/details/{{ user.org_id }}/dashboard">
+           routerLink="/admin/organisations/details/{{ user.org_id }}/dashboard">
           <i class="fa fa-dashboard" aria-hidden="true"></i>
           <span>{{ "dashboard" | translate }}</span>
         </a>
         <a *ngIf="!authUser.orgInfo.hasExtensionAccess"
-          routerLink="/admin/organisations/details/{{ user.org_id }}/farmers">
+           routerLink="/admin/organisations/details/{{ user.org_id }}/farmers">
           <i class="fa fa-dashboard" aria-hidden="true"></i>
           <span>{{ "dashboard" | translate }}</span>
         </a>
@@ -32,13 +32,16 @@
         </a>
       </li>
 
+      <!--
       <li routerLinkActive="active" *appHasPermission="[[1]]">
-        <a routerLink="/admin/organisations">
-          <i class="fa fa-university" aria-hidden="true"></i>
-          <span>{{ "Organisations" | translate }}</span>
-        </a>
-      </li>
+       <a routerLink="/admin/organisations">
+         <i class="fa fa-university" aria-hidden="true"></i>
+         <span>{{ "Organisations" | translate }}</span>
+           </a>
+     </li>
+     -->
       <li class="treeview" routerLinkActive="active" *appHasPermission="[[4, 1], [4, 11], 0, 6, 5]">
+
         <a href="#">
           <i class="fa fa-users"></i><span>Farmers</span>
           <span class="pull-right-container">
@@ -75,10 +78,11 @@
           </li>-->
         </ul>
       </li>
-      <!--<li
+      <!--
+      <li
         class="header"
-        *appHasPermission="[1, [4, 1], [4, 11], [4, 12], 0, 6]"
-      >-->
+        *appHasPermission="[1, [4, 1], [4, 11], [4, 12], 0, 6]">
+      -->
       <li class="header" *appHasPermission="[1]">
         {{ "wet_processing" | translate }}
       </li>
@@ -150,7 +154,7 @@
           </li>
         </ul>
       </li>
-      <ng-container *ngIf="hasGreenCoffee">
+      <ng-container *ngIf="hasGreenCoffee" appInternal>
         <li class="treeview" routerLinkActive="active" *appHasPermission="[1]">
           <a href="#">
             <i class="fa fa-coffee"></i>
@@ -212,7 +216,7 @@
           <span>Parchments</span>
         </a>
       </li>
-      <li class="treeview" routerLinkActive="active" *appHasPermission="[2]">
+      <li class="treeview" routerLinkActive="active" *appHasPermission="[2]" appInternal>
         <a href="#">
           <i class="fa fa-coffee"></i><span>Green coffee</span>
           <span class="pull-right-container">
@@ -246,13 +250,13 @@
           </li>
         </ul>
       </li>
-      <li class="header" *ngIf="
+      <li class="header"  appInternal *ngIf="
           authUser.orgInfo.hasExtensionAccess ||
           authUser.parameters.role[0] == 11
         ">
         {{ "EXTENSION SERVICES" | translate }}
       </li>
-      <ng-template [ngIf]="
+      <ng-template appInternal [ngIf]="
           authUser.orgInfo.hasExtensionAccess ||
           authUser.parameters.role[0] == 11
         ">
@@ -453,11 +457,31 @@
           <span>Entries</span>
         </a>
       </li>
-      <li routerLinkActive="active" *appHasPermission="[0, [4, 10], 5]">
-        <a routerLink="/admin/warehouse/dispatches">
-          <i class="fa fa-code-fork" aria-hidden="true"></i>
-          <span>Dispatch</span>
+      <li
+        class="treeview"
+        routerLinkActive="active"
+        *appHasPermission="[0, [4, 10], 5]"
+      >
+        <a href="#">
+          <i class="fa fa-code-fork"></i><span>Dispatch</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
         </a>
+        <ul class="treeview-menu">
+          <li routerLinkActive="active">
+            <a routerLink="/admin/warehouse/dispatches">
+              <i class="fa fa-circle-o"></i>
+              <span>Dispatching</span>
+            </a>
+          </li>
+          <li routerLinkActive="active">
+            <a routerLink="/admin/input/distribution/progress">
+              <i class="fa fa-circle-o"></i>
+              <span>Report</span>
+            </a>
+          </li>
+        </ul>
       </li>
       <li class="header">{{ "GENERAL" | translate }}</li>
       <li class="treeview" routerLinkActive="active">
@@ -495,7 +519,7 @@
               [4, 12],
               5,
               8,
-              [[8, 1], 1, 'NOT']
+             1
             ]">
             <a href="#">
               <i class="fa fa-circle-o"></i>
@@ -505,20 +529,21 @@
               </span>
             </a>
             <ul class="treeview-menu">
-              <li routerLinkActive="active" *appHasPermission="[
+             <!-- <li routerLinkActive="active" *appHasPermission="[
                   0,
                   6,
                   [4, 1],
                   [4, 11],
                   [4, 12],
                   5,
+
                   [[8, 1], [1, 1], 'NOT']
                 ]">
                 <a routerLink="/admin/input/distribution/progress">
                   <i class="fa fa-circle-o"></i>
                   <span>Distribution</span>
                 </a>
-              </li>
+              </li>-->
               <li routerLinkActive="active" *appHasPermission="[
                   0,
                   6,
@@ -526,9 +551,10 @@
                   [4, 11],
                   [4, 12],
                   5,
+
                   [8, 1],
                   [8, 2],
-                  [[1, 1], [8, 1], 'AND']
+                  1
                 ]">
                 <a routerLink="/admin/input/application/progress">
                   <i class="fa fa-circle-o"></i>
@@ -544,7 +570,7 @@
                   5,
                   [8, 1],
                   [8, 2],
-                  [[1, 1], [8, 1], 'AND']
+                  1
                 ]">
                 <a routerLink="/admin/input/pesticide/application/progress">
                   <i class="fa fa-circle-o"></i>
@@ -584,7 +610,7 @@
               </li>
             </ul>
           </li>
-          <li routerLinkActive="active" *appHasPermission="[[11, 1], 1, 0]">
+          <li routerLinkActive="active" *appHasPermission="[[11, 1], 1, 0]" appInternal>
             <a routerLink="/admin/reports">
               <i class="fa fa-circle-o" aria-hidden="true"></i>
               <span>{{ "extension service reports" | translate }}</span>

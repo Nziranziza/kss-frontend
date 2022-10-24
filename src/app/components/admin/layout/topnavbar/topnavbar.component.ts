@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {
   AuthenticationService,
   AuthorisationService,
@@ -15,7 +15,7 @@ import { TranslateService } from '@ngx-translate/core';
   templateUrl: './topnavbar.component.html',
   styleUrls: ['./topnavbar.component.css'],
 })
-export class TopnavbarComponent implements OnInit {
+export class TopnavbarComponent implements OnInit, AfterViewInit {
   surname: string;
   orgName: string;
   seasons: any[];
@@ -48,8 +48,7 @@ export class TopnavbarComponent implements OnInit {
         this.newLandToApprove = item.totalNewLandToApproved;
       });
   }
-
-  ngAfterView(){
+  ngAfterViewInit(): void {
     this.seasonService.all().subscribe((data) => {
       this.seasons = data.content;
       this.currentSeason = this.authenticationService.getCurrentSeason();

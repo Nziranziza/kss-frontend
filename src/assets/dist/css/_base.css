@@ -71,6 +71,9 @@ login-box-link:hover {
   color: #4f210d !important;
 }
 
+.skin-blue .main-header .navbar .sidebar-toggle:hover {
+  background-color: #4f210d !important;
+}
 .home .logo {
   background-image: url("../img/sks/logo-sks-coffee@2x.png");
   background-repeat: no-repeat;
@@ -605,4 +608,11 @@ div {
 
 table {
   text-transform: capitalize;
+}
+
+@media (max-width:480px)  {
+  .stats-box .stats-box-text-header,
+  .stats-box .stats-box-text-item{
+    text-align: center;
+  }
 }

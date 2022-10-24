@@ -45,6 +45,7 @@
   height: 210px;
   overflow: scroll;
   overflow-x: hidden;
+  overflow-y: hidden;
 }
 
 ::-webkit-scrollbar {

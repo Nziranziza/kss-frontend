@@ -513,9 +513,9 @@
           Cancel
         </button>
         <button
-          [disabled]="!save || loading"
           class="btn btn-success pull-right btn-md"
           type="submit"
+          [disabled]="loading"
         >
           <span *ngIf="!loading; else other_content">Save</span>
           <ng-template #other_content>

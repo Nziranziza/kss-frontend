@@ -66,7 +66,7 @@ export class EditFarmerProfileComponent
 
   ngOnInit() {
     this.editFarmerProfileForm = this.formBuilder.group({
-      phone_number: ['', Validators.pattern("[0-9]{12}")],
+      phone_number: ['', Validators.pattern('[0-9]{12}')],
       groupName: [''],
       NID: [''],
       foreName: [''],
@@ -116,15 +116,17 @@ export class EditFarmerProfileComponent
       this.farmer.type = this.farmer.type.toString();
       this.editFarmerProfileForm.controls.type.setValue(this.farmer.type);
     }
+    if(!this.farmer.type){
+      this.farmer.type = '1';
+      this.editFarmerProfileForm.controls.type.setValue(this.farmer.type);
+    }
     this.initial();
     this.editFarmerProfileForm.patchValue(this.farmer, { emitEvent: false });
-    if (this.farmer.active) {
-      this.farmer.active
-        ? this.editFarmerProfileForm.get('active'.toString()).patchValue('true')
-        : this.editFarmerProfileForm
-          .get('active'.toString())
-          .patchValue('false');
+
+    if(this.farmer.active) {
+      this.editFarmerProfileForm.controls.active.patchValue(this.farmer.active.toString());
     }
+
 
     this.getPaymentChannels();
     this.addPaymentChannel();
@@ -212,11 +214,12 @@ export class EditFarmerProfileComponent
       ) {
         delete body.NID;
       }
+      body.active = +body.active;
       this.helper.cleanObject(body);
       this.farmerService.updateFarmerProfile(body).subscribe(
         () => {
           this.setMessage('Profile successfully updated!');
-          this.router.navigateByUrl("admin/farmers/list");
+          this.router.navigateByUrl('admin/farmers/list');
           this.modal.close();
         },
         (err) => {
@@ -403,8 +406,8 @@ export class EditFarmerProfileComponent
         }
       });
     this.editFarmerProfileForm.controls.phone_number.valueChanges.subscribe((value) => {
-      if (value === "07") {
-        this.editFarmerProfileForm.controls.phone_number.setValue("2507");
+      if (value === '07') {
+        this.editFarmerProfileForm.controls.phone_number.setValue('2507');
       }
     });
   }
