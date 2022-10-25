@@ -366,12 +366,12 @@ export class OrganisationFarmersComponent
             NID: item.userInfo.NID,
             PHONE: item.userInfo.phone_number,
             REG_NUMBER: item.userInfo.regNumber,
-            PROVINCE: item.request[0].location.prov_id.namek,
-            DISTRICT: item.request[0].location.dist_id.name,
-            SECTOR: item.request[0].location.sect_id.name,
-            CELL: item.request[0].location.cell_id.name,
-            VILLAGE: item.request[0].location.village_id.name,
-            NUMBER_OF_TREES: item.request? this.getNumberOfTrees(item.request): 0,
+            PROVINCE: item.request?.requestInfo[0]?.location?.prov_id.namek,
+            DISTRICT: item.request?.requestInfo[0]?.location?.dist_id.name,
+            SECTOR: item.request?.requestInfo[0]?.location?.sect_id.name,
+            CELL: item.request?.requestInfo[0]?.location?.cell_id.name,
+            VILLAGE: item.request?.requestInfo[0]?.location?.village_id.name,
+            NUMBER_OF_TREES: item.request?.requestInfo? this.getNumberOfTrees(item.request?.requestInfo): 0,
           };
           this.allFarmers.push(temp);
         });
@@ -401,9 +401,11 @@ export class OrganisationFarmersComponent
 
   getNumberOfTrees = (requestInfo) => {
     let sum = 0;
-    requestInfo.map((request) => {
-      sum = sum + request.numberOfTrees;
-    });
+    if(Array.isArray(requestInfo)){
+      requestInfo.map((request) => {
+        sum = sum + request.numberOfTrees;
+      });
+    }
     return sum;
   }
 
