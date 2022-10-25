@@ -43,4 +43,8 @@ export class FarmService {
   farmStats(body: any): Observable<any> {
     return this.apiService.post('/v1.1/farm-visit-schedules/overview', body);
   }
+
+  landAllocatedByLoc(body: any): Observable<any> {
+    return this.apiService.post('/v1.1/farm/lands/allocatedByLoc', body);
+  }
 }

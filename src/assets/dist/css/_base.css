@@ -609,3 +609,10 @@ div {
 table {
   text-transform: capitalize;
 }
+
+@media (max-width:480px)  {
+  .stats-box .stats-box-text-header,
+  .stats-box .stats-box-text-item{
+    text-align: center;
+  }
+}
