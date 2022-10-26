@@ -57,8 +57,7 @@ export class EditSeasonComponent implements OnInit {
       distribution: this.formBuilder.group({
         totalFertilizerAvailable: [''],
         totalPesticideAvailable: [''],
-        supplierId: new FormArray([]),
-        appendixDate: ['']
+        supplierId: new FormArray([])
       })
     });
     this.editPriceForm = this.formBuilder.group({

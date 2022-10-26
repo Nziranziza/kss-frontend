@@ -181,15 +181,7 @@ export class OrganisationFarmersComponent
           this.cwsSummary = data.content[0];
         }
       });
-    /*if (this.authenticationService.getCurrentUser().orgInfo.distributionSites) {
-      this.siteService
-        .get(
-          this.authenticationService.getCurrentUser().orgInfo.distributionSites
-        )
-        .subscribe((data) => {
-          this.site = data.content;
-        });
-    }*/
+
     this.setMessage(this.messageService.getMessage());
     this.orgCoveredArea = this.route.snapshot.data.orgCoveredAreaData;
     this.getAllFarmers();
@@ -408,9 +400,11 @@ export class OrganisationFarmersComponent
 
   getNumberOfTrees = (requestInfo) => {
     let sum = 0;
-    requestInfo.map((request) => {
-      sum = sum + request.numberOfTrees;
-    });
+    if(Array.isArray(requestInfo)){
+      requestInfo.map((request) => {
+        sum = sum + request.numberOfTrees;
+      });
+    }
     return sum;
   }
 

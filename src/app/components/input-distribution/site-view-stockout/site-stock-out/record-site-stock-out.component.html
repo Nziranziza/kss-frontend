@@ -1,65 +1,85 @@
 <div class="modal-header">
-  <i class="fa fa-times-circle close" style="font-size: 24px;" aria-label="Close" (click)="modal.dismiss()">
+  <i (click)="modal.dismiss()" aria-label="Close" class="fa fa-times-circle close" style="font-size: 24px;">
   </i>
 </div>
 <div class="modal-body">
   <app-list-errors [errorList]="errors"></app-list-errors>
   <app-list-message [message]="message"></app-list-message>
-  <form [formGroup]="siteStockOutForm" (ngSubmit)="onSubmit()">
+  <form (ngSubmit)="onSubmit()" [formGroup]="siteStockOutForm">
     <div class="row">
-      <label class="control-label label-required" style="margin-left: 7px">&nbsp; Destination</label>
+      <div class="col-sm-12">
+        <label class="control-label label-required" style="margin-left: 7px">&nbsp; Destination</label>
+      </div>
+      <div class="col-sm-12">
+        <div class="row">
+          <div align="center" class="col-md-4 col-md-offset-4 jumbotron">
+            <app-loader *ngIf="isLoadingAllocated; else other_content"></app-loader>
+            <ng-template #other_content>
+              <div class="stats-box">
+                <div class="row">
+                  <div class="col-xs-12">
+                    <div class="stats-box-text-header">Allocated Fertilizer</div>
+                  </div>
+                </div>
+                <div class="stats-box-text-item">{{ this.stockOutTotalAllocated  }} KGs</div>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngFor="let control of formDestination.controls; let i=index" class="jumbotron" formArrayName="destination">
+      <div [formGroupName]="i" class="row">
+        <div class="col-sm-3">
+          <div class="form-group">
+            <span class="label-required">Sector</span>
+            <select (change)="onChangeSector(i)" class="form-control" formControlName="sect_id">
+              <option value=""></option>
+              <option *ngFor="let sector of sectors[i]" value="{{sector._id}}">{{sector.name}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="form-group">
+            <span class="label-required">Cell</span>
+            <select (change)="onChangeCell(i)" class="form-control" formControlName="cell_id">
+              <option value=""></option>
+              <option *ngFor="let cell of cells[i]" value="{{cell._id}}">{{cell.name}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="form-group">
+            <span class="label-required">Village</span>
+            <select (change)="onChangeVillage(i)" class="form-control" formControlName="village_id">
+              <option value=""></option>
+              <option *ngFor="let village of villages[i]" value="{{village._id}}">{{village.name}}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-sm-3">
+          <input class="form-control" formControlName="allocated" type="hidden"/>
+          <button (click)="removeDestination(i)" class="btn btn-danger btn-sm pull-left"
+                  style="margin-top: 20px" type="button"> Remove
+          </button>
+        </div>
+      </div>
     </div>
     <div class="row">
-      <div class="col-xs-6">
-        <button class="btn btn-success btn-sm pull-right" (click)="addDestination()" type="button">
+      <div class="col-xs-12 col-sm-12 col-md-12 text-center">
+        <button (click)="addDestination()" class="btn btn-success btn-md " type="button">
           <i class="fa fa-plus"></i> destination
         </button>
       </div>
     </div>
-    <div *ngFor="let control of formDestination.controls; let i=index" formArrayName="destination">
-        <div class="row" [formGroupName]="i">
-          <div class="col-xs-2">
-            <div class="form-group">
-              <span class="label-required">Sector</span>
-              <select class="form-control" formControlName="sect_id" (change)="onChangeSector(i)">
-                <option value=""></option>
-                <option *ngFor="let sector of sectors[i]" value="{{sector._id}}">{{sector.name}}</option>
-              </select>
-            </div>
-          </div>
-          <div class="col-xs-2">
-            <div class="form-group">
-              <span class="label-required">Cell</span>
-              <select class="form-control" formControlName="cell_id" (change)="onChangeCell(i)">
-                <option value=""></option>
-                <option *ngFor="let cell of cells[i]" value="{{cell._id}}">{{cell.name}}</option>
-              </select>
-            </div>
-          </div>
-          <div class="col-xs-2">
-            <div class="form-group">
-              <span class="label-required">Village</span>
-              <select class="form-control" formControlName="village_id">
-                <option value=""></option>
-                <option *ngFor="let village of villages[i]" value="{{village._id}}">{{village.name}}</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form-group col-xs-1">
-            <button class="btn btn-danger btn-sm pull-left" type="button"
-                    (click)="removeDestination(i)" style="margin-top: 20px"> Remove
-            </button>
-          </div>
-        </div>
-    </div>
-    <div class="row">
-      <div class="col-sm-6">
-        <div class="form-group"
-             [ngClass]="{ 'has-error': getField('totalQty').invalid
-              && (getField('totalQty').dirty || getField('totalQty').touched) }">
+    <div class="row" style="margin-top: 20px">
+      <div class="col-xs-12 col-sm-12 col-md-6 jumbotron">
+        <div [ngClass]="{ 'has-error': getField('totalQty').invalid
+              && (getField('totalQty').dirty || getField('totalQty').touched) }"
+             class="form-group">
           <label class="control-label label-required">Total quantity</label>
-          <input type="number" formControlName="totalQty" class="form-control" min="1">
+          <input class="form-control" formControlName="totalQty" min="1" type="number">
           <app-inline-errors
             *ngIf="getField('totalQty').invalid && (getField('totalQty').dirty || getField('totalQty').touched)"
             [errors]="getField('totalQty').errors"
@@ -68,15 +88,29 @@
           </app-inline-errors>
         </div>
       </div>
-      <div class="col-xs-6">
+      <div class="col-xs-12 col-sm-12 col-md-6 jumbotron">
         <div class="form-group">
           <label class="control-label label-required">Date</label>
-          <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="date" class="form-control">
-          <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+          <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" class="form-control" formControlName="date">
+          <owl-date-time #dt1 [pickerType]="'calendar'"></owl-date-time>
         </div>
       </div>
       <div class="col-sm-12" style="margin-top: 25px">
-        <button class="btn btn-success pull-right btn-margin" type="submit">save</button>
+        <!--        <button class="btn btn-success pull-right btn-margin" type="submit">save</button>-->
+        <button
+          [disabled]="isLoading"
+          class="btn btn-success btn-lg pull-right submit"
+        >
+          <span *ngIf="!isLoading; else other_content">Save</span>
+          <ng-template #other_content>
+            <div class="loader">
+              <div class="line"></div>
+              <div class="line"></div>
+              <div class="line"></div>
+              <div class="line"></div>
+            </div>
+          </ng-template>
+        </button>
       </div>
     </div>
   </form>
