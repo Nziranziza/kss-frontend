@@ -71,6 +71,7 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
       totalQty: ['', [Validators.required, Validators.max(this.totalqty - this.totalStockOutFertilizer)]],
       date: [this.datePipe.transform(this.currentDate, 'yyyy-MM-dd'), Validators.required],
     });
+    console.log(this.stock);
     if (this.isCWSDistributor) {
       this.organisationService.get(this.authenticationService.getCurrentUser().info.org_id).subscribe(data => {
         this.org = data.content;
@@ -99,7 +100,6 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
     this.isLoading = true;
     if (this.siteStockOutForm.valid) {
       const record = JSON.parse(JSON.stringify(this.siteStockOutForm.value));
-
       record.destination.map(loc => {
         delete loc.allocated
       });
