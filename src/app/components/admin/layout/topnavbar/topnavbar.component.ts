@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import {
   AuthenticationService,
   AuthorisationService,
@@ -15,7 +15,7 @@ import { TranslateService } from '@ngx-translate/core';
   templateUrl: './topnavbar.component.html',
   styleUrls: ['./topnavbar.component.css'],
 })
-export class TopnavbarComponent implements OnInit, AfterViewInit {
+export class TopnavbarComponent implements OnInit {
   surname: string;
   orgName: string;
   seasons: any[];
@@ -33,7 +33,7 @@ export class TopnavbarComponent implements OnInit, AfterViewInit {
     private farmerService: FarmerService,
     private seasonService: SeasonService,
     private translate: TranslateService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.surname = this.authenticationService.getCurrentUser().info.surname;
@@ -47,13 +47,17 @@ export class TopnavbarComponent implements OnInit, AfterViewInit {
         this.updatedLandToApprove = item.totalUpdatedLandToBeApproved;
         this.newLandToApprove = item.totalNewLandToApproved;
       });
-  }
-  ngAfterViewInit(): void {
     this.seasonService.all().subscribe((data) => {
       this.seasons = data.content;
       this.currentSeason = this.authenticationService.getCurrentSeason();
     });
   }
+  // ngAfterViewInit(): void {
+  //   this.seasonService.all().subscribe((data) => {
+  //     this.seasons = data.content;
+  //     this.currentSeason = this.authenticationService.getCurrentSeason();
+  //   });
+  // }
 
   changeSeason(season: string) {
     const body = {
