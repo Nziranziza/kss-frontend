@@ -5,8 +5,8 @@
     <div class="box-header with-border">
       <h3 class="box-title">Record Dispatch</h3>
       <div class="box-tools pull-right">
-        <button type="button" class="btn btn-box-tool" data-target="#box-body" data-toggle="collapse"> <i
-            class="fa fa-expand"></i>
+        <button type="button" class="btn btn-box-tool" data-target="#box-body" data-toggle="collapse"><i
+          class="fa fa-expand"></i>
         </button>
       </div>
     </div>
@@ -79,12 +79,12 @@
         <div class="row" style="margin-top: 15px; margin-bottom: 15px">
           <div class="col-xs-4">
             <label>
-              <input type="checkbox" [checked]="includeFertilizer" (change)="onIncludeFertilizer()" /> Fertilizer
+              <input type="checkbox" [checked]="includeFertilizer" (change)="onIncludeFertilizer()"/> Fertilizer
             </label>
           </div>
           <div class="col-xs-4">
             <label>
-              <input type="checkbox" [checked]="includePesticide" (change)="onIncludePesticide()" /> Pesticide
+              <input type="checkbox" [checked]="includePesticide" (change)="onIncludePesticide()"/> Pesticide
             </label>
           </div>
         </div>
@@ -113,7 +113,7 @@
                 <div class="form-group">
                   <span class="control-label label-required">Number of bags</span>
                   <input type="text" formControlName="numberOfBags" class="form-control"
-                    (input)="onChangePackageFertilizer(i)">
+                         (input)="onChangePackageFertilizer(i)">
                 </div>
               </div>
               <div class="col-xs-6 col-md-2">
@@ -124,7 +124,7 @@
               </div>
               <div class="form-group col-xs-6 col-md-1">
                 <button class="btn btn-danger btn pull-left" type="button" (click)="removePackageFertilizer(i)"
-                  style="margin-top: 20px"> Remove
+                        style="margin-top: 20px"> Remove
                 </button>
               </div>
             </div>
@@ -166,7 +166,7 @@
               </div>
               <div class="form-group col-xs-6 col-md-1">
                 <button class="btn btn-danger btn pull-left" type="button" (click)="removePackagePesticide(i)"
-                  style="margin-top: 20px"> Remove
+                        style="margin-top: 20px"> Remove
                 </button>
               </div>
             </div>
@@ -233,14 +233,14 @@
       <div class="col-xs-6 col-md-1">
         <div class="form-group">
           <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="from" class="form-control"
-            placeholder="from date..">
+                 placeholder="from date..">
           <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
         </div>
       </div>
       <div class="col-xs-6 col-md-1">
         <div class="form-group">
           <input [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" formControlName="to" class="form-control"
-            placeholder="to..">
+                 placeholder="to..">
           <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
         </div>
       </div>
@@ -253,7 +253,7 @@
     </div>
     <div class="col-xs-6 col-md-2">
       <button class="btn btn-success pull-right btn-margin" type="button" (click)="exportAsXLSX()"><i
-          class="fa fa-download"></i> Export dispatches
+        class="fa fa-download"></i> Export dispatches
       </button>
     </div>
   </form>
@@ -264,87 +264,89 @@
     <div class="box">
       <div class="box-body expendable-dataTable">
         <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
-          class="row-border hover table table-striped responsive-table">
+               class="row-border hover table table-striped responsive-table">
           <thead>
-            <tr>
-              <th>Destination</th>
-              <th>Driver</th>
-              <th>Vehicle</th>
-              <th>Phone number</th>
-              <th></th>
-              <th>Date</th>
-              <th>Received</th>
-              <th></th>
-            </tr>
+          <tr>
+            <th>Destination</th>
+            <th>Driver</th>
+            <th>Vehicle</th>
+            <th>Phone number</th>
+            <th></th>
+            <th>Date</th>
+            <th>Received</th>
+            <th></th>
+          </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let dispatch of inputDispatches">
-              <td>{{ dispatch.destinationSite.siteId.siteName }}</td>
-              <td>{{ dispatch.driverInfo.driver }}</td>
-              <td>{{ dispatch.driverInfo.vehiclePlate }}</td>
-              <td>{{ dispatch.driverInfo.driverPhoneNumber }}</td>
-              <td>
-                <div class="row pull-right" style="width: 750px;">
-                  <div class="col-sm-12">
-                    <h4><strong>Product Details</strong></h4>
-                    <table style="background: transparent; width: 100%;">
-                      <tr style="font-style: oblique; font-size: 12px; background: transparent; font-weight: bold">
-                        <td>Input</td>
-                        <td>Items</td>
-                        <td>Qty</td>
-                        <td>Total</td>
-                        <td>ReceivedQty</td>
-                        <td>Comment</td>
-                        <td></td>
-                      </tr>
-                      <tr *ngFor="let entry of dispatch.entries"
+          <tr *ngFor="let dispatch of inputDispatches">
+            <td>{{ dispatch.destinationSite.siteId.siteName }}</td>
+            <td>{{ dispatch.driverInfo.driver }}</td>
+            <td>{{ dispatch.driverInfo.vehiclePlate }}</td>
+            <td>{{ dispatch.driverInfo.driverPhoneNumber }}</td>
+            <td>
+              <div class="row pull-right" style="width: 750px;">
+                <div class="col-sm-12">
+                  <h4><strong>Product Details</strong></h4>
+                  <table style="background: transparent; width: 100%;">
+                    <tr style="font-style: oblique; font-size: 12px; background: transparent; font-weight: bold">
+                      <td>Input</td>
+                      <td>Items</td>
+                      <td>Qty</td>
+                      <td>Total</td>
+                      <td>ReceivedQty</td>
+                      <td>Comment</td>
+                      <td></td>
+                    </tr>
+                    <tr *ngFor="let entry of dispatch.entries"
                         style="font-style: oblique; font-size: 12px; background: transparent">
-                        <td>{{ entry.inputId.inputName }}</td>
-                        <td>{{ entry.numberOfItems }}</td>
-                        <td>{{ entry.quantityPerItem }}</td>
-                        <td>{{ entry.numberOfItems * entry.quantityPerItem }}
-                          <app-quantity-unit [inputType]="entry.inputId.inputType"></app-quantity-unit>
-                        </td>
-                        <td>{{ entry.receivedQty }}
-                          <app-quantity-unit [inputType]="entry.inputId.inputType"></app-quantity-unit>
-                        </td>
-                        <td>{{ entry.dispatch_comments | lowercase }}</td>
-                        <td>
-                        <td>
-                          <ng-container *ngIf="!dispatch.receivedBy">
-                            <a appInternal class="btn btn-default btn-margin btn-sm pull-right cancel-entry"
-                              type="button" id="{{dispatch._id}}-{{entry._id}}">
-                              <i class="fa fa-remove" aria-hidden="true"></i>
-                            </a>
-                          </ng-container>
-                        </td>
-                      </tr>
-                    </table>
-                  </div>
-                  <div class="col-sm-12" *ngIf="dispatch.receivedBy"><br>
-                    <h4><strong>Receiver Details</strong></h4>
-                    <table style="background: transparent; width: 750px;">
-                      <tr style="font-style: oblique; font-size: 12px; background: transparent; font-weight: bold">
-                        <td>Names</td>
-                        <td>Phone Number</td>
-                        <td>CWS</td>
-                      </tr>
-                      <tr style="font-style: oblique; font-size: 12px; background: transparent">
-                        <td>{{ dispatch.receivedBy?.foreName|lowercase }} &nbsp;
-                          {{ dispatch.receivedBy?.surname|lowercase }}</td>
-                        <td>{{ dispatch.receivedBy?.phoneNumber }}</td>
-                        <td>{{ dispatch.receivedBy.org_id?.organizationName }}</td>
-                      </tr>
-                    </table>
-                  </div>
+                      <td>{{ entry.inputId.inputName }}</td>
+                      <td>{{ entry.numberOfItems }}</td>
+                      <td>{{ entry.quantityPerItem }}</td>
+                      <td>{{ entry.numberOfItems * entry.quantityPerItem }}
+                        <app-quantity-unit [inputType]="entry.inputId.inputType"></app-quantity-unit>
+                      </td>
+                      <td>{{ entry.receivedQty }}
+                        <app-quantity-unit [inputType]="entry.inputId.inputType"></app-quantity-unit>
+                      </td>
+                      <td>{{ entry.dispatch_comments | lowercase }}</td>
+                      <td>
+                      <td>
+                        <ng-container *ngIf="!dispatch.receivedBy">
+                          <a appInternal class="btn btn-default btn-margin btn-sm pull-right cancel-entry"
+                             type="button" id="{{dispatch._id}}-{{entry._id}}">
+                            <i class="fa fa-remove" aria-hidden="true"></i>
+                          </a>
+                        </ng-container>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <div class="col-sm-12" *ngIf="dispatch.receivedBy"><br>
+                  <h4><strong>Receiver Details</strong></h4>
+                  <table style="background: transparent; width: 750px;">
+                    <tr style="font-style: oblique; font-size: 12px; background: transparent; font-weight: bold">
+                      <td>Names</td>
+                      <td>Phone Number</td>
+                      <td>CWS</td>
+                    </tr>
+                    <tr style="font-style: oblique; font-size: 12px; background: transparent">
+                      <td>{{ dispatch.receivedBy?.foreName|lowercase }} &nbsp;
+                        {{ dispatch.receivedBy?.surname|lowercase }}</td>
+                      <td>{{ dispatch.receivedBy?.phoneNumber }}</td>
+                      <td>{{ dispatch.receivedBy.org_id?.organizationName }}</td>
+                    </tr>
+                  </table>
                 </div>
               </div>
-     </td>
+
+            </td>
             <td>{{ dispatch.date | date }}</td>
             <td>
               <ng-container *ngIf="dispatch.receivedBy; else confirm">
                 <span>&#10003;</span>
-                <span style="font-style: oblique; font-size: 11px;">&nbsp; by: &nbsp; {{ dispatch.receivedBy.foreName|lowercase }} &nbsp; {{ dispatch.receivedBy.surname|lowercase }}  </span>
+                <span
+                  style="font-style: oblique; font-size: 11px;">&nbsp; by: &nbsp; {{ dispatch.receivedBy.foreName|lowercase }}
+                  &nbsp; {{ dispatch.receivedBy.surname|lowercase }}  </span>
               </ng-container>
               <ng-template #confirm>
               </ng-template>
@@ -354,30 +356,20 @@
                 <i class="fa fa-print" aria-hidden="true"></i> Note
               </button>
               <ng-container *ngIf="!dispatch.receivedBy">
-                <button appRequiredSeason class="btn btn-default btn-margin btn-sm pull-right" (click)="cancelDispatch(dispatch._id)"
+                <button appRequiredSeason class="btn btn-default btn-margin btn-sm pull-right"
+                        (click)="cancelDispatch(dispatch._id)"
                         type="button">
                   <i class="fa fa-remove" aria-hidden="true"></i> Cancel
                 </button>
               </ng-container>
-              <ng-container *ngIf="!dispatch.receivedBy"  appInternal>
+              <ng-container *ngIf="!dispatch.receivedBy" appInternal>
                 <button (click)="editDistribution(dispatch._id)"
                         class="btn btn-success btn-margin pull-right btn-sm" style="margin-left: 10px;">
                   Edit
                 </button>
-                <ng-container *ngIf="!dispatch.receivedBy">
-                  <button appRequiredSeason class="btn btn-default btn-margin btn-sm pull-right"
-                    (click)="cancelDispatch(dispatch._id)" type="button">
-                    <i class="fa fa-remove" aria-hidden="true"></i> Cancel
-                  </button>
-                </ng-container>
-                <ng-container *ngIf="!dispatch.receivedBy">
-                  <button (click)="editDistribution(dispatch._id)" class="btn btn-success btn-margin pull-right btn-sm"
-                    style="margin-left: 10px;">
-                    Edit
-                  </button>
-                </ng-container>
-              </td>
-            </tr>
+              </ng-container>
+            </td>
+          </tr>
           </tbody>
         </table>
       </div>
