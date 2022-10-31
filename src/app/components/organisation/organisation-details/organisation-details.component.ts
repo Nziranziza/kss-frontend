@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {
   BasicComponent,
@@ -26,8 +26,7 @@ declare var $;
 })
 export class OrganisationDetailsComponent
   extends BasicComponent
-  implements OnInit, OnDestroy
-{
+  implements OnInit, OnDestroy {
   cells: any;
   villages: any;
   farmers: any;
@@ -102,18 +101,18 @@ export class OrganisationDetailsComponent
           this.cwsSummary = data.content[0];
         }
       });
-   /* if (this.authenticationService.getCurrentUser().orgInfo.distributionSites) {
-      this.siteService
-        .get(
-          this.authenticationService.getCurrentUser().orgInfo.distributionSites
-        )
-        .subscribe((data) => {
-          this.site = data.content;
-        });
-    }*/
+    /* if (this.authenticationService.getCurrentUser().orgInfo.distributionSites) {
+       this.siteService
+         .get(
+           this.authenticationService.getCurrentUser().orgInfo.distributionSites
+         )
+         .subscribe((data) => {
+           this.site = data.content;
+         });
+     }*/
     this.setMessage(this.messageService.getMessage());
     this.orgCoveredArea = this.route.snapshot.data.orgCoveredArea;
-    this.currentSeason = this.authenticationService.getCurrentSeason();
+    // this.currentSeason = this.authenticationService.getCurrentSeason();
   }
   getVillagesName(cell) {
     let villages = '';

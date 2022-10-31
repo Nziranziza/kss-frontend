@@ -69,6 +69,8 @@ export class SiteViewStockoutComponent extends BasicComponent implements OnInit,
   }
 
   getOrgDispatchPlan(){
+    this.cwsAllocatedFertilizer = 0;
+    this.cwsAllocatedPesticide = 0;
     this.siteService.getCWSDispatchPlan(this.siteId).subscribe(data => {
       this.fertilizerPlan = data.data.fertilizers;
       this.pesticidePlan = data.data.pesticides;
@@ -127,8 +129,10 @@ export class SiteViewStockoutComponent extends BasicComponent implements OnInit,
       });
       this.inputDistributionService.getCwsStockOuts(this.org._id, this.siteId).subscribe((data) => {
         this.stockOuts = data.data;
+        this.calculateStatistics();
         this.rerender();
       });
+      this.getOrgDispatchPlan();
       this.message = this.messageService.getMessage();
       this.messageService.clearMessage();
     });

@@ -99,7 +99,6 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
     this.isLoading = true;
     if (this.siteStockOutForm.valid) {
       const record = JSON.parse(JSON.stringify(this.siteStockOutForm.value));
-
       record.destination.map(loc => {
         delete loc.allocated
       });
@@ -177,7 +176,10 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
           searchBy: 'sect_id',
           locId: value
         };
-        this.computeAllocated(data, this.getDestinationFormGroup(index).controls.allocated);
+
+        if(this.stock.inputId.inputType === 'Fertilizer') {
+          this.computeAllocated(data, this.getDestinationFormGroup(index).controls.allocated);
+        }
         this.filterCustomCells(this.org, index);
       } else {
         this.locationService.getCells(value).toPromise().then(data => {
@@ -206,7 +208,10 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
           searchBy: 'cell_id',
           locId: value
         };
-        this.computeAllocated(request, this.getDestinationFormGroup(index).controls.allocated);
+
+        if(this.stock.inputId.inputType === 'Fertilizer') {
+          this.computeAllocated(request, this.getDestinationFormGroup(index).controls.allocated);
+        }
 
         this.locationService.getVillages(value).toPromise().then(data => {
           const sectorId = this.getDestinationFormGroup(index).controls.sect_id.value;
@@ -238,7 +243,9 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
           searchBy: 'village_id',
           locId: value
         };
-        this.computeAllocated(request, this.getDestinationFormGroup(index).controls.allocated);
+        if(this.stock.inputId.inputType === 'Fertilizer') {
+          this.computeAllocated(request, this.getDestinationFormGroup(index).controls.allocated);
+        }
       }
     }
   }
