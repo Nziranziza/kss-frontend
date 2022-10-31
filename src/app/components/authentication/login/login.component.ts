@@ -1,7 +1,7 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {HttpHeaders} from '@angular/common/http';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { HttpHeaders } from '@angular/common/http';
 import {
   AuthenticationService,
   AuthorisationService,
@@ -9,7 +9,7 @@ import {
   MessageService,
   OrganisationService
 } from '../../../core';
-import {SeasonService} from '../../../core';
+import { SeasonService } from '../../../core';
 
 declare var $;
 
@@ -57,13 +57,13 @@ export class LoginComponent extends BasicComponent implements OnInit, OnDestroy 
             'Content-Type': 'application/json',
             'x-auth-token': params.token
           });
-          const options = {headers};
+          const options = { headers };
           const body = {};
           this.authenticationService.unlock(body, options).subscribe(data => {
             if (data) {
               this.setMessage('Account successfully unlocked!');
             }
-          },  err => {
+          }, err => {
             this.setWarning(err.errors);
           });
         }
@@ -90,24 +90,25 @@ export class LoginComponent extends BasicComponent implements OnInit, OnDestroy 
     if (!this.authForm.invalid) {
       const credentials = this.authForm.value;
       this.authenticationService.attemptAuth(credentials).subscribe(() => {
-          this.seasonService.all().subscribe((dt) => {
-            const seasons = dt.content;
-            seasons.forEach((item) => {
-              if (item.isCurrent) {
-                this.authenticationService.setCurrentSeason(item);
-              }
-            });
+        this.seasonService.all().subscribe((dt) => {
+          const seasons = dt.content;
+          seasons.forEach((item) => {
+            if (item.isCurrent) {
+              this.authenticationService.setCurrentSeason(item);
+            }
           });
-        },
-        err => {
-          this.setError(err.errors);
+        }, () => {
         }, () => {
           this.organisationService.getServices(this.authenticationService.getCurrentUser().info.org_id).subscribe((servicesDt) => {
             const services = servicesDt.data;
             this.authenticationService.setServices(services);
-          }, () => {},  () => {
+          }, () => { }, () => {
             this.afterLogInRedirect();
           });
+        });
+      },
+        err => {
+          this.setError(err.errors);
         });
 
     } else {
@@ -122,7 +123,7 @@ export class LoginComponent extends BasicComponent implements OnInit, OnDestroy 
   afterLogInRedirect() {
     const orgId = this.authenticationService.getCurrentUser().info.org_id;
     if (this.authorisationService.isCWSUser()) {
-      this.router.navigateByUrl('admin/organisations/details/'+ orgId + '/farmers');
+      this.router.navigateByUrl('admin/organisations/details/' + orgId + '/farmers');
     } else if (this.authorisationService.isDryMillUser()) {
       this.router.navigateByUrl('admin/drymill/parchment/list');
     } else if (this.authorisationService.isSWAdmin()) {

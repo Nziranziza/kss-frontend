@@ -76,7 +76,7 @@ export class EditFarmerProfileComponent
       groupContactPerson: this.formBuilder.group({
         firstName: [''],
         lastName: [''],
-        phone: [''],
+        phone: ['', Validators.pattern('[0-9]{12}')],
       }),
       location: this.formBuilder.group({
         prov_id: [''],
@@ -116,14 +116,14 @@ export class EditFarmerProfileComponent
       this.farmer.type = this.farmer.type.toString();
       this.editFarmerProfileForm.controls.type.setValue(this.farmer.type);
     }
-    if(!this.farmer.type){
+    if (!this.farmer.type) {
       this.farmer.type = '1';
       this.editFarmerProfileForm.controls.type.setValue(this.farmer.type);
     }
     this.initial();
     this.editFarmerProfileForm.patchValue(this.farmer, { emitEvent: false });
 
-    if(this.farmer.active) {
+    if (this.farmer.active) {
       this.editFarmerProfileForm.controls.active.patchValue(this.farmer.active.toString());
     }
 

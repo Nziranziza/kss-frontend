@@ -13,18 +13,19 @@
     </div>
   </div>
 </div>
-<br/>
+<br />
 <div class="alert alert-warning alert-dismissible">
   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
   <h4><i class="icon fa fa-warning"></i> Alert!</h4>
-  The <span style="font-weight: bolder">cherry deliveries</span> will be considered as yield of previous season <span style="font-weight: bolder"> 2022A&B Season </span>
+  The <span style="font-weight: bolder">cherry deliveries</span> will be considered as yield of previous season <span
+    style="font-weight: bolder"> 2022A&B Season </span>
 </div>
-<br/>
+<br />
 <app-list-errors [errorList]="errors"></app-list-errors>
 <app-list-message [message]="message"></app-list-message>
 <form [formGroup]="recordCherryDeliveryForm" (ngSubmit)="onSaveSupply()">
   <div class="row">
-    <div class="col-xs-3">
+    <div class="col-xs-6 col-md-3">
       <div class="form-group">
         <label class="control-label label-required">Cherries type</label>
         <select class="form-control" formControlName="cherriesType">
@@ -33,19 +34,19 @@
         </select>
       </div>
     </div>
-    <div class="col-xs-3">
+    <div class="col-xs-6 col-md-3">
       <div class="form-group">
         <label class="control-label label-required">Cherries Qty (kg)</label>
         <input type="text" formControlName="cherriesQty" class="form-control">
       </div>
     </div>
-    <div class="col-xs-3">
+    <div class="col-xs-6 col-md-3">
       <div class="form-group">
         <label class="control-label label-required">Unit price per Kg</label>
         <input type="text" formControlName="unitPerKg" class="form-control">
       </div>
     </div>
-    <div class="col-xs-3">
+    <div class="col-xs-6 col-md-3">
       <div class="form-group">
         <label class="control-label label-required">Delivery date</label>
         <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="cherriesSupplyDate" class="form-control">
@@ -88,73 +89,75 @@
 <div class="row">
   <div class="col-xs-12">
     <div class="box">
-      <div class="box-body" style="overflow: auto">
+      <div class="box-body table-responsive" style="overflow: auto">
         <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped">
           <thead>
-          <tr>
-            <th style="width: 20px !important;"></th>
-            <th style="width: 20px !important;"><i class="fa fa-check-square-o"></i></th>
-            <th>CherriesQty (kg)</th>
-            <th>Unit price</th>
-            <th>Delivery approval</th>
-            <th>Paid amount (rwf)</th>
-            <th>Recorded by</th>
-            <th>Payment status</th>
-            <th></th>
-            <th>Owed amount</th>
-            <th>Date</th>
-            <th></th>
-          </tr>
+            <tr>
+              <th style="width: 20px !important;"></th>
+              <th style="width: 20px !important;"><i class="fa fa-check-square-o"></i></th>
+              <th>CherriesQty (kg)</th>
+              <th>Unit price</th>
+              <th>Delivery approval</th>
+              <th>Paid amount (rwf)</th>
+              <th>Recorded by</th>
+              <th>Payment status</th>
+              <th></th>
+              <th>Owed amount</th>
+              <th>Date</th>
+              <th></th>
+            </tr>
           </thead>
           <tbody>
-          <tr *ngFor="let supply of cherrySupplies">
-            <td style="width: 20px !important;"></td>
-            <td style="width: 20px !important;">
-              <div *ngIf="(supply.owedAmount > 0) && (supply.deliveryApproval)" style="text-align: center;">
-                <input type="checkbox" (click)="selectSupply($event.target.checked, supply)" *ngIf="(!withPendingApproval(supply.payment)); else warning">
-                <ng-template #warning >
-                  <i class="fa fa-warning" style="color: #dca956"></i>
-                </ng-template>
-              </div>
-            </td>
-            <td> {{ supply.cherriesQty }}</td>
-            <td> {{ supply.unitPerKg }}</td>
-            <td>
-              <ng-container *ngIf="supply.deliveryApproval; else notDelivered">approved</ng-container>
-              <ng-template #notDelivered> not approved</ng-template>
-            </td>
-            <td> {{ supply.paidAmount }}</td>
-            <td>
-              <ng-container *ngIf="supply.recordedBy">
-                <span style="font-size: 12px;"> {{ supply.recordedBy.foreName|titlecase }} &nbsp; {{ supply.recordedBy.surname|titlecase }}  </span>
-              </ng-container>
-            </td>
-            <td><span style="color: #dca956">{{ (supply.paymentStatus.split("_")).join(" ") | lowercase }} </span></td>
-            <td>
-              <table style="background: transparent; width: 750px;" class="pull-right">
-                <tr style="font-size: 12px; background: transparent; font-weight: bold">
-                  <td>Amount paid (rwf)</td>
-                  <td>Payment approval status</td>
-                </tr>
-                <tr *ngFor="let payment of supply.payment"
-                    style="font-size: 12px; background: transparent">
-                  <td>{{ payment.amount }}</td>
-                  <td>
-                    <ng-container *ngIf="payment.approval; else notApproved">approved</ng-container>
-                    <ng-template #notApproved> not approved</ng-template>
-                  </td>
-                </tr>
-              </table>
-            </td>
-            <td> {{ supply.owedAmount }}</td>
-            <td> {{ supply.cherriesSupplyDate| date }}</td>
-            <td>
-              <button appRequiredSeasonCherry class="btn btn-default btn-margin btn-sm pull-right" (click)="cancelSupply(supply._id)"
-                      type="button">
-                <i class="fa fa-remove" aria-hidden="true"></i> Cancel
-              </button>
-            </td>
-          </tr>
+            <tr *ngFor="let supply of cherrySupplies">
+              <td style="width: 20px !important;"></td>
+              <td style="width: 20px !important;">
+                <div *ngIf="(supply.owedAmount > 0) && (supply.deliveryApproval)" style="text-align: center;">
+                  <input type="checkbox" (click)="selectSupply($event.target.checked, supply)"
+                    *ngIf="(!withPendingApproval(supply.payment)); else warning">
+                  <ng-template #warning>
+                    <i class="fa fa-warning" style="color: #dca956"></i>
+                  </ng-template>
+                </div>
+              </td>
+              <td> {{ supply.cherriesQty }}</td>
+              <td> {{ supply.unitPerKg }}</td>
+              <td>
+                <ng-container *ngIf="supply.deliveryApproval; else notDelivered">approved</ng-container>
+                <ng-template #notDelivered> not approved</ng-template>
+              </td>
+              <td> {{ supply.paidAmount }}</td>
+              <td>
+                <ng-container *ngIf="supply.recordedBy">
+                  <span style="font-size: 12px;"> {{ supply.recordedBy.foreName|titlecase }} &nbsp;
+                    {{ supply.recordedBy.surname|titlecase }} </span>
+                </ng-container>
+              </td>
+              <td><span style="color: #dca956">{{ (supply.paymentStatus.split("_")).join(" ") | lowercase }} </span>
+              </td>
+              <td>
+                <table style="background: transparent; width: 750px;" class="pull-right">
+                  <tr style="font-size: 12px; background: transparent; font-weight: bold">
+                    <td>Amount paid (rwf)</td>
+                    <td>Payment approval status</td>
+                  </tr>
+                  <tr *ngFor="let payment of supply.payment" style="font-size: 12px; background: transparent">
+                    <td>{{ payment.amount }}</td>
+                    <td>
+                      <ng-container *ngIf="payment.approval; else notApproved">approved</ng-container>
+                      <ng-template #notApproved> not approved</ng-template>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+              <td> {{ supply.owedAmount }}</td>
+              <td> {{ supply.cherriesSupplyDate| date }}</td>
+              <td>
+                <button appRequiredSeasonCherry class="btn btn-default btn-margin btn-sm pull-right"
+                  (click)="cancelSupply(supply._id)" type="button">
+                  <i class="fa fa-remove" aria-hidden="true"></i> Cancel
+                </button>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -166,6 +169,3 @@
     <a class="btn btn-warning btn-margin pull-right" (click)="onCancel()">Back</a>
   </div>
 </div>
-
-
-
