@@ -183,7 +183,6 @@ export class OrganisationFarmersComponent
 
     this.setMessage(this.messageService.getMessage());
     this.orgCoveredArea = this.route.snapshot.data.orgCoveredAreaData;
-    console.log(this.authenticationService.getCurrentSeason());
     this.currentSeason = this.authenticationService.getCurrentSeason();
     this.getAllFarmers();
     this.getSetPinStatus();

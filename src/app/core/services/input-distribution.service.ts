@@ -24,7 +24,7 @@ export class InputDistributionService {
   }
 
   editDispatch(body: any, id: string): Observable<any> {
-    return this.apiService.put('/dispatches/' + id, body);
+    return this.apiService.put('/inputdispatch/update_dispatch/' + id, body);
   }
 
   getDispatch(id: string): Observable<any> {

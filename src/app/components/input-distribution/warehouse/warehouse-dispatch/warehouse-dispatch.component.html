@@ -353,7 +353,7 @@
                   <i class="fa fa-remove" aria-hidden="true"></i> Cancel
                 </button>
               </ng-container>
-              <ng-container *ngIf="!dispatch.receivedBy">
+              <ng-container *ngIf="!dispatch.receivedBy" appInternal>
                 <button (click)="editDistribution(dispatch._id)"
                         class="btn btn-success btn-margin pull-right btn-sm" style="margin-left: 10px;">
                   Edit

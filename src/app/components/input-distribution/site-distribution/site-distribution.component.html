@@ -25,6 +25,7 @@
               <tr>
                 <th>Location</th>
                 <th>Trees</th>
+                <th>Appendix</th>
                 <th>Fertilizer needed</th>
                 <th>Fertilizer allocated</th>
                 <th>Trees at distribution</th>
@@ -41,6 +42,7 @@
                   <span class="details-row-title-sm">Village </span> : <span class="details-row-data-sm">{{ request.location.village_id.name }}</span>
                 </td>
                 <td>{{ request.numberOfTrees }}</td>
+                <td>{{ request?.appendix ? "Ari ku mugereka" : " " }}</td>
                 <td>{{ request.fertilizer_need | number : '1.0-2' }} Kg</td>
                 <td>{{ request.fertilizer_allocate | number : '1.0-2' }} Kg</td>
                 <td>{{ request.treesAtDistribution }}</td>
