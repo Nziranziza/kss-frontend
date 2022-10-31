@@ -7,7 +7,7 @@ import {
   SeasonService,
   SiteService,
   WarehouseService
-} from '../../../../core/services';
+} from '../../../../core';
 import {Router} from '@angular/router';
 import {DatePipe, isPlatformBrowser} from '@angular/common';
 import {HelperService} from '../../../../core';
