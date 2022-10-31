@@ -5,25 +5,26 @@
     <div class="box-header with-border">
       <h3 class="box-title">Record Dispatch</h3>
       <div class="box-tools pull-right">
-        <button type="button" class="btn btn-box-tool" data-target="#box-body" data-toggle="collapse"> <i class="fa fa-expand"></i>
+        <button type="button" class="btn btn-box-tool" data-target="#box-body" data-toggle="collapse"><i
+          class="fa fa-expand"></i>
         </button>
       </div>
     </div>
     <div class="box-body collapse in" id="box-body">
       <div class="row">
         <ng-container formGroupName="location">
-          <div class="col-xs-2">
+          <div class="col-xs-6 col-md-2">
             <div class="form-group">
-              <span class="">Province</span>
+              <span class="control-label">Province</span>
               <select class="form-control" formControlName="prov_id">
                 <option value=""></option>
                 <option *ngFor="let province of provinces" value="{{province._id}}">{{province.namee}}</option>
               </select>
             </div>
           </div>
-          <div class="col-xs-2">
+          <div class="col-xs-6 col-md-2">
             <div class="form-group">
-              <span class="">District</span>
+              <span class="control-label">District</span>
               <select class="form-control" formControlName="dist_id">
                 <option value=""></option>
                 <option *ngFor="let district of districts" value="{{district._id}}">{{district.name}}</option>
@@ -31,9 +32,9 @@
             </div>
           </div>
         </ng-container>
-        <div class="col-xs-2">
+        <div class="col-xs-6 col-md-2">
           <div class="form-group">
-            <label class="control-label label-required">Site</label>
+            <span class="label-required">Site</span>
             <select class="form-control" formControlName="siteId">
               <option value=""></option>
               <option *ngFor="let site of sites" value="{{site._id}}">{{site.siteName}}</option>
@@ -43,31 +44,31 @@
       </div>
       <ng-container formGroupName="entries">
         <div class="row">
-          <div class="col-xs-2">
+          <div class="col-xs-6 col-md-2">
             <div class="form-group">
               <label class="control-label label-required">Driver</label>
               <input type="text" formControlName="driver" class="form-control">
             </div>
           </div>
-          <div class="col-xs-2">
+          <div class="col-xs-6 col-md-2">
             <div class="form-group">
               <label class="control-label label-required">Driver phone number</label>
               <input type="text" formControlName="driverPhoneNumber" class="form-control">
             </div>
           </div>
-          <div class="col-xs-2">
+          <div class="col-xs-6 col-md-2">
             <div class="form-group">
               <label class="control-label label-required">Vehicle plate</label>
               <input type="text" formControlName="vehiclePlate" class="form-control">
             </div>
           </div>
-          <div class="col-xs-2">
+          <div class="col-xs-6 col-md-2">
             <div class="form-group">
               <label class="control-label label-required">Vehicle model</label>
               <input type="text" formControlName="vehicleModel" class="form-control">
             </div>
           </div>
-          <div class="col-xs-2">
+          <div class="col-xs-6 col-md-2">
             <div class="form-group">
               <label class="control-label label-required">Date</label>
               <input [owlDateTimeTrigger]="dt0" [owlDateTime]="dt0" formControlName="date" class="form-control">
@@ -98,7 +99,7 @@
           </div>
           <div *ngFor="let control of formPackageFertilizer.controls; let i=index" formArrayName="packageFertilizer">
             <div class="row" [formGroupName]="i">
-              <div class="col-xs-2">
+              <div class="col-xs-6 col-md-2">
                 <div class="form-group">
                   <span class="control-label label-required">Bag size (kg)</span>
                   <select class="form-control" formControlName="bagSize" (change)="onChangePackageFertilizer(i)">
@@ -108,28 +109,28 @@
                   </select>
                 </div>
               </div>
-              <div class="col-xs-2">
+              <div class="col-xs-6 col-md-2">
                 <div class="form-group">
                   <span class="control-label label-required">Number of bags</span>
                   <input type="text" formControlName="numberOfBags" class="form-control"
                          (input)="onChangePackageFertilizer(i)">
                 </div>
               </div>
-              <div class="col-xs-2">
+              <div class="col-xs-6 col-md-2">
                 <div class="form-group">
                   <span class="control-label label-required"></span>
                   <input type="text" formControlName="subTotal" class="form-control" readonly="readonly">
                 </div>
               </div>
-              <div class="form-group col-xs-1">
-                <button class="btn btn-danger btn pull-left" type="button"
-                        (click)="removePackageFertilizer(i)" style="margin-top: 20px"> Remove
+              <div class="form-group col-xs-6 col-md-1">
+                <button class="btn btn-danger btn pull-left" type="button" (click)="removePackageFertilizer(i)"
+                        style="margin-top: 20px"> Remove
                 </button>
               </div>
             </div>
           </div>
           <div class="row">
-            <div class="col-xs-2">
+            <div class="col-xs-6 col-md-2">
               <div class="form-group">
                 <span class="control-label label-required">Total qty fertilizer (kg)</span>
                 <input type="text" formControlName="totalQtyFertilizer" class="form-control" readonly="readonly">
@@ -147,7 +148,7 @@
           </div>
           <div *ngFor="let control of formPackagePesticide.controls; let i=index" formArrayName="packagePesticide">
             <div class="row" [formGroupName]="i">
-              <div class="col-xs-2">
+              <div class="col-xs-6 col-md-2">
                 <div class="form-group">
                   <span class="control-label label-required">Pesticide type</span>
                   <select class="form-control" formControlName="pesticideType" (change)="onChangePackagePesticide(i)">
@@ -157,21 +158,21 @@
                   </select>
                 </div>
               </div>
-              <div class="col-xs-2">
+              <div class="col-xs-6 col-md-2">
                 <div class="form-group">
                   <span class="control-label label-required">Quantity (l)</span>
                   <input type="text" formControlName="qty" class="form-control">
                 </div>
               </div>
-              <div class="form-group col-xs-1">
-                <button class="btn btn-danger btn pull-left" type="button"
-                        (click)="removePackagePesticide(i)" style="margin-top: 20px"> Remove
+              <div class="form-group col-xs-6 col-md-1">
+                <button class="btn btn-danger btn pull-left" type="button" (click)="removePackagePesticide(i)"
+                        style="margin-top: 20px"> Remove
                 </button>
               </div>
             </div>
           </div>
           <div class="row">
-            <div class="col-xs-2">
+            <div class="col-xs-6 col-md-2">
               <div class="form-group">
                 <span class="control-label label-required">Total qty pesticide (l)</span>
                 <input type="text" formControlName="totalQtyPesticide" class="form-control" readonly="readonly">
@@ -181,7 +182,7 @@
         </ng-container>
       </ng-container>
       <div class="row">
-        <div class="col-xs-12">
+        <div class="col-xs-6 col-md-12">
           <button class="btn btn-success pull-right">Save</button>
         </div>
       </div>
@@ -191,20 +192,20 @@
 <div class="row filter-form" style="margin-bottom: 10px; margin-left: -1px">
   <form [formGroup]="filterForm" (ngSubmit)="onFilter()">
     <ng-container formGroupName="search">
-      <div class="col-xs-1">
+      <div class="col-xs-6 col-md-1">
         <select class="form-control" formControlName="searchBy">
           <option *ngFor="let field of searchFields" value="{{field.value}}">{{field.name | titlecase}}</option>
         </select>
       </div>
       <ng-container formGroupName="location" *ngIf="isFilterBySite">
-        <div class="col-xs-1">
+        <div class="col-xs-6 col-md-1">
           <select class="form-control" formControlName="prov_id">
             <option value="">select province</option>
             <option *ngFor="let province of filterProvinces" value="{{province._id}}">{{province.namee | titlecase}}
             </option>
           </select>
         </div>
-        <div class="col-xs-1">
+        <div class="col-xs-6 col-md-1">
           <select class="form-control" formControlName="dist_id">
             <option value="">select district</option>
             <option *ngFor="let district of filterDistricts" value="{{district._id}}">{{district.name | titlecase}}
@@ -212,16 +213,16 @@
           </select>
         </div>
       </ng-container>
-      <div class="col-xs-1" *ngIf="isFilterBySite">
+      <div class="col-xs-6 col-md-1" *ngIf="isFilterBySite">
         <select class="form-control" formControlName="siteId">
           <option value="">select site</option>
           <option *ngFor="let site of filterSites" value="{{site._id}}">{{site.siteName | titlecase}}</option>
         </select>
       </div>
-      <div class="col-xs-2" *ngIf="!isFilterByType && !isFilterBySite">
+      <div class="col-xs-6 col-md-2" *ngIf="!isFilterByType && !isFilterBySite">
         <input type="text" formControlName="term" class="form-control" placeholder="term..">
       </div>
-      <div class="col-xs-2" *ngIf="isFilterByType">
+      <div class="col-xs-6 col-md-2" *ngIf="isFilterByType">
         <select class="form-control" formControlName="term">
           <option value="Fertilizer">Fertilizer</option>
           <option value="Pesticide">Pesticide</option>
@@ -229,14 +230,14 @@
       </div>
     </ng-container>
     <ng-container formGroupName="date">
-      <div class="col-xs-1">
+      <div class="col-xs-6 col-md-1">
         <div class="form-group">
           <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="from" class="form-control"
                  placeholder="from date..">
           <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
         </div>
       </div>
-      <div class="col-xs-1">
+      <div class="col-xs-6 col-md-1">
         <div class="form-group">
           <input [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" formControlName="to" class="form-control"
                  placeholder="to..">
@@ -244,11 +245,13 @@
         </div>
       </div>
     </ng-container>
-    <div class="col-xs-3">
+    <div class="col-xs-3 col-md-1">
       <button class="btn btn-warning pull-right btn-margin" type="button" (click)="onClearFilter()">Clear</button>
+    </div>
+    <div class="col-xs-3 col-md-2">
       <button class="btn btn-success pull-right btn-margin" type="submit"><i class="fa fa-search"></i> Search</button>
     </div>
-    <div class="col-xs-2">
+    <div class="col-xs-6 col-md-2">
       <button class="btn btn-success pull-right btn-margin" type="button" (click)="exportAsXLSX()"><i
         class="fa fa-download"></i> Export dispatches
       </button>
@@ -257,10 +260,11 @@
 </div>
 <app-list-warnings [warning]="warning"></app-list-warnings>
 <div class="row">
-  <div class="col-xs-12">
+  <div class="col-md-12">
     <div class="box">
       <div class="box-body expendable-dataTable">
-        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped responsive-table">
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
+               class="row-border hover table table-striped responsive-table">
           <thead>
           <tr>
             <th>Destination</th>
@@ -307,12 +311,12 @@
                       <td>{{ entry.dispatch_comments | lowercase }}</td>
                       <td>
                       <td>
-                      <ng-container *ngIf="!dispatch.receivedBy">
-                        <a appInternal class="btn btn-default btn-margin btn-sm pull-right cancel-entry"
-                           type="button" id="{{dispatch._id}}-{{entry._id}}">
-                          <i class="fa fa-remove" aria-hidden="true"></i>
-                        </a>
-                      </ng-container>
+                        <ng-container *ngIf="!dispatch.receivedBy">
+                          <a appInternal class="btn btn-default btn-margin btn-sm pull-right cancel-entry"
+                             type="button" id="{{dispatch._id}}-{{entry._id}}">
+                            <i class="fa fa-remove" aria-hidden="true"></i>
+                          </a>
+                        </ng-container>
                       </td>
                     </tr>
                   </table>
@@ -326,19 +330,23 @@
                       <td>CWS</td>
                     </tr>
                     <tr style="font-style: oblique; font-size: 12px; background: transparent">
-                      <td>{{ dispatch.receivedBy?.foreName|lowercase }} &nbsp; {{ dispatch.receivedBy?.surname|lowercase }}</td>
+                      <td>{{ dispatch.receivedBy?.foreName|lowercase }} &nbsp;
+                        {{ dispatch.receivedBy?.surname|lowercase }}</td>
                       <td>{{ dispatch.receivedBy?.phoneNumber }}</td>
                       <td>{{ dispatch.receivedBy.org_id?.organizationName }}</td>
                     </tr>
                   </table>
                 </div>
               </div>
-     </td>
+
+            </td>
             <td>{{ dispatch.date | date }}</td>
             <td>
               <ng-container *ngIf="dispatch.receivedBy; else confirm">
                 <span>&#10003;</span>
-                <span style="font-style: oblique; font-size: 11px;">&nbsp; by: &nbsp; {{ dispatch.receivedBy.foreName|lowercase }} &nbsp; {{ dispatch.receivedBy.surname|lowercase }}  </span>
+                <span
+                  style="font-style: oblique; font-size: 11px;">&nbsp; by: &nbsp; {{ dispatch.receivedBy.foreName|lowercase }}
+                  &nbsp; {{ dispatch.receivedBy.surname|lowercase }}  </span>
               </ng-container>
               <ng-template #confirm>
               </ng-template>
@@ -348,13 +356,14 @@
                 <i class="fa fa-print" aria-hidden="true"></i> Note
               </button>
               <ng-container *ngIf="!dispatch.receivedBy">
-                <button appRequiredSeason class="btn btn-default btn-margin btn-sm pull-right" (click)="cancelDispatch(dispatch._id)"
+                <button appRequiredSeason class="btn btn-default btn-margin btn-sm pull-right"
+                        (click)="cancelDispatch(dispatch._id)"
                         type="button">
                   <i class="fa fa-remove" aria-hidden="true"></i> Cancel
                 </button>
               </ng-container>
-              <ng-container *ngIf="!dispatch.receivedBy">
-                <button appInternal (click)="editDistribution(dispatch._id)"
+              <ng-container *ngIf="!dispatch.receivedBy"  appInternal>
+                <button (click)="editDistribution(dispatch._id)"
                         class="btn btn-success btn-margin pull-right btn-sm" style="margin-left: 10px;">
                   Edit
                 </button>

@@ -48,7 +48,7 @@
            <!-- <td *ngIf="stockOut.input.inputType == 'Fertilizer'">{{ recipient.extra_fertilizer }}</td>-->
             <td>
               <button class="btn btn-default btn-margin btn-sm pull-right"
-                      (click)="cancelDistribution(stockOut._id, stockOut.input.inputType, recipient)">
+                      (click)="cancelDistribution(stockOut._id, stockOut.inputId.inputType, recipient)">
                 <i class="fa fa-remove" aria-hidden="true"></i> Cancel
               </button>
             </td>

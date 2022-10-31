@@ -131,7 +131,7 @@ export class TrainingScheduleEditComponent
         this.scheduleData = data.data;
         this.scheduleTraining.controls.trainingModule.setValue(
           this.trainings
-            .map(function (e) {
+            .map((e) => {
               return e._id;
             })
             .indexOf(this.scheduleData.trainingId._id),
@@ -144,8 +144,8 @@ export class TrainingScheduleEditComponent
         this.scheduleTraining.controls.location
           .get("venue".toString())
           .setValue(this.scheduleData.venueName, { emitEvent: false });
-        this.locationService.getProvinces().subscribe((data) => {
-          this.provinces = data;
+        this.locationService.getProvinces().subscribe((newdata) => {
+          this.provinces = newdata;
           this.locationService
             .getDistricts(this.scheduleData.location.prov_id._id)
             .subscribe((dt) => {
@@ -171,7 +171,7 @@ export class TrainingScheduleEditComponent
 
         this.scheduleTraining.controls.trainer.setValue(
           this.trainers
-            .map(function (e) {
+            .map((e) => {
               return e._id;
             })
             .indexOf(this.scheduleData.trainer.userId)
@@ -332,7 +332,7 @@ export class TrainingScheduleEditComponent
       };
       this.userService
         .updateMemberContact(traineData.value.groupId, data)
-        .subscribe((data) => {
+        .subscribe((newdata) => {
           this.loading = false;
         });
     } else {
@@ -575,8 +575,8 @@ export class TrainingScheduleEditComponent
         return obj;
       }),
     };
-    this.trainingService.editSchedule(data, this.id).subscribe((data) => {
-      this.successDatails = data.data;
+    this.trainingService.editSchedule(data, this.id).subscribe((newdata) => {
+      this.successDatails = newdata.data;
       this.success(this.successDatails.description, this.successDatails._id);
       this.loading = false;
     },
@@ -589,8 +589,10 @@ export class TrainingScheduleEditComponent
   sendMessage() {
     this.loading = true;
     const data = this.successDatails._id;
-    this.trainingService.sendMessage(data).subscribe((data) => {
-      this.router.navigateByUrl("admin/training/schedule/list");
+
+    this.trainingService.sendMessage(data).subscribe((newdata) => {
+      this.router.navigateByUrl('admin/training/schedule/list');
+
       this.loading = false;
     });
   }
@@ -611,10 +613,12 @@ export class TrainingScheduleEditComponent
   }
 
   formatDate(date) {
-    var d = new Date(date),
-      month = "" + (d.getMonth() + 1),
-      day = "" + d.getDate(),
-      year = d.getFullYear();
+
+    const d = new Date(date);
+    let month = '' + (d.getMonth() + 1);
+    let day = '' + d.getDate();
+    const year = d.getFullYear();
+
 
     if (month.length < 2) month = "0" + month;
     if (day.length < 2) day = "0" + day;

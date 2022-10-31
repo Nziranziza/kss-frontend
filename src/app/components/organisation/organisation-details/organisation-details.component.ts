@@ -1,7 +1,9 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { FormBuilder } from "@angular/forms";
-import { ActivatedRoute } from "@angular/router";
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
 import {
   BasicComponent,
   OrganisationService,
@@ -14,24 +16,25 @@ import {
   HelperService,
   FarmerService,
   AuthorisationService,
-} from "src/app/core";
-import { Subject } from "rxjs";
+  AuthUser,
+} from 'src/app/core';
+
 
 @Component({
-  selector: "app-organisation-details",
-  templateUrl: "./organisation-details.component.html",
-  styleUrls: ["./organisation-details.component.css"],
+  selector: 'app-organisation-details',
+  templateUrl: './organisation-details.component.html',
+  styleUrls: ['./organisation-details.component.css'],
 })
 export class OrganisationDetailsComponent
   extends BasicComponent
-  implements OnInit, OnDestroy
-{
+  implements OnInit, OnDestroy {
   cells: any;
   villages: any;
   farmers: any;
   config: { itemsPerPage: any; currentPage: any; totalItems: number; };
   paginatedFarmers: any;
   showData: boolean;
+  authUser: AuthUser
   constructor(
     private organisationService: OrganisationService,
     private userService: UserService,
@@ -76,7 +79,7 @@ export class OrganisationDetailsComponent
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
-      this.organisationId = params["organisationId".toString()];
+      this.organisationId = params['organisationId'.toString()];
     });
     this.parameters = {
       length: 10,
@@ -88,6 +91,7 @@ export class OrganisationDetailsComponent
     this.organisationService.get(this.organisationId).subscribe((data) => {
       this.org = data.content;
     });
+    this.authUser = this.authenticationService.getCurrentUser();
     this.organisationService
       .getCwsSummary(this.organisationId)
       .subscribe((data) => {
@@ -95,18 +99,10 @@ export class OrganisationDetailsComponent
           this.cwsSummary = data.content[0];
         }
       });
-    if (this.authenticationService.getCurrentUser().orgInfo.distributionSite) {
-      this.siteService
-        .get(
-          this.authenticationService.getCurrentUser().orgInfo.distributionSite
-        )
-        .subscribe((data) => {
-          this.site = data.content;
-        });
-    }
+
     this.setMessage(this.messageService.getMessage());
     this.orgCoveredArea = this.route.snapshot.data.orgCoveredArea;
-    this.currentSeason = this.authenticationService.getCurrentSeason();
+    // this.currentSeason = this.authenticationService.getCurrentSeason();
   }
 
   ngOnDestroy(): void {

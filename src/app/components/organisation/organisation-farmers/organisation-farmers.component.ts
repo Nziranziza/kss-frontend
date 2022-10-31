@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {
   AuthenticationService,
   ExcelServicesService,
@@ -11,17 +11,17 @@ import {
   BasicComponent,
   FarmerService, HelperService, LocationService,
 } from '../../../core';
-import {ActivatedRoute} from '@angular/router';
-import {FarmerDetailsComponent} from '../../farmer/farmer-details/farmer-details.component';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {isArray, isObject} from 'util';
+import { ActivatedRoute } from '@angular/router';
+import { FarmerDetailsComponent } from '../../farmer/farmer-details/farmer-details.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { isArray, isObject } from 'util';
 import {
   ParchmentReportDetailComponent
 } from '../../reports/parchment-report/parchment-report-detail/parchment-report-detail.component';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {isEmptyObject} from 'jquery';
-import {Subject} from 'rxjs';
-import {DataTableDirective} from 'angular-datatables';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { isEmptyObject } from 'jquery';
+import { Subject } from 'rxjs';
+import { DataTableDirective } from 'angular-datatables';
 
 @Component({
   selector: 'app-organisation-farmers',
@@ -98,12 +98,12 @@ export class OrganisationFarmersComponent
     screenReaderCurrentLabel: `You're on page`,
   };
   searchFields = [
-    {value: 'reg_number', name: 'registration number'},
-    {value: 'nid', name: 'NID'},
-    {value: 'forename', name: 'first name'},
-    {value: 'surname', name: 'last name'},
-    {value: 'groupname', name: 'group name'},
-    {value: 'phone_number', name: 'phone number'},
+    { value: 'reg_number', name: 'registration number' },
+    { value: 'nid', name: 'NID' },
+    { value: 'forename', name: 'first name' },
+    { value: 'surname', name: 'last name' },
+    { value: 'groupname', name: 'group name' },
+    { value: 'phone_number', name: 'phone number' },
   ];
   resetPin = true;
   showSetPinButton = true;
@@ -117,10 +117,11 @@ export class OrganisationFarmersComponent
   searchLocationBy = 'farm';
   filter: any;
   // @ts-ignore
-  @ViewChild(DataTableDirective, {static: false})
+  @ViewChild(DataTableDirective, { static: false })
   dtElement: DataTableDirective;
 
   ngOnInit() {
+    this.currentSeason = this.authenticationService.getCurrentSeason();
     this.route.params.subscribe((params) => {
       if (!params['organisationId'.toString()]) {
         this.route.parent.params.subscribe((parameters) => {
@@ -145,8 +146,8 @@ export class OrganisationFarmersComponent
     this.filterForm = this.formBuilder.group({
       searchByLocation: this.formBuilder.group({
         searchBy: ['farm_location'],
-        prov_id: [{value: '', disabled: true}],
-        dist_id: [{value: '', disabled: true}],
+        prov_id: [{ value: '', disabled: true }],
+        dist_id: [{ value: '', disabled: true }],
         sect_id: [''],
         cell_id: [''],
         village_id: [''],
@@ -180,7 +181,8 @@ export class OrganisationFarmersComponent
           this.cwsSummary = data.content[0];
         }
       });
-    if (this.authenticationService.getCurrentUser().orgInfo.distributionSite) {
+
+  /*    if (this.authenticationService.getCurrentUser().orgInfo.distributionSite) {
       this.siteService
         .get(
           this.authenticationService.getCurrentUser().orgInfo.distributionSite
@@ -188,7 +190,8 @@ export class OrganisationFarmersComponent
         .subscribe((data) => {
           this.site = data.content;
         });
-    }
+    }*/
+
     this.setMessage(this.messageService.getMessage());
     this.orgCoveredArea = this.route.snapshot.data.orgCoveredAreaData;
     this.currentSeason = this.authenticationService.getCurrentSeason();
@@ -284,10 +287,10 @@ export class OrganisationFarmersComponent
   }
 
   onClearFilter() {
-    this.filterForm.controls.searchByTerm.get('term').setValue('', {emitEvent: false});
-    this.filterForm.controls.searchByLocation.get('sect_id').setValue('', {emitEvent: false});
-    this.filterForm.controls.searchByLocation.get('cell_id').setValue('', {emitEvent: false});
-    this.filterForm.controls.searchByLocation.get('village_id').setValue('', {emitEvent: false});
+    this.filterForm.controls.searchByTerm.get('term').setValue('', { emitEvent: false });
+    this.filterForm.controls.searchByLocation.get('sect_id').setValue('', { emitEvent: false });
+    this.filterForm.controls.searchByLocation.get('cell_id').setValue('', { emitEvent: false });
+    this.filterForm.controls.searchByLocation.get('village_id').setValue('', { emitEvent: false });
     delete this.parameters.search;
     this.organisationService.getFarmers(this.parameters).subscribe((data) => {
       this.paginatedFarmers = data.data;
@@ -352,7 +355,7 @@ export class OrganisationFarmersComponent
   }
 
   viewDetails(farmer: Farmer) {
-    const modalRef = this.modal.open(FarmerDetailsComponent, {size: 'lg'});
+    const modalRef = this.modal.open(FarmerDetailsComponent, { size: 'lg' });
     modalRef.componentInstance.farmer = farmer;
   }
 
@@ -368,7 +371,7 @@ export class OrganisationFarmersComponent
         this.downloadingAll = false;
         data.content.map((item) => {
           const temp = {
-            NAMES: item.userInfo.userType === 2 ? (item.userInfo.surname + '  ' + item.userInfo.foreName) : item.userInfo.groupName,
+            NAMES: item.userInfo.type === 2 ? item.userInfo.groupName : (item.userInfo.surname + '  ' + item.userInfo.foreName),
             SEX: item.userInfo.sex,
             NID: item.userInfo.NID,
             PHONE: item.userInfo.phone_number,
@@ -378,7 +381,7 @@ export class OrganisationFarmersComponent
             SECTOR: item.request[0].location.sect_id.name,
             CELL: item.request[0].location.cell_id.name,
             VILLAGE: item.request[0].location.village_id.name,
-            NUMBER_OF_TREES: this.getNumberOfTrees(item.request),
+            NUMBER_OF_TREES: item.request ? this.getNumberOfTrees(item.request) : 0,
           };
           this.allFarmers.push(temp);
         });
@@ -408,9 +411,11 @@ export class OrganisationFarmersComponent
 
   getNumberOfTrees = (requestInfo) => {
     let sum = 0;
-    requestInfo.map((request) => {
-      sum = sum + request.numberOfTrees;
-    });
+    if(Array.isArray(requestInfo)){
+      requestInfo.map((request) => {
+        sum = sum + request.numberOfTrees;
+      });
+    }
     return sum;
   }
 
@@ -423,11 +428,11 @@ export class OrganisationFarmersComponent
           this.districts = dt;
           this.filterForm.controls.searchByLocation
             .get('prov_id'.toString())
-            .patchValue(this.org.location.prov_id._id, {emitEvent: false});
+            .patchValue(this.org.location.prov_id._id, { emitEvent: false });
           /* if (this.searchLocationBy === 'farm') {*/
           this.filterForm.controls.searchByLocation
             .get('dist_id'.toString())
-            .patchValue(this.org.location.dist_id._id, {emitEvent: false});
+            .patchValue(this.org.location.dist_id._id, { emitEvent: false });
           this.sectors = this.filterZoningSectors(this.org.coveredSectors);
           /*} else {
             this.filterForm.controls.searchByLocation
@@ -443,26 +448,26 @@ export class OrganisationFarmersComponent
     this.filterForm.controls.searchByLocation
       .get('searchBy'.toString())
       .valueChanges.subscribe((value) => {
-      if (value === 'farm_location') {
-        this.searchLocationBy = 'farm';
-        /* this.filterForm.controls.searchByLocation
-          .get('prov_id'.toString()).setValue(this.org.location.prov_id._id, {emitEvent: false});
-        this.filterForm.controls.searchByLocation
-          .get('dist_id'.toString()).setValue(this.org.location.dist_id._id, {emitEvent: true});
-        this.filterForm.controls.searchByLocation
-          .get('prov_id'.toString()).disable({emitEvent: false});
-        this.filterForm.controls.searchByLocation
-          .get('dist_id'.toString()).disable({emitEvent: false});
-        this.sectors = this.filterZoningSectors(this.org.coveredSectors);*/
-      } else {
-        this.searchLocationBy = 'farmer';
-        /*this.filterForm.controls.searchByLocation
-          .get('dist_id'.toString()).setValue(this.org.location.dist_id._id, {emitEvent: true});*/
-        /*this.filterForm.controls.searchByLocation
-          .get('prov_id'.toString()).enable({emitEvent: false});
-        this.filterForm.controls.searchByLocation
-          .get('dist_id'.toString()).enable({emitEvent: true});*/
-      }
+        if (value === 'farm_location') {
+          this.searchLocationBy = 'farm';
+          /* this.filterForm.controls.searchByLocation
+            .get('prov_id'.toString()).setValue(this.org.location.prov_id._id, {emitEvent: false});
+          this.filterForm.controls.searchByLocation
+            .get('dist_id'.toString()).setValue(this.org.location.dist_id._id, {emitEvent: true});
+          this.filterForm.controls.searchByLocation
+            .get('prov_id'.toString()).disable({emitEvent: false});
+          this.filterForm.controls.searchByLocation
+            .get('dist_id'.toString()).disable({emitEvent: false});
+          this.sectors = this.filterZoningSectors(this.org.coveredSectors);*/
+        } else {
+          this.searchLocationBy = 'farmer';
+          /*this.filterForm.controls.searchByLocation
+            .get('dist_id'.toString()).setValue(this.org.location.dist_id._id, {emitEvent: true});*/
+          /*this.filterForm.controls.searchByLocation
+            .get('prov_id'.toString()).enable({emitEvent: false});
+          this.filterForm.controls.searchByLocation
+            .get('dist_id'.toString()).enable({emitEvent: true});*/
+        }
         /*this.filterForm.controls.searchByLocation
       .get('prov_id'.toString()).setValue(this.org.location.prov_id._id, {emitEvent: false});
     this.filterForm.controls.searchByLocation
@@ -474,7 +479,7 @@ export class OrganisationFarmersComponent
     this.sectors = this.filterZoningSectors(this.org.coveredSectors);
     this.cells = null;
     this.villages = null;*/
-    });
+      });
     /*this.filterForm.controls.searchByLocation.get('prov_id'.toString()).valueChanges.subscribe(
       (value) => {
         if (value !== '') {
@@ -542,44 +547,44 @@ export class OrganisationFarmersComponent
     this.filterForm.controls.searchByLocation
       .get('sect_id'.toString())
       .valueChanges.subscribe((value) => {
-      if (value !== '') {
-        this.locationService.getCells(value).subscribe((data) => {
-          /* if (this.searchLocationBy === 'farm') {*/
-          this.cells = this.filterZoningCells(this.org.coveredSectors, value);
-          /*} else {
-              this.cells = data;
-          }*/
+        if (value !== '') {
+          this.locationService.getCells(value).subscribe((data) => {
+            /* if (this.searchLocationBy === 'farm') {*/
+            this.cells = this.filterZoningCells(this.org.coveredSectors, value);
+            /*} else {
+                this.cells = data;
+            }*/
+            this.villages = null;
+            this.filterForm.controls.searchByLocation
+              .get('village_id'.toString()).setValue('', { emitEvent: false });
+          });
+        } else {
+          this.cells = null;
           this.villages = null;
           this.filterForm.controls.searchByLocation
-            .get('village_id'.toString()).setValue('', {emitEvent: false});
-        });
-      } else {
-        this.cells = null;
-        this.villages = null;
-        this.filterForm.controls.searchByLocation
-          .get('cell_id'.toString()).setValue('', {emitEvent: false});
-        this.filterForm.controls.searchByLocation
-          .get('village_id'.toString()).setValue('', {emitEvent: false});
-      }
-    });
+            .get('cell_id'.toString()).setValue('', { emitEvent: false });
+          this.filterForm.controls.searchByLocation
+            .get('village_id'.toString()).setValue('', { emitEvent: false });
+        }
+      });
     this.filterForm.controls.searchByLocation
       .get('cell_id'.toString())
       .valueChanges.subscribe((value) => {
-      if (value !== '') {
-        this.locationService.getVillages(value).subscribe((data) => {
-          /*  if (this.searchLocationBy === 'farm') {*/
-          const id = this.filterForm.controls.searchByLocation
-            .get('sect_id'.toString()).value;
-          this.villages = this.filterZoningVillages(this.org.coveredSectors, id, data);
-          this.filterForm.controls.searchByLocation
-            .get('village_id'.toString()).setValue('', {emitEvent: false});
-          /*  } else {
-              this.villages = data;
-              this.filterForm.controls.searchByLocation
-                .get('village_id'.toString()).setValue('', {emitEvent: false});
-          }*/
-        });
-      }
-    });
+        if (value !== '') {
+          this.locationService.getVillages(value).subscribe((data) => {
+            /*  if (this.searchLocationBy === 'farm') {*/
+            const id = this.filterForm.controls.searchByLocation
+              .get('sect_id'.toString()).value;
+            this.villages = this.filterZoningVillages(this.org.coveredSectors, id, data);
+            this.filterForm.controls.searchByLocation
+              .get('village_id'.toString()).setValue('', { emitEvent: false });
+            /*  } else {
+                this.villages = data;
+                this.filterForm.controls.searchByLocation
+                  .get('village_id'.toString()).setValue('', {emitEvent: false});
+            }*/
+          });
+        }
+      });
   }
 }

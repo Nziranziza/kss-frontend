@@ -128,8 +128,8 @@ export class FarmerCreateComponent
       surname: [''],
       groupName: [''],
       phone_number: ['', Validators.pattern('[0-9]{12}')],
-      sex: ['m'],
-      NID: ['', Validators.required],
+      sex: [''],
+      NID: [''],
       type: [this.farmerTypes[0], Validators.required],
       groupContactPerson: this.formBuilder.group({
         firstName: [''],

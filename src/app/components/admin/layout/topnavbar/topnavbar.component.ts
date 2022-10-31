@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import {
   AuthenticationService,
   AuthorisationService,
@@ -33,15 +33,11 @@ export class TopnavbarComponent implements OnInit {
     private farmerService: FarmerService,
     private seasonService: SeasonService,
     private translate: TranslateService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.surname = this.authenticationService.getCurrentUser().info.surname;
     this.orgName = this.authenticationService.getCurrentUser().orgInfo.orgName;
-    this.seasonService.all().subscribe((data) => {
-      this.seasons = data.content;
-      this.currentSeason = this.authenticationService.getCurrentSeason();
-    });
     this.sharedDataService.changeApprovalFlag();
     this.subscription = this.sharedDataService
       .getEmittedApprovalFlag()
@@ -51,7 +47,17 @@ export class TopnavbarComponent implements OnInit {
         this.updatedLandToApprove = item.totalUpdatedLandToBeApproved;
         this.newLandToApprove = item.totalNewLandToApproved;
       });
+    this.seasonService.all().subscribe((data) => {
+      this.seasons = data.content;
+      this.currentSeason = this.authenticationService.getCurrentSeason();
+    });
   }
+  // ngAfterViewInit(): void {
+  //   this.seasonService.all().subscribe((data) => {
+  //     this.seasons = data.content;
+  //     this.currentSeason = this.authenticationService.getCurrentSeason();
+  //   });
+  // }
 
   changeSeason(season: string) {
     const body = {

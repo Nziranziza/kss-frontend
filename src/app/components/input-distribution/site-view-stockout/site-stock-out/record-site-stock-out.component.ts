@@ -1,7 +1,14 @@
 import {Component, Inject, Injector, Input, OnInit, PLATFORM_ID} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {AuthenticationService, AuthorisationService, LocationService, OrganisationService, SiteService} from '../../../../core';
+import {
+  AuthenticationService,
+  AuthorisationService,
+  FarmService,
+  LocationService,
+  OrganisationService,
+  SiteService
+} from '../../../../core';
 import {MessageService} from '../../../../core';
 import {HelperService} from '../../../../core';
 import {InputDistributionService} from '../../../../core';
@@ -32,6 +39,9 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
   org: any;
   isCWSDistributor: any;
   public destinationList: FormArray;
+  stockOutTotalAllocated = 0;
+  isLoading = false;
+  isLoadingAllocated = false;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
@@ -41,6 +51,7 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
     private organisationService: OrganisationService,
     private messageService: MessageService,
     private locationService: LocationService,
+    private farmService: FarmService,
     private route: ActivatedRoute,
     private datePipe: DatePipe,
     private siteService: SiteService,
@@ -61,21 +72,22 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
       date: [this.datePipe.transform(this.currentDate, 'yyyy-MM-dd'), Validators.required],
     });
     if (this.isCWSDistributor) {
-      this.siteService.get(this.siteId).subscribe((site) => {
-        this.site = site.content;
-      });
       this.organisationService.get(this.authenticationService.getCurrentUser().info.org_id).subscribe(data => {
         this.org = data.content;
-        this.addDestination();
-        this.filterCustomSectors(this.org, 0);
+        this.siteService.get(this.siteId).subscribe((site) => {
+          this.site = site.content;
+          this.addDestination();
+          this.filterCustomSectors(this.org, 0);
+        });
       });
 
     } else {
-      this.siteService.get(this.authenticationService.getCurrentUser().orgInfo.distributionSite).subscribe((site) => {
+
+     /* this.siteService.get(this.authenticationService.getCurrentUser().orgInfo.distributionSites).subscribe((site) => {
         this.site = site.content;
         this.addDestination();
         this.filterCustomSectors(this.site, 0);
-      });
+      });*/
     }
     this.initial();
   }
@@ -85,8 +97,14 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
   }
 
   onSubmit() {
+    this.isLoading = true;
     if (this.siteStockOutForm.valid) {
       const record = JSON.parse(JSON.stringify(this.siteStockOutForm.value));
+      record.destination.map(loc => {
+        delete loc.allocated
+      });
+
+      // Remove allocated value before sending
       if (this.isCWSDistributor) {
         record.destination.map((destination) => {
           destination['prov_id'.toString()] = this.org.location.prov_id._id;
@@ -102,17 +120,19 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
       record.siteId = this.stock.siteId._id;
       record['stockId'.toString()] = this.stock._id;
       record['userId'.toString()] = this.authenticationService.getCurrentUser().info._id;
-      this.helper.cleanObject(record.location);
       this.inputDistributionService.recordStockOut(record).subscribe(() => {
+          this.isLoading = false;
           this.messageService.setMessage('Stock out recorded!');
           this.siteStockOutForm.reset();
           this.siteStockOutForm.controls.date.setValue(this.datePipe.transform(this.currentDate, 'yyyy-MM-dd', 'GMT+2'));
           this.modal.dismiss();
         },
         (err) => {
+          this.isLoading = false;
           this.setError(err.errors);
         });
     } else {
+      this.isLoading = false;
       this.setError(this.helper.getFormValidationErrors(this.siteStockOutForm));
     }
   }
@@ -121,7 +141,8 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
     return this.formBuilder.group({
       sect_id: ['', Validators.required],
       cell_id: ['', Validators.required],
-      village_id: ['', Validators.required]
+      village_id: ['', Validators.required],
+      allocated: ['']
     });
   }
 
@@ -137,6 +158,7 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
   removeDestination(index: number) {
     if ((this.siteStockOutForm.controls.destination as FormArray).length > 1) {
       (this.siteStockOutForm.controls.destination as FormArray).removeAt(index);
+      this.computeTotalAllocated();
     }
   }
 
@@ -147,8 +169,18 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
 
   onChangeSector(index: number) {
     const value = this.getDestinationFormGroup(index).controls.sect_id.value;
+    this.isLoadingAllocated = true;
     if (value !== '') {
       if (this.isCWSDistributor) {
+        // Get Allocated for this location
+        const data = {
+          searchBy: 'sect_id',
+          locId: value
+        };
+
+        if(this.stock.inputId.inputType === 'Fertilizer') {
+          this.computeAllocated(data, this.getDestinationFormGroup(index).controls.allocated);
+        }
         this.filterCustomCells(this.org, index);
       } else {
         this.locationService.getCells(value).toPromise().then(data => {
@@ -159,10 +191,29 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
     }
   }
 
+  computeAllocated(data: any, control){
+    this.farmService.landAllocatedByLoc(data).subscribe(res => {
+      control.setValue(res.data.allocatedFertilizer);
+      this.isLoadingAllocated = false;
+      this.computeTotalAllocated();
+    });
+  }
+
   onChangeCell(index: number) {
     const value = this.getDestinationFormGroup(index).controls.cell_id.value;
+    this.isLoadingAllocated = true;
     if (value !== '') {
       if (this.isCWSDistributor) {
+        // Get Allocated for this location
+        const request = {
+          searchBy: 'cell_id',
+          locId: value
+        };
+
+        if(this.stock.inputId.inputType === 'Fertilizer') {
+          this.computeAllocated(request, this.getDestinationFormGroup(index).controls.allocated);
+        }
+
         this.locationService.getVillages(value).toPromise().then(data => {
           const sectorId = this.getDestinationFormGroup(index).controls.sect_id.value;
           const i = this.org.coveredSectors.findIndex(element => element.sectorId._id === sectorId);
@@ -178,6 +229,24 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
         this.locationService.getVillages(value).toPromise().then(data => {
           this.villages[index] = data;
         });
+      }
+    }
+  }
+
+
+  onChangeVillage(index: number) {
+    const value = this.getDestinationFormGroup(index).controls.village_id.value;
+    this.isLoadingAllocated = true;
+    if(value !== ''){
+      if(this.isCWSDistributor){
+        // Get Allocated for this location
+        const request = {
+          searchBy: 'village_id',
+          locId: value
+        };
+        if(this.stock.inputId.inputType === 'Fertilizer') {
+          this.computeAllocated(request, this.getDestinationFormGroup(index).controls.allocated);
+        }
       }
     }
   }
@@ -219,5 +288,15 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
 
 
   initial() {
+  }
+
+  computeTotalAllocated() {
+    const destinationList =  (this.siteStockOutForm.get('destination') as FormArray).controls;
+    let total = 0;
+    for(const destination of destinationList){
+      const group = (destination as FormGroup);
+      total = total + group.controls.allocated.value;
+    }
+    this.stockOutTotalAllocated = total;
   }
 }

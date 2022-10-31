@@ -13,9 +13,9 @@ import {
   ConfirmDialogService,
   InputDistributionService,
   ExcelServicesService,
-} from '../../../../core/services';
+} from '../../../../core';
 import { isPlatformBrowser } from '@angular/common';
-import { BasicComponent } from '../../../../core/library';
+import { BasicComponent } from '../../../../core';
 import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
 import { DatePipe } from '@angular/common';
@@ -62,18 +62,23 @@ export class ViewApplicationComponent
       pagingType: 'full_numbers',
       pageLength: 25,
     };
+    console.log(this.stockOut);
     this.recipients = this.groupBy(this.stockOut.recipients, 'regNumber');
     if (this.objectKeys(this.recipients)[0] !== undefined) {
       this.createExcelData(this.stockOut.recipients);
     }
   }
 
-  groupBy(xs, key) {
-    return xs.reduce(function(rv, x) {
-      (rv[x[key]] = rv[x[key]] || []).push(x);
-      return rv;
-    });
-  }
+  groupBy = (items, key) => items.reduce(
+    (result, item) => ({
+      ...result,
+      [item[key]]: [
+        ...(result[item[key]] || []),
+        item,
+      ],
+    }),
+    {},
+  );
 
   onSubmit() {}
 

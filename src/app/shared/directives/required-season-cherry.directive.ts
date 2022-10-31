@@ -10,11 +10,11 @@ export class RequiredSeasonCherryDirective  implements OnInit {
   }
 
   ngOnInit() {
-      /*
+
       if (!this.authenticationService.getCurrentSeason().isCurrent &&
       this.authenticationService.getCurrentSeason().season !== '2021A&B') {
-      */
-      if (!this.authenticationService.getCurrentSeason().isCurrent) {
+
+      /* if (!this.authenticationService.getCurrentSeason().isCurrent) {*/
       this.renderer.setStyle(this.el.nativeElement, 'display', 'none');
     }
   }

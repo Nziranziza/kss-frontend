@@ -1,27 +1,15 @@
 <div class="modal-header">
-  <i
-    class="fa fa-times-circle close"
-    style="font-size: 24px"
-    aria-label="Close"
-    (click)="modal.dismiss()"
-  >
+  <i class="fa fa-times-circle close" style="font-size: 24px" aria-label="Close" (click)="modal.dismiss()">
   </i>
 </div>
 <div class="modal-body custom-tabs">
   <ul class="nav nav-tabs" role="tablist">
     <li role="presentation" class="active">
-      <a href="#profile" aria-controls="Profile" role="tab" data-toggle="tab"
-        ><span>Edit Profile</span></a
-      >
+      <a href="#profile" aria-controls="Profile" role="tab" data-toggle="tab"><span>Edit Profile</span></a>
     </li>
     <li role="presentation" class="" *appHasPermission="[1, 1]" appInternal>
-      <a
-        href="#payment-channels"
-        aria-controls="payment-channels"
-        role="tab"
-        data-toggle="tab"
-        ><span>Payment channels</span></a
-      >
+      <a href="#payment-channels" aria-controls="payment-channels" role="tab" data-toggle="tab"><span>Payment
+          channels</span></a>
     </li>
   </ul>
   <div class="tab-content">
@@ -29,8 +17,7 @@
       <div class="row" style="margin-top: 15px">
         <div class="col-sm-2">REG number</div>
         <div class="col-sm-1">
-          <span style="font-weight: bolder"> {{ farmer?.regNumber }} </span
-          ><br />
+          <span style="font-weight: bolder"> {{ farmer?.regNumber }} </span><br />
         </div>
       </div>
       <br />
@@ -48,21 +35,13 @@
                       <label class="control-label label-required">Type</label>
                       <div class="radio">
                         <label>
-                          <input
-                            type="radio"
-                            formControlName="type"
-                            value="1"
-                          />
+                          <input type="radio" formControlName="type" value="1" />
                           Individual
                         </label>
                       </div>
                       <div class="radio">
                         <label>
-                          <input
-                            type="radio"
-                            formControlName="type"
-                            value="2"
-                          />
+                          <input type="radio" formControlName="type" value="2" />
                           Group
                         </label>
                       </div>
@@ -74,22 +53,13 @@
                     <div class="col-md-6">
                       <div class="form-group">
                         <label class="control-label label-required">NID</label>
-                        <input
-                          type="text"
-                          formControlName="NID"
-                          class="form-control"
-                          id="NID"
-                          (input)="verifyNid($event.target.value)"
-                        />
-                        <app-inline-errors
-                          *ngIf="
+                        <input type="text" formControlName="NID" class="form-control" id="NID"
+                          (input)="verifyNid($event.target.value)" />
+                        <app-inline-errors *ngIf="
                             editFarmerProfileForm.controls.NID.invalid &&
                             (editFarmerProfileForm.controls.NID.dirty ||
                               editFarmerProfileForm.controls.NID.touched)
-                          "
-                          [errors]="editFarmerProfileForm.controls.NID.errors"
-                          [label]="'national id'"
-                        >
+                          " [errors]="editFarmerProfileForm.controls.NID.errors" [label]="'national id'">
                         </app-inline-errors>
                         <span class="input-error" *ngIf="invalidId">
                           invalid nid
@@ -98,56 +68,28 @@
                     </div>
                     <div class="col-md-6">
                       <div class="form-group">
-                        <label class="control-label label-required"
-                          >First name</label
-                        >
-                        <input
-                          type="text"
-                          formControlName="foreName"
-                          class="form-control"
-                          readonly="readonly"
-                        />
+                        <label class="control-label label-required">First name</label>
+                        <input type="text" formControlName="foreName" class="form-control" readonly="readonly" />
                       </div>
                     </div>
                     <div class="col-md-6">
                       <div class="form-group">
-                        <label class="control-label label-required"
-                          >Last name</label
-                        >
-                        <input
-                          type="text"
-                          formControlName="surname"
-                          class="form-control"
-                          readonly="readonly"
-                        />
+                        <label class="control-label label-required">Last name</label>
+                        <input type="text" formControlName="surname" class="form-control" readonly="readonly" />
                       </div>
                     </div>
                     <div class="col-md-6">
                       <div class="form-group">
-                        <label class="control-label label-required"
-                          >Gender</label
-                        >
+                        <label class="control-label label-required">Gender</label>
                         <div class="radio">
                           <label>
-                            <input
-                              type="radio"
-                              formControlName="sex"
-                              value="m"
-                              checked=""
-                              disabled
-                            />
+                            <input type="radio" formControlName="sex" value="m" checked="" disabled />
                             Male
                           </label>
                         </div>
                         <div class="radio">
                           <label>
-                            <input
-                              type="radio"
-                              formControlName="sex"
-                              value="f"
-                              checked=""
-                              disabled
-                            />
+                            <input type="radio" formControlName="sex" value="f" checked="" disabled />
                             Female
                           </label>
                         </div>
@@ -156,32 +98,19 @@
                     <div class="col-md-6">
                       <div class="form-group">
                         <label class="control-label">Phone number</label>
-                        <input
-                          type="text"
-                          formControlName="phone_number"
-                          class="form-control"
-                        />
-                        <app-inline-errors
-                          *ngIf="
+                        <input type="text" formControlName="phone_number" class="form-control" />
+                        <app-inline-errors *ngIf="
                           editFarmerProfileForm.controls.phone_number.invalid &&
                             (editFarmerProfileForm.controls.phone_number.dirty ||
                             editFarmerProfileForm.controls.phone_number.touched)
-                          "
-                          [errors]="editFarmerProfileForm.controls.phone_number.errors"
-                          [label]="'phone number'"
-                        >
+                          " [errors]="editFarmerProfileForm.controls.phone_number.errors" [label]="'phone number'">
                         </app-inline-errors>
                       </div>
                     </div>
                     <div class="col-md-6">
                       <div class="form-group">
                         <label class="control-label">Family size</label>
-                        <input
-                          type="number"
-                          formControlName="familySize"
-                          class="form-control"
-                          min="0"
-                        />
+                        <input type="number" formControlName="familySize" class="form-control" min="0" />
                       </div>
                     </div>
                   </section>
@@ -189,11 +118,7 @@
                     <div class="col-md-6">
                       <div class="form-group">
                         <label class="control-label label-required">Name</label>
-                        <input
-                          type="text"
-                          formControlName="groupName"
-                          class="form-control"
-                        />
+                        <input type="text" formControlName="groupName" class="form-control" />
                       </div>
                     </div>
                   </section>
@@ -202,8 +127,8 @@
                       <label class="control-label">Status</label>
                       <select class="form-control" formControlName="active">
                         <option value=""></option>
-                        <option value="true">Active</option>
-                        <option value="false">Inactive</option>
+                        <option value="1">Active</option>
+                        <option value="0">Inactive</option>
                       </select>
                     </div>
                   </div>
@@ -211,39 +136,32 @@
                 <div class="row">
                   <fieldset class="location" *ngIf="isGroup">
                     <legend>
-                      <label class="control-label label-required"
-                        >&nbsp; Contact person</label
-                      >
+                      <label class="control-label label-required">&nbsp; Contact person</label>
                     </legend>
                     <div formGroupName="groupContactPerson">
                       <div class="col-md-4">
                         <div class="form-group">
                           <span class="">First name</span>
-                          <input
-                            type="text"
-                            formControlName="firstName"
-                            class="form-control"
-                          />
+                          <input type="text" formControlName="firstName" class="form-control" />
                         </div>
                       </div>
                       <div class="col-md-4">
                         <div class="form-group">
                           <span class="">Last name</span>
-                          <input
-                            type="text"
-                            formControlName="lastName"
-                            class="form-control"
-                          />
+                          <input type="text" formControlName="lastName" class="form-control" />
                         </div>
                       </div>
                       <div class="col-md-4">
                         <div class="form-group">
                           <span class="">Phone number</span>
-                          <input
-                            type="text"
-                            formControlName="phone"
-                            class="form-control"
-                          />
+                          <input type="text" formControlName="phone" class="form-control" />
+                          <app-inline-errors *ngIf="
+                            editFarmerProfileForm.controls.groupContactPerson.get('phone').invalid &&
+                              (editFarmerProfileForm.controls.groupContactPerson.get('phone').dirty ||
+                              editFarmerProfileForm.controls.groupContactPerson.get('phone').touched)
+                            " [errors]="editFarmerProfileForm.controls.groupContactPerson.get('phone').errors"
+                            [label]="'phone number'">
+                          </app-inline-errors>
                         </div>
                       </div>
                     </div>
@@ -256,10 +174,7 @@
                         <label class="control-label">Province</label>
                         <select class="form-control" formControlName="prov_id">
                           <option value=""></option>
-                          <option
-                            *ngFor="let province of provinces"
-                            value="{{ province._id }}"
-                          >
+                          <option *ngFor="let province of provinces" value="{{ province._id }}">
                             {{ province.namee }}
                           </option>
                         </select>
@@ -270,10 +185,7 @@
                         <label class="control-label">District</label>
                         <select class="form-control" formControlName="dist_id">
                           <option value=""></option>
-                          <option
-                            *ngFor="let district of districts"
-                            value="{{ district._id }}"
-                          >
+                          <option *ngFor="let district of districts" value="{{ district._id }}">
                             {{ district.name }}
                           </option>
                         </select>
@@ -284,10 +196,7 @@
                         <label class="control-label">Sector</label>
                         <select class="form-control" formControlName="sect_id">
                           <option value=""></option>
-                          <option
-                            *ngFor="let sector of sectors"
-                            value="{{ sector._id }}"
-                          >
+                          <option *ngFor="let sector of sectors" value="{{ sector._id }}">
                             {{ sector.name }}
                           </option>
                         </select>
@@ -298,10 +207,7 @@
                         <label class="control-label">Cell</label>
                         <select class="form-control" formControlName="cell_id">
                           <option value=""></option>
-                          <option
-                            *ngFor="let cell of cells"
-                            value="{{ cell._id }}"
-                          >
+                          <option *ngFor="let cell of cells" value="{{ cell._id }}">
                             {{ cell.name }}
                           </option>
                         </select>
@@ -310,15 +216,9 @@
                     <div class="col-md-2">
                       <div class="form-group">
                         <label class="control-label">Village</label>
-                        <select
-                          class="form-control"
-                          formControlName="village_id"
-                        >
+                        <select class="form-control" formControlName="village_id">
                           <option value=""></option>
-                          <option
-                            *ngFor="let village of villages"
-                            value="{{ village._id }}"
-                          >
+                          <option *ngFor="let village of villages" value="{{ village._id }}">
                             {{ village.name }}
                           </option>
                         </select>
@@ -332,18 +232,10 @@
         </div>
         <div class="row">
           <div class="col-md-12">
-            <button
-              class="btn btn-warning btn-margin pull-right"
-              (click)="modal.dismiss()"
-              type="button"
-            >
+            <button class="btn btn-warning btn-margin pull-right" (click)="modal.dismiss()" type="button">
               Cancel
             </button>
-            <button
-              class="btn btn-success pull-right"
-              [disabled]="!submit"
-              type="submit"
-            >
+            <button class="btn btn-success pull-right" [disabled]="!submit" type="submit">
               Save
             </button>
           </div>
@@ -357,10 +249,7 @@
         <div class="col-sm-12">
           <div class="box" *ngIf="showEditPaymentChannelForm">
             <div class="box-body">
-              <form
-                [formGroup]="editPaymentChannelForm"
-                (ngSubmit)="onEditChannel()"
-              >
+              <form [formGroup]="editPaymentChannelForm" (ngSubmit)="onEditChannel()">
                 <div class="row">
                   <div class="col-md-12">
                     <h5>Edit payment channel</h5>
@@ -371,10 +260,7 @@
                     <div class="form-group">
                       <span class="label-required">Channel</span>
                       <select class="form-control" formControlName="channelId">
-                        <option
-                          *ngFor="let channel of channels"
-                          value="{{ channel._id }}"
-                        >
+                        <option *ngFor="let channel of channels" value="{{ channel._id }}">
                           {{ channel.channel }}
                         </option>
                       </select>
@@ -383,10 +269,7 @@
                   <div class="col-md-3">
                     <div class="form-group">
                       <span class="label-required"> Subscription number </span>
-                      <input
-                        class="form-control"
-                        formControlName="subscriptionCode"
-                      />
+                      <input class="form-control" formControlName="subscriptionCode" />
                     </div>
                   </div>
                 </div>
@@ -400,11 +283,7 @@
           </div>
         </div>
       </div>
-      <form
-        [formGroup]="addPaymentChannelsForm"
-        (ngSubmit)="onAddChannel()"
-        *ngIf="!showEditPaymentChannelForm"
-      >
+      <form [formGroup]="addPaymentChannelsForm" (ngSubmit)="onAddChannel()" *ngIf="!showEditPaymentChannelForm">
         <div class="row">
           <div class="col-md-12">
             <div class="box">
@@ -417,36 +296,23 @@
                 </div>
                 <div class="row">
                   <div class="col-md-12">
-                    <button
-                      class="btn btn-success btn-sm"
-                      (click)="addPaymentChannel()"
-                      type="button"
-                      style="margin-bottom: 10px"
-                    >
+                    <button class="btn btn-success btn-sm" (click)="addPaymentChannel()" type="button"
+                      style="margin-bottom: 10px">
                       <i class="fa fa-plus"></i> Payment channel
                     </button>
                   </div>
                 </div>
-                <div
-                  *ngFor="
+                <div *ngFor="
                     let control of formPaymentChannel.controls;
                     let i = index
-                  "
-                  formArrayName="paymentChannels"
-                >
+                  " formArrayName="paymentChannels">
                   <div class="row" [formGroupName]="i">
                     <div class="col-md-2">
                       <div class="form-group">
                         <span class="label-required">Channel</span>
-                        <select
-                          class="form-control"
-                          formControlName="paymentChannel"
-                          (change)="onChangePaymentChannel(i)"
-                        >
-                          <option
-                            *ngFor="let channel of channels"
-                            value="{{ channel._id }}"
-                          >
+                        <select class="form-control" formControlName="paymentChannel"
+                          (change)="onChangePaymentChannel(i)">
+                          <option *ngFor="let channel of channels" value="{{ channel._id }}">
                             {{ channel.channel }}
                           </option>
                         </select>
@@ -457,19 +323,12 @@
                         <span class="label-required">
                           Subscription number
                         </span>
-                        <input
-                          class="form-control"
-                          formControlName="subscriptionCode"
-                        />
+                        <input class="form-control" formControlName="subscriptionCode" />
                       </div>
                     </div>
                     <div class="form-group col-md-1">
-                      <button
-                        class="btn btn-danger btn-sm pull-left"
-                        type="button"
-                        (click)="removePaymentChannel(i)"
-                        style="margin-top: 20px"
-                      >
+                      <button class="btn btn-danger btn-sm pull-left" type="button" (click)="removePaymentChannel(i)"
+                        style="margin-top: 20px">
                         Remove
                       </button>
                     </div>
@@ -482,18 +341,10 @@
         </div>
         <div class="row">
           <div class="col-md-12">
-            <button
-              class="btn btn-warning btn-margin pull-right"
-              (click)="modal.dismiss()"
-              type="button"
-            >
+            <button class="btn btn-warning btn-margin pull-right" (click)="modal.dismiss()" type="button">
               Cancel
             </button>
-            <button
-              class="btn btn-success pull-right"
-              [disabled]="!submit"
-              type="submit"
-            >
+            <button class="btn btn-success pull-right" [disabled]="!submit" type="submit">
               Save
             </button>
           </div>
@@ -514,17 +365,11 @@
                 <td>{{ getPaymentChannelName(channel.paymentChannel) }}</td>
                 <td>{{ channel.subscriptionCode }}</td>
                 <td>
-                  <button
-                    class="btn btn-success btn-margin btn-sm"
-                    (click)="editCoffeeFarmerPaymentChannel(channel)"
-                  >
+                  <button class="btn btn-success btn-margin btn-sm" (click)="editCoffeeFarmerPaymentChannel(channel)">
                     Edit
                   </button>
-                  <button
-                    class="btn btn-primary btn-margin btn-sm"
-                    (click)="deleteCoffeeFarmerPaymentChannel(channel)"
-                    *ngIf="channel.status === 2"
-                  >
+                  <button class="btn btn-primary btn-margin btn-sm" (click)="deleteCoffeeFarmerPaymentChannel(channel)"
+                    *ngIf="channel.status === 2">
                     Delete
                   </button>
                 </td>

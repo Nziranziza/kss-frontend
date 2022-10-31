@@ -53,12 +53,15 @@
                 <span class="details-row-data">{{ organisation.streetNumber }}</span>
               </td>
               <td class="actions no-wrap text-right">
+                <ng-container *ngIf="authUser.orgInfo.hasExtensionAccess || authUser.parameters.role[0] == 11; else farmers">
                 <a routerLink="/admin/organisations/details/{{organisation._id}}/dashboard" class="btn btn-info btn-sm"
+                *ngIf="isOrgCWS(organisation)"><i
+                class="fa fa-university"></i> Details </a></ng-container>
+                <ng-template #farmers>
+                <a routerLink="/admin/organisations/details/{{organisation._id}}/farmers" class="btn btn-info btn-sm"
                    *ngIf="isOrgCWS(organisation)"><i
-                  class="fa fa-university"></i> Details </a>
-                <a routerLink="/admin/cws-pending-farmers/{{organisation._id}}"
-                   class="btn btn-warning btn-margin btn-sm" *ngIf="isOrgCWS(organisation)"><i
-                  class="fa fa-users"></i> Pending farmers</a>
+                  class="fa fa-university"></i> Details </a></ng-template>
+
                 <a routerLink="/admin/organisations/{{organisation._id}}/users"
                    *appHasPermission="[[4,1],0,[8,1],[1,1]]" class="btn btn-info btn-sm"
                    style="margin-left: 10px"><i
