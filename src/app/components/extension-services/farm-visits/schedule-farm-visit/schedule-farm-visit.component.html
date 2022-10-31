@@ -150,10 +150,7 @@
           >
           </app-inline-errors>
           <span
-            style="
-              font: normal 10px Helvetica Neue, Helvetica, Arial, sans-serif;
-              color: #ff2c2c;
-            "
+            style="font: normal 10px Helvetica Neue, Helvetica, Arial, sans-serif; color: #ff2c2c"
             *ngIf="
               scheduleVisit.value.farmerGroup != '' && farmers?.length <= 0
             "
@@ -257,10 +254,7 @@
                 </fieldset>
               </div>
               <span
-                style="
-                  font: normal 10px Helvetica Neue, Helvetica, Arial, sans-serif;
-                  color: #ff2c2c;
-                "
+                style="font: normal 10px Helvetica Neue, Helvetica, Arial, sans-serif; color: #ff2c2c"
                 *ngIf="selectedFarms?.length <= 0"
               >
                 select at least one farm</span
@@ -275,16 +269,16 @@
                 </legend>
                 <div *ngIf="viewDetailsClicked">
                   <h4 class="text-center" style="margin-top: -20px">
-                    {{ farmDetails?.upiNumber }}
+                    {{ farmDetails.upiNumber }}
                   </h4>
                   <h4 class="text-center">
-                    {{ farmDetails?.numberOfTrees }} {{ "trees" | translate }}
+                    {{ farmDetails.numberOfTrees }} {{ "trees" | translate }}
                   </h4>
-                  <div *ngIf="farmDetails?.treeAges[0]">
+                  <div *ngIf="farmDetails.treeAges[0]">
                     <div class="row" style="margin-top: 70px">
                       <div
                         class="col-sm-3"
-                        *ngIf="farmDetails?.treeAges[0]?.numOfTrees > 0"
+                        *ngIf="farmDetails.treeAges[0].numOfTrees > 0"
                       >
                         <img
                           src="assets/dist/img/sks/coffeeTree.png"
@@ -295,7 +289,7 @@
                       </div>
                       <div
                         class="col-sm-3"
-                        *ngIf="farmDetails?.treeAges[1]?.numOfTrees > 0"
+                        *ngIf="farmDetails.treeAges[1].numOfTrees > 0"
                       >
                         <img
                           src="assets/dist/img/sks/coffeeTree.png"
@@ -306,7 +300,7 @@
                       </div>
                       <div
                         class="col-sm-3"
-                        *ngIf="farmDetails?.treeAges[2]?.numOfTrees > 0"
+                        *ngIf="farmDetails.treeAges[2].numOfTrees > 0"
                       >
                         <img
                           src="assets/dist/img/sks/coffeeTree.png"
@@ -317,7 +311,7 @@
                       </div>
                       <div
                         class="col-sm-3"
-                        *ngIf="farmDetails?.treeAges[3]?.numOfTrees > 0"
+                        *ngIf="farmDetails.treeAges[3].numOfTrees > 0"
                       >
                         <img
                           src="assets/dist/img/sks/coffeeTree.png"
@@ -330,12 +324,16 @@
                     <div class="row">
                       <div
                         class="col-sm-3"
-                        *ngIf="farmDetails?.treeAges[0]?.numOfTrees > 0"
+                        *ngIf="farmDetails.treeAges[0].numOfTrees > 0"
                       >
                         <span style="color: green"> 0-3 </span>
                         --
                         <label>
-                          {{ farmDetails?.treeAges[0]?.numOfTrees }}
+                          {{
+                            farmDetails.treeAges[0]
+                              ? farmDetails.treeAges[0].numOfTrees
+                              : 0
+                          }}
                         </label>
                       </div>
                       <div
@@ -345,27 +343,27 @@
                         <span style="color: green"> 4-10 </span>
                         --
                         <label>
-                          {{ farmDetails?.treeAges[1]?.numOfTrees }}
+                          {{ farmDetails.treeAges[1].numOfTrees }}
                         </label>
                       </div>
                       <div
                         class="col-sm-3"
-                        *ngIf="farmDetails?.treeAges[2]?.numOfTrees"
+                        *ngIf="farmDetails.treeAges[2].numOfTrees"
                       >
                         <span style="color: green"> 11-15 </span>
                         --
                         <label>
-                          {{ farmDetails?.treeAges[2]?.numOfTrees }}
+                          {{ farmDetails.treeAges[2].numOfTrees }}
                         </label>
                       </div>
                       <div
                         class="col-sm-3"
-                        *ngIf="farmDetails?.treeAges[3]?.numOfTrees > 0"
+                        *ngIf="farmDetails.treeAges[3].numOfTrees > 0"
                       >
                         <span style="color: green"> 16-20 </span>
                         --
                         <label>
-                          {{ farmDetails?.treeAges[3]?.numOfTrees }}
+                          {{ farmDetails.treeAges[3].numOfTrees }}
                         </label>
                       </div>
                     </div>
@@ -373,7 +371,7 @@
                     <div class="row" style="margin-top: 100px">
                       <div
                         class="col-sm-4"
-                        *ngIf="farmDetails?.treeAges[4]?.numOfTrees > 0"
+                        *ngIf="farmDetails.treeAges[4].numOfTrees > 0"
                       >
                         <img
                           src="assets/dist/img/sks/coffeeTree.png"
@@ -384,7 +382,7 @@
                       </div>
                       <div
                         class="col-sm-4"
-                        *ngIf="farmDetails?.treeAges[5]?.numOfTrees > 0"
+                        *ngIf="farmDetails.treeAges[5].numOfTrees > 0"
                       >
                         <img
                           src="assets/dist/img/sks/coffeeTree.png"
@@ -395,7 +393,7 @@
                       </div>
                       <div
                         class="col-sm-4"
-                        *ngIf="farmDetails?.treeAges[6]?.numOfTrees > 0"
+                        *ngIf="farmDetails.treeAges[6].numOfTrees > 0"
                       >
                         <img
                           src="assets/dist/img/sks/coffeeTree.png"
@@ -408,12 +406,12 @@
                     <div class="row">
                       <div
                         class="col-sm-4"
-                        *ngIf="farmDetails?.treeAges[4]?.numOfTrees > 0"
+                        *ngIf="farmDetails.treeAges[4].numOfTrees > 0"
                       >
                         <span style="color: green"> 21-25 </span>
                         --
                         <label>
-                          {{ farmDetails?.treeAges[4]?.numOfTrees }}
+                          {{ farmDetails.treeAges[4].numOfTrees }}
                         </label>
                       </div>
                       <div
@@ -423,17 +421,17 @@
                         <span style="color: green"> 26-30 </span>
                         --
                         <label>
-                          {{ farmDetails?.treeAges[5]?.numOfTrees }}
+                          {{ farmDetails.treeAges[5].numOfTrees }}
                         </label>
                       </div>
                       <div
                         class="col-sm-4"
-                        *ngIf="farmDetails?.treeAges[6]?.numOfTrees > 0"
+                        *ngIf="farmDetails.treeAges[6].numOfTrees > 0"
                       >
                         <span style="color: green"> 31+ </span>
                         --
                         <label>
-                          {{ farmDetails?.treeAges[6]?.numOfTrees }}
+                          {{ farmDetails.treeAges[6].numOfTrees }}
                         </label>
                       </div>
                     </div>
@@ -592,15 +590,10 @@
                 >
                 </app-inline-errors>
                 <span
-                  style="
-                    font: normal 10px Helvetica Neue, Helvetica, Arial,
-                      sans-serif;
-                    color: red;
-                  "
-                  *ngIf="
-                    scheduleVisit.controls.endTime.touched &&
+                  style="font: normal 10px Helvetica Neue, Helvetica, Arial, sans-serif; color: red"
+                  *ngIf="scheduleVisit.controls.endTime.touched &&
                     scheduleVisit.controls.startTime.value >=
-                      scheduleVisit.controls.endTime.value
+                    scheduleVisit.controls.endTime.value
                   "
                 >
                   End Time cannot be less than Start Time

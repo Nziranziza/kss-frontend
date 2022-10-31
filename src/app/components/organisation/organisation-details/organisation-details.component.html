@@ -45,9 +45,10 @@
               <div class="stats-box-details-left">Contacts</div>
             </div>
             <div class="col-md-10">
+
               <div class="stats-box-details-right text-lowercase">
                 Email:
-                <span class="bold"> {{ org?.email?.toLowerCase() }} </span>
+
               </div>
               <div class="stats-box-details-right">
                 Phone: <span class="bold"> {{ org?.phone_number }} </span>
@@ -76,6 +77,9 @@
                   <div class="col-xs-9">
                     <div class="stats-box-location-cells">
                       <span *ngFor="let cell of area.covCells; let i = index">
+<<<<<<< HEAD
+                        <span>{{ cell?.name }}, </span>
+=======
                         <a
                           type="button"
                           class="btn btn-link"
@@ -87,6 +91,7 @@
                         >
                           {{ cell.name }}
                         </a>
+>>>>>>> acbe915f5994c6e5b76572c3e3147f542be8d7b8
                       </span>
                     </div>
                   </div>
@@ -94,7 +99,7 @@
               </span>
             </span>
           </div>
-          <!--  <button class="stats-box-button">View more details</button> -->
+<!--          <button class="stats-box-button">View more details</button>-->
         </div>
       </div>
       <div class="col-md-4" style="padding: 0 5px 0 0px">
@@ -223,8 +228,10 @@
     </li>
     <li
       role="presentation"
+
       *appHasPermission="[[4, 1], [4, 11], [4, 12], 0, 6, 5, 11]"
       routerLink="/admin/organisations/details/{{ organisationId }}/cherries"
+
       routerLinkActive="active"
     >
       <a role="tab" data-toggle="tab"><span>Cherries & Parchments</span></a>

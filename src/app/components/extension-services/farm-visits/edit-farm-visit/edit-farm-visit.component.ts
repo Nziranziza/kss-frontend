@@ -37,17 +37,17 @@ export class EditFarmVisitComponent implements OnInit {
     private helper: HelperService,
     private modal: NgbModal
   ) { }
-  loading = false;
+  loading: Boolean = false;
   farmerGroups: any[] = [];
   farmList: any[] = [];
   selectedFarm: any[] = [];
-  allTraineesSelected: boolean;
+  allTraineesSelected: Boolean;
   gaps: any[] = [];
   agronomist: any[] = [];
   savedFarmList: any[] = [];
   farmers: any[] = [];
   gapDropdownSettings: IDropdownSettings = {};
-  viewDetailsClicked: boolean;
+  viewDetailsClicked: Boolean;
   farmDetails;
   farmerGroupId;
   id: string;
@@ -95,6 +95,7 @@ export class EditFarmVisitComponent implements OnInit {
       this.visits = data.data;
       this.savedFarmList = data.data.farms;
       this.scheduleVisit.controls.startTime.setValue(
+
         new Date(data.data.date.split('T')[0] +
           'T' +
           (parseInt(data.data.expectedDuration.from.split(':')[0], 10) - 2).toString() + ':'
@@ -106,6 +107,7 @@ export class EditFarmVisitComponent implements OnInit {
           'T' +
           (parseInt(data.data.expectedDuration.to.split(':')[0], 10) - 2).toString() + ':' + data.data.expectedDuration.to.split(':')[1] +
           ':00.000Z')
+
       );
       this.scheduleVisit.controls.farmerGroup.setValue(
         data.data.groupId.groupName,
@@ -161,13 +163,13 @@ export class EditFarmVisitComponent implements OnInit {
   }
 
   getFarms(groupName: string) {
-    const newdata = {
+    const data = {
       name: groupName,
       org_id: this.authenticationService.getCurrentUser().info.org_id,
     };
     this.farmList = [];
     this.farmers = [];
-    this.groupService.getByName(newdata).subscribe((data) => {
+    this.groupService.getByName(data).subscribe((data) => {
       this.farmerGroupId = data.data._id;
       data.data.members.forEach((member) => {
         member.openDialog = false;
@@ -182,7 +184,7 @@ export class EditFarmVisitComponent implements OnInit {
                 farm: info,
                 owner: member.userId,
                 upi: info.upiNumber,
-                selected: info._id === farms.farmId,
+                selected: info._id == farms.farmId,
                 location: info.location,
                 trees: info.numberOfTrees,
               });
@@ -234,8 +236,8 @@ export class EditFarmVisitComponent implements OnInit {
           gap_name: 'Not Applied',
         },
       ];
-      data.data.forEach((newdata) => {
-        newData.push({ _id: newdata._id, gap_name: newdata.gap_name });
+      data.data.forEach((data) => {
+        newData.push({ _id: data._id, gap_name: data.gap_name });
       });
       this.gaps = newData;
       this.loading = false;
@@ -279,12 +281,12 @@ export class EditFarmVisitComponent implements OnInit {
       const dataValues = JSON.parse(JSON.stringify(this.scheduleVisit.value));
       const adoptionGap = [];
       dataValues.adoptionGap.forEach((adoption) => {
-        if (adoption._id !== '') {
+        if (adoption._id != '') {
           adoptionGap.push(adoption._id);
         }
       });
-      const farms = this.farmList.filter((newdata) => {
-        return newdata.selected === true;
+      const farms = this.farmList.filter((data) => {
+        return data.selected == true;
       });
       const data: any = {
         date: dataValues.date.visitDate,
@@ -306,9 +308,9 @@ export class EditFarmVisitComponent implements OnInit {
       };
       adoptionGap.length > 0 ? data.gaps = adoptionGap : data.gaps = [];
       this.visitService.edit(this.id, data).subscribe(
-        (newdata) => {
-          this.successDetails = newdata.data;
-          this.success(newdata.data.description, newdata.data._id);
+        (data) => {
+          this.successDetails = data.data;
+          this.success(data.data.description, data.data._id);
           this.loading = false;
         },
         (err) => {
@@ -338,10 +340,10 @@ export class EditFarmVisitComponent implements OnInit {
   }
 
   formatDate(date) {
-    const d = new Date(date);
-    let month = '' + (d.getMonth() + 1);
-    let day = '' + d.getDate();
-    const year = d.getFullYear();
+    let d = new Date(date),
+      month = '' + (d.getMonth() + 1),
+      day = '' + d.getDate(),
+      year = d.getFullYear();
 
     if (month.length < 2) month = '0' + month;
     if (day.length < 2) day = '0' + day;

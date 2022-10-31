@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
-import {HelperService} from '../../../../core/helpers';
+import {HelperService} from '../../../../core';
 import {
   AuthenticationService,
   ConfirmDialogService,

@@ -182,6 +182,16 @@ export class OrganisationFarmersComponent
         }
       });
 
+  /*    if (this.authenticationService.getCurrentUser().orgInfo.distributionSite) {
+      this.siteService
+        .get(
+          this.authenticationService.getCurrentUser().orgInfo.distributionSite
+        )
+        .subscribe((data) => {
+          this.site = data.content;
+        });
+    }*/
+
     this.setMessage(this.messageService.getMessage());
     this.orgCoveredArea = this.route.snapshot.data.orgCoveredAreaData;
     this.currentSeason = this.authenticationService.getCurrentSeason();
