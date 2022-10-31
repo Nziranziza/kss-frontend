@@ -338,8 +338,7 @@
                     </table>
                   </div>
                 </div>
-              </div>
-     </td>
+            </td>
             <td>{{ dispatch.date | date }}</td>
             <td>
               <ng-container *ngIf="dispatch.receivedBy; else confirm">
@@ -364,18 +363,7 @@
                         class="btn btn-success btn-margin pull-right btn-sm" style="margin-left: 10px;">
                   Edit
                 </button>
-                <ng-container *ngIf="!dispatch.receivedBy">
-                  <button appRequiredSeason class="btn btn-default btn-margin btn-sm pull-right"
-                    (click)="cancelDispatch(dispatch._id)" type="button">
-                    <i class="fa fa-remove" aria-hidden="true"></i> Cancel
-                  </button>
-                </ng-container>
-                <ng-container *ngIf="!dispatch.receivedBy">
-                  <button (click)="editDistribution(dispatch._id)" class="btn btn-success btn-margin pull-right btn-sm"
-                    style="margin-left: 10px;">
-                    Edit
-                  </button>
-                </ng-container>
+              </ng-container>
               </td>
             </tr>
           </tbody>
