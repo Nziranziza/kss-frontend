@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, Resolve} from '@angular/router';
-import {OrganisationService} from '../services/organisation.service';
-import {LocationService} from '../services/location.service';
+import {OrganisationService} from '../services';
+import {LocationService} from '../services';
 
 @Injectable({
   providedIn: 'root'
