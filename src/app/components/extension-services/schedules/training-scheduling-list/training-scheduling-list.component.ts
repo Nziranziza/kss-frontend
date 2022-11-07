@@ -1,21 +1,21 @@
-import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {
   TrainingService,
   Training,
   AuthenticationService,
-} from "../../../../core";
-import { MessageService } from "../../../../core";
-import { BasicComponent } from "../../../../core";
-import { Subject } from "rxjs";
-import { DataTableDirective } from "angular-datatables";
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { ConfirmModalComponent } from "src/app/shared";
-import { TrainingScheduleViewComponent } from "../training-schedule-view/training-schedule-view.component";
+} from '../../../../core';
+import { MessageService } from '../../../../core';
+import { BasicComponent } from '../../../../core';
+import { Subject } from 'rxjs';
+import { DataTableDirective } from 'angular-datatables';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ConfirmModalComponent } from 'src/app/shared';
+import { TrainingScheduleViewComponent } from '../training-schedule-view/training-schedule-view.component';
 
 @Component({
-  selector: "app-training-scheduling-list",
-  templateUrl: "./training-scheduling-list.component.html",
-  styleUrls: ["./training-scheduling-list.component.css"],
+  selector: 'app-training-scheduling-list',
+  templateUrl: './training-scheduling-list.component.html',
+  styleUrls: ['./training-scheduling-list.component.css'],
 })
 export class TrainingSchedulingListComponent
   extends BasicComponent
@@ -38,10 +38,10 @@ export class TrainingSchedulingListComponent
   autoHide = false;
   responsive = false;
   labels: any = {
-    previousLabel: "Prev",
-    nextLabel: "Next",
-    screenReaderPaginationLabel: "Pagination",
-    screenReaderPageLabel: "page",
+    previousLabel: 'Prev',
+    nextLabel: 'Next',
+    screenReaderPaginationLabel: 'Pagination',
+    screenReaderPageLabel: 'page',
     screenReaderCurrentLabel: `You're on page`,
   };
   config: any;
@@ -56,8 +56,9 @@ export class TrainingSchedulingListComponent
   ngOnInit() {
     this.getSchedules();
     this.dtOptions = {
-      pagingType: "full_numbers",
+      pagingType: 'full_numbers',
       pageLength: 25,
+      order: [],
     };
   }
 
@@ -72,7 +73,7 @@ export class TrainingSchedulingListComponent
       .allSchedule(this.authenticationService.getCurrentUser().info.org_id)
       .subscribe((data) => {
         this.schedules = data.data;
-        deleteTrigger ? "" : this.dtTrigger.next();
+        deleteTrigger ? '' : this.dtTrigger.next();
       });
     if (!deleteTrigger) {
       this.config = {
@@ -85,7 +86,7 @@ export class TrainingSchedulingListComponent
   }
 
   open(content) {
-    this.modalService.open(content, { size: "sm", windowClass: "modal-sm" });
+    this.modalService.open(content, { size: 'sm', windowClass: 'modal-sm' });
   }
 
   selectedSchedule(schedule) {
@@ -94,7 +95,7 @@ export class TrainingSchedulingListComponent
 
   sendMessage() {
     this.loading = true;
-    let data = this.schedule._id;
+    const data = this.schedule._id;
     this.trainingService.sendMessage(data).subscribe((data) => {
       this.loading = false;
     });
@@ -102,11 +103,11 @@ export class TrainingSchedulingListComponent
 
   openDeleteModal(group: any, warning?: any) {
     const modalRef = this.modal.open(ConfirmModalComponent);
-    modalRef.componentInstance.title = "Delete Training Schedule";
+    modalRef.componentInstance.title = 'Delete Training Schedule';
     modalRef.componentInstance.content =
-      "Are you sure you want to Delete this Schedule?";
-    modalRef.componentInstance.confirmButtonText = "Delete";
-    modalRef.componentInstance.cancelButtonText = "Cancel";
+      'Are you sure you want to Delete this Schedule?';
+    modalRef.componentInstance.confirmButtonText = 'Delete';
+    modalRef.componentInstance.cancelButtonText = 'Cancel';
     modalRef.componentInstance.warning = warning;
     modalRef.result.then((results) => {
       if (results.confirmed) {
@@ -114,7 +115,7 @@ export class TrainingSchedulingListComponent
           () => {
             this.loading = true;
             this.getSchedules(true);
-            this.setMessage("Schedule successfully Deleted!");
+            this.setMessage('Schedule successfully Deleted!');
           },
           (err) => {
             this.openDeleteModal(group, err.message);

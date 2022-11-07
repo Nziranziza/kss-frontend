@@ -88,40 +88,40 @@
           <tbody>
             <ng-container *ngFor="let visit of visits">
               <tr>
-                <td>{{ visit.createdAt | date: "short" }}</td>
+                <td>{{ visit?.createdAt | date: "short" }}</td>
                 <td>
                   <div *ngFor="let farm of visit.farms">
                     <span class="text-capitalize">
                       {{
-                        farm.owner.firstName
-                          ? farm.owner.firstName.toLowerCase() +
+                        farm?.owner?.firstName
+                          ? farm?.owner?.firstName?.toLowerCase() +
                             " " +
-                            farm.owner.lastName.toLowerCase()
-                          : farm.owner.groupName.toLowerCase()
+                            farm?.owner?.lastName?.toLowerCase()
+                          : farm?.owner?.groupName?.toLowerCase()
                       }}
                     </span>
                   </div>
                 </td>
-                <td>{{ visit.description }}</td>
+                <td>{{ visit?.description }}</td>
                 <td>
                   <div *ngFor="let gap of visit.gaps">
-                    {{ gap.gap_name }}
+                    {{ gap?.gap_name }}
                   </div>
                 </td>
                 <td>
                   <span class="text-capitalize">
                     {{
-                      visit?.visitor?.firstName.toLowerCase() +
+                      visit?.visitor?.firstName?.toLowerCase() +
                         " " +
-                        visit?.visitor?.lastName.toLowerCase()
+                        visit?.visitor?.lastName?.toLowerCase()
                     }}
                   </span>
                 </td>
                 <td>
                   {{ visit.date | date: "shortDate" }},
                   <div>
-                    {{ visit?.expectedDuration.from }} to
-                    {{ visit?.expectedDuration.to }}
+                    {{ visit?.expectedDuration?.from }} to
+                    {{ visit?.expectedDuration?.to }}
                   </div>
                 </td>
                 <td>{{ visit?.groupId?.groupName }}</td>

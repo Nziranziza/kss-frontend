@@ -7,6 +7,7 @@ import {
   TrainingService,
   SeedlingService,
   BasicComponent,
+  AuthorisationService,
 } from 'src/app/core';
 import { Subject } from 'rxjs';
 import { ConfirmModalComponent } from 'src/app/shared';
@@ -25,7 +26,8 @@ export class NurseryListComponent
     private trainingService: TrainingService,
     private authenticationService: AuthenticationService,
     private modalService: NgbModal,
-    private seedlingService: SeedlingService
+    private seedlingService: SeedlingService,
+    private authorisationService: AuthorisationService
   ) {
     super();
   }
@@ -65,12 +67,15 @@ export class NurseryListComponent
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 25,
+      order: [],
     };
   }
 
   getNurseries(deletetrigger: any = false): void {
     this.loading = true;
-    this.seedlingService.all(this.authenticationService.getCurrentUser().info.org_id).subscribe((data) => {
+    const body = !this.authorisationService.isTechnoServeAdmin() ?
+      this.authenticationService.getCurrentUser().info.org_id : '';
+    this.seedlingService.all(body).subscribe((data) => {
       this.nurseries = data.data;
       this.nurseries.map((nursery) => {
         let sum = 0;

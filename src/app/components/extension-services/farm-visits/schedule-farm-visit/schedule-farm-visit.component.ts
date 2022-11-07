@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {
   AuthenticationService,
+  BasicComponent,
   GapService,
   GroupService,
   HelperService,
@@ -13,14 +14,16 @@ import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import { Router } from '@angular/router';
 import { SuccessModalComponent } from '../../../../shared';
 import { ScrollStrategy, ScrollStrategyOptions } from '@angular/cdk/overlay';
+import { DataTableDirective } from 'angular-datatables';
+import { Subject } from 'rxjs';
 @Component({
   selector: 'app-schedule-farm-visit',
   templateUrl: './schedule-farm-visit.component.html',
   styleUrls: [
-    '../../schedules/training-scheduling-create/training-scheduling-create.component.css',
+    './schedule-farm-visit.component.css',
   ],
 })
-export class ScheduleFarmVisitComponent implements OnInit {
+export class ScheduleFarmVisitComponent extends BasicComponent implements OnInit {
   scheduleVisit: FormGroup;
   scrollStrategy: ScrollStrategy;
   constructor(
@@ -36,6 +39,7 @@ export class ScheduleFarmVisitComponent implements OnInit {
     private helper: HelperService,
     private readonly sso: ScrollStrategyOptions
   ) {
+    super();
     this.scrollStrategy = this.sso.noop();
   }
   loading = false;
@@ -55,6 +59,14 @@ export class ScheduleFarmVisitComponent implements OnInit {
   formatedStartDate: string;
   formatedEndDate: string;
   newDate: Date = new Date();
+  dtOptions: any = {};
+  // @ts-ignore
+  dtTrigger: Subject = new Subject();
+  // @ts-ignore
+  @ViewChild(DataTableDirective, { static: false })
+  dtElement: DataTableDirective;
+  config: any;
+  allSelected = false;
 
 
   ngOnInit() {
@@ -138,24 +150,82 @@ export class ScheduleFarmVisitComponent implements OnInit {
     this.groupService.getByName(data).subscribe((newdata) => {
       this.farmerGroupId = newdata.data._id;
       newdata.data.members.forEach((member) => {
-        member.openDialog = false;
-        this.farmers.push(member);
-        member.farms.forEach((farm) => {
-          farm.requestInfo.forEach((info) => {
-            this.farmList.push({
-              farmer: member.firstName
-                ? member.firstName + ' ' + member.lastName
-                : member.groupContactPersonNames,
+        const newMember = member.farms.map((farm) => {
+          const newFarm = farm.requestInfo.map((info) => {
+            return {
               farm: info,
-              owner: member.userId,
               upi: info.upiNumber,
               location: info.location,
               trees: info.numberOfTrees,
+              farmer: member.firstName
+                ? member.firstName + ' ' + member.lastName
+                : member.groupContactPersonNames,
+              owner: member.userId,
               selected: false,
-            });
+            };
           });
+          return {
+            farmer: member.firstName
+              ? member.firstName + ' ' + member.lastName
+              : member.groupContactPersonNames,
+            owner: member.userId,
+            farmSelected: false,
+            farms: newFarm
+          };
         });
+        this.farmers.push(newMember[0]);
       });
+      this.config = {
+        itemsPerPage: 2,
+        currentPage: 1,
+        totalItems: this.farmers.length,
+      };
+      this.dtTrigger.next();
+    });
+    this.dtOptions = {
+      pagingType: 'full_numbers',
+      pageLength: 10,
+      order: [],
+    };
+  }
+
+  selectAllFarmer(isChecked: boolean) {
+    this.allSelected = isChecked;
+    this.farmers.map((farmer) => {
+      farmer.farmSelected = isChecked;
+      farmer.farms.forEach((farm) => {
+        farm.selected = isChecked;
+      });
+    });
+    this.farmers.map((farmer) => {
+      const newData = farmer.farms.filter((data) => {
+        return data.selected === true;
+      });
+      this.selectedFarms.push(...newData);
+    });
+  }
+
+  selectFarmer(isChecked: boolean, i: number) {
+    this.farmers[i].farmSelected = isChecked;
+    this.farmers[i].farms.forEach((farm) => {
+      farm.selected = isChecked;
+    });
+    this.farmers.map((farmer) => {
+      const newData = farmer.farms.filter((data) => {
+        return data.selected === true;
+      });
+      this.selectedFarms.push(...newData);
+    });
+  }
+
+  selectFarms(isChecked: boolean, item: number, i: number) {
+    this.farmers[item].farms[i].selected = isChecked;
+    this.selectedFarms = [];
+    this.farmers.map((farmer) => {
+      const newData = farmer.farms.filter((data) => {
+        return data.selected === true;
+      });
+      this.selectedFarms.push(...newData);
     });
   }
 
@@ -181,15 +251,6 @@ export class ScheduleFarmVisitComponent implements OnInit {
       });
   }
 
-  selectFarms(isChecked: boolean, i: number) {
-    this.farmList[i].selected = true;
-    if (!isChecked) {
-      this.allTraineesSelected = isChecked;
-    }
-    this.selectedFarms = this.farmList.filter((data) => {
-      return data.selected === true;
-    });
-  }
 
   getGaps(): void {
     this.loading = true;

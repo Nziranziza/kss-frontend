@@ -1,9 +1,6 @@
 <ng-template #content let-modal>
   <div class="modal-header">
-    <h4
-      class="modal-title training-modal-title text-center"
-      id="modal-basic-title"
-    >
+    <h4 class="modal-title training-modal-title text-center" id="modal-basic-title">
       Verify and Confirm
     </h4>
   </div>
@@ -29,45 +26,32 @@
               </div>
             </div>
             <div style="margin-bottom: 10px">
-              <label class="control-label label-required"
-                >GAP to be covered during the visit</label
-              >
+              <label class="control-label label-required">GAP to be covered during the visit</label>
               <div class="confirm-text-box confirm-text">
-                <li
-                  *ngFor="
+                <li *ngFor="
                     let gaps of scheduleVisit?.value?.adoptionGap;
                     let i = index
-                  "
-                >
+                  ">
                   {{ gaps?.gap_name }}
                 </li>
               </div>
             </div>
             <div style="margin-bottom: 10px">
-              <label class="control-label label-required"
-                >Agronomist who will visit</label
-              >
-              <div
-                class="confirm-text-box confirm-text"
-                *ngFor="let agro of agronomist; let i = index"
-              >
+              <label class="control-label label-required">Agronomist who will visit</label>
+              <div class="confirm-text-box confirm-text" *ngFor="let agro of agronomist; let i = index">
                 <span *ngIf="agro._id == scheduleVisit.value.agronomist">
                   {{ agro?.fullNames }}
                 </span>
               </div>
             </div>
             <div style="margin-bottom: 10px">
-              <label class="control-label label-required"
-                >Date and Time of the visit</label
-              >
+              <label class="control-label label-required">Date and Time of the visit</label>
               <div class="confirm-text-box confirm-text">
                 {{ formatedStartDate + " to " + formatedEndDate }}
               </div>
             </div>
             <div style="margin-bottom: 10px">
-              <label class="control-label label-required"
-                >Visit Description</label
-              >
+              <label class="control-label label-required">Visit Description</label>
               <div class="confirm-text-box confirm-text">
                 {{ scheduleVisit?.value?.description }} <br /><br /><br />
               </div>
@@ -80,21 +64,13 @@
   <div class="modal-footer">
     <div class="row">
       <div class="col-sm-3">
-        <button
-          type="button"
-          class="btn btn-danger btn-lg pull-left"
-          (click)="modal.dismiss()"
-        >
+        <button type="button" class="btn btn-danger btn-lg pull-left" (click)="modal.dismiss()">
           Cancel
         </button>
       </div>
       <div class="col-sm-6"></div>
       <div class="col-sm-3">
-        <button
-          class="btn btn-secondary btn-lg submit"
-          (click)="modal.dismiss(); onSubmit()"
-          [disabled]="loading"
-        >
+        <button class="btn btn-secondary btn-lg submit" (click)="modal.dismiss(); onSubmit()" [disabled]="loading">
           <span *ngIf="!loading; else other_content">Confirm</span>
           <ng-template #other_content>
             <div class="loader">
@@ -116,374 +92,173 @@
       <br />
       <div class="col-sm-10 col-centered">
         <div class="form-group">
-          <label class="control-label label-required"
-            >{{ "select_group" | translate }}
+          <label class="control-label label-required">{{ "select_group" | translate }}
           </label>
           <select class="form-control" formControlName="farmerGroup">
             <option value="" disabled selected>
               {{ "select_group" | translate }}
             </option>
-            <option
-              *ngFor="let group of farmerGroups"
-              value="{{ group.groupName }}"
-            >
+            <option *ngFor="let group of farmerGroups" value="{{ group.groupName }}">
               {{ group.groupName | titlecase }}
             </option>
           </select>
-          <app-inline-errors
-            *ngIf="
+          <app-inline-errors *ngIf="
               scheduleVisit.controls.farmerGroup.invalid &&
               (scheduleVisit.controls.farmerGroup.dirty ||
                 scheduleVisit.controls.farmerGroup.touched)
-            "
-            [errors]="scheduleVisit.controls.farmerGroup.errors"
-            [label]="'farmer_group'"
-          >
+            " [errors]="scheduleVisit.controls.farmerGroup.errors" [label]="'farmer_group'">
           </app-inline-errors>
-          <span
-            style="font: normal 10px Helvetica Neue, Helvetica, Arial, sans-serif; color: #ff2c2c"
-            *ngIf="
+          <span style="font: normal 10px Helvetica Neue, Helvetica, Arial, sans-serif; color: #ff2c2c" *ngIf="
               scheduleVisit.value.farmerGroup != '' && farmers?.length <= 0
-            "
-          >
-            group has no farmers</span
-          >
+            ">
+            group has no farmers</span>
         </div>
       </div>
-      <span
-        *ngIf="scheduleVisit.value.farmerGroup != '' && farmers?.length > 0"
-      >
+      <span *ngIf="scheduleVisit.value.farmerGroup != '' && farmers?.length > 0">
         <div class="col-sm-10 col-centered">
-          <div class="row">
-            <div class="col-sm-6">
-              <div class="form-group">
-                <fieldset style="margin: 0px -3px 0px -3px !important">
-                  <legend style="width: 13em">
-                    <label class="control-label"
-                      >&nbsp; {{ "select_farm" | translate }}
-                    </label>
-                  </legend>
-                  <div *ngFor="let member of farmers; let i = index">
-                    <div class="box box-default">
-                      <div class="box-header with-border">
-                        <h5 class="box-title">
-                          {{
-                            member.firstName
-                              ? member.firstName + " " + member.lastName
-                              : member.groupContactPersonNames
-                          }}
-                        </h5>
-                        <div class="box-tools pull-right">
-                          <button
-                            class="btn btn-box-tool"
-                            *ngIf="member.openDialog"
-                            (click)="expandFarmModal(i)"
-                          >
-                            <i class="fa fa-minus"></i>
-                          </button>
-                          <button
-                            *ngIf="!member.openDialog"
-                            class="btn btn-box-tool"
-                            (click)="expandFarmModal(i)"
-                          >
-                            <i class="fa fa-plus"></i>
-                          </button>
+          <div class="box" style="overflow: auto">
+            <div class="box-body table-responsive no-border" style="font-size: 1.2rem">
+              <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
+                class="hover table table-responsive-lg table-striped" config>
+                <thead>
+                  <tr>
+                    <th>
+                      <input type="checkbox" (click)="selectAllFarmer($event.target.checked)" [(ngModel)]="allSelected"
+                        [ngModelOptions]="{ standalone: true }">
+                    </th>
+                    <th>Full name</th>
+                    <th class="all"></th>
+                    <!-- <th></th> -->
+                  </tr>
+                </thead>
+                <tbody>
+                  <ng-container *ngFor="let member of farmers; let i = index">
+                    <tr>
+                      <td>
+                        <div style="text-align: center;">
+                          <input type="checkbox" (click)="selectFarmer($event.target.checked, i)"
+                            [(ngModel)]="farmers[i].farmSelected" [ngModelOptions]="{ standalone: true }">
                         </div>
-                      </div>
-                      <div class="box-body" *ngIf="member.openDialog">
-                        <table class="row-border hover table table-striped">
-                          <thead>
-                            <tr>
-                              <th>UPI/Location</th>
-                              <th>Trees</th>
-                              <th>More</th>
-                              <th>{{ "selection" | translate }}</th>
+                      </td>
+                      <td> {{member.farmer}} </td>
+                      <td>
+                        <table style="background: transparent; width: auto" class="pull-left">
+                          <ng-container>
+                            <tr style="font-size: 12px; background: transparent; font-weight: bold">
+                              <td></td>
+                              <td style="padding-left: 20px">UPI Number Or Location</td>
+                              <td style="padding-left: 40px">Total Trees</td>
+                              <td style="padding-left: 40px">0-3</td>
+                              <td style="padding-left: 40px">4-10</td>
+                              <td style="padding-left: 40px">11-15</td>
+                              <td style="padding-left: 40px">16-20</td>
+                              <td style="padding-left: 40px">21-26</td>
+                              <td style="padding-left: 40px">31+ </td>
                             </tr>
-                          </thead>
-                          <tbody>
-                            <tr *ngFor="let farm of farmList; let i = index">
-                              <td *ngIf="farm.owner == member.userId">
-                                {{
-                                  farm.upi
-                                    ? farm.upi
-                                    : farm?.location?.dist_id?.name +
+                            <tr style="font-size: 12px; background: transparent"
+                              *ngFor="let farmerFarm of member.farms, let d = index">
+                              <td class="all">
+                                <div style="text-align: center;">
+                                  <input type="checkbox" (click)="selectFarms($event.target.checked, i, d)"
+                                    [(ngModel)]="farmers[i].farms[d].selected" [ngModelOptions]="{ standalone: true }">
+                                </div>
+                              </td>
+                              <td style="padding-left: 20px"> {{
+                              farmerFarm.upi
+                                    ? farmerFarm.upi
+                                    : farmerFarm?.location?.dist_id?.name +
                                       " > " +
-                                      farm?.location?.sect_id?.name +
+                                      farmerFarm?.location?.sect_id?.name +
                                       " > " +
-                                      farm?.location?.cell_id?.name
+                                      farmerFarm?.location?.cell_id?.name
                                 }}
                               </td>
-                              <td *ngIf="farm.owner == member.userId">
-                                {{ farm?.trees }}
+                              <td style="padding-left: 40px" class="text-center"> {{ farmerFarm?.trees }} </td>
+                              <td style="padding-left: 40px" class="text-center">
+                                {{
+                                farmerFarm.farm.treeAges[0]
+                                  ? farmerFarm.farm.treeAges[0].numOfTrees
+                                  : 0
+                              }}
                               </td>
-                              <td *ngIf="farm.owner == member.userId">
-                                <button
-                                  appRequiredSeason
-                                  class="btn btn-action-no-border btn-margin details-button"
-                                  (click)="viewDetails(i)"
-                                >
-                                  <em class="fa fa-eye"></em>
-                                </button>
+                              <td style="padding-left: 40px" class="text-center">
+                                {{
+                                farmerFarm.farm.treeAges[1]
+                                  ? farmerFarm.farm.treeAges[1].numOfTrees
+                                  : 0
+                              }}
                               </td>
-                              <td *ngIf="farm.owner == member.userId">
-                                <input
-                                  type="checkbox"
-                                  class="pull-right"
-                                  (click)="
-                                    selectFarms($event.target.checked, i)
-                                  "
-                                  [(ngModel)]="farm.selected"
-                                  [ngModelOptions]="{ standalone: true }"
-                                />
+                              <td style="padding-left: 40px" class="text-center">
+                                {{
+                                farmerFarm.farm.treeAges[2]
+                                  ? farmerFarm.farm.treeAges[2].numOfTrees
+                                  : 0
+                              }}
+                              </td>
+                              <td style="padding-left: 40px" class="text-center">
+                                {{
+                                farmerFarm.farm.treeAges[3]
+                                  ? farmerFarm.farm.treeAges[3].numOfTrees
+                                  : 0
+                              }}
+                              </td>
+                              <td style="padding-left: 40px" class="text-center">
+                                {{
+                                farmerFarm.farm.treeAges[4]
+                                  ? farmerFarm.farm.treeAges[4].numOfTrees
+                                  : 0
+                              }}
+                              </td>
+                              <td style="padding-left: 40px" class="text-center">
+                                {{
+                                farmerFarm.farm.treeAges[5]
+                                  ? farmerFarm.farm.treeAges[5].numOfTrees
+                                  : 0
+                              }}
                               </td>
                             </tr>
-                          </tbody>
+                          </ng-container>
                         </table>
-                      </div>
-                    </div>
-                  </div>
-                </fieldset>
-              </div>
-              <span
-                style="font: normal 10px Helvetica Neue, Helvetica, Arial, sans-serif; color: #ff2c2c"
-                *ngIf="selectedFarms?.length <= 0 && savedFarmList.length <=0"
-              >
-                select at least one farm</span
-              >
-            </div>
-            <div class="col-sm-6">
-              <fieldset style="margin: 0px -3px 0px -3px !important">
-                <legend style="width: 13em">
-                  <label class="control-label"
-                    >&nbsp; {{ "farm_details" | translate }}</label
-                  >
-                </legend>
-                <div *ngIf="viewDetailsClicked">
-                  <h4 class="text-center" style="margin-top: -20px">
-                    {{ farmDetails.upiNumber }}
-                  </h4>
-                  <h4 class="text-center">
-                    {{ farmDetails.numberOfTrees }} {{ "trees" | translate }}
-                  </h4>
-                  <div *ngIf="farmDetails.treeAges[0]">
-                    <div class="row" style="margin-top: 70px">
-                      <div
-                        class="col-sm-3"
-                        *ngIf="farmDetails.treeAges[0].numOfTrees > 0"
-                      >
-                        <img
-                          src="assets/dist/img/sks/coffeeTree.png"
-                          width="40px"
-                          height="40px"
-                          style="position: absolute; bottom: 0"
-                        />
-                      </div>
-                      <div
-                        class="col-sm-3"
-                        *ngIf="farmDetails.treeAges[1].numOfTrees > 0"
-                      >
-                        <img
-                          src="assets/dist/img/sks/coffeeTree.png"
-                          width="50px"
-                          height="50px"
-                          style="position: absolute; bottom: 0"
-                        />
-                      </div>
-                      <div
-                        class="col-sm-3"
-                        *ngIf="farmDetails.treeAges[2].numOfTrees > 0"
-                      >
-                        <img
-                          src="assets/dist/img/sks/coffeeTree.png"
-                          width="60px"
-                          height="60px"
-                          style="position: absolute; bottom: 0"
-                        />
-                      </div>
-                      <div
-                        class="col-sm-3"
-                        *ngIf="farmDetails.treeAges[3].numOfTrees > 0"
-                      >
-                        <img
-                          src="assets/dist/img/sks/coffeeTree.png"
-                          width="70px"
-                          height="70px"
-                          style="position: absolute; bottom: 0"
-                        />
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div
-                        class="col-sm-3"
-                        *ngIf="farmDetails.treeAges[0].numOfTrees > 0"
-                      >
-                        <span style="color: green"> 0-3 </span>
-                        --
-                        <label>
-                          {{
-                            farmDetails.treeAges[0]
-                              ? farmDetails.treeAges[0].numOfTrees
-                              : 0
-                          }}
-                        </label>
-                      </div>
-                      <div
-                        class="col-sm-3"
-                        *ngIf="farmDetails.treeAges[1].numOfTrees > 0"
-                      >
-                        <span style="color: green"> 4-10 </span>
-                        --
-                        <label>
-                          {{ farmDetails.treeAges[1].numOfTrees }}
-                        </label>
-                      </div>
-                      <div
-                        class="col-sm-3"
-                        *ngIf="farmDetails.treeAges[2].numOfTrees"
-                      >
-                        <span style="color: green"> 11-15 </span>
-                        --
-                        <label>
-                          {{ farmDetails.treeAges[2].numOfTrees }}
-                        </label>
-                      </div>
-                      <div
-                        class="col-sm-3"
-                        *ngIf="farmDetails.treeAges[3].numOfTrees > 0"
-                      >
-                        <span style="color: green"> 16-20 </span>
-                        --
-                        <label>
-                          {{ farmDetails.treeAges[3].numOfTrees }}
-                        </label>
-                      </div>
-                    </div>
-
-                    <div class="row" style="margin-top: 100px">
-                      <div
-                        class="col-sm-4"
-                        *ngIf="farmDetails.treeAges[4].numOfTrees > 0"
-                      >
-                        <img
-                          src="assets/dist/img/sks/coffeeTree.png"
-                          width="80px"
-                          height="80px"
-                          style="position: absolute; bottom: 0"
-                        />
-                      </div>
-                      <div
-                        class="col-sm-4"
-                        *ngIf="farmDetails.treeAges[5].numOfTrees > 0"
-                      >
-                        <img
-                          src="assets/dist/img/sks/coffeeTree.png"
-                          width="90px"
-                          height="90px"
-                          style="position: absolute; bottom: 0"
-                        />
-                      </div>
-                      <div
-                        class="col-sm-4"
-                        *ngIf="farmDetails.treeAges[6].numOfTrees > 0"
-                      >
-                        <img
-                          src="assets/dist/img/sks/coffeeTree.png"
-                          width="95px"
-                          height="95px"
-                          style="position: absolute; bottom: 0"
-                        />
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div
-                        class="col-sm-4"
-                        *ngIf="farmDetails.treeAges[4].numOfTrees > 0"
-                      >
-                        <span style="color: green"> 21-25 </span>
-                        --
-                        <label>
-                          {{ farmDetails.treeAges[4].numOfTrees }}
-                        </label>
-                      </div>
-                      <div
-                        class="col-sm-4"
-                        *ngIf="farmDetails.treeAges[5].numOfTrees > 0"
-                      >
-                        <span style="color: green"> 26-30 </span>
-                        --
-                        <label>
-                          {{ farmDetails.treeAges[5].numOfTrees }}
-                        </label>
-                      </div>
-                      <div
-                        class="col-sm-4"
-                        *ngIf="farmDetails.treeAges[6].numOfTrees > 0"
-                      >
-                        <span style="color: green"> 31+ </span>
-                        --
-                        <label>
-                          {{ farmDetails.treeAges[6].numOfTrees }}
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </fieldset>
+                      </td>
+                    </tr>
+                  </ng-container>
+              </table>
             </div>
           </div>
         </div>
         <div class="col-sm-10 col-centered">
           <div class="form-group">
             <label class="control-label label-required">
-              {{ "select_gap_to_cover" | translate }}</label
-            >
-            <ng-multiselect-dropdown
-              formControlName="adoptionGap"
-              [placeholder]="'select gap'"
-              [settings]="gapDropdownSettings"
-              [data]="gaps"
-              [(ngModel)]="scheduleVisit.value.adoptionGap"
-              (onSelect)="onGapSelect($event)"
-              required
-            >
+              {{ "select_gap_to_cover" | translate }}</label>
+            <ng-multiselect-dropdown formControlName="adoptionGap" [placeholder]="'select gap'"
+              [settings]="gapDropdownSettings" [data]="gaps" [(ngModel)]="scheduleVisit.value.adoptionGap"
+              (onSelect)="onGapSelect($event)" required>
             </ng-multiselect-dropdown>
-            <app-inline-errors
-              *ngIf="
+            <app-inline-errors *ngIf="
                 scheduleVisit.controls.adoptionGap.invalid &&
                 (scheduleVisit.controls.adoptionGap.dirty ||
                   scheduleVisit.controls.adoptionGap.touched)
-              "
-              [errors]="scheduleVisit.controls.adoptionGap.errors"
-              [label]="'adoption_gap'"
-            >
+              " [errors]="scheduleVisit.controls.adoptionGap.errors" [label]="'adoption_gap'">
             </app-inline-errors>
           </div>
         </div>
         <div class="col-sm-10 col-centered">
           <div class="form-group">
             <label class="control-label label-required">
-              {{ "select_agronomist_to_visit" | translate }}</label
-            >
+              {{ "select_agronomist_to_visit" | translate }}</label>
             <select class="form-control" formControlName="agronomist">
               <option value="" selected>
                 {{ "select_agronomist" | translate }}
               </option>
-              <option
-                *ngFor="let agro of agronomist; let i = index"
-                value="{{ agro._id }}"
-              >
+              <option *ngFor="let agro of agronomist; let i = index" value="{{ agro._id }}">
                 {{ agro.fullNames | titlecase }}
               </option>
             </select>
-            <app-inline-errors
-              *ngIf="
+            <app-inline-errors *ngIf="
                 scheduleVisit.controls.agronomist.invalid &&
                 (scheduleVisit.controls.agronomist.dirty ||
                   scheduleVisit.controls.agronomist.touched)
-              "
-              [errors]="scheduleVisit.controls.agronomist.errors"
-              [label]="'agronomist'"
-            >
+              " [errors]="scheduleVisit.controls.agronomist.errors" [label]="'agronomist'">
             </app-inline-errors>
           </div>
         </div>
@@ -495,62 +270,33 @@
               <label class="control-label label-required">{{
                 "select_date" | translate
               }}</label>
-              <input
-                [owlDateTimeTrigger]="dt1"
-                [owlDateTime]="dt1"
-                [min]="newDate"
-                formControlName="visitDate"
-                class="form-control"
-                placeholder="Dd/mm/yyyy"
-              />
-              <owl-date-time
-                [pickerType]="'calendar'"
-                [scrollStrategy]="scrollStrategy"
-                #dt1
-              ></owl-date-time>
-              <app-inline-errors
-                *ngIf="
+              <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" [min]="newDate" formControlName="visitDate"
+                class="form-control" placeholder="Dd/mm/yyyy" />
+              <owl-date-time [pickerType]="'calendar'" [scrollStrategy]="scrollStrategy" #dt1></owl-date-time>
+              <app-inline-errors *ngIf="
                   scheduleVisit.controls.date.get('visitDate').invalid &&
                   (scheduleVisit.controls.date.get('visitDate').dirty ||
                     scheduleVisit.controls.date.get('visitDate').touched)
-                "
-                [errors]="scheduleVisit.controls.date.get('visitDate').errors"
-                [label]="'visit date'"
-              >
+                " [errors]="scheduleVisit.controls.date.get('visitDate').errors" [label]="'visit date'">
               </app-inline-errors>
             </div>
           </div>
         </div>
         <div class="col-sm-10 col-centered">
-          <div
-            class="row text-center"
-            style="padding-left: 10%; padding-right: 10%"
-          >
+          <div class="row text-center" style="padding-left: 10%; padding-right: 10%">
             <div class="col-sm-6">
               <div class="form-group">
                 <label class="control-label label-required">{{
                   "start_time" | translate
                 }}</label>
-                <input
-                  [owlDateTimeTrigger]="dt3"
-                  class="form-control"
-                  formControlName="startTime"
-                  [owlDateTime]="dt3"
-                />
-                <owl-date-time
-                  [pickerType]="'timer'"
-                  [scrollStrategy]="scrollStrategy"
-                  #dt3
-                ></owl-date-time>
-                <app-inline-errors
-                  *ngIf="
+                <input [owlDateTimeTrigger]="dt3" class="form-control" formControlName="startTime"
+                  [owlDateTime]="dt3" />
+                <owl-date-time [pickerType]="'timer'" [scrollStrategy]="scrollStrategy" #dt3></owl-date-time>
+                <app-inline-errors *ngIf="
                     scheduleVisit.controls.startTime.invalid &&
                     (scheduleVisit.controls.startTime.dirty ||
                       scheduleVisit.controls.startTime.touched)
-                  "
-                  [errors]="scheduleVisit.controls.startTime.errors"
-                  [label]="'start time'"
-                >
+                  " [errors]="scheduleVisit.controls.startTime.errors" [label]="'start time'">
                 </app-inline-errors>
               </div>
             </div>
@@ -559,36 +305,20 @@
                 <label class="control-label label-required">{{
                   "end_time" | translate
                 }}</label>
-                <input
-                  [owlDateTimeTrigger]="dt4"
-                  class="form-control"
-                  [min]="startTime"
-                  formControlName="endTime"
-                  [owlDateTime]="dt4"
-                />
-                <owl-date-time
-                  [pickerType]="'timer'"
-                  [scrollStrategy]="scrollStrategy"
-                  #dt4
-                ></owl-date-time>
-                <span
-                  style="font: normal 10px Helvetica Neue, Helvetica, Arial, sans-serif; color: red"
-                  *ngIf="
+                <input [owlDateTimeTrigger]="dt4" class="form-control" [min]="startTime" formControlName="endTime"
+                  [owlDateTime]="dt4" />
+                <owl-date-time [pickerType]="'timer'" [scrollStrategy]="scrollStrategy" #dt4></owl-date-time>
+                <span style="font: normal 10px Helvetica Neue, Helvetica, Arial, sans-serif; color: red" *ngIf="
                     scheduleVisit.controls.startTime.value >=
                     scheduleVisit.controls.endTime.value
-                  "
-                >
-                 End Time can not be less the Start Time
+                  ">
+                  End Time can not be less the Start Time
                 </span>
-                <app-inline-errors
-                  *ngIf="
+                <app-inline-errors *ngIf="
                     scheduleVisit.controls.endTime.invalid &&
                     (scheduleVisit.controls.endTime.dirty ||
                       scheduleVisit.controls.endTime.touched)
-                  "
-                  [errors]="scheduleVisit.controls.endTime.errors"
-                  [label]="'end time'"
-                >
+                  " [errors]="scheduleVisit.controls.endTime.errors" [label]="'end time'">
                 </app-inline-errors>
               </div>
             </div>
@@ -599,22 +329,12 @@
             <label class="control-label label-required">{{
               "visit_description" | translate
             }}</label>
-            <input
-              type="text"
-              formControlName="description"
-              class="form-control"
-              style="height: 100px"
-              required
-            />
-            <app-inline-errors
-              *ngIf="
+            <input type="text" formControlName="description" class="form-control" style="height: 100px" required />
+            <app-inline-errors *ngIf="
                 scheduleVisit.controls.description.invalid &&
                 (scheduleVisit.controls.description.dirty ||
                   scheduleVisit.value.description.touched)
-              "
-              [errors]="scheduleVisit.controls.description.errors"
-              [label]="'description'"
-            >
+              " [errors]="scheduleVisit.controls.description.errors" [label]="'description'">
             </app-inline-errors>
           </div>
         </div>
@@ -622,32 +342,21 @@
     </div>
     <br />
     <div class="text-center" *ngIf="scheduleVisit.value.farmerGroup != ''">
-      <button
-        type="button"
-        class="btn"
-        style="
+      <button type="button" class="btn" style="
           width: 250px;
           height: 50px;
           margin-right: 10px;
           background-color: #bababa;
           color: #ffffff;
-        "
-        routerLink="/admin/farm/visit/list"
-      >
+        " routerLink="/admin/farm/visit/list">
         {{ "cancel" | translate }}
       </button>
-      <button
-        class="btn"
-        (click)="open(content)"
-        [disabled]="loading"
-        style="
+      <button class="btn" (click)="open(content)" [disabled]="loading" style="
           width: 250px;
           height: 50px;
           background-color: #4f210d;
           color: #ffffff;
-        "
-        [disabled]="loading"
-      >
+        " [disabled]="loading">
         <span *ngIf="!loading">{{ "update visit" | translate }}</span>
         <ng-template *ngIf="loading">
           <div class="loader">
