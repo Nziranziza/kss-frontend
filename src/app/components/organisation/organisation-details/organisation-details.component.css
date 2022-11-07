@@ -142,7 +142,17 @@
   letter-spacing: 0px;
   color: #000000;
   opacity: 1;
+
 }
+
+.stats-covered {
+  overflow: scroll;
+  overflow-x: hidden;
+}
+
+.stats-covered::-webkit-scrollbar { width: 0 !important }
+.stats-covered { overflow: -moz-scrollbars-none; }
+.stats-covered { -ms-overflow-style: none; }
 
 .stats-box-cws-names {
   /* UI Properties */

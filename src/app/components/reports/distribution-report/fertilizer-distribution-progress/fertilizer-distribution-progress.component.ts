@@ -76,6 +76,7 @@ export class FertilizerDistributionProgressComponent extends BasicComponent impl
         cell_id: [''],
         village_id: [''],
       }),
+      appendix: [false]
     });
     this.dtOptions = {
       pagingType: 'full_numbers',
@@ -120,7 +121,8 @@ export class FertilizerDistributionProgressComponent extends BasicComponent impl
     this.downloading = true;
     this.downloadDetailedEnabled = false;
     const body = {
-      location: {}
+      location: {},
+      appendix: undefined
     };
     if (this.request.location.searchBy === 'district') {
       body.location['searchBy'.toString()] = 'district';
@@ -136,6 +138,7 @@ export class FertilizerDistributionProgressComponent extends BasicComponent impl
       body.location['searchBy'.toString()] = 'cell';
       body.location['cell_id'.toString()] = this.request.location.cell_id;
     }
+    body.appendix = this.request.appendix;
     this.inputDistributionService.getDistributionProgressDetail(body).subscribe((data) => {
       this.printableDetails = data.content;
       this.excelService.exportAsExcelFile(this.printableDetails, 'Fe detailed application report');
@@ -162,6 +165,7 @@ export class FertilizerDistributionProgressComponent extends BasicComponent impl
       }
       this.downloadDetailedEnabled = searchBy !== 'province';
       this.request = request;
+      console.log(this.request);
       this.inputDistributionService.getDistributionProgress(request).subscribe((data) => {
         this.loading = false;
         this.distributionProgress = [];
