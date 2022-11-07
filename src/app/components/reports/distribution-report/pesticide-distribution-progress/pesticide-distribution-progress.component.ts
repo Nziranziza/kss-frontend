@@ -73,6 +73,7 @@ export class PesticideDistributionProgressComponent extends BasicComponent imple
         cell_id: [''],
         village_id: [''],
       }),
+      appendix: [false],
     });
     this.reportIsReady = true;
     this.dtOptions = {
@@ -150,11 +151,11 @@ export class PesticideDistributionProgressComponent extends BasicComponent imple
           });
           this.showData = true;
         } else {
-          this.setMessage('Sorry no data found to this location!');
+          this.setWarning('Sorry no data found to this location!');
         }
       }, (err) => {
         if (err.status === 404) {
-          this.setMessage('Sorry no data found to this location!');
+          this.setWarning('Sorry no data found to this location!');
         } else {
           this.setError(err.errors);
         }
@@ -258,7 +259,8 @@ export class PesticideDistributionProgressComponent extends BasicComponent imple
     this.downloading = true;
     this.downloadDetailedEnabled = false;
     const body = {
-      location: {}
+      location: {},
+      appendix: undefined
     };
     if (this.request.location.searchBy === 'district') {
       body.location['searchBy'.toString()] = 'district';
@@ -274,6 +276,7 @@ export class PesticideDistributionProgressComponent extends BasicComponent imple
       body.location['searchBy'.toString()] = 'cell';
       body.location['cell_id'.toString()] = this.request.location.cell_id;
     }
+    body.appendix = this.request.appendix;
     this.inputDistributionService.getDistributionProgressPesticideDetail(body).subscribe((data) => {
       this.printableDetails = data.content;
       this.excelService.exportAsExcelFile(this.printableDetails, 'Pe detailed application report');
