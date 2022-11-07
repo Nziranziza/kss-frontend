@@ -189,7 +189,7 @@ export class FarmerGroupCreateComponent
       .checkNameStatus({ name: this.createForm.value.groupName })
       .subscribe(
         (data) => {
-          this.nameAlreadyExist = false;
+          this.nameAlreadyExist = true;
         },
         (err) => {
           this.nameAlreadyExist = false;
