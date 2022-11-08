@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {
   AuthenticationService,
+  BasicComponent,
   GapService,
   GroupService,
   HelperService,
@@ -12,6 +13,9 @@ import {
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SuccessModalComponent } from 'src/app/shared';
+import { DataTableDirective } from 'angular-datatables';
+import { Subject } from 'rxjs';
+import { ScrollStrategy, ScrollStrategyOptions } from '@angular/cdk/overlay';
 
 @Component({
   selector: 'app-edit-farm-visit',
@@ -20,8 +24,9 @@ import { SuccessModalComponent } from 'src/app/shared';
     '../../schedules/training-scheduling-create/training-scheduling-create.component.css',
   ],
 })
-export class EditFarmVisitComponent implements OnInit {
+export class EditFarmVisitComponent extends BasicComponent implements OnInit {
   scheduleVisit: FormGroup;
+  scrollStrategy: ScrollStrategy;
   errors: any;
   successDetails: any;
   constructor(
@@ -35,8 +40,12 @@ export class EditFarmVisitComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private helper: HelperService,
-    private modal: NgbModal
-  ) { }
+    private modal: NgbModal,
+    private readonly sso: ScrollStrategyOptions
+  ) {
+    super();
+    this.scrollStrategy = this.sso.noop();
+  }
   loading = false;
   farmerGroups: any[] = [];
   farmList: any[] = [];
@@ -56,6 +65,14 @@ export class EditFarmVisitComponent implements OnInit {
   formatedStartDate: string;
   formatedEndDate: string;
   newDate: Date = new Date();
+  dtOptions: any = {};
+  // @ts-ignore
+  dtTrigger: Subject = new Subject();
+  // @ts-ignore
+  @ViewChild(DataTableDirective, { static: false })
+  dtElement: DataTableDirective;
+  config: any;
+  allSelected = false;
 
 
   ngOnInit() {
@@ -98,7 +115,7 @@ export class EditFarmVisitComponent implements OnInit {
         new Date(data.data.date.split('T')[0] +
           'T' +
           (parseInt(data.data.expectedDuration.from.split(':')[0], 10) - 2).toString() + ':'
-           + data.data.expectedDuration.from.split(':')[1] +
+          + data.data.expectedDuration.from.split(':')[1] +
           ':00.000Z')
       );
       this.scheduleVisit.controls.endTime.setValue(
@@ -160,6 +177,16 @@ export class EditFarmVisitComponent implements OnInit {
     gapSelected.setValue(items, { emitEvent: false });
   }
 
+  checkIfExit(id: string) {
+    let result = false;
+    this.savedFarmList.forEach((farms) => {
+      if (farms.farmId === id) {
+        result = true;
+        return;
+      }
+    });
+    return result;
+  }
   getFarms(groupName: string) {
     const newdata = {
       name: groupName,
@@ -167,29 +194,87 @@ export class EditFarmVisitComponent implements OnInit {
     };
     this.farmList = [];
     this.farmers = [];
+
     this.groupService.getByName(newdata).subscribe((data) => {
       this.farmerGroupId = data.data._id;
       data.data.members.forEach((member) => {
-        member.openDialog = false;
-        this.farmers.push(member);
-        this.savedFarmList.forEach((farms) => {
-          member.farms.forEach((farm) => {
-            farm.requestInfo.forEach((info) => {
-              this.farmList.push({
+        const newMember =
+          member.farms.map((farm) => {
+            const newFarm = farm.requestInfo.map((info) => {
+              return {
+                farm: info,
+                upi: info.upiNumber,
+                location: info.location,
+                trees: info.numberOfTrees,
                 farmer: member.firstName
                   ? member.firstName + ' ' + member.lastName
                   : member.groupContactPersonNames,
-                farm: info,
                 owner: member.userId,
-                upi: info.upiNumber,
-                selected: info._id === farms.farmId,
-                location: info.location,
-                trees: info.numberOfTrees,
-              });
+                selected: this.checkIfExit(info._id),
+              };
             });
+            return {
+              farmer: member.firstName
+                ? member.firstName + ' ' + member.lastName
+                : member.groupContactPersonNames,
+              owner: member.userId,
+              farmSelected: false,
+              farms: newFarm
+            };
           });
-        });
+        this.farmers.push(newMember[0]);
       });
+      this.config = {
+        itemsPerPage: 2,
+        currentPage: 1,
+        totalItems: this.farmers.length,
+      };
+      this.dtTrigger.next();
+    });
+    this.dtOptions = {
+      pagingType: 'full_numbers',
+      pageLength: 10,
+      order: [],
+    };
+  }
+
+  selectAllFarmer(isChecked: boolean) {
+    this.allSelected = isChecked;
+    this.farmers.map((farmer) => {
+      farmer.farmSelected = isChecked;
+      farmer.farms.forEach((farm) => {
+        farm.selected = isChecked;
+      });
+    });
+    this.farmers.map((farmer) => {
+      const newData = farmer.farms.filter((data) => {
+        return data.selected === true;
+      });
+      this.selectedFarms.push(...newData);
+    });
+  }
+
+  selectFarmer(isChecked: boolean, i: number) {
+    this.farmers[i].farmSelected = isChecked;
+    this.farmers[i].farms.forEach((farm) => {
+      farm.selected = isChecked;
+    });
+    this.farmers.map((farmer) => {
+      const newData = farmer.farms.filter((data) => {
+        return data.selected === true;
+      });
+      this.selectedFarms.push(...newData);
+    });
+  }
+
+  selectFarms(isChecked: boolean, item: number, i: number) {
+    this.farmers[item].farms[i].selected = isChecked;
+    this.selectedFarms = [];
+    this.farmers.map((farmer) => {
+      const newData = farmer.farms.filter((data) => {
+        return data.selected === true;
+      });
+      this.selectedFarms.push(...newData);
     });
   }
 
@@ -215,15 +300,15 @@ export class EditFarmVisitComponent implements OnInit {
     this.loading = false;
   }
 
-  selectFarms(isChecked: boolean, i: number) {
-    this.farmList[i].selected = true;
-    if (!isChecked) {
-      this.allTraineesSelected = isChecked;
-    }
-    this.selectedFarms = this.farmList.filter((data) => {
-      return data.selected === true;
-    });
-  }
+  // selectFarms(isChecked: boolean, i: number) {
+  //   this.farmList[i].selected = true;
+  //   if (!isChecked) {
+  //     this.allTraineesSelected = isChecked;
+  //   }
+  //   this.selectedFarms = this.farmList.filter((data) => {
+  //     return data.selected === true;
+  //   });
+  // }
 
   getGaps(): void {
     this.loading = true;
