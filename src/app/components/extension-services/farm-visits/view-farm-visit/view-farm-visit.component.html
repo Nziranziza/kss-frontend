@@ -43,7 +43,7 @@
                     <td>
                       {{ farm?.upiNumber }}
                     </td>
-                    <td><a *ngIf="farm.photos" href="{{ farm.photos }}" target="_blank">
+                    <td><a *ngIf="farm?.photos.length > 0" href="{{ farm.photos[0] }}" target="_blank">
                         <i class="fa fa-download"></i>
                       </a></td>
                     <td> {{farm?.overall_score }} % </td>
