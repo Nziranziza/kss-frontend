@@ -16,7 +16,7 @@
                     <th>Owner</th>
                     <th>Phone Number</th>
                     <th>Location</th>
-                    <th>UPI</th>
+                    <th *ngIf="false">UPI</th>
                     <th>Picture</th>
                     <th>Score</th>
                   </tr>
@@ -40,7 +40,7 @@
                           farm?.location?.village_id?.name
                       }}
                     </td>
-                    <td>
+                    <td *ngIf="false">
                       {{ farm?.upiNumber }}
                     </td>
                     <td><a *ngIf="farm?.photos.length > 0" href="{{ farm.photos[0] }}" target="_blank">
