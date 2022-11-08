@@ -1,1 +1,32 @@
+table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>td:first-child:before,
+table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>th:first-child:before {
+  display: none;
+}
 
+.table>thead:first-child>tr:first-child>th {
+  display: table-cell !important;
+}
+
+table.dataTable.row-border tbody tr:first-child td {
+  display: table-cell !important;
+}
+
+.description-block {
+  padding: 20px 0 20px 0;
+}
+
+td>span {
+  padding: 10px;
+}
+
+.stats__amount {
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 1.2;
+}
+
+.stats__caption {}
+
+.purple-text {
+  color: #3c8dbc;
+}

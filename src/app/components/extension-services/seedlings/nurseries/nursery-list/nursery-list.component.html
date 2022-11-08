@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-sm-10">Nursery Sites</div>
     <div class="col-sm-2">
-      <a class="btn btn-success pull-right" routerLink="/admin/seedling/nursery/create">
+      <a class="btn btn-success pull-right" routerLink="/admin/seedling/nursery/create" *appHasPermission="[1]">
         Add Nursery
       </a>
     </div>

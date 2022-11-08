@@ -1,8 +1,5 @@
 <div class="modal-body extended-modal-body">
-  <div
-    (click)="modal.dismiss('cancel click')"
-    class="btn-modal-close text-center"
-  >
+  <div (click)="modal.dismiss('cancel click')" class="btn-modal-close text-center">
     <em class="fa fa-close"></em>
   </div>
   <h3>Visit Details</h3>
@@ -20,6 +17,7 @@
                     <th>Phone Number</th>
                     <th>Location</th>
                     <th>UPI</th>
+                    <th>Picture</th>
                     <th>Score</th>
                   </tr>
                 </thead>
@@ -45,6 +43,9 @@
                     <td>
                       {{ farm?.upiNumber }}
                     </td>
+                    <td><a *ngIf="farm?.photos.length > 0" href="{{ farm.photos[0] }}" target="_blank">
+                        <i class="fa fa-download"></i>
+                      </a></td>
                     <td> {{farm?.overall_score }} % </td>
                   </tr>
                 </tbody>
@@ -52,9 +53,7 @@
             </div>
           </div>
           <div style="margin-bottom: 10px">
-            <label class="control-label"
-              >GAP to be covered during the visit</label
-            >
+            <label class="control-label">GAP to be covered during the visit</label>
             <div class="confirm-text-box confirm-text">
               <table class="row-border hover table">
                 <thead>

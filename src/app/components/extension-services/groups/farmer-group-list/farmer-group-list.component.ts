@@ -20,8 +20,7 @@ import { ViewGroupComponent } from '../view-group/view-group.component';
 })
 export class FarmerGroupListComponent
   extends BasicComponent
-  implements OnInit, OnDestroy
-{
+  implements OnInit, OnDestroy {
   constructor(
     private authorisationService: AuthorisationService,
     private groupService: GroupService,
@@ -53,6 +52,7 @@ export class FarmerGroupListComponent
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 10,
+      order: [],
     };
     this.setMessage(this.messageService.getMessage());
   }
@@ -64,9 +64,8 @@ export class FarmerGroupListComponent
 
   listGroups(): void {
     this.loading = true;
-    const body = {
-      reference: this.authenticationService.getCurrentUser().info.org_id,
-    };
+    const body = !this.authorisationService.isTechnoServeAdmin() ?
+      { reference: this.authenticationService.getCurrentUser().info.org_id } : {};
 
     this.groupService.list(body).subscribe((data) => {
       this.groups = data.data;
