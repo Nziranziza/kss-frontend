@@ -19,7 +19,7 @@ import { BasicComponent } from '../../../../core';
   selector: 'app-view-farm-visit',
   templateUrl: './view-farm-visit.component.html',
   styleUrls: [
-    '../../schedules/training-scheduling-create/training-scheduling-create.component.css',
+    './view-farm-visit.component.css',
   ],
 })
 export class ViewFarmVisitComponent
@@ -29,6 +29,7 @@ export class ViewFarmVisitComponent
   closeResult = '';
   visits: any;
   modal: NgbActiveModal;
+  index;
   @Input() id: string;
 
   constructor(
@@ -51,6 +52,10 @@ export class ViewFarmVisitComponent
     this.setMessage(this.messageService.getMessage());
   }
 
+  selectIndex(i) {
+    this.index = i;
+  }
+
   getVisits() {
     this.visitService.one(this.id).subscribe((data) => {
       data.data.farms.map((farm) => {
@@ -58,9 +63,11 @@ export class ViewFarmVisitComponent
         farm.overall_score = 0;
         farm.evaluatedGaps.map((gap) => {
           overallWeight += gap.overall_weight;
-        })
+        });
+        farm.photos = [];
         farm.evaluatedGaps.map((gap) => {
           farm.overall_score += gap.overall_score * 100 / overallWeight;
+          farm.photos.push(...gap.photos);
         })
         return farm
       })

@@ -94,7 +94,7 @@
               <th>Seedlings Variety</th>
               <th>Seeds Amount</th>
               <th>Status</th>
-              <th class="text-center">Actions</th>
+              <th style="width:18%" class="text-center">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -107,17 +107,17 @@
                 <td>{{ nursery.stocks.length }} Variety</td>
                 <td>{{ totalSeeds[i] }} Kg</td>
                 <td>{{ nursery.status || "Active" }}</td>
-                <td>
+                <td style="width:18%" class="text-center">
                   <button appRequiredSeason class="btn btn-action-no-border btn-margin details-button"
                     (click)="openViewModal(nursery._id)">
                     <em class="fa fa-eye"></em>
                   </button>
                   <button appRequiredSeason (click)="openDeleteModal(nursery)"
-                    class="btn btn-action-no-border btn-margin">
+                    class="btn btn-action-no-border btn-margin" *appHasPermission="[1]">
                     <em class="fa fa-trash"></em>
                   </button>
                   <button class="btn btn-action-no-border btn-margin btn-sm details-button"
-                    routerLink="/admin/seedling/nursery/edit/{{ nursery._id }}">
+                    routerLink="/admin/seedling/nursery/edit/{{ nursery._id }}" *appHasPermission="[1]">
                     <em class="fa fa-pencil"></em>
                   </button>
                 </td>
