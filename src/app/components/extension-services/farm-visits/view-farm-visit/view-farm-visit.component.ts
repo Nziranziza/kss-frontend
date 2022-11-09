@@ -19,7 +19,7 @@ import { BasicComponent } from '../../../../core';
   selector: 'app-view-farm-visit',
   templateUrl: './view-farm-visit.component.html',
   styleUrls: [
-    '../../schedules/training-scheduling-create/training-scheduling-create.component.css',
+    './view-farm-visit.component.css',
   ],
 })
 export class ViewFarmVisitComponent
@@ -29,6 +29,7 @@ export class ViewFarmVisitComponent
   closeResult = '';
   visits: any;
   modal: NgbActiveModal;
+  index;
   @Input() id: string;
 
   constructor(
@@ -49,6 +50,10 @@ export class ViewFarmVisitComponent
   ngOnInit() {
     this.getVisits();
     this.setMessage(this.messageService.getMessage());
+  }
+
+  selectIndex(i) {
+    this.index = i;
   }
 
   getVisits() {
