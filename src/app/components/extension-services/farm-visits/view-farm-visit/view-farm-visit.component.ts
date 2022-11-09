@@ -58,9 +58,11 @@ export class ViewFarmVisitComponent
         farm.overall_score = 0;
         farm.evaluatedGaps.map((gap) => {
           overallWeight += gap.overall_weight;
-        })
+        });
+        farm.photos = [];
         farm.evaluatedGaps.map((gap) => {
           farm.overall_score += gap.overall_score * 100 / overallWeight;
+          farm.photos.push(...gap.photos);
         })
         return farm
       })

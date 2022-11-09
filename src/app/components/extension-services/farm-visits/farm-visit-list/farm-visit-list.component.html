@@ -125,7 +125,7 @@
                   </div>
                 </td>
                 <td>{{ visit?.groupId?.groupName }}</td>
-                <td>{{ visit?.overall_score ? visit?.overall_score : 0 }} %</td>
+                <td>{{ visit?.overall_score ? visit?.overall_score : 0 | number: "1.2-2" }} %</td>
                 <td>
                   <button appRequiredSeason class="btn btn-action-no-border btn-margin details-button"
                     (click)="openViewModal(visit._id)">
@@ -137,7 +137,7 @@
                       <em class="fa fa-trash"></em>
                     </button>
                     <button appRequiredSeason (click)="open(content); selectedVisit(visit)"
-                      class="btn btn-action-no-border btn-margin">
+                      class="btn btn-action-no-border btn-margin" *appHasPermission="[1]">
                       <em class="fa fa-envelope-o"></em>
                     </button>
                     <button *appHasPermission="[1]" class="btn btn-action-no-border btn-margin btn-sm details-button"

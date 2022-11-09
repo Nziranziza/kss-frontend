@@ -113,11 +113,11 @@
                     <em class="fa fa-eye"></em>
                   </button>
                   <button appRequiredSeason (click)="openDeleteModal(nursery)"
-                    class="btn btn-action-no-border btn-margin">
+                    class="btn btn-action-no-border btn-margin" *appHasPermission="[1]">
                     <em class="fa fa-trash"></em>
                   </button>
                   <button class="btn btn-action-no-border btn-margin btn-sm details-button"
-                    routerLink="/admin/seedling/nursery/edit/{{ nursery._id }}">
+                    routerLink="/admin/seedling/nursery/edit/{{ nursery._id }}" *appHasPermission="[1]">
                     <em class="fa fa-pencil"></em>
                   </button>
                 </td>

@@ -11,7 +11,7 @@
     <button class="btn btn-default btn-margin pull-right" (click)="editProfile(farmer.userInfo)">
       <i class="fa fa-pencil"></i> Profile
     </button>
-    <div *appHasPermission="[0,[8,1],[1,1],[1]]">
+    <div *appHasPermission="[0,[8,1],[1,1],[13]]">
       <ng-container *ngIf="showSetPinButton; else loadingSetPinStatus">
         <a class="btn btn-success btn-margin pull-right" *ngIf="!resetPin" (click)="enableResetPin(true)"><i
             class="fa fa-check"></i>&nbsp; Enable pin reset
