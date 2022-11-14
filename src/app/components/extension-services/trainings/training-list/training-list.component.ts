@@ -1,27 +1,26 @@
-import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {
   TrainingService,
   Training,
   AuthenticationService,
-} from "../../../../core";
-import { MessageService } from "../../../../core";
+} from '../../../../core';
+import { MessageService } from '../../../../core';
 // import { HelperService } from "../../../../core";
-import { BasicComponent } from "../../../../core";
-import { Subject } from "rxjs";
-import { DataTableDirective } from "angular-datatables";
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { ConfirmModalComponent } from "../../../../shared";
-import { TrainingViewComponent } from "../training-view/training-view.component";
+import { BasicComponent } from '../../../../core';
+import { Subject } from 'rxjs';
+import { DataTableDirective } from 'angular-datatables';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ConfirmModalComponent } from '../../../../shared';
+import { TrainingViewComponent } from '../training-view/training-view.component';
 
 @Component({
-  selector: "app-training-list",
-  templateUrl: "./training-list.component.html",
-  styleUrls: ["./training-list.component.css"],
+  selector: 'app-training-list',
+  templateUrl: './training-list.component.html',
+  styleUrls: ['./training-list.component.css'],
 })
 export class TrainingListComponent
   extends BasicComponent
-  implements OnInit, OnDestroy
-{
+  implements OnInit, OnDestroy {
   constructor(
     private messageService: MessageService,
     private trainingService: TrainingService,
@@ -38,10 +37,10 @@ export class TrainingListComponent
   autoHide = false;
   responsive = false;
   labels: any = {
-    previousLabel: "Prev",
-    nextLabel: "Next",
-    screenReaderPaginationLabel: "Pagination",
-    screenReaderPageLabel: "page",
+    previousLabel: 'Prev',
+    nextLabel: 'Next',
+    screenReaderPaginationLabel: 'Pagination',
+    screenReaderPageLabel: 'page',
     screenReaderCurrentLabel: `You're on page`,
   };
   config: any;
@@ -58,8 +57,9 @@ export class TrainingListComponent
     this.getTrainingList();
     this.getTrainingsStats({});
     this.dtOptions = {
-      pagingType: "full_numbers",
+      pagingType: 'full_numbers',
       pageLength: 10,
+      order: [],
     };
     this.setMessage(this.messageService.getMessage());
   }
@@ -93,11 +93,11 @@ export class TrainingListComponent
 
   openDeleteModal(trainingId: any, warning?: any) {
     const modalRef = this.modal.open(ConfirmModalComponent);
-    modalRef.componentInstance.title = "Delete Training";
+    modalRef.componentInstance.title = 'Delete Training';
     modalRef.componentInstance.content =
-      "Are you sure you want to delete this Training?";
-    modalRef.componentInstance.confirmButtonText = "Delete";
-    modalRef.componentInstance.cancelButtonText = "Cancel";
+      'Are you sure you want to delete this Training?';
+    modalRef.componentInstance.confirmButtonText = 'Delete';
+    modalRef.componentInstance.cancelButtonText = 'Cancel';
     modalRef.componentInstance.warning = warning;
     modalRef.result.then((results) => {
       if (results.confirmed) {
@@ -108,7 +108,7 @@ export class TrainingListComponent
               this.trainings = data.data;
               this.loading = false;
             });
-            this.setMessage("Training successfully deleted!");
+            this.setMessage('Training successfully deleted!');
           },
           (err) => {
             this.setMessage(err.errors);

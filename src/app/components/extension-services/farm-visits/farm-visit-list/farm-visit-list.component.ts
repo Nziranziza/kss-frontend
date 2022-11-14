@@ -7,6 +7,7 @@ import {
   VisitService,
   AuthenticationService,
   BasicComponent,
+  AuthorisationService,
 } from 'src/app/core';
 import { ConfirmModalComponent } from 'src/app/shared';
 import { ViewFarmVisitComponent } from '../view-farm-visit/view-farm-visit.component';
@@ -23,7 +24,8 @@ export class FarmVisitListComponent
     private messageService: MessageService,
     private visitService: VisitService,
     private modal: NgbModal,
-    private authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService,
+    private authorisationService: AuthorisationService
   ) {
     super();
   }
@@ -57,13 +59,16 @@ export class FarmVisitListComponent
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 25,
+      order: [],
     };
   }
 
   getVisits(deletetrigger = false): void {
     this.loading = true;
+    const body = !this.authorisationService.isTechnoServeAdmin() ?
+      { reference: this.authenticationService.getCurrentUser().info.org_id } : {};
     this.visitService
-      .all({ reference: this.authenticationService.getCurrentUser().info.org_id })
+      .all(body)
       .subscribe((data) => {
         const newData = data.data.map((newdata) => {
           newdata.overall_score = 0;
