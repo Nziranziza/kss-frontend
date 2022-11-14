@@ -10,11 +10,6 @@
   width: 128px;
 }
 
-header nav {
-  display: inline-block;
-  /* border-bottom: 2px solid #190ec7; */
-}
-
 .sks_nav {
   background-color: #4f210d;
   height: 60px;
@@ -33,13 +28,44 @@ header nav {
 footer {
   /* border: 2px solid red; */
   padding-left: 10px;
+  min-height: 80px;
   padding-right: 10px;
   background-color: #bfaea7 !important;
 }
 
+.footer-sub {
+  /* border: 2px solid red; */
+  padding-left: 10px;
+  min-height: 200px;
+  padding-right: 10px;
+  background-color: #eeeeee !important;
+}
+
 .footer_links {
-  font-size: 14px;
+  font-size: 1.5rem;
+  text-align: center;
   /* color: #cbcbcb; */
+}
+
+.elements {
+  list-style: none;
+}
+
+.elements-link {
+  margin-top: 1rem;
+  font: normal normal medium 3rem Helvetica Neue, Helvetica, Arial,
+    sans-serif;
+  pointer-events: initial;
+  cursor: pointer;
+}
+
+.footer-social {
+  color: #E1A33E;
+  font-size: 5rem
+}
+
+.footer-social i {
+  padding-left: 3rem;
 }
 
 .footer_links a {
@@ -50,7 +76,7 @@ footer {
 
 .footer_links a:hover {
   color: #000000;
-  border-bottom: 1px solid #4f210d;
+  border-bottom: 1px solid transparent;
   text-decoration: none;
 }
 
@@ -87,9 +113,13 @@ footer {
 }
 
 .about {
-  min-height: 430px;
+  min-height: 320px;
   padding: 20px;
   position: relative;
+}
+
+.partners-section {
+  background: #f2eee7 0% 0% no-repeat padding-box;
 }
 
 .bold {
@@ -98,29 +128,30 @@ footer {
 
 .about-texts {
   text-align: left;
-  margin-left: 40px;
+  margin-left: 5rem;
   letter-spacing: 0px;
   min-height: 36px;
   color: #000000;
-  font: normal normal medium 30px/40px Helvetica Neue, Helvetica, Arial,
+  font: normal normal medium 3rem Helvetica Neue, Helvetica, Arial,
     sans-serif;
+  font-size: 3rem;
 }
 
 
 .about-texts .text {
-  font-size: 20px;
+  font-size: 2rem;
   text-transform: none;
 }
 
 .about-title {
-  font-size: 40px;
+  font-size: 3.5rem;
   color: #e1a33e;
   height: 66px;
-  margin-top: -40px;
+  margin-top: -2rem;
 }
 
 .about-logo {
-  margin-top: 20px;
+  margin-top: 1rem;
   height: 146px;
   width: 441px;
 }
@@ -198,7 +229,8 @@ footer {
 .footer_links {
   /* UI Properties */
   text-align: left;
-  font: normal normal 600 18px/23px Montserrat;
+  font: normal normal medium 3rem Helvetica Neue, Helvetica, Arial,
+    sans-serif;
   letter-spacing: 0px;
   color: #4f210d;
   opacity: 1;
@@ -274,4 +306,52 @@ footer {
 .features-box div span {
   margin-top: -10px;
   font-size: 16px;
+}
+
+.dropdown-menu {
+  min-width: 140px;
+  border-radius: 0px;
+}
+
+.dropdown-menu .dropdown-item {
+  display: block;
+  padding: 5px 14px;
+}
+
+.header-name-box {
+  text-align: center;
+  margin-top: 15px;
+  font: normal normal medium 28px/34px Helvetica Neue;
+  letter-spacing: 0px;
+  color: #E1A33E;
+  opacity: 1;
+  width: 143px;
+  height: 25px;
+  pointer-events: initial;
+  cursor: pointer;
+}
+
+.header-name-text {
+  text-align: left;
+  margin-top: 15px;
+  margin-left: 20px;
+  font: normal normal normal 15px/17px Helvetica Neue;
+  letter-spacing: 0px;
+  color: #FFFFFF;
+  opacity: 1;
+}
+
+.text-white {
+  --tw-text-opacity: 1;
+  color: black;
+  font-size: larger;
+}
+
+.ml-5 {
+  margin-left: 1.25rem;
+}
+
+.my-5 {
+  margin-bottom: 1.25rem;
+  margin-top: 1.25rem;
 }
