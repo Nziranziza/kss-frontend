@@ -22,9 +22,9 @@ RUN sudo apt-get update && \
     sudo service nginx restart
 
 WORKDIR /home/docker-deployer/
-COPY smartkungahara-srv-01.conf /etc/nginx/sites-available/
-COPY smartkungahara-srv-02.conf /etc/nginx/sites-available/
-#RUN sudo ln -s /etc/nginx/sites-available/smartkungahara.rw.conf /etc/nginx/sites-enabled
+COPY smartkungahara.rw.conf /etc/nginx/sites-available/
+#COPY smartkungahara-srv-02.conf /etc/nginx/sites-available/
+RUN sudo ln -s /etc/nginx/sites-available/smartkungahara.rw.conf /etc/nginx/sites-enabled
 RUN sudo rm -rf /etc/nginx/sites-available/default
 RUN sudo rm -rf /etc/nginx/sites-enabled/default
 RUN sudo service nginx restart
