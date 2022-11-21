@@ -9,6 +9,7 @@ import { Subject } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { GapDeleteModal } from '../gap-delete-modal/gap-delete-modal.component';
 import { ViewGapComponent } from '../view-gap/view-gap.component';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-gap-list',
@@ -21,7 +22,8 @@ export class GapListComponent
   constructor(
     private messageService: MessageService,
     private gapService: GapService,
-    private modal: NgbModal
+    private modal: NgbModal,
+    private cookieService: CookieService,
   ) {
     super();
   }
@@ -29,6 +31,7 @@ export class GapListComponent
   gaps: any[] = [];
   mostAdopted: any = '';
   overallWeight = 0;
+  gapTotalWeight = 0;
 
   dtOptions: DataTables.Settings = {};
   loading = false;
@@ -48,13 +51,17 @@ export class GapListComponent
 
   getGap(deletetrigger: any = false): void {
     this.loading = true;
+    this.gapTotalWeight = 0;
     this.gapService.all().subscribe((data) => {
       this.gaps = data.data;
       deletetrigger ? '' : this.dtTrigger.next();
       this.gaps.map((gap) => {
+        this.gapTotalWeight += gap.gap_weight;
         this.overallWeight += gap.gap_weight * gap.adoptionRate / 100;
       })
       const bestAdopted = data.data.reduce((max, gap) => max.adoptionRate > gap.adoptionRate ? max : gap);
+      this.cookieService.set('gapTotal-weight', this.gapTotalWeight.toString());
+      console.log(this.gapTotalWeight.toString());
       if (bestAdopted.gap_name) {
         this.mostAdopted = bestAdopted.gap_name;
       }
