@@ -40,6 +40,7 @@ export class GapListComponent
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 10,
+      order: [],
     };
     this.setMessage(this.messageService.getMessage());
   }

@@ -1,10 +1,10 @@
 import {Component, Inject, Injector, Input, OnInit, PLATFORM_ID} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
-import {AuthenticationService, InputDistributionService, MessageService} from '../../../../core/services';
-import {HelperService} from '../../../../core/helpers';
+import {AuthenticationService, InputDistributionService, MessageService} from '../../../../core';
+import {HelperService} from '../../../../core';
 import {isPlatformBrowser} from '@angular/common';
-import {BasicComponent} from '../../../../core/library';
+import {BasicComponent} from '../../../../core';
 
 @Component({
   selector: 'app-apply-pesticide',

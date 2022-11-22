@@ -1,11 +1,7 @@
 <h3>
   Farmers Groups
-  <a
-    class="btn btn-success"
-    style="float: right"
-    routerLink="/admin/farmers/group/create"
-    *appHasPermission="[1]"
-    ><i class="fa fa-plus"></i> Add a farmers group
+  <a class="btn btn-success" style="float: right" routerLink="/admin/farmers/group/create" *appHasPermission="[1]"><i
+      class="fa fa-plus"></i> Add a farmers group
   </a>
 </h3>
 
@@ -55,12 +51,7 @@
     <div class="box">
       <div class="box-body table-responsive">
         <app-loader *ngIf="loading"></app-loader>
-        <table
-          datatable
-          [dtOptions]="dtOptions"
-          [dtTrigger]="dtTrigger"
-          class="row-border hover table table-striped"
-        >
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped">
           <thead>
             <tr>
               <th>Date added</th>
@@ -74,7 +65,7 @@
                 attendance rate
               </th>
               <th>status</th>
-              <th>Actions</th>
+              <th style="width:18%" class="text-center">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -97,41 +88,25 @@
                 </td>
                 <td>{{ weekDays[group.meetingSchedule?.meetingDay - 1] }}</td>
                 <td>{{ group?.attendanceRate }}</td>
-                <td>
+                <td style="width:18%" class="text-center">
                   <span class="profile-text">
-                    <ng-container *ngIf="!group.active; else inactive"
-                      ><span style="color: green; font-weight: bold"
-                        >active</span
-                      >
+                    <ng-container *ngIf="!group.active; else inactive"><span
+                        style="color: green; font-weight: bold">active</span>
                     </ng-container>
-                    <ng-template #inactive
-                      ><span style="color: #b21717; font-weight: bold"
-                        >inactive</span
-                      ></ng-template
-                    >
+                    <ng-template #inactive><span style="color: #b21717; font-weight: bold">inactive</span></ng-template>
                   </span>
                 </td>
                 <td class="actions no-wrap text-right">
-                  <button
-                    appRequiredSeason
-                    class="btn btn-action-no-border btn-margin details-button"
-                    (click)="openViewModal(group._id)"
-                  >
+                  <button appRequiredSeason class="btn btn-action-no-border btn-margin details-button"
+                    (click)="openViewModal(group._id)">
                     <em class="fa fa-eye"></em>
                   </button>
-                  <button
-                    (click)="openDelete(group)"
-                    *appHasPermission="[1]"
-                    class="btn btn-action-no-border btn-margin"
-                  >
+                  <button (click)="openDelete(group)" *appHasPermission="[1]"
+                    class="btn btn-action-no-border btn-margin">
                     <em class="fa fa-trash"></em>
                   </button>
-                  <button
-                    class="btn btn-action-no-border btn-margin"
-                    *appHasPermission="[1]"
-                    [routerLink]="['/admin/farmers/group/edit', group._id]"
-                    style="margin-left: 10px"
-                  >
+                  <button class="btn btn-action-no-border btn-margin" *appHasPermission="[1]"
+                    [routerLink]="['/admin/farmers/group/edit', group._id]" style="margin-left: 10px">
                     <em class="fa fa-pencil"></em>
                   </button>
                 </td>

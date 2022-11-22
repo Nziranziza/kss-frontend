@@ -1,37 +1,72 @@
 <div class="modal-body extended-modal-body">
-  <div
-    (click)="modal.dismiss('cancel click')"
-    class="btn-modal-close text-center"
-  >
+  <div (click)="modal.dismiss('cancel click')" class="btn-modal-close text-center">
     <em class="fa fa-close"></em>
   </div>
-  <h3>Visit Details</h3>
-  <div class="box">
-    <div class="box-body box-confirm">
-      <div class="row">
-        <div class="col-xs-12">
-          <div style="margin-bottom: 10px">
-            <label class="control-label">Farm to visit</label>
-            <div class="confirm-text-box confirm-text">
-              <table class="row-border hover table">
-                <thead>
-                  <tr>
-                    <th>Owner</th>
-                    <th>Phone Number</th>
-                    <th>Location</th>
-                    <th>UPI</th>
-                    <th>Score</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let farm of visits?.farms; let i = index">
-                    <td>
-                      {{ farm.owner?.firstName + " " + farm.owner?.lastName }}
-                    </td>
-                    <td>{{ farm.owner?.phoneNumber }}</td>
-                    <td>
-                      {{
-                        farm?.location?.prov_id?.namek.toLowerCase()+
+  <!-- title row -->
+  <div class="row">
+    <div class="col-xs-12">
+      <h2 class="page-header">
+        Farm Visit Details
+        <small class="pull-right">Date: {{ visits?.date | date: "shortDate" }}</small>
+      </h2>
+      <small class="pull-right">Time: {{ visits?.expectedDuration ? visits.expectedDuration.from : "" }} -
+        {{ visits?.expectedDuration ? visits.expectedDuration.to : "" }}</small>
+    </div>
+    <!-- /.col -->
+  </div>
+  <!-- info row -->
+  <div class="row invoice-info">
+    <div class="col-sm-4 invoice-col">
+      Agronomist
+      <address>
+        <strong>{{ visits?.visitor.firstName + " " + visits?.visitor.lastName }}</strong><br>
+
+      </address>
+    </div>
+    <!-- /.col -->
+    <div class="col-sm-4 invoice-col">
+      Description
+      <address>
+        <strong>{{ visits?.description }}</strong><br>
+
+      </address>
+    </div>
+    <!-- /.col -->
+    <div class="col-sm-4 invoice-col">
+      <b>GAP To Be Covered</b><br>
+      <br>
+      <div *ngFor="let gap of visits?.gaps; let i = index">
+        <b>{{ gap.gap_name }}</b><br>
+      </div>
+    </div>
+    <!-- /.col -->
+  </div>
+  <!-- /.row -->
+
+  <div class="row">
+    <!-- accepted payments column -->
+    <div class="col-xs-12">
+      <p class="lead">Farm To Visit</p>
+      <div class="table-responsive">
+        <table class="row-border hover table">
+          <thead>
+            <tr>
+              <th style="width:30%">Farmer Name</th>
+              <th>Contact</th>
+              <th style="width:30%">Location</th>
+              <th style="width:10%">UPI</th>
+              <th>Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let farm of visits?.farms; let i = index">
+              <td>
+                {{ farm.owner?.firstName ? farm.owner?.firstName + " " + farm.owner?.lastName : farm.owner?.groupContactPersonNames}}
+              </td>
+              <td>{{ farm.owner?.phoneNumber }}</td>
+              <td>
+                {{
+                  farm?.location?.prov_id?.namek ? farm?.location?.prov_id?.namek.toLowerCase()+
                           " > " +
                           farm?.location?.dist_id?.name +
                           " > " +
@@ -39,62 +74,72 @@
                           " > " +
                           farm?.location?.cell_id?.name +
                           " > " +
-                          farm?.location?.village_id?.name
-                      }}
-                    </td>
-                    <td>
-                      {{ farm?.upiNumber }}
-                    </td>
-                    <td> {{farm?.overall_score }} % </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+                          farm?.location?.village_id?.name : '-'
+                  }}
+              </td>
+              <td>
+                {{ farm?.upiNumber ? farm?.upiNumber : '-' }}
+              </td>
+              <td> {{farm?.overall_score | number: "1.2-2" }} % </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-xs-12 text-center" *ngIf="visits?.gaps?.length > 0">
+      <div class="row invoice-info">
+        <div class="col-sm-6 invoice-col">
+          <p class="lead">Farm Visit Details:</p>
+        </div>
+        <div class="col-sm-6 invoice-col"> <select class="form-control" (change)="selectIndex($event.target.value)">
+            <option value="" disabled selected>
+              {{ "Select Farm" | translate }}
+            </option>
+            <option *ngFor="let farmVisit of visits?.farms; let i = index" value="{{i}}">
+              {{ farmVisit.owner?.firstName ? farmVisit.owner?.firstName + " " + farmVisit.owner?.lastName : farmVisit.owner?.groupContactPersonNames | titlecase }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div style="margin-top: 10px;" *ngIf="index >= 0 && visits?.farms[index]?.evaluatedGaps?.length > 0">
+        <div class="row invoice-info">
+          <div class="col-sm-4 invoice-col">
+            Gap
           </div>
-          <div style="margin-bottom: 10px">
-            <label class="control-label"
-              >GAP to be covered during the visit</label
-            >
-            <div class="confirm-text-box confirm-text">
-              <table class="row-border hover table">
-                <thead>
-                  <tr>
-                    <th>Gap Name</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let gap of visits?.gaps; let i = index">
-                    <td>{{ gap.gap_name }}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+          <!-- /.col -->
+          <div class="col-sm-4 invoice-col">
+            Score
           </div>
-          <div style="margin-bottom: 10px">
-            <label class="control-label">Agronomist who will visit</label>
-            <div class="confirm-text-box confirm-text">
-              {{ visits?.visitor.firstName + " " + visits?.visitor.lastName }}
-            </div>
+          <!-- /.col -->
+          <div class="col-sm-4 invoice-col">
+            Picture
           </div>
-          <div style="margin-bottom: 10px">
-            <label class="control-label">Date and Time of the visit</label>
-            <div class="confirm-text-box confirm-text">
-              {{ visits?.date | date: "shortDate" }} <br />
-              From :
-              {{ visits?.expectedDuration ? visits.expectedDuration.from : "" }}
-              <br />
-              To :
-              {{ visits?.expectedDuration ? visits.expectedDuration.to : "" }}
+          <!-- /.col -->
+        </div>
+      </div>
+      <div *ngIf="index >= 0 && visits?.farms[index]?.evaluatedGaps?.length > 0">
+        <div class="text-muted well well-sm no-shadow" style="margin-top: -10px;"
+          *ngFor="let visitGap of visits?.farms[index]?.evaluatedGaps">
+          <div class="row invoice-info">
+            <div class="col-sm-4 invoice-col" *ngFor="let gap of visits?.gaps; let t = index">
+              <div *ngIf="gap._id === visitGap?.gap_id">{{gap?.gap_name}}</div>
             </div>
-          </div>
-          <div style="margin-bottom: 10px">
-            <label class="control-label">Visit Description</label>
-            <div class="confirm-text-box confirm-text">
-              {{ visits?.description }} <br />
+            <!-- /.col -->
+            <div class="col-sm-4 invoice-col">
+              {{visitGap?.overall_score * 100/ visitGap?.overall_weight}}
             </div>
+            <!-- /.col -->
+            <div class="col-sm-4 invoice-col">
+              <img src="{{visitGap?.photos[0]}}" alt="no picture" class="image-styling">
+            </div>
+            <!-- /.col -->
           </div>
         </div>
       </div>
     </div>
+    <!-- /.col -->
+
+    <!-- /.col -->
   </div>
+  <!-- /.row -->
 </div>

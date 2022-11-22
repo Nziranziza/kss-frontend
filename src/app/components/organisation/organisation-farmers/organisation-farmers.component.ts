@@ -182,7 +182,7 @@ export class OrganisationFarmersComponent
         }
       });
 
-  /*    if (this.authenticationService.getCurrentUser().orgInfo.distributionSite) {
+     /* if (this.authenticationService.getCurrentUser().orgInfo.distributionSite) {
       this.siteService
         .get(
           this.authenticationService.getCurrentUser().orgInfo.distributionSite
@@ -195,7 +195,7 @@ export class OrganisationFarmersComponent
     this.setMessage(this.messageService.getMessage());
     this.orgCoveredArea = this.route.snapshot.data.orgCoveredAreaData;
     this.currentSeason = this.authenticationService.getCurrentSeason();
-    this.getAllFarmers();
+    /* this.getAllFarmers();*/
     this.getSetPinStatus();
     this.onChanges();
   }
@@ -363,7 +363,7 @@ export class OrganisationFarmersComponent
     this.messageService.clearMessage();
   }
 
-  getAllFarmers() {
+  /*getAllFarmers() {
     this.downloadingAll = true;
     this.organisationService
       .getAllFarmers(this.organisationId)
@@ -371,22 +371,22 @@ export class OrganisationFarmersComponent
         this.downloadingAll = false;
         data.content.map((item) => {
           const temp = {
-            NAMES: item.userInfo.type === 2 ? item.userInfo.groupName : (item.userInfo.surname + '  ' + item.userInfo.foreName),
-            SEX: item.userInfo.sex,
-            NID: item.userInfo.NID,
-            PHONE: item.userInfo.phone_number,
-            REG_NUMBER: item.userInfo.regNumber,
-            PROVINCE: item.request[0].location.prov_id.namek,
-            DISTRICT: item.request[0].location.dist_id.name,
-            SECTOR: item.request[0].location.sect_id.name,
-            CELL: item.request[0].location.cell_id.name,
-            VILLAGE: item.request[0].location.village_id.name,
-            NUMBER_OF_TREES: item.request ? this.getNumberOfTrees(item.request) : 0,
+            NAMES: item.userInfo?.type === 2 ? item.userInfo?.groupName : (item.userInfo?.surname + '  ' + item.userInfo?.foreName),
+            SEX: item.userInfo?.sex,
+            NID: item.userInfo?.NID,
+            PHONE: item.userInfo?.phone_number,
+            REG_NUMBER: item.userInfo?.regNumber,
+            PROVINCE: item.request?.requestInfo[0]?.location?.prov_id.namek,
+            DISTRICT: item.request?.requestInfo[0]?.location?.dist_id.name,
+            SECTOR: item.request?.requestInfo[0]?.location?.sect_id.name,
+            CELL: item.request?.requestInfo[0]?.location?.cell_id.name,
+            VILLAGE: item.request?.requestInfo[0]?.location?.village_id.name,
+            NUMBER_OF_TREES: item.request ? this.getNumberOfTrees(item.request.requestInfo) : 0,
           };
           this.allFarmers.push(temp);
         });
       });
-  }
+  }*/
 
   getSetPinStatus() {
     this.showSetPinButton = false;

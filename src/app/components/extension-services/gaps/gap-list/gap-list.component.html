@@ -1,7 +1,6 @@
 <div class="title-bar">
   <h3>GAP Management</h3>
-  <a class="btn btn-success pull-right" routerLink="/admin/gaps/create"
-    ><i class="fa fa-plus"></i> Add a GAP
+  <a class="btn btn-success pull-right" routerLink="/admin/gaps/create"><i class="fa fa-plus"></i> Add a GAP
   </a>
 </div>
 <app-list-message [message]="message"></app-list-message>
@@ -50,12 +49,7 @@
     <div class="box">
       <div class="box-body table-responsive">
         <app-loader *ngIf="loading"></app-loader>
-        <table
-          datatable
-          [dtOptions]="dtOptions"
-          [dtTrigger]="dtTrigger"
-          class="row-border hover table table-striped"
-        >
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped">
           <thead>
             <tr>
               <th>Date Added</th>
@@ -64,7 +58,7 @@
               <th>Observations/Adoption</th>
               <th>Adoption Rate</th>
               <th>Status</th>
-              <th>Actions</th>
+              <th style="width:18%" class="text-center">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -74,27 +68,18 @@
                 <td>{{ gap.gap_name }}</td>
                 <td>{{ gap.gap_weight }}</td>
                 <td>{{ gap.sections.length }}</td>
-                <td>{{ gap.adoptionRate }}</td>
+                <td>{{ gap.adoptionRate | number: "1.2-2"  }}</td>
                 <td>{{ gap.status }}</td>
-                <td>
-                  <button
-                    appRequiredSeason
-                    class="btn btn-action-no-border btn-margin details-button"
-                    (click)="openViewModal(gap._id)"
-                  >
+                <td style="width:18%" class="text-center">
+                  <button appRequiredSeason class="btn btn-action-no-border btn-margin details-button"
+                    (click)="openViewModal(gap._id)">
                     <em class="fa fa-eye"></em>
                   </button>
-                  <button
-                    appRequiredSeason
-                    (click)="openDeleteModal(gap)"
-                    class="btn btn-action-no-border btn-margin"
-                  >
+                  <button appRequiredSeason (click)="openDeleteModal(gap)" class="btn btn-action-no-border btn-margin">
                     <em class="fa fa-trash"></em>
                   </button>
-                  <button
-                    class="btn btn-action-no-border btn-margin btn-sm details-button"
-                    routerLink="/admin/gaps/edit/{{ gap._id }}"
-                  >
+                  <button class="btn btn-action-no-border btn-margin btn-sm details-button"
+                    routerLink="/admin/gaps/edit/{{ gap._id }}">
                     <em class="fa fa-pencil"></em>
                   </button>
                 </td>

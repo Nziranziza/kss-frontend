@@ -58,7 +58,7 @@
         </div>
       </div>
       <div class="col-md-4" style="padding: 0 5px 0 0px">
-        <div class="text-center stats-box stats-scroll">
+        <div class="text-center stats-box stats-covered">
           <div style="height: 180px">
             <div class="stats-box-title">Covered Locations</div>
             <div class="row stats-box-details-left" style="margin-top: 10px">
@@ -77,9 +77,6 @@
                   <div class="col-xs-9">
                     <div class="stats-box-location-cells">
                       <span *ngFor="let cell of area.covCells; let i = index">
-<<<<<<< HEAD
-                        <span>{{ cell?.name }}, </span>
-=======
                         <a
                           type="button"
                           class="btn btn-link"
@@ -91,7 +88,6 @@
                         >
                           {{ cell.name }}
                         </a>
->>>>>>> acbe915f5994c6e5b76572c3e3147f542be8d7b8
                       </span>
                     </div>
                   </div>

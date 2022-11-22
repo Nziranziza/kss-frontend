@@ -337,11 +337,8 @@
                     </tr>
                   </table>
                 </div>
-<<<<<<< HEAD
-=======
               </div>
 
->>>>>>> resolve-conflict-staging-merge-develop
             </td>
             <td>{{ dispatch.date | date }}</td>
             <td>
@@ -365,7 +362,7 @@
                   <i class="fa fa-remove" aria-hidden="true"></i> Cancel
                 </button>
               </ng-container>
-              <ng-container *ngIf="!dispatch.receivedBy"  appInternal>
+              <ng-container *ngIf="!dispatch.receivedBy" >
                 <button (click)="editDistribution(dispatch._id)"
                         class="btn btn-success btn-margin pull-right btn-sm" style="margin-left: 10px;">
                   Edit
