@@ -167,7 +167,8 @@ export class OrganisationFarmersComponent
         to: new Date(),
       },
     };
-    this.getFarmers(this.organisationId);
+    /*
+    this.getFarmers(this.organisationId); */
     this.getPaginatedFarmers();
     this.isUserCWSOfficer = this.authorisationService.isCWSUser();
     this.organisationService.get(this.organisationId).subscribe((data) => {
@@ -302,7 +303,7 @@ export class OrganisationFarmersComponent
     });
   }
 
-  getFarmers(orgId: string): void {
+  /*getFarmers(orgId: string): void {
     this.organisationService.getOrgFarmers(orgId).subscribe((data) => {
       if (data) {
         this.farmers = data.content;
@@ -313,7 +314,7 @@ export class OrganisationFarmersComponent
         });
       }
     });
-  }
+  }*/
 
   getPaginatedFarmers(): void {
     this.loading = true;
