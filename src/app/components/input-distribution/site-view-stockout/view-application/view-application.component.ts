@@ -100,6 +100,7 @@ export class ViewApplicationComponent
               stockId,
               quantity: recipient.quantity,
               farmerRequestId: recipient.farmerRequestId,
+              recipientId: recipient._id,
             };
             this.inputDistributionService.cancelDistribution(body).subscribe(
               (data) => {
@@ -125,6 +126,7 @@ export class ViewApplicationComponent
               stockId,
               quantity: recipient.quantity,
               farmerRequestId: recipient.farmerRequestId,
+              recipientId: recipient._id
             };
             this.inputDistributionService
               .cancelPesticideDistribution(body)

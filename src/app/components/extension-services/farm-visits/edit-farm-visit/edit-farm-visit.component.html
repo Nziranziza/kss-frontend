@@ -14,13 +14,13 @@
               <div class="confirm-text-box confirm-text">
                 <li *ngFor="let farms of selectedFarms; let i = index">
                   {{
-                    farms?.farmer +
-                      " -- Location " +
-                      farms?.location?.dist_id?.name +
-                      " > " +
-                      farms?.location?.sect_id?.name +
-                      " > " +
-                      farms?.location?.cell_id?.name + " -- UPI " + farms?.upiNumber
+                  farms?.farmer +
+                  " -- Location " +
+                  farms?.location?.dist_id?.name +
+                  " > " +
+                  farms?.location?.sect_id?.name +
+                  " > " +
+                  farms?.location?.cell_id?.name + " -- UPI " + farms?.upiNumber
                   }}
                 </li>
               </div>
@@ -119,12 +119,12 @@
           <div class="box" style="overflow: auto">
             <div class="box-body table-responsive no-border" style="font-size: 1.2rem">
               <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
-                class="hover table table-responsive-lg table-striped" config>
+                     class="hover table table-responsive-lg table-striped" config>
                 <thead>
                   <tr>
                     <th>
                       <input type="checkbox" (click)="selectAllFarmer($event.target.checked)" [(ngModel)]="allSelected"
-                        [ngModelOptions]="{ standalone: true }">
+                             [ngModelOptions]="{ standalone: true }">
                     </th>
                     <th>Full name</th>
                     <th class="all"></th>
@@ -137,7 +137,7 @@
                       <td>
                         <div style="text-align: center;">
                           <input type="checkbox" (click)="selectFarmer($event.target.checked, i)"
-                            [(ngModel)]="farmers[i].farmSelected" [ngModelOptions]="{ standalone: true }">
+                                 [(ngModel)]="farmers[i].farmSelected" [ngModelOptions]="{ standalone: true }">
                         </div>
                       </td>
                       <td> {{member.farmer}} </td>
@@ -156,21 +156,21 @@
                               <td style="padding-left: 40px">31+ </td>
                             </tr>
                             <tr style="font-size: 12px; background: transparent"
-                              *ngFor="let farmerFarm of member.farms, let d = index">
+                                *ngFor="let farmerFarm of member.farms, let d = index">
                               <td class="all">
                                 <div style="text-align: center;">
                                   <input type="checkbox" (click)="selectFarms($event.target.checked, i, d)"
-                                    [(ngModel)]="farmers[i].farms[d].selected" [ngModelOptions]="{ standalone: true }">
+                                         [(ngModel)]="farmers[i].farms[d].selected" [ngModelOptions]="{ standalone: true }">
                                 </div>
                               </td>
                               <td style="padding-left: 20px"> {{
-                              farmerFarm.upi
-                                    ? farmerFarm.upi
-                                    : farmerFarm?.location?.dist_id?.name +
-                                      " > " +
-                                      farmerFarm?.location?.sect_id?.name +
-                                      " > " +
-                                      farmerFarm?.location?.cell_id?.name
+                                farmerFarm.upi
+                                  ? farmerFarm.upi
+                                  : farmerFarm?.location?.dist_id?.name +
+                                  " > " +
+                                  farmerFarm?.location?.sect_id?.name +
+                                  " > " +
+                                  farmerFarm?.location?.cell_id?.name
                                 }}
                               </td>
                               <td style="padding-left: 40px" class="text-center"> {{ farmerFarm?.trees }} </td>
@@ -179,42 +179,42 @@
                                 farmerFarm.farm.treeAges[0]
                                   ? farmerFarm.farm.treeAges[0].numOfTrees
                                   : 0
-                              }}
+                                }}
                               </td>
                               <td style="padding-left: 40px" class="text-center">
                                 {{
                                 farmerFarm.farm.treeAges[1]
                                   ? farmerFarm.farm.treeAges[1].numOfTrees
                                   : 0
-                              }}
+                                }}
                               </td>
                               <td style="padding-left: 40px" class="text-center">
                                 {{
                                 farmerFarm.farm.treeAges[2]
                                   ? farmerFarm.farm.treeAges[2].numOfTrees
                                   : 0
-                              }}
+                                }}
                               </td>
                               <td style="padding-left: 40px" class="text-center">
                                 {{
                                 farmerFarm.farm.treeAges[3]
                                   ? farmerFarm.farm.treeAges[3].numOfTrees
                                   : 0
-                              }}
+                                }}
                               </td>
                               <td style="padding-left: 40px" class="text-center">
                                 {{
                                 farmerFarm.farm.treeAges[4]
                                   ? farmerFarm.farm.treeAges[4].numOfTrees
                                   : 0
-                              }}
+                                }}
                               </td>
                               <td style="padding-left: 40px" class="text-center">
                                 {{
                                 farmerFarm.farm.treeAges[5]
                                   ? farmerFarm.farm.treeAges[5].numOfTrees
                                   : 0
-                              }}
+                                }}
                               </td>
                             </tr>
                           </ng-container>
@@ -231,8 +231,8 @@
             <label class="control-label label-required">
               {{ "select_gap_to_cover" | translate }}</label>
             <ng-multiselect-dropdown formControlName="adoptionGap" [placeholder]="'select gap'"
-              [settings]="gapDropdownSettings" [data]="gaps" [(ngModel)]="scheduleVisit.value.adoptionGap"
-              (onSelect)="onGapSelect($event)" required>
+                                     [settings]="gapDropdownSettings" [data]="gaps" [(ngModel)]="scheduleVisit.value.adoptionGap"
+                                     (onSelect)="onGapSelect($event)" required>
             </ng-multiselect-dropdown>
             <app-inline-errors *ngIf="
                 scheduleVisit.controls.adoptionGap.invalid &&
@@ -269,9 +269,9 @@
             <div class="form-group">
               <label class="control-label label-required">{{
                 "select_date" | translate
-              }}</label>
+                }}</label>
               <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" [min]="newDate" formControlName="visitDate"
-                class="form-control" placeholder="Dd/mm/yyyy" />
+                     class="form-control" placeholder="Dd/mm/yyyy" />
               <owl-date-time [pickerType]="'calendar'" [scrollStrategy]="scrollStrategy" #dt1></owl-date-time>
               <app-inline-errors *ngIf="
                   scheduleVisit.controls.date.get('visitDate').invalid &&
@@ -288,9 +288,9 @@
               <div class="form-group">
                 <label class="control-label label-required">{{
                   "start_time" | translate
-                }}</label>
+                  }}</label>
                 <input [owlDateTimeTrigger]="dt3" class="form-control" formControlName="startTime"
-                  [owlDateTime]="dt3" />
+                       [owlDateTime]="dt3" />
                 <owl-date-time [pickerType]="'timer'" [scrollStrategy]="scrollStrategy" #dt3></owl-date-time>
                 <app-inline-errors *ngIf="
                     scheduleVisit.controls.startTime.invalid &&
@@ -304,9 +304,9 @@
               <div class="form-group">
                 <label class="control-label label-required">{{
                   "end_time" | translate
-                }}</label>
+                  }}</label>
                 <input [owlDateTimeTrigger]="dt4" class="form-control" [min]="startTime" formControlName="endTime"
-                  [owlDateTime]="dt4" />
+                       [owlDateTime]="dt4" />
                 <owl-date-time [pickerType]="'timer'" [scrollStrategy]="scrollStrategy" #dt4></owl-date-time>
                 <span style="font: normal 10px Helvetica Neue, Helvetica, Arial, sans-serif; color: red" *ngIf="
                     scheduleVisit.controls.startTime.value >=
@@ -328,7 +328,7 @@
           <div class="form-group">
             <label class="control-label label-required">{{
               "visit_description" | translate
-            }}</label>
+              }}</label>
             <input type="text" formControlName="description" class="form-control" style="height: 100px" required />
             <app-inline-errors *ngIf="
                 scheduleVisit.controls.description.invalid &&

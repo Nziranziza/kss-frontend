@@ -602,10 +602,6 @@ div {
   text-transform: capitalize;
 }
 
-.text-lowercase {
-  text-transform: lowercase;
-}
-
 table {
   text-transform: capitalize;
 }

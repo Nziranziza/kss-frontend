@@ -32,8 +32,10 @@ export class ProfileComponent implements OnInit {
     });
     this.userInfo = this.authenticationService.getCurrentUser().info;
     this.orgInfo = this.authenticationService.getCurrentUser().orgInfo;
+
     /* if (this.orgInfo.distributionSites) {
       this.siteService.get(this.orgInfo.distributionSites).subscribe(data => {
+
         this.site = data.content;
       });
     }*/
