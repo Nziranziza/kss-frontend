@@ -1,4 +1,4 @@
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser } from "@angular/common";
 import {
   Component,
   Inject,
@@ -6,14 +6,14 @@ import {
   Input,
   OnInit,
   PLATFORM_ID,
-} from '@angular/core';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { SiteService } from 'src/app/core/services/site.service';
-import {BasicComponent, MessageService} from '../../../../core';
+} from "@angular/core";
+import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
+import { SiteService } from "src/app/core/services/site.service";
+import { BasicComponent } from "../../../../core/library";
 
 @Component({
-  selector: 'delete-site-modal',
-  templateUrl: './delete-site-modal-component.html',
+  selector: "delete-site-modal",
+  templateUrl: "./delete-site-modal-component.html",
 })
 export class DeleteSiteModal extends BasicComponent implements OnInit {
   modal: NgbActiveModal;
@@ -33,7 +33,8 @@ export class DeleteSiteModal extends BasicComponent implements OnInit {
   delete(siteId) {
     this.siteService.delete(siteId).subscribe(
       (data) => {
-        this.modal.close({message: data.message});
+        this.setMessage(data.message);
+        this.modal.dismiss();
       },
       (err) => {
         this.setError(err.errors);

@@ -14,10 +14,13 @@
                 <input type="text" formControlName="siteName" class="form-control">
               </div>
             </div>
+
             <!--<div class="col-xs-6 col-md-3">
+
               <label class="control-label">Allocated Qty: </label>
               <input type="text" formControlName="allocatedQty" class="form-control" readonly="readonly">
-            </div>-->
+            </div>
+            -->
           </div>
           <fieldset class="location" style="margin: 15px 0px 15px !important; ">
             <legend>
@@ -83,9 +86,9 @@
                           ]</span>
                       </p>
                       <select multiple="multiple" class="form-control" [size]="5" formControlName="coveredSectors"
-                        [size]="5">
+                              [size]="5">
                         <option *ngFor="let sector of coveredSectorsSet" value="{{sector._id}}"
-                          (mousedown)="onMouseDownSector($event, sector)" (mousemove)="$event.preventDefault()">
+                                (mousedown)="onMouseDownSector($event, sector)" (mousemove)="$event.preventDefault()">
                           {{sector.name}}
                         </option>
                       </select>
@@ -99,7 +102,7 @@
                       </p>
                       <select multiple="multiple" class="form-control" formControlName="coveredCWS" [size]="5">
                         <option *ngFor="let cws of coveredCWSSet" value="{{cws._id}}"
-                          (mousedown)="onMouseDownCWS($event, cws)" (mousemove)="$event.preventDefault()">
+                                (mousedown)="onMouseDownCWS($event, cws)" (mousemove)="$event.preventDefault()">
                           {{cws.organizationName}}
                         </option>
                       </select>

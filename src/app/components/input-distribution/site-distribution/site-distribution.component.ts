@@ -1,13 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {AuthenticationService, AuthorisationService, OrganisationTypeService} from '../../../core/services';
-import {HelperService} from '../../../core/helpers';
-import {InputDistributionService} from '../../../core/services';
+import {AuthenticationService, AuthorisationService, OrganisationTypeService} from '../../../core';
+import {HelperService} from '../../../core';
+import {InputDistributionService} from '../../../core';
 import {RecordDistributionComponent} from './record-distribution/record-distribution.component';
-import {MessageService} from '../../../core/services';
+import {MessageService} from '../../../core';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ApplyPesticideComponent} from './apply-pesticide/apply-pesticide.component';
-import {BasicComponent} from '../../../core/library';
+import {BasicComponent} from '../../../core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {WarehouseDispatchEditComponent} from '../warehouse/warehouse-dispatch-edit/warehouse-dispatch-edit.component';
 

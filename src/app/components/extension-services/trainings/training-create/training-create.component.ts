@@ -15,7 +15,8 @@ import { Router } from '@angular/router';
 })
 export class TrainingCreateComponent
   extends BasicComponent
-  implements OnInit, OnDestroy {
+  implements OnInit, OnDestroy
+{
   constructor(
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
@@ -36,7 +37,7 @@ export class TrainingCreateComponent
   gaps: any[] = [];
   loading = false;
 
-  ngOnDestroy(): void { }
+  ngOnDestroy(): void {}
 
   ngOnInit() {
     this.getGaps();
@@ -156,8 +157,8 @@ export class TrainingCreateComponent
     if (this.createTraining.valid) {
       this.loading = true;
       for (let i = 0; i < this.files.length; i++) {
-        const data = await this.readBase64(this.files[i].file).then((newdata) => {
-          return newdata;
+        const data = await this.readBase64(this.files[i].file).then((data) => {
+          return data;
         });
         this.materials.push(data);
       }
@@ -190,19 +191,17 @@ export class TrainingCreateComponent
     const value = JSON.parse(JSON.stringify(this.createTraining.value));
     const adoptionGap = [];
     value.adoptionGap.forEach((adoption) => {
-      if (adoption._id !== '') {
+      if (adoption._id != '') {
         adoptionGap.push(adoption._id);
       }
     });
     const materials = [];
-    if (this.results.length > 0) {
-      this.files.map((file, index) => {
-        materials.push({
-          fileName: file.name,
-          url: this.results[index],
-        });
+    this.files.map((file, index) => {
+      materials.push({
+        fileName: file.name,
+        url: this.results[index],
       });
-    }
+    });
 
     const data: any = {
       trainingName: value.trainingName,
@@ -215,7 +214,7 @@ export class TrainingCreateComponent
     }
 
     this.trainingService.create(data).subscribe(
-      (newdata) => {
+      (data) => {
         this.loading = false;
         this.setMessage('Training successfully created.');
 

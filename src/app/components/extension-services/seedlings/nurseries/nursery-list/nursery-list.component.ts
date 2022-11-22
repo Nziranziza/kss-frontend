@@ -1,6 +1,6 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { DataTableDirective } from 'angular-datatables';
+import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { DataTableDirective } from "angular-datatables";
 import {
   AuthenticationService,
   MessageService,
@@ -13,10 +13,11 @@ import { Subject } from 'rxjs';
 import { ConfirmModalComponent } from 'src/app/shared';
 import { ViewNurseryComponent } from '../view-nursery/view-nursery.component';
 
+
 @Component({
-  selector: 'app-nursery-list',
-  templateUrl: './nursery-list.component.html',
-  styleUrls: ['./nursery-list.component.css'],
+  selector: "app-nursery-list",
+  templateUrl: "./nursery-list.component.html",
+  styleUrls: ["./nursery-list.component.css"],
 })
 export class NurseryListComponent
   extends BasicComponent
@@ -31,6 +32,7 @@ export class NurseryListComponent
   ) {
     super();
   }
+  ngOnDestroy(): void { }
 
   nurseries: any[] = [];
   schedule;
@@ -40,10 +42,10 @@ export class NurseryListComponent
   autoHide = false;
   responsive = false;
   labels: any = {
-    previousLabel: 'Prev',
-    nextLabel: 'Next',
-    screenReaderPaginationLabel: 'Pagination',
-    screenReaderPageLabel: 'page',
+    previousLabel: "Prev",
+    nextLabel: "Next",
+    screenReaderPaginationLabel: "Pagination",
+    screenReaderPageLabel: "page",
     screenReaderCurrentLabel: `You're on page`,
   };
   config: any;
@@ -60,12 +62,11 @@ export class NurseryListComponent
   // @ts-ignore
   @ViewChild(DataTableDirective, { static: false })
   dtElement: DataTableDirective;
-  ngOnDestroy(): void { }
 
   ngOnInit() {
     this.getNurseries();
     this.dtOptions = {
-      pagingType: 'full_numbers',
+      pagingType: "full_numbers",
       pageLength: 25,
       order: [],
     };
@@ -82,7 +83,7 @@ export class NurseryListComponent
         let prickedSum = 0;
         let distributedSum = 0;
         nursery.stocks.map((stock) => {
-          const distributedSeed = stock.remainingQty
+          let distributedSeed = stock.remainingQty
             ? stock.prickedQty - stock.remainingQty
             : 0;
           sum += stock.seeds;
@@ -102,7 +103,7 @@ export class NurseryListComponent
       this.totalPrickedOut.map((total) => {
         this.prickedSum += total;
       });
-      deletetrigger ? ' ' : this.dtTrigger.next();
+      deletetrigger ? " " : this.dtTrigger.next();
       this.loading = false;
     });
     if (!deletetrigger) {
@@ -116,11 +117,11 @@ export class NurseryListComponent
 
   openDeleteModal(nursery: any, warning?: any) {
     const modalRef = this.modalService.open(ConfirmModalComponent);
-    modalRef.componentInstance.title = 'Delete Nursery';
+    modalRef.componentInstance.title = "Delete Nursery";
     modalRef.componentInstance.content =
-      'Are you sure you want to Delete this Nursery?';
-    modalRef.componentInstance.confirmButtonText = 'Delete';
-    modalRef.componentInstance.cancelButtonText = 'Cancel';
+      "Are you sure you want to Delete this Nursery?";
+    modalRef.componentInstance.confirmButtonText = "Delete";
+    modalRef.componentInstance.cancelButtonText = "Cancel";
     modalRef.componentInstance.warning = warning;
     modalRef.result.then((results) => {
       if (results.confirmed) {
@@ -128,7 +129,7 @@ export class NurseryListComponent
           () => {
             this.loading = true;
             this.getNurseries(true);
-            this.setMessage('Nursery successfully Deleted!');
+            this.setMessage("Nursery successfully Deleted!");
           },
           (err) => {
             this.errors = err.errors;
