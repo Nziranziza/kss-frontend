@@ -3,8 +3,8 @@ import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {isPlatformBrowser} from '@angular/common';
 import {Subject} from 'rxjs';
 import {DatePipe} from '@angular/common';
-import {AuthenticationService, ConfirmDialogService, ExcelServicesService, WarehouseService} from '../../../../../core/services';
-import {BasicComponent} from '../../../../../core/library';
+import {AuthenticationService, ConfirmDialogService, ExcelServicesService, WarehouseService} from '../../../../../core';
+import {BasicComponent} from '../../../../../core';
 
 @Component({
   selector: 'app-delivery-details',

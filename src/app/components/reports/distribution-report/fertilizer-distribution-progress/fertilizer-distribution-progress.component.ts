@@ -83,7 +83,7 @@ export class FertilizerDistributionProgressComponent extends BasicComponent impl
       pageLength: 25
     };
     if (this.isSiteManager) {
-      this.siteService.get(this.authenticationService.getCurrentUser().orgInfo.distributionSites).subscribe((site) => {
+      this.siteService.get(this.authenticationService.getCurrentUser().orgInfo.distributionSite).subscribe((site) => {
         this.site = site.content;
         const temp = [];
         this.site.coveredAreas.coveredSectors.map((sector) => {

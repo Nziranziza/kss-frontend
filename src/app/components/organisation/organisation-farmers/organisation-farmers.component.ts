@@ -167,7 +167,8 @@ export class OrganisationFarmersComponent
         to: new Date(),
       },
     };
-    this.getFarmers(this.organisationId);
+    /*
+    this.getFarmers(this.organisationId); */
     this.getPaginatedFarmers();
     this.isUserCWSOfficer = this.authorisationService.isCWSUser();
     this.organisationService.get(this.organisationId).subscribe((data) => {
@@ -182,10 +183,20 @@ export class OrganisationFarmersComponent
         }
       });
 
+     /* if (this.authenticationService.getCurrentUser().orgInfo.distributionSite) {
+      this.siteService
+        .get(
+          this.authenticationService.getCurrentUser().orgInfo.distributionSite
+        )
+        .subscribe((data) => {
+          this.site = data.content;
+        });
+    }*/
+
     this.setMessage(this.messageService.getMessage());
     this.orgCoveredArea = this.route.snapshot.data.orgCoveredAreaData;
     this.currentSeason = this.authenticationService.getCurrentSeason();
-    this.getAllFarmers();
+    /* this.getAllFarmers();*/
     this.getSetPinStatus();
     this.onChanges();
   }
@@ -292,7 +303,7 @@ export class OrganisationFarmersComponent
     });
   }
 
-  getFarmers(orgId: string): void {
+  /*getFarmers(orgId: string): void {
     this.organisationService.getOrgFarmers(orgId).subscribe((data) => {
       if (data) {
         this.farmers = data.content;
@@ -303,7 +314,7 @@ export class OrganisationFarmersComponent
         });
       }
     });
-  }
+  }*/
 
   getPaginatedFarmers(): void {
     this.loading = true;
@@ -353,7 +364,7 @@ export class OrganisationFarmersComponent
     this.messageService.clearMessage();
   }
 
-  getAllFarmers() {
+  /*getAllFarmers() {
     this.downloadingAll = true;
     this.organisationService
       .getAllFarmers(this.organisationId)
@@ -376,7 +387,7 @@ export class OrganisationFarmersComponent
           this.allFarmers.push(temp);
         });
       });
-  }
+  }*/
 
   getSetPinStatus() {
     this.showSetPinButton = false;

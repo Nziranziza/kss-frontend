@@ -332,8 +332,8 @@ export class EditFarmVisitComponent extends BasicComponent implements OnInit {
     this.scheduleVisit
       .get('farmerGroup'.toString())
       .valueChanges.subscribe((value) => {
-        this.getFarms(value);
-      });
+      this.getFarms(value);
+    });
   }
 
   open(content) {

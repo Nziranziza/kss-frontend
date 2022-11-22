@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {Router} from '@angular/router';
-import {AuthenticationService, ExcelServicesService, OrganisationService, OrganisationTypeService} from '../../../core/services';
+import {AuthenticationService, ExcelServicesService, OrganisationService, OrganisationTypeService} from '../../../core';
 import {HelperService} from '../../../core';
-import {LocationService} from '../../../core/services';
+import {LocationService} from '../../../core';
 import {InputDistributionService} from '../../../core';
-import {SiteService} from '../../../core/services';
-import {AuthorisationService} from '../../../core/services';
+import {SiteService} from '../../../core';
+import {AuthorisationService} from '../../../core';
 import {Subject} from 'rxjs';
 
 @Component({
@@ -171,6 +171,7 @@ export class DistributionPlanComponent implements OnInit {
   exportPlan() {
     this.excelService.exportAsExcelFile(this.plans, 'distribution plan');
   }
+
 
   distributionExport() {
     this.isLoadingReport1 = true;
