@@ -175,6 +175,7 @@ export class EditFarmerRequestComponent implements OnInit {
         });
       });
     } else if (this.isUserSiteManager) {
+
       /*this.siteService.get(this.authenticationService.getCurrentUser().orgInfo.distributionSites).subscribe((site) => {
         this.site = site.content;
         this.site.coveredAreas.coveredSectors.map((sector) => {

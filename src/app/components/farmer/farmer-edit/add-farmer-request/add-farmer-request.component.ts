@@ -228,7 +228,7 @@ export class AddFarmerRequestComponent
     } else if (this.isUserSiteManager && !this.isUserCWSOfficer) {
       this.siteService
         .get(
-          this.authenticationService.getCurrentUser().orgInfo.distributionSites
+          this.authenticationService.getCurrentUser().orgInfo.distributionSite
         )
         .subscribe((site) => {
           this.site = site.content;

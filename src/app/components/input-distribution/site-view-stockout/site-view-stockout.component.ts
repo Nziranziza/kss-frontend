@@ -214,6 +214,14 @@ export class SiteViewStockoutComponent extends BasicComponent implements OnInit,
     this.dtTrigger.unsubscribe();
   }
 
+  getDestination(destinations) {
+    let str = '';
+    destinations.map((dest) => {
+      str = str + ' - ' + dest.cell_id.name;
+    });
+    return str;
+  }
+
   rerender() {
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
       dtInstance.destroy();

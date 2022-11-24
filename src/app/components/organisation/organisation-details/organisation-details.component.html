@@ -45,9 +45,10 @@
               <div class="stats-box-details-left">Contacts</div>
             </div>
             <div class="col-md-10">
+
               <div class="stats-box-details-right text-lowercase">
                 Email:
-                <span class="bold"> {{ org?.email?.toLowerCase() }} </span>
+
               </div>
               <div class="stats-box-details-right">
                 Phone: <span class="bold"> {{ org?.phone_number }} </span>
@@ -88,7 +89,7 @@
               </span>
             </span>
           </div>
-          <!--  <button class="stats-box-button">View more details</button> -->
+<!--          <button class="stats-box-button">View more details</button>-->
         </div>
       </div>
       <div class="col-md-4">
@@ -202,8 +203,14 @@
       routerLinkActive="active">
       <a role="tab" data-toggle="tab"><span>Suppliers</span></a>
     </li>
-    <li role="presentation" *appHasPermission="[[4, 1], [4, 11], [4, 12], 0, 6, 5, 11]"
-      routerLink="/admin/organisations/details/{{ organisationId }}/cherries" routerLinkActive="active">
+    <li
+      role="presentation"
+
+      *appHasPermission="[[4, 1], [4, 11], [4, 12], 0, 6, 5, 11]"
+      routerLink="/admin/organisations/details/{{ organisationId }}/cherries"
+
+      routerLinkActive="active"
+    >
       <a role="tab" data-toggle="tab"><span>Cherries & Parchments</span></a>
     </li>
     <li role="presentation" *appHasPermission="[[4, 1], [4, 11], [4, 12], 0, [1,1]]"
