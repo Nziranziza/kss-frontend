@@ -14,11 +14,11 @@
                 {{ trainingsStats?.totalPresent }}
               </h1>
             </div>
-            <div class="col-sm-3">
+            <div class="col-xs-6 col-sm-3">
               <span style="white-space: pre"> Male </span>
               {{ trainingsStats?.malePresent }}
             </div>
-            <div class="col-sm-3">
+            <div class="col-xs-6 col-sm-3">
               <span style="white-space: pre"> Female </span>
               {{ trainingsStats?.femalePresent }}
             </div>
@@ -34,11 +34,11 @@
                 {{ trainingsStats?.totalAbsent }}
               </h1>
             </div>
-            <div class="col-sm-3">
+            <div class="col-xs-6 col-sm-3">
               <span style="white-space: pre"> Male </span>
               {{ trainingsStats?.maleAbsent }}
             </div>
-            <div class="col-sm-3">
+            <div class="col-xs-6 col-sm-3">
               <span style="white-space: pre"> Female </span>
               {{ trainingsStats?.femaleAbsent }}
             </div>
@@ -100,37 +100,39 @@
       <div class="box" class="background: #EDEAE8 0% 0% no-repeat padding-box">
         <app-loader *ngIf="loading"></app-loader>
         <div class="box-body" *ngIf="!loading">
-          <table>
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Filename</th>
-                <th>Download</th>
-              </tr>
-            </thead>
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Filename</th>
+                  <th>Download</th>
+                </tr>
+              </thead>
 
-            <tbody *ngFor="let file of training?.materials; let i = index">
-              <tr>
-                <td>{{ i + 1 }}</td>
-                <td>{{ file.fileName }}</td>
-                <td>
-                  <a href="{{ file.url }}" target="_blank">
-                    <i class="fa fa-download"></i>
-                  </a>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+              <tbody *ngFor="let file of training?.materials; let i = index">
+                <tr>
+                  <td>{{ i + 1 }}</td>
+                  <td>{{ file.fileName }}</td>
+                  <td>
+                    <a href="{{ file.url }}" target="_blank">
+                      <i class="fa fa-download"></i>
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
   </div>
   <div class="box">
     <h4 class="text-center">List of Associated Schedule</h4>
-    <div class="box-body table-responsive">
+    <div class="box-body table-responsive"
+      *ngIf="training?.schedules?.location?.cell_id && training?.schedules.length > 0">
       <app-loader *ngIf="loading"></app-loader>
-      <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" *ngIf="training?.schedules?.length > 0"
-        class="row-border hover table table-striped">
+      <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped">
         <thead>
           <tr>
             <th>Date Added</th>

@@ -62,7 +62,7 @@
 }
 
 .filter-box-top {
-  max-height: 46px;
+  min-height: 46px;
 }
 
 .filter-title-text {

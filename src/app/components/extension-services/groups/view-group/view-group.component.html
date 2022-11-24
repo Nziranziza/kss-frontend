@@ -146,23 +146,25 @@
             Members ( Total:
             {{ groupDetails?.members ? groupDetails.members.length : 0 }} )
           </h3>
-          <table class="row-border hover table table-striped">
-            <thead>
-              <tr>
-                <th>Farmer Names</th>
-                <th>Contact</th>
-                <th>Age</th>
-                <th>Reg Number</th>
-              </tr>
-              <tr *ngFor="let trainee of groupDetails?.members; let i = index">
-                <td>{{ trainee.firstName + " " + trainee.lastName }}</td>
-                <td>{{ trainee.phoneNumber }}</td>
-                <td>{{ trainee.age }}</td>
-                <td>{{ trainee.regNumber }}</td>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
+          <div class="table-responsive">
+            <table class="row-border hover table table-striped">
+              <thead>
+                <tr>
+                  <th>Farmer Names</th>
+                  <th>Contact</th>
+                  <th>Age</th>
+                  <th>Reg Number</th>
+                </tr>
+                <tr *ngFor="let trainee of groupDetails?.members; let i = index">
+                  <td>{{ trainee.firstName + " " + trainee.lastName }}</td>
+                  <td>{{ trainee.phoneNumber }}</td>
+                  <td>{{ trainee.age }}</td>
+                  <td>{{ trainee.regNumber }}</td>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

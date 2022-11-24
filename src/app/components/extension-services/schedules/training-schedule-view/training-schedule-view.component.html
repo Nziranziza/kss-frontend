@@ -170,36 +170,38 @@
           Trainees ( Total:
           {{ training?.trainees ? training?.trainees.length : 0 }} )
         </h3>
-        <table class="row-border hover table table-striped">
-          <thead>
-            <tr>
-              <th>Farmer Names</th>
-              <th>Contact</th>
-              <th>Attended</th>
-              <th>SMS Status</th>
-              <th class="text-center">Actions</th>
-            </tr>
-            <tr *ngFor="let trainee of training?.trainees; let i = index">
-              <td>{{ trainee.foreName + " " + trainee.surName }}</td>
-              <td>{{ trainee.phoneNumber }}</td>
-              <td style="text-align: center; color: green" *ngIf="trainee.attended">
-                Yes
-              </td>
-              <td style="text-align: center; color: red" *ngIf="!trainee.attended">
-                No
-              </td>
-              <td style="text-align: center; color: red">
-                {{ trainee.smsStatus == "NOT_SENT" ? "Not Sent" : "Sent" }}
-              </td>
-              <td>
-                <button appRequiredSeason (click)="open(content)" class="btn btn-action-no-border"
-                  *ngIf="trainee.smsStatus == 'NOT_SENT'">
-                  <em class="fa fa-envelope-o"></em>
-                </button>
-              </td>
-            </tr>
-          </thead>
-        </table>
+        <div class="table-responsive">
+          <table class="row-border hover table table-striped">
+            <thead>
+              <tr>
+                <th>Farmer Names</th>
+                <th>Contact</th>
+                <th>Attended</th>
+                <th>SMS Status</th>
+                <th class="text-center">Actions</th>
+              </tr>
+              <tr *ngFor="let trainee of training?.trainees; let i = index">
+                <td>{{ trainee.foreName + " " + trainee.surName }}</td>
+                <td>{{ trainee.phoneNumber }}</td>
+                <td style="text-align: center; color: green" *ngIf="trainee.attended">
+                  Yes
+                </td>
+                <td style="text-align: center; color: red" *ngIf="!trainee.attended">
+                  No
+                </td>
+                <td style="text-align: center; color: red">
+                  {{ trainee.smsStatus == "NOT_SENT" ? "Not Sent" : "Sent" }}
+                </td>
+                <td>
+                  <button appRequiredSeason (click)="open(content)" class="btn btn-action-no-border"
+                    *ngIf="trainee.smsStatus == 'NOT_SENT'">
+                    <em class="fa fa-envelope-o"></em>
+                  </button>
+                </td>
+              </tr>
+            </thead>
+          </table>
+        </div>
       </div>
     </div>
   </div>
