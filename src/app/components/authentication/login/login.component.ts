@@ -88,6 +88,7 @@ export class LoginComponent extends BasicComponent implements OnInit, OnDestroy 
 
   onSubmit() {
     if (!this.authForm.invalid) {
+      this.authForm.controls.email.setValue(this.authForm.controls.email.value.replace(/\s/g, ''));
       const credentials = this.authForm.value;
       this.authenticationService.attemptAuth(credentials).subscribe(() => {
         this.seasonService.all().subscribe((dt) => {

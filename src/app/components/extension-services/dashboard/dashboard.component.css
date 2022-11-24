@@ -62,7 +62,7 @@
 }
 
 .filter-box-top {
-  max-height: 46px;
+  min-height: 46px;
 }
 
 .filter-title-text {
@@ -110,13 +110,7 @@
   border-radius: 3px;
 }
 
-.ng-autocomplete
-  ::ng-deep
-  .autocomplete-container
-  .suggestions-container
-  ul
-  li
-  a {
+.ng-autocomplete ::ng-deep .autocomplete-container .suggestions-container ul li a {
   font: normal 10px/15px Helvetica Neue, Helvetica, Arial, sans-serif;
   color: #333333;
 }

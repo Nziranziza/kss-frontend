@@ -7,19 +7,11 @@
     <br />
     again <br />
 
-    <button
-      type="button"
-      class="btn btn-success btn-lg pull-center"
-      (click)="modal.dismiss()"
-    >
+    <button type="button" class="btn btn-success btn-lg pull-center" (click)="modal.dismiss()">
       cancel
     </button>
-    <button
-      type="button"
-      class="btn btn-success btn-lg pull-center"
-      (click)="sendMessage(); modal.dismiss()"
-      [disabled]="loading"
-    >
+    <button type="button" class="btn btn-success btn-lg pull-center" (click)="sendMessage(); modal.dismiss()"
+      [disabled]="loading">
       <span *ngIf="!loading; else other_content">Send Message</span>
       <ng-template #other_content>
         <div class="loader">
@@ -34,10 +26,7 @@
 </ng-template>
 
 <div class="modal-body extended-modal-body">
-  <div
-    (click)="modal.dismiss('cancel click')"
-    class="btn-modal-close text-center"
-  >
+  <div (click)="modal.dismiss('cancel click')" class="btn-modal-close text-center">
     <em class="fa fa-close"></em>
   </div>
   <div class="stats-section">
@@ -52,11 +41,11 @@
                 {{ trainingsStats?.totalPresent }}
               </h1>
             </div>
-            <div class="col-sm-3">
+            <div class="col-xs-6 col-sm-3">
               <span style="white-space: pre"> Male </span>
               {{ trainingsStats?.malePresent }}
             </div>
-            <div class="col-sm-3">
+            <div class="col-xs-6 col-sm-3">
               <span style="white-space: pre"> Female </span>
               {{ trainingsStats?.femalePresent }}
             </div>
@@ -72,11 +61,11 @@
                 {{ trainingsStats?.totalAbsent }}
               </h1>
             </div>
-            <div class="col-sm-3">
+            <div class="col-xs-6 col-sm-3">
               <span style="white-space: pre"> Male </span>
               {{ trainingsStats?.maleAbsent }}
             </div>
-            <div class="col-sm-3">
+            <div class="col-xs-6 col-sm-3">
               <span style="white-space: pre"> Female </span>
               {{ trainingsStats?.femaleAbsent }}
             </div>
@@ -113,9 +102,7 @@
             {{ training?.description }}
           </div>
 
-          <label class="control-label label-required"
-            >Training Location address</label
-          >
+          <label class="control-label label-required">Training Location address</label>
           <div class="row">
             <div class="col-sm-6">
               <label class="control-label"> Province </label>
@@ -183,46 +170,38 @@
           Trainees ( Total:
           {{ training?.trainees ? training?.trainees.length : 0 }} )
         </h3>
-        <table class="row-border hover table table-striped">
-          <thead>
-            <tr>
-              <th>Farmer Names</th>
-              <th>Contact</th>
-              <th>Attended</th>
-              <th>SMS Status</th>
-              <th class="text-center">Actions</th>
-            </tr>
-            <tr *ngFor="let trainee of training?.trainees; let i = index">
-              <td>{{ trainee.foreName + " " + trainee.surName }}</td>
-              <td>{{ trainee.phoneNumber }}</td>
-              <td
-                style="text-align: center; color: green"
-                *ngIf="trainee.attended"
-              >
-                Yes
-              </td>
-              <td
-                style="text-align: center; color: red"
-                *ngIf="!trainee.attended"
-              >
-                No
-              </td>
-              <td style="text-align: center; color: red">
-                {{ trainee.smsStatus == "NOT_SENT" ? "Not Sent" : "Sent" }}
-              </td>
-              <td>
-                <button
-                  appRequiredSeason
-                  (click)="open(content)"
-                  class="btn btn-action-no-border"
-                  *ngIf="trainee.smsStatus == 'NOT_SENT'"
-                >
-                  <em class="fa fa-envelope-o"></em>
-                </button>
-              </td>
-            </tr>
-          </thead>
-        </table>
+        <div class="table-responsive">
+          <table class="row-border hover table table-striped">
+            <thead>
+              <tr>
+                <th>Farmer Names</th>
+                <th>Contact</th>
+                <th>Attended</th>
+                <th>SMS Status</th>
+                <th class="text-center">Actions</th>
+              </tr>
+              <tr *ngFor="let trainee of training?.trainees; let i = index">
+                <td>{{ trainee.foreName + " " + trainee.surName }}</td>
+                <td>{{ trainee.phoneNumber }}</td>
+                <td style="text-align: center; color: green" *ngIf="trainee.attended">
+                  Yes
+                </td>
+                <td style="text-align: center; color: red" *ngIf="!trainee.attended">
+                  No
+                </td>
+                <td style="text-align: center; color: red">
+                  {{ trainee.smsStatus == "NOT_SENT" ? "Not Sent" : "Sent" }}
+                </td>
+                <td>
+                  <button appRequiredSeason (click)="open(content)" class="btn btn-action-no-border"
+                    *ngIf="trainee.smsStatus == 'NOT_SENT'">
+                    <em class="fa fa-envelope-o"></em>
+                  </button>
+                </td>
+              </tr>
+            </thead>
+          </table>
+        </div>
       </div>
     </div>
   </div>

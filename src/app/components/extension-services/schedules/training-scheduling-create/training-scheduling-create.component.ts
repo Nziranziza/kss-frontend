@@ -12,10 +12,11 @@ import {
   UserService,
   GroupService,
   User,
-} from "../../../../core";
-import { isEmptyObject } from "jquery";
-import { Router } from "@angular/router";
-import { SuccessModalComponent } from "src/app/shared";
+} from '../../../../core';
+import { isEmptyObject } from 'jquery';
+import { Router } from '@angular/router';
+import { SuccessModalComponent } from 'src/app/shared';
+import { ScrollStrategy, ScrollStrategyOptions } from '@angular/cdk/overlay';
 
 @Component({
   selector: "app-training-scheduling-create",
@@ -29,6 +30,7 @@ export class TrainingSchedulingCreateComponent
   filterForm: FormGroup;
   editContactForm: FormGroup;
   newDate: Date = new Date();
+  scrollStrategy: ScrollStrategy;
   constructor(
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
@@ -40,9 +42,11 @@ export class TrainingSchedulingCreateComponent
     private organisationService: OrganisationService,
     private userService: UserService,
     private groupService: GroupService,
-    private router: Router
+    private router: Router,
+    private readonly sso: ScrollStrategyOptions
   ) {
     super(locationService, organisationService);
+    this.scrollStrategy = this.sso.noop();
   }
   today: any = new Date();
   trainings: Training[] = [];

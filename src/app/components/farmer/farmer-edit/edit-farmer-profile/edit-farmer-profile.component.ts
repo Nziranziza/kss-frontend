@@ -410,6 +410,11 @@ export class EditFarmerProfileComponent
         this.editFarmerProfileForm.controls.phone_number.setValue('2507');
       }
     });
+    this.editFarmerProfileForm.controls.groupContactPerson.get('phone').valueChanges.subscribe((value) => {
+      if (value === '07') {
+        this.editFarmerProfileForm.controls.groupContactPerson.get('phone').setValue('2507');
+      }
+    });
   }
 
   initial() {

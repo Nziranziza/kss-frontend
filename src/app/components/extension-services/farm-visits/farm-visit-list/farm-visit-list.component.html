@@ -126,7 +126,7 @@
                   </div>
                 </td>
                 <td>{{ visit?.groupId?.groupName }}</td>
-                <td>{{ visit?.overall_score ? visit?.overall_score : 0 | number: "1.2-2" }} %</td>
+                <td>{{ visit?.overall_score ? (visit?.overall_score | number: "1.2-2") : (0 | number: "1.2-2") }} %</td>
                 <td style="width:18%" class="text-center">
                   <button appRequiredSeason class="btn btn-action-no-border btn-margin details-button"
                     (click)="openViewModal(visit._id)">

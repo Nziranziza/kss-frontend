@@ -69,6 +69,9 @@ export class ViewFarmVisitComponent
           farm.overall_score += gap.overall_score * 100 / overallWeight;
           farm.photos.push(...gap.photos);
         })
+        if (data.data.gaps.length > 0) {
+          farm.overall_score = farm.overall_score / data.data.gaps.length
+        }
         return farm
       })
       this.visits = data.data;

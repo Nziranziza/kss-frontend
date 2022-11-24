@@ -1,20 +1,12 @@
 <div class="modal-header">
-  <i
-    class="fa fa-times-circle close"
-    style="font-size: 24px"
-    aria-label="Close"
-    (click)="modal.dismiss()"
-  >
+  <i class="fa fa-times-circle close" style="font-size: 24px" aria-label="Close" (click)="modal.dismiss()">
   </i>
 </div>
 <div class="modal-body">
   <app-list-errors [errorList]="errors"></app-list-errors>
   <app-list-message [message]="message"></app-list-message>
   <form [formGroup]="editFarmerRequestForm" (ngSubmit)="onSubmit()">
-    <div
-      class="row text-muted well well-sm no-shadow"
-      style="margin: 10px auto"
-    >
+    <div class="row text-muted well well-sm no-shadow" style="margin: 10px auto">
       <div class="col-md-12">
         <span class="land-info-title"> LAND IDENTIFICATIONS </span>
       </div>
@@ -22,19 +14,14 @@
         <div class="form-group">
           <label class="control-label">Land UPI number</label>
           <input type="text" formControlName="upiNumber" class="form-control" placeholder="00/000/00/000"
-                 (input)="validateUPI($event)">
-          <div
-            *ngIf="
+            (input)="validateUPI($event)">
+          <div *ngIf="
               editFarmerRequestForm.controls.upiNumber.invalid &&
               (editFarmerRequestForm.controls.upiNumber.dirty ||
-              editFarmerRequestForm.controls.upiNumber.touched)"
-            class="input-error"
-          >
-            <div
-              *ngIf="
+              editFarmerRequestForm.controls.upiNumber.touched)" class="input-error">
+            <div *ngIf="
                 editFarmerRequestForm.controls.upiNumber.invalid
-              "
-            >
+              ">
               Upi is invalid.
             </div>
           </div>
@@ -46,30 +33,21 @@
           <input type="text" formControlName="landOwner" class="form-control" />
         </div>
       </div>
-      <div
-        formGroupName="location"
-        *ngIf="!showUPILocations; else locationIfUpi"
-      >
+      <div formGroupName="location" *ngIf="!showUPILocations; else locationIfUpi">
         <div class="col-md-2">
           <div class="form-group">
             <span class="">Province</span>
             <select class="form-control" formControlName="prov_id">
               <option value=""></option>
-              <option
-                *ngFor="let province of provinces"
-                value="{{ province._id }}"
-              >
+              <option *ngFor="let province of provinces" value="{{ province._id }}">
                 {{ province.namee }}
               </option>
             </select>
-            <div
-              *ngIf="
+            <div *ngIf="
                 getLocationInput('prov_id').invalid &&
                 (getLocationInput('prov_id').dirty ||
                   getLocationInput('prov_id').touched)
-              "
-              class="input-error"
-            >
+              " class="input-error">
               <div *ngIf="getLocationInput('prov_id').errors.required">
                 Province is required.
               </div>
@@ -81,21 +59,15 @@
             <span class="">District</span>
             <select class="form-control" formControlName="dist_id">
               <option value=""></option>
-              <option
-                *ngFor="let district of districts"
-                value="{{ district._id }}"
-              >
+              <option *ngFor="let district of districts" value="{{ district._id }}">
                 {{ district.name }}
               </option>
             </select>
-            <div
-              *ngIf="
+            <div *ngIf="
                 getLocationInput('dist_id').invalid &&
                 (getLocationInput('dist_id').dirty ||
                   getLocationInput('dist_id').touched)
-              "
-              class="input-error"
-            >
+              " class="input-error">
               <div *ngIf="getLocationInput('dist_id').errors.required">
                 District is required.
               </div>
@@ -111,14 +83,11 @@
                 {{ sector.name }}
               </option>
             </select>
-            <div
-              *ngIf="
+            <div *ngIf="
                 getLocationInput('sect_id').invalid &&
                 (getLocationInput('sect_id').dirty ||
                   getLocationInput('sect_id').touched)
-              "
-              class="input-error"
-            >
+              " class="input-error">
               <div *ngIf="getLocationInput('sect_id').errors.required">
                 Sector is required.
               </div>
@@ -134,14 +103,11 @@
                 {{ cell.name }}
               </option>
             </select>
-            <div
-              *ngIf="
+            <div *ngIf="
                 getLocationInput('cell_id').invalid &&
                 (getLocationInput('cell_id').dirty ||
                   getLocationInput('cell_id').touched)
-              "
-              class="input-error"
-            >
+              " class="input-error">
               <div *ngIf="getLocationInput('cell_id').errors.required">
                 Cell is required.
               </div>
@@ -153,21 +119,15 @@
             <span class="">village</span>
             <select class="form-control" formControlName="village_id">
               <option value=""></option>
-              <option
-                *ngFor="let village of villages"
-                value="{{ village._id }}"
-              >
+              <option *ngFor="let village of villages" value="{{ village._id }}">
                 {{ village.name }}
               </option>
             </select>
-            <div
-              *ngIf="
+            <div *ngIf="
                 getLocationInput('village_id').invalid &&
                 (getLocationInput('village_id').dirty ||
                   getLocationInput('village_id').touched)
-              "
-              class="input-error"
-            >
+              " class="input-error">
               <div *ngIf="getLocationInput('village_id').errors.required">
                 Village is required.
               </div>
@@ -181,10 +141,7 @@
             <div class="form-group">
               <span class="">Province</span>
               <select class="form-control" formControlName="prov_id">
-                <option
-                  *ngFor="let province of provinces"
-                  value="{{ province._id }}"
-                >
+                <option *ngFor="let province of provinces" value="{{ province._id }}">
                   {{ province.namee }}
                 </option>
               </select>
@@ -197,10 +154,7 @@
             <div class="form-group">
               <span class="">District</span>
               <select class="form-control" formControlName="dist_id">
-                <option
-                  *ngFor="let district of districts"
-                  value="{{ district._id }}"
-                >
+                <option *ngFor="let district of districts" value="{{ district._id }}">
                   {{ district.name }}
                 </option>
               </select>
@@ -239,17 +193,11 @@
             <div class="form-group">
               <span class="">village</span>
               <select class="form-control" formControlName="village_id">
-                <option
-                  *ngFor="let village of villages"
-                  value="{{ village._id }}"
-                >
+                <option *ngFor="let village of villages" value="{{ village._id }}">
                   {{ village.name }}
                 </option>
               </select>
-              <div
-                *ngIf="!checkIfUpiinValidZoning.village_id"
-                class="input-error"
-              >
+              <div *ngIf="!checkIfUpiinValidZoning.village_id" class="input-error">
                 <div>UPI Village not in CWS Covered Area.</div>
               </div>
             </div>
@@ -259,23 +207,13 @@
       <div class="col-md-6">
         <div class="form-group">
           <label class="control-label">Longitude geo coordinate</label>
-          <input
-            type="text"
-            formControlName="longitudeCoordinate"
-            class="form-control"
-            placeholder="00.0000000"
-          />
+          <input type="text" formControlName="longitudeCoordinate" class="form-control" placeholder="00.0000000" />
         </div>
       </div>
       <div class="col-md-6">
         <div class="form-group">
           <label class="control-label">Latitude geo coordinate</label>
-          <input
-            type="text"
-            formControlName="latitudeCoordinate"
-            class="form-control"
-            placeholder="00.0000000"
-          />
+          <input type="text" formControlName="latitudeCoordinate" class="form-control" placeholder="00.0000000" />
         </div>
       </div>
       <div class="col-md-2">
@@ -289,10 +227,7 @@
         </div>
       </div>
     </div>
-    <div
-      class="row text-muted well well-sm no-shadow"
-      style="margin: 10px auto"
-    >
+    <div class="row text-muted well well-sm no-shadow" style="margin: 10px auto">
       <div class="col-md-12">
         <span class="land-info-title"> LAND'S TREES </span>
       </div>
@@ -305,93 +240,57 @@
             <div class="col-sm-6 col-md-3">
               <div style="margin-top: 10px"> <b>Number of trees </b> </div>
               <div style="margin-bottom: 10px; margin-top: 10px">
-                <input
-                  type="number"
-                  min="0"
-                  formControlName="numberOfTrees"
-                  class="form-control"
-                />
-                <div
-                  *ngIf="
+                <input type="number" min="0" formControlName="numberOfTrees" class="form-control" />
+                <div *ngIf="
                     editFarmerRequestForm.controls.numberOfTrees.invalid &&
                     (editFarmerRequestForm.controls.numberOfTrees.dirty ||
                       editFarmerRequestForm.controls.numberOfTrees.touched)
-                  "
-                  class="input-error"
-                >
-                  <div
-                    *ngIf="
+                  " class="input-error">
+                  <div *ngIf="
                       editFarmerRequestForm.controls.numberOfTrees.errors
                         .required
-                    "
-                  >
+                    ">
                     Number of trees is required.
                   </div>
-                  <div
-                    *ngIf="
+                  <div *ngIf="
                       editFarmerRequestForm.controls.numberOfTrees.errors.min
-                    "
-                  >
+                    ">
                     Number of trees must be greater than zero.
                   </div>
-                  <div
-                    *ngIf="
+                  <div *ngIf="
                       editFarmerRequestForm.controls.numberOfTrees.errors
                         .pattern
-                    "
-                  >
+                    ">
                     Number of trees must be an integer.
                   </div>
                 </div>
               </div>
             </div>
             <ng-container *ngIf="treeVarieties">
-              <div
-                class="col-sm-6 col-md-3"
-                *ngFor="let control of formTreeAges.controls; let i = index"
-                formArrayName="treeAges"
-              >
+              <div class="col-sm-6 col-md-3" *ngFor="let control of formTreeAges.controls; let i = index"
+                formArrayName="treeAges">
                 <div style="display: block" [formGroupName]="i">
-                  <div
-                    style="margin-top: 10px">Trees age <b>{{ ranges[i] }} Years</b></div
-                  >
+                  <div style="margin-top: 10px">Trees age <b>{{ ranges[i] }} Years</b></div>
                   <div style="margin-bottom: 10px; margin-top: 10px">
-                    <input
-                      type="number"
-                      formControlName="numOfTrees"
-                      class="form-control"
-                      min="0"
-                      disabled
-                    />
+                    <input type="number" formControlName="numOfTrees" class="form-control" min="0" disabled />
                   </div>
-                  <div
-                    *ngFor="
+                  <div *ngFor="
                       let ctrl of formTreeVarieties(i).controls;
                       let v = index
-                    "
-                    formArrayName="varieties"
-                  >
+                    " formArrayName="varieties">
                     <div style="display: table-row" [formGroupName]="v">
-                      <label
-                        style="
+                      <label style="
                           font-weight: lighter;
                           display: table-cell;
                           width: 50%;
                           font-size: smaller;
-                        "
-                      >
+                        ">
                         <input type="checkbox" formControlName="selected" />
                         {{ treeVarieties[v].name | titlecase }}
                       </label>
                       <div style="display: table-cell; width: auto">
-                        <input
-                          type="number"
-                          formControlName="number"
-                          class="form-control v-number"
-                          min="0"
-                          (keyup)="updateList(i, v)"
-                          (change)="updateList(i, v)"
-                        />
+                        <input type="number" formControlName="number" class="form-control v-number" min="0"
+                          (keyup)="updateList(i, v)" (change)="updateList(i, v)" />
                       </div>
                     </div>
                   </div>
@@ -402,44 +301,34 @@
         </div>
       </div>
     </div>
-    <div
-      class="row text-muted well well-sm no-shadow"
-      style="margin: 10px auto"
-    >
+    <div class="row text-muted well well-sm no-shadow" style="margin: 10px auto">
       <div class="row">
         <div class="col-md-12">
           <span class="land-info-title"> CERTIFICATION DETAILS </span>
-          <button
-            class="btn btn-success btn-sm"
-            (click)="addCertificate()"
-            type="button"
-          >
+          <button class="btn btn-success btn-sm" (click)="addCertificate()" type="button">
             <i class="fa fa-plus-circle"></i> Add certificate
           </button>
         </div>
       </div>
-      <div
-        *ngFor="let control of formCertificates.controls; let i = index"
-        formArrayName="certificates"
-      >
+      <div *ngFor="let control of formCertificates.controls; let i = index" formArrayName="certificates">
         <div class="row" [formGroupName]="i">
           <div class="col-md-5">
             <div class="form-group">
               <label class="control-label">Certificate Name</label>
-              <input type="text" formControlName="name" class="form-control" />
-              <div
-                *ngIf="
+              <select class="form-control" formControlName="name">
+                <option value=""></option>
+                <option *ngFor="let certificate of certificateNames" value="{{ certificate.name }}">
+                  {{ certificate.name }}
+                </option>
+              </select>
+              <div *ngIf="
                   getCertificateFormGroup(i).controls.name.invalid &&
                   (getCertificateFormGroup(i).controls.name.dirty ||
                     getCertificateFormGroup(i).controls.name.touched)
-                "
-                class="input-error"
-              >
-                <div
-                  *ngIf="
+                " class="input-error">
+                <div *ngIf="
                     getCertificateFormGroup(i).controls.name.errors.required
-                  "
-                >
+                  ">
                   Name of certificate is required.
                 </div>
               </div>
@@ -447,39 +336,24 @@
           </div>
           <div class="col-md-5">
             <div class="form-group">
-              <label class="control-label"
-                >Certificate Identification Number</label
-              >
-              <input
-                type="text"
-                formControlName="identificationNumber"
-                class="form-control"
-                style="width: 90%; display: inline"
-              />
-              <button
-                class="btn btn-danger btn-sm inline-btn"
-                type="button"
-                (click)="removeCertificate(i)"
-              >
+              <label class="control-label">Certificate Identification Number</label>
+              <input type="text" formControlName="identificationNumber" class="form-control"
+                style="width: 90%; display: inline" />
+              <button class="btn btn-danger btn-sm inline-btn" type="button" (click)="removeCertificate(i)">
                 <i class="fa fa-minus-circle"></i>
               </button>
-              <div
-                *ngIf="
+              <div *ngIf="
                   getCertificateFormGroup(i).controls.identificationNumber
                     .invalid &&
                   (getCertificateFormGroup(i).controls.identificationNumber
                     .dirty ||
                     getCertificateFormGroup(i).controls.identificationNumber
                       .touched)
-                "
-                class="input-error"
-              >
-                <div
-                  *ngIf="
+                " class="input-error">
+                <div *ngIf="
                     getCertificateFormGroup(i).controls.identificationNumber
                       .errors.required
-                  "
-                >
+                  ">
                   Name of certificate is required.
                 </div>
               </div>
@@ -488,28 +362,16 @@
         </div>
       </div>
     </div>
-    <input
-      type="hidden"
-      formControlName="fertilizer_allocate"
-      class="form-control"
-    />
+    <input type="hidden" formControlName="fertilizer_allocate" class="form-control" />
     <div class="row">
       <div class="col-md-6"></div>
     </div>
     <div class="row">
       <div class="col-md-12">
-        <button
-          class="btn btn-warning btn-margin pull-right"
-          (click)="modal.dismiss()"
-          type="button"
-        >
+        <button class="btn btn-warning btn-margin pull-right" (click)="modal.dismiss()" type="button">
           Cancel
         </button>
-        <button
-          class="btn btn-success pull-right btn-md"
-          type="submit"
-          [disabled]="loading"
-        >
+        <button class="btn btn-success pull-right btn-md" type="submit" [disabled]="loading">
           <span *ngIf="!loading; else other_content">Save</span>
           <ng-template #other_content>
             <div class="loader">

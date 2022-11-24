@@ -1,6 +1,6 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   AuthenticationService,
   AuthorisationService,
@@ -15,8 +15,8 @@ import {
   SiteService,
   UserService,
 } from '../../../core';
-import {isArray, isUndefined} from 'util';
-import {Location} from '@angular/common';
+import { isArray, isUndefined } from 'util';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-farmer-create',
@@ -75,6 +75,21 @@ export class FarmerCreateComponent
   treeVarieties: any;
   ranges = ['0-3', '4-10', '11-15', '16-20', '21-25', '26-30', '31+'];
   certificates: any;
+  certificateNames = [{
+    name: 'Organic',
+  }, {
+    name: 'Fair Trade',
+  }, {
+    name: 'Rain Forest',
+  }, {
+    name: 'UTZ',
+  }, {
+    name: 'C.A.F.E Practice',
+  }, {
+    name: '4C',
+  }, {
+    name: 'Appellation',
+  }];
   upi: any;
   land: any;
   province: any;
@@ -149,21 +164,21 @@ export class FarmerCreateComponent
       fertilizer_allocate: [0],
       tree_location: this.formBuilder.group({
         prov_id: [
-          {value: this.provinceValue, disabled: this.disableProvId},
+          { value: this.provinceValue, disabled: this.disableProvId },
         ],
         dist_id: [
-          {value: '', disabled: this.disableDistId},
+          { value: '', disabled: this.disableDistId },
         ],
         sect_id: [''],
         cell_id: [''],
         village_id: [''],
       }),
       location_if_upi: this.formBuilder.group({
-        prov_id: [{value: '', disabled: true}],
-        dist_id: [{value: '', disabled: true}],
-        sect_id: [{value: '', disabled: true}],
-        cell_id: [{value: '', disabled: true}],
-        village_id: [{value: '', disabled: true}],
+        prov_id: [{ value: '', disabled: true }],
+        dist_id: [{ value: '', disabled: true }],
+        sect_id: [{ value: '', disabled: true }],
+        cell_id: [{ value: '', disabled: true }],
+        village_id: [{ value: '', disabled: true }],
       }),
       upiNumber: [''],
       landOwner: [''],
@@ -359,8 +374,8 @@ export class FarmerCreateComponent
   validateUPI(event) {
     const upi = event.target.value
 
-    if(upi.length > 0) {
-      this.createForm.controls.upiNumber.setErrors({invalid: true});
+    if (upi.length > 0) {
+      this.createForm.controls.upiNumber.setErrors({ invalid: true });
     }
     // this.initial();
     this.checkIfUpiinValidZoning = {
@@ -390,10 +405,10 @@ export class FarmerCreateComponent
           }
 
           this.locationService.getZoningIDS(payload).subscribe(
-            (pr)=> {
+            (pr) => {
               this.province = pr;
             },
-            () => {},
+            () => { },
             () => {
 
 
@@ -406,15 +421,15 @@ export class FarmerCreateComponent
 
               if (this.province.province_id !== this.org.location.prov_id._id) {
                 this.checkIfUpiinValidZoning.prov_id = false
-                this.createForm.controls.upiNumber.setErrors({Invalid: true});
+                this.createForm.controls.upiNumber.setErrors({ Invalid: true });
               }
-              else if (this.province.district_id !== this.org.location.dist_id._id){
+              else if (this.province.district_id !== this.org.location.dist_id._id) {
                 this.checkIfUpiinValidZoning.dist_id = false
-                this.createForm.controls.upiNumber.setErrors({Invalid: true});
+                this.createForm.controls.upiNumber.setErrors({ Invalid: true });
               }
-              else if (!villagesSet.includes(this.province.village_id))  { // If yes, use location.
+              else if (!villagesSet.includes(this.province.village_id)) { // If yes, use location.
                 this.checkIfUpiinValidZoning.village_id = false
-                this.createForm.controls.upiNumber.setErrors({Invalid: true});
+                this.createForm.controls.upiNumber.setErrors({ Invalid: true });
               }
               else {
 
@@ -539,7 +554,7 @@ export class FarmerCreateComponent
     this.formTreeAges
       .at(i)
       .get('numOfTrees')
-      .setValue(sum, {emitEvent: true});
+      .setValue(sum, { emitEvent: true });
     if (this.formTreeVarieties(i).at(v).get('number').value !== 0) {
       this.formTreeVarieties(i).at(v).get('selected').setValue(true);
     } else {
@@ -601,7 +616,7 @@ export class FarmerCreateComponent
           item['upiNumber'.toString()] = temp.upiNumber;
           item['treeAges'.toString()] = temp.treeAges;
           item['numberOfTrees'.toString()] = temp.numberOfTrees;
-          if(this.createForm.controls.upiNumber.value)
+          if (this.createForm.controls.upiNumber.value)
             item['location'.toString()] = temp.location_if_upi;
           else item['location'.toString()] = temp.tree_location;
           delete item.tree_location;
@@ -707,8 +722,8 @@ export class FarmerCreateComponent
             upiNumber: temp.upiNumber,
             treeAges: temp.treeAges,
             numberOfTrees: temp.numberOfTrees,
-            location: this.createForm.controls.upiNumber.value? temp.location_if_upi: temp.tree_location,
-            ...(temp.certificates.length > 0 && {certificates: temp.certificates})
+            location: this.createForm.controls.upiNumber.value ? temp.location_if_upi : temp.tree_location,
+            ...(temp.certificates.length > 0 && { certificates: temp.certificates })
           }
         ];
 
@@ -1123,46 +1138,46 @@ export class FarmerCreateComponent
     this.createForm.controls.location
       .get('prov_id'.toString())
       .valueChanges.subscribe((value) => {
-      if (value !== '') {
-        this.locationService.getDistricts(value).subscribe((data) => {
-          this.addressDistricts = data;
-          this.addressSectors = null;
-          this.addressCells = null;
-          this.addressVillages = null;
-        });
-      }
-    });
+        if (value !== '') {
+          this.locationService.getDistricts(value).subscribe((data) => {
+            this.addressDistricts = data;
+            this.addressSectors = null;
+            this.addressCells = null;
+            this.addressVillages = null;
+          });
+        }
+      });
     this.createForm.controls.location
       .get('dist_id'.toString())
       .valueChanges.subscribe((value) => {
-      if (value !== '') {
-        this.locationService.getSectors(value).subscribe((data) => {
-          this.addressSectors = data;
-          this.addressCells = null;
-          this.addressVillages = null;
-        });
-      }
-    });
+        if (value !== '') {
+          this.locationService.getSectors(value).subscribe((data) => {
+            this.addressSectors = data;
+            this.addressCells = null;
+            this.addressVillages = null;
+          });
+        }
+      });
 
     this.createForm.controls.location
       .get('sect_id'.toString())
       .valueChanges.subscribe((value) => {
-      if (value !== '') {
-        this.locationService.getCells(value).subscribe((data) => {
-          this.addressCells = data;
-          this.addressVillages = null;
-        });
-      }
-    });
+        if (value !== '') {
+          this.locationService.getCells(value).subscribe((data) => {
+            this.addressCells = data;
+            this.addressVillages = null;
+          });
+        }
+      });
     this.createForm.controls.location
       .get('cell_id'.toString())
       .valueChanges.subscribe((value) => {
-      if (value !== '') {
-        this.locationService.getVillages(value).subscribe((data) => {
-          this.addressVillages = data;
-        });
-      }
-    });
+        if (value !== '') {
+          this.locationService.getVillages(value).subscribe((data) => {
+            this.addressVillages = data;
+          });
+        }
+      });
     this.createForm.controls.treeAges.valueChanges.subscribe((value) => {
       if (value !== null) {
         this.validForm = this.validateNumbers(value);
@@ -1190,45 +1205,45 @@ export class FarmerCreateComponent
     this.createForm.controls.tree_location
       .get('prov_id'.toString())
       .valueChanges.subscribe((value) => {
-      if (value !== '') {
-        this.locationService.getDistricts(value).subscribe((data) => {
-          this.districts = data;
-          this.sectors = null;
-          this.cells = null;
-          this.villages = null;
-        });
-      }
-    });
+        if (value !== '') {
+          this.locationService.getDistricts(value).subscribe((data) => {
+            this.districts = data;
+            this.sectors = null;
+            this.cells = null;
+            this.villages = null;
+          });
+        }
+      });
     this.createForm.controls.tree_location
       .get('dist_id'.toString())
       .valueChanges.subscribe((value) => {
-      if (value !== '') {
-        this.locationService.getSectors(value).subscribe((data) => {
-          this.sectors = data;
-          this.cells = null;
-          this.villages = null;
-        });
-      }
-    });
+        if (value !== '') {
+          this.locationService.getSectors(value).subscribe((data) => {
+            this.sectors = data;
+            this.cells = null;
+            this.villages = null;
+          });
+        }
+      });
     this.createForm.controls.tree_location
       .get('sect_id'.toString())
       .valueChanges.subscribe((value) => {
-      if (value !== '') {
-        this.locationService.getCells(value).subscribe((data) => {
-          this.cells = data;
-          this.villages = null;
-        });
-      }
-    });
+        if (value !== '') {
+          this.locationService.getCells(value).subscribe((data) => {
+            this.cells = data;
+            this.villages = null;
+          });
+        }
+      });
     this.createForm.controls.tree_location
       .get('cell_id'.toString())
       .valueChanges.subscribe((value) => {
-      if (value !== '') {
-        this.locationService.getVillages(value).subscribe((data) => {
-          this.villages = data;
-        });
-      }
-    });
+        if (value !== '') {
+          this.locationService.getVillages(value).subscribe((data) => {
+            this.villages = data;
+          });
+        }
+      });
   }
 
   filterCustomVillages(org: any, villages: any) {
@@ -1325,10 +1340,10 @@ export class FarmerCreateComponent
           this.districts = dt;
           this.createForm.controls.tree_location
             .get('prov_id'.toString())
-            .patchValue(this.org.location.prov_id._id, {emitEvent: false});
+            .patchValue(this.org.location.prov_id._id, { emitEvent: false });
           this.createForm.controls.tree_location
             .get('dist_id'.toString())
-            .patchValue(this.org.location.dist_id._id, {emitEvent: false});
+            .patchValue(this.org.location.dist_id._id, { emitEvent: false });
           this.sectors = this.filterZoningSectors(this.org.coveredSectors);
         });
     });
