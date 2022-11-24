@@ -30,6 +30,21 @@ export class EditFarmerRequestComponent implements OnInit {
   treeVarieties: any;
   ranges = ['0-3', '4-10', '11-15', '16-20', '21-25', '26-30', '31+'];
   certificates: any;
+  certificateNames = [{
+    name: 'Organic',
+  }, {
+    name: 'Fair Trade',
+  }, {
+    name: 'Rain Forest',
+  }, {
+    name: 'UTZ',
+  }, {
+    name: 'C.A.F.E Practice',
+  }, {
+    name: '4C',
+  }, {
+    name: 'Appellation',
+  }];
   cells: any;
   villages: any;
   org: any;
@@ -52,7 +67,7 @@ export class EditFarmerRequestComponent implements OnInit {
     cell_id: true,
     village_id: true
   };
-  showUPILocations= false;
+  showUPILocations = false;
 
 
   constructor(
@@ -89,11 +104,11 @@ export class EditFarmerRequestComponent implements OnInit {
         village_id: ['', Validators.required]
       }),
       location_if_upi: this.formBuilder.group({
-        prov_id: [{value: '', disabled: true}],
-        dist_id: [{value: '', disabled: true}],
-        sect_id: [{value: '', disabled: true}],
-        cell_id: [{value: '', disabled: true}],
-        village_id: [{value: '', disabled: true}],
+        prov_id: [{ value: '', disabled: true }],
+        dist_id: [{ value: '', disabled: true }],
+        sect_id: [{ value: '', disabled: true }],
+        cell_id: [{ value: '', disabled: true }],
+        village_id: [{ value: '', disabled: true }],
       }),
       upiNumber: [''],
       landOwner: [''],
@@ -382,7 +397,7 @@ export class EditFarmerRequestComponent implements OnInit {
       request['fertilizer_need'.toString()] =
         +request['numberOfTrees'.toString()] * this.currentSeason.seasonParams.fertilizerKgPerTree;
       request['documentId'.toString()] = this.farmerId;
-      if(this.showUPILocations) {
+      if (this.showUPILocations) {
         request['location'.toString()] = this.editFarmerRequestForm.controls.location_if_upi.value;
       }
       request['subDocumentId'.toString()] = this.land._id;
@@ -397,10 +412,10 @@ export class EditFarmerRequestComponent implements OnInit {
         });
       });
       this.farmerService.updateFarmerRequest(request).subscribe(() => {
-          this.setMessage('request successfully updated!');
-          this.modal.dismiss();
-          this.loading = false;
-        },
+        this.setMessage('request successfully updated!');
+        this.modal.dismiss();
+        this.loading = false;
+      },
         (err) => {
           this.setError(err.errors);
           this.loading = false;
@@ -456,8 +471,8 @@ export class EditFarmerRequestComponent implements OnInit {
     const upi = event.target.value
     this.showUPILocations = false;
 
-    if(upi.length > 0) {
-      this.editFarmerRequestForm.controls.upiNumber.setErrors({invalid: true});
+    if (upi.length > 0) {
+      this.editFarmerRequestForm.controls.upiNumber.setErrors({ invalid: true });
     }
     // this.initial();
     this.checkIfUpiinValidZoning = {
@@ -488,10 +503,10 @@ export class EditFarmerRequestComponent implements OnInit {
           }
 
           this.locationService.getZoningIDS(payload).subscribe(
-            (pr)=> {
+            (pr) => {
               this.province = pr;
             },
-            () => {},
+            () => { },
             () => {
 
 
@@ -504,15 +519,15 @@ export class EditFarmerRequestComponent implements OnInit {
 
               if (this.province.province_id !== this.org.location.prov_id._id) {
                 this.checkIfUpiinValidZoning.prov_id = false
-                this.editFarmerRequestForm.controls.upiNumber.setErrors({Invalid: true});
+                this.editFarmerRequestForm.controls.upiNumber.setErrors({ Invalid: true });
               }
-              else if (this.province.district_id !== this.org.location.dist_id._id){
+              else if (this.province.district_id !== this.org.location.dist_id._id) {
                 this.checkIfUpiinValidZoning.dist_id = false
-                this.editFarmerRequestForm.controls.upiNumber.setErrors({Invalid: true});
+                this.editFarmerRequestForm.controls.upiNumber.setErrors({ Invalid: true });
               }
-              else if (!villagesSet.includes(this.province.village_id))  { // If yes, use location.
+              else if (!villagesSet.includes(this.province.village_id)) { // If yes, use location.
                 this.checkIfUpiinValidZoning.village_id = false
-                this.editFarmerRequestForm.controls.upiNumber.setErrors({Invalid: true});
+                this.editFarmerRequestForm.controls.upiNumber.setErrors({ Invalid: true });
               }
               else {
 

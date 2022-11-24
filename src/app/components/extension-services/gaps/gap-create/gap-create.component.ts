@@ -64,7 +64,6 @@ export class GapCreateComponent
   }
 
   ngOnInit() {
-    console.log(this.gapTotalWeight);
     this.createForm = this.formBuilder.group({
       gap_name: ['', Validators.required],
       // description: ['Check whether is pruning correctly.', Validators.required],

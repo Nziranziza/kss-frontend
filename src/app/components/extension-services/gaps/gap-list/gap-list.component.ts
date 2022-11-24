@@ -61,7 +61,6 @@ export class GapListComponent
       })
       const bestAdopted = data.data.reduce((max, gap) => max.adoptionRate > gap.adoptionRate ? max : gap);
       this.cookieService.set('gapTotal-weight', this.gapTotalWeight.toString());
-      console.log(this.gapTotalWeight.toString());
       if (bestAdopted.gap_name) {
         this.mostAdopted = bestAdopted.gap_name;
       }

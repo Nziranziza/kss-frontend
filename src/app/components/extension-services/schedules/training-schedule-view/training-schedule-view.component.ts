@@ -6,26 +6,21 @@ import {
   PLATFORM_ID,
   Inject,
   Input,
-} from "@angular/core";
-import { NgbActiveModal, NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { TrainingService, GapService, Training } from "../../../../core";
-import { MessageService } from "../../../../core";
-import { BasicComponent } from "../../../../core";
-import { isPlatformBrowser } from "@angular/common";
+} from '@angular/core';
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { TrainingService, GapService, Training } from '../../../../core';
+import { MessageService } from '../../../../core';
+import { BasicComponent } from '../../../../core';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
-  selector: "app-training-schedule-view",
-  templateUrl: "./training-schedule-view.component.html",
-  styleUrls: ["./training-schedule-view.component.css"],
+  selector: 'app-training-schedule-view',
+  templateUrl: './training-schedule-view.component.html',
+  styleUrls: ['./training-schedule-view.component.css'],
 })
 export class TrainingScheduleViewComponent
   extends BasicComponent
-  implements OnInit, OnDestroy
-{
-  closeResult = "";
-  training: any;
-  modal: NgbActiveModal;
-  @Input() id: string;
+  implements OnInit, OnDestroy {
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
@@ -39,20 +34,24 @@ export class TrainingScheduleViewComponent
       this.modal = this.injector.get(NgbActiveModal);
     }
   }
-
-  ngOnDestroy(): void {}
-
-  ngOnInit() {
-    this.getTraining();
-    this.getTrainingsStats();
-    this.setMessage(this.messageService.getMessage());
-  }
+  closeResult = '';
+  training: any;
+  modal: NgbActiveModal;
+  @Input() id: string;
 
   results: any[] = [];
   gaps: any[] = [];
   loading = false;
   dataReturned: any[] = [];
   trainingsStats: any;
+
+  ngOnDestroy(): void { }
+
+  ngOnInit() {
+    this.getTraining();
+    this.getTrainingsStats();
+    this.setMessage(this.messageService.getMessage());
+  }
 
   getTraining() {
     this.trainingService.getSchedule(this.id).subscribe((data) => {
@@ -73,12 +72,12 @@ export class TrainingScheduleViewComponent
   }
 
   open(content) {
-    this.modalService.open(content, { size: "sm", windowClass: "modal-sm" });
+    this.modalService.open(content, { size: 'sm', windowClass: 'modal-sm' });
   }
 
   sendMessage() {
     this.loading = true;
-    let data = this.id;
+    const data = this.id;
     this.trainingService.sendMessage(data).subscribe((data) => {
       this.loading = false;
     });

@@ -12,12 +12,12 @@
       </li>
       <li routerLinkActive="active" *appHasPermission="[1]">
         <a *ngIf="authUser.orgInfo.hasExtensionAccess"
-           routerLink="/admin/organisations/details/{{ user.org_id }}/dashboard">
+          routerLink="/admin/organisations/details/{{ user.org_id }}/dashboard">
           <i class="fa fa-dashboard" aria-hidden="true"></i>
           <span>{{ "dashboard" | translate }}</span>
         </a>
         <a *ngIf="!authUser.orgInfo.hasExtensionAccess"
-           routerLink="/admin/organisations/details/{{ user.org_id }}/farmers">
+          routerLink="/admin/organisations/details/{{ user.org_id }}/farmers">
           <i class="fa fa-dashboard" aria-hidden="true"></i>
           <span>{{ "dashboard" | translate }}</span>
         </a>
@@ -250,7 +250,7 @@
           </li>
         </ul>
       </li>
-      <li class="header"  appInternal *ngIf="
+      <li class="header" appInternal *ngIf="
           authUser.orgInfo.hasExtensionAccess ||
           authUser.parameters.role[0] == 11
         ">
@@ -457,11 +457,7 @@
           <span>Entries</span>
         </a>
       </li>
-      <li
-        class="treeview"
-        routerLinkActive="active"
-        *appHasPermission="[0, [4, 10], 5]"
-      >
+      <li class="treeview" routerLinkActive="active" *appHasPermission="[0, [4, 10], 5]">
         <a href="#">
           <i class="fa fa-code-fork"></i><span>Dispatch</span>
           <span class="pull-right-container">
@@ -529,7 +525,7 @@
               </span>
             </a>
             <ul class="treeview-menu">
-             <!-- <li routerLinkActive="active" *appHasPermission="[
+              <!-- <li routerLinkActive="active" *appHasPermission="[
                   0,
                   6,
                   [4, 1],
