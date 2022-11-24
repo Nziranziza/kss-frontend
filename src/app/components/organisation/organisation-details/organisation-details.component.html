@@ -3,9 +3,9 @@
 </div>
 <div class="row">
   <div class="col-md-12 stats-section">
-    <div class="row">
+    <div class="row no-gutter">
       <div class="col-md-12 text-center stats-title">CWS Summary</div>
-      <div class="col-md-4" style="padding: 0 5px 0 5px">
+      <div class="col-md-4">
         <div class="text-center stats-box">
           <div class="stats-box-title">CWS Details</div>
           <div class="stats-box-details-title">{{ org?.organizationName }}</div>
@@ -57,7 +57,7 @@
           </div>
         </div>
       </div>
-      <div class="col-md-4" style="padding: 0 5px 0 0px">
+      <div class="col-md-4">
         <div class="text-center stats-box stats-covered">
           <div style="height: 180px">
             <div class="stats-box-title">Covered Locations</div>
@@ -77,15 +77,9 @@
                   <div class="col-xs-9">
                     <div class="stats-box-location-cells">
                       <span *ngFor="let cell of area.covCells; let i = index">
-                        <a
-                          type="button"
-                          class="btn btn-link"
-                          data-container="body"
-                          style="text-decoration: none; color: #0a0a0a"
-                          data-toggle="popover"
-                          data-placement="top"
-                          ngbPopover="{{ getVillagesName(cell) }}"
-                        >
+                        <a type="button" class="btn btn-link" data-container="body"
+                          style="text-decoration: none; color: #0a0a0a" data-toggle="popover" data-placement="top"
+                          ngbPopover="{{ getVillagesName(cell) }}">
                           {{ cell.name }}
                         </a>
                       </span>
@@ -98,7 +92,7 @@
 <!--          <button class="stats-box-button">View more details</button>-->
         </div>
       </div>
-      <div class="col-md-4" style="padding: 0 5px 0 0px">
+      <div class="col-md-4">
         <div class="text-center stats-box">
           <div class="stats-box-title" style="margin-bottom: 8px">
             CWS Stats
@@ -195,31 +189,18 @@
 <br />
 <div class="custom-tabs">
   <ul class="nav nav-tabs" role="tablist">
-    <li
-      role="presentation"
-      routerLink="/admin/organisations/details/{{ organisationId }}/dashboard"
-      routerLinkActive="active"
-      *ngIf="authUser.orgInfo.hasExtensionAccess || authUser.parameters.role[0] == 11
-      "
-    >
-      <a aria-controls="dashboard" role="tab" data-toggle="tab"
-        ><span>CWS Dashboard</span></a
-      >
+    <li role="presentation" routerLink="/admin/organisations/details/{{ organisationId }}/dashboard"
+      routerLinkActive="active" *ngIf="authUser.orgInfo.hasExtensionAccess || authUser.parameters.role[0] == 11
+      ">
+      <a aria-controls="dashboard" role="tab" data-toggle="tab"><span>CWS Dashboard</span></a>
     </li>
-    <li
-      role="presentation"
-      routerLink="/admin/organisations/details/{{ organisationId }}/farmers"
-      routerLinkActive="active"
-    >
+    <li role="presentation" routerLink="/admin/organisations/details/{{ organisationId }}/farmers"
+      routerLinkActive="active">
       <a role="tab" data-toggle="tab"><span>Farmers</span></a>
     </li>
-    <li
-      role="presentation"
-      *appHasPermission="[[4, 1], [4, 11], [4, 12], 0, 6, 5, 11]"
-      routerLink="/admin/organisations/details/{{ organisationId }}/suppliers"
-      aria-controls="suppliers"
-      routerLinkActive="active"
-    >
+    <li role="presentation" *appHasPermission="[[4, 1], [4, 11], [4, 12], 0, 6, 5, 11]"
+      routerLink="/admin/organisations/details/{{ organisationId }}/suppliers" aria-controls="suppliers"
+      routerLinkActive="active">
       <a role="tab" data-toggle="tab"><span>Suppliers</span></a>
     </li>
     <li
@@ -232,12 +213,8 @@
     >
       <a role="tab" data-toggle="tab"><span>Cherries & Parchments</span></a>
     </li>
-    <li
-      role="presentation"
-      *appHasPermission="[[4, 1], [4, 11], [4, 12], 0, [1,1]]"
-      routerLink="/admin/organisations/details/{{ organisationId }}/users"
-      routerLinkActive="active"
-    >
+    <li role="presentation" *appHasPermission="[[4, 1], [4, 11], [4, 12], 0, [1,1]]"
+      routerLink="/admin/organisations/details/{{ organisationId }}/users" routerLinkActive="active">
       <a role="tab" data-toggle="tab"><span>Users</span></a>
     </li>
   </ul>

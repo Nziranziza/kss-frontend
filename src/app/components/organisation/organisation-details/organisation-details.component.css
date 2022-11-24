@@ -14,8 +14,7 @@
 
 .stats-section {
   min-height: 253px;
-  background: transparent linear-gradient(180deg, #e1a33e 0%, #ffffff 100%) 0%
-    0% no-repeat padding-box;
+  background: transparent linear-gradient(180deg, #e1a33e 0%, #ffffff 100%) 0% 0% no-repeat padding-box;
   opacity: 1;
 }
 
@@ -33,9 +32,8 @@
 .stats-box {
   margin: 5px auto;
   padding: 5px;
-  height: 210px;
+  min-height: 210px;
   width: 100%;
-  /* UI Properties */
   background: #ffffff 0% 0% no-repeat padding-box;
   border-radius: 3px;
   opacity: 1;
@@ -52,6 +50,7 @@
   width: 12px;
   height: 12px;
 }
+
 ::-webkit-scrollbar-track {
   border: 1px solid #eae4e2;
   border-radius: 10px;
@@ -150,9 +149,17 @@
   overflow-x: hidden;
 }
 
-.stats-covered::-webkit-scrollbar { width: 0 !important }
-.stats-covered { overflow: -moz-scrollbars-none; }
-.stats-covered { -ms-overflow-style: none; }
+.stats-covered::-webkit-scrollbar {
+  width: 0 !important
+}
+
+.stats-covered {
+  overflow: -moz-scrollbars-none;
+}
+
+.stats-covered {
+  -ms-overflow-style: none;
+}
 
 .stats-box-cws-names {
   /* UI Properties */

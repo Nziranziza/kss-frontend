@@ -1,7 +1,7 @@
-import {Component, Inject, Injector, Input, OnInit, PLATFORM_ID,} from '@angular/core';
-import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {HelperService} from '../../../../core/helpers';
+import { Component, Inject, Injector, Input, OnInit, PLATFORM_ID, } from '@angular/core';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { HelperService } from '../../../../core/helpers';
 import {
   AuthenticationService,
   AuthorisationService,
@@ -12,9 +12,9 @@ import {
   OrganisationService,
   SiteService,
 } from '../../../../core/services';
-import {isPlatformBrowser} from '@angular/common';
-import {Router} from '@angular/router';
-import {BasicComponent} from '../../../../core/library';
+import { isPlatformBrowser } from '@angular/common';
+import { Router } from '@angular/router';
+import { BasicComponent } from '../../../../core/library';
 
 @Component({
   selector: 'app-add-farmer-request',
@@ -53,6 +53,21 @@ export class AddFarmerRequestComponent
   treeVarieties: any;
   ranges = ['0-3', '4-10', '11-15', '16-20', '21-25', '26-30', '31+'];
   certificates: any;
+  certificateNames = [{
+    name: 'Organic',
+  }, {
+    name: 'Fair Trade',
+  }, {
+    name: 'Rain Forest',
+  }, {
+    name: 'UTZ',
+  }, {
+    name: 'C.A.F.E Practice',
+  }, {
+    name: '4C',
+  }, {
+    name: 'Appellation',
+  }];
   validForm = true;
   save = false;
   upi: any;
@@ -113,11 +128,11 @@ export class AddFarmerRequestComponent
       fertilizer_allocate: [0],
       location: this.formBuilder.group({
         prov_id: [
-          {value: '', disabled: this.disableProvId},
+          { value: '', disabled: this.disableProvId },
           Validators.required,
         ],
         dist_id: [
-          {value: '', disabled: this.disableDistId},
+          { value: '', disabled: this.disableDistId },
           Validators.required,
         ],
         sect_id: ['', Validators.required],
@@ -125,11 +140,11 @@ export class AddFarmerRequestComponent
         village_id: ['', Validators.required],
       }),
       location_if_upi: this.formBuilder.group({
-        prov_id: [{value: '', disabled: true}],
-        dist_id: [{value: '', disabled: true}],
-        sect_id: [{value: '', disabled: true}],
-        cell_id: [{value: '', disabled: true}],
-        village_id: [{value: '', disabled: true}],
+        prov_id: [{ value: '', disabled: true }],
+        dist_id: [{ value: '', disabled: true }],
+        sect_id: [{ value: '', disabled: true }],
+        cell_id: [{ value: '', disabled: true }],
+        village_id: [{ value: '', disabled: true }],
       }),
       upiNumber: [''],
       landOwner: [''],
@@ -315,7 +330,7 @@ export class AddFarmerRequestComponent
     this.formTreeAges
       .at(i)
       .get('numOfTrees')
-      .setValue(sum, {emitEvent: true});
+      .setValue(sum, { emitEvent: true });
     if (this.formTreeVarieties(i).at(v).get('number').value !== 0) {
       this.formTreeVarieties(i).at(v).get('selected').setValue(true);
     } else {
@@ -328,7 +343,7 @@ export class AddFarmerRequestComponent
     this.showUPILocations = false;
 
     if (upi.length > 0) {
-      this.createForm.controls.upiNumber.setErrors({invalid: true});
+      this.createForm.controls.upiNumber.setErrors({ invalid: true });
     }
     // this.initial();
     this.checkIfUpiinValidZoning = {
@@ -376,13 +391,13 @@ export class AddFarmerRequestComponent
 
               if (this.province.province_id !== this.org.location.prov_id._id) {
                 this.checkIfUpiinValidZoning.prov_id = false
-                this.createForm.controls.upiNumber.setErrors({Invalid: true});
+                this.createForm.controls.upiNumber.setErrors({ Invalid: true });
               } else if (this.province.district_id !== this.org.location.dist_id._id) {
                 this.checkIfUpiinValidZoning.dist_id = false
-                this.createForm.controls.upiNumber.setErrors({Invalid: true});
+                this.createForm.controls.upiNumber.setErrors({ Invalid: true });
               } else if (!villagesSet.includes(this.province.village_id)) { // If yes, use location.
                 this.checkIfUpiinValidZoning.village_id = false
-                this.createForm.controls.upiNumber.setErrors({Invalid: true});
+                this.createForm.controls.upiNumber.setErrors({ Invalid: true });
               } else {
 
                 this.provinces = [{
@@ -451,11 +466,11 @@ export class AddFarmerRequestComponent
       fertilizer_allocate: [0],
       location: this.formBuilder.group({
         prov_id: [
-          {value: this.provinceValue, disabled: this.disableProvId},
+          { value: this.provinceValue, disabled: this.disableProvId },
           Validators.required,
         ],
         dist_id: [
-          {value: this.districtValue, disabled: this.disableDistId},
+          { value: this.districtValue, disabled: this.disableDistId },
           Validators.required,
         ],
         sect_id: ['', Validators.required],
@@ -679,15 +694,15 @@ export class AddFarmerRequestComponent
     this.createForm.controls.location
       .get('prov_id'.toString())
       .valueChanges.subscribe((value) => {
-      if (value !== '') {
-        this.locationService.getDistricts(value).subscribe((data) => {
-          this.districts = data;
-          this.sectors = null;
-          this.cells = null;
-          this.villages = null;
-        });
-      }
-    });
+        if (value !== '') {
+          this.locationService.getDistricts(value).subscribe((data) => {
+            this.districts = data;
+            this.sectors = null;
+            this.cells = null;
+            this.villages = null;
+          });
+        }
+      });
     this.createForm.controls.treeAges.valueChanges.subscribe((value) => {
       if (value !== null) {
         this.validForm = this.validateNumbers(value);
@@ -705,33 +720,33 @@ export class AddFarmerRequestComponent
     this.createForm.controls.location
       .get('dist_id'.toString())
       .valueChanges.subscribe((value) => {
-      if (value !== '') {
-        this.locationService.getSectors(value).subscribe((data) => {
-          this.sectors = data;
-          this.cells = null;
-          this.villages = null;
-        });
-      }
-    });
+        if (value !== '') {
+          this.locationService.getSectors(value).subscribe((data) => {
+            this.sectors = data;
+            this.cells = null;
+            this.villages = null;
+          });
+        }
+      });
     this.createForm.controls.location
       .get('sect_id'.toString())
       .valueChanges.subscribe((value) => {
-      if (value !== '') {
-        this.locationService.getCells(value).subscribe((data) => {
-          this.cells = data;
-          this.villages = null;
-        });
-      }
-    });
+        if (value !== '') {
+          this.locationService.getCells(value).subscribe((data) => {
+            this.cells = data;
+            this.villages = null;
+          });
+        }
+      });
     this.createForm.controls.location
       .get('cell_id'.toString())
       .valueChanges.subscribe((value) => {
-      if (value !== '') {
-        this.locationService.getVillages(value).subscribe((data) => {
-          this.villages = data;
-        });
-      }
-    });
+        if (value !== '') {
+          this.locationService.getVillages(value).subscribe((data) => {
+            this.villages = data;
+          });
+        }
+      });
   }
 
   initial() {
@@ -743,10 +758,10 @@ export class AddFarmerRequestComponent
           this.districts = dt;
           this.createForm.controls.location
             .get('prov_id'.toString())
-            .patchValue(this.org.location.prov_id._id, {emitEvent: false});
+            .patchValue(this.org.location.prov_id._id, { emitEvent: false });
           this.createForm.controls.location
             .get('dist_id'.toString())
-            .patchValue(this.org.location.dist_id._id, {emitEvent: false});
+            .patchValue(this.org.location.dist_id._id, { emitEvent: false });
           this.sectors = this.filterZoningSectors(this.org.coveredSectors);
         });
     });

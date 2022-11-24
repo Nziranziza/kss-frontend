@@ -3,11 +3,10 @@
   <span class="logo">
     <!-- mini logo for sidebar mini 50x50 pixels -->
     <span class="logo-mini">
-      <img src="assets/dist/img/sks/logo-updated.png" style="height: 12px"
-    /></span>
+      <img src="assets/dist/img/sks/logo-updated.png" style="height: 12px" /></span>
     <!-- logo for regular state and mobile devices -->
-    <span class="logo-lg" style="margin-left: -25px"
-      ><img src="assets/dist/img/sks/logo-updated.png" style="height: 40px; width: 110px" />
+    <span class="logo-lg" style="margin-left: -25px"><img src="assets/dist/img/sks/logo-updated.png"
+        style="height: 40px; width: 110px" />
       <span class="header-name-box">
         <span class="header-name-text"> Coffee </span>
       </span>
@@ -24,12 +23,7 @@
       <ul class="nav navbar-nav">
         <!-- Notifications -->
         <li class="dropdown notifications-menu" [appRequiredRoles]="[6]">
-          <a
-            href="#"
-            class="dropdown-toggle"
-            data-toggle="dropdown"
-            aria-expanded="false"
-          >
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
             <i class="fa fa-bell-o"></i>
             <span class="label label-warning">{{ needOfApproval }}</span>
           </a>
@@ -37,24 +31,20 @@
             <li>
               <ul class="menu">
                 <li>
-                  <a
-                    [routerLink]="[
+                  <a [routerLink]="[
                       '/admin/farmers/need-approval/list',
                       { needApproval: 'updated' }
-                    ]"
-                  >
+                    ]">
                     <i class="fa fa-map-marker text-aqua"></i>
                     <span class="text-yellow">{{ updatedLandToApprove }}</span>
                     updated lands need to be approved
                   </a>
                 </li>
                 <li>
-                  <a
-                    [routerLink]="[
+                  <a [routerLink]="[
                       '/admin/farmers/need-approval/list',
                       { needApproval: 'new' }
-                    ]"
-                  >
+                    ]">
                     <i class="fa fa-map-marker text-aqua"></i>
                     <span class="text-yellow"> {{ newLandToApprove }}</span> new
                     lands need to be approved
@@ -65,20 +55,12 @@
           </ul>
         </li>
         <li class="dropdown notifications-menu">
-          <a
-            href="#"
-            class="dropdown-toggle"
-            data-toggle="dropdown"
-            aria-expanded="false"
-          >
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
             <span class="hidden-xs">
               <img src="assets/dist/img/sks/ico_language.svg" /> &nbsp;
-                English
+              English
               &nbsp;</span>
-            <i
-              class="fa fa-caret-down"
-              aria-hidden="true"
-            ></i>
+            <i class="fa fa-caret-down" aria-hidden="true"></i>
           </a>
           <ul class="dropdown-menu">
             <li>
@@ -92,29 +74,16 @@
         </li>
         <!-- Languages Changing -->
         <li class="dropdown notifications-menu">
-          <a
-            href="#"
-            class="dropdown-toggle"
-            data-toggle="dropdown"
-            aria-expanded="false"
-          >
-            <i
-              class="fa fa-caret-down"
-              aria-hidden="true"
-              style="font-weight: bolder"
-            ></i>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+            <i class="fa fa-caret-down" aria-hidden="true" style="font-weight: bolder"></i>
             &nbsp; Season {{ currentSeason?.season }}
           </a>
           <ul class="dropdown-menu">
             <li>
               <ul class="menu">
                 <li *ngFor="let season of seasons">
-                  <a
-                    type="button"
-                    (click)="changeSeason(season?._id)"
-                    *ngIf="season?._id !== currentSeason?._id"
-                    style="cursor: pointer"
-                  >
+                  <a type="button" (click)="changeSeason(season?._id)" *ngIf="season?._id !== currentSeason?._id"
+                    style="cursor: pointer">
                     <i class="fa fa-tint text-green" aria-hidden="true"></i>
                     Season {{ season?.season }}
                   </a>
@@ -142,11 +111,7 @@
             <!-- Menu Footer-->
             <li class="user-footer">
               <div class="pull-left">
-                <a
-                  routerLink="/admin/users/profile"
-                  class="btn btn-default btn-flat"
-                  >Profile</a
-                >
+                <a routerLink="/admin/users/profile" class="btn btn-default btn-flat">Profile</a>
               </div>
               <div class="pull-right">
                 <button (click)="onLogOut()" class="btn btn-default btn-flat">

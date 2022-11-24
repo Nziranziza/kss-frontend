@@ -1,8 +1,9 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
 
-import {Answer, BasicComponent, Gap, GapService, HelperService, MessageService, Question, Section} from '../../../../core';
+import { Answer, BasicComponent, Gap, GapService, HelperService, MessageService, Question, Section } from '../../../../core';
 
 @Component({
   selector: 'app-gap-edit',
@@ -15,9 +16,9 @@ export class GapEditComponent
   id: string;
   createForm: FormGroup;
   approachs = [
-    {id: 'mark_input', name: 'Marks Input'},
-    {id: 'multiple_single', name: 'Multiple Choice - Single'},
-    {id: 'yes_no', name: 'Yes/No'},
+    { id: 'mark_input', name: 'Marks Input' },
+    { id: 'multiple_single', name: 'Multiple Choice - Single' },
+    { id: 'yes_no', name: 'Yes/No' },
     {
       id: 'multiple_apply',
       name: 'Multiple Choice - All that Apply',
@@ -26,6 +27,7 @@ export class GapEditComponent
   loading = false;
   adoptionOptionsVisible = false;
   gap: Gap;
+  gapTotalWeight = 100 - parseInt(this.cookieService.get('gapTotal-weight'), 10);
 
   constructor(
     private formBuilder: FormBuilder,
@@ -33,7 +35,8 @@ export class GapEditComponent
     private gapService: GapService,
     private messageService: MessageService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private cookieService: CookieService,
   ) {
     super();
   }
@@ -76,16 +79,15 @@ export class GapEditComponent
       this.id = params['id'.toString()];
     });
 
+    this.getGap();
     this.createForm = this.formBuilder.group({
       _id: [''],
       gap_name: ['', Validators.required],
       sections: new FormArray([], Validators.required),
-      gap_weight: ['', Validators.required],
+      gap_weight: ['', [Validators.required, Validators.max(this.gapTotalWeight)]],
       gap_score: ['', Validators.required],
       picture_text: ['', Validators.required]
     });
-
-    this.getGap();
 
     this.initial();
     this.setMessage(this.messageService.getMessage());
@@ -131,7 +133,7 @@ export class GapEditComponent
     });
   }
 
-  populateAnswers(answer: Answer, sectionIndex: number, qstIndex: number, answerIndex:number){
+  populateAnswers(answer: Answer, sectionIndex: number, qstIndex: number, answerIndex: number) {
     const answers = this.getQuestionAnswers(sectionIndex, qstIndex);
     answers.push(this.createAnswer());
     answers.at(answerIndex).get('_id').setValue(answer._id);
@@ -164,11 +166,11 @@ export class GapEditComponent
 
   // Methods for validating Question Fields
 
-  getQuestionField(field: string, sectionIndex: number, qstIndex: number){
+  getQuestionField(field: string, sectionIndex: number, qstIndex: number) {
     return this.getSectionQuestions(sectionIndex).at(qstIndex).get(field);
   }
 
-  getAnswerField(field: string, sectionIndex: number, qstIndex: number, answIndex: number){
+  getAnswerField(field: string, sectionIndex: number, qstIndex: number, answIndex: number) {
     return this.getQuestionAnswers(sectionIndex, qstIndex).at(answIndex).get(field);
   }
 
@@ -196,7 +198,7 @@ export class GapEditComponent
   addQuestionToSection(sectionIndex) {
     const section = (this.createForm.controls.sections as FormArray).controls[
       sectionIndex
-      ] as FormGroup;
+    ] as FormGroup;
 
     (section.controls.questions as FormArray).push(this.createQuestion());
   }
@@ -204,7 +206,7 @@ export class GapEditComponent
   addAnswersToQuestion(sectionIndex, qstIndex) {
     const section = (this.createForm.controls.sections as FormArray).controls[
       sectionIndex
-      ] as FormGroup;
+    ] as FormGroup;
     const question = (section.controls.questions as FormArray).controls[qstIndex] as FormGroup;
     (question.controls.answers as FormArray).push(this.createAnswer());
   }
@@ -261,7 +263,7 @@ export class GapEditComponent
   addAnswers(element: Answer, qIndex: number, aIndex: number) {
     const question = (this.createForm.controls.questions as FormArray).controls[
       qIndex
-      ] as FormGroup;
+    ] as FormGroup;
 
     const answers = question.controls.answers as FormArray;
     answers.push(this.createAnswer());
@@ -272,7 +274,7 @@ export class GapEditComponent
     answers.at(aIndex).get('is_not_applicable').setValue(element.is_not_applicable);
   }
 
-  removeQuestion(sectionIndex, qstIndex){
+  removeQuestion(sectionIndex, qstIndex) {
     this.getSectionQuestions(sectionIndex).removeAt(qstIndex);
   }
 
@@ -320,7 +322,7 @@ export class GapEditComponent
   }
 
   replaceUndefinedOrNull(key, value) {
-    if (value === '' && key === "_id") {
+    if (value === '' && key === '_id') {
       return undefined;
     }
 

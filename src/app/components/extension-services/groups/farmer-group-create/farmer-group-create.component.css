@@ -3,3 +3,20 @@
   width: fit-content;
   padding-bottom: 15px;
 }
+
+.ng-autocomplete {
+  width: 100%;
+}
+
+.ng-autocomplete ::ng-deep .autocomplete-container {
+  height: 35px;
+}
+
+.ng-autocomplete ::ng-deep .autocomplete-container .input-container input {
+  height: 35px;
+}
+
+.ng-autocomplete ::ng-deep .autocomplete-container .suggestions-container ul li a {
+  font: normal 10px/15px Helvetica Neue, Helvetica, Arial, sans-serif;
+  color: #333333;
+}
