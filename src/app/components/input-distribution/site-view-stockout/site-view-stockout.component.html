@@ -98,8 +98,9 @@
         <tr>
           <th>Type</th>
           <th>Destination</th>
-          <th>Quantity</th>
+          <th>Stocked-out Qty</th>
           <th>Distributed Qty</th>
+          <th>Available Qty</th>
           <th>Returned Qty</th>
           <th>Date</th>
           <th>Actions</th>
@@ -113,6 +114,7 @@
             <app-quantity-unit [inputType]="stockOut.inputId.inputType"></app-quantity-unit>
           </td>
           <td>{{ stockOut.distributedQty }}</td>
+          <td>{{ stockOut.totalQuantity - stockOut.distributedQty  }}</td>
           <td>{{ stockOut.returnedQty }}</td>
           <td>{{ stockOut.date | date }}</td>
           <td>
