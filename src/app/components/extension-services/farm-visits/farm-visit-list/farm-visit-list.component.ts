@@ -81,7 +81,10 @@ export class FarmVisitListComponent
               newdata.overall_score += gap.overall_score * 100 / overallWeight;
             })
           })
-          newdata.overall_score = newdata.overall_score / newdata.gaps.length;
+          newdata.overall_score = newdata.overall_score / newdata.farms.length;
+          if (newdata.gaps.length > 0) {
+            newdata.overall_score = newdata.overall_score / newdata.gaps.length;
+          }
           const newFarmData = newdata.farms.filter((v, i, a) => a.findIndex(farm => (farm.owner.userId === v.owner.userId)) === i);
           newdata.farms = newFarmData;
           return newdata;

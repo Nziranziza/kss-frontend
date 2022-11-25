@@ -57,6 +57,8 @@ export class FarmerGroupCreateComponent
   groupMembers = [];
   time: any;
   nameAlreadyExist: boolean;
+  initialValue = '';
+  keyword = 'leaderName';
   searchFields = [
     { value: 'reg_number', name: 'registration number' },
     { value: 'nid', name: 'NID' },
@@ -183,6 +185,15 @@ export class FarmerGroupCreateComponent
     this.allResultsSelected = isChecked;
   }
 
+  selectEvent(item) {
+    console.log(item);
+    this.createForm.controls.leaderNames.setValue(item.leaderName);
+    this.createForm.controls.leaderPhoneNumber.setValue(item.phone_number);
+  }
+  deselectEvent() {
+    console.log('----');
+  }
+
   // checking if group name already exists
   checkNameStatus() {
     this.groupService
@@ -238,9 +249,12 @@ export class FarmerGroupCreateComponent
     this.searchResults.forEach((item) => {
       if (item.selected) {
         item.selected = false;
+        item.leaderName = item.userInfo.groupName ? item.userInfo.groupName : item.userInfo.surname + ' ' + item.userInfo.foreName;
+        item.phone_number = item.userInfo.phone_number;
         this.groupMembers.push(JSON.parse(JSON.stringify(item)));
       }
     });
+    console.log(this.groupMembers);
   }
 
   removeMembersToGroup() {

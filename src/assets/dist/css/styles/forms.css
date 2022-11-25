@@ -20,6 +20,7 @@ form .input-required {
   border-radius: 7px;
   opacity: 1;
   padding-left: 4px;
+  margin-bottom: 5px;
 }
 
 .confirm-text-box {
@@ -29,6 +30,7 @@ form .input-required {
   border-radius: 3px;
   opacity: 1;
 }
+
 .confirm-text {
   text-align: left;
   font: normal normal bold 12px/32px Helvetica Neue, Helvetica, Arial, sans-serif;
@@ -39,7 +41,7 @@ form .input-required {
 }
 
 .confirm-text-area {
-    min-height: 105px;
+  min-height: 105px;
 }
 
 .control-label {

@@ -104,8 +104,9 @@ export class SiteDistributionComponent extends BasicComponent implements OnInit 
     modalRef.componentInstance.documentId = documentId;
     modalRef.result.then((message) => {
       this.setMessage(message);
-      this.inputDistributionService.getFarmerRequests(this.requestsOf).subscribe((data) => {
-        this.requests = data.content[0].requestInfo;
+      this.inputDistributionService.getFarmerRequestsAsCWS(this.authenticationService.getCurrentUser()
+        .info.org_id, this.requestsOf.farmerRegNumber, this.siteId).subscribe((data) => {
+        this.requests = data.content[0].request.requestInfo;
       });
     });
   }

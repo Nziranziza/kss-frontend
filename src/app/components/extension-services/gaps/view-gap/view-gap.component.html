@@ -1,8 +1,5 @@
 <div class="modal-body extended-modal-body">
-  <div
-    (click)="modal.dismiss('cancel click')"
-    class="btn-modal-close text-center"
-  >
+  <div (click)="modal.dismiss('cancel click')" class="btn-modal-close text-center">
     <em class="fa fa-close"></em>
   </div>
   <h3 class="text-center">Gap Details</h3>
@@ -41,23 +38,19 @@
         </div>
         <div class="col-xs-12" style="margin-right: 10px">
           <h3 class="text-center">Observation Details</h3>
-          <div *ngFor="let section of gapDetails.sections">
+          <div *ngFor="let section of gapDetails?.sections">
             <fieldset style="margin-right: 0 !important">
               <legend>
-                <label class="control-label text-center"
-                  >&nbsp; {{ section.section_name }}</label
-                >
+                <label class="control-label text-center">&nbsp; {{ section.section_name }}</label>
               </legend>
-              <div class="box" *ngFor="let question of section.questions">
-                <div
-                  style="
+              <div class="box" *ngFor="let question of section?.questions">
+                <div style="
                     margin-left: 10px;
                     margin-right: 10px;
                     background-color: white;
                     margin-bottom: 10px;
                     border-radius: 7px;
-                  "
-                >
+                  ">
                   <div class="row">
                     <div class="col-xs-12">
                       <h3 class="text-center">Question Details</h3>
@@ -90,16 +83,13 @@
                       <h3 class="text-center">Answer Details</h3>
                     </div>
                     <div class="col-xs-12">
-                      <div
-                        style="
+                      <div style="
                           background-color: #f2f2f2;
                           margin-left: 10px;
                           margin-right: 10px;
                           margin-bottom: 10px;
                           border-radius: 7px;
-                        "
-                        *ngFor="let answer of question.answers"
-                      >
+                        " *ngFor="let answer of question.answers">
                         <div class="row">
                           <div class="col-xs-5">
                             <label class="control-label">Answer</label>

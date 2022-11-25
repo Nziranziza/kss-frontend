@@ -1,12 +1,16 @@
-.main-sidebar, .main-sidebar {
+.main-sidebar,
+.main-sidebar {
   background-color: #EAE4E2;
+  height: 100%;
 }
 
-.sidebar-menu > li.header , .sidebar-menu>li{
+.sidebar-menu>li.header,
+.sidebar-menu>li {
   background-color: #E7D7C1;
   color: #4F210D;
 }
-.sidebar-menu > li.header  {
+
+.sidebar-menu>li.header {
   font-weight: bold;
 }
 
@@ -31,7 +35,9 @@
   color: white;
 }
 
-.sidebar-menu>li:hover>a, .sidebar-menu>li.active>a, .sidebar-menu>li.menu-open>a {
+.sidebar-menu>li:hover>a,
+.sidebar-menu>li.active>a,
+.sidebar-menu>li.menu-open>a {
   background-color: #4F210D1F;
 }
 
@@ -46,4 +52,3 @@
 .sidebar a:hover {
   background: #4F210D1F;
 }
-

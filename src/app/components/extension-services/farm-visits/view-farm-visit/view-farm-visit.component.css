@@ -1,4 +1,8 @@
 .image-styling {
-  width: 30%;
+  height: 10rem;
   border-radius: 5px;
+}
+
+.invoice-col {
+  font-size: 1.5rem;
 }
