@@ -136,7 +136,7 @@ export class ViewApplicationComponent
                   this.stockOut.recipients = this.stockOut.recipients.filter(
                     (value) => {
                       return (
-                        value.farmerRequestId !== recipient.farmerRequestId
+                        value._id !== recipient._id
                       );
                     }
                   );

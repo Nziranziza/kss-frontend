@@ -39,9 +39,10 @@ export class ApplyPesticideComponent extends BasicComponent implements OnInit {
     this.distributionForm = this.formBuilder.group({
       pesticides: new FormArray([])
     });
-    this.inputDistributionService.getSiteStockOuts(this.siteId).subscribe((data) => {
-      data.content.map((stock) => {
-        if (stock.input.inputType === 'Pesticide' && stock.returnedQty === 0) {
+    this.inputDistributionService.getCwsStockOuts(this.authenticationService.getCurrentUser()
+      .info.org_id, this.siteId).subscribe((data) => {
+      data.data.map((stock) => {
+        if (stock.inputId.inputType === 'Pesticide' && stock.returnedQty === 0) {
           const control = new FormControl(false);
           this.stocks.push(stock);
           (this.distributionForm.controls.pesticides as FormArray).push(control);
