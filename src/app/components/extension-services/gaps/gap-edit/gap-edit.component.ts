@@ -84,7 +84,7 @@ export class GapEditComponent
       _id: [''],
       gap_name: ['', Validators.required],
       sections: new FormArray([], Validators.required),
-      gap_weight: ['', [Validators.required, Validators.max(this.gapTotalWeight)]],
+      gap_weight: ['', [Validators.required]],
       gap_score: ['', Validators.required],
       picture_text: ['', Validators.required]
     });

@@ -82,7 +82,7 @@ export class FarmerGroupCreateComponent
       groupName: ['', Validators.required],
       leaderNames: ['', Validators.required],
       leaderPhoneNumber: [
-        '',
+        { value: '', disabled: true },
         [Validators.required, Validators.pattern('[0-9]{12}')],
       ],
       description: ['', Validators.required],
