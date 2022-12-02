@@ -240,35 +240,15 @@
         </div>
       </span>
     </div>
-    <div class="text-center" *ngIf="addNursery.value.siteAvailability === 'no'">
-      <br />
-      <br />
-      <button type="button" class="btn" style="
-          width: 250px;
-          height: 50px;
-          margin-right: 10px;
-          background-color: #bababa;
-          color: #ffffff;
-        " routerLink="/admin/seedling/nursery/list">
-        Cancel
-      </button>
-      <button class="btn" (click)="onCreate()" [disabled]="loading" style="
-          width: 250px;
-          height: 50px;
-          background-color: #4f210d;
-          color: #ffffff;
-        " [disabled]="loading">
-        <span *ngIf="!loading; else other_content">Update Nursery</span>
-        <ng-template #other_content>
-          <div class="loader">
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
-          </div>
-        </ng-template>
-      </button>
-    </div>
     <br />
   </form>
+</div>
+
+<div class="row" *ngIf="addNursery.value.siteAvailability === 'no'">
+  <div class="col-xs-12">
+    <a class="btn btn-warning btn-margin pull-right" routerLink="/admin/seedling/nursery/list">Cancel</a>
+    <button type="button" class="btn btn-success pull-right" (click)="onCreate()">
+      Update
+    </button>
+  </div>
 </div>

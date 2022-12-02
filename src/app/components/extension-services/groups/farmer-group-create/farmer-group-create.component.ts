@@ -18,6 +18,7 @@ import { isEmptyObject } from 'jquery';
 import { GroupService } from '../../../../core';
 import { SuccessModalComponent } from '../../../../shared';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ScrollStrategy, ScrollStrategyOptions } from '@angular/cdk/overlay';
 
 @Component({
   selector: 'app-farmer-group-create',
@@ -38,9 +39,11 @@ export class FarmerGroupCreateComponent
     private groupService: GroupService,
     private authenticationService: AuthenticationService,
     protected locationService: LocationService,
-    private helper: HelperService
+    private helper: HelperService,
+    private readonly sso: ScrollStrategyOptions
   ) {
     super(locationService, organisationService);
+    this.scrollStrategy = this.sso.noop();
   }
 
   createForm: FormGroup;
@@ -59,6 +62,7 @@ export class FarmerGroupCreateComponent
   nameAlreadyExist: boolean;
   initialValue = '';
   keyword = 'leaderName';
+  scrollStrategy: ScrollStrategy;
   searchFields = [
     { value: 'reg_number', name: 'registration number' },
     { value: 'nid', name: 'NID' },

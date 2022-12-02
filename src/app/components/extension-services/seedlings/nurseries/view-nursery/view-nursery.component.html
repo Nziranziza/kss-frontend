@@ -19,7 +19,7 @@
     <div class="col-sm-4 invoice-col">
       <strong>Site Name</strong>
       <address>
-        {{ nurseryDatas.nurseryName }} <br>
+        {{ nurseryDatas?.nurseryName }} <br>
       </address>
     </div>
     <!-- /.location -->
@@ -39,8 +39,8 @@
     <div class="col-sm-4 invoice-col">
       <strong>Geo Coordinate</strong>
       <address>
-        <strong>Latitude: </strong>{{ nurseryDatas.latitude || "" }}<br>
-        <strong>Longitude: </strong>{{ nurseryDatas.longitude || "" }}<br>
+        <strong>Latitude: </strong>{{ nurseryDatas?.latitude || "" }}<br>
+        <strong>Longitude: </strong>{{ nurseryDatas?.longitude || "" }}<br>
 
       </address>
     </div>
@@ -48,16 +48,16 @@
   <div class="row invoice-info">
     <div class="col-sm-4 invoice-col">
       <strong>Nursery Owner </strong><br>
-      <strong>Name: </strong>{{ nurseryDatas.owner.name || "" }}<br>
-      <strong>Phone Number: </strong>{{ nurseryDatas.owner.phoneNumber || "" }}<br>
+      <strong>Name: </strong>{{ nurseryDatas?.owner?.name || "" }}<br>
+      <strong>Phone Number: </strong>{{ nurseryDatas?.owner?.phoneNumber || "" }}<br>
       <br>
       <br>
       <br>
     </div>
     <div class="col-sm-8 invoice-col">
       <strong>Responsible Manager </strong><br>
-      <strong>Name: </strong>{{ nurseryDatas.representative.name || "" }}<br>
-      <strong>Phone Number: </strong>{{ nurseryDatas.representative.phoneNumber || "" }}<br>
+      <strong>Name: </strong>{{ nurseryDatas?.representative?.name || "" }}<br>
+      <strong>Phone Number: </strong>{{ nurseryDatas?.representative?.phoneNumber || "" }}<br>
       <br>
       <br>
       <br>
@@ -84,7 +84,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let stock of nurseryDatas.stocks; let i = index">
+          <tr *ngFor="let stock of nurseryDatas?.stocks; let i = index">
             <td class="text-center">{{ stock.varietyId.name || "" }}</td>
 
             <td class="text-center">

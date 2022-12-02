@@ -96,7 +96,7 @@
                 <label class="control-label label-required">Time</label>
                 <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="meetingTime"
                   class="form-control" />
-                <owl-date-time [pickerType]="'timer'" #dt1></owl-date-time>
+                <owl-date-time #dt1 [pickerType]="'timer'" [scrollStrategy]="scrollStrategy"></owl-date-time>
               </div>
             </div>
           </ng-container>
@@ -324,7 +324,7 @@
   <div class="col-xs-12">
     <a class="btn btn-warning btn-margin pull-right" routerLink="/admin/farmers/group/list">Cancel</a>
     <button type="button" class="btn btn-success pull-right" (click)="onSubmit()">
-      Save
+      Update
     </button>
   </div>
 </div>

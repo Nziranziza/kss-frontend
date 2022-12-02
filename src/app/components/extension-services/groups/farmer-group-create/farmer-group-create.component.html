@@ -176,7 +176,7 @@
                         <label class="control-label label-required">Time</label>
                         <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="meetingTime"
                           class="form-control" />
-                        <owl-date-time [pickerType]="'timer'" #dt1></owl-date-time>
+                        <owl-date-time #dt1 [pickerType]="'timer'" [scrollStrategy]="scrollStrategy"></owl-date-time>
                         <app-inline-errors *ngIf="
                         createForm.controls.meetingSchedule.get(
                           'meetingTime'.toString()

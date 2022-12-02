@@ -8,12 +8,8 @@
     </span>
     <br />
     has been added <br />
-    <button
-      type="button"
-      class="btn btn-success btn-lg pull-center"
-      routerLink="/admin/training/list"
-      (click)="modal.dismiss()"
-    >
+    <button type="button" class="btn btn-success btn-lg pull-center" routerLink="/admin/training/list"
+      (click)="modal.dismiss()">
       OK
     </button>
   </div>
@@ -40,12 +36,10 @@
             <div>
               <label class="control-label label-required">Associated GAP</label>
               <div class="confirm-text-box confirm-text">
-                <li
-                  *ngFor="
+                <li *ngFor="
                     let gaps of createTraining.value.adoptionGap;
                     let i = index
-                  "
-                >
+                  ">
                   {{ gaps.name }}
                 </li>
               </div>
@@ -59,9 +53,7 @@
           </div>
           <div class="col-xs-6">
             <div>
-              <label class="control-label label-required"
-                >Training Description</label
-              >
+              <label class="control-label label-required">Training Description</label>
               <div class="confirm-text-box confirm-text">
                 {{ createTraining.value.description }}
               </div>
@@ -98,21 +90,14 @@
   <div class="modal-footer">
     <div class="row">
       <div class="col-sm-3">
-        <button
-          type="button"
-          class="btn btn-danger btn-lg pull-left"
-          (click)="modal.dismiss()"
-        >
+        <button type="button" class="btn btn-danger btn-lg pull-left" (click)="modal.dismiss()">
           Cancel
         </button>
       </div>
       <div class="col-sm-6"></div>
       <div class="col-sm-3">
-        <button
-          class="btn btn-secondary btn-lg submit"
-          (click)="modal.dismiss(); onSubmit(); open(ccontent)"
-          [disabled]="loading"
-        >
+        <button class="btn btn-secondary btn-lg submit" (click)="modal.dismiss(); onSubmit(); open(ccontent)"
+          [disabled]="loading">
           <span *ngIf="!loading; else other_content">Confirm</span>
           <ng-template #other_content>
             <div class="loader">
@@ -144,45 +129,26 @@
                 <label class="control-label label-required">{{
                   "training_name" | translate
                 }}</label>
-                <input
-                  type="text"
-                  formControlName="trainingName"
-                  class="form-control"
-                />
-                <app-inline-errors
-                  *ngIf="
+                <input type="text" formControlName="trainingName" class="form-control" />
+                <app-inline-errors *ngIf="
                     createTraining.controls.trainingName.invalid &&
                     (createTraining.controls.trainingName.dirty ||
                       createTraining.controls.trainingName.touched)
-                  "
-                  [errors]="createTraining.controls.trainingName.errors"
-                  [label]="'training_name'"
-                >
+                  " [errors]="createTraining.controls.trainingName.errors" [label]="'training_name'">
                 </app-inline-errors>
               </div>
             </div>
-            <div
-              class="col-sm-6"
-              *ngIf="createTraining.value.trainingName != ''"
-            >
+            <div class="col-sm-6" *ngIf="createTraining.value.trainingName != ''">
               <div class="form-group">
                 <label class="control-label label-required">{{
                   "training_description" | translate
                 }}</label>
-                <input
-                  type="text"
-                  formControlName="description"
-                  class="form-control"
-                />
-                <app-inline-errors
-                  *ngIf="
+                <input type="text" formControlName="description" class="form-control" />
+                <app-inline-errors *ngIf="
                     createTraining.controls.description.invalid &&
                     (createTraining.controls.description.dirty ||
                       createTraining.controls.description.touched)
-                  "
-                  [errors]="createTraining.controls.description.errors"
-                  [label]="'description'"
-                >
+                  " [errors]="createTraining.controls.description.errors" [label]="'description'">
                 </app-inline-errors>
               </div>
             </div>
@@ -194,24 +160,15 @@
                   "associated_gap" | translate
                 }}</label>
 
-                <ng-multiselect-dropdown
-                  formControlName="adoptionGap"
-                  [settings]="gapDropdownSettings"
-                  [data]="gaps"
-                  [(ngModel)]="createTraining.value.adoptionGap"
-                  (onSelect)="onGapSelect($event)"
-                >
+                <ng-multiselect-dropdown formControlName="adoptionGap" [settings]="gapDropdownSettings" [data]="gaps"
+                  [(ngModel)]="createTraining.value.adoptionGap" (onSelect)="onGapSelect($event)">
                 </ng-multiselect-dropdown>
 
-                <app-inline-errors
-                  *ngIf="
+                <app-inline-errors *ngIf="
                     createTraining.controls.adoptionGap.invalid &&
                     (createTraining.controls.adoptionGap.dirty ||
                       createTraining.controls.adoptionGap.touched)
-                  "
-                  [errors]="createTraining.controls.adoptionGap.errors"
-                  [label]="'adoption_gap'"
-                >
+                  " [errors]="createTraining.controls.adoptionGap.errors" [label]="'adoption_gap'">
                 </app-inline-errors>
               </div>
             </div>
@@ -221,45 +178,25 @@
                   "attach_files" | translate
                 }}</label>
                 <label for="file-input" class="training-file-input">
-                  <img
-                    src="assets/dist/img/sks/ico_export.svg"
-                    class="training-file-input-icon"
-                  />
+                  <img src="assets/dist/img/sks/ico_export.svg" class="training-file-input-icon" />
                   <div class="training-file-input-text">
                     {{ "click_drag_pdf_file" | translate }}
                   </div>
                 </label>
-                <input
-                  id="file-input"
-                  type="file"
-                  multiple
-                  class="form-control"
-                  style="display: none"
-                  (change)="onFileSelected($event)"
-                  accept="application/pdf"
-                />
+                <input id="file-input" type="file" multiple class="form-control" style="display: none"
+                  (change)="onFileSelected($event)" accept="application/pdf" />
                 <div class="training-file-list">
                   Attached file(s) to upload <br /><br />
-                  <div
-                    *ngFor="let file of files; let i = index"
-                    style="padding-bottom: 6px"
-                  >
+                  <div *ngFor="let file of files; let i = index" style="padding-bottom: 6px">
                     <span style="width: 75%; float: left">
-                      <img
-                        src="assets/dist/img/sks/ico_attach.svg"
-                        style="margin-right: 5px"
-                      />
+                      <img src="assets/dist/img/sks/ico_attach.svg" style="margin-right: 5px" />
                       {{ file.name }}
                     </span>
                     <span style="margin-left: 40px; width: 12%; float: left">
                       {{ file.size }}
                     </span>
-                    <i
-                      class="fa fa-times"
-                      aria-hidden="true"
-                      (click)="removeSelectedFile(index)"
-                      style="color: red"
-                    ></i>
+                    <i class="fa fa-times" aria-hidden="true" (click)="removeSelectedFile(index)"
+                      style="color: red"></i>
                     <br />
                   </div>
                 </div>
@@ -270,22 +207,13 @@
       </div>
     </div>
   </div>
-  <div class="text-center" *ngIf="createTraining.value.trainingName != ''">
-    <button
-      type="button"
-      class="btn btn-success"
-      style="width: 250px; height: 50px; margin-right: 10px"
-      routerLink="/admin/training/list"
-    >
-      {{ "cancel" | translate }}
-    </button>
-    <button
-      type="button"
-      class="btn btn-success"
-      (click)="onFileUpload(content)"
-      style="width: 250px; height: 50px"
-    >
-      {{ "add_training" | translate }}
+</form>
+
+<div class="row" *ngIf="createTraining.value.trainingName != ''">
+  <div class="col-xs-12">
+    <a class="btn btn-warning btn-margin pull-right" routerLink="/admin/training/list">Cancel</a>
+    <button type="button" class="btn btn-success pull-right" (click)="onFileUpload(content)">
+      Save
     </button>
   </div>
-</form>
+</div>
