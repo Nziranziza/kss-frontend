@@ -47,10 +47,10 @@
   <br>
   <div class="row">
     <div class="col-xs-12" *ngIf="index >= 0 && visits?.gaps.length > 0">
-      <i class="fa fa-times-circle close pull-right" style="font-size: 20px; margin-right: 10px; margin-top: 10px"
-        aria-label="Close" (click)="selectIndex(-1)">
-      </i>
-      <div class="text-muted well well-sm no-shadow">
+      <div class="text-muted well well-sm no-shadow table-responsive">
+        <i class="fa fa-times-circle close pull-right" style="font-size: 20px; margin-right: 10px; margin-top: 10px"
+          aria-label="Close" (click)="selectIndex(-1)">
+        </i>
         <div class="row invoice-info">
           <div class="col-sm-3 invoice-col">
             <br>
@@ -63,39 +63,46 @@
             {{ visits?.farms[index].upiNumber ? visits?.farms[index].upiNumber : '-' }}
           </div>
           <div class="col-sm-9 invoice-col">
-            <div class="row invoice-info" style="margin-bottom: 0.1rem;">
-              <div class="col-sm-5 invoice-col">
-                Gap
-              </div>
-              <!-- /.col -->
-              <div class="col-sm-2 invoice-col text-center">
-                Score
-              </div>
-              <!-- /.col -->
-              <div class="col-sm-5 invoice-col text-center">
-                Picture
-              </div>
-              <!-- /.col -->
-            </div>
-            <div *ngFor="let gap of visits?.gaps; let t = index">
-              <div class="row">
-                <div class="col-sm-5 invoice-col">
-                  {{gap?.gap_name}}
-                </div>
-                <!-- /.col -->
-                <span *ngFor="let visitGap of visits?.farms[index]?.evaluatedGaps">
-                  <span *ngIf="gap._id === visitGap.gap_id">
-                    <div class="col-sm-2 text-center">
-                      {{visitGap?.overall_score * 100/ visitGap?.overall_weight}}
-                    </div>
-                    <!-- /.col -->
-                    <div class="col-sm-5 text-center">
-                      <img src="{{visitGap?.photos[0]}}" alt="No Picture Taken" class="image-styling">
-                    </div>
-                  </span>
-                  <!-- /.col -->
-                </span>
-              </div>
+            <div class="table-responsive">
+              <table class="row-border hover table">
+                <thead>
+                  <tr>
+                    <th style="width:40%">Gap</th>
+                    <th style="width:10%">Score</th>
+                    <th class="text-center">Picture</th>
+                    <th class="text-center">Download</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let gap of visits?.gaps; let t = index">
+                    <td style="width:40%">{{gap?.gap_name}}</td>
+
+                    <td style="width:10%">
+                      <span *ngFor="let visitGap of visits?.farms[index]?.evaluatedGaps">
+                        <span *ngIf="gap._id === visitGap.gap_id">
+                          {{visitGap?.overall_score * 100/ visitGap?.overall_weight}}
+                        </span>
+                      </span>
+                    </td>
+                    <td class="text-center">
+                      <span *ngFor="let visitGap of visits?.farms[index]?.evaluatedGaps">
+                        <span *ngIf="gap._id === visitGap.gap_id">
+                          <span><img src="{{visitGap?.photos[0]}}" alt="No Picture Taken" class="image-styling"></span>
+                        </span>
+                      </span>
+                    </td>
+                    <td class="text-center">
+                      <span *ngFor="let visitGap of visits?.farms[index]?.evaluatedGaps">
+                        <span *ngIf="gap._id === visitGap.gap_id">
+                          <a href="{{ visitGap?.photos[0] }}" target="_blank">
+                            <i class="fa fa-download"></i>
+                          </a>
+                        </span>
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>

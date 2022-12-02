@@ -24,185 +24,164 @@
     </button>
   </div>
 </ng-template>
-
 <div class="modal-body extended-modal-body">
-  <div (click)="modal.dismiss('cancel click')" class="btn-modal-close text-center">
-    <em class="fa fa-close"></em>
+  <div class="modal-header">
+    <i class="fa fa-times-circle close" style="font-size: 24px;" aria-label="Close"
+      (click)="modal.dismiss('cancel click')">
+    </i>
   </div>
-  <div class="stats-section">
-    <div class="row">
-      <div class="col-sm-12 text-center stats-title">Statistics</div>
-      <div class="col-sm-4">
-        <div class="text-center stats-box">
-          <h3>Attended Trainees</h3>
-          <div class="row">
-            <div class="col-sm-5">
-              <h1 style="margin-top: -5px; margin-left: 5px">
-                {{ trainingsStats?.totalPresent }}
-              </h1>
-            </div>
-            <div class="col-xs-6 col-sm-3">
-              <span style="white-space: pre"> Male </span>
-              {{ trainingsStats?.malePresent }}
-            </div>
-            <div class="col-xs-6 col-sm-3">
-              <span style="white-space: pre"> Female </span>
-              {{ trainingsStats?.femalePresent }}
-            </div>
+  <!-- title row -->
+  <div class="row">
+    <div class="col-xs-12">
+      <h2 class="page-header">
+        {{ training?.trainingId ? training?.trainingId?.trainingName : "" }} Details
+        <small class="pull-right">Created: {{ training?.createdAt | date: "y/LL/d - h:mm" }}</small>
+      </h2>
+    </div>
+    <!-- /.col -->
+  </div>
+  <!-- info row -->
+  <div class="row invoice-info">
+    <!-- /.col -->
+    <div class="col-sm-4 invoice-col">
+      <strong>Description</strong>
+      <address>
+        {{ training?.description }}<br>
+
+      </address>
+    </div>
+    <!-- /.location -->
+    <div class="col-sm-4 invoice-col">
+      <strong>Location</strong>
+      <address>
+        <br>
+        <strong>Province: </strong>{{ training?.location ? training.location.prov_id?.namek.toLowerCase(): "" }}<br>
+        <strong>District: </strong>{{ training?.location ? training.location.dist_id?.name : "" }}<br>
+        <strong>Sector: </strong>{{ training?.location ? training.location.sect_id?.name : "" }}<br>
+        <strong>Cell: </strong>{{ training?.location ? training.location.cell_id?.name : "" }}<br>
+        <strong>Village: </strong>{{
+          training?.location ? training.location.village_id?.name : ""
+        }}<br>
+        <strong>Venue: </strong>{{ training?.venueName }}<br>
+
+      </address>
+    </div>
+    <!-- /.Venue -->
+    <div class="col-sm-4 invoice-col">
+      <strong>Trainer</strong>
+      <address>
+        <br>
+        <strong>FullName: </strong>{{ training?.trainer ? training.trainer.fullName : "" }} <br>
+        <strong>Organization Name: </strong> {{training?.trainer?.organisationName}} <br>
+        <strong>Phone Number: </strong> {{training?.trainer?.phoneNumber}} <br>
+      </address>
+    </div>
+  </div>
+  <div class="row invoice-info">
+    <div class="col-sm-4 invoice-col">
+      <strong>Training Date & Time </strong><br>
+      <small>From: </small>{{ training?.startTime | date: "short" }}
+      <br>
+      <small>To: </small> {{ training?.endTime | date: "short" }}
+      <br>
+    </div>
+    <div class="col-sm-8 invoice-col">
+      <br>
+      <br>
+      <h3 class="text-center">{{ trainingsStats?.totalPresent + trainingsStats?.totalAbsent}} Trainees</h3>
+    </div>
+    <!-- /.col -->
+    <!-- /.location -->
+    <div class="col-sm-4 invoice-col">
+      <strong>Group Name</strong>
+      <address>
+        {{ training?.groupId?.groupName }} <br>
+      </address>
+    </div>
+    <!-- /.col -->
+    <!-- /.location -->
+    <div class="col-sm-4 invoice-col">
+      <div class="text-center trainees-box">
+        <p>Attended Trainees</p>
+        <h4>{{ trainingsStats?.totalPresent }}</h4>
+        <div class="row">
+          <div class="col-xs-6">
+            <i class="fa fa-male fa-2x" aria-hidden="true" style="color: #35a1ff"></i>
+            <p>{{ trainingsStats?.malePresent }}</p>
           </div>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div class="text-center stats-box third-box">
-          <h3>Not Attended Trainees</h3>
-          <div class="row">
-            <div class="col-sm-5">
-              <h1 style="margin-top: -5px; margin-left: 5px">
-                {{ trainingsStats?.totalAbsent }}
-              </h1>
-            </div>
-            <div class="col-xs-6 col-sm-3">
-              <span style="white-space: pre"> Male </span>
-              {{ trainingsStats?.maleAbsent }}
-            </div>
-            <div class="col-xs-6 col-sm-3">
-              <span style="white-space: pre"> Female </span>
-              {{ trainingsStats?.femaleAbsent }}
-            </div>
+          <div class="col-xs-6">
+            <i class="fa fa-female fa-2x" aria-hidden="true" style="color: #ff69f6"></i>
+            <p>{{ trainingsStats?.femalePresent }}</p>
           </div>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div class="text-center stats-box middle-box">
-          <h3>Attendance Rate</h3>
-          <h1>
-            {{
-              trainingsStats?.totalPresent > 0
-                ? (trainingsStats.totalPresent * 100) /
-                  trainingsStats.totalInvitees
-                : (0 | number: "1.1-1")
-            }}%
-          </h1>
         </div>
       </div>
     </div>
+    <div class="col-sm-4 invoice-col">
+      <div class="text-center trainees-box trainees-box-absent">
+        <p>Not Attended Trainees</p>
+        <h4>{{ trainingsStats?.totalAbsent }}</h4>
+        <div class="row">
+          <div class="col-xs-6">
+            <i class="fa fa-male fa-2x" aria-hidden="true" style="color: #35a1ff"></i>
+            <p>{{ trainingsStats?.maleAbsent }}</p>
+          </div>
+          <div class="col-xs-6">
+            <i class="fa fa-female fa-2x" aria-hidden="true" style="color: #ff69f6"></i>
+            <p>{{ trainingsStats?.femaleAbsent }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /.col -->
   </div>
+  <!-- /.row -->
 
-  <div class="row" style="margin-top: 15px">
-    <div class="col-sm-6">
+  <br>
+  <div class="row">
+    <!-- accepted payments column -->
+    <div class="col-xs-12 col-centered">
       <div class="box-confirm">
         <div class="box-body">
-          <h4 class="text-center">Scheduled Training details</h4>
-          <label class="control-label label-required">Selected Training</label>
-          <div class="confirm-text-box confirm-text">
-            {{ training?.trainingId ? training?.trainingId?.trainingName : "" }}
+          <h3 class="text-center">
+            Trainees ( Total:
+            {{ training?.trainees ? training?.trainees.length : 0 }} )
+          </h3>
+          <div class="table-responsive">
+            <table class="row-border hover table table-striped">
+              <thead>
+                <tr>
+                  <th>Farmer Names</th>
+                  <th>Contact</th>
+                  <th style="text-align: center">Attended</th>
+                  <th style="text-align: center">SMS Status</th>
+                  <th class="text-center">Actions</th>
+                </tr>
+                <tr *ngFor="let trainee of training?.trainees; let i = index">
+                  <td>{{ trainee.foreName + " " + trainee.surName }}</td>
+                  <td>{{ trainee.phoneNumber }}</td>
+                  <td style="text-align: center; color: green" *ngIf="trainee.attended">
+                    Yes
+                  </td>
+                  <td style="text-align: center; color: red" *ngIf="!trainee.attended">
+                    No
+                  </td>
+                  <td style="text-align: center; color: red">
+                    {{ trainee.smsStatus == "NOT_SENT" ? "Not Sent" : "Sent" }}
+                  </td>
+                  <td class="text-center">
+                    <button appRequiredSeason (click)="open(content)" class="btn btn-action-no-border"
+                      *ngIf="trainee.smsStatus == 'NOT_SENT'">
+                      <em class="fa fa-envelope-o"></em>
+                    </button>
+                  </td>
+                </tr>
+              </thead>
+            </table>
           </div>
-          <label class="control-label label-required">Description</label>
-          <div class="confirm-text-box confirm-text confirm-text-area">
-            {{ training?.description }}
-          </div>
-
-          <label class="control-label label-required">Training Location address</label>
-          <div class="row">
-            <div class="col-sm-6">
-              <label class="control-label"> Province </label>
-              <div class="confirm-text-box confirm-text">
-                {{ training?.location ? training.location.prov_id?.namek.toLowerCase(): "" }}
-              </div>
-              <label class="control-label"> Sector </label>
-              <div class="confirm-text-box confirm-text">
-                {{ training?.location ? training.location.sect_id?.name : "" }}
-              </div>
-              <label class="control-label"> Village </label>
-              <div class="confirm-text-box confirm-text">
-                {{
-                  training?.location ? training.location.village_id?.name : ""
-                }}
-              </div>
-            </div>
-            <div class="col-sm-6">
-              <label class="control-label label-required"> District </label>
-              <div class="confirm-text-box confirm-text">
-                {{ training?.location ? training.location.dist_id?.name : "" }}
-              </div>
-              <label class="control-label"> Cell </label>
-              <div class="confirm-text-box confirm-text">
-                {{ training?.location ? training.location.cell_id?.name : "" }}
-              </div>
-              <label class="control-label"> Venue </label>
-              <div class="confirm-text-box confirm-text">
-                {{ training?.venueName }}
-              </div>
-            </div>
-          </div>
-          <label class="control-label">Training Date & Time</label>
-          <div class="row">
-            <div class="col-sm-6">
-              <label class="control-label"> From </label>
-              <div class="confirm-text-box confirm-text">
-                {{ training?.startTime | date: "short" }}
-              </div>
-            </div>
-            <div class="col-sm-6">
-              <label class="control-label"> To </label>
-              <div class="confirm-text-box confirm-text">
-                {{ training?.endTime | date: "short" }}
-              </div>
-            </div>
-          </div>
-          <div class="control-label text-center"></div>
         </div>
       </div>
     </div>
-    <div class="col-sm-6">
-      <div class="box-confirm">
-        <label class="control-label label-required">Trainer</label>
-        <div class="confirm-text-box confirm-text" style="margin-right: 20px">
-          {{ training?.trainer ? training.trainer.fullName : "" }}
-        </div>
-        <br />
-        <label class="control-label label-required">Group Name</label>
-        <div class="confirm-text-box confirm-text" style="margin-right: 20px">
-          {{ training?.groupId?.groupName }}
-        </div>
-        <br />
-        <h3 class="text-center">
-          Trainees ( Total:
-          {{ training?.trainees ? training?.trainees.length : 0 }} )
-        </h3>
-        <div class="table-responsive">
-          <table class="row-border hover table table-striped">
-            <thead>
-              <tr>
-                <th>Farmer Names</th>
-                <th>Contact</th>
-                <th>Attended</th>
-                <th>SMS Status</th>
-                <th class="text-center">Actions</th>
-              </tr>
-              <tr *ngFor="let trainee of training?.trainees; let i = index">
-                <td>{{ trainee.foreName + " " + trainee.surName }}</td>
-                <td>{{ trainee.phoneNumber }}</td>
-                <td style="text-align: center; color: green" *ngIf="trainee.attended">
-                  Yes
-                </td>
-                <td style="text-align: center; color: red" *ngIf="!trainee.attended">
-                  No
-                </td>
-                <td style="text-align: center; color: red">
-                  {{ trainee.smsStatus == "NOT_SENT" ? "Not Sent" : "Sent" }}
-                </td>
-                <td>
-                  <button appRequiredSeason (click)="open(content)" class="btn btn-action-no-border"
-                    *ngIf="trainee.smsStatus == 'NOT_SENT'">
-                    <em class="fa fa-envelope-o"></em>
-                  </button>
-                </td>
-              </tr>
-            </thead>
-          </table>
-        </div>
-      </div>
-    </div>
+    <!-- /.col -->
   </div>
+  <!-- /.row -->
 </div>

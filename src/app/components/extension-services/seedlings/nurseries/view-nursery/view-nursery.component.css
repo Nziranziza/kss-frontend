@@ -1,3 +1,7 @@
 .confirm-text {
-    min-height: 32px;
+  min-height: 32px;
+}
+
+th {
+  font-size: small;
 }
