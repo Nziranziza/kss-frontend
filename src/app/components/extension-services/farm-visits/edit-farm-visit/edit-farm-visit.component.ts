@@ -246,6 +246,11 @@ export class EditFarmVisitComponent extends BasicComponent implements OnInit {
         farm.selected = isChecked;
       });
     });
+    this.selectedFarmersList();
+  }
+
+  selectedFarmersList() {
+    this.selectedFarms = [];
     this.farmers.map((farmer) => {
       const newData = farmer.farms.filter((data) => {
         return data.selected === true;
@@ -259,23 +264,12 @@ export class EditFarmVisitComponent extends BasicComponent implements OnInit {
     this.farmers[i].farms.forEach((farm) => {
       farm.selected = isChecked;
     });
-    this.farmers.map((farmer) => {
-      const newData = farmer.farms.filter((data) => {
-        return data.selected === true;
-      });
-      this.selectedFarms.push(...newData);
-    });
+    this.selectedFarmersList();
   }
 
   selectFarms(isChecked: boolean, item: number, i: number) {
     this.farmers[item].farms[i].selected = isChecked;
-    this.selectedFarms = [];
-    this.farmers.map((farmer) => {
-      const newData = farmer.farms.filter((data) => {
-        return data.selected === true;
-      });
-      this.selectedFarms.push(...newData);
-    });
+    this.selectedFarmersList();
   }
 
   expandFarmModal(i: number) {
@@ -300,16 +294,6 @@ export class EditFarmVisitComponent extends BasicComponent implements OnInit {
     this.loading = false;
   }
 
-  // selectFarms(isChecked: boolean, i: number) {
-  //   this.farmList[i].selected = true;
-  //   if (!isChecked) {
-  //     this.allTraineesSelected = isChecked;
-  //   }
-  //   this.selectedFarms = this.farmList.filter((data) => {
-  //     return data.selected === true;
-  //   });
-  // }
-
   getGaps(): void {
     this.loading = true;
     this.gapService.all().subscribe((data) => {
@@ -332,14 +316,14 @@ export class EditFarmVisitComponent extends BasicComponent implements OnInit {
     this.scheduleVisit
       .get('farmerGroup'.toString())
       .valueChanges.subscribe((value) => {
-      this.getFarms(value);
-    });
+        this.getFarms(value);
+      });
   }
 
   open(content) {
     this.scheduleVisit.markAllAsTouched();
+    this.selectedFarmersList();
     if (this.scheduleVisit.valid) {
-      this.selectedFarms = this.selectedFarms.length > 0 ? this.selectedFarms : this.savedFarmList;
       this.formatedStartDate =
         this.formatDate(
           this.scheduleVisit.controls.date.get('visitDate'.toString()).value
@@ -368,13 +352,10 @@ export class EditFarmVisitComponent extends BasicComponent implements OnInit {
           adoptionGap.push(adoption._id);
         }
       });
-      const farms = this.farmList.filter((newdata) => {
-        return newdata.selected === true;
-      });
       const data: any = {
         date: dataValues.date.visitDate,
         description: dataValues.description,
-        farms: farms.map((newdata) => {
+        farms: this.selectedFarms.map((newdata) => {
           return {
             farmId: newdata.farm._id,
             owner: newdata.owner,
