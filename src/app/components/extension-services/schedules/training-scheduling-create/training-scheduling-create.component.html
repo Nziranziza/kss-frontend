@@ -140,23 +140,25 @@
           <h3 class="text-center">
             Trainees ( Total: {{ selectedTrainees?.length }} )
           </h3>
-          <table class="row-border hover table table-striped">
-            <thead>
-              <tr>
-                <th>Reg. Number</th>
-                <th>Farmer Names</th>
-                <th>Contact</th>
-                <th>Status</th>
-              </tr>
-              <tr *ngFor="let trainee of selectedTrainees; let i = index">
-                <td>{{ i + 1 }}</td>
-                <td>{{ trainee.firstName + " " + trainee.lastName }}</td>
-                <td>{{ trainee.phoneNumber }}</td>
-                <td>{{ trainee.attendance }}</td>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
+          <div class="table-responsive">
+            <table class="row-border hover table table-striped">
+              <thead>
+                <tr>
+                  <th>Reg. Number</th>
+                  <th>Farmer Names</th>
+                  <th>Contact</th>
+                  <th>Status</th>
+                </tr>
+                <tr *ngFor="let trainee of selectedTrainees; let i = index">
+                  <td>{{ i + 1 }}</td>
+                  <td>{{ trainee.firstName + " " + trainee.lastName }}</td>
+                  <td>{{ trainee.phoneNumber }}</td>
+                  <td>{{ trainee.attendance }}</td>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
@@ -373,7 +375,7 @@
                       <div class="col-xs-6">
                         <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="trainingStartDate"
                           [min]="newDate" class="form-control" placeholder="Dd/mm/yyyy" />
-                        <owl-date-time [scrollStrategy]="scrollStrategy" [pickerType]="'calendar'" #dt1></owl-date-time>
+                        <owl-date-time #dt1 [pickerType]="'calendar'" [scrollStrategy]="scrollStrategy"></owl-date-time>
                         <app-inline-errors *ngIf="
                             scheduleTraining.controls.trainingStartDate
                               .invalid &&
@@ -389,7 +391,7 @@
                       <div class="col-xs-6">
                         <input [owlDateTimeTrigger]="dt2" class="form-control" formControlName="startTime"
                           [owlDateTime]="dt2" />
-                        <owl-date-time [scrollStrategy]="scrollStrategy" [pickerType]="'timer'" #dt2></owl-date-time>
+                        <owl-date-time #dt2 [pickerType]="'timer'" [scrollStrategy]="scrollStrategy"></owl-date-time>
                         <app-inline-errors *ngIf="
                             scheduleTraining.controls.startTime.invalid &&
                             (scheduleTraining.controls.startTime.dirty ||
@@ -410,7 +412,7 @@
                         <input [owlDateTimeTrigger]="dt3" [owlDateTime]="dt3" [min]="
                             scheduleTraining.controls.trainingStartDate.value
                           " formControlName="trainingEndDate" class="form-control" placeholder="Dd/mm/yyyy" />
-                        <owl-date-time [scrollStrategy]="scrollStrategy" [pickerType]="'calendar'" #dt3></owl-date-time>
+                        <owl-date-time #dt3 [pickerType]="'calendar'" [scrollStrategy]="scrollStrategy"></owl-date-time>
                         <app-inline-errors *ngIf="
                             scheduleTraining.controls.trainingEndDate.invalid &&
                             (scheduleTraining.controls.trainingEndDate.dirty ||
@@ -423,7 +425,7 @@
                       <div class="col-xs-6">
                         <input [owlDateTimeTrigger]="dt4" class="form-control" formControlName="endTime"
                           [owlDateTime]="dt4" />
-                        <owl-date-time [scrollStrategy]="scrollStrategy" [pickerType]="'timer'" #dt4></owl-date-time>
+                        <owl-date-time #dt4 [pickerType]="'timer'" [scrollStrategy]="scrollStrategy"></owl-date-time>
                         <app-inline-errors *ngIf="
                             scheduleTraining.controls.endTime.invalid &&
                             (scheduleTraining.controls.endTime.dirty ||
@@ -515,7 +517,7 @@
                   </div>
                 </form>
                 <form [formGroup]="editContactForm">
-                  <div *ngIf="trainees?.length > 0">
+                  <div *ngIf="trainees?.length > 0" class="table-responsive">
                     <table class="row-border hover table table-striped">
                       <thead>
                         <tr class="font: normal normal medium 9px/10px Helvetica Neue, Helvetica, Arial, sans-serif;">
@@ -642,36 +644,37 @@
                   <h6>TOTAL TO BE TRAINED</h6>
                   <h4>{{ selectedTrainees?.length }}</h4>
                 </div>
-                <table class="row-border hover table table-striped">
-                  <thead>
-                    <tr>
-                      <th>Reg. Number</th>
-                      <th>Farmer Names</th>
-                      <th>Contact</th>
-                      <th>Status</th>
-                      <th>Selection</th>
-                    </tr>
-                    <tr *ngFor="let trainee of selectedTrainees; let i = index">
-                      <td>{{ i + 1 }}</td>
-                      <td>
-                        {{
+                <div class="table-responsive">
+                  <table class="row-border hover table table-striped">
+                    <thead>
+                      <tr>
+                        <th>Reg. Number</th>
+                        <th>Farmer Names</th>
+                        <th>Contact</th>
+                        <th>Status</th>
+                        <th>Selection</th>
+                      </tr>
+                      <tr *ngFor="let trainee of selectedTrainees; let i = index">
+                        <td>{{ i + 1 }}</td>
+                        <td>
+                          {{
                           trainee.firstName
                             ? trainee.firstName + " " + trainee.lastName
                             : trainee.groupContactPersonNames
                         }}
-                      </td>
-                      <td>{{ trainee.phoneNumber }}</td>
-                      <td>{{ trainee.attendance }}</td>
-                      <td>
-                        <input type="checkbox" class="pull-right" (click)="selectTrainee($event.target.checked, i)"
-                          [(ngModel)]="trainee.selected" [ngModelOptions]="{ standalone: true }" />
-                      </td>
-                    </tr>
-                  </thead>
-                  <tbody></tbody>
-                </table>
-                <button type="button" class="btn btn-danger pull-right" style="width: 35%"
-                  (click)="removeMembersToBeTrained()">
+                        </td>
+                        <td>{{ trainee.phoneNumber }}</td>
+                        <td>{{ trainee.attendance }}</td>
+                        <td>
+                          <input type="checkbox" class="pull-right" (click)="selectTrainee($event.target.checked, i)"
+                            [(ngModel)]="trainee.selected" [ngModelOptions]="{ standalone: true }" />
+                        </td>
+                      </tr>
+                    </thead>
+                    <tbody></tbody>
+                  </table>
+                </div>
+                <button type="button" class="btn btn-danger pull-right" (click)="removeMembersToBeTrained()">
                   <i class="fa fa-trash" style="color: red"></i>
                   REMOVE SELECTED
                 </button>
@@ -682,27 +685,20 @@
       </div>
     </div>
   </div>
-
-  <div class="row" *ngIf="scheduleTraining.value.trainingModule">
-    <div class="col-sm-3"></div>
-    <div class="col-sm-3">
-      <button type="button" class="btn btn-success" style="width: 250px; height: 50px; margin-right: 10px"
-        routerLink="/admin/training/schedule/list">
-        CANCEL
-      </button>
-    </div>
-    <div class="col-sm-3">
-      <button type="button" class="btn btn-success" (click)="open(content)" style="width: 250px; height: 50px" *ngIf="
-          !(
-            scheduleTraining.controls.startTime.value >=
-              scheduleTraining.controls.endTime.value &&
-            scheduleTraining.controls.trainingStartDate.value >=
-              scheduleTraining.controls.trainingEndDate.value
-          )
-        ">
-        SCHEDULE A TRAINING
-      </button>
-    </div>
-    <div class="col-sm-3"></div>
-  </div>
 </form>
+
+<div class="row" *ngIf="scheduleTraining.value.trainingModule">
+  <div class="col-xs-12">
+    <a class="btn btn-warning btn-margin pull-right" routerLink="/admin/training/schedule/list">Cancel</a>
+    <button type="button" class="btn btn-success pull-right" (click)="open(content)" disabled="
+    !(
+      scheduleTraining.controls.startTime.value >=
+        scheduleTraining.controls.endTime.value &&
+      scheduleTraining.controls.trainingStartDate.value >=
+        scheduleTraining.controls.trainingEndDate.value
+    )
+  ">
+      Schedule
+    </button>
+  </div>
+</div>
