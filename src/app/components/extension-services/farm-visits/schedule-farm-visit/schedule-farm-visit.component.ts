@@ -88,7 +88,7 @@ export class ScheduleFarmVisitComponent extends BasicComponent implements OnInit
       singleSelection: false,
       idField: '_id',
       textField: 'name',
-      enableCheckAll: false,
+      enableCheckAll: true,
       selectAllText: 'Select All',
       unSelectAllText: 'UnSelect All',
       itemsShowLimit: 6,
@@ -137,7 +137,8 @@ export class ScheduleFarmVisitComponent extends BasicComponent implements OnInit
   }
   onGapSelectAll(items: any) {
     const gapSelected = this.scheduleVisit.get('adoptionGap'.toString());
-    gapSelected.setValue(items, { emitEvent: false });
+
+    gapSelected.setValue(items.filter((e) => e._id !== ''), { emitEvent: false });
   }
 
   getFarms(groupName: string) {

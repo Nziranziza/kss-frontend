@@ -174,7 +174,7 @@ export class EditFarmVisitComponent extends BasicComponent implements OnInit {
   }
   onGapSelectAll(items: any) {
     const gapSelected = this.scheduleVisit.get('adoptionGap'.toString());
-    gapSelected.setValue(items, { emitEvent: false });
+    gapSelected.setValue(items.filter((e) => e._id !== ''), { emitEvent: false });
   }
 
   checkIfExit(id: string) {

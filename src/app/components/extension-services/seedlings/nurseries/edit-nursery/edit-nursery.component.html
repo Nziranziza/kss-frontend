@@ -161,15 +161,14 @@
               <label class="control-label">Pricked out Seedlings </label>
             </div>
             <div class="col-sm-1 text-center" style="padding: 0 2px 0 0px">
-              <label class="control-label"> Success Rate</label>
-            </div>
-            <div class="col-sm-1 text-center" style="padding: 0 2px 0 0px">
               <label class="control-label">Prick-Out Date</label>
             </div>
             <div class="col-sm-2 text-center" style="padding: 0 2px 0 0px">
               <label class="control-label">Disributed Seedlings</label>
             </div>
-
+            <div class="col-sm-1 text-center" style="padding: 0 2px 0 0px">
+              <label class="control-label"> Success Rate</label>
+            </div>
           </div>
           <div class="row">
             <span *ngFor="let stock of formData.controls; let i = index" class="text-center" formArrayName="stockData">
@@ -220,19 +219,19 @@
                   <input type="number" min="0" class="form-control" formControlName="prickedQty" />
                 </div>
                 <div class="col-sm-1" style="margin-top: 10px; padding: 0 2px 0 0px">
-                  <input type="text" class="form-control" value="{{
-                      (stock.value.prickedQty * 100) /
-                        stock.controls.expectedSeedling.value || 0
-                        | number: '1.2-2'
-                    }}%" disabled />
-                </div>
-                <div class="col-sm-1" style="margin-top: 10px; padding: 0 2px 0 0px">
                   <input [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" class="form-control"
                     formControlName="pickingDate" placeholder="Dd/mm/yyyy" />
                   <owl-date-time [pickerType]="'calendar'" [scrollStrategy]="scrollStrategy" #dt2></owl-date-time>
                 </div>
                 <div class="col-sm-2" style="margin-top: 10px; padding: 0 2px 0 0px">
                   <input type="text" class="form-control" formControlName="distributed" />
+                </div>
+                <div class="col-sm-1" style="margin-top: 10px; padding: 0 2px 0 0px">
+                  <input type="text" class="form-control" value="{{
+                      (stock.controls.distributed.value * 100) /
+                        stock.value.prickedQty  || 0
+                        | number: '1.2-2'
+                    }}%" disabled />
                 </div>
               </span>
             </span>

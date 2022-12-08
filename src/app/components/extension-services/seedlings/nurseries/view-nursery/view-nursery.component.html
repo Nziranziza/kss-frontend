@@ -78,9 +78,9 @@
             <th class="text-center">Sowing Date</th>
             <th class="text-center">Germination rate</th>
             <th class="text-center">Pricked out</th>
-            <th class="text-center">Success Rate</th>
-            <th class="text-center">Disributed</th>
             <th class="text-center">Prick-out date</th>
+            <th class="text-center">Disributed</th>
+            <th class="text-center">Success Rate</th>
           </tr>
         </thead>
         <tbody>
@@ -103,13 +103,13 @@
               {{ stock.prickedQty || 0 }}
             </td>
             <td class="text-center">
-              {{ stock.successRate || "0" | number: "1.2-2" }} %
+              {{ stock.pickedDate || "" | date: "short" }}
             </td>
             <td class="text-center">
               {{ stock.prickedQty - stock.remainingQty || 0 }}
             </td>
             <td class="text-center">
-              {{ stock.pickedDate || "" | date: "short" }}
+              {{ ((stock.prickedQty - stock.remainingQty) * 100  / stock.prickedQty) || "0" | number: "1.2-2" }} %
             </td>
           </tr>
         </tbody>
