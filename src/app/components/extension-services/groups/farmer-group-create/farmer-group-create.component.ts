@@ -151,7 +151,6 @@ export class FarmerGroupCreateComponent
         })
       );
     });
-    console.log(departmentControl);
   }
 
   addContact(index) {
@@ -219,7 +218,6 @@ export class FarmerGroupCreateComponent
   }
 
   selectEvent(item) {
-    console.log(item);
     this.createForm.controls.leaderNames.setValue(item.leaderName);
     this.createForm.controls.leaderPhoneNumber.setValue(item.phone_number);
   }
@@ -287,7 +285,6 @@ export class FarmerGroupCreateComponent
         this.groupMembers.push(JSON.parse(JSON.stringify(item)));
       }
     });
-    console.log(this.groupMembers);
   }
 
   removeMembersToGroup() {
