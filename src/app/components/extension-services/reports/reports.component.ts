@@ -235,64 +235,104 @@ export class ReportsComponent extends BasicComponent implements OnInit {
     this.reportForm.controls.filter
       .get('training.trainingId'.toString())
       .valueChanges.subscribe((value) => {
-      this.reportForm.controls.filter
-        .get('training.trainingId'.toString())
-        .patchValue(value, { emitEvent: false });
-      const valueData: any = this.valueNames(value, this.trainings);
-      this.filterHeader.trainingName = valueData.trainingName;
-      this.getStats();
-    });
+        this.reportForm.controls.filter
+          .get('training.trainingId'.toString())
+          .patchValue(value, { emitEvent: false });
+        const valueData: any = this.valueNames(value, this.trainings);
+        this.filterHeader.trainingName = valueData.trainingName;
+        this.getStats();
+      });
     this.reportForm.controls.filter
       .get('date')
       .valueChanges.subscribe((value) => {
-      this.reportForm.controls.filter
-        .get('date')
-        .patchValue(value, { emitEvent: false });
-      this.getStats();
-    });
+        this.reportForm.controls.filter
+          .get('date')
+          .patchValue(value, { emitEvent: false });
+        this.getStats();
+      });
     this.reportForm.controls.filter
       .get('locationBy')
       .valueChanges.subscribe((value) => {
-      this.reportForm.controls.filter
-        .get('locationBy')
-        .patchValue(value, { emitEvent: false });
-      if (value !== 'cws') {
-        this.resetCWSFilter();
-      }
-      this.locationChangDistrict(
-        this.reportForm.get('filter') as FormGroup,
-        value
-      );
-      this.reportForm.controls.filter
-        .get('location.sect_id')
-        .setValue('', { emitEvent: false });
-      this.reportForm.controls.filter
-        .get('location.cell_id')
-        .setValue('', { emitEvent: false });
-      this.reportForm.controls.filter
-        .get('location.village_id')
-        .setValue('', { emitEvent: false });
-      this.locationSectors = [];
-      this.locationCells = [];
-      this.locationVillages = [];
-      this.getStats();
-    });
+        this.reportForm.controls.filter
+          .get('locationBy')
+          .patchValue(value, { emitEvent: false });
+        if (value !== 'cws') {
+          this.resetCWSFilter();
+        }
+        this.locationChangDistrict(
+          this.reportForm.get('filter') as FormGroup,
+          value
+        );
+        this.reportForm.controls.filter
+          .get('location.sect_id')
+          .setValue('', { emitEvent: false });
+        this.reportForm.controls.filter
+          .get('location.cell_id')
+          .setValue('', { emitEvent: false });
+        this.reportForm.controls.filter
+          .get('location.village_id')
+          .setValue('', { emitEvent: false });
+        this.locationSectors = [];
+        this.locationCells = [];
+        this.locationVillages = [];
+        this.getStats();
+      });
     this.reportForm.controls.filter
       .get('location.prov_id'.toString())
       .valueChanges.subscribe(
-      (value) => {
-        if (this.orgAuto) {
-          this.orgAuto.clear();
-        }
+        (value) => {
+          if (this.orgAuto) {
+            this.orgAuto.clear();
+          }
+          this.reportForm.controls.filter
+            .get('location.prov_id'.toString())
+            .patchValue(value, { emitEvent: false });
+          this.locationChangeProvince(
+            this.reportForm.get('filter') as FormGroup,
+            value
+          );
+          this.siteService
+            .getZone({ prov_id: value, searchBy: 'province' })
+            .subscribe((data) => {
+              if (data) {
+                this.organisations = data.content.filter((org) =>
+                  org.organizationRole.includes(1)
+                );
+                this.organisations.unshift({
+                  organizationName: 'all cws',
+                  _id: '',
+                });
+              }
+            });
+          this.filterHeader.location = {
+            prov_id: '',
+            dist_id: '',
+            sect_id: '',
+            cell_id: '',
+            village_id: '',
+          };
+          this.reportForm.controls.filter
+            .get('locationBy')
+            .setValue('', { emitEvent: false });
+          const valueData: any = this.valueNames(value, this.locationProvinces);
+          this.filterHeader.location.prov_id = valueData.namee;
+          this.getStats();
+        },
+        () => { },
+        () => { }
+      );
+    this.reportForm.controls.filter
+      .get('location.dist_id'.toString())
+      .valueChanges.subscribe((value) => {
         this.reportForm.controls.filter
-          .get('location.prov_id'.toString())
+          .get('location.dist_id'.toString())
           .patchValue(value, { emitEvent: false });
-        this.locationChangeProvince(
+        this.locationChangDistrict(
           this.reportForm.get('filter') as FormGroup,
           value
         );
         this.siteService
-          .getZone({ prov_id: value, searchBy: 'province' })
+          .getZone({ dist_id: value, searchBy: 'district' })
           .subscribe((data) => {
             if (data) {
               this.organisations = data.content.filter((org) =>
@@ -305,7 +345,7 @@ export class ReportsComponent extends BasicComponent implements OnInit {
             }
           });
         this.filterHeader.location = {
-          prov_id: '',
+          prov_id: this.filterHeader.location.prov_id,
           dist_id: '',
           sect_id: '',
           cell_id: '',
@@ -314,164 +354,124 @@ export class ReportsComponent extends BasicComponent implements OnInit {
         this.reportForm.controls.filter
           .get('locationBy')
           .setValue('', { emitEvent: false });
-        const valueData: any = this.valueNames(value, this.locationProvinces);
-        this.filterHeader.location.prov_id = valueData.namee;
+        const valueData: any = this.valueNames(value, this.locationDistricts);
+        this.filterHeader.location.dist_id = valueData.name;
         this.getStats();
-      },
-      () => {},
-      () => {}
-    );
-    this.reportForm.controls.filter
-      .get('location.dist_id'.toString())
-      .valueChanges.subscribe((value) => {
-      this.reportForm.controls.filter
-        .get('location.dist_id'.toString())
-        .patchValue(value, { emitEvent: false });
-      this.locationChangDistrict(
-        this.reportForm.get('filter') as FormGroup,
-        value
-      );
-      this.siteService
-        .getZone({ dist_id: value, searchBy: 'district' })
-        .subscribe((data) => {
-          if (data) {
-            this.organisations = data.content.filter((org) =>
-              org.organizationRole.includes(1)
-            );
-            this.organisations.unshift({
-              organizationName: 'all cws',
-              _id: '',
-            });
-          }
-        });
-      this.filterHeader.location = {
-        prov_id: this.filterHeader.location.prov_id,
-        dist_id: '',
-        sect_id: '',
-        cell_id: '',
-        village_id: '',
-      };
-      this.reportForm.controls.filter
-        .get('locationBy')
-        .setValue('', { emitEvent: false });
-      const valueData: any = this.valueNames(value, this.locationDistricts);
-      this.filterHeader.location.dist_id = valueData.name;
-      this.getStats();
-    });
+      });
     this.reportForm.controls.filter
       .get('location.sect_id'.toString())
       .valueChanges.subscribe((value) => {
-      this.filterHeader.location = {
-        prov_id: this.filterHeader.location.prov_id,
-        dist_id: this.filterHeader.location.dist_id,
-        sect_id: '',
-        cell_id: '',
-        village_id: '',
-      };
-      const valueData: any = this.valueNames(value, this.locationSectors);
-      this.filterHeader.location.sect_id = valueData.name;
-      this.reportForm.controls.filter
-        .get('location.sect_id'.toString())
-        .patchValue(value, { emitEvent: false });
-      if (!isUndefined(this.newOrg) && this.newOrg !== '') {
-        this.locationCells = this.filterZoningCells(
-          this.newData.coveredSectors,
-          value
-        );
-      } else {
-        this.locationChangSector(
-          this.reportForm.get('filter') as FormGroup,
-          value
-        );
-      }
-      if (
-        this.reportForm.controls.filter.get('locationBy').value === 'cws' &&
-        this.newOrg
-      ) {
-        this.groupService
-          .list({
-            ...(this.newOrg && { reference: this.newOrg }),
-            ...{ location: { sect_id: value } },
-          })
-          .subscribe((data) => {
-            this.groups = data.data;
-          });
-      }
-      this.getStats();
-    });
+        this.filterHeader.location = {
+          prov_id: this.filterHeader.location.prov_id,
+          dist_id: this.filterHeader.location.dist_id,
+          sect_id: '',
+          cell_id: '',
+          village_id: '',
+        };
+        const valueData: any = this.valueNames(value, this.locationSectors);
+        this.filterHeader.location.sect_id = valueData.name;
+        this.reportForm.controls.filter
+          .get('location.sect_id'.toString())
+          .patchValue(value, { emitEvent: false });
+        if (!isUndefined(this.newOrg) && this.newOrg !== '') {
+          this.locationCells = this.filterZoningCells(
+            this.newData.coveredSectors,
+            value
+          );
+        } else {
+          this.locationChangSector(
+            this.reportForm.get('filter') as FormGroup,
+            value
+          );
+        }
+        if (
+          this.reportForm.controls.filter.get('locationBy').value === 'cws' &&
+          this.newOrg
+        ) {
+          this.groupService
+            .list({
+              ...(this.newOrg && { reference: this.newOrg }),
+              ...{ location: { sect_id: value } },
+            })
+            .subscribe((data) => {
+              this.groups = data.data;
+            });
+        }
+        this.getStats();
+      });
 
     this.reportForm.controls.filter
       .get('location.cell_id'.toString())
       .valueChanges.subscribe((value) => {
-      this.filterHeader.location = {
-        prov_id: this.filterHeader.location.prov_id,
-        dist_id: this.filterHeader.location.dist_id,
-        sect_id: this.filterHeader.location.sect_id,
-        cell_id: '',
-        village_id: '',
-      };
-      const valueData: any = this.valueNames(value, this.locationCells);
-      this.filterHeader.location.cell_id = valueData.name;
-      this.reportForm.controls.filter
-        .get('location.cell_id'.toString())
-        .patchValue(value, { emitEvent: false });
-      this.locationService.getVillages(value).subscribe((data) => {
-        this.locationVillages = data;
-        if (!isUndefined(this.newOrg) && this.newOrg !== '') {
-          this.locationVillages = this.filterZoningVillages(
-            this.newData.coveredSectors,
-            this.reportForm.controls.filter.get('location.sect_id'.toString())
-              .value,
-            this.locationVillages
-          );
+        this.filterHeader.location = {
+          prov_id: this.filterHeader.location.prov_id,
+          dist_id: this.filterHeader.location.dist_id,
+          sect_id: this.filterHeader.location.sect_id,
+          cell_id: '',
+          village_id: '',
+        };
+        const valueData: any = this.valueNames(value, this.locationCells);
+        this.filterHeader.location.cell_id = valueData.name;
+        this.reportForm.controls.filter
+          .get('location.cell_id'.toString())
+          .patchValue(value, { emitEvent: false });
+        this.locationService.getVillages(value).subscribe((data) => {
+          this.locationVillages = data;
+          if (!isUndefined(this.newOrg) && this.newOrg !== '') {
+            this.locationVillages = this.filterZoningVillages(
+              this.newData.coveredSectors,
+              this.reportForm.controls.filter.get('location.sect_id'.toString())
+                .value,
+              this.locationVillages
+            );
+          }
+        });
+        if (
+          this.reportForm.controls.filter.get('locationBy').value === 'cws' &&
+          this.newOrg
+        ) {
+          this.groupService
+            .list({
+              ...(this.newOrg && { reference: this.newOrg }),
+              ...{ location: { cell_id: value } },
+            })
+            .subscribe((data) => {
+              this.groups = data.data;
+            });
         }
+        this.getStats();
       });
-      if (
-        this.reportForm.controls.filter.get('locationBy').value === 'cws' &&
-        this.newOrg
-      ) {
-        this.groupService
-          .list({
-            ...(this.newOrg && { reference: this.newOrg }),
-            ...{ location: { cell_id: value } },
-          })
-          .subscribe((data) => {
-            this.groups = data.data;
-          });
-      }
-      this.getStats();
-    });
 
     this.reportForm.controls.filter
       .get('location.village_id'.toString())
       .valueChanges.subscribe((value) => {
-      this.filterHeader.location = {
-        prov_id: this.filterHeader.location.prov_id,
-        dist_id: this.filterHeader.location.dist_id,
-        sect_id: this.filterHeader.location.sect_id,
-        cell_id: this.filterHeader.location.cell_id,
-        village_id: '',
-      };
-      const valueData: any = this.valueNames(value, this.locationVillages);
-      this.filterHeader.location.village_id = valueData.name;
-      this.reportForm.controls.filter
-        .get('location.village_id'.toString())
-        .patchValue(value, { emitEvent: false });
-      if (
-        this.reportForm.controls.filter.get('locationBy').value === 'cws' &&
-        this.newOrg
-      ) {
-        this.groupService
-          .list({
-            ...(this.newOrg && { reference: this.newOrg }),
-            ...{ location: { village_id: value } },
-          })
-          .subscribe((data) => {
-            this.groups = data.data;
-          });
-      }
-      this.getStats();
-    });
+        this.filterHeader.location = {
+          prov_id: this.filterHeader.location.prov_id,
+          dist_id: this.filterHeader.location.dist_id,
+          sect_id: this.filterHeader.location.sect_id,
+          cell_id: this.filterHeader.location.cell_id,
+          village_id: '',
+        };
+        const valueData: any = this.valueNames(value, this.locationVillages);
+        this.filterHeader.location.village_id = valueData.name;
+        this.reportForm.controls.filter
+          .get('location.village_id'.toString())
+          .patchValue(value, { emitEvent: false });
+        if (
+          this.reportForm.controls.filter.get('locationBy').value === 'cws' &&
+          this.newOrg
+        ) {
+          this.groupService
+            .list({
+              ...(this.newOrg && { reference: this.newOrg }),
+              ...{ location: { village_id: value } },
+            })
+            .subscribe((data) => {
+              this.groups = data.data;
+            });
+        }
+        this.getStats();
+      });
   }
 
   valueNames(id: string, arr: any) {
@@ -529,6 +529,8 @@ export class ReportsComponent extends BasicComponent implements OnInit {
     const value = this.reportForm.get('reportFor').value;
     let body = this.getLocation();
     const form = JSON.parse(JSON.stringify(this.reportForm.value));
+    this.reportsTableData = [];
+    this.reportGenerated = false;
     if (value === 'Farmer Groups') {
       body = {
         ...body,
@@ -565,12 +567,12 @@ export class ReportsComponent extends BasicComponent implements OnInit {
         data.data.forEach((data) => {
           numberOfTrainees += data.numberOfTrainees;
           numberOfAttendedTrainees += data.numberOfAttendedTrainees;
-          if (data.gender == 'M' || data.gender == 'm') {
+          if (data.gender === 'M' || data.gender === 'm') {
             totalMales += data.numberOfTrainees;
             maleNumberOfAttendedTrainees += data.numberOfAttendedTrainees;
           }
 
-          if (data.gender == 'F' || data.gender == 'f') {
+          if (data.gender === 'F' || data.gender === 'f') {
             totalFemales += data.numberOfTrainees;
             femaleNumberOfAttendedTrainees += data.numberOfAttendedTrainees;
           }

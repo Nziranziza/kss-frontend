@@ -122,11 +122,19 @@
                       </div>
 
                       <div class="col-sm-4 vcenter">
-                        <div
-                          [ngClass]="{ 'has-error': getQuestionField('weight', i, x).invalid &&(getQuestionField('weight', i, x).dirty || getQuestionField('weight', i, x).touched) }"
-                          class="form-group">
+                        <div [ngClass]="{ 'has-error': getQuestionField('weight', i, x).invalid &&(getQuestionField('weight', i, x).dirty || getQuestionField('weight', i, x).touched) || (scoreStatus[0] && scoreStatus[1] === x && scoreStatus[2] === i)
+                          }" class="form-group">
                           <label class="control-label">Question Score</label>
                           <input class="form-control" formControlName="weight" placeholder="" type="number" />
+                          <div *ngIf="scoreStatus[0] && scoreStatus[1] === x && scoreStatus[2] === i"
+                            class="input-error">
+                            <span *ngIf="scoreStatus[3]; else less_than">
+                              questions score is less than total gap score
+                            </span>
+                            <ng-template #less_than>
+                              questions score is greater than total gap score
+                            </ng-template>
+                          </div>
                           <app-inline-errors
                             *ngIf="getQuestionField('weight', i, x).invalid && (getQuestionField('weight', i, x).dirty || getQuestionField('weight', i, x).touched)"
                             [errors]="getQuestionField('weight', i, x).errors" [label]="'Question Score'">
@@ -206,12 +214,17 @@
                             </div>
 
                             <div class="col-sm-2 vcenter">
-                              <div
-                                [ngClass]="{ 'has-error': getAnswerField('weight', i, x, y).invalid &&(getAnswerField('weight', i, x, y).dirty || getAnswerField('weight', i, x, y).touched) }"
+                              <div [ngClass]="{ 'has-error': getAnswerField('weight', i, x, y).invalid &&(getAnswerField('weight', i, x, y).dirty || getAnswerField('weight', i, x, y).touched) || 
+                                getAnswerField('weight', i, x, y).value >  getQuestionField('weight', i, x).value }"
                                 class="form-group">
-                                <label class="control-label label-required">weight</label>
+                                <label class="control-label label-required">score</label>
                                 <input class="form-control" formControlName="weight" name="weight" placeholder=""
                                   type="number" />
+                                <div
+                                  *ngIf="getAnswerField('weight', i, x, y).value >  getQuestionField('weight', i, x).value"
+                                  class="input-error">
+                                  score exceeded question score
+                                </div>
                                 <app-inline-errors
                                   *ngIf="getAnswerField('weight', i, x, y).invalid && (getAnswerField('weight', i, x, y).dirty || getAnswerField('weight', i, x, y).touched)"
                                   [errors]="getAnswerField('weight', i, x, y).errors" [label]="'Weight'">
@@ -281,7 +294,8 @@
   </div>
   <div class="col-sm-12 text-right" style="margin-top: 10px">
     <a class="btn btn-warning btn-margin btn-lg" routerLink="/admin/gaps/list" style="margin-right: 20px">Cancel</a>
-    <button (click)="onSubmit()" [disabled]="loading" class="btn btn-success btn-lg submit">
+    <button (click)="onSubmit()" [disabled]="loading || scoreStatus[3] || answerScoreExceeded"
+      class="btn btn-success btn-lg submit">
       <span *ngIf="!loading; else other_content">Submit</span>
       <ng-template #other_content>
         <div class="loader">

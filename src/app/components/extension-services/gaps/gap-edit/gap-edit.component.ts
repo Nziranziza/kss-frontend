@@ -27,6 +27,9 @@ export class GapEditComponent
   ];
   loading = false;
   adoptionOptionsVisible = false;
+  scoreStatus = [false, 0, 0, false];
+  answerScoreExceeded = false;
+  initialDataMode = false;
   gap: Gap;
 
   constructor(
@@ -110,6 +113,43 @@ export class GapEditComponent
         });
       }
     });
+  }
+
+  // validate question score to overall score
+
+  validateScore(value: any) {
+    const totalScore = this.getGapScore.value;
+    let currentIndex = 0;
+    let parentIndex = 0;
+    let marks = 0;
+
+    // calculate total question score
+    const sumAllWeight = value.map((item, i) => {
+      parentIndex = i;
+      this.answerScoreExceeded = false;
+      const sum = item.questions.map((newWeight, index) => {
+        let currScore = 0;
+        currentIndex = index;
+        if (newWeight.weight) {
+          currScore = parseInt(newWeight.weight, 10);
+        }
+        if (newWeight.answers.length > 0) {
+          newWeight.answers.map((answer) => {
+            if (answer.weight > newWeight.weight) {
+              this.answerScoreExceeded = true;
+            }
+          })
+        }
+        return currScore;
+      }).reduce((currSum, prevSum) => currSum + prevSum, 0);
+      return sum
+    }).reduce((partialSum, a) => partialSum + a, 0);
+    if (totalScore - sumAllWeight <= 100) {
+      marks = totalScore - sumAllWeight;
+    }
+
+    // compare gap score and total question score and return current question
+    this.scoreStatus = [(totalScore !== sumAllWeight), currentIndex, parentIndex, marks > 0 ? true : false];
   }
 
   populateSections(element: Section, index: number) {
@@ -371,7 +411,6 @@ export class GapEditComponent
 
   initial() {
   }
-
   ngOnDestroy() {
   }
 }
