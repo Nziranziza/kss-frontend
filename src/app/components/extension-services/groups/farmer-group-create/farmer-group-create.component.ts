@@ -218,7 +218,6 @@ export class FarmerGroupCreateComponent
   }
 
   selectEvent(item) {
-    console.log(item);
     this.createForm.controls.leaderNames.setValue(item.leaderName);
     this.createForm.controls.leaderPhoneNumber.setValue(item.phone_number);
   }
