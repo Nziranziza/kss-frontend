@@ -690,14 +690,7 @@
 <div class="row" *ngIf="scheduleTraining.value.trainingModule">
   <div class="col-xs-12">
     <a class="btn btn-warning btn-margin pull-right" routerLink="/admin/training/schedule/list">Cancel</a>
-    <button type="button" class="btn btn-success pull-right" (click)="open(content)" disabled="
-    !(
-      scheduleTraining.controls.startTime.value >=
-        scheduleTraining.controls.endTime.value &&
-      scheduleTraining.controls.trainingStartDate.value >=
-        scheduleTraining.controls.trainingEndDate.value
-    )
-  ">
+    <button type="button" class="btn btn-success pull-right" (click)="open(content)">
       Schedule
     </button>
   </div>
