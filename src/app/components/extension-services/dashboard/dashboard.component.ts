@@ -131,7 +131,7 @@ export class DashboardComponent extends BasicComponent implements OnInit {
   };
 
   selectedFarmDetails: any;
-  clickedMarker: Boolean = false;
+  clickedMarker = false;
   trainings: any[] = [];
   trainers: any[] = [];
   trainingsStats: any = {
@@ -150,7 +150,7 @@ export class DashboardComponent extends BasicComponent implements OnInit {
   coveredSectors: any[] = [];
   groups: any[] = [];
   nurseries: any[] = [];
-  selectedGroup: String;
+  selectedGroup: string;
   initialValue = '';
   keyword = 'organizationName';
   groupKeyword = 'groupName';
@@ -888,25 +888,25 @@ export class DashboardComponent extends BasicComponent implements OnInit {
       this.dashboardForm.controls[group].get('season_id').value !== ''
         ? this.dashboardForm.controls[group].get('season_id').value
         : this.currentSeasonYear;
-    if (value === 1) {
+    if (value === '1') {
       this.dateRangeMin[group] = `${parseFloat(current) - 1}-10-01`;
       this.dateRangeMax[group] = `${current}-01-01`;
       this.dashboardForm.controls[group]
         .get('filterByDate')
         .setValue([`${parseFloat(current) - 1}-10-01`, `${current}-01-01`]);
-    } else if (value === 2) {
+    } else if (value === '2') {
       this.dateRangeMin[group] = `${current}-01-01`;
       this.dateRangeMax[group] = `${current}-04-01`;
       this.dashboardForm.controls[group]
         .get('filterByDate')
         .setValue([`${current}-01-01`, `${current}-04-01`]);
-    } else if (value === 3) {
+    } else if (value === '3') {
       this.dateRangeMin[group] = `${current}-04-01`;
       this.dateRangeMax[group] = `${current}-07-01`;
       this.dashboardForm.controls[group]
         .get('filterByDate')
         .setValue([`${current}-04-01`, `${current}-07-01`]);
-    } else if (value === 4) {
+    } else if (value === '4') {
       this.dateRangeMin[group] = `${current}-07-01`;
       this.dateRangeMax[group] = `${current}-10-01`;
       this.dashboardForm.controls[group]

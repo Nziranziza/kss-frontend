@@ -361,10 +361,7 @@
 <div class="row" *ngIf="scheduleVisit.value.farmerGroup != '' && farmers?.length > 0">
   <div class="col-xs-12">
     <a class="btn btn-warning btn-margin pull-right" routerLink="/admin/farm/visit/list">Cancel</a>
-    <button type="button" class="btn btn-success pull-right" (click)="open(content)" disabled="
-    scheduleVisit.controls.startTime.value <
-        scheduleVisit.controls.endTime.value
-  ">
+    <button type="button" class="btn btn-success pull-right" (click)="open(content)">
       Schedule
     </button>
   </div>

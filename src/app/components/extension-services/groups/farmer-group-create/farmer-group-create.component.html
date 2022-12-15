@@ -428,13 +428,8 @@
                   <div class="col-xs-12 col-md-6">
                     <div class="form-group">
                       <label class="control-label label-required">Group leader phone number</label>
-                      <input type="text" formControlName="leaderPhoneNumber" placeholder="250" class="form-control" />
-                      <app-inline-errors *ngIf="
-                      createForm.controls.leaderPhoneNumber.invalid &&
-                      (createForm.controls.leaderPhoneNumber.dirty ||
-                        createForm.controls.leaderPhoneNumber.touched)
-                    " [errors]="createForm.controls.leaderPhoneNumber.errors" [label]="'leader phone number'">
-                      </app-inline-errors>
+                      <input type="text" formControlName="leaderPhoneNumber" placeholder="250" class="form-control"
+                        disabled />
                     </div>
                   </div>
                 </div>
