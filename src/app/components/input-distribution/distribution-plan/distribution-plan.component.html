@@ -2,7 +2,7 @@
   {{ title }}
 </h3>
 <div class="row pull-right">
-  <div class="col-xs-6 col-md-4">
+  <!--  <div class="col-xs-6 col-md-4">
     <button class="btn btn-success btn-margin" (click)="distributionExport()">
       <span *ngIf="!isLoadingReport1; else other_content"><i class="fa fa-download"></i> Administrative Report</span>
       <ng-template #other_content>
@@ -27,10 +27,10 @@
         </div>
       </ng-template>
     </button>
-  </div>
+  </div>-->
   <div class="col-xs-6 col-md-4">
     <button class="btn btn-success btn-margin" (click)="progressExport()">
-      <span *ngIf="!isLoadingReport3; else other_content"><i class="fa fa-download"></i>Progress Report</span>
+      <span *ngIf="!isLoadingReport3; else other_content"><i class="fa fa-download"></i>Input Distribution Progress Report</span>
       <ng-template #other_content>
         <div class="loader">
           <div class="line"></div>

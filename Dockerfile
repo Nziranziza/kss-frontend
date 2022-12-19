@@ -1,10 +1,10 @@
 FROM ubuntu:20.04
 RUN apt-get update && apt-get install -y sudo
 RUN adduser --disabled-password \
---gecos '' docker-deployer
+    --gecos '' docker-deployer
 RUN adduser docker-deployer sudo
 RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> \
-/etc/sudoers
+    /etc/sudoers
 
 USER docker-deployer
 RUN sudo apt-get update && \

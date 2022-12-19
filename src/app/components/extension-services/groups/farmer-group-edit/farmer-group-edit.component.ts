@@ -11,6 +11,7 @@ import {
   OrganisationService, UserService
 } from '../../../../core';
 import { isEmptyObject } from 'jquery';
+import { ScrollStrategy, ScrollStrategyOptions } from '@angular/cdk/overlay';
 
 @Component({
   selector: 'app-farmer-group-edit',
@@ -30,8 +31,10 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
     private groupService: GroupService,
     private authenticationService: AuthenticationService,
     protected locationService: LocationService,
+    private readonly sso: ScrollStrategyOptions,
     private helper: HelperService) {
     super(locationService, organisationService);
+    this.scrollStrategy = this.sso.noop();
   }
 
   editForm: FormGroup;
@@ -48,6 +51,7 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
   groupMembers = [];
   time: any;
   id: string;
+  scrollStrategy: ScrollStrategy;
   searchFields = [
     { value: 'reg_number', name: 'registration number' },
     { value: 'nid', name: 'NID' },
@@ -70,7 +74,7 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
     this.editForm = this.formBuilder.group({
       groupName: [''],
       leaderNames: ['', Validators.required],
-      leaderPhoneNumber: ['', Validators.required, Validators.pattern("[0-9]{12}")],
+      leaderPhoneNumber: ['', Validators.required, Validators.pattern('[0-9]{12}')],
       description: [''],
       meetingSchedule: this.formBuilder.group({
         meetingDay: [''],
@@ -90,7 +94,6 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
       draw: 1,
       org_id: this.authenticationService.getCurrentUser().info.org_id
     };
-
     this.filterForm = this.formBuilder.group({
       searchOption: ['location'],
       searchByLocation: this.formBuilder.group({
@@ -106,51 +109,67 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
     });
     this.route.params.subscribe(params => {
       this.id = params['id'.toString()];
-      this.groupService.get(params['id'.toString()]).subscribe(data => {
-        const members = data.data.members;
-        members.map((member) => {
-          const item = {
-            userInfo: {
-              regNumber: '',
-              groupName: '',
-              foreName: '',
-              surname: '',
-              phone_number: '',
-              _id: member.userId,
-            },
-            selected: true
-          };
-          item.userInfo.regNumber = member.regNumber;
-          if (member.groupName) {
-            item.userInfo.groupName = member.groupName;
-          } else {
-            item.userInfo.foreName = member.firstName;
-            item.userInfo.surname = member.lastName;
-          }
-          item.userInfo.phone_number = member.phoneNumber;
-          this.groupMembers.push(item);
-        });
-        this.editForm.controls.location
-          .get("prov_id".toString())
-          .setValue(data.data.location.prov_id._id, { emitEvent: true });
-        this.editForm.controls.location
-          .get("dist_id".toString())
-          .setValue(data.data.location.dist_id._id, { emitEvent: true });
-        this.editForm.controls.location
-          .get("sect_id".toString())
-          .setValue(data.data.location.sect_id._id, { emitEvent: true });
-        this.editForm.controls.location
-          .get("cell_id".toString())
-          .setValue(data.data.location.cell_id._id, { emitEvent: true });
-        this.editForm.controls.location
-          .get("village_id".toString())
-          .setValue(data.data.location.village_id._id, { emitEvent: true });
-        delete data.data.location
-        this.editForm.patchValue(data.data);
-      });
     });
+    this.getGroupDetails();
     this.basicInit(this.authenticationService.getCurrentUser().info.org_id);
     this.onChanges();
+  }
+
+  getGroupDetails() {
+    this.groupService.get(this.id).subscribe(data => {
+      const members = data.data.members;
+      members.map((member) => {
+        const item = {
+          userInfo: {
+            regNumber: '',
+            groupName: '',
+            foreName: '',
+            surname: '',
+            phone_number: '',
+            _id: member.userId,
+          },
+          selected: true
+        };
+        item.userInfo.regNumber = member.regNumber;
+        if (member.groupName) {
+          item.userInfo.groupName = member.groupName;
+        } else {
+          item.userInfo.foreName = member.firstName;
+          item.userInfo.surname = member.lastName;
+        }
+        item.userInfo.phone_number = member.phoneNumber;
+        this.groupMembers.push(item);
+      });
+
+      this.editForm.controls.location
+        .get('prov_id'.toString())
+        .setValue(data.data.location.prov_id._id);
+      this.editForm.controls.location
+        .get('dist_id'.toString())
+        .setValue(data.data.location.dist_id._id);
+      this.editForm.controls.location
+        .get('sect_id'.toString())
+        .setValue(data.data.location.sect_id._id);
+      this.editForm.controls.location
+        .get('cell_id'.toString())
+        .setValue(data.data.location.cell_id._id);
+      this.editForm.controls.location
+        .get('village_id'.toString())
+        .setValue(data.data.location.village_id._id);
+      this.editForm.controls.meetingSchedule
+        .get('meetingDay'.toString())
+        .setValue(data.data.meetingSchedule.meetingDay);
+      this.editForm.controls.meetingSchedule
+        .get('meetingTime'.toString())
+        .setValue(data.data.meetingSchedule.meetingTime);
+      this.editForm.controls.description.setValue(
+        data.data.description
+      );
+      delete data.data.location
+      delete data.data.meetingSchedule
+      delete data.data.description
+      this.editForm.patchValue(data.data);
+    });
   }
 
   onSubmit() {
@@ -241,7 +260,7 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
   removeMembersToGroup() {
     this.groupMembers.forEach((item) => {
       if (item.selected) {
-        this.groupMembers = this.groupMembers.filter(el => el.userInfo._id != item.userInfo._id);
+        this.groupMembers = this.groupMembers.filter(el => el.userInfo._id !== item.userInfo._id);
       }
     });
   }

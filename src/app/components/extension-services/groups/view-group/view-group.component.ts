@@ -6,10 +6,12 @@ import {
   PLATFORM_ID,
   Inject,
   Input,
+  ViewChild,
 } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { BasicComponent, GroupService, MessageService } from 'src/app/core';
 import { isPlatformBrowser } from '@angular/common';
+import { ChartType } from 'angular-google-charts';
 
 @Component({
   selector: 'app-view-group',
@@ -18,8 +20,7 @@ import { isPlatformBrowser } from '@angular/common';
 })
 export class ViewGroupComponent
   extends BasicComponent
-  implements OnInit, OnDestroy
-{
+  implements OnInit, OnDestroy {
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
@@ -36,6 +37,7 @@ export class ViewGroupComponent
   groupDetails: any;
   modal: NgbActiveModal;
   @Input() id: string;
+  @ViewChild('genderChart ', { static: false }) genderChart;
 
   results: any[] = [];
   weekDays: string[] = [
@@ -59,7 +61,43 @@ export class ViewGroupComponent
     femaleOldTotal: 0,
   };
 
-  ngOnDestroy(): void {}
+  graph = {
+    type: ChartType.PieChart,
+    data: [
+      ['Female', 0],
+      ['Male', 0],
+    ],
+    dummyData: [
+      ['Female', 50],
+      ['Male', 50],
+    ],
+    options: {
+      colors: ['#FF69F6', '#35A1FF'],
+      legend: { position: 'none' },
+      pieHole: 0.3,
+      pieSliceTextStyle: {
+        color: 'black',
+      },
+
+      labels: {
+        display: false // not working
+      },
+      backgroundColor: { fill: 'transparent' },
+      chartArea: {
+        left: 20,
+        top: 10,
+        bottom: 10,
+        width: '80%',
+        height: '150',
+      },
+    },
+    columnNames: ['female', 'male'],
+    width: '80%',
+    height: 160,
+
+  };
+
+  ngOnDestroy(): void { }
 
   ngOnInit() {
     this.getVisits();
@@ -73,7 +111,7 @@ export class ViewGroupComponent
         member.nid
           ? (member.age = new Date().getFullYear() - member.nid.substring(1, 5))
           : (member.age = '-');
-        if (member.sex == 'm' || member.sex == 'M') {
+        if (member.sex === 'm' || member.sex === 'M') {
           this.totalByGender.maleTotal += 1;
           if (member.age <= 30) {
             this.totalByGender.maleYouthTotal += 1;
@@ -85,9 +123,13 @@ export class ViewGroupComponent
           }
         }
       });
+      this.graph.data = [];
+      this.graph.data.push(['Female', (this.totalByGender.femaleTotal * 100) /
+        (this.totalByGender.maleTotal + this.totalByGender.femaleTotal)], ['male', (this.totalByGender.maleTotal * 100) /
+          (this.totalByGender.maleTotal + this.totalByGender.femaleTotal)]);
       this.totalByGender.maleOldTotal =
         this.totalByGender.maleTotal - this.totalByGender.maleYouthTotal;
-        this.totalByGender.femaleOldTotal =
+      this.totalByGender.femaleOldTotal =
         this.totalByGender.femaleTotal - this.totalByGender.femaleYouthTotal;
     });
   }

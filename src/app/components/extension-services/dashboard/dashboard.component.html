@@ -315,7 +315,7 @@
                   <input [selectMode]="'range'" [owlDateTimeTrigger]="dt3" [owlDateTime]="dt3"
                     (ngModelChange)="seasonDateChange($event, 'visitFilters')" formControlName="filterByDate"
                     class="form-control form-control-small" placeholder="From: Dd/mm/yyyy ~ To: Dd/mm/yyyy"
-                    [min]="dateRangeMin['visitFilters']" [max]="dateRangeMax['visitFilters']" />
+                    [min]="dateRangeMin.visitFilters" [max]="dateRangeMax.visitFilters" />
                   <owl-date-time #dt3 [pickerType]="'calendar'" [scrollStrategy]="scrollStrategy"></owl-date-time>
                 </div>
               </div>

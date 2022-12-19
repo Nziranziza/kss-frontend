@@ -131,7 +131,7 @@ export class DashboardComponent extends BasicComponent implements OnInit {
   };
 
   selectedFarmDetails: any;
-  clickedMarker: Boolean = false;
+  clickedMarker = false;
   trainings: any[] = [];
   trainers: any[] = [];
   trainingsStats: any = {
@@ -150,7 +150,7 @@ export class DashboardComponent extends BasicComponent implements OnInit {
   coveredSectors: any[] = [];
   groups: any[] = [];
   nurseries: any[] = [];
-  selectedGroup: String;
+  selectedGroup: string;
   initialValue = '';
   keyword = 'organizationName';
   groupKeyword = 'groupName';
@@ -452,7 +452,7 @@ export class DashboardComponent extends BasicComponent implements OnInit {
   }
 
   getNurseries() {
-    this.seedlingService.all().subscribe((data) => {
+    this.seedlingService.all(this.authenticationService.getCurrentUser().info.org_id).subscribe((data) => {
       this.nurseries = data.data;
       this.nurseries.unshift({ nurseryName: 'all nurseries', _id: '' });
     });
@@ -492,10 +492,10 @@ export class DashboardComponent extends BasicComponent implements OnInit {
   // get stats from filters
   getStats(filterBy: string) {
     this.mainBody = {};
-    if (filterBy != '') {
+    if (filterBy !== '') {
       let value = [];
       value = this.dashboardForm.controls[filterBy].get('filterByDate').value;
-      if (this.newOrg != '') {
+      if (this.newOrg !== '') {
         this.mainBody.referenceId = this.newOrg;
       }
       if (value) {
@@ -552,10 +552,10 @@ export class DashboardComponent extends BasicComponent implements OnInit {
         groupId: item._id,
       };
     }
-    if (this.dashboardForm.value.trainingId != '') {
+    if (this.dashboardForm.value.trainingId !== '') {
       body.trainingId = this.dashboardForm.value.trainingId;
     }
-    if (this.selectedAgronomist != '') {
+    if (this.selectedAgronomist !== '') {
       body.trainerId = this.selectedAgronomist;
     }
     this.getTrainingsStats(body);
@@ -566,10 +566,10 @@ export class DashboardComponent extends BasicComponent implements OnInit {
     if (this.selectedGroup !== '') {
       this.mainBody.groupId = this.selectedGroup;
     }
-    if (this.dashboardForm.value.trainingId != '') {
+    if (this.dashboardForm.value.trainingId !== '') {
       this.mainBody.trainingId = this.dashboardForm.value.trainingId;
     }
-    if (item.userId != '') {
+    if (item.userId !== '') {
       this.mainBody.trainerId = item.userId;
     }
     this.getTrainingsStats(this.mainBody);
@@ -580,7 +580,7 @@ export class DashboardComponent extends BasicComponent implements OnInit {
 
   deselectAgronomistEvent() {
     this.selectedAgronomist = '';
-    if (this.dashboardForm.value.trainingId != '') {
+    if (this.dashboardForm.value.trainingId !== '') {
       this.mainBody.trainingId = this.dashboardForm.value.trainingId;
     }
     if (this.selectedGroup !== '') {
@@ -609,10 +609,10 @@ export class DashboardComponent extends BasicComponent implements OnInit {
   deselectGroupEvent() {
     this.selectedGroup = '';
     const body: any = {};
-    if (this.dashboardForm.value.trainingId != '') {
+    if (this.dashboardForm.value.trainingId !== '') {
       body.trainingId = this.dashboardForm.value.trainingId;
     }
-    if (this.selectedAgronomist != '') {
+    if (this.selectedAgronomist !== '') {
       body.trainerId = this.selectedAgronomist;
     }
     this.getTrainingsStats(body);
@@ -658,12 +658,10 @@ export class DashboardComponent extends BasicComponent implements OnInit {
       this.seedlingStats.forEach((data) => {
         this.totalSeedlings += data.totalQuantity;
       });
+      this.seedlingGraph.data = [];
       this.seedlingStats.forEach((data, index) => {
-        const nextIndex = 0;
-        this.seedlingGraph.data[index][nextIndex] = data.variety;
-        this.seedlingGraph.data[index][nextIndex + 1] =
-          (data.totalQuantity * 100) / this.totalSeedlings;
-        this.seedlingGraph.options.colors[index] = colors[index];
+        this.seedlingGraph.data.push([data.variety, (data.totalQuantity * 100) / this.totalSeedlings])
+        this.seedlingGraph.options.colors.push(colors[index]);
       });
       this.loading = false;
       this.seedlingGraph = Object.assign([], this.seedlingGraph);
@@ -704,12 +702,10 @@ export class DashboardComponent extends BasicComponent implements OnInit {
     this.loading = true;
     this.visitService.getVisitsStats(body).subscribe((data) => {
       this.visitStats = data.data;
-      this.graph.data[1][1] =
-        (this.visitStats.maleFarmVisits * 100) /
-        this.visitStats.totalFarmersVisited;
-      this.graph.data[0][1] =
-        (this.visitStats.femaleFarmVisits * 100) /
-        this.visitStats.totalFarmersVisited;
+      this.graph.data = [];
+      this.graph.data.push(['Female', (this.visitStats.femaleFarmVisits * 100) /
+        this.visitStats.totalFarmersVisited], ['male', (this.visitStats.maleFarmVisits * 100) /
+          this.visitStats.totalFarmersVisited]);
       this.loading = false;
     });
     this.graph = Object.assign([], this.graph);
@@ -820,7 +816,7 @@ export class DashboardComponent extends BasicComponent implements OnInit {
 
 
     this.dashboardForm.controls.training_id.valueChanges.subscribe((value) => {
-      if (this.selectedAgronomist != '') {
+      if (this.selectedAgronomist !== '') {
         this.mainBody.trainerId = this.dashboardForm.value.trainerId;
       }
       if (value !== '') {
@@ -858,7 +854,7 @@ export class DashboardComponent extends BasicComponent implements OnInit {
   // season filters
   seasonChangeEffect(group: string) {
     const value =
-      this.dashboardForm.controls[group].get('season_id').value != ''
+      this.dashboardForm.controls[group].get('season_id').value !== ''
         ? this.dashboardForm.controls[group].get('season_id').value
         : this.currentSeasonYear;
     this.dateRangeMin[group] = `${parseFloat(value) - 1}-10-01`;
@@ -889,34 +885,34 @@ export class DashboardComponent extends BasicComponent implements OnInit {
   seasonQuarterChange(group: string) {
     const value = this.dashboardForm.controls[group].get('quarterId').value;
     const current =
-      this.dashboardForm.controls[group].get('season_id').value != ''
+      this.dashboardForm.controls[group].get('season_id').value !== ''
         ? this.dashboardForm.controls[group].get('season_id').value
         : this.currentSeasonYear;
-    if (value == 1) {
+    if (value === '1') {
       this.dateRangeMin[group] = `${parseFloat(current) - 1}-10-01`;
       this.dateRangeMax[group] = `${current}-01-01`;
       this.dashboardForm.controls[group]
         .get('filterByDate')
         .setValue([`${parseFloat(current) - 1}-10-01`, `${current}-01-01`]);
-    } else if (value == 2) {
+    } else if (value === '2') {
       this.dateRangeMin[group] = `${current}-01-01`;
       this.dateRangeMax[group] = `${current}-04-01`;
       this.dashboardForm.controls[group]
         .get('filterByDate')
         .setValue([`${current}-01-01`, `${current}-04-01`]);
-    } else if (value == 3) {
+    } else if (value === '3') {
       this.dateRangeMin[group] = `${current}-04-01`;
       this.dateRangeMax[group] = `${current}-07-01`;
       this.dashboardForm.controls[group]
         .get('filterByDate')
         .setValue([`${current}-04-01`, `${current}-07-01`]);
-    } else if (value == 4) {
+    } else if (value === '4') {
       this.dateRangeMin[group] = `${current}-07-01`;
       this.dateRangeMax[group] = `${current}-10-01`;
       this.dashboardForm.controls[group]
         .get('filterByDate')
         .setValue([`${current}-07-01`, `${current}-10-01`]);
-    } else if (value == '') {
+    } else if (value === '') {
       this.dateRangeMin[group] = `${parseFloat(current) - 1}-10-01`;
       this.dateRangeMax[group] = `${current}-10-01`;
       this.dashboardForm.controls[group]
@@ -947,13 +943,13 @@ export class DashboardComponent extends BasicComponent implements OnInit {
   }
 
   enableFilter(value: boolean, type: string) {
-    if (type == 'training') {
+    if (type === 'training') {
       this.trainingFilterEnabled = value;
-    } else if (type == 'seedling') {
+    } else if (type === 'seedling') {
       this.seedlingFilterEnabled = value;
-    } else if (type == 'gap') {
+    } else if (type === 'gap') {
       this.gapFilterEnabled = value;
-    } else if (type == 'visit') {
+    } else if (type === 'visit') {
       this.visitFilterEnabled = value;
     }
   }

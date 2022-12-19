@@ -176,7 +176,7 @@
                         <label class="control-label label-required">Time</label>
                         <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="meetingTime"
                           class="form-control" />
-                        <owl-date-time [pickerType]="'timer'" #dt1></owl-date-time>
+                        <owl-date-time #dt1 [pickerType]="'timer'" [scrollStrategy]="scrollStrategy"></owl-date-time>
                         <app-inline-errors *ngIf="
                         createForm.controls.meetingSchedule.get(
                           'meetingTime'.toString()
@@ -325,7 +325,61 @@
                         }}
                         </ng-template>
                       </td>
-                      <td>{{ item.userInfo.phone_number }}</td>
+                      <td>
+                        <form [formGroup]="editContactForm">
+                          <div formArrayName="contacts">
+                            <div class="row" *ngIf="item.userInfo.phone_number">
+                              <div class="col-xs-8" formGroupName="{{ i }}">
+                                <span *ngIf="!item.editMode">
+                                  {{ item.userInfo.phone_number }}
+                                </span>
+                                <span *ngIf="item.editMode">
+                                  <input type="number" min="0" style="height: 23px; width: 95%" placeholder="250"
+                                    formControlName="contact" />
+                                </span>
+                              </div>
+                              <div class="col-xs-3">
+                                <span *ngIf="!item.editMode">
+                                  <button class="btn btn-primary btn-xs" (click)="addContact(i)">
+                                    <i class="fa fa-edit"></i>
+                                  </button>
+                                </span>
+                                <span *ngIf="item.editMode">
+                                  <button class="btn btn-success btn-xs" (click)="cancelEditContact(i)"
+                                    style="margin-right: 3px">
+                                    <i class="fa fa-remove"></i>
+                                  </button>
+                                  <button class="btn btn-success btn-xs" (click)="submitContact(i)">
+                                    <i class="fa fa-check"></i></button></span>
+                              </div>
+                            </div>
+                            <div class="row" *ngIf="!item.userInfo.phone_number">
+                              <div class="col-xs-8" formGroupName="{{ i }}">
+                                <span *ngIf="!item.editMode" style="color: #ff0000">
+                                  Add a phone number
+                                </span>
+                                <span *ngIf="item.editMode">
+                                  <input type="number" min="0" style="height: 23px; width: 95%"
+                                    formControlName="contact" /></span>
+                              </div>
+                              <div class="col-xs-3">
+                                <span *ngIf="!item.editMode">
+                                  <button class="btn btn-primary btn-xs" (click)="addContact(i)">
+                                    <i class="fa fa-plus"></i>
+                                  </button>
+                                </span>
+                                <span *ngIf="item.editMode">
+                                  <button class="btn btn-primary btn-xs" (click)="cancelEditContact(i)"
+                                    style="margin-right: 3px">
+                                    <i class="fa fa-remove"></i>
+                                  </button>
+                                  <button class="btn btn-success btn-xs" (click)="submitContact(i)">
+                                    <i class="fa fa-check"></i></button></span>
+                              </div>
+                            </div>
+                          </div>
+                        </form>
+                      </td>
                       <td>
                         <input type="checkbox" (click)="selectResultsItem($event.target.checked, i)"
                           *ngIf="notInGroupMembers(i)" [(ngModel)]="searchResults[i].selected"
@@ -374,13 +428,8 @@
                   <div class="col-xs-12 col-md-6">
                     <div class="form-group">
                       <label class="control-label label-required">Group leader phone number</label>
-                      <input type="text" formControlName="leaderPhoneNumber" placeholder="250" class="form-control" />
-                      <app-inline-errors *ngIf="
-                      createForm.controls.leaderPhoneNumber.invalid &&
-                      (createForm.controls.leaderPhoneNumber.dirty ||
-                        createForm.controls.leaderPhoneNumber.touched)
-                    " [errors]="createForm.controls.leaderPhoneNumber.errors" [label]="'leader phone number'">
-                      </app-inline-errors>
+                      <input type="text" formControlName="leaderPhoneNumber" placeholder="250" class="form-control"
+                        disabled />
                     </div>
                   </div>
                 </div>
