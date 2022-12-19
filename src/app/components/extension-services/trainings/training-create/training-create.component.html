@@ -1,20 +1,3 @@
-<ng-template #ccontent let-modal>
-  <div class="modal-body text-center" style="font-size: 1.5em">
-    <i class="fa fa-check" style="color: #00a513; font-size: 4.5em"></i>
-    <br />
-    Thank you <br />
-    <span style="font-weight: bold">
-      “ {{ createTraining.value.trainingName }} “
-    </span>
-    <br />
-    has been added <br />
-    <button type="button" class="btn btn-success btn-lg pull-center" routerLink="/admin/training/list"
-      (click)="modal.dismiss()">
-      OK
-    </button>
-  </div>
-</ng-template>
-
 <ng-template #content let-modal>
   <div class="modal-header">
     <h4 class="modal-title training-modal-title" id="modal-basic-title">
@@ -96,8 +79,7 @@
       </div>
       <div class="col-sm-6"></div>
       <div class="col-sm-3">
-        <button class="btn btn-secondary btn-lg submit" (click)="modal.dismiss(); onSubmit(); open(ccontent)"
-          [disabled]="loading">
+        <button class="btn btn-secondary btn-lg submit" (click)="modal.dismiss(); onSubmit()" [disabled]="loading">
           <span *ngIf="!loading; else other_content">Confirm</span>
           <ng-template #other_content>
             <div class="loader">

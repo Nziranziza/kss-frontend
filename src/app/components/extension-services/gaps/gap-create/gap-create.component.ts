@@ -130,6 +130,8 @@ export class GapCreateComponent
     let marks = 0;
 
     // calculate total question score
+
+    console.log(value);
     const sumAllWeight = value.map((item, i) => {
       parentIndex = i;
       this.answerScoreExceeded = false;
