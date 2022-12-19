@@ -15,8 +15,7 @@ import { Router } from '@angular/router';
 })
 export class TrainingCreateComponent
   extends BasicComponent
-  implements OnInit, OnDestroy
-{
+  implements OnInit, OnDestroy {
   constructor(
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
@@ -37,7 +36,7 @@ export class TrainingCreateComponent
   gaps: any[] = [];
   loading = false;
 
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void { }
 
   ngOnInit() {
     this.getGaps();
@@ -161,7 +160,7 @@ export class TrainingCreateComponent
           return data;
         });
         this.materials.push(data);
-      }
+      };
       this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' });
       this.trainingService
         .uploadMaterial({ materials: this.materials })
@@ -191,7 +190,7 @@ export class TrainingCreateComponent
     const value = JSON.parse(JSON.stringify(this.createTraining.value));
     const adoptionGap = [];
     value.adoptionGap.forEach((adoption) => {
-      if (adoption._id != '') {
+      if (adoption._id !== '') {
         adoptionGap.push(adoption._id);
       }
     });
@@ -214,10 +213,9 @@ export class TrainingCreateComponent
     }
 
     this.trainingService.create(data).subscribe(
-      (data) => {
+      (ndata) => {
         this.loading = false;
-        this.setMessage('Training successfully created.');
-
+        this.success(value.trainingName);
       },
       (err) => {
         this.loading = false;
