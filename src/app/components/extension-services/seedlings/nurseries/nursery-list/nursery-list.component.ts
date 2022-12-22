@@ -51,17 +51,20 @@ export class NurseryListComponent
   config: any;
   dtOptions: any = {};
   loading = false;
-  totalSeeds: any[] = [];
-  totalPrickedOut: any[] = [];
-  prickedSum = 0;
-  seedsSum = 0;
-  totalDistributedSum: any[] = [];
-  distributeSum = 0;
   // @ts-ignore
   dtTrigger: Subject = new Subject();
   // @ts-ignore
   @ViewChild(DataTableDirective, { static: false })
   dtElement: DataTableDirective;
+  stats: any = {
+    sites:0,
+    remainingQty: 0,
+    expectedQty: 0,
+    prickedQty: 0,
+    providedQty: 0,
+    distributedQty: 0,
+    germinationRate: 0
+  }
 
   ngOnInit() {
     this.getNurseries();
@@ -77,35 +80,16 @@ export class NurseryListComponent
     const body = !this.authorisationService.isTechnoServeAdmin() ?
       this.authenticationService.getCurrentUser().info.org_id : '';
     this.seedlingService.all(body).subscribe((data) => {
-      this.nurseries = data.data;
-      this.nurseries.map((nursery) => {
-        let sum = 0;
-        let prickedSum = 0;
-        let distributedSum = 0;
-        nursery.stocks.map((stock) => {
-          let distributedSeed = stock.remainingQty
-            ? stock.prickedQty - stock.remainingQty
-            : 0;
-          sum += stock.seeds;
-          prickedSum += stock.prickedQty || 0;
-          distributedSum += distributedSeed || 0;
-        });
-        this.totalSeeds.push(sum);
-        this.totalDistributedSum.push(distributedSum);
-        this.totalPrickedOut.push(prickedSum);
-      });
-      this.totalSeeds.map((total) => {
-        this.seedsSum += total;
-      });
-      this.totalDistributedSum.map((distSum) => {
-        this.distributeSum += distSum;
-      });
-      this.totalPrickedOut.map((total) => {
-        this.prickedSum += total;
-      });
+      this.nurseries = data.data.map((nursery) => ({
+        ...nursery,
+        stockQty: nursery.stocks.reduce((acc, curr) => acc + curr.seeds, 0)
+      }));
       deletetrigger ? " " : this.dtTrigger.next();
       this.loading = false;
     });
+    this.seedlingService.statistics(body).subscribe(({ data }) => {
+      this.stats = data
+    })
     if (!deletetrigger) {
       this.config = {
         itemsPerPage: 10,
