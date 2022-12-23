@@ -9,6 +9,7 @@ import {
   OrganisationService,
   ReportService,
   SeasonService,
+  SeedlingService,
   SiteService,
   TrainingService,
 } from 'src/app/core';
@@ -37,7 +38,8 @@ export class ReportsComponent extends BasicComponent implements OnInit {
     private trainingService: TrainingService,
     private reportService: ReportService,
     private siteService: SiteService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private seedlingService: SeedlingService
   ) {
     super(locationService, organisationService);
   }
@@ -623,6 +625,15 @@ export class ReportsComponent extends BasicComponent implements OnInit {
       this.reportService.farmStats(body).subscribe((data) => {
         this.stats = data.data;
       });
+    } else if (value === "Nurseries") {
+      body = {
+        ...body,
+        ...(this.newOrg && { reference: this.newOrg }),
+      };
+      this.reportBody = body;
+      this.reportService.nurseriesStats(body).subscribe((data) => {
+        this.stats = data.data;
+      });
     }
   }
 
@@ -675,6 +686,37 @@ export class ReportsComponent extends BasicComponent implements OnInit {
         this.reportsTableData = data.data;
         this.reportGenerated = true;
       });
+    } else if (this.reportForm.value.reportFor === "Nurseries") {
+      this.reportsTableData = [];
+      const { location = {}, ...body } = this.reportBody;
+      this.seedlingService
+        .all({
+          ...body,
+          ...location,
+        })
+        .subscribe((data) => {
+          this.reportsTableData = data.data.map(
+            ({ owner, createdAt, nurseryName, location, stocks, status }) => {
+              const varieties = stocks.length;
+              return {
+                owner: owner?.name,
+                createdAt,
+                name: nurseryName,
+                province: location?.prov_id?.namek,
+                district: location?.dist_id?.name,
+                sector: location?.sect_id?.name,
+                cell: location?.cell_id?.name,
+                village: location?.village_id?.name,
+                variety: varieties
+                  ? `${varieties} ${varieties === 1 ? "variety" : "varieties"}`
+                  : "No variety",
+                amount: stocks.reduce((acc, curr) => acc + curr.seeds, 0),
+                status: status || "Active",
+              };
+            }
+          );
+          this.reportGenerated = true;
+        });
     }
   }
 
@@ -760,6 +802,22 @@ export class ReportsComponent extends BasicComponent implements OnInit {
         .farmDownload(this.reportBody, 'pdf')
         .subscribe((data) => {
           this.dataPdf = data.data.data;
+        });
+    } else if (this.reportForm.value.reportFor === "Nurseries") {
+      this.reportService
+        .nurseriesDownload(this.reportBody, "xlsx")
+        .subscribe((data) => {
+          this.dataFile = data.data.file;
+        });
+      this.reportService
+        .nurseriesDownload(this.reportBody, "csv")
+        .subscribe((data) => {
+          this.dataCsv = data.data.file;
+        });
+      this.reportService
+        .nurseriesDownload(this.reportBody, "pdf")
+        .subscribe((data) => {
+          this.dataPdf = data.data.file;
         });
     }
   }
