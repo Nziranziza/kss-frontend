@@ -13,11 +13,9 @@ export class SeedlingService {
     return this.apiService.post('/v1.1/nurseries', body);
   }
 
-  all(id?: string): Observable<any> {
+  all(filters?: any): Observable<any> {
     const queryParams = new HttpParams({
-      fromObject: {
-        reference: id
-      }
+      fromObject: filters
     })
     return this.apiService.get('/v1.1/nurseries', queryParams);
   }
@@ -42,7 +40,7 @@ export class SeedlingService {
     return this.apiService.post('/v1.1/seedlings/nursery', body);
   }
 
-  statistics(body: any) {
+  nurseryStats(body: any) {
     return this.apiService.post('/v1.1/nurseries/statistics', body);
   }
 }

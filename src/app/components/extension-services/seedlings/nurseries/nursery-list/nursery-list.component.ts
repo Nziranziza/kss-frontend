@@ -13,6 +13,15 @@ import { Subject } from 'rxjs';
 import { ConfirmModalComponent } from 'src/app/shared';
 import { ViewNurseryComponent } from '../view-nursery/view-nursery.component';
 
+interface Stats {
+  sites: number;
+  remainingQty: number;
+  expectedQty: number;
+  prickedQty: number;
+  providedQty: number;
+  distributedQty: number;
+  germinationRate: number
+}
 
 @Component({
   selector: "app-nursery-list",
@@ -56,7 +65,7 @@ export class NurseryListComponent
   // @ts-ignore
   @ViewChild(DataTableDirective, { static: false })
   dtElement: DataTableDirective;
-  stats: any = {
+  stats: Stats = {
     sites:0,
     remainingQty: 0,
     expectedQty: 0,
@@ -87,7 +96,7 @@ export class NurseryListComponent
       deletetrigger ? " " : this.dtTrigger.next();
       this.loading = false;
     });
-    this.seedlingService.statistics(body).subscribe(({ data }) => {
+    this.seedlingService.nurseryStats(body).subscribe(({ data }) => {
       this.stats = data
     })
     if (!deletetrigger) {

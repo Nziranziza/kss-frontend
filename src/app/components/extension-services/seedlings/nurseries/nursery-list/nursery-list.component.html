@@ -20,7 +20,7 @@
           </div>
           <div class="col-xs-2"></div>
         </div>
-        <div class="stats-box-text-item">{{ stats.sites }}</div>
+        <div class="stats-box-text-item">{{ stats.sites | number }}</div>
       </div>
     </div>
     <div class="col-sm-2 small-spacing">
@@ -31,7 +31,7 @@
           </div>
           <div class="col-xs-2"></div>
         </div>
-        <div class="stats-box-text-item">{{ stats.providedQty }} Kg</div>
+        <div class="stats-box-text-item">{{ stats.providedQty | number }} Kg</div>
       </div>
     </div>
     <div class="col-sm-2 small-spacing">
@@ -41,7 +41,7 @@
             <div class="stats-box-text-header">Expected Seedlings</div>
           </div>
         </div>
-        <div class="stats-box-text-item">{{ stats.expectedQty }}</div>
+        <div class="stats-box-text-item">{{ stats.expectedQty | number }}</div>
       </div>
     </div>
     <div class="col-sm-2 small-spacing">
@@ -51,7 +51,7 @@
             <div class="stats-box-text-header">Pricked Out Seedlings</div>
           </div>
         </div>
-        <div class="stats-box-text-item">{{ stats.prickedQty }}</div>
+        <div class="stats-box-text-item">{{ stats.prickedQty | number }}</div>
       </div>
     </div>
     <div class="col-sm-2 small-spacing">
@@ -74,7 +74,7 @@
             <div class="stats-box-text-header">Distributed Seedlings</div>
           </div>
         </div>
-        <div class="stats-box-text-item">{{ stats.distributedQty }}</div>
+        <div class="stats-box-text-item">{{ stats.distributedQty | number }}</div>
       </div>
     </div>
   </div>
@@ -90,11 +90,15 @@
               <th>Date Added</th>
               <th>Name</th>
               <th>Owner</th>
-              <th>Location</th>
+              <th>Province</th>
+              <th>District</th>
+              <th>Sector</th>
+              <th>Cell</th>
+              <th>Village</th>
               <th>Seedlings Variety</th>
               <th>Seeds Amount</th>
               <th>Status</th>
-              <th style="width:18%" class="text-center">Actions</th>
+              <th class="text-center">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -103,11 +107,15 @@
                 <td>{{ nursery.createdAt | date: "short" }}</td>
                 <td>{{ nursery.nurseryName }}</td>
                 <td>{{ nursery.owner.name }}</td>
+                <td>{{ nursery.location.prov_id.name }}</td>
+                <td>{{ nursery.location.dist_id.name }}</td>
+                <td>{{ nursery.location.sect_id.name }}</td>
                 <td>{{ nursery.location.cell_id.name }}</td>
+                <td>{{ nursery.location.village_id.name }}</td>
                 <td>{{ nursery.stocks.length }} Variety</td>
                 <td>{{ nursery.stockQty }} Kg</td>
                 <td>{{ nursery.status || "Active" }}</td>
-                <td style="width:18%" class="text-center">
+                <td class="text-center">
                   <button appRequiredSeason class="btn btn-action-no-border btn-margin details-button"
                     (click)="openViewModal(nursery._id)">
                     <em class="fa fa-eye"></em>
