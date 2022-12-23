@@ -174,18 +174,6 @@ export class EditFarmerRequestComponent implements OnInit {
           });
         });
       });
-    } else if (this.isUserSiteManager) {
-
-      /*this.siteService.get(this.authenticationService.getCurrentUser().orgInfo.distributionSites).subscribe((site) => {
-        this.site = site.content;
-        this.site.coveredAreas.coveredSectors.map((sector) => {
-          this.sectors.push({
-            _id: sector.sect_id,
-            name: sector.name
-          });
-        });
-      });*/
-
     } else {
       this.locationService.getSectors(this.land.location.dist_id._id).subscribe((sectors) => {
         this.sectors = sectors;
@@ -241,7 +229,6 @@ export class EditFarmerRequestComponent implements OnInit {
     });
   }
 
-
   get formCertificates() {
     return this.editFarmerRequestForm.get('certificates') as FormArray;
   }
@@ -260,36 +247,6 @@ export class EditFarmerRequestComponent implements OnInit {
   }
 
   onChanges() {
-    this.editFarmerRequestForm.controls.location.get('prov_id'.toString()).valueChanges.subscribe(
-      (value) => {
-        if (value !== null) {
-          this.locationService.getDistricts(value).subscribe((data) => {
-            this.districts = data;
-            this.sectors = null;
-            this.cells = null;
-            this.villages = null;
-          });
-          if (this.isUserSiteManager && (!this.isUserCWSOfficer)) {
-            const temp = [];
-            this.site.coveredAreas.coveredSectors.map((sector) => {
-              temp.push({
-                _id: sector.sect_id,
-                name: sector.name
-              });
-            });
-            this.sectors.push(temp);
-          } else if (this.isUserCWSOfficer) {
-            this.filterCustomSectors(this.org);
-          } else {
-            this.locationService.getSectors(value).toPromise().then(data => {
-              this.sectors = data;
-              this.cells = [];
-              this.villages = [];
-            });
-          }
-        }
-      }
-    );
     this.editFarmerRequestForm.controls.treeAges.valueChanges.subscribe(
       (value) => {
         if (value !== null) {
@@ -304,39 +261,53 @@ export class EditFarmerRequestComponent implements OnInit {
           this.save = this.validForm;
         }
       });
-    this.editFarmerRequestForm.controls.location.get('dist_id'.toString()).valueChanges.subscribe(
+    this.editFarmerRequestForm.controls.location.get('prov_id'.toString()).valueChanges.subscribe(
       (value) => {
         if (value !== null) {
-          this.locationService.getSectors(value).subscribe((data) => {
-            this.sectors = data;
+          this.locationService.getDistricts(value).subscribe((data) => {
+            this.districts = data;
+            this.sectors = null;
             this.cells = null;
             this.villages = null;
           });
-          if (this.isUserCWSOfficer) {
-            this.filterCustomCells(this.org);
+        }
+      }
+    );
+    this.editFarmerRequestForm.controls.location.get('dist_id'.toString()).valueChanges.subscribe(
+      (value) => {
+        if (value !== null) {
+          if (this.isUserSiteManager && (!this.isUserCWSOfficer)) {
+            const temp = [];
+            this.site.coveredAreas.coveredSectors.map((sector) => {
+              temp.push({
+                _id: sector.sect_id,
+                name: sector.name
+              });
+            });
+            this.sectors.push(temp);
+          } else if (this.isUserCWSOfficer) {
+            this.filterCustomSectors(this.org);
           } else {
-            this.locationService.getCells(value).toPromise().then(data => {
-              this.cells = data;
-              this.villages = [];
+            this.locationService.getSectors(value).subscribe((data) => {
+              this.sectors = data;
             });
           }
+          this.cells = null;
+          this.villages = null;
         }
       }
     );
     this.editFarmerRequestForm.controls.location.get('sect_id'.toString()).valueChanges.subscribe(
       (value) => {
         if (value !== null) {
-          this.locationService.getCells(value).subscribe((data) => {
-            this.cells = data;
-            this.villages = null;
-          });
           if (this.isUserCWSOfficer) {
             this.filterCustomCells(this.org);
           } else {
-            this.locationService.getVillages(value).toPromise().then(data => {
-              this.villages = data;
+            this.locationService.getCells(value).subscribe((data) => {
+              this.cells = data;
             });
           }
+          this.villages = null;
         }
       }
     );
@@ -353,12 +324,6 @@ export class EditFarmerRequestComponent implements OnInit {
         }
       }
     );
-  }
-
-  initial() {
-    this.locationService.getProvinces().subscribe((data) => {
-      this.provinces = data;
-    });
   }
 
   updateList(i: number, v: number) {
@@ -378,7 +343,6 @@ export class EditFarmerRequestComponent implements OnInit {
 
   onSubmit() {
     this.editFarmerRequestForm.markAllAsTouched();
-
     if (this.editFarmerRequestForm.controls.upiNumber.value) {
       this.editFarmerRequestForm.controls.location.get('prov_id').clearValidators();
       this.editFarmerRequestForm.controls.location.get('prov_id').updateValueAndValidity();
@@ -458,7 +422,7 @@ export class EditFarmerRequestComponent implements OnInit {
     const i = org.coveredSectors.findIndex(element => element.sectorId._id === sectorId);
     const sector = org.coveredSectors[i];
     sector.coveredVillages.map((village) => {
-      if (villages.findIndex(el => el._id === village.village_id)) {
+      if (villages.findIndex(el => el._id === village.village_id) !== -1) {
         temp.push({
           _id: village.village_id,
           name: village.name
@@ -475,7 +439,6 @@ export class EditFarmerRequestComponent implements OnInit {
     if (upi.length > 0) {
       this.editFarmerRequestForm.controls.upiNumber.setErrors({ invalid: true });
     }
-    // this.initial();
     this.checkIfUpiinValidZoning = {
       prov_id: true,
       dist_id: true,
@@ -531,7 +494,6 @@ export class EditFarmerRequestComponent implements OnInit {
                 this.editFarmerRequestForm.controls.upiNumber.setErrors({ Invalid: true });
               }
               else {
-
                 this.provinces = [{
                   _id: this.province.province_id,
                   namee: this.titleCase(this.upi.parcelLocation.province.provinceName)
@@ -603,5 +565,11 @@ export class EditFarmerRequestComponent implements OnInit {
 
   titleCase(word: string) {
     return word[0].toUpperCase() + word.substr(1).toLowerCase();
+  }
+
+  initial() {
+    this.locationService.getProvinces().subscribe((data) => {
+      this.provinces = data;
+    });
   }
 }

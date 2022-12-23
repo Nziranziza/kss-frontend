@@ -47,7 +47,6 @@ export class DashboardComponent extends BasicComponent implements OnInit {
   }
   scrollStrategy: ScrollStrategy;
   organisationId = '';
-
   dashboardForm: FormGroup;
   trainingFilterEnabled = false;
   visitFilterEnabled = false;

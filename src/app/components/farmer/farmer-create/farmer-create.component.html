@@ -163,7 +163,6 @@
             </fieldset>
           </div>
           <!-- Payment channels
-
           <div class="row">
             <div class="col-md-12">
               <button class="btn btn-success btn-sm" (click)="addPaymentChannel()" type="button" style="margin-bottom: 10px;">
@@ -196,7 +195,6 @@
               </div>
             </div>
           </div>
-
           End payment channels -->
           <div class="row">
             <fieldset *ngIf="isGroup" class="location">
@@ -230,176 +228,7 @@
                 </div>
               </div>
             </fieldset>
-            <div *ngIf="createFromPending" class="col-md-12"></div>
-            <ng-container *ngIf="!isUserCWSOfficer; else onCWSLevel">
-              <div *ngFor="let request of formRequests.controls; let i = index" formArrayName="requests">
-                <fieldset [formGroupName]="i" class="request">
-                  <legend>
-                    <label class="control-label label-required">&nbsp;Land</label>
-                  </legend>
-                  <input class="form-control" formControlName="fertilizer_need" type="hidden" />
-                  <input class="form-control" formControlName="fertilizer_allocate" type="hidden" />
-                  <div class="row">
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <label class="control-label">Number of Trees</label>
-                        <input class="form-control" formControlName="numberOfTrees" type="text" />
-                        <div *ngIf="
-                            getRequestsFormGroup(i).controls.numberOfTrees
-                              .invalid &&
-                            (getRequestsFormGroup(i).controls.numberOfTrees
-                              .dirty ||
-                              getRequestsFormGroup(i).controls.numberOfTrees
-                                .touched)
-                          " class="input-error">
-                          <div *ngIf="
-                              getRequestsFormGroup(i).controls.numberOfTrees
-                                .errors.required
-                            ">
-                            Number of trees is required.
-                          </div>
-                          <div *ngIf="
-                              getRequestsFormGroup(i).controls.numberOfTrees
-                                .errors.min
-                            ">
-                            Number of trees must be greater than zero.
-                          </div>
-                          <div *ngIf="
-                              getRequestsFormGroup(i).controls.numberOfTrees
-                                .errors.pattern
-                            ">
-                            Number of trees must be an integer.
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div formGroupName="tree_location">
-                      <div class="col-md-2">
-                        <div class="form-group">
-                          <span class="">Province</span>
-                          <select (change)="onChangeProvince(i)" class="form-control" formControlName="prov_id">
-                            <option value=""></option>
-                            <option *ngFor="let province of provinces" value="{{ province._id }}">
-                              {{ province.namee }}
-                            </option>
-                          </select>
-                          <div *ngIf="
-                              getLocationInput(i, 'prov_id').invalid &&
-                              (getLocationInput(i, 'prov_id').dirty ||
-                                getLocationInput(i, 'prov_id').touched)
-                            " class="input-error">
-                            <div *ngIf="
-                                getLocationInput(i, 'prov_id').errors.required
-                              ">
-                              Province is required.
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-2">
-                        <div class="form-group">
-                          <span class="">District</span>
-                          <select (change)="onChangeDistrict(i)" class="form-control" formControlName="dist_id">
-                            <option value=""></option>
-                            <option *ngFor="let district of districts[i]" value="{{ district._id }}">
-                              {{ district.name }}
-                            </option>
-                          </select>
-                          <div *ngIf="
-                              getLocationInput(i, 'dist_id').invalid &&
-                              (getLocationInput(i, 'dist_id').dirty ||
-                                getLocationInput(i, 'dist_id').touched)
-                            " class="input-error">
-                            <div *ngIf="
-                                getLocationInput(i, 'dist_id').errors.required
-                              ">
-                              District is required.
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-2">
-                        <div class="form-group">
-                          <span class="">Sector</span>
-                          <select (change)="onChangeSector(i)" class="form-control" formControlName="sect_id">
-                            <option value=""></option>
-                            <option *ngFor="let sector of sectors[i]" value="{{ sector._id }}">
-                              {{ sector.name }}
-                            </option>
-                          </select>
-                          <div *ngIf="
-                              getLocationInput(i, 'sect_id').invalid &&
-                              (getLocationInput(i, 'sect_id').dirty ||
-                                getLocationInput(i, 'sect_id').touched)
-                            " class="input-error">
-                            <div *ngIf="
-                                getLocationInput(i, 'sect_id').errors.required
-                              ">
-                              Sector is required.
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-2">
-                        <div class="form-group">
-                          <span class="">Cell</span>
-                          <select (change)="onChangeCell(i)" class="form-control" formControlName="cell_id">
-                            <option value=""></option>
-                            <option *ngFor="let cell of cells[i]" value="{{ cell._id }}">
-                              {{ cell.name }}
-                            </option>
-                          </select>
-                          <div *ngIf="
-                              getLocationInput(i, 'cell_id').invalid &&
-                              (getLocationInput(i, 'cell_id').dirty ||
-                                getLocationInput(i, 'cell_id').touched)
-                            " class="input-error">
-                            <div *ngIf="
-                                getLocationInput(i, 'cell_id').errors.required
-                              ">
-                              Cell is required.
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-2">
-                        <div class="form-group">
-                          <span class="">village</span>
-                          <select class="form-control" formControlName="village_id">
-                            <option value=""></option>
-                            <option *ngFor="let village of villages[i]" value="{{ village._id }}">
-                              {{ village.name }}
-                            </option>
-                          </select>
-                          <div *ngIf="
-                              getLocationInput(i, 'village_id').invalid &&
-                              (getLocationInput(i, 'village_id').dirty ||
-                                getLocationInput(i, 'village_id').touched)
-                            " class="input-error">
-                            <div *ngIf="
-                                getLocationInput(i, 'village_id').errors
-                                  .required
-                              ">
-                              Village is required.
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div *ngIf="!createFromPending" class="form-group col-md-12">
-                      <button (click)="removeRequest(i)" class="btn btn-danger pull-right" type="button">
-                        Remove
-                      </button>
-                    </div>
-                  </div>
-                </fieldset>
-              </div>
-            </ng-container>
-            <ng-template #onCWSLevel>
               <div class="modal-body" style="margin-top: 30px">
-                <form (ngSubmit)="onSubmit()" [formGroup]="createForm">
                   <div class="row text-muted well well-sm no-shadow" style="margin: 10px auto">
                     <div class="col-md-12">
                       <span class="land-info-title">
@@ -436,7 +265,7 @@
                           <span class="">Province</span>
                           <select class="form-control" formControlName="prov_id">
                             <option value=""></option>
-                            <option *ngFor="let province of provinces" value="{{ province._id }}">
+                            <option *ngFor="let province of treesProvinces" value="{{ province._id }}">
                               {{ province.namee }}
                             </option>
                           </select>
@@ -458,7 +287,7 @@
                           <span class="">District</span>
                           <select class="form-control" formControlName="dist_id">
                             <option value=""></option>
-                            <option *ngFor="let district of districts" value="{{ district._id }}">
+                            <option *ngFor="let district of treesDistricts" value="{{ district._id }}">
                               {{ district.name }}
                             </option>
                           </select>
@@ -480,7 +309,7 @@
                           <span class="">Sector</span>
                           <select class="form-control" formControlName="sect_id">
                             <option value=""></option>
-                            <option *ngFor="let sector of sectors" value="{{ sector._id }}">
+                            <option *ngFor="let sector of treesSectors" value="{{ sector._id }}">
                               {{ sector.name }}
                             </option>
                           </select>
@@ -502,7 +331,7 @@
                           <span class="">Cell</span>
                           <select class="form-control" formControlName="cell_id">
                             <option value=""></option>
-                            <option *ngFor="let cell of cells" value="{{ cell._id }}">
+                            <option *ngFor="let cell of treesCells" value="{{ cell._id }}">
                               {{ cell.name }}
                             </option>
                           </select>
@@ -524,7 +353,7 @@
                           <span class="">village</span>
                           <select class="form-control" formControlName="village_id">
                             <option value=""></option>
-                            <option *ngFor="let village of villages" value="{{ village._id }}">
+                            <option *ngFor="let village of treesVillages" value="{{ village._id }}">
                               {{ village.name }}
                             </option>
                           </select>
@@ -549,11 +378,11 @@
                           <div class="form-group">
                             <span class="">Province</span>
                             <select class="form-control" formControlName="prov_id">
-                              <option *ngFor="let province of provinces" value="{{ province._id }}">
+                              <option *ngFor="let province of treesProvinces" value="{{ province._id }}">
                                 {{ province.namee }}
                               </option>
                             </select>
-                            <div *ngIf="!checkIfUpiinValidZoning.prov_id" class="input-error">
+                            <div *ngIf="!checkIfUpiInValidZoning.prov_id" class="input-error">
                               <div>UPI Province not in CWS Covered Area.</div>
                             </div>
                           </div>
@@ -562,11 +391,11 @@
                           <div class="form-group">
                             <span class="">District</span>
                             <select class="form-control" formControlName="dist_id">
-                              <option *ngFor="let district of districts" value="{{ district._id }}">
+                              <option *ngFor="let district of treesDistricts" value="{{ district._id }}">
                                 {{ district.name }}
                               </option>
                             </select>
-                            <div *ngIf="!checkIfUpiinValidZoning.dist_id" class="input-error">
+                            <div *ngIf="!checkIfUpiInValidZoning.dist_id" class="input-error">
                               <div>UPI District not in CWS Covered Area.</div>
                             </div>
                           </div>
@@ -575,11 +404,11 @@
                           <div class="form-group">
                             <span class="">Sector</span>
                             <select class="form-control" formControlName="sect_id">
-                              <option *ngFor="let sector of sectors" value="{{ sector._id }}">
+                              <option *ngFor="let sector of treesSectors" value="{{ sector._id }}">
                                 {{ sector.name }}
                               </option>
                             </select>
-                            <div *ngIf="!checkIfUpiinValidZoning.sect_id" class="input-error">
+                            <div *ngIf="!checkIfUpiInValidZoning.sect_id" class="input-error">
                               <div>UPI Sector not in CWS Covered Area.</div>
                             </div>
                           </div>
@@ -588,11 +417,11 @@
                           <div class="form-group">
                             <span class="">Cell</span>
                             <select class="form-control" formControlName="cell_id">
-                              <option *ngFor="let cell of cells" value="{{ cell._id }}">
+                              <option *ngFor="let cell of treesCells" value="{{ cell._id }}">
                                 {{ cell.name }}
                               </option>
                             </select>
-                            <div *ngIf="!checkIfUpiinValidZoning.cell_id" class="input-error">
+                            <div *ngIf="!checkIfUpiInValidZoning.cell_id" class="input-error">
                               <div>UPI Cell not in CWS Covered Area.</div>
                             </div>
                           </div>
@@ -601,11 +430,11 @@
                           <div class="form-group">
                             <span class="">village</span>
                             <select class="form-control" formControlName="village_id">
-                              <option *ngFor="let village of villages" value="{{ village._id }}">
+                              <option *ngFor="let village of treesVillages" value="{{ village._id }}">
                                 {{ village.name }}
                               </option>
                             </select>
-                            <div *ngIf="!checkIfUpiinValidZoning.village_id" class="input-error">
+                            <div *ngIf="!checkIfUpiInValidZoning.village_id" class="input-error">
                               <div>UPI Village not in CWS Covered Area.</div>
                             </div>
                           </div>
@@ -779,9 +608,7 @@
                   <div class="row">
                     <div class="col-md-6"></div>
                   </div>
-                </form>
               </div>
-            </ng-template>
           </div>
         </div>
       </div>
