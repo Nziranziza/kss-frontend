@@ -59,12 +59,6 @@ export class FarmerEditComponent extends BasicComponent implements OnInit, OnDes
     this.isUserSiteManager = this.authorisationService.isSiteManager();
     this.isCWSOfficer = this.authorisationService.isCWSAdmin();
     this.isUserDCC = this.authorisationService.isDistrictCashCropOfficer();
-    /*if (this.authenticationService.getCurrentUser().orgInfo.distributionSites) {
-      this.siteService.get(this.authenticationService.getCurrentUser().orgInfo.distributionSites).subscribe((site) => {
-
-        this.site = site.content;
-      });
-    }*/
     this.organisationService.get(this.authenticationService.getCurrentUser().info.org_id).subscribe(data => {
       this.org = data.content;
     });
@@ -194,6 +188,8 @@ export class FarmerEditComponent extends BasicComponent implements OnInit, OnDes
     this.userService.isSetPinAllowed(this.farmer.userInfo.regNumber).subscribe((data) => {
       this.showSetPinButton = true;
       this.resetPin = data.content.allowedToSetPin;
+    }, error => {
+      this.showSetPinButton = false;
     });
   }
 
