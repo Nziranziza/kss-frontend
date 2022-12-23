@@ -56,7 +56,7 @@ export class FarmerDetailsComponent implements OnInit {
         this.totalTrees = this.farmer.request.requestInfo.reduce( function(tot, record) {
           return tot + record.numberOfTrees;
         },0);
-        
+
       } else {
         this.requests = [this.farmer.request.requestInfo];
         this.totalTrees = this.farmer.request.requestInfo.numberOfTrees
