@@ -27,7 +27,7 @@
       <div class="stats-box">
         <div class="row">
           <div class="col-xs-10">
-            <div class="stats-box-text-header">Provided Seeds</div>
+            <div class="stats-box-text-header">Seeds Quantity</div>
           </div>
           <div class="col-xs-2"></div>
         </div>
@@ -96,7 +96,9 @@
               <th>Cell</th>
               <th>Village</th>
               <th>Seedlings Variety</th>
-              <th>Seeds Amount</th>
+              <th>Seeds Quantity</th>
+              <th>Pricked Out Quantity</th>
+              <th>Distributed Quantity</th>
               <th>Status</th>
               <th class="text-center">Actions</th>
             </tr>
@@ -107,13 +109,15 @@
                 <td>{{ nursery.createdAt | date: "short" }}</td>
                 <td>{{ nursery.nurseryName }}</td>
                 <td>{{ nursery.owner.name }}</td>
-                <td>{{ nursery.location.prov_id.name }}</td>
+                <td>{{ nursery.location.prov_id.name || nursery.location.prov_id.namek | titlecase }}</td>
                 <td>{{ nursery.location.dist_id.name }}</td>
                 <td>{{ nursery.location.sect_id.name }}</td>
                 <td>{{ nursery.location.cell_id.name }}</td>
                 <td>{{ nursery.location.village_id.name }}</td>
                 <td>{{ nursery.stocks.length }} Variety</td>
-                <td>{{ nursery.stockQty }} Kg</td>
+                <td>{{ nursery.stockQty | number }} Kg</td>
+                <td>{{ nursery.prickedQty | number }}</td>
+                <td>{{ nursery.distributedQty | number }}</td>
                 <td>{{ nursery.status || "Active" }}</td>
                 <td class="text-center">
                   <button appRequiredSeason class="btn btn-action-no-border btn-margin details-button"

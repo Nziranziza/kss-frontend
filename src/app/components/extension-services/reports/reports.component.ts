@@ -44,7 +44,8 @@ export class ReportsComponent extends BasicComponent implements OnInit {
     super(locationService, organisationService);
   }
 
-  loading = false;
+  statsLoading = false;
+  reportLoading = false;
   reportForm: FormGroup;
   @ViewChild('orgAuto') orgAuto: any;
   dtOptions: DataTables.Settings = {};
@@ -140,10 +141,10 @@ export class ReportsComponent extends BasicComponent implements OnInit {
   }
 
   getTrainings(): void {
-    this.loading = true;
+    this.statsLoading = true;
     this.trainingService.all().subscribe((data) => {
       this.trainings = data.data;
-      this.loading = false;
+      this.statsLoading = false;
     });
   }
 
@@ -293,7 +294,9 @@ export class ReportsComponent extends BasicComponent implements OnInit {
             this.reportForm.get('filter') as FormGroup,
             value
           );
-          this.siteService
+
+          if(value) {
+            this.siteService
             .getZone({ prov_id: value, searchBy: 'province' })
             .subscribe((data) => {
               if (data) {
@@ -306,6 +309,8 @@ export class ReportsComponent extends BasicComponent implements OnInit {
                 });
               }
             });
+          }
+          
           this.filterHeader.location = {
             prov_id: '',
             dist_id: '',
@@ -333,7 +338,8 @@ export class ReportsComponent extends BasicComponent implements OnInit {
           this.reportForm.get('filter') as FormGroup,
           value
         );
-        this.siteService
+        if(value) {
+          this.siteService
           .getZone({ dist_id: value, searchBy: 'district' })
           .subscribe((data) => {
             if (data) {
@@ -346,6 +352,7 @@ export class ReportsComponent extends BasicComponent implements OnInit {
               });
             }
           });
+        }
         this.filterHeader.location = {
           prov_id: this.filterHeader.location.prov_id,
           dist_id: '',
@@ -528,6 +535,7 @@ export class ReportsComponent extends BasicComponent implements OnInit {
   }
 
   getStats() {
+    this.statsLoading = true
     const value = this.reportForm.get('reportFor').value;
     let body = this.getLocation();
     const form = JSON.parse(JSON.stringify(this.reportForm.value));
@@ -541,6 +549,7 @@ export class ReportsComponent extends BasicComponent implements OnInit {
       this.reportBody = body;
       this.reportService.groupStats(body).subscribe((data) => {
         this.stats = data.data[0];
+        this.statsLoading = false
       });
     } else if (value === 'Trainings') {
       const date = form.filter.date;
@@ -587,6 +596,7 @@ export class ReportsComponent extends BasicComponent implements OnInit {
           maleNumberOfAttendedTrainees,
           femaleNumberOfAttendedTrainees,
         };
+        this.statsLoading = false
       });
     } else if (value === 'Farm Visits') {
       const date = form.filter.date;
@@ -604,6 +614,7 @@ export class ReportsComponent extends BasicComponent implements OnInit {
       this.reportBody = body;
       this.reportService.visitStats(body).subscribe((data) => {
         this.stats = data.data[0];
+        this.statsLoading = false
       });
     } else if (value === 'Coffee Farmers') {
       body = {
@@ -614,6 +625,7 @@ export class ReportsComponent extends BasicComponent implements OnInit {
       this.reportBody = body;
       this.reportService.farmStats(body).subscribe((data) => {
         this.stats = data.data;
+        this.statsLoading = false
       });
     } else if (value === 'Coffee Farms') {
       body = {
@@ -624,6 +636,7 @@ export class ReportsComponent extends BasicComponent implements OnInit {
       this.reportBody = body;
       this.reportService.farmStats(body).subscribe((data) => {
         this.stats = data.data;
+        this.statsLoading = false
       });
     } else if (value === "Nurseries") {
       body = {
@@ -633,6 +646,7 @@ export class ReportsComponent extends BasicComponent implements OnInit {
       this.reportBody = body;
       this.reportService.nurseriesStats(body).subscribe((data) => {
         this.stats = data.data;
+        this.statsLoading = false
       });
     }
   }
@@ -642,6 +656,7 @@ export class ReportsComponent extends BasicComponent implements OnInit {
   }
 
   generateReport() {
+    this.reportLoading = true;
     if (this.reportForm.value.reportFor === 'Farmer Groups') {
       this.reportsTableData = [];
       const dataNames: any = this.filterHeader;
@@ -650,12 +665,14 @@ export class ReportsComponent extends BasicComponent implements OnInit {
       this.reportService.groupSummary(this.reportBody).subscribe((data) => {
         this.reportsTableData = data.data;
         this.reportGenerated = true;
+        this.reportLoading = false;
       });
     } else if (this.reportForm.value.reportFor === 'Trainings') {
       this.reportsTableData = [];
       this.reportService.trainingSummary(this.reportBody).subscribe((data) => {
         this.reportsTableData = data.data;
         this.reportGenerated = true;
+        this.reportLoading = false;
       });
     } else if (this.reportForm.value.reportFor === 'Farm Visits') {
       this.reportsTableData = [];
@@ -665,6 +682,7 @@ export class ReportsComponent extends BasicComponent implements OnInit {
       this.reportService.visitSummary(this.reportBody).subscribe((data) => {
         this.reportsTableData = data.data;
         this.reportGenerated = true;
+        this.reportLoading = false;
       });
     } else if (this.reportForm.value.reportFor === 'Coffee Farmers') {
       this.reportsTableData = [];
@@ -675,6 +693,7 @@ export class ReportsComponent extends BasicComponent implements OnInit {
       this.reportService.farmSummary(this.reportBody).subscribe((data) => {
         this.reportsTableData = data.data;
         this.reportGenerated = true;
+        this.reportLoading = false;
       });
     } else if (this.reportForm.value.reportFor === 'Coffee Farms') {
       this.reportsTableData = [];
@@ -685,6 +704,7 @@ export class ReportsComponent extends BasicComponent implements OnInit {
       this.reportService.farmSummary(this.reportBody).subscribe((data) => {
         this.reportsTableData = data.data;
         this.reportGenerated = true;
+        this.reportLoading = false;
       });
     } else if (this.reportForm.value.reportFor === "Nurseries") {
       this.reportsTableData = [];
@@ -698,6 +718,9 @@ export class ReportsComponent extends BasicComponent implements OnInit {
           this.reportsTableData = data.data.map(
             ({ owner, createdAt, nurseryName, location, stocks, status }) => {
               const varieties = stocks.length;
+              const amount = stocks.reduce((acc, curr) => acc + (curr.seeds || 0), 0);
+              const prickedQty = stocks.reduce((acc, curr) => acc + (curr.prickedQty || 0), 0);
+              const remainingQty = stocks.reduce((acc, curr) => acc + (curr.remainingQty || 0), 0);
               return {
                 owner: owner?.name,
                 createdAt,
@@ -710,12 +733,15 @@ export class ReportsComponent extends BasicComponent implements OnInit {
                 variety: varieties
                   ? `${varieties} ${varieties === 1 ? "variety" : "varieties"}`
                   : "No variety",
-                amount: stocks.reduce((acc, curr) => acc + curr.seeds, 0),
+                amount,
                 status: status || "Active",
+                prickedQty,
+                distributedQty: prickedQty - remainingQty
               };
             }
           );
           this.reportGenerated = true;
+          this.reportLoading = false;
         });
     }
   }
