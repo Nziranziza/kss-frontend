@@ -89,10 +89,26 @@ export class NurseryListComponent
     const body = !this.authorisationService.isTechnoServeAdmin() ?
       this.authenticationService.getCurrentUser().info.org_id : '';
     this.seedlingService.all(body).subscribe((data) => {
-      this.nurseries = data.data.map((nursery) => ({
-        ...nursery,
-        stockQty: nursery.stocks.reduce((acc, curr) => acc + curr.seeds, 0)
-      }));
+      this.nurseries = data.data.map((nursery) => {
+        const prickedQty = nursery.stocks.reduce(
+          (acc, curr) => acc + (curr.prickedQty || 0),
+          0
+        );
+        const remainingQty = nursery.stocks.reduce(
+          (acc, curr) => acc + (curr.remainingQty || 0),
+          0
+        );
+        const distributedQty = prickedQty - remainingQty;
+        return {
+          ...nursery,
+          stockQty: nursery.stocks.reduce(
+            (acc, curr) => acc + (curr.seeds || 0),
+            0
+          ),
+          prickedQty,
+          distributedQty,
+        };
+      });
       deletetrigger ? " " : this.dtTrigger.next();
       this.loading = false;
     });

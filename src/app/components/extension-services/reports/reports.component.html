@@ -117,7 +117,8 @@
             *ngIf="
               reportForm.value.reportFor !== 'Farmer Groups' &&
               reportForm.value.reportFor !== 'Coffee Farmers' &&
-              reportForm.value.reportFor !== 'Coffee Farms'
+              reportForm.value.reportFor !== 'Coffee Farms' &&
+              reportForm.value.reportFor !== 'Nurseries'
             "
           >
             <div class="ng-autocomplete">
@@ -222,7 +223,7 @@
             </div>
           </div>
         </span>
-        <span *ngIf="reportForm.value.reportFor !== ''">
+        <span *ngIf="reportForm.value.reportFor !== '' && !statsLoading">
           <div class="col-xs-12 text-center" style="margin-top: 10px">
             <button
               class="btn btn-default"
@@ -243,53 +244,56 @@
                              Box with Report Summary
   ------------------------------------------------------------------------------
 -->
-<div class="summary-box">
+<div *ngIf="statsLoading" style="margin-top: 20px; margin-bottom: 20px">
+  <app-loader></app-loader>
+</div>
+<div *ngIf="!statsLoading" class="summary-box">
   <h3 class="text-center">{{ reportForm.value.reportFor }}</h3>
   <div class="row" style="margin-top: -15px">
     <span *ngIf="reportForm.value.reportFor === 'Farmer Groups'">
       <div class="col-sm-6 text-center">
         <h4>Total Groups</h4>
-        <h3>{{ stats?.numberOfGroups || 0 }}</h3>
+        <h3>{{ stats?.numberOfGroups || 0 | number }}</h3>
       </div>
       <div class="col-sm-6 text-center">
         <h4>Total Members</h4>
-        <h3>{{ stats?.numberOfMembers || 0 }}</h3>
+        <h3>{{ stats?.numberOfMembers || 0 | number }}</h3>
       </div>
     </span>
     <span *ngIf="reportForm.value.reportFor === 'Trainings'">
       <div class="col-sm-6 text-center">
         <h4>Total Trainees</h4>
-        <h3>{{ stats?.numberOfTrainees || 0 }}</h3>
+        <h3>{{ stats?.numberOfTrainees || 0 | number }}</h3>
         <div class="col-sm-6 text-center">
           <h4>Male</h4>
-          <h3>{{ stats?.totalMales || 0 }}</h3>
+          <h3>{{ stats?.totalMales || 0 | number }}</h3>
         </div>
         <div class="col-sm-6 text-center">
           <h4>Female</h4>
-          <h3>{{ stats?.totalFemales || 0 }}</h3>
+          <h3>{{ stats?.totalFemales || 0 | number }}</h3>
         </div>
       </div>
       <div class="col-sm-6 text-center">
         <h4>Total Attended Trainees</h4>
-        <h3>{{ stats?.numberOfAttendedTrainees || 0 }}</h3>
+        <h3>{{ stats?.numberOfAttendedTrainees || 0 | number }}</h3>
         <div class="col-sm-6 text-center">
           <h4>Male</h4>
-          <h3>{{ stats?.maleNumberOfAttendedTrainees || 0 }}</h3>
+          <h3>{{ stats?.maleNumberOfAttendedTrainees || 0 | number }}</h3>
         </div>
         <div class="col-sm-6 text-center">
           <h4>Female</h4>
-          <h3>{{ stats?.femaleNumberOfAttendedTrainees || 0 }}</h3>
+          <h3>{{ stats?.femaleNumberOfAttendedTrainees || 0 | number }}</h3>
         </div>
       </div>
     </span>
     <span *ngIf="reportForm.value.reportFor === 'Farm Visits'">
       <div class="col-sm-6 text-center">
         <h4>Total Visits</h4>
-        <h3>{{ stats?.numberOfFarmVisits || 0 }}</h3>
+        <h3>{{ stats?.numberOfFarmVisits || 0 | number }}</h3>
       </div>
       <div class="col-sm-6 text-center">
         <h4>Total Visited Farmers</h4>
-        <h3>{{ stats?.numberOfFarmVisits || 0 }}</h3>
+        <h3>{{ stats?.numberOfFarmVisits || 0 | number }}</h3>
       </div>
     </span>
 
@@ -298,8 +302,8 @@
         <h4>Total Farmers</h4>
         <h3>
           {{
-            stats?.statistics?.male?.farmers +
-              stats?.statistics?.female?.farmers || 0
+            stats?.statistics?.male?.size +
+              stats?.statistics?.female?.size || 0 | number
           }}
         </h3>
       </div>
@@ -309,7 +313,7 @@
         <h3>
           {{
             stats?.statistics?.male?.numberOfTrees +
-              stats?.statistics?.female?.numberOfTrees || 0
+              stats?.statistics?.female?.numberOfTrees || 0 | number
           }}
         </h3>
       </div>
@@ -321,7 +325,7 @@
         <h3>
           {{
             stats?.statistics?.male?.numberOfLands +
-              stats?.statistics?.female?.numberOfLands || 0
+              stats?.statistics?.female?.numberOfLands || 0 | number
           }}
         </h3>
       </div>
@@ -331,7 +335,7 @@
         <h3>
           {{
             stats?.statistics?.male?.numberOfTrees +
-              stats?.statistics?.female?.numberOfTrees || 0
+              stats?.statistics?.female?.numberOfTrees || 0 | number
           }}
         </h3>
       </div>
@@ -342,12 +346,12 @@
         <h3>{{ stats.sites | number }}</h3>
       </div>
       <div class="col-sm-2 text-center">
-        <h4>Provided Seeds</h4>
-        <h3>{{ stats.providedQty | number }}</h3>
+        <h4>Seeds Quantity</h4>
+        <h3>{{ stats.providedQty | number }} kg</h3>
       </div>
       <div class="col-sm-2 text-center">
         <h4>Expected Seedlings</h4>
-        <h3>{{ stats.expectedQty | number }} Kg</h3>
+        <h3>{{ stats.expectedQty | number }}</h3>
       </div>
       <div class="col-sm-2 text-center">
         <h4>Pricked out Seedlings</h4>
@@ -394,7 +398,10 @@
                           Different tables of all report
   ----------------------------------------------------------------------------
 -->
-<div class="box" id="downloadFile">
+<div *ngIf="reportLoading" style="margin-top: 20px; margin-bottom: 20px">
+  <app-loader></app-loader>
+</div>
+<div *ngIf="!reportLoading" class="box" id="downloadFile">
   <div class="box-header" *ngIf="reportsTableData.length > 0">
     <img src="assets/dist/img/sks/tecnoserve.png" style="width: 140px" />
   </div>
@@ -436,7 +443,7 @@
             {{ schedule.trainees.NID ? getAge(schedule.trainees.NID) : "-" }}
           </td>
           <td>{{ schedule.trainingId.trainingName }}</td>
-          <td>{{ schedule.startTime | date : "short" }}</td>
+          <td>{{ schedule.startTime | date : "M/d/yy, hh:mm a" }}</td>
           <td>
             {{ schedule.venueName }}
           </td>
@@ -456,7 +463,6 @@
       reportsTableData.length > 0
     "
   >
-    <app-loader *ngIf="loading"></app-loader>
     <table
       datatable
       [dtOptions]="dtOptions"
@@ -468,34 +474,37 @@
           <th>Date added</th>
           <th>Group name</th>
           <th>Leader names</th>
-          <th>Leader Contact</th>
+          <th>Leader phone number</th>
+          <th>Group size</th>
+          <th>Meeting Day</th>
           <th>Province</th>
           <th>District</th>
           <th>Sector</th>
           <th>Cell</th>
           <th>Village</th>
-          <th>Group size</th>
-          <th>Meeting Day</th>
+          <th>Status</th>
         </tr>
       </thead>
       <tbody>
         <ng-container *ngFor="let group of reportsTableData">
           <tr style="text-transform: capitalize">
-            <td>{{ group.createdAt | date : "y/LL/d - h:mm" }}</td>
+            <td>{{ group.createdAt | date : "M/d/yy, hh:mm a" }}</td>
             <td>{{ group.groupName }}</td>
             <td>{{ group.leaderNames }}</td>
             <td>{{ group.leaderPhoneNumber }}</td>
-            <td>{{ group.location.prov_id?.namek.toLowerCase() }}</td>
-            <td>{{ group.location.dist_id?.name }}</td>
-            <td>{{ group.location.sect_id?.name }}</td>
-            <td>{{ group.location.cell_id?.name }}</td>
-            <td>{{ group.location.village_id?.name }}</td>
             <td>
               <span>{{ group.members.length + " " + "farmers" }}</span>
             </td>
             <td>
               {{ weekDays[group.meetingSchedule?.meetingDay - 1] }}
             </td>
+            <td>{{ group.location.prov_id?.namek.toLowerCase() }}</td>
+            <td>{{ group.location.dist_id?.name }}</td>
+            <td>{{ group.location.sect_id?.name }}</td>
+            <td>{{ group.location.cell_id?.name }}</td>
+            <td>{{ group.location.village_id?.name }}</td>
+            
+            <td>{{ group.status }}</td>
           </tr>
         </ng-container>
       </tbody>
@@ -508,7 +517,6 @@
       reportsTableData.length > 0
     "
   >
-    <app-loader *ngIf="loading"></app-loader>
     <table
       datatable
       [dtOptions]="dtOptions"
@@ -533,7 +541,7 @@
       <tbody>
         <ng-container *ngFor="let visit of reportsTableData">
           <tr>
-            <td>{{ visit.createdAt | date : "short" }}</td>
+            <td>{{ visit.createdAt | date : "M/d/yy, hh:mm a" }}</td>
             <td>{{ visit.farm.upiNumber }}</td>
             <td>{{ visit.owner.lastName + " " + visit.owner.firstName }}</td>
             <td>{{ visit.farm.location.prov_id.namek.toLowerCase() }}</td>
@@ -563,7 +571,6 @@
       reportsTableData.length > 0
     "
   >
-    <app-loader *ngIf="loading"></app-loader>
     <table
       datatable
       [dtOptions]="dtOptions"
@@ -641,7 +648,6 @@
       reportsTableData.length > 0
     "
   >
-    <app-loader *ngIf="loading"></app-loader>
     <table
       datatable
       [dtOptions]="dtOptions"
@@ -650,29 +656,21 @@
     >
       <thead>
         <tr>
-          <th>Farmer names</th>
-          <th>Reg Number</th>
           <th>UPI Number</th>
           <th>Province</th>
           <th>District</th>
           <th>Sector</th>
           <th>Cell</th>
           <th>Village</th>
-          <th>Status</th>
           <th>Total Trees</th>
+          <th>Status</th>
+          <th>Reg Number</th>
+          <th>Owner names</th>
         </tr>
       </thead>
       <tbody>
         <ng-container *ngFor="let data of reportsTableData">
           <tr *ngFor="let farm of data.requestInfo">
-            <td>
-              {{
-                data?.userInfo?.type === 2
-                  ? data?.userInfo?.groupName
-                  : data?.userInfo?.foreName + " " + data.userInfo?.surname
-              }}
-            </td>
-            <td>{{ data?.userInfo?.regNumber }}</td>
             <td>{{ farm.upiNumber }}</td>
             <td>
               {{ farm.location.prov_id.namek.toLowerCase() }}
@@ -689,10 +687,18 @@
             <td>
               {{ farm.location.village_id.name }}
             </td>
+            <td>{{ farm?.numberOfTrees }}</td>
             <td>
               {{ farm.status ? farm.status : "active" }}
             </td>
-            <td>{{ farm?.numberOfTrees }}</td>
+            <td>{{ data?.userInfo?.regNumber }}</td>
+            <td>
+              {{
+                data?.userInfo?.type === 2
+                  ? data?.userInfo?.groupName
+                  : data?.userInfo?.foreName + " " + data.userInfo?.surname
+              }}
+            </td>
           </tr>
         </ng-container>
       </tbody>
@@ -704,7 +710,6 @@
       reportForm.value.reportFor === 'Nurseries' && reportsTableData.length > 0
     "
   >
-    <app-loader *ngIf="loading"></app-loader>
     <table
       datatable
       [dtOptions]="dtOptions"
@@ -722,7 +727,9 @@
           <th>Cell</th>
           <th>Village</th>
           <th>variety</th>
-          <th>Seeds Amount</th>
+          <th>Seeds Quantity</th>
+          <th>Pricked out Seedlings</th>
+          <th>Distributed Seedlings</th>
           <th>Status</th>
         </tr>
       </thead>
@@ -730,12 +737,12 @@
         <ng-container *ngFor="let data of reportsTableData">
           <tr>
             <td>
-              {{ data?.createdAt | date: "short" }}
+              {{ data?.createdAt | date: "M/d/yy, hh:mm a" }}
             </td>
             <td>{{ data?.name }}</td>
             <td>{{ data?.owner }}</td>
             <td>
-              {{ data?.province }}
+              {{ data?.province | titlecase }}
             </td>
             <td>
               {{ data?.district }}
@@ -752,7 +759,9 @@
             <td>
               {{ data?.variety }}
             </td>
-            <td>{{ data?.amount }}</td>
+            <td>{{ data?.amount | number }} kg</td>
+            <td>{{ data?.prickedQty | number }}</td>
+            <td>{{ data?.distributedQty | number }}</td>
             <td>{{ data?.status }}</td>
           </tr>
         </ng-container>
