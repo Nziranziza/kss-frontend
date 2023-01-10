@@ -6,9 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./footernavbar.component.css']
 })
 export class FooternavbarComponent implements OnInit {
-
   constructor() { }
-
   ngOnInit() {
   }
 

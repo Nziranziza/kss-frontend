@@ -75,7 +75,7 @@ export class UserEditComponent implements OnInit {
       sex: ['', Validators.required],
       NID: [{value: '', disabled: true}],
       org_id: [''],
-      userType: [{value: '', disabled: (!this.authorisationService.isTechouseAdmin() && !this.authorisationService.isNaebAdmin()) }],
+      userType: [{value: '', disabled: (!this.authorisationService.isAdmin()) }],
       userRoles: new FormArray([]),
       location: this.formBuilder.group({
         prov_id: [''],
@@ -201,7 +201,7 @@ export class UserEditComponent implements OnInit {
           return {name: key, value: dt.content[key]};
         });
         this.userTypes = [...this.userTypes, ...temp].filter((v, i, a) => a.findIndex(t => (t.name === v.name)) === i);
-        if ((!this.authorisationService.isNaebAdmin()) && (!this.authorisationService.isTechouseUser()) ) {
+        if ((!this.authorisationService.isAdmin())) {
           const index = this.userTypes.findIndex(v => v.name === 'ADMIN');
           if (index > -1) {
             this.userTypes.splice(index, 1);
@@ -262,7 +262,7 @@ export class UserEditComponent implements OnInit {
               return {name: key, value: dt.content[key]};
             });
             this.userTypes = [...this.userTypes, ...temp].filter((v, i, a) => a.findIndex(t => (t.name === v.name)) === i);
-            if ((!this.authorisationService.isNaebAdmin()) && (!this.authorisationService.isTechouseUser()) ) {
+            if (!this.authorisationService.isAdmin()) {
               const index = this.userTypes.findIndex(v => v.name === 'ADMIN');
               if (index > -1) {
                 this.userTypes.splice(index, 1);

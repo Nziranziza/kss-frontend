@@ -271,7 +271,7 @@ export class UserCreateComponent implements OnInit {
             if (
               (!this.authorisationService.isNaebAdmin()) &&
               (!this.authorisationService.isTechouseUser()) &&
-              (!this.authorisationService.isTecnoserveUser())
+              (!this.authorisationService.isTechnoServeUser())
             ) {
               const index = this.userTypes.findIndex(v => v.name === 'ADMIN');
               if (index > -1) {

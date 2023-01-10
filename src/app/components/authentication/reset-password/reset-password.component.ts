@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {AuthenticationService} from '../../../core/services';
+import {AuthenticationService} from '../../../core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {HelperService} from '../../../core/helpers';
+import {HelperService} from '../../../core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {MessageService} from '../../../core/services';
-import {BasicComponent} from '../../../core/library';
+import {MessageService} from '../../../core';
+import {BasicComponent} from '../../../core';
 
 declare var $;
 
