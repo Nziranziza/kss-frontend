@@ -303,7 +303,7 @@
         <h3>
           {{
             stats?.statistics?.male?.size +
-              stats?.statistics?.female?.size || 0 | number
+              stats?.statistics?.female?.size + stats?.statistics?.group?.size || 0 | number
           }}
         </h3>
       </div>

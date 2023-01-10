@@ -18,6 +18,15 @@ export class SmsDashboardComponent implements OnInit {
   createOrder: FormGroup;
   smsOrders: any[] = [];
   smsBalance: any = { balance: 0, rate: 10 };
+  smsHistory: any = {
+    meta: {
+      summary: [],
+    },
+  };
+  statuses = {
+    DELIVERED: "DELIVERED",
+    FAILED: "FAILED",
+  };
 
   ngOnInit(): void {
     this.createOrder = this.formBuilder.group({
@@ -29,6 +38,7 @@ export class SmsDashboardComponent implements OnInit {
     );
     this.getBalance();
     this.getOrders();
+    this.getSmsHistory();
   }
 
   getBalance(): any {
@@ -45,6 +55,22 @@ export class SmsDashboardComponent implements OnInit {
       .subscribe((data) => {
         this.smsOrders = data.data;
       });
+  }
+
+  getSmsHistory() {
+    this.smsService.getSmsHistory().subscribe(({ data }) => {
+      this.smsHistory = {
+        ...data,
+        meta: {
+          ...data?.meta,
+          summary: data?.meta?.summary.filter(
+            ({ status }) =>
+              status === this.statuses.DELIVERED ||
+              status === this.statuses.FAILED
+          ),
+        },
+      };
+    });
   }
 
   orderSms(): void {
