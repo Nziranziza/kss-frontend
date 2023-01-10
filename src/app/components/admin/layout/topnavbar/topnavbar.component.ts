@@ -52,12 +52,7 @@ export class TopnavbarComponent implements OnInit {
       this.currentSeason = this.authenticationService.getCurrentSeason();
     });
   }
-  // ngAfterViewInit(): void {
-  //   this.seasonService.all().subscribe((data) => {
-  //     this.seasons = data.content;
-  //     this.currentSeason = this.authenticationService.getCurrentSeason();
-  //   });
-  // }
+
 
   changeSeason(season: string) {
     const body = {

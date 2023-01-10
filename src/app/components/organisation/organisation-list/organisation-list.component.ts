@@ -105,7 +105,7 @@ export class OrganisationListComponent extends BasicComponent implements OnInit,
           }
         }
       });
-    } else if (this.authorisationService.isPartner()) {
+    } else if (this.authorisationService.isTechnoServeUser()) {
       this.organisationService.getPartners(this.authenticationService.getCurrentUser().info.org_id).subscribe(data => {
         if (data) {
           this.organisations = data.content;

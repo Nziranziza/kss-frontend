@@ -40,7 +40,7 @@ export class ConfirmDispatchComponent implements OnInit {
     this.dispatch.entries.forEach((entry) => {
       temp.push({
         entryId : entry._id,
-        receivedQty: (entry.numberOfItems *  entry.quantityPerItem),
+        receivedQty: (entry.numberOfItems * entry.quantityPerItem),
         comment: ''
       });
       this.addEntry();
