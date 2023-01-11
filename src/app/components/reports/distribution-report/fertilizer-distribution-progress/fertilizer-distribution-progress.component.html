@@ -114,10 +114,15 @@
                     (click)="exportAsXLSX()"><i
               class="fa fa-download"></i> Summary
             </button>
-            <button type="button" class="btn btn-default pull-right" (click)="downloadDetails()"
+            <button type="button" class="btn btn-default pull-right btn-margin" (click)="downloadDetails()"
                     [disabled]="!downloadDetailedEnabled">
               <app-downloading *ngIf="downloading"></app-downloading>
               Detailed xls
+            </button>
+            <button type="button" class="btn btn-default pull-right" (click)="downloadPdf()"
+                    [disabled]="!downloadDetailedEnabled">
+              <app-downloading *ngIf="pdfDownloading"></app-downloading>
+              Detailed pdf
             </button>
           </div>
           <div class="col-xs-12" *ngIf="showData">
