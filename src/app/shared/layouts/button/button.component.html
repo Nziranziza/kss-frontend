@@ -1,0 +1,4 @@
+<button *ngIf="!loading else loadingTemplate" (click)="handleClick()" [ngClass]="btClass">{{text}}</button>
+<ng-template #loadingTemplate>
+    
+</ng-template>

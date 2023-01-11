@@ -1,0 +1,152 @@
+/* || Main Wrapper and Homepage styles */
+
+.content-wrapper,
+.login-page {
+  background-color: $light-color;
+}
+
+.skin-blue {
+
+  .sidebar a {
+    color: $primary-color !important;
+  }
+
+  .wrapper {
+    background-color: #EAE4E2;
+  }
+
+  .main-header {
+
+    .sidebar-toggle:hover,
+    .navbar,
+    li.user-header,
+    .logo {
+      background-color: $primary-color !important;
+    }
+  }
+}
+
+/* Homepage Styles */
+
+.home {
+  min-height: 100%;
+  background: $background-image-url no-repeat center center fixed;
+  background-size: cover;
+
+  .logo {
+    @include logo-styles;
+  }
+
+  .logo-title {
+    width: min-content;
+    margin: 0 auto;
+  }
+
+  &>.container {
+    min-height: 780px;
+  }
+}
+
+.profile {
+  &-label {
+    display: inline;
+    font-weight: 700;
+    line-height: 1;
+    white-space: nowrap;
+    vertical-align: baseline;
+  }
+
+  &-text {
+    margin-left: 15px;
+  }
+}
+
+/* ---------------------------------------------------------------- Main Background ---------- */
+
+.content {
+  background-color: $light-color 0% 0% no-repeat padding-box;
+  text-transform: capitalize;
+
+  &-wrapper {
+    text-transform: lowercase;
+  }
+}
+
+
+div {
+  text-transform: capitalize;
+
+  .wrapper {
+    background-color: $semi-dark-color;
+  }
+}
+
+.text-capitalize {
+  text-transform: capitalize;
+}
+
+@media (max-width:480px) {
+
+  .stats-box .stats-box-text-header,
+  .stats-box .stats-box-text-item {
+    text-align: center;
+  }
+}
+
+.no-gutter {
+
+  .row,
+  .container,
+  .container-fluid {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+}
+
+@media (min-width:1000px) {
+  .no-gutter>[class^="col-"] {
+    padding-left: 0;
+    padding-right: 5px;
+  }
+}
+
+@media (max-width:1000px) {
+  .no-gutter>[class^="col-"] {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+
+/* || END LOGIN PAGES */
+
+html,
+body {
+  height: 100% !important;
+  color: #000000;
+  top: 0 !important;
+}
+
+.list-sub-header {
+  font-style: italic;
+  font-size: 6px;
+  color: #dedede;
+}
+
+
+h3 {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.top-col-statistics {
+  padding-right: 0;
+  padding-left: 0;
+  margin-bottom: 15px;
+}
+
+.col-centered {
+  float: none;
+  margin: 0 auto;
+}

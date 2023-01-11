@@ -1,0 +1,89 @@
+@import '../shared/_colors.scss';
+@import '../shared/_mixins.scss';
+@import '../shared/_variables.scss';
+
+/*------------------------------------- custom tabs ----------------------------------*/
+
+.custom-tabs {
+  .nav-tabs {
+    border-bottom: 1px solid $semi-grey-color;
+
+    &>li {
+      width: 20%;
+      text-align: center;
+      margin-bottom: 0px;
+
+      &.active {
+        &>a {
+          background: $semi-grey-color;
+          border-width: 1px;
+        }
+      }
+
+      &>a {
+        border: none;
+        color: $greyish-color;
+        background: $light-color;
+
+        &:hover {
+          border: none;
+          color: $greyish-color !important;
+          background: $semi-grey-color;
+        }
+
+        &::after {
+          background: $light-color;
+          height: 1px;
+          position: absolute;
+          width: 100%;
+          left: 0px;
+          bottom: -1px;
+          transition: all 250ms ease 0s;
+          transform: scale(0);
+        }
+      }
+
+      &:hover {
+        &>a::after {
+          transform: scale(1);
+        }
+      }
+    }
+  }
+
+  .tab-nav {
+    &>li {
+      &>a::after {
+        background: $semi-grey-color none repeat scroll 0% 0%;
+        color: $light-color;
+      }
+    }
+  }
+
+  .tab-pane {
+    padding: 15px 0;
+  }
+
+  .tab-content {
+    padding: 20px;
+  }
+
+  .card {
+    background: $light-color none repeat scroll 0% 0%;
+    margin-bottom: 30px;
+  }
+}
+
+.navbar-default .navbar-toggle {
+  color: $primary-color !important;
+  background-color: $light-color !important;
+}
+
+
+
+@media all and (max-width: 724px) {
+
+  .custom-tabs .nav-tabs>li>a {
+    padding: 5px 5px;
+  }
+}

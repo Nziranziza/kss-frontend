@@ -12,15 +12,15 @@
 @import url("assets/dist/css/AdminLTE.min.css");
 @import url("assets/dist/css/skins/_all-skins.min.css");
 @import "~ng-pick-datetime-ex/assets/style/picker.min.css";
-@import url("assets/dist/css/styles/nav.css");
-@import url("assets/dist/css/styles/positions.css");
-@import url("assets/dist/css/styles/screens.css");
-@import url("assets/dist/css/styles/sections.css");
-@import url("assets/dist/css/styles/sidebar.css");
-@import url("assets/dist/css/styles/tables.css");
-@import url("assets/dist/css/styles/texts.css");
-@import url("assets/dist/css/styles/forms.css");
-@import url("assets/dist/css/styles/buttons.css");
-@import url("assets/dist/css/styles/modals.css");
-@import url("assets/dist/css/_base.css");
+@import "./assets/dist/sass/styles/box.scss";
+@import "./assets/dist/sass/styles/forms.scss";
+@import "./assets/dist/sass/styles/navs.scss";
+@import "./assets/dist/sass/styles/tables.scss";
+@import "./assets/dist/sass/styles/buttons.scss";
+@import "./assets/dist/sass/styles/loaders.scss";
+@import "./assets/dist/sass/styles/modals.scss";
+@import "./assets/dist/sass/styles/alerts.scss";
+@import "./assets/dist/sass/styles/pagination.scss";
+@import "./assets/dist/sass/styles/layout.scss";
+@import "./assets/dist/sass/_base.scss";
 

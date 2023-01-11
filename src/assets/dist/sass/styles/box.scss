@@ -1,0 +1,142 @@
+@import '../shared/_colors.scss';
+@import '../shared/_mixins.scss';
+@import '../shared/_variables.scss';
+
+/* Login Page */
+
+.login-box {
+  width: 427px;
+  margin: 4% auto;
+  font-size: 17px;
+
+  &-body {
+    background-color: transparent;
+  }
+
+  &-msg {
+    margin: 10px 0;
+    font-weight: bolder;
+    color: $dark-color;
+  }
+
+  &-body {
+    .action-button {
+      color: $secondary-color;
+      font-weight: bolder;
+    }
+  }
+
+  &-link {
+    color: $primary-color;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 16px;
+
+    a {
+      color: $primary-color;
+
+      &:hover {
+        color: $secondary-color;
+      }
+    }
+  }
+
+  input.form-control {
+    border: 2px solid $primary-color !important;
+    border-radius: 3px !important;
+  }
+
+  .action-button {
+    text-transform: uppercase;
+    background-color: $primary-color;
+    border-color: $primary-color;
+    color: $light-color !important;
+
+    &:active,
+    &:hover {
+      background-color: $primary-color;
+      border-color: $primary-color;
+      color: $light-color !important;
+    }
+  }
+}
+
+/* Stats Box */
+
+/*----------------------------------------Dashboard Statistics--------------------------------------*/
+
+.stats {
+  &-section {
+    background: transparent linear-gradient(180deg, $secondary-color 0%, $light-color 100%) 0% 0% no-repeat padding-box;
+    opacity: 1;
+  }
+
+  &-title {
+    text-align: center;
+    padding: 1%;
+    font: normal normal bold 20px/25px;
+    font-size: 25px;
+    letter-spacing: 0px;
+    color: $dark-color;
+    opacity: 1;
+  }
+
+  &-box {
+    padding: 1%;
+    width: 100%;
+    margin-bottom: 5px;
+    background: $light-color 0% 0% no-repeat padding-box;
+    border-radius: 4%;
+    opacity: 1;
+
+    &-text {
+      &-header {
+        font: normal normal 15px/10px $main-font;
+        color: $greyish-color;
+        margin: 20px 10px 10px 20px;
+      }
+
+      &-item {
+        font-weight: bold;
+        color: $dark-color;
+        font: normal normal bold 22px/13px $main-font;
+        margin: 10px 10px 20px 20px;
+      }
+    }
+  }
+
+  &-icon-section {
+    color: $secondary-color;
+  }
+}
+
+.stats-box>h1,
+h3 {
+  font-weight: bold;
+}
+
+.box {
+  border-top: 1px solid $semi-light-color;
+  margin-top: 10px;
+}
+
+.middle-box {
+  color: $green-color;
+}
+
+.third-box {
+  color: $secondary-color;
+}
+
+
+.trainees-box {
+  background: #ffffff 0% 0% no-repeat padding-box;
+  border: 1px solid #00900b;
+  border-radius: 5px;
+  opacity: 1;
+}
+
+.trainees-box-absent {
+  border: 1px solid #ff0000;
+}

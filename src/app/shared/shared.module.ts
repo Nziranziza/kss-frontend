@@ -30,6 +30,7 @@ import { SuccessModalComponent } from './layouts';
 import { TranslateModule } from '@ngx-translate/core';
 import { SafePipe } from './pipes';
 import {HasServicesDirective} from './directives/has-services.directive';
+import { ButtonComponent } from './layouts/button/button.component';
 
 @NgModule({
   imports: [
@@ -57,6 +58,7 @@ import {HasServicesDirective} from './directives/has-services.directive';
     ConfirmModalComponent,
     SuccessModalComponent,
     SafePipe,
+    ButtonComponent,
   ],
   exports: [
     CommonModule,

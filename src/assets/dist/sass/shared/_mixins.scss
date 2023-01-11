@@ -1,0 +1,69 @@
+@import './_colors.scss';
+@import './_variables.scss';
+
+/* Use a mixin to define common styles for buttons */
+@mixin button-styles {
+  color: $primary-color !important;
+
+  &:hover {
+    background-color: $primary-color !important;
+  }
+}
+
+/* common styles for texts */
+
+@mixin text-styles($weight: normal normal, $size: 1em, $color: $semi-dark-color) {
+  font: $weight $main-font $size;
+  color: $color;
+}
+
+
+/* common styles for boxes */
+
+@mixin box-styles {
+  background: $light-color;
+  padding: 0%;
+}
+
+/* Use a mixin to define common styles for the logo */
+@mixin logo-styles {
+  background-image: $logo-image-url;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  text-align: center;
+  min-height: 150px;
+
+  .text span {
+    color: $primary-color;
+    font-size: 2vw;
+    font-weight: bolder;
+  }
+}
+
+/* main container style */
+
+/* Define a mixin for the "container" class */
+@mixin container {
+  min-height: 740px;
+}
+
+@mixin loading-skeleton {
+  color: grey;
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: #eee;
+  border-color: #eee;
+
+  &::placeholder {
+    color: transparent;
+  }
+}
+
+
+/* common styles for texts 
+
+@mixin alert($color: '', ) {
+    
+}
+*/
