@@ -1,23 +1,26 @@
 /*------------------------------------ expendable dataTable --------------------------------------*/
 
-.details-row-title {
-  font-size: 12px !important;
-  font-weight: bolder;
-  margin-left: 25px;
-}
+.details-row {
+  &-title {
+    font-size: 12px !important;
+    font-weight: bolder;
+    margin-left: 25px;
 
-.details-row-data {
-  font-size: 12px !important;
-}
+    &-sm {
+      font-size: 14px !important;
+      font-weight: bolder;
+      margin-left: 15px;
+    }
 
-.details-row-title-sm {
-  font-size: 14px !important;
-  font-weight: bolder;
-  margin-left: 15px;
-}
+  }
 
-.details-row-data-sm {
-  font-size: 14px !important;
+  &-data {
+    font-size: 12px !important;
+
+    &-sm {
+      font-size: 14px !important;
+    }
+  }
 }
 
 .spinner-container {

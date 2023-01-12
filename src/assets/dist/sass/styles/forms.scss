@@ -1,3 +1,7 @@
+@import '../shared/_colors.scss';
+@import '../shared/_mixins.scss';
+@import '../shared/_variables.scss';
+
 /*----------------------------------------Auto-complete--------------------------------------*/
 
 .ng-autocomplete {
@@ -11,12 +15,12 @@
   .input-container {
     input {
       height: 34px;
-      border: 1px solid #d2d6de;
+      border: 1px solid $semi-light-color;
       padding: 6px 12px;
       font-size: 14px;
       line-height: 1.42857143;
-      color: #555;
-      background-color: #fff;
+      color: $greyish-color;
+      background-color: $light-color;
       border-radius: 3px;
     }
 
@@ -30,9 +34,9 @@
     box-shadow: none;
 
     ul li a {
-      color: #555;
-      background-color: #faf9f8;
-      border: 1px solid #ffffff;
+      color: $greyish-color;
+      background-color: $light-color;
+      border: 1px solid $light-color;
       padding: 6px 12px;
       font-size: 12px;
     }
@@ -63,18 +67,18 @@ fieldset {
   width: auto !important;
   padding: 10px !important;
   margin: 15px !important;
-  border: 1px solid #d2d6de !important;
+  border: 1px solid $semi-light-color !important;
   border-radius: 3px;
 
   legend {
     width: 20%;
-    border-bottom: 0 solid #e5e5e5;
+    border-bottom: 0 solid $semi-light-color;
     font-size: 14px;
   }
 }
 
 form .input-required .asterisk:before {
-  color: #ff0f0f;
+  color: $error-color;
   content: "*";
   position: relative;
   margin-left: 5px;
@@ -91,37 +95,38 @@ form .input-required {
 }
 
 .box-confirm {
-  background: #edeae8 0% 0% no-repeat padding-box;
+  background: $semi-light-color 0% 0% no-repeat padding-box;
   border-radius: 7px;
   opacity: 1;
   padding-left: 4px;
   margin-bottom: 5px;
 }
 
-.confirm-text-box {
-  width: 100%;
-  min-height: 20px;
-  background: #ffffff 0% 0% no-repeat padding-box;
-  border-radius: 3px;
-  opacity: 1;
-}
-
 .confirm-text {
   text-align: left;
   font: normal normal bold 12px/32px Helvetica Neue, Helvetica, Arial, sans-serif;
   letter-spacing: 0px;
-  color: #000000;
+  color: $dark-color;
   opacity: 1;
   padding-left: 10px;
-}
 
-.confirm-text-area {
-  min-height: 105px;
+  &-box {
+    width: 100%;
+    min-height: 20px;
+    background: $light-color 0% 0% no-repeat padding-box;
+    border-radius: 3px;
+    opacity: 1;
+  }
+
+  &-area {
+    min-height: 105px;
+  }
+
 }
 
 .control-label {
   font: normal normal medium 10px/30px Helvetica Neue, Helvetica, Arial, sans-serif;
-  color: #4F210D;
+  color: $primary-color;
   opacity: 1;
   margin-top: 5px;
   margin-left: 5px;

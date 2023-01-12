@@ -131,12 +131,12 @@ h3 {
 
 
 .trainees-box {
-  background: #ffffff 0% 0% no-repeat padding-box;
-  border: 1px solid #00900b;
+  background: $light-color 0% 0% no-repeat padding-box;
+  border: 1px solid $green-color;
   border-radius: 5px;
   opacity: 1;
-}
 
-.trainees-box-absent {
-  border: 1px solid #ff0000;
+  &-absent {
+    border: 1px solid $error-color;
+  }
 }

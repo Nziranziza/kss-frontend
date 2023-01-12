@@ -39,11 +39,11 @@
 /*------------------------------------ expendable dataTable --------------------------------------*/
 
 table.dataTable>tbody>tr.child {
-  background-color: #faf9f8;
+  background-color: $semi-light-color;
 }
 
 table.dataTable>tbody>tr.child:hover {
-  background-color: #fffeee !important;
+  background-color: $semi-light-color !important;
 }
 
 table.table-bordered.dataTable td:last-child,
@@ -54,21 +54,21 @@ table.table-bordered.dataTable td:last-child {
 table.dataTable.dtr-inline.collapsed>tbody>tr.parent>td:first-child:before,
 table.dataTable.dtr-inline.collapsed>tbody>tr.parent>th:first-child:before {
   content: "-";
-  background-color: white;
-  color: #333333;
+  background-color: $light-color;
+  color: $semi-dark-color;
 }
 
 table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>td:first-child:before,
 table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>th:first-child:before {
-  color: #333333 !important;
-  background-color: white;
+  color: $semi-dark-color !important;
+  background-color: $light-color;
 }
 
 .table-striped>tbody>tr:nth-of-type(odd) {
-  background-color: #f9f6f1;
+  background-color: $semi-light-color;
 }
 
 .table-striped>tbody>tr:nth-of-type(odd):hover {
-  background-color: white !important;
+  background-color: $light-color !important;
 }
 
