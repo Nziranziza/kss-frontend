@@ -1,3 +1,7 @@
+@import './shared/_colors.scss';
+@import './shared/_mixins.scss';
+@import './shared/_variables.scss';
+
 /* || Main Wrapper and Homepage styles */
 
 .content-wrapper,
@@ -124,14 +128,14 @@ div {
 html,
 body {
   height: 100% !important;
-  color: #000000;
+  color: $dark-color;
   top: 0 !important;
 }
 
 .list-sub-header {
   font-style: italic;
   font-size: 6px;
-  color: #dedede;
+  color: $semi-light-color;
 }
 
 
