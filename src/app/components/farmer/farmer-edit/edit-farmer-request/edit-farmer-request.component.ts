@@ -435,7 +435,6 @@ export class EditFarmerRequestComponent implements OnInit {
   validateUPI(event) {
     const upi = event.target.value
     this.showUPILocations = false;
-
     if (upi.length > 0) {
       this.editFarmerRequestForm.controls.upiNumber.setErrors({ invalid: true });
     }
@@ -447,7 +446,7 @@ export class EditFarmerRequestComponent implements OnInit {
       village_id: true
     };
 
-    if (upi.length >= 15) {
+    if (upi.length >= 14) {
       const body = {
         upiNumber: upi,
       };
@@ -455,7 +454,6 @@ export class EditFarmerRequestComponent implements OnInit {
         (data) => {
           this.upi = data.data;
           // Reset Validators
-          this.editFarmerRequestForm.controls.upiNumber.setErrors(null);
           this.editFarmerRequestForm.controls.upiNumber.setErrors(null);
 
           const payload = {
@@ -472,7 +470,6 @@ export class EditFarmerRequestComponent implements OnInit {
             },
             () => { },
             () => {
-
 
               const villagesSet = [];
               this.org.coveredSectors.map((sector) => {

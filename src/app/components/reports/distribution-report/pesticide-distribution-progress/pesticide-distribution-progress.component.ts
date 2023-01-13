@@ -200,21 +200,21 @@ export class PesticideDistributionProgressComponent extends BasicComponent imple
     this.checkProgressForm.controls.location.get('sect_id'.toString()).valueChanges.subscribe(
       (value) => {
         if (value !== '') {
-          if (this.isCWSUser) {
+          /*if (this.isCWSUser) {
             this.filterCustomCells(this.org);
           } else {
             this.locationService.getCells(value).subscribe((data) => {
               this.cells = data;
               this.villages = null;
             });
-          }
+          }*/
           this.sectorId = true;
         } else {
           this.sectorId = false;
         }
       }
     );
-    this.checkProgressForm.controls.location.get('cell_id'.toString()).valueChanges.subscribe(
+    /*this.checkProgressForm.controls.location.get('cell_id'.toString()).valueChanges.subscribe(
       (value) => {
         if (value !== '') {
 
@@ -227,7 +227,7 @@ export class PesticideDistributionProgressComponent extends BasicComponent imple
           this.cellId = false;
         }
       }
-    );
+    );*/
   }
 
   filterCustomSectors(org: any) {
@@ -287,8 +287,8 @@ export class PesticideDistributionProgressComponent extends BasicComponent imple
 
   summarizeData(field: string){
     let sum = 0;
-    for(let i = 0; i < this.distributionProgress.length; i++) {
-      sum += this.distributionProgress[i][field];
+    for (const item of this.distributionProgress) {
+      sum += item[field];
     }
     return sum;
   }
