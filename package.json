@@ -47,6 +47,7 @@
     "html2canvas": "~1.4.1",
     "jquery": "~3.6.0",
     "jspdf": "~2.5.1",
+    "lodash": "^4.17.21",
     "moment": "~2.29.4",
     "moment-timezone": "~0.5.34",
     "ng-bootstrap-to-bootstrap-3": "^0.7.0",
