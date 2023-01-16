@@ -446,7 +446,7 @@ export class EditFarmerRequestComponent implements OnInit {
       village_id: true
     };
 
-    if (upi.length >= 14) {
+    if (upi.length >= 10) {
       const body = {
         upiNumber: upi,
       };
