@@ -12,7 +12,6 @@ import {
 import { SeasonService } from '../../../core';
 
 declare var $;
-
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -22,7 +21,6 @@ export class LoginComponent extends BasicComponent implements OnInit, OnDestroy 
 
   authForm: FormGroup;
   viewPasswordEnabled = false;
-
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -133,7 +131,7 @@ export class LoginComponent extends BasicComponent implements OnInit, OnDestroy 
       this.router.navigateByUrl('admin/warehouse/dispatches');
     } else if (this.authorisationService.isSiteManager()) {
       this.router.navigateByUrl('admin/input/site/distribution');
-    } else if (this.authorisationService.isTechnoServeAdmin()) {
+    } else if (this.authorisationService.isTechnoServeUser()) {
       this.router.navigateByUrl('admin/dashboard/extension');
     } else {
       this.router.navigateByUrl('admin/organisations');

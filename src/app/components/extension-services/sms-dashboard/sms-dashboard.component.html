@@ -44,7 +44,7 @@
     </div>
   </form>
 </ng-template>
-<div class="col-sm-12 stats-section">
+<div>
   <div class="row">
     <div class="col-sm-4">
       <div class="text-center stats-box">
@@ -52,21 +52,16 @@
         <h1>{{ smsBalance.balance }}</h1>
       </div>
     </div>
-    <div class="col-sm-4">
-      <div class="text-center stats-box middle-box">
-        <h3>Delivered SMS</h3>
-        <h1>0</h1>
-      </div>
-    </div>
-    <div class="col-sm-4">
-      <div class="text-center stats-box third-box">
-        <h3>Failed SMS</h3>
-        <h1>0</h1>
+    <div *ngFor="let item of smsHistory.meta.summary">
+      <div class="col-sm-4">
+        <div [ngClass]="{'text-center stats-box': true, 'middle-box': item.status === statuses.DELIVERED, 'third-box': item.status === statuses.FAILED  }">
+          <h3>{{ item.status }} SMS</h3>
+          <h1>{{ item.count }}</h1>
+        </div>
       </div>
     </div>
   </div>
 </div>
-
 <div class="row">
   <div class="col-sm-6" style="margin-top: 25px">
     <div class="panel panel-default">
@@ -84,7 +79,15 @@
               <th>Status</th>
             </tr>
           </thead>
-          <tbody></tbody>
+          <tbody>
+            <tr *ngFor="let history of smsHistory.data; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ history.createdAt | date : "short" }}</td>
+              <td>{{ history.recipient }}</td>
+              <td>{{ history.content }}</td>
+              <td>{{ history.status }}</td>
+            </tr>
+          </tbody>
         </table>
       </div>
     </div>
@@ -108,7 +111,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let order of smsOrders; let i = index">
-              <td>{{ order.createdAt | date: "short" }}</td>
+              <td>{{ order.createdAt | date : "short" }}</td>
               <td>{{ order.requested_sms }}</td>
               <td>{{ order.approved_sms }}</td>
               <td>

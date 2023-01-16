@@ -62,7 +62,7 @@ export class HasPermissionDirective implements OnInit {
             }
           }
         } else {
-          hasRole = this.currentUser.parameters.role.includes(permission[0]);
+          hasRole = this.currentUser.parameters.role.includes(permission[0]) || permission[0] === 'all';
           isType = +this.currentUser.parameters.type === permission[1];
           if (hasRole && isType) {
             hasPermission = true;

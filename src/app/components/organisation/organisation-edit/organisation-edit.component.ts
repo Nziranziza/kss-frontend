@@ -115,6 +115,7 @@ export class OrganisationEditComponent extends BasicComponent implements OnInit 
         });
         this.organisation = JSON.parse(JSON.stringify(data.content));
         const org = data.content;
+        this.isSuperOrganisation(org);
         org['genreId'.toString()] = org.genre._id;
         delete org.genre;
         if (
@@ -304,6 +305,10 @@ export class OrganisationEditComponent extends BasicComponent implements OnInit 
       const selectedRoles = this.editForm.value.organizationRole
         .map((checked, index) => checked ? this.possibleRoles[index].value : null)
         .filter(value => value !== null);
+      if(this.isSuperOrg) {
+        this.selectedRoles.push(0);
+      }
+      console.log(selectedRoles);
       const selectedPartners = this.editForm.value.organizationPartner
         .map((checked, index) => checked ? this.partners[index]._id : null)
         .filter(value => value !== null);

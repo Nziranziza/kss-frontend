@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '../api.service';
 import { Observable } from 'rxjs';
+import { HttpParams } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -12,8 +13,11 @@ export class SeedlingService {
     return this.apiService.post('/v1.1/nurseries', body);
   }
 
-  all(id?: string): Observable<any> {
-    return this.apiService.get('/v1.1/nurseries?reference='+ id);
+  all(filters?: any): Observable<any> {
+    const queryParams = new HttpParams({
+      fromObject: filters
+    })
+    return this.apiService.get('/v1.1/nurseries', queryParams);
   }
 
   one(id: string): Observable<any> {
@@ -34,5 +38,9 @@ export class SeedlingService {
 
   getSeedlingDistributionByNursery(body: any) {
     return this.apiService.post('/v1.1/seedlings/nursery', body);
+  }
+
+  nurseryStats(body: any) {
+    return this.apiService.post('/v1.1/nurseries/statistics', body);
   }
 }

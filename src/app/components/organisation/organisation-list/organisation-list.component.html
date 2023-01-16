@@ -34,7 +34,7 @@
                 <span class="details-row-data">{{ organisation.streetNumber }}</span>
               </td>
               <td class="actions no-wrap text-right">
-                <a routerLink="/admin/organisations/{{organisation._id}}/users" *appHasPermission="[4,0,[8,1]]"
+                <a routerLink="/admin/organisations/{{organisation._id}}/users" *appHasPermission="[4,0]"
                    class="btn btn-info btn-sm"><i
                   class="fa fa-users"></i> Users</a>
                 <a class="btn btn-success btn-margin btn-sm" *appHasPermission="[[4,1],0]"

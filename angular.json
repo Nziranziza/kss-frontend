@@ -72,7 +72,7 @@
                 }
               ]
             },
-            "staging" : {
+            "staging": {
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -95,6 +95,14 @@
                   "maximumError": "10mb"
                 }
               ]
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
             }
           }
         },
@@ -107,6 +115,9 @@
           "configurations": {
             "production": {
               "browserTarget": "basic-angular:build:production"
+            },
+            "development": {
+              "browserTarget": "projectName:build:development"
             },
             "staging": {
               "browserTarget": "staging:build:staging"

@@ -5,7 +5,6 @@ import {Router} from '@angular/router';
 import {constant} from '../../../../../environments/constant';
 
 declare var $;
-
 @Component({
   selector: 'app-asidenavbar',
   templateUrl: './asidenavbar.component.html',
