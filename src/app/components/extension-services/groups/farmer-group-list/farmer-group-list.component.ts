@@ -37,6 +37,7 @@ export class FarmerGroupListComponent
   // @ts-ignore
   dtTrigger: Subject = new Subject();
   groupMembersTotal = 0;
+  pageLoading = false;
   weekDays: string[] = [
     'Monday',
     'Tuesday',
@@ -48,6 +49,7 @@ export class FarmerGroupListComponent
   ];
 
   ngOnInit() {
+    this.pageLoading = true;
     this.listGroups();
     this.dtOptions = {
       pagingType: 'full_numbers',
@@ -55,6 +57,7 @@ export class FarmerGroupListComponent
       order: [],
     };
     this.setMessage(this.messageService.getMessage());
+    this.pageLoading = false;
   }
 
   ngOnDestroy(): void {

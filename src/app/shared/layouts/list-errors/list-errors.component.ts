@@ -42,7 +42,7 @@ export class ListErrorsComponent implements OnInit, OnChanges {
       $(() => {
         $('.custom-error').each((index, element) => {
           const $element = $(element);
-          const timeout = $element.data('auto-dismiss') || 7500;
+          const timeout = $element.data('auto-dismiss') || 75000;
           setTimeout(() => {
             $element.hide();
           }, timeout);

@@ -1,0 +1,163 @@
+@import '../shared/_colors.scss';
+@import '../shared/_mixins.scss';
+@import '../shared/_variables.scss';
+
+/*----------------------------------------Auto-complete--------------------------------------*/
+
+.ng-autocomplete {
+  width: 100%;
+}
+
+.ng-autocomplete ::ng-deep .autocomplete-container {
+  height: 34px;
+  box-shadow: none;
+
+  .input-container {
+    input {
+      height: 34px;
+      border: 1px solid $semi-light-color;
+      padding: 6px 12px;
+      font-size: 14px;
+      line-height: 1.42857143;
+      color: $greyish-color;
+      background-color: $light-color;
+      border-radius: 3px;
+    }
+
+    .x i {
+      font-size: 14px;
+      font-weight: bolder;
+    }
+  }
+
+  .suggestions-container {
+    box-shadow: none;
+
+    ul li a {
+      color: $greyish-color;
+      background-color: $light-color;
+      border: 1px solid $light-color;
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+  }
+}
+
+.form-control {
+  border-radius: 3px;
+}
+
+.form-inline .owl-date-input {
+  margin-left: 10px;
+}
+
+@media (max-width: 800px) {
+  .form-inline {
+    input {
+      margin: 10px 0;
+    }
+
+    .owl-date-input {
+      margin-left: 0px;
+    }
+  }
+}
+
+fieldset {
+  width: auto !important;
+  padding: 10px !important;
+  margin: 15px !important;
+  border: 1px solid $semi-light-color !important;
+  border-radius: 3px;
+
+  legend {
+    width: 20%;
+    border-bottom: 0 solid $semi-light-color;
+    font-size: 14px;
+  }
+}
+
+form .input-required .asterisk:before {
+  color: $error-color;
+  content: "*";
+  position: relative;
+  margin-left: 5px;
+}
+
+form .input-required input,
+form .input-required select,
+form .input-required textarea {
+  width: 95%;
+}
+
+form .input-required {
+  display: flex;
+}
+
+.box-confirm {
+  background: $semi-light-color 0% 0% no-repeat padding-box;
+  border-radius: 7px;
+  opacity: 1;
+  padding-left: 4px;
+  margin-bottom: 5px;
+}
+
+.confirm-text {
+  text-align: left;
+  font: normal normal bold 12px/32px Helvetica Neue, Helvetica, Arial, sans-serif;
+  letter-spacing: 0px;
+  color: $dark-color;
+  opacity: 1;
+  padding-left: 10px;
+
+  &-box {
+    width: 100%;
+    min-height: 20px;
+    background: $light-color 0% 0% no-repeat padding-box;
+    border-radius: 3px;
+    opacity: 1;
+  }
+
+  &-area {
+    min-height: 105px;
+  }
+
+}
+
+.control-label {
+  font: normal normal medium 10px/30px Helvetica Neue, Helvetica, Arial, sans-serif;
+  color: $primary-color;
+  opacity: 1;
+  margin-top: 5px;
+  margin-left: 5px;
+}
+
+.small-spacing {
+  padding: 0 2px 0 0px;
+}
+
+
+.input-error {
+  color: $error-color;
+  font-size: 12px;
+}
+
+.selected-parchment {
+  color: $secondary-color;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.label-required:after {
+  content: "*";
+  color: $error-color;
+  padding-left: 5px;
+}
+
+.label-optional:after {
+  content: "(opt)";
+  color: $secondary-color;
+  font-size: 12px;
+  font-weight: 300;
+  position: absolute;
+}

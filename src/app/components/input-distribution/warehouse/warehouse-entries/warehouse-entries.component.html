@@ -187,17 +187,17 @@
           <tr *ngFor="let stock of stocks">
             <td>{{ stock.inputId.inputType }}</td>
             <td>{{ stock.inputId.inputName }}</td>
-            <td *ngIf="stock.inputId.inputType === 'Fertilizer'">{{ stock.items }}</td>
+            <td *ngIf="stock.inputId.inputType === 'Fertilizer'">{{ stock.items | number }}</td>
             <td *ngIf="stock.inputId.inputType !== 'Fertilizer'"></td>
-            <td *ngIf="stock.inputId.inputType === 'Fertilizer'">{{ stock.quantityPerItem }}</td>
+            <td *ngIf="stock.inputId.inputType === 'Fertilizer'">{{ stock.quantityPerItem | number }}</td>
             <td *ngIf="stock.inputId.inputType !== 'Fertilizer'"></td>
-            <td>{{ stock.suppliedQty }}
+            <td>{{ stock.suppliedQty | number }}
               <app-quantity-unit [inputType]="stock.inputId.inputType"></app-quantity-unit>
             </td>
-            <td *ngIf="stock.inputId.inputType === 'Fertilizer'">{{ stock.availableQty }}
+            <td *ngIf="stock.inputId.inputType === 'Fertilizer'">{{ stock.availableQty | number }}
               <app-quantity-unit [inputType]="stock.inputId.inputType"></app-quantity-unit>
             </td>
-            <td *ngIf="stock.inputId.inputType !== 'Fertilizer'">{{ stock.availableQty }}
+            <td *ngIf="stock.inputId.inputType !== 'Fertilizer'">{{ stock.availableQty | number }}
               <app-quantity-unit [inputType]="stock.inputId.inputType"></app-quantity-unit>
             </td>
           </tr>
