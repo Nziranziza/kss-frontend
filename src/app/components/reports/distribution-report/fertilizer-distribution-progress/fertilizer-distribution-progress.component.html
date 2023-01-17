@@ -134,15 +134,15 @@
               <tbody>
               <tr *ngFor="let location of distributionProgress">
                 <td> {{ location.name }}</td>
-                <td> {{ location.allocated }}</td>
-                <td> {{ location.distributed }}</td>
-                <td> {{ location.approved }}</td>
+                <td> {{ location.allocated | number }}</td>
+                <td> {{ location.distributed | number }}</td>
+                <td> {{ location.approved | number }}</td>
               </tr>
               <tr>
                 <th> Total</th>
-                <th> {{ summarizeData('allocated') }}</th>
-                <th> {{ summarizeData('distributed') }}</th>
-                <th> {{ summarizeData('approved') }}</th>
+                <th> {{ summarizeData('allocated') | number }}</th>
+                <th> {{ summarizeData('distributed') | number }}</th>
+                <th> {{ summarizeData('approved') | number }}</th>
               </tr>
               </tbody>
             </table>

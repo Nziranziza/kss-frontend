@@ -32,12 +32,12 @@
       <span class="info-box-icon"></span>
       <div class="info-box-content">
         <span class="info-box-text">Ikofi</span>
-        <span class="info-box-number">{{ payment.ikofi.amount }} Rwf</span>
+        <span class="info-box-number">{{ payment.ikofi.amount | number }} Rwf</span>
         <div class="progress">
           <div class="progress-bar" style="width: 100%"></div>
         </div>
         <span class="progress-description">
-              {{ payment.ikofi.transactions }} Transactions
+              {{ payment.ikofi.transactions | number }} Transactions
             </span>
       </div>
       <!-- /.info-box-content -->
@@ -51,13 +51,13 @@
 
       <div class="info-box-content">
         <span class="info-box-text">Cash</span>
-        <span class="info-box-number">{{ payment.cash.amount }} Rwf</span>
+        <span class="info-box-number">{{ payment.cash.amount | number }} Rwf</span>
 
         <div class="progress">
           <div class="progress-bar" style="width: 100%"></div>
         </div>
         <span class="progress-description">
-              {{ payment.cash.transactions }} Transactions
+              {{ payment.cash.transactions | number }} Transactions
             </span>
       </div>
       <!-- /.info-box-content -->
@@ -71,12 +71,12 @@
 
       <div class="info-box-content">
         <span class="info-box-text">MTN</span>
-        <span class="info-box-number">{{ payment.mtn.amount }} Rwf</span>
+        <span class="info-box-number">{{ payment.mtn.amount | number }} Rwf</span>
         <div class="progress">
           <div class="progress-bar" style="width: 100%"></div>
         </div>
         <span class="progress-description">
-              {{ payment.mtn.transactions }} Transactions
+              {{ payment.mtn.transactions | number }} Transactions
             </span>
       </div>
       <!-- /.info-box-content -->
@@ -89,12 +89,12 @@
       <span class="info-box-icon"></span>
       <div class="info-box-content">
         <span class="info-box-text">Airtel</span>
-        <span class="info-box-number">{{ payment.airtel.amount }} Rwf</span>
+        <span class="info-box-number">{{ payment.airtel.amount | number }} Rwf</span>
         <div class="progress">
           <div class="progress-bar" style="width: 100%"></div>
         </div>
         <span class="progress-description">
-              {{ payment.airtel.transactions }} Transactions
+              {{ payment.airtel.transactions | number }} Transactions
             </span>
       </div>
       <!-- /.info-box-content -->

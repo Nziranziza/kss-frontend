@@ -30,6 +30,8 @@ import { SuccessModalComponent } from './layouts';
 import { TranslateModule } from '@ngx-translate/core';
 import { SafePipe } from './pipes';
 import {HasServicesDirective} from './directives/has-services.directive';
+import { ButtonComponent } from './layouts/button/button.component';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 @NgModule({
   imports: [
@@ -41,6 +43,7 @@ import {HasServicesDirective} from './directives/has-services.directive';
     MatIconModule,
     MatDialogModule,
     DataTablesModule,
+    NgxSpinnerModule,
   ],
 
   declarations: [ListErrorsComponent, LoaderComponent,
@@ -57,6 +60,7 @@ import {HasServicesDirective} from './directives/has-services.directive';
     ConfirmModalComponent,
     SuccessModalComponent,
     SafePipe,
+    ButtonComponent,
   ],
   exports: [
     CommonModule,

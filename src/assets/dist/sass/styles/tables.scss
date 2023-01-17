@@ -1,0 +1,74 @@
+@import '../shared/_colors.scss';
+@import '../shared/_mixins.scss';
+@import '../shared/_variables.scss';
+
+/* || Table styles */
+
+.no-border {
+  &>.table {
+    &>tbody {
+      &>tr {
+
+        &>th,
+        &>td {
+          border-top: none;
+        }
+      }
+    }
+
+    &>tfoot {
+      &>tr {
+
+        &>th,
+        &>td {
+          border-top: none;
+        }
+      }
+    }
+
+    &>thead {
+      &>tr {
+        &>td {
+          border-top: none;
+        }
+      }
+    }
+  }
+}
+
+/*------------------------------------ expendable dataTable --------------------------------------*/
+
+table.dataTable>tbody>tr.child {
+  background-color: $semi-light-color;
+}
+
+table.dataTable>tbody>tr.child:hover {
+  background-color: $semi-light-color !important;
+}
+
+table.table-bordered.dataTable td:last-child,
+table.table-bordered.dataTable td:last-child {
+  min-width: 250px;
+}
+
+table.dataTable.dtr-inline.collapsed>tbody>tr.parent>td:first-child:before,
+table.dataTable.dtr-inline.collapsed>tbody>tr.parent>th:first-child:before {
+  content: "-";
+  background-color: $light-color;
+  color: $semi-dark-color;
+}
+
+table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>td:first-child:before,
+table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>th:first-child:before {
+  color: $semi-dark-color !important;
+  background-color: $light-color;
+}
+
+.table-striped>tbody>tr:nth-of-type(odd) {
+  background-color: $semi-light-color;
+}
+
+.table-striped>tbody>tr:nth-of-type(odd):hover {
+  background-color: $light-color !important;
+}
+

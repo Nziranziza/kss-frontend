@@ -1,0 +1,73 @@
+@import '../shared/_colors.scss';
+@import '../shared/_mixins.scss';
+@import '../shared/_variables.scss';
+
+/*------------------------------------------ custom pagination and sorting -------------------------------*/
+
+.custom-pagination {
+  .ngx-pagination {
+    padding: 5px;
+    align-items: center;
+    width: 48%;
+    float: right;
+
+    li {
+      box-sizing: border-box;
+      display: inline-block;
+      min-width: 1.5em;
+      margin-left: 2px;
+      text-align: center;
+      text-decoration: none !important;
+      cursor: pointer;
+      *cursor: hand;
+      color: $semi-dark-color !important;
+      border: 1px solid transparent;
+      border-radius: 2px;
+
+      a, button {
+        color: $dark-color;
+        display: block;
+        padding: 0.5em 1em;
+      }
+
+      &.current {
+        color: $semi-dark-color !important;
+        border: 1px solid $greyish-color;
+        padding: 0.5em 1em;
+        background: $light-color linear-gradient(to bottom, $light-color 0%, $semi-grey-color 100%);
+      }
+
+      &:hover {
+        a, button {
+          color: $light-color !important;
+          background-color: $semi-dark-color;
+          display: block;
+        }
+        color: $light-color !important;
+        background-color: $semi-dark-color;
+      }
+    }
+
+    & .small-screen {
+      display: none;
+    }
+  }
+}
+
+
+.cdk-global-overlay-wrapper,
+.cdk-overlay-container {
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  position: absolute;
+  z-index: 9999999 !important;
+}
+
+.fa-sort {
+  float: right;
+  color: $semi-grey-color;
+}

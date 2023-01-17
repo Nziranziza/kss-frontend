@@ -1,0 +1,123 @@
+@import '../shared/_colors.scss';
+@import '../shared/_mixins.scss';
+@import '../shared/_variables.scss';
+
+.btn-circle {
+  &.btn-lg {
+    width: 50px;
+    height: 50px;
+    padding: 10px 16px;
+    font-size: 18px;
+    line-height: 1.33;
+    border-radius: 25px;
+  }
+}
+
+.btn-margin {
+  margin-left: 10px;
+}
+
+.btn-custom-margin-top {
+  margin-top: 26px;
+}
+
+.btn-success,
+.btn-default,
+.btn-primary,
+.btn-action,
+.btn-info {
+  background-color: $light-color;
+  color: $primary-color;
+  border-color: $primary-color;
+
+  &:hover,
+  &:active,
+  &:focus,
+  &::after {
+    background-color: $primary-color;
+    color: $light-color !important;
+    border-color: $light-color;
+  }
+}
+
+.btn-danger {
+  background-color: $error-color;
+  color: $light-color !important;
+
+  &:hover {
+    background-color: $light-color;
+    color: $error-color !important;
+  }
+}
+
+.btn-warning {
+  border-color: $secondary-color;
+  color: $secondary-color !important;
+
+  &:hover {
+    background-color: $secondary-color;
+    color: $light-color !important;
+  }
+}
+
+.btn-info {
+  border-color: $link-color;
+  color: $link-color !important;
+}
+
+.btn-action-no-border {
+  background-color: transparent;
+  border: none;
+}
+
+.btn-modal-close {
+  margin-top: -35px;
+  font-size: 28px;
+  color: $light-color;
+  align-content: right;
+  background-color: $error-color;
+  width: 40px;
+  height: 40px;
+  margin-right: -35px;
+  border-radius: 50%;
+  float: right;
+  cursor: pointer;
+}
+
+.login-box {
+  &.action-button {
+    background-color: $primary-color;
+    color: $light-color !important;
+    text-transform: uppercase;
+    border-color: $primary-color;
+
+    &:active {
+      background-color: $primary-color;
+      color: $light-color !important;
+    }
+
+    &:hover {
+      background-color: $primary-color;
+      color: $light-color !important;
+    }
+  }
+
+  &-body {
+    &.action-button {
+      color: $secondary-color;
+      font-size: 16px;
+      font-weight: bolder;
+    }
+  }
+}
+
+
+@media (max-width: 800px) {
+  .form-inline input {
+    margin: 10px 0;
+  }
+
+  .form-inline .owl-date-input {
+    margin-left: 0px;
+  }
+}

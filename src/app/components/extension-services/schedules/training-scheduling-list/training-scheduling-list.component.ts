@@ -37,6 +37,7 @@ export class TrainingSchedulingListComponent
   showData = true;
   autoHide = false;
   responsive = false;
+  pageLoading = false;
   labels: any = {
     previousLabel: 'Prev',
     nextLabel: 'Next',
@@ -54,12 +55,14 @@ export class TrainingSchedulingListComponent
   dtElement: DataTableDirective;
 
   ngOnInit() {
+    this.pageLoading = true;
     this.getSchedules();
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 25,
       order: [],
     };
+    this.pageLoading = false;
   }
 
   ngOnDestroy(): void {

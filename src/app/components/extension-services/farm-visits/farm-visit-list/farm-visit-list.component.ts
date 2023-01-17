@@ -36,6 +36,7 @@ export class FarmVisitListComponent
   showData = true;
   autoHide = false;
   responsive = false;
+  pageLoading = false;
   labels: any = {
     previousLabel: 'Prev',
     nextLabel: 'Next',
@@ -55,12 +56,14 @@ export class FarmVisitListComponent
   ngOnDestroy(): void { }
 
   ngOnInit() {
+    this.pageLoading = true;
     this.getVisits();
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 25,
       order: [],
     };
+    this.pageLoading = false;
   }
 
   getVisits(deletetrigger = false): void {
