@@ -1,6 +1,6 @@
-import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { DataTableDirective } from "angular-datatables";
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { DataTableDirective } from 'angular-datatables';
 import {
   AuthenticationService,
   MessageService,
@@ -24,9 +24,9 @@ interface Stats {
 }
 
 @Component({
-  selector: "app-nursery-list",
-  templateUrl: "./nursery-list.component.html",
-  styleUrls: ["./nursery-list.component.css"],
+  selector: 'app-nursery-list',
+  templateUrl: './nursery-list.component.html',
+  styleUrls: ['./nursery-list.component.css'],
 })
 export class NurseryListComponent
   extends BasicComponent
@@ -41,7 +41,6 @@ export class NurseryListComponent
   ) {
     super();
   }
-  ngOnDestroy(): void { }
 
   nurseries: any[] = [];
   schedule;
@@ -50,11 +49,12 @@ export class NurseryListComponent
   showData = true;
   autoHide = false;
   responsive = false;
+  pageLoading = false;
   labels: any = {
-    previousLabel: "Prev",
-    nextLabel: "Next",
-    screenReaderPaginationLabel: "Pagination",
-    screenReaderPageLabel: "page",
+    previousLabel: 'Prev',
+    nextLabel: 'Next',
+    screenReaderPaginationLabel: 'Pagination',
+    screenReaderPageLabel: 'page',
     screenReaderCurrentLabel: `You're on page`,
   };
   config: any;
@@ -76,13 +76,17 @@ export class NurseryListComponent
   }
 
   ngOnInit() {
+    this.pageLoading = true;
     this.getNurseries();
     this.dtOptions = {
-      pagingType: "full_numbers",
+      pagingType: 'full_numbers',
       pageLength: 25,
       order: [],
     };
+    this.pageLoading = false;
   }
+
+  ngOnDestroy(): void { }
 
   getNurseries(deletetrigger: any = false): void {
     this.loading = true;
@@ -109,7 +113,7 @@ export class NurseryListComponent
           distributedQty,
         };
       });
-      deletetrigger ? " " : this.dtTrigger.next();
+      deletetrigger ? ' ' : this.dtTrigger.next();
       this.loading = false;
     });
     this.seedlingService.nurseryStats(body).subscribe(({ data }) => {
@@ -126,11 +130,11 @@ export class NurseryListComponent
 
   openDeleteModal(nursery: any, warning?: any) {
     const modalRef = this.modalService.open(ConfirmModalComponent);
-    modalRef.componentInstance.title = "Delete Nursery";
+    modalRef.componentInstance.title = 'Delete Nursery';
     modalRef.componentInstance.content =
-      "Are you sure you want to Delete this Nursery?";
-    modalRef.componentInstance.confirmButtonText = "Delete";
-    modalRef.componentInstance.cancelButtonText = "Cancel";
+      'Are you sure you want to Delete this Nursery?';
+    modalRef.componentInstance.confirmButtonText = 'Delete';
+    modalRef.componentInstance.cancelButtonText = 'Cancel';
     modalRef.componentInstance.warning = warning;
     modalRef.result.then((results) => {
       if (results.confirmed) {
@@ -138,7 +142,7 @@ export class NurseryListComponent
           () => {
             this.loading = true;
             this.getNurseries(true);
-            this.setMessage("Nursery successfully Deleted!");
+            this.setMessage('Nursery successfully Deleted!');
           },
           (err) => {
             this.errors = err.errors;

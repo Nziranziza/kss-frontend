@@ -53,6 +53,7 @@ export class DashboardComponent extends BasicComponent implements OnInit {
   seedlingFilterEnabled = false;
   gapFilterEnabled = false;
   organisations = [];
+  pageLoading = false;
 
   newOrg = '';
 
@@ -418,6 +419,7 @@ export class DashboardComponent extends BasicComponent implements OnInit {
       cws_id: [''],
       covered_sector: [''],
     });
+    this.pageLoading = true;
     this.route.parent.params.subscribe((params) => {
       this.organisationId = params['organisationId'.toString()];
       this.starterBody = { referenceId: params['organisationId'.toString()] };
@@ -474,6 +476,7 @@ export class DashboardComponent extends BasicComponent implements OnInit {
       this.seasonChangeEffect('location');
     });
     this.getGeneralStats(this.starterBody);
+    this.pageLoading = false;
   }
   // General stats from filters
 

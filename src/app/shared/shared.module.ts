@@ -31,6 +31,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { SafePipe } from './pipes';
 import {HasServicesDirective} from './directives/has-services.directive';
 import { ButtonComponent } from './layouts/button/button.component';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 @NgModule({
   imports: [
@@ -42,6 +43,7 @@ import { ButtonComponent } from './layouts/button/button.component';
     MatIconModule,
     MatDialogModule,
     DataTablesModule,
+    NgxSpinnerModule,
   ],
 
   declarations: [ListErrorsComponent, LoaderComponent,
