@@ -51,6 +51,7 @@ export class FertilizerDistributionProgressComponent extends BasicComponent impl
   org: any;
   printableDetails = [];
   downloading = false;
+  pdfDownloading = false;
   reportIsReady: boolean;
 
   constructor(private formBuilder: FormBuilder, private siteService: SiteService,
@@ -143,6 +144,39 @@ export class FertilizerDistributionProgressComponent extends BasicComponent impl
       this.printableDetails = data.content;
       this.excelService.exportAsExcelFile(this.printableDetails, 'Fe detailed application report');
       this.downloading = false;
+      this.downloadDetailedEnabled = true;
+    });
+  }
+
+  downloadPdf() {
+    this.pdfDownloading = true;
+    this.downloadDetailedEnabled = false;
+    const body = {
+      location: {},
+      appendix: undefined
+    };
+    if (this.request.location.searchBy === 'district') {
+      body.location['searchBy'.toString()] = 'district';
+      body.location['dist_id'.toString()] = this.request.location.dist_id;
+    }
+
+    if (this.request.location.searchBy === 'sector') {
+      body.location['searchBy'.toString()] = 'sector';
+      body.location['sect_id'.toString()] = this.request.location.sect_id;
+    }
+
+    if (this.request.location.searchBy === 'cell') {
+      body.location['searchBy'.toString()] = 'cell';
+      body.location['cell_id'.toString()] = this.request.location.cell_id;
+    }
+    body.appendix = this.request.appendix;
+    this.inputDistributionService.getDistributionProgressDetail(body).subscribe((data) => {
+      const downloadLink = document.createElement('a');
+      const fileName = 'fertilizer_report.pdf';
+      downloadLink.href = `data:application/pdf;base64,${data.file}`;
+      downloadLink.download = fileName;
+      downloadLink.click();
+      this.pdfDownloading = false;
       this.downloadDetailedEnabled = true;
     });
   }

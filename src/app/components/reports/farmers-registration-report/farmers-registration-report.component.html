@@ -111,7 +111,7 @@
                 <div class="col-xs-12">
                   <div class="pull-left" style="margin-left: 15px; font-size: 14px">
                     <span style="font-weight: bolder">Total : </span>
-                    <span [ngStyle]="{color: graph.options.colors[0]}">{{ total }} {{ graph.columnNames[1] }}</span>
+                    <span [ngStyle]="{color: graph.options.colors[0]}">{{ total | number }} {{ graph.columnNames[1] }}</span>
                   </div>
                 </div>
               </div>

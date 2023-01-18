@@ -60,7 +60,7 @@
                 <ng-template #farmers>
                 <a routerLink="/admin/organisations/details/{{organisation._id}}/farmers" class="btn btn-info btn-sm"
                    *ngIf="isOrgCWS(organisation)"><i
-                  class="fa fa-university"></i> Details </a></ng-template>
+                  class="fa fa-users"></i> Farmers </a></ng-template>
 
                 <a routerLink="/admin/organisations/{{organisation._id}}/users"
                    *appHasPermission="[[4,1],0,[8,1],[1,1]]" class="btn btn-info btn-sm"

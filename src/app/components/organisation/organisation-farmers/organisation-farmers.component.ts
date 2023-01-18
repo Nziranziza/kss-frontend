@@ -85,7 +85,7 @@ export class OrganisationFarmersComponent
   message: string;
   showData = false;
   parameters: any;
-  downloadingAll = true;
+  downloadingAll = false;
   config: any;
   autoHide = true;
   responsive = true;
@@ -167,8 +167,6 @@ export class OrganisationFarmersComponent
         to: new Date(),
       },
     };
-    /*
-    this.getFarmers(this.organisationId); */
     this.getPaginatedFarmers();
     this.isUserCWSOfficer = this.authorisationService.isCWSUser();
     this.organisationService.get(this.organisationId).subscribe((data) => {
@@ -192,8 +190,30 @@ export class OrganisationFarmersComponent
   }
 
   exportAsXLSX() {
-    this.excelService.exportAsExcelFile(this.allFarmers, 'farmers');
-  }
+      this.downloadingAll = true;
+      this.organisationService.getAllFarmers(this.organisationId)
+        .subscribe(data => {
+          data.content.map((item) => {
+            const temp = {
+              NAMES: item.userInfo.surname + '  ' + item.userInfo.foreName,
+              SEX: item.userInfo.sex,
+              NID: item.userInfo.NID,
+              PHONE: item.userInfo.phone_number,
+              REGNUMBER: item.userInfo.regNumber,
+              PROVINCE: item.request.requestInfo[0].location.prov_id.namek,
+              DISTRICT: item.request.requestInfo[0].location.dist_id.name,
+              SECTOR: item.request.requestInfo[0].location.sect_id.name,
+              CELL: item.request.requestInfo[0].location.cell_id.name,
+              VILLAGE: item.request.requestInfo[0].location.village_id.name,
+              NUMBER_OF_TREES: this.getNumberOfTrees(item.request.requestInfo)
+            };
+            this.allFarmers.push(temp);
+          });
+          this.downloadingAll = false;
+          this.excelService.exportAsExcelFile(this.allFarmers, 'farmers');
+        });
+    }
+
 
   onPageChange(event) {
     this.config.currentPage = event;
@@ -541,4 +561,5 @@ export class OrganisationFarmersComponent
         }
       });
   }
+
 }

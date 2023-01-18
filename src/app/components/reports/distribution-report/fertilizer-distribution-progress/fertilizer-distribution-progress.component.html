@@ -114,10 +114,15 @@
                     (click)="exportAsXLSX()"><i
               class="fa fa-download"></i> Summary
             </button>
-            <button type="button" class="btn btn-default pull-right" (click)="downloadDetails()"
+            <button type="button" class="btn btn-default pull-right btn-margin" (click)="downloadDetails()"
                     [disabled]="!downloadDetailedEnabled">
               <app-downloading *ngIf="downloading"></app-downloading>
               Detailed xls
+            </button>
+            <button type="button" class="btn btn-default pull-right" (click)="downloadPdf()"
+                    [disabled]="!downloadDetailedEnabled">
+              <app-downloading *ngIf="pdfDownloading"></app-downloading>
+              Detailed pdf
             </button>
           </div>
           <div class="col-xs-12" *ngIf="showData">
@@ -134,15 +139,15 @@
               <tbody>
               <tr *ngFor="let location of distributionProgress">
                 <td> {{ location.name }}</td>
-                <td> {{ location.allocated }}</td>
-                <td> {{ location.distributed }}</td>
-                <td> {{ location.approved }}</td>
+                <td> {{ location.allocated | number }}</td>
+                <td> {{ location.distributed | number }}</td>
+                <td> {{ location.approved | number }}</td>
               </tr>
               <tr>
                 <th> Total</th>
-                <th> {{ summarizeData('allocated') }}</th>
-                <th> {{ summarizeData('distributed') }}</th>
-                <th> {{ summarizeData('approved') }}</th>
+                <th> {{ summarizeData('allocated') | number }}</th>
+                <th> {{ summarizeData('distributed') | number }}</th>
+                <th> {{ summarizeData('approved') | number }}</th>
               </tr>
               </tbody>
             </table>

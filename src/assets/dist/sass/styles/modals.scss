@@ -1,0 +1,59 @@
+@import '../shared/_colors.scss';
+@import '../shared/_mixins.scss';
+@import '../shared/_variables.scss';
+
+.modal-lg .modal-xl {
+  width: 75% !important;
+  height: auto !important;
+}
+
+.modal-content {
+  -webkit-border-radius: 5px !important;
+  -moz-border-radius: 5px !important;
+  border-radius: 5px !important;
+}
+
+.modal {
+  background: rgba(0, 0, 0, 0.0);
+}
+
+.modal-header {
+  border-bottom: none;
+}
+
+.big-modal-dialog {
+  width: 80% !important;
+  height: auto;
+}
+
+.extended-modal-body {
+  background-color: $light-color;
+  box-shadow: 0px 3px 6px $dark-color;
+  border: 1px solid $primary-color;
+  border-radius: 5px;
+  opacity: 1;
+}
+
+@media (min-width: 992px) {
+
+  .modal-lg {
+    width: 75% !important;
+    height: auto !important;
+  }
+
+  .modal-sm {
+    width: 65% !important;
+    height: auto !important;
+  }
+
+  .extended-modal-body {
+    width: 1100px;
+    margin-left: -30%;
+  }
+}
+
+@media (max-width:992px) {
+  .extended-modal-body {
+    width: 100%;
+  }
+}
