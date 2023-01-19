@@ -28,7 +28,7 @@
             </div>
             <div class="col-xs-2"></div>
           </div>
-          <div class="stats-box-text-item">{{ this.mostAdopted || " - " }}</div>
+          <div class="stats-box-text-item">{{ (overallWeight > 0) ? mostAdopted : " - " }}</div>
         </div>
       </div>
       <div class="col-sm-4">
@@ -40,7 +40,7 @@
             <div class="col-xs-2"></div>
           </div>
           <div class="stats-box-text-item">
-            {{ this.overallWeight | number: "1.2-2" }}
+            {{ overallWeight | number: "1.2-2" }}
           </div>
         </div>
       </div>

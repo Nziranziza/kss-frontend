@@ -453,7 +453,10 @@ export class DashboardComponent extends BasicComponent implements OnInit {
   }
 
   getNurseries() {
-    this.seedlingService.all(this.authenticationService.getCurrentUser().info.org_id).subscribe((data) => {
+    const orgId = this.organisationId !== ''
+      ? this.organisationId :
+      this.authenticationService.getCurrentUser().info.org_id;
+    this.seedlingService.all({reference : orgId}).subscribe((data) => {
       this.nurseries = data.data;
       this.nurseries.unshift({ nurseryName: 'all nurseries', _id: '' });
     });
