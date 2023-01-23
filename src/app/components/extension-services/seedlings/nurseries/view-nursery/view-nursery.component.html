@@ -123,7 +123,7 @@
     <h4 class="text-center">List of Distributed Seedlings</h4>
     <div class="box-body table-responsive">
       <app-loader *ngIf="loading"></app-loader>
-      <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped">
+      <table datatable class="row-border hover table table-striped">
         <thead>
           <tr>
             <th>Distribution Date</th>
@@ -136,28 +136,37 @@
           </tr>
         </thead>
         <tbody>
-          <ng-container *ngFor="let distribution of nurseryDistribution">
+          <ng-container *ngFor="let distribution of nurseryDistribution | paginate: config">
             <tr>
               <td>{{ distribution?.date | date: "short" }}</td>
               <td>
                 <div *ngFor="let dist of distribution.distributions">
-                  <span *ngIf="dist.reason == 'in_filling'">
+                  <span *ngIf="dist.reason == 'in_filling' else zeroData">
                     {{ dist?.distributedQty }}
                   </span>
+                  <ng-template #zeroData>
+                    0
+                  </ng-template>
                 </div>
               </td>
               <td>
                 <div *ngFor="let dist of distribution.distributions">
-                  <span *ngIf="dist.reason == 'replacement'">
+                  <span *ngIf="dist.reason == 'replacement' else zeroData">
                     {{ dist?.distributedQty }}
                   </span>
+                  <ng-template #zeroData>
+                    0
+                  </ng-template>
                 </div>
               </td>
               <td>
                 <div *ngFor="let dist of distribution.distributions">
-                  <span *ngIf="dist.reason == 'expansion'">
+                  <span *ngIf="dist.reason == 'expansion' else zeroData">
                     {{ dist?.distributedQty }}
                   </span>
+                  <ng-template #zeroData>
+                    0
+                  </ng-template>
                 </div>
               </td>
               <td>

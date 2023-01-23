@@ -453,10 +453,9 @@ export class DashboardComponent extends BasicComponent implements OnInit {
   }
 
   getNurseries() {
-    const orgId = this.organisationId !== ''
-      ? this.organisationId :
-      this.authenticationService.getCurrentUser().info.org_id;
-    this.seedlingService.all({reference : orgId}).subscribe((data) => {
+    const body = this.organisationId
+      ? {reference : this.organisationId} : {};
+    this.seedlingService.all(body).subscribe((data) => {
       this.nurseries = data.data;
       this.nurseries.unshift({ nurseryName: 'all nurseries', _id: '' });
     });
@@ -803,7 +802,6 @@ export class DashboardComponent extends BasicComponent implements OnInit {
       .get('sect_id'.toString())
       .valueChanges.subscribe((value) => {
 
-        this.newOrg = '';
         if (value !== '') {
           this.locationChangSector(this.dashboardForm, value);
           this.currentSelectedLocation = {
@@ -883,7 +881,6 @@ export class DashboardComponent extends BasicComponent implements OnInit {
       this.dashboardForm.controls.location
         .get('sect_id'.toString())
         .setValue('');
-      this.newOrg = '';
     }
   }
 
