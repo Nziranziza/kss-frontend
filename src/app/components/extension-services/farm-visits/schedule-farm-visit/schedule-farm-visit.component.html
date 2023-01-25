@@ -245,7 +245,7 @@
               {{ "select_gap_to_cover" | translate }}</label>
             <ng-multiselect-dropdown formControlName="adoptionGap" [placeholder]="'select gap'"
               [settings]="gapDropdownSettings" [data]="gaps" [(ngModel)]="scheduleVisit.value.adoptionGap"
-              (onSelect)="onGapSelect($event)" (onSelectAll)="onGapSelectAll($event)" required>
+              (onSelect)="onGapSelect($event)" (onSelectAll)="onGapSelectAll($event)" (onDeSelectAll)="onGapDeSelectAll($event)" required>
             </ng-multiselect-dropdown>
             <app-inline-errors *ngIf="
                 scheduleVisit.controls.adoptionGap.invalid &&

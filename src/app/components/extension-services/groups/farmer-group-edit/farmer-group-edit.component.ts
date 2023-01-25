@@ -51,6 +51,8 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
   groupMembers = [];
   time: any;
   id: string;
+  initialValue = '';
+  keyword = 'leaderName';
   scrollStrategy: ScrollStrategy;
   searchFields = [
     { value: 'reg_number', name: 'registration number' },
@@ -115,6 +117,14 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
     this.onChanges();
   }
 
+  selectEvent(item) {
+    this.editForm.controls.leaderNames.setValue(item.leaderName);
+    this.editForm.controls.leaderPhoneNumber.setValue(item.phone_number);
+  }
+  deselectEvent() {
+    console.log('----');
+  }
+
   getGroupDetails() {
     this.groupService.get(this.id).subscribe(data => {
       const members = data.data.members;
@@ -128,6 +138,8 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
             phone_number: '',
             _id: member.userId,
           },
+          leaderName: '',
+          phone_number: '',
           selected: true
         };
         item.userInfo.regNumber = member.regNumber;
@@ -137,6 +149,8 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
           item.userInfo.foreName = member.firstName;
           item.userInfo.surname = member.lastName;
         }
+        item.leaderName = item.userInfo.groupName ? item.userInfo.groupName : item.userInfo.surname + ' ' + item.userInfo.foreName;
+        item.phone_number = member.phoneNumber;
         item.userInfo.phone_number = member.phoneNumber;
         this.groupMembers.push(item);
       });
@@ -176,7 +190,6 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
     this.editForm.markAllAsTouched();
     if (true) {
       const value = JSON.parse(JSON.stringify(this.editForm.value));
-      value.org_id = this.authenticationService.getCurrentUser().info.org_id;
       value.meetingSchedule.meetingDay = +value.meetingSchedule.meetingDay;
       const members = [];
       this.groupMembers.map((member) => {
@@ -252,6 +265,8 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
     this.searchResults.forEach((item) => {
       if (item.selected) {
         item.selected = false;
+        item.leaderName = item.userInfo.groupName ? item.userInfo.groupName : item.userInfo.surname + ' ' + item.userInfo.foreName;
+        item.phone_number = item.userInfo.phone_number;
         this.groupMembers.push(JSON.parse(JSON.stringify(item)));
       }
     });
