@@ -85,6 +85,13 @@
   cursor: pointer;
 }
 
+.close {
+  &.white {
+    color: $light-color;
+    opacity: 1;
+  }
+}
+
 .login-box {
   &.action-button {
     background-color: $primary-color;

@@ -135,11 +135,21 @@ export class ScheduleFarmVisitComponent extends BasicComponent implements OnInit
     );
     gapSelected.setValue(gapOptions, { emitEvent: false });
   }
+
   onGapSelectAll(items: any) {
     const gapSelected = this.scheduleVisit.get('adoptionGap'.toString());
-
+    this.gaps = this.gaps.filter((e) => e._id !== '');
     gapSelected.setValue(items.filter((e) => e._id !== ''), { emitEvent: false });
   }
+
+  onGapDeSelectAll(items: any) {
+    const gapSelected = this.scheduleVisit.get('adoptionGap'.toString());
+    gapSelected.setValue([{
+      _id: '',
+      name: 'Not Applied',
+    }], { emitEvent: false });
+  }
+
 
   getFarms(groupName: string) {
     const data = {

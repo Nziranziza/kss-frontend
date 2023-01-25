@@ -1,0 +1,15 @@
+.sms-tabs {
+  margin-top: 25px;
+}
+.sms-tabs .nav-tabs > li.active > a {
+  background-color: #fef8eb;
+}
+.sms-tabs .nav-tabs > li {
+  width: 50%;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.sms-tabs .nav-tabs > li a {
+  color: unset !important;
+}

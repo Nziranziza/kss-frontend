@@ -235,9 +235,9 @@
   <div class="row invoice-info">
     <h4 class="text-center">List of Associated Schedule</h4>
     <div class="box-body table-responsive"
-      *ngIf="training?.schedules?.location?.cell_id && training?.schedules.length > 0">
+      *ngIf="training?.schedules.length > 0">
       <app-loader *ngIf="loading"></app-loader>
-      <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped">
+      <table datatable class="row-border hover table table-striped">
         <thead>
           <tr>
             <th>Date Added</th>
