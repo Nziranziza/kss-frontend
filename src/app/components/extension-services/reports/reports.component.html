@@ -664,8 +664,9 @@
           <th>Village</th>
           <th>Total Trees</th>
           <th>Status</th>
-          <th>Reg Number</th>
-          <th>Owner names</th>
+          <th>Owner Reg Number</th>
+          <th>Owner Names</th>
+          <th>Owner Phone Number</th>
         </tr>
       </thead>
       <tbody>
@@ -698,6 +699,9 @@
                   ? data?.userInfo?.groupName
                   : data?.userInfo?.foreName + " " + data.userInfo?.surname
               }}
+            </td>
+            <td>
+              {{ data?.userInfo?.phone_number }}
             </td>
           </tr>
         </ng-container>

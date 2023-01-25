@@ -297,7 +297,7 @@ export class ReportsComponent extends BasicComponent implements OnInit {
 
           if(value) {
             this.siteService
-            .getZone({ prov_id: value, searchBy: 'province' })
+            .getZone({ prov_id: value, searchBy: 'province', partner: 'Technoserve' })
             .subscribe((data) => {
               if (data) {
                 this.organisations = data.content.filter((org) =>
@@ -340,7 +340,7 @@ export class ReportsComponent extends BasicComponent implements OnInit {
         );
         if(value) {
           this.siteService
-          .getZone({ dist_id: value, searchBy: 'district' })
+          .getZone({ dist_id: value, searchBy: 'district', partner: 'Technoserve' })
           .subscribe((data) => {
             if (data) {
               this.organisations = data.content.filter((org) =>
