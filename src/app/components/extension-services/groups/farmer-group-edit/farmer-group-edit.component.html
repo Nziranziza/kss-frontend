@@ -210,15 +210,70 @@
                     <td>{{ i + 1 }}</td>
                     <td>
                       <ng-container *ngIf="item.userInfo.groupName; else names">
-                        {{ item.userInfo.groupName }}
+                        {{ item?.userInfo?.groupName }}
                       </ng-container>
                       <ng-template #names>
                         {{
-                          item.userInfo.surname + " " + item.userInfo.foreName
+                          item?.userInfo?.surname + " " + item?.userInfo?.foreName
                         }}
                       </ng-template>
                     </td>
-                    <td>{{ item.userInfo.phone_number }}</td>
+
+                    <td>
+                      <form [formGroup]="editContactForm">
+                        <div formArrayName="contacts">
+                          <div class="row" *ngIf="item.userInfo.phone_number">
+                            <div class="col-xs-8" formGroupName="{{ i }}">
+                              <span *ngIf="!item.editMode">
+                                {{ item?.userInfo?.phone_number }}
+                              </span>
+                              <span *ngIf="item.editMode">
+                                <input type="number" min="0" style="height: 23px; width: 95%" placeholder="250"
+                                  formControlName="contact" />
+                              </span>
+                            </div>
+                            <div class="col-xs-3">
+                              <span *ngIf="!item.editMode">
+                                <button class="btn btn-primary btn-xs" (click)="addContact(i)">
+                                  <i class="fa fa-edit"></i>
+                                </button>
+                              </span>
+                              <span *ngIf="item.editMode">
+                                <button class="btn btn-success btn-xs" (click)="cancelEditContact(i)"
+                                  style="margin-right: 3px">
+                                  <i class="fa fa-remove"></i>
+                                </button>
+                                <button class="btn btn-success btn-xs" (click)="submitContact(i)">
+                                  <i class="fa fa-check"></i></button></span>
+                            </div>
+                          </div>
+                          <div class="row" *ngIf="!item.userInfo.phone_number">
+                            <div class="col-xs-8" formGroupName="{{ i }}">
+                              <span *ngIf="!item.editMode" style="color: #ff0000">
+                                Add a phone number
+                              </span>
+                              <span *ngIf="item.editMode">
+                                <input type="number" min="0" style="height: 23px; width: 95%"
+                                  formControlName="contact" /></span>
+                            </div>
+                            <div class="col-xs-3">
+                              <span *ngIf="!item.editMode">
+                                <button class="btn btn-primary btn-xs" (click)="addContact(i)">
+                                  <i class="fa fa-plus"></i>
+                                </button>
+                              </span>
+                              <span *ngIf="item.editMode">
+                                <button class="btn btn-primary btn-xs" (click)="cancelEditContact(i)"
+                                  style="margin-right: 3px">
+                                  <i class="fa fa-remove"></i>
+                                </button>
+                                <button class="btn btn-success btn-xs" (click)="submitContact(i)">
+                                  <i class="fa fa-check"></i></button></span>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+                    </td>
                     <td>
                       <input type="checkbox" (click)="selectResultsItem($event.target.checked, i)"
                         *ngIf="notInGroupMembers(i)" [(ngModel)]="searchResults[i].selected"

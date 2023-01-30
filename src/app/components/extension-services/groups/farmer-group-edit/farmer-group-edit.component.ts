@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   AuthenticationService,
@@ -41,6 +41,7 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
   errors: any;
   provinces: any;
   filterForm: FormGroup;
+  editContactForm: FormGroup;
   parameters: any;
   loading = false;
   org: any;
@@ -109,6 +110,9 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
         searchBy: ['reg_number'],
       }),
     });
+    this.editContactForm = this.formBuilder.group({
+      contacts: this.formBuilder.array([]),
+    });
     this.route.params.subscribe(params => {
       this.id = params['id'.toString()];
     });
@@ -125,6 +129,54 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
     console.log('----');
   }
 
+  // adding new contacts
+  addContacts() {
+    const departmentControl = (
+      this.editContactForm.get('contacts') as FormArray
+    ).controls;
+    this.searchResults.forEach((user) => {
+      departmentControl.push(
+        this.formBuilder.group({
+          userId: user.userInfo._id,
+          contact: user.userInfo.phone_number,
+        })
+      );
+    });
+  }
+
+
+  addContact(index) {
+    this.searchResults[index].editMode = true;
+  }
+
+  cancelEditContact(index) {
+    this.searchResults[index].editMode = false;
+  }
+
+  // submitting the contacts
+
+  submitContact(index) {
+    if (this.editContactForm.valid) {
+      const arrayControl = this.editContactForm.get('contacts') as FormArray;
+      const traineData = arrayControl.at(index);
+      this.searchResults[index].userInfo.phone_number = traineData.value.contact;
+      this.searchResults[index].editMode = false;
+      this.userService
+        .updateBasic({
+          id: traineData.value.userId,
+          phone_number: traineData.value.contact.toString(),
+          lastModifiedBy: {
+            _id: this.authenticationService.getCurrentUser().info._id,
+            name: this.authenticationService.getCurrentUser().info.surname,
+          },
+        })
+        .subscribe((newdata) => {
+          this.loading = false;
+        });
+    } else {
+      this.errors = this.helper.getFormValidationErrors(this.editContactForm);
+    }
+  }
   getGroupDetails() {
     this.groupService.get(this.id).subscribe(data => {
       const members = data.data.members;
@@ -313,6 +365,7 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
       this.organisationService.getFarmers(this.parameters).subscribe(
         (data) => {
           this.searchResults = data.data;
+          this.addContacts();
           this.loading = false;
         },
         (err) => {

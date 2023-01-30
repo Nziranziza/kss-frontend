@@ -285,7 +285,7 @@
                     }}</label>
                   <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="visitDate" [min]="newDate"
                     class="form-control" placeholder="Dd/mm/yyyy" />
-                  <owl-date-time #dt1 [pickerType]="'calendar'" [scrollStrategy]="scrollStrategy"></owl-date-time>
+                  <owl-date-time [pickerType]="'calendar'" [scrollStrategy]="scrollStrategy" #dt1></owl-date-time>
                   <app-inline-errors *ngIf="
                       scheduleVisit.controls.date.get('visitDate').invalid &&
                       (scheduleVisit.controls.date.get('visitDate').dirty ||
@@ -302,7 +302,7 @@
                   }}</label>
                 <input [owlDateTimeTrigger]="dt3" class="form-control" formControlName="startTime"
                   [owlDateTime]="dt3" />
-                <owl-date-time #dt3 [pickerType]="'timer'" [scrollStrategy]="scrollStrategy"></owl-date-time>
+                <owl-date-time [pickerType]="'timer'" [scrollStrategy]="scrollStrategy" #dt3></owl-date-time>
                 <app-inline-errors *ngIf="
                     scheduleVisit.controls.startTime.invalid &&
                     (scheduleVisit.controls.startTime.dirty ||
@@ -317,7 +317,7 @@
                   "end_time" | translate
                   }}</label>
                 <input [owlDateTimeTrigger]="dt4" class="form-control" formControlName="endTime" [owlDateTime]="dt4" />
-                <owl-date-time #dt4 [pickerType]="'timer'" [scrollStrategy]="scrollStrategy"></owl-date-time>
+                <owl-date-time [pickerType]="'timer'" [scrollStrategy]="scrollStrategy" #dt4></owl-date-time>
                 <app-inline-errors *ngIf="
                     scheduleVisit.controls.endTime.invalid &&
                     (scheduleVisit.controls.endTime.dirty ||
