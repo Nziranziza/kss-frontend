@@ -137,43 +137,34 @@
         </thead>
         <tbody>
           <ng-container *ngFor="let distribution of nurseryDistribution | paginate: config">
-            <tr>
+            <tr *ngFor="let dist of distribution.distributions">
               <td>{{ distribution?.date | date: "short" }}</td>
               <td>
-                <div *ngFor="let dist of distribution.distributions">
-                  <span *ngIf="dist.reason == 'in_filling' else zeroData">
-                    {{ dist?.distributedQty }}
-                  </span>
-                  <ng-template #zeroData>
-                    0
-                  </ng-template>
-                </div>
+                <span *ngIf="dist.reason == 'in_filling' else zeroData">
+                  {{ dist?.distributedQty }}
+                </span>
               </td>
               <td>
-                <div *ngFor="let dist of distribution.distributions">
-                  <span *ngIf="dist.reason == 'replacement' else zeroData">
-                    {{ dist?.distributedQty }}
-                  </span>
-                  <ng-template #zeroData>
-                    0
-                  </ng-template>
-                </div>
+                <span *ngIf="dist.reason == 'replacement' else zeroData">
+                  {{ dist?.distributedQty }}
+                </span>
+                <ng-template #zeroData>
+                  0
+                </ng-template>
               </td>
               <td>
-                <div *ngFor="let dist of distribution.distributions">
-                  <span *ngIf="dist.reason == 'expansion' else zeroData">
-                    {{ dist?.distributedQty }}
-                  </span>
-                  <ng-template #zeroData>
-                    0
-                  </ng-template>
-                </div>
+                <span *ngIf="dist.reason == 'expansion' else zeroData">
+                  {{ dist?.distributedQty }}
+                </span>
+                <ng-template #zeroData>
+                  0
+                </ng-template>
               </td>
               <td>
                 {{
-                  distribution?.farmer?.firstName.toLowerCase() +
+                  distribution?.farmer?.firstName?.toLowerCase() +
                     " " +
-                    distribution?.farmer?.lastName.toLowerCase()
+                    distribution?.farmer?.lastName?.toLowerCase()
                 }}
               </td>
               <td>{{ distribution?.officer?.name?.toLowerCase() }}</td>
