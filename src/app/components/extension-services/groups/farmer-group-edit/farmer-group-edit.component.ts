@@ -126,7 +126,7 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
     this.editForm.controls.leaderPhoneNumber.setValue(item.phone_number);
   }
   deselectEvent() {
-    console.log('----');
+    console.log('---------------');
   }
 
   // adding new contacts
@@ -256,7 +256,7 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
         },
         (err) => {
           this.loading = false;
-          this.errors = err.errors;
+          this.errors = err.error || err.errors ;
         }
       );
     } else {
