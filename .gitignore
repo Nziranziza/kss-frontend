@@ -8,6 +8,8 @@
 /node_modules
 /dist
 
+/.angular/
+
 # files
 /shipitFile.js
 
