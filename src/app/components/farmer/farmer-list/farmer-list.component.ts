@@ -11,7 +11,7 @@ import {Router} from '@angular/router';
 import {Farmer} from '../../../core';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {FarmerDetailsComponent} from '../farmer-details/farmer-details.component';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {isArray, isObject} from 'util';
 import {BasicComponent} from '../../../core';
 import {HelperService} from '../../../core';
@@ -25,7 +25,7 @@ export class FarmerListComponent
   extends BasicComponent
   implements OnInit, OnDestroy {
   isDistrictCashCrop = false;
-  filterForm: FormGroup;
+  filterForm: UntypedFormGroup;
   maxSize = 9;
   order = 'userInfo.foreName';
   reverse = true;
@@ -77,7 +77,7 @@ export class FarmerListComponent
     private authorisationService: AuthorisationService,
     private helper: HelperService,
     private modal: NgbModal,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private messageService: MessageService,
     private locationService: LocationService
   ) {

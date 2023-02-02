@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
@@ -22,13 +22,13 @@ export class TrainingEditComponent
   extends BasicComponent
   implements OnInit, OnDestroy
 {
-  createTraining: FormGroup;
+  createTraining: UntypedFormGroup;
   closeResult = '';
   id: string;
   training: Training;
   gapDropdownSettings: IDropdownSettings = {};
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private trainingService: TrainingService,
     private gapService: GapService,
     private router: Router,

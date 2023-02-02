@@ -8,7 +8,7 @@ import {NgxPaginationModule} from 'ngx-pagination';
 import {OrderModule} from 'ngx-order-pipe';
 import {OwlDateTimeModule, OwlNativeDateTimeModule} from 'ng-pick-datetime-ex';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {FusionChartsModule} from 'angular-fusioncharts';
+// import {FusionChartsModule} from 'angular-fusioncharts';
 import {GoogleChartsModule} from 'angular-google-charts';
 import {ParchmentReportComponent} from '../../reports/parchment-report/parchment-report.component';
 import {ParchmentReportDetailComponent} from '../../reports/parchment-report/parchment-report-detail/parchment-report-detail.component';
@@ -27,7 +27,8 @@ import { ParchmentEditComponent } from './parchment-edit/parchment-edit.componen
         CommonModule,
         ParchmentRoutingModule, NgbModule, NgxPaginationModule, OrderModule,
         SharedModule, OwlDateTimeModule,
-        FusionChartsModule, GoogleChartsModule,
+        // FusionChartsModule,
+        GoogleChartsModule,
         AutocompleteLibModule,
         OwlNativeDateTimeModule,
         OwlNativeDateTimeModule, BrowserAnimationsModule

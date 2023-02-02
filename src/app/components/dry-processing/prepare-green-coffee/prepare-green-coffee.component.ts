@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {
   AuthenticationService,
   CoffeeTypeService,
@@ -27,7 +27,7 @@ declare var $;
 })
 export class PrepareGreenCoffeeComponent extends BasicComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  filterForm: FormGroup;
+  filterForm: UntypedFormGroup;
   cartItem = [];
   cart = [];
   title = 'Prepare green coffee';
@@ -61,7 +61,7 @@ export class PrepareGreenCoffeeComponent extends BasicComponent implements OnIni
   constructor(private parchmentService: ParchmentService,
               private router: Router,
               private dryMillService: DryProcessingService,
-              private formBuilder: FormBuilder,
+              private formBuilder: UntypedFormBuilder,
               private coffeeTypeService: CoffeeTypeService,
               private confirmDialogService: ConfirmDialogService,
               private organisationService: OrganisationService,

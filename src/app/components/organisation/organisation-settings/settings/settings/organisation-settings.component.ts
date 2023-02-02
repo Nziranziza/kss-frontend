@@ -1,5 +1,5 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {BasicComponent} from '../../../../../core';
 import {PaymentService} from '../../../../../core/services/payment.service';
 import {HelperService} from '../../../../../core';
@@ -16,15 +16,15 @@ import {EditCertificateComponent} from '../edit-certificate/edit-certificate.com
 })
 export class OrganisationSettingsComponent extends BasicComponent implements OnInit {
 
-  constructor(private formBuilder: FormBuilder, private modal: NgbModal,
+  constructor(private formBuilder: UntypedFormBuilder, private modal: NgbModal,
               private paymentService: PaymentService, private  confirmDialogService: ConfirmDialogService,
               private route: ActivatedRoute, private coffeeTypeService: CoffeeTypeService,
               private helper: HelperService, private organisationService: OrganisationService) {
     super();
   }
 
-  addPaymentChannelForm: FormGroup;
-  addCertificateForm: FormGroup;
+  addPaymentChannelForm: UntypedFormGroup;
+  addCertificateForm: UntypedFormGroup;
   coffeeTypes = [];
   paymentChannels: any;
   channels: any;
@@ -44,7 +44,7 @@ export class OrganisationSettingsComponent extends BasicComponent implements OnI
       this.organisationId = params['organisationId'.toString()];
     });
     this.addPaymentChannelForm = this.formBuilder.group({
-      paymentChannels: new FormArray([])
+      paymentChannels: new UntypedFormArray([])
     });
     this.addCertificateForm = this.formBuilder.group({
       certificateName: ['', Validators.required],
@@ -101,7 +101,7 @@ export class OrganisationSettingsComponent extends BasicComponent implements OnI
   }
 
   get formPaymentChannel() {
-    return this.addPaymentChannelForm.controls.paymentChannels as FormArray;
+    return this.addPaymentChannelForm.controls.paymentChannels as UntypedFormArray;
   }
 
   onChangePaymentChannel(index: number) {
@@ -119,19 +119,19 @@ export class OrganisationSettingsComponent extends BasicComponent implements OnI
   }
 
   addPaymentChannel() {
-    (this.addPaymentChannelForm.controls.paymentChannels as FormArray).push(this.createPaymentChannel());
+    (this.addPaymentChannelForm.controls.paymentChannels as UntypedFormArray).push(this.createPaymentChannel());
   }
 
   removePaymentChannel(index: number) {
-    (this.addPaymentChannelForm.controls.paymentChannels as FormArray).removeAt(index);
+    (this.addPaymentChannelForm.controls.paymentChannels as UntypedFormArray).removeAt(index);
   }
 
-  getPaymentChannelFormGroup(index): FormGroup {
-    this.paymentChannels = this.addPaymentChannelForm.controls.paymentChannels as FormArray;
-    return this.paymentChannels.controls[index] as FormGroup;
+  getPaymentChannelFormGroup(index): UntypedFormGroup {
+    this.paymentChannels = this.addPaymentChannelForm.controls.paymentChannels as UntypedFormArray;
+    return this.paymentChannels.controls[index] as UntypedFormGroup;
   }
 
-  createPaymentChannel(): FormGroup {
+  createPaymentChannel(): UntypedFormGroup {
     return this.formBuilder.group({
       channelId: ['', Validators.required],
       subscriptionNumber: ['', Validators.required],

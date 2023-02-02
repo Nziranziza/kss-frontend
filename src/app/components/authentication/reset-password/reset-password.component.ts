@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AuthenticationService} from '../../../core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {HelperService} from '../../../core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {MessageService} from '../../../core';
@@ -16,7 +16,7 @@ declare var $;
 })
 export class ResetPasswordComponent extends BasicComponent implements OnInit {
 
-  resetPasswordForm: FormGroup;
+  resetPasswordForm: UntypedFormGroup;
   userId: string;
   isValidToken = false;
   token: string;
@@ -26,7 +26,7 @@ export class ResetPasswordComponent extends BasicComponent implements OnInit {
     private router: Router,
     private authenticationService: AuthenticationService,
     private http: HttpClient,
-    private formBuilder: FormBuilder, private helperService: HelperService,
+    private formBuilder: UntypedFormBuilder, private helperService: HelperService,
     private messageService: MessageService
   ) {
     super();

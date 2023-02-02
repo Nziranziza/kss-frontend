@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {BasicComponent} from '../../../core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {
   AuthenticationService,
   ConfirmDialogService, OrganisationService,
@@ -25,7 +25,7 @@ declare var $;
 
 export class DmParchmentListDeliveriesComponent extends BasicComponent implements OnInit, AfterViewInit {
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(private formBuilder: UntypedFormBuilder,
               private router: Router, private confirmDialogService: ConfirmDialogService,
               private seasonService: SeasonService,
               private modal: NgbModal,
@@ -36,7 +36,7 @@ export class DmParchmentListDeliveriesComponent extends BasicComponent implement
     super();
   }
 
-  filterForm: FormGroup;
+  filterForm: UntypedFormGroup;
   dtOptions: any = {};
   // @ts-ignore
   dtTrigger: Subject = new Subject();

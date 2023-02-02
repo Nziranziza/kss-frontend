@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {AuthenticationService, AuthorisationService, MessageService, SiteService} from '../../../../core/services';
 import {ActivatedRoute, Router} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
@@ -16,7 +16,7 @@ export class SitePendingFarmersComponent extends BasicComponent implements OnIni
               private router: Router, private authorisationService: AuthorisationService,
               private authenticationService: AuthenticationService,
               private route: ActivatedRoute,
-              private modal: NgbModal, private formBuilder: FormBuilder, private messageService: MessageService) {
+              private modal: NgbModal, private formBuilder: UntypedFormBuilder, private messageService: MessageService) {
     super();
     this.parameters = {
       length: 25,
@@ -31,7 +31,7 @@ export class SitePendingFarmersComponent extends BasicComponent implements OnIni
   order = 'foreName';
   reverse = true;
   directionLinks = true;
-  filterForm: FormGroup;
+  filterForm: UntypedFormGroup;
   title = 'temporary farmers';
   i: number;
   parameters: any;

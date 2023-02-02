@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MessageService, SiteService} from '../../../../core/services';
 import {LocationService} from '../../../../core/services';
@@ -13,14 +13,14 @@ import {isUndefined} from 'util';
 })
 export class SiteEditComponent implements OnInit{
 
-  constructor(private formBuilder: FormBuilder, private route: ActivatedRoute,
+  constructor(private formBuilder: UntypedFormBuilder, private route: ActivatedRoute,
               private router: Router, private siteService: SiteService,
               private messageService: MessageService,
               private locationService: LocationService,
               private helper: HelperService) {
   }
 
-  editForm: FormGroup;
+  editForm: UntypedFormGroup;
   errors: string[];
   organisations: any;
   provinces: any;

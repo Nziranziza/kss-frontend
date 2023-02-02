@@ -6,7 +6,7 @@ import {
   SeasonService,
   SiteService
 } from '../../../../core';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
@@ -17,7 +17,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 export class SiteDispatchPlanComponent extends BasicComponent implements OnInit, OnDestroy {
 
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(private formBuilder: UntypedFormBuilder,
               private route: ActivatedRoute,
               private siteService: SiteService,
               private router: Router, private confirmDialogService: ConfirmDialogService,
@@ -27,7 +27,7 @@ export class SiteDispatchPlanComponent extends BasicComponent implements OnInit,
     super();
   }
 
-  dispatchPlanForm: FormGroup;
+  dispatchPlanForm: UntypedFormGroup;
   qtyPesticides = 0;
   season: any;
   id: string;
@@ -42,9 +42,9 @@ export class SiteDispatchPlanComponent extends BasicComponent implements OnInit,
     this.dispatchPlanForm = this.formBuilder.group({
       fertilizers: this.formBuilder.group({
         qty: [0],
-        cws: new FormArray([]),
+        cws: new UntypedFormArray([]),
       }),
-      pesticides: new FormArray([]),
+      pesticides: new UntypedFormArray([]),
       qtyPesticides: [0]
     });
     this.route.params.subscribe(params => {
@@ -54,7 +54,7 @@ export class SiteDispatchPlanComponent extends BasicComponent implements OnInit,
         this.cws = this.site.coveredAreas.coveredCWS;
         this.getCurrentSeason();
         for (const station of this.cws) {
-          (this.dispatchPlanForm.controls.fertilizers.get('cws') as FormArray)
+          (this.dispatchPlanForm.controls.fertilizers.get('cws') as UntypedFormArray)
             .push(
               this.formBuilder.group({
                 org_id: [station.org_id],
@@ -68,27 +68,27 @@ export class SiteDispatchPlanComponent extends BasicComponent implements OnInit,
   }
 
   get formPesticides() {
-    return this.dispatchPlanForm.controls.pesticides as FormArray;
+    return this.dispatchPlanForm.controls.pesticides as UntypedFormArray;
   }
 
   getFormPesticidesCws(index: number) {
-    return this.formPesticides.controls[index].get('cws') as FormArray
+    return this.formPesticides.controls[index].get('cws') as UntypedFormArray
   }
 
   get formFertilizersCWS() {
-    return this.dispatchPlanForm.controls.fertilizers.get('cws') as FormArray
+    return this.dispatchPlanForm.controls.fertilizers.get('cws') as UntypedFormArray
   }
 
   addPesticide() {
-    (this.dispatchPlanForm.controls.pesticides as FormArray).push(this.createPesticide());
+    (this.dispatchPlanForm.controls.pesticides as UntypedFormArray).push(this.createPesticide());
   }
 
   removePesticide(index: number) {
-    (this.dispatchPlanForm.controls.pesticides as FormArray).removeAt(index);
+    (this.dispatchPlanForm.controls.pesticides as UntypedFormArray).removeAt(index);
   }
 
-  createPesticide(): FormGroup {
-    const stations = new FormArray([]);
+  createPesticide(): UntypedFormGroup {
+    const stations = new UntypedFormArray([]);
     for (const station of this.cws) {
       stations.push(
         this.formBuilder.group({
@@ -101,7 +101,7 @@ export class SiteDispatchPlanComponent extends BasicComponent implements OnInit,
     return this.formBuilder.group({
       inputId: ['', Validators.required],
       qty: [''],
-      cws: stations as FormArray
+      cws: stations as UntypedFormArray
     });
   }
 
@@ -168,7 +168,7 @@ export class SiteDispatchPlanComponent extends BasicComponent implements OnInit,
 
   onIncludePesticide() {
     this.includePesticide = !this.includePesticide;
-    if ((this.dispatchPlanForm.get('pesticides') as FormArray).length === 0) {
+    if ((this.dispatchPlanForm.get('pesticides') as UntypedFormArray).length === 0) {
       this.addPesticide();
     }
   }
@@ -196,7 +196,7 @@ export class SiteDispatchPlanComponent extends BasicComponent implements OnInit,
 
     this.includeFertilizer = plan.fertilizers.qty > 0;
     for (const pesticide of plan.pesticides) {
-      const stations = new FormArray([]);
+      const stations = new UntypedFormArray([]);
       let subTotal = 0;
       for (const station of this.cws) {
         const qt = pesticide.cws.find((c) => c.org_id === station.org_id)?.qty
@@ -209,7 +209,7 @@ export class SiteDispatchPlanComponent extends BasicComponent implements OnInit,
         );
         subTotal = subTotal + qt;
       }
-      (this.dispatchPlanForm.controls.pesticides as FormArray).push(
+      (this.dispatchPlanForm.controls.pesticides as UntypedFormArray).push(
         this.formBuilder.group({
           inputId: [pesticide.inputId, Validators.required],
           qty: [subTotal],

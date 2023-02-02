@@ -12,7 +12,7 @@ import {Subject} from 'rxjs';
 import {BasicComponent} from '../../../core';
 import {DataTableDirective} from 'angular-datatables';
 import {AddCoffeeItemComponent} from '../prepare-green-coffee/add-coffee-item/add-coffee-item.component';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {HelperService} from '../../../core';
 import {AddResultsComponent} from './add-results/add-results.component';
 
@@ -26,7 +26,7 @@ declare var $;
 export class ListGreenCoffeeComponent extends BasicComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private router: Router, private confirmDialogService: ConfirmDialogService,
     private seasonService: SeasonService,
     private modal: NgbModal,
@@ -51,7 +51,7 @@ export class ListGreenCoffeeComponent extends BasicComponent implements OnInit, 
   summary: any;
   results: any;
   orgId: string;
-  filterForm: FormGroup;
+  filterForm: UntypedFormGroup;
   currentDate: any;
   seasonStartingDate: string;
   organisations = [];

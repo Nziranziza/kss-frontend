@@ -1,6 +1,6 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {CoffeeTypeService, ConfirmDialogService, MessageService, OrganisationService} from '../../../../core/services';
 import {ParchmentService} from '../../../../core/services';
 import {AuthenticationService} from '../../../../core/services';
@@ -21,7 +21,7 @@ import {ParchmentEditComponent} from '../parchment-edit/parchment-edit.component
 
 export class ParchmentListComponent extends BasicComponent implements OnInit, OnDestroy {
 
-  filterForm: FormGroup;
+  filterForm: UntypedFormGroup;
   maxSize = 9;
   order = 'coffeeType.name';
   reverse = true;
@@ -55,7 +55,7 @@ export class ParchmentListComponent extends BasicComponent implements OnInit, On
 
   constructor(private parchmentService: ParchmentService,
               private router: Router,
-              private formBuilder: FormBuilder,
+              private formBuilder: UntypedFormBuilder,
               private messageService: MessageService,
               private coffeeTypeService: CoffeeTypeService,
               private confirmDialogService: ConfirmDialogService,

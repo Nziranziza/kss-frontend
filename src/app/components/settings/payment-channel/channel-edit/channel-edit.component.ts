@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 
 import {PaymentService} from '../../../../core/services/payment.service';
@@ -14,10 +14,10 @@ import {BasicComponent} from '../../../../core';
 
 export class ChannelEditComponent extends BasicComponent implements OnInit {
 
-  editForm: FormGroup;
+  editForm: UntypedFormGroup;
   id: string;
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(private formBuilder: UntypedFormBuilder,
               private route: ActivatedRoute,
               private router: Router,
               private paymentService: PaymentService,

@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {
   TrainingService,
@@ -26,16 +26,16 @@ import { ScrollStrategy, ScrollStrategyOptions } from '@angular/cdk/overlay';
 export class TrainingScheduleEditComponent
   extends BasicComponent
   implements OnInit {
-  scheduleTraining: FormGroup;
-  filterForm: FormGroup;
-  editContactForm: FormGroup;
+  scheduleTraining: UntypedFormGroup;
+  filterForm: UntypedFormGroup;
+  editContactForm: UntypedFormGroup;
   selectedStartDate: string;
   selectedEndDate: string;
   newDate: Date = new Date();
   sectors: any[];
   districts: any;
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private modalService: NgbModal,
     private trainingService: TrainingService,
     protected locationService: LocationService,
@@ -213,7 +213,7 @@ export class TrainingScheduleEditComponent
 
   addContacts() {
     const departmentControl = (
-      this.editContactForm.get('contacts') as FormArray
+      this.editContactForm.get('contacts') as UntypedFormArray
     ).controls;
     this.trainees.forEach((trainee) => {
       departmentControl.push(
@@ -321,7 +321,7 @@ export class TrainingScheduleEditComponent
 
   submitContact(index) {
     if (this.editContactForm.valid) {
-      const arrayControl = this.editContactForm.get('contacts') as FormArray;
+      const arrayControl = this.editContactForm.get('contacts') as UntypedFormArray;
       const traineData = arrayControl.at(index);
       this.trainees[index].contact = traineData.value.contact;
       this.trainees[index].phoneNumber = traineData.value.contact;

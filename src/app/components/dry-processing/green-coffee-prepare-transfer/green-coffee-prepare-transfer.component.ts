@@ -10,7 +10,7 @@ import {
   OrganisationService
 } from '../../../core';
 
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {DatePipe} from '@angular/common';
@@ -25,8 +25,8 @@ declare var $;
 })
 export class GreenCoffeePrepareTransferComponent  extends BasicComponent implements OnInit, OnDestroy {
 
-  filterForm: FormGroup;
-  transferForm: FormGroup;
+  filterForm: UntypedFormGroup;
+  transferForm: UntypedFormGroup;
   cartItem = [];
   cart = [];
   organisations: any;
@@ -42,7 +42,7 @@ export class GreenCoffeePrepareTransferComponent  extends BasicComponent impleme
 
   constructor(private dryProcessingService: DryProcessingService,
               private router: Router,
-              private formBuilder: FormBuilder,
+              private formBuilder: UntypedFormBuilder,
               private coffeeTypeService: CoffeeTypeService,
               private confirmDialogService: ConfirmDialogService,
               private organisationService: OrganisationService,

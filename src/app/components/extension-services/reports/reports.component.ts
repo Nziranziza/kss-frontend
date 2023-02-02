@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Subject } from 'rxjs';
 import {
   AuthenticationService,
@@ -29,7 +29,7 @@ export class ReportsComponent extends BasicComponent implements OnInit {
   dataPdf: any;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private seasonService: SeasonService,
     private authenticationService: AuthenticationService,
     private locationService: LocationService,
@@ -46,7 +46,7 @@ export class ReportsComponent extends BasicComponent implements OnInit {
 
   statsLoading = false;
   reportLoading = false;
-  reportForm: FormGroup;
+  reportForm: UntypedFormGroup;
   @ViewChild("orgAuto") orgAuto: any;
   dtOptions: DataTables.Settings = {};
   // @ts-ignore
@@ -263,7 +263,7 @@ export class ReportsComponent extends BasicComponent implements OnInit {
           this.resetCWSFilter();
         }
         this.locationChangDistrict(
-          this.reportForm.get("filter") as FormGroup,
+          this.reportForm.get("filter") as UntypedFormGroup,
           value
         );
         this.reportForm.controls.filter
@@ -291,7 +291,7 @@ export class ReportsComponent extends BasicComponent implements OnInit {
             .get("location.prov_id".toString())
             .patchValue(value, { emitEvent: false });
           this.locationChangeProvince(
-            this.reportForm.get("filter") as FormGroup,
+            this.reportForm.get("filter") as UntypedFormGroup,
             value
           );
 
@@ -339,7 +339,7 @@ export class ReportsComponent extends BasicComponent implements OnInit {
           .get("location.dist_id".toString())
           .patchValue(value, { emitEvent: false });
         this.locationChangDistrict(
-          this.reportForm.get("filter") as FormGroup,
+          this.reportForm.get("filter") as UntypedFormGroup,
           value
         );
         if (value) {
@@ -397,7 +397,7 @@ export class ReportsComponent extends BasicComponent implements OnInit {
           );
         } else {
           this.locationChangSector(
-            this.reportForm.get("filter") as FormGroup,
+            this.reportForm.get("filter") as UntypedFormGroup,
             value
           );
         }

@@ -6,7 +6,7 @@ import {
   MessageService,
   OrganisationService
 } from '../../../core/services';
-import {FormBuilder} from '@angular/forms';
+import {UntypedFormBuilder} from '@angular/forms';
 import {HelperService} from '../../../core/helpers';
 import {ConfirmDispatchComponent} from './confirm-dispatch/confirm-dispatch.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
@@ -23,7 +23,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 export class SiteViewDispatchComponent extends BasicComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(private confirmDialogService: ConfirmDialogService,
-              private formBuilder: FormBuilder,
+              private formBuilder: UntypedFormBuilder,
               private helper: HelperService,
               private messageService: MessageService,
               private router: Router,

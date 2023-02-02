@@ -9,7 +9,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {NgxPaginationModule} from 'ngx-pagination';
 import {OrderModule} from 'ngx-order-pipe';
-import {FusionChartsModule} from 'angular-fusioncharts';
+// import {FusionChartsModule} from 'angular-fusioncharts';
 import {GoogleChartsModule} from 'angular-google-charts';
 import {PrepareGreenCoffeeComponent} from './prepare-green-coffee/prepare-green-coffee.component';
 import {ListGreenCoffeeComponent} from './list-green-coffee/list-green-coffee.component';
@@ -31,7 +31,8 @@ import { GreenCoffeeListTransfersComponent } from './green-coffee-list-transfers
         CommonModule,
         DryProcessingRoutingModule, NgbModule, NgxPaginationModule, OrderModule,
         SharedModule, OwlDateTimeModule,
-        FusionChartsModule, GoogleChartsModule,
+        // FusionChartsModule,
+        GoogleChartsModule,
         AutocompleteLibModule,
         OwlNativeDateTimeModule,
         OwlNativeDateTimeModule, BrowserAnimationsModule

@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {HelperService} from '../../../../core';
 import {CoffeeTypeService} from '../../../../core';
@@ -11,44 +11,44 @@ import {CoffeeTypeService} from '../../../../core';
 })
 export class CoffeeTypeCreateComponent implements OnInit {
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(private formBuilder: UntypedFormBuilder,
               private router: Router, private coffeeTypeService: CoffeeTypeService, private helper: HelperService) {
   }
 
-  createForm: FormGroup;
+  createForm: UntypedFormGroup;
   errors: string[];
   category: any;
 
   ngOnInit() {
     this.createForm = this.formBuilder.group({
       name: ['', Validators.required],
-      category: new FormArray([]),
+      category: new UntypedFormArray([]),
       level: ['', Validators.required]
     });
     this.addCategory();
   }
 
-  createCategory(): FormGroup {
+  createCategory(): UntypedFormGroup {
     return this.formBuilder.group({
       name: ['', Validators.required]
     });
   }
 
   get formCategory() {
-    return this.createForm.get('category') as FormArray;
+    return this.createForm.get('category') as UntypedFormArray;
   }
 
   addCategory() {
-    (this.createForm.controls.category as FormArray).push(this.createCategory());
+    (this.createForm.controls.category as UntypedFormArray).push(this.createCategory());
   }
 
   removeCategory(index: number) {
-    (this.createForm.controls.category as FormArray).removeAt(index);
+    (this.createForm.controls.category as UntypedFormArray).removeAt(index);
   }
 
-  getCategoryFormGroup(index): FormGroup {
-    this.category = this.createForm.get('category') as FormArray;
-    return this.category.controls[index] as FormGroup;
+  getCategoryFormGroup(index): UntypedFormGroup {
+    this.category = this.createForm.get('category') as UntypedFormArray;
+    return this.category.controls[index] as UntypedFormGroup;
   }
 
   onSubmit() {

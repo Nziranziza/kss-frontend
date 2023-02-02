@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {AuthorisationService, SeasonService, SiteService} from '../../../../core/services';
 import {Router} from '@angular/router';
 import {InputDistributionService} from '../../../../core/services';
@@ -20,7 +20,7 @@ import {BasicComponent} from '../../../../core/library';
 })
 export class WarehouseEntriesComponent extends BasicComponent implements OnInit {
 
-  constructor(private formBuilder: FormBuilder, private siteService: SiteService, private modal: NgbModal,
+  constructor(private formBuilder: UntypedFormBuilder, private siteService: SiteService, private modal: NgbModal,
               private authenticationService: AuthenticationService,
               private authorizationService: AuthorisationService,
               private router: Router, private inputDistributionService: InputDistributionService,
@@ -31,9 +31,9 @@ export class WarehouseEntriesComponent extends BasicComponent implements OnInit 
     super();
   }
 
-  recordEntriesForm: FormGroup;
+  recordEntriesForm: UntypedFormGroup;
   season: any;
-  filterEntriesForm: FormGroup;
+  filterEntriesForm: UntypedFormGroup;
   errors: any;
   message: any;
   isTypePesticide = false;
@@ -66,7 +66,7 @@ export class WarehouseEntriesComponent extends BasicComponent implements OnInit 
         driver: [''],
         driverPhoneNumber: [''],
         vehiclePlate: [''],
-        package: new FormArray([]),
+        package: new UntypedFormArray([]),
         totalQty: [''],
         date: [this.datePipe.transform(this.currentDate, 'yyyy-MM-dd', 'GMT+2'), Validators.required],
       }),
@@ -86,7 +86,7 @@ export class WarehouseEntriesComponent extends BasicComponent implements OnInit 
   onChange() {
     this.recordEntriesForm.get('inputType'.toString()).valueChanges.subscribe(
       (value) => {
-        this.package = (this.recordEntriesForm.controls.deliveryDetails.get('package') as FormArray);
+        this.package = (this.recordEntriesForm.controls.deliveryDetails.get('package') as UntypedFormArray);
 
         while (this.package.length !== 0) {
           this.package.removeAt(0);
@@ -153,27 +153,27 @@ export class WarehouseEntriesComponent extends BasicComponent implements OnInit 
   }
 
   get formPackage() {
-    return this.recordEntriesForm.controls.deliveryDetails.get('package') as FormArray;
+    return this.recordEntriesForm.controls.deliveryDetails.get('package') as UntypedFormArray;
   }
 
   addPackageFertilizer() {
-    (this.recordEntriesForm.controls.deliveryDetails.get('package') as FormArray).push(this.createPackageFertilizer());
+    (this.recordEntriesForm.controls.deliveryDetails.get('package') as UntypedFormArray).push(this.createPackageFertilizer());
   }
 
   addPackagePesticide() {
-    (this.recordEntriesForm.controls.deliveryDetails.get('package') as FormArray).push(this.createPackagePesticide());
+    (this.recordEntriesForm.controls.deliveryDetails.get('package') as UntypedFormArray).push(this.createPackagePesticide());
   }
 
   removePackage(index: number) {
-    (this.recordEntriesForm.controls.deliveryDetails.get('package') as FormArray).removeAt(index);
+    (this.recordEntriesForm.controls.deliveryDetails.get('package') as UntypedFormArray).removeAt(index);
   }
 
-  getPackageFormGroup(index): FormGroup {
-    this.package = this.recordEntriesForm.controls.deliveryDetails.get('package') as FormArray;
-    return this.package.controls[index] as FormGroup;
+  getPackageFormGroup(index): UntypedFormGroup {
+    this.package = this.recordEntriesForm.controls.deliveryDetails.get('package') as UntypedFormArray;
+    return this.package.controls[index] as UntypedFormGroup;
   }
 
-  createPackageFertilizer(): FormGroup {
+  createPackageFertilizer(): UntypedFormGroup {
     return this.formBuilder.group({
       bagSize: ['', Validators.required],
       numberOfBags: ['', Validators.required],
@@ -181,7 +181,7 @@ export class WarehouseEntriesComponent extends BasicComponent implements OnInit 
     });
   }
 
-  createPackagePesticide(): FormGroup {
+  createPackagePesticide(): UntypedFormGroup {
     return this.formBuilder.group({
       pesticideType: ['', Validators.required],
       qty: ['', Validators.required]

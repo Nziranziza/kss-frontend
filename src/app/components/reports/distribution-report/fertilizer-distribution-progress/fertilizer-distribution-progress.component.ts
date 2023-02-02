@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {Subject} from 'rxjs';
 
 import {
@@ -23,7 +23,7 @@ import { ChartType } from 'angular-google-charts';
 export class FertilizerDistributionProgressComponent extends BasicComponent implements OnInit {
 
   title = 'Fertilizer application progress';
-  checkProgressForm: FormGroup;
+  checkProgressForm: UntypedFormGroup;
   errors: any;
   loading = false;
   message: string;
@@ -54,7 +54,7 @@ export class FertilizerDistributionProgressComponent extends BasicComponent impl
   pdfDownloading = false;
   reportIsReady: boolean;
 
-  constructor(private formBuilder: FormBuilder, private siteService: SiteService,
+  constructor(private formBuilder: UntypedFormBuilder, private siteService: SiteService,
               private authorisationService: AuthorisationService,
               private authenticationService: AuthenticationService,
               private excelService: ExcelServicesService,

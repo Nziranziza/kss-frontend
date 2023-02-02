@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ChartType } from 'angular-google-charts';
 import {
   AuthenticationService,
@@ -26,7 +26,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class DashboardComponent extends BasicComponent implements OnInit {
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private authenticationService: AuthenticationService,
     protected locationService: LocationService,
     private organisationService: OrganisationService,
@@ -47,7 +47,7 @@ export class DashboardComponent extends BasicComponent implements OnInit {
   }
   scrollStrategy: ScrollStrategy;
   organisationId = '';
-  dashboardForm: FormGroup;
+  dashboardForm: UntypedFormGroup;
   trainingFilterEnabled = false;
   visitFilterEnabled = false;
   seedlingFilterEnabled = false;
