@@ -13,8 +13,8 @@ import {FusionChartsModule} from 'angular-fusioncharts';
 import {GoogleChartsModule} from 'angular-google-charts';
 
 @NgModule({
-  declarations: [SelectDeliveriesComponent, PayFarmersComponent,
-    PreviewDeliveriesListComponent, ConfirmPaymentComponent, PaySingleFarmerComponent],
+    declarations: [SelectDeliveriesComponent, PayFarmersComponent,
+        PreviewDeliveriesListComponent, ConfirmPaymentComponent, PaySingleFarmerComponent],
     imports: [
         CommonModule,
         OrganisationPayFarmersRoutingModule,
@@ -25,8 +25,7 @@ import {GoogleChartsModule} from 'angular-google-charts';
         FusionChartsModule,
         GoogleChartsModule, OwlDateTimeModule
     ],
-  exports: [PaySingleFarmerComponent],
-  entryComponents: [PaySingleFarmerComponent]
+    exports: [PaySingleFarmerComponent]
 })
 export class OrganisationPayFarmersModule {
 }

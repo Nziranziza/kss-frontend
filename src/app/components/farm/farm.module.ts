@@ -11,13 +11,12 @@ import {TreeVarietyCreateComponent} from './tree-variety/tree-variety-create/tre
 import {TreeVarietyEditComponent} from './tree-variety/tree-variety-edit/tree-variety-edit.component';
 
 @NgModule({
-  declarations: [TreeVarietiesListComponent, TreeVarietyCreateComponent, TreeVarietyEditComponent],
-  imports: [
-    CommonModule,
-    FarmRoutingModule,
-    SharedModule, NgbModule, NgxPaginationModule, OrderModule, GoogleChartsModule
-  ],
-  entryComponents: []
+    declarations: [TreeVarietiesListComponent, TreeVarietyCreateComponent, TreeVarietyEditComponent],
+    imports: [
+        CommonModule,
+        FarmRoutingModule,
+        SharedModule, NgbModule, NgxPaginationModule, OrderModule, GoogleChartsModule
+    ]
 })
 export class FarmModule {
 }

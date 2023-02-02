@@ -19,21 +19,20 @@ import {AutocompleteLibModule} from 'angular-ng-autocomplete';
 import { ParchmentEditComponent } from './parchment-edit/parchment-edit.component';
 
 @NgModule({
-  declarations: [ParchmentListComponent, ParchmentCreateComponent,
-    ParchmentReportComponent,
-    ParchmentReportDetailComponent,
-    ParchmentPrepareTransferCartComponent, ParchmentListTransfersComponent, ParchmentEditComponent],
-  imports: [
-    CommonModule,
-    ParchmentRoutingModule, NgbModule, NgxPaginationModule, OrderModule,
-    SharedModule, OwlDateTimeModule,
-    FusionChartsModule, GoogleChartsModule,
-    AutocompleteLibModule,
-    OwlNativeDateTimeModule,
-    OwlNativeDateTimeModule, BrowserAnimationsModule
-  ],
-  exports: [ParchmentCreateComponent, ParchmentPrepareTransferCartComponent],
-  entryComponents: [ParchmentCreateComponent, ParchmentReportDetailComponent]
+    declarations: [ParchmentListComponent, ParchmentCreateComponent,
+        ParchmentReportComponent,
+        ParchmentReportDetailComponent,
+        ParchmentPrepareTransferCartComponent, ParchmentListTransfersComponent, ParchmentEditComponent],
+    imports: [
+        CommonModule,
+        ParchmentRoutingModule, NgbModule, NgxPaginationModule, OrderModule,
+        SharedModule, OwlDateTimeModule,
+        FusionChartsModule, GoogleChartsModule,
+        AutocompleteLibModule,
+        OwlNativeDateTimeModule,
+        OwlNativeDateTimeModule, BrowserAnimationsModule
+    ],
+    exports: [ParchmentCreateComponent, ParchmentPrepareTransferCartComponent]
 })
 export class ParchmentModule {
 }

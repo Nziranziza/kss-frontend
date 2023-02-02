@@ -22,26 +22,20 @@ import { GreenCoffeePrepareTransferComponent } from './green-coffee-prepare-tran
 import { GreenCoffeeListTransfersComponent } from './green-coffee-list-transfers/green-coffee-list-transfers.component';
 
 @NgModule({
-  declarations: [DmParchmentListDeliveriesComponent, PrepareGreenCoffeeComponent,
-    ListGreenCoffeeComponent, EditDeliveryItemComponent,
-    AddCoffeeItemComponent,
-    AddResultsComponent, ListCwsGreenCoffeeComponent, ShowResultsComponent,
-    GreenCoffeePrepareTransferComponent, GreenCoffeeListTransfersComponent],
-  imports: [
-    CommonModule,
-    DryProcessingRoutingModule, NgbModule, NgxPaginationModule, OrderModule,
-    SharedModule, OwlDateTimeModule,
-    FusionChartsModule, GoogleChartsModule,
-    AutocompleteLibModule,
-    OwlNativeDateTimeModule,
-    OwlNativeDateTimeModule, BrowserAnimationsModule
-  ],
-  entryComponents: [
-    EditDeliveryItemComponent,
-    AddCoffeeItemComponent,
-    AddResultsComponent,
-    ShowResultsComponent
-  ]
+    declarations: [DmParchmentListDeliveriesComponent, PrepareGreenCoffeeComponent,
+        ListGreenCoffeeComponent, EditDeliveryItemComponent,
+        AddCoffeeItemComponent,
+        AddResultsComponent, ListCwsGreenCoffeeComponent, ShowResultsComponent,
+        GreenCoffeePrepareTransferComponent, GreenCoffeeListTransfersComponent],
+    imports: [
+        CommonModule,
+        DryProcessingRoutingModule, NgbModule, NgxPaginationModule, OrderModule,
+        SharedModule, OwlDateTimeModule,
+        FusionChartsModule, GoogleChartsModule,
+        AutocompleteLibModule,
+        OwlNativeDateTimeModule,
+        OwlNativeDateTimeModule, BrowserAnimationsModule
+    ]
 })
 export class DryProcessingModule {
 }
