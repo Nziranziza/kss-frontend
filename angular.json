@@ -45,7 +45,17 @@
               "src/assets/plugins/input-mask/jquery.inputmask.date.extensions.js",
               "src/assets/plugins/input-mask/jquery.inputmask.extensions.js",
               "src/assets/dist/js/demo.js"
-            ]
+            ],
+            "allowedCommonJsDependencies": [
+              "lodash",
+              "dayjs",
+              "jquery",
+              "moment",
+              "object-fit-images",
+              "util",
+              "moment-timezone",
+              "file-saver"
+           ]
           },
           "configurations": {
             "production": {
