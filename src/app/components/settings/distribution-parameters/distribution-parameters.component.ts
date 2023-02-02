@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormArray, UntypedFormBuilder, FormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {InputDistributionService} from '../../../core/services';
 import {Router} from '@angular/router';
 import {HelperService} from '../../../core/helpers';
@@ -15,14 +15,14 @@ import {BasicComponent} from '../../../core/library';
 })
 export class DistributionParametersComponent extends BasicComponent implements OnInit {
 
-  createFertilizerForm: FormGroup;
-  createPesticideForm: FormGroup;
-  createSupplierForm: FormGroup;
+  createFertilizerForm: UntypedFormGroup;
+  createPesticideForm: UntypedFormGroup;
+  createSupplierForm: UntypedFormGroup;
   suppliers: any;
   fertilizers: any;
   pesticides: any;
 
-  constructor(private formBuilder: FormBuilder, private helper: HelperService, private modal: NgbModal,
+  constructor(private formBuilder: UntypedFormBuilder, private helper: HelperService, private modal: NgbModal,
               private router: Router, private inputDistributionService: InputDistributionService) {
     super();
   }

@@ -1,6 +1,6 @@
 import {Component, Inject, Injector, Input, OnInit, PLATFORM_ID} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {HelperService} from '../../../../core/helpers';
 import {isPlatformBrowser} from '@angular/common';
 import {InputDistributionService, SeasonService} from '../../../../core/services';
@@ -15,11 +15,11 @@ export class EditSeasonComponent implements OnInit {
 
   modal: NgbActiveModal;
   @Input() season;
-  editFertilizerForm: FormGroup;
-  editDistributionForm: FormGroup;
-  editSeasonParamsForm: FormGroup;
-  editPesticideForm: FormGroup;
-  editPriceForm: FormGroup;
+  editFertilizerForm: UntypedFormGroup;
+  editDistributionForm: UntypedFormGroup;
+  editSeasonParamsForm: UntypedFormGroup;
+  editPesticideForm: UntypedFormGroup;
+  editPriceForm: UntypedFormGroup;
   errors = [];
   message: string;
   isCurrentUserNaebOfficer: boolean;
@@ -31,7 +31,7 @@ export class EditSeasonComponent implements OnInit {
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
-    private injector: Injector, private formBuilder: FormBuilder,
+    private injector: Injector, private formBuilder: UntypedFormBuilder,
     private authorisationService: AuthorisationService,
     private inputDistributionService: InputDistributionService,
     private helper: HelperService, private seasonService: SeasonService) {
@@ -51,13 +51,13 @@ export class EditSeasonComponent implements OnInit {
       season: ['', Validators.required],
     });
     this.editPesticideForm = this.formBuilder.group({
-      pesticide: new FormArray([])
+      pesticide: new UntypedFormArray([])
     });
     this.editDistributionForm = this.formBuilder.group({
       distribution: this.formBuilder.group({
         totalFertilizerAvailable: [''],
         totalPesticideAvailable: [''],
-        supplierId: new FormArray([])
+        supplierId: new UntypedFormArray([])
       })
     });
     this.editPriceForm = this.formBuilder.group({
@@ -111,7 +111,7 @@ export class EditSeasonComponent implements OnInit {
   }
 
   get formPesticide() {
-    return this.editPesticideForm.controls.pesticide as FormArray;
+    return this.editPesticideForm.controls.pesticide as UntypedFormArray;
   }
 
   onChangePesticide(index: number) {
@@ -124,19 +124,19 @@ export class EditSeasonComponent implements OnInit {
   }
 
   addPesticide() {
-    (this.editPesticideForm.controls.pesticide as FormArray).push(this.createPesticide());
+    (this.editPesticideForm.controls.pesticide as UntypedFormArray).push(this.createPesticide());
   }
 
   removePesticide(index: number) {
-    (this.editPesticideForm.controls.pesticide as FormArray).removeAt(index);
+    (this.editPesticideForm.controls.pesticide as UntypedFormArray).removeAt(index);
   }
 
-  getPesticideFormGroup(index): FormGroup {
-    this.pesticide = this.editPesticideForm.controls.pesticide as FormArray;
-    return this.pesticide.controls[index] as FormGroup;
+  getPesticideFormGroup(index): UntypedFormGroup {
+    this.pesticide = this.editPesticideForm.controls.pesticide as UntypedFormArray;
+    return this.pesticide.controls[index] as UntypedFormGroup;
   }
 
-  createPesticide(): FormGroup {
+  createPesticide(): UntypedFormGroup {
     return this.formBuilder.group({
       inputName: ['', Validators.required],
       pesticideMlPerTree: ['', Validators.required]
@@ -217,11 +217,11 @@ export class EditSeasonComponent implements OnInit {
         const temp = this.season.seasonParams.supplierId ?
           this.season.seasonParams.supplierId.find((item => item._id === supplier._id)) : null;
         if (temp) {
-          const control = new FormControl(true);
-          (this.editDistributionForm.controls.distribution.get('supplierId') as FormArray).push(control);
+          const control = new UntypedFormControl(true);
+          (this.editDistributionForm.controls.distribution.get('supplierId') as UntypedFormArray).push(control);
         } else {
-          const control = new FormControl(false);
-          (this.editDistributionForm.controls.distribution.get('supplierId') as FormArray).push(control);
+          const control = new UntypedFormControl(false);
+          (this.editDistributionForm.controls.distribution.get('supplierId') as UntypedFormArray).push(control);
         }
       });
     });

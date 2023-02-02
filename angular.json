@@ -45,7 +45,17 @@
               "src/assets/plugins/input-mask/jquery.inputmask.date.extensions.js",
               "src/assets/plugins/input-mask/jquery.inputmask.extensions.js",
               "src/assets/dist/js/demo.js"
-            ]
+            ],
+            "allowedCommonJsDependencies": [
+              "lodash",
+              "dayjs",
+              "jquery",
+              "moment",
+              "object-fit-images",
+              "util",
+              "moment-timezone",
+              "file-saver"
+           ]
           },
           "configurations": {
             "production": {
@@ -58,7 +68,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
@@ -82,7 +91,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
@@ -146,18 +154,6 @@
               "src/assets"
             ]
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "src/tsconfig.app.json",
-              "src/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
         }
       }
     },
@@ -177,18 +173,8 @@
               "devServerTarget": "basic-angular:serve:production"
             }
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": "e2e/tsconfig.e2e.json",
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
         }
       }
     }
-  },
-  "defaultProject": "basic-angular"
+  }
 }

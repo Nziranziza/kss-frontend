@@ -7,7 +7,7 @@ import {
   DryProcessingService,
   HelperService
 } from '../../../../core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {PaymentService} from '../../../../core/services/payment.service';
 import {DatePipe, isPlatformBrowser} from '@angular/common';
 import {ActivatedRoute} from '@angular/router';
@@ -20,7 +20,7 @@ import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 })
 export class ShowResultsComponent extends BasicComponent implements OnInit {
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(private formBuilder: UntypedFormBuilder,
               private paymentService: PaymentService,
               @Inject(PLATFORM_ID) private platformId: object,
               private injector: Injector,
@@ -37,7 +37,7 @@ export class ShowResultsComponent extends BasicComponent implements OnInit {
   }
 
   modal: NgbActiveModal;
-  uploadResultsForm: FormGroup;
+  uploadResultsForm: UntypedFormGroup;
   results: any;
   fileError: string;
   isImage = false;

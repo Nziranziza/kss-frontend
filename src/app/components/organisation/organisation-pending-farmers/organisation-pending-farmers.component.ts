@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AuthenticationService, OrganisationService} from '../../../core/services';
 import {ActivatedRoute, Router} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {ExcelServicesService} from '../../../core/services';
 import {HttpClient} from '@angular/common/http';
 import {MessageService} from '../../../core/services';
@@ -19,7 +19,7 @@ export class OrganisationPendingFarmersComponent implements OnInit, OnDestroy {
               private router: Router, private authenticationService: AuthenticationService,
               private authorisationService: AuthorisationService,
               private excelService: ExcelServicesService, private http: HttpClient,
-              private modal: NgbModal, private formBuilder: FormBuilder, private messageService: MessageService) {
+              private modal: NgbModal, private formBuilder: UntypedFormBuilder, private messageService: MessageService) {
   }
 
   message: string;
@@ -28,7 +28,7 @@ export class OrganisationPendingFarmersComponent implements OnInit, OnDestroy {
   order = 'foreName';
   reverse = true;
   directionLinks = true;
-  filterForm: FormGroup;
+  filterForm: UntypedFormGroup;
   title = 'Temporary Farmers';
   i: number;
   parameters: any;

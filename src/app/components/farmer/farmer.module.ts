@@ -19,19 +19,17 @@ import {GoogleChartsModule} from 'angular-google-charts';
 import {FarmerCreateComponent} from './farmer-create/farmer-create.component';
 
 @NgModule({
-  declarations: [FarmerListComponent, FarmerDetailsComponent, FarmerCreateComponent,
-    FarmerEditComponent, FarmerLandsComponent,
-    EditFarmerProfileComponent, EditFarmerRequestComponent,
-    AddFarmerRequestComponent, FarmerNeedApprovalListComponent,
-    FarmerAdministrativeListComponent],
-  imports: [
-    CommonModule,
-    FarmerRoutingModule,
-    SharedModule, NgbModule, NgxPaginationModule, OrderModule, GoogleChartsModule
-  ],
-  exports: [FarmerDetailsComponent],
-  entryComponents: [FarmerDetailsComponent, AddFarmerRequestComponent,
-    EditFarmerRequestComponent, EditFarmerProfileComponent]
+    declarations: [FarmerListComponent, FarmerDetailsComponent, FarmerCreateComponent,
+        FarmerEditComponent, FarmerLandsComponent,
+        EditFarmerProfileComponent, EditFarmerRequestComponent,
+        AddFarmerRequestComponent, FarmerNeedApprovalListComponent,
+        FarmerAdministrativeListComponent],
+    imports: [
+        CommonModule,
+        FarmerRoutingModule,
+        SharedModule, NgbModule, NgxPaginationModule, OrderModule, GoogleChartsModule
+    ],
+    exports: [FarmerDetailsComponent]
 })
 export class FarmerModule {
 }

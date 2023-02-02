@@ -1,6 +1,6 @@
 import {AfterViewChecked, AfterViewInit, Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild} from '@angular/core';
 import {BasicComponent} from '../../../../core/library';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {
   AuthenticationService,
   ConfirmDialogService, MessageService, OrganisationService,
@@ -25,7 +25,7 @@ declare var $;
 
 export class ParchmentListTransfersComponent extends BasicComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(private formBuilder: UntypedFormBuilder,
               private router: Router, private confirmDialogService: ConfirmDialogService,
               private seasonService: SeasonService,
               private modal: NgbModal,
@@ -39,7 +39,7 @@ export class ParchmentListTransfersComponent extends BasicComponent implements O
     super();
   }
 
-  filterForm: FormGroup;
+  filterForm: UntypedFormGroup;
   dtOptions: any = {};
   // @ts-ignore
   dtTrigger: Subject = new Subject();

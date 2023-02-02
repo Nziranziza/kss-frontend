@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {HelperService} from '../../../../core';
 import {PaymentService} from '../../../../core/services/payment.service';
@@ -12,9 +12,9 @@ import {BasicComponent} from '../../../../core';
 })
 export class ChannelComponent extends BasicComponent implements OnInit {
 
-  createForm: FormGroup;
+  createForm: UntypedFormGroup;
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(private formBuilder: UntypedFormBuilder,
               private router: Router, private paymentService: PaymentService, private helper: HelperService) {
     super();
   }

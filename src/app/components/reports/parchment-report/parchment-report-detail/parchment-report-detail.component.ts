@@ -2,7 +2,7 @@ import {Component, Inject, Injector, Input, OnInit, PLATFORM_ID} from '@angular/
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {AuthenticationService, ParchmentService, UserService} from '../../../../core';
 import {DatePipe, isPlatformBrowser} from '@angular/common';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {BasicComponent} from '../../../../core';
 import {HelperService} from '../../../../core';
 
@@ -17,7 +17,7 @@ export class ParchmentReportDetailComponent extends BasicComponent implements On
   @Input() location;
   production: any;
   loading = false;
-  filterForm: FormGroup;
+  filterForm: UntypedFormGroup;
   seasonStartingDate: string;
 
   constructor(
@@ -26,7 +26,7 @@ export class ParchmentReportDetailComponent extends BasicComponent implements On
     private datePipe: DatePipe,
     private helper: HelperService,
     private authenticationService: AuthenticationService,
-    private parchmentService: ParchmentService, private formBuilder: FormBuilder,
+    private parchmentService: ParchmentService, private formBuilder: UntypedFormBuilder,
     private injector: Injector) {
     super();
     if (isPlatformBrowser(this.platformId)) {

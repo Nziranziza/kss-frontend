@@ -18,7 +18,7 @@ import { isArray, isObject } from 'util';
 import {
   ParchmentReportDetailComponent
 } from '../../reports/parchment-report/parchment-report-detail/parchment-report-detail.component';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { isEmptyObject } from 'jquery';
 import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
@@ -41,7 +41,7 @@ export class OrganisationFarmersComponent
     private siteService: SiteService,
     protected locationService: LocationService,
     private route: ActivatedRoute,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private messageService: MessageService,
     private modal: NgbModal,
     private helper: HelperService,
@@ -77,7 +77,7 @@ export class OrganisationFarmersComponent
   dtTrigger: Subject = new Subject();
   subRegionFilter: any;
   seasonStartingTime: string;
-  filterForm: FormGroup;
+  filterForm: UntypedFormGroup;
   maxSize = 9;
   order = 'userInfo.foreName';
   reverse = true;

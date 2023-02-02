@@ -8,7 +8,7 @@ import {
   OnInit,
   PLATFORM_ID,
 } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { VisitService, GapService, Training } from '../../../../core';
@@ -25,7 +25,7 @@ import { BasicComponent } from '../../../../core';
 export class ViewFarmVisitComponent
   extends BasicComponent
   implements OnInit, OnDestroy {
-  createTraining: FormGroup;
+  createTraining: UntypedFormGroup;
   closeResult = '';
   visits: any;
   modal: NgbActiveModal;

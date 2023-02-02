@@ -3,7 +3,7 @@
 .icheckbox_polaris,
 .iradio_polaris {
     display: inline-block;
-    *display: inline;
+    display: inline;
     vertical-align: middle;
     margin: 0;
     padding: 0;

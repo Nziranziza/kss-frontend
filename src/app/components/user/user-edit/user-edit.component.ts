@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AuthorisationService, MessageService, UserService} from '../../../core/services';
 import {AuthenticationService, OrganisationService} from '../../../core/services';
@@ -15,7 +15,7 @@ import {SiteService} from '../../../core/services';
 
 export class UserEditComponent implements OnInit {
   organisationId: string;
-  editForm: FormGroup;
+  editForm: UntypedFormGroup;
   errors = [];
   userTypes: any[];
   orgPossibleRoles: any[];
@@ -55,7 +55,7 @@ export class UserEditComponent implements OnInit {
   hasSite = false;
   hideEmail = false;
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(private formBuilder: UntypedFormBuilder,
               private route: ActivatedRoute, private router: Router,
               private userService: UserService, private helper: HelperService,
               private organisationService: OrganisationService,
@@ -76,7 +76,7 @@ export class UserEditComponent implements OnInit {
       NID: [{value: '', disabled: true}],
       org_id: [''],
       userType: [{value: '', disabled: (!this.authorisationService.isAdmin()) }],
-      userRoles: new FormArray([]),
+      userRoles: new UntypedFormArray([]),
       location: this.formBuilder.group({
         prov_id: [''],
         dist_id: [''],
@@ -115,11 +115,11 @@ export class UserEditComponent implements OnInit {
           this.orgPossibleRoles.map(role => {
             // Initiate user roles
             if (user.content.userRoles.includes(role.value)) {
-              const control = new FormControl(true);
-              (this.editForm.controls.userRoles as FormArray).push(control);
+              const control = new UntypedFormControl(true);
+              (this.editForm.controls.userRoles as UntypedFormArray).push(control);
             } else {
-              const control = new FormControl(false);
-              (this.editForm.controls.userRoles as FormArray).push(control);
+              const control = new UntypedFormControl(false);
+              (this.editForm.controls.userRoles as UntypedFormArray).push(control);
             }
           });
         });

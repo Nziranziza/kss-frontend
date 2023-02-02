@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { HttpHeaders } from '@angular/common/http';
 import {
   AuthenticationService,
@@ -19,13 +19,13 @@ declare var $;
 })
 export class LoginComponent extends BasicComponent implements OnInit, OnDestroy {
 
-  authForm: FormGroup;
+  authForm: UntypedFormGroup;
   viewPasswordEnabled = false;
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private authenticationService: AuthenticationService,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private messageService: MessageService,
     private authorisationService: AuthorisationService,
     private organisationService: OrganisationService,

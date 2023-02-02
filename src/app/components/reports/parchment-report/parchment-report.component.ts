@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AuthenticationService, ExcelServicesService, OrganisationService, OrganisationTypeService} from '../../../core';
 import {HelperService} from '../../../core';
@@ -22,7 +22,7 @@ import { ChartType } from 'angular-google-charts';
 export class ParchmentReportComponent extends BasicComponent implements OnInit {
 
   title = 'Cherries supply report';
-  filterForm: FormGroup;
+  filterForm: UntypedFormGroup;
   provinces: any;
   districts: any;
   sectors: any;
@@ -73,7 +73,7 @@ export class ParchmentReportComponent extends BasicComponent implements OnInit {
   subRegionFilter: any;
   regionIds = [];
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(private formBuilder: UntypedFormBuilder,
               private authorisationService: AuthorisationService,
               private authenticationService: AuthenticationService,
               private excelService: ExcelServicesService,

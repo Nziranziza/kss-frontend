@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TrainingService, GapService } from '../../../../core';
 import { HelperService } from '../../../../core';
@@ -17,7 +17,7 @@ export class TrainingCreateComponent
   extends BasicComponent
   implements OnInit, OnDestroy {
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private modalService: NgbModal,
     private trainingService: TrainingService,
     private gapService: GapService,
@@ -26,7 +26,7 @@ export class TrainingCreateComponent
   ) {
     super();
   }
-  createTraining: FormGroup;
+  createTraining: UntypedFormGroup;
   closeResult = '';
   gapDropdownSettings: IDropdownSettings = {};
 

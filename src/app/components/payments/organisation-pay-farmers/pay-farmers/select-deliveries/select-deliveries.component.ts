@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {AuthenticationService, OrganisationService, UserService} from '../../../../../core';
 import {DatePipe} from '@angular/common';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {Router} from '@angular/router';
 import {DataTableDirective} from 'angular-datatables';
@@ -20,7 +20,7 @@ export class SelectDeliveriesComponent extends BasicComponent implements OnInit,
 
   constructor(private organisationService: OrganisationService, private userService: UserService,
               private authenticationService: AuthenticationService, private helper: HelperService,
-              private datePipe: DatePipe, private formBuilder: FormBuilder,
+              private datePipe: DatePipe, private formBuilder: UntypedFormBuilder,
               private paymentService: PaymentService,
               private paymentProcessingService: PaymentProcessingService,
               private router: Router) {
@@ -32,7 +32,7 @@ export class SelectDeliveriesComponent extends BasicComponent implements OnInit,
   org: any;
   currentSeason: any;
   seasonStartingTime: string;
-  filterForm: FormGroup;
+  filterForm: UntypedFormGroup;
   parameters: any;
   dtOptions: any = {};
   // @ts-ignore

@@ -1,6 +1,6 @@
 import {Component, Inject, Injector, Input, OnInit, PLATFORM_ID} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {
   AuthenticationService,
   AuthorisationService,
@@ -27,7 +27,7 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
 
   modal: NgbActiveModal;
   @Input() stock;
-  siteStockOutForm: FormGroup;
+  siteStockOutForm: UntypedFormGroup;
   sectors: any = [];
   cells: any = [];
   villages: any = [];
@@ -38,14 +38,14 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
   @Input() totalqty;
   org: any;
   isCWSDistributor: any;
-  public destinationList: FormArray;
+  public destinationList: UntypedFormArray;
   stockOutTotalAllocated = 0;
   isLoading = false;
   isLoadingAllocated = false;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
-    private injector: Injector, private formBuilder: FormBuilder,
+    private injector: Injector, private formBuilder: UntypedFormBuilder,
     private authenticationService: AuthenticationService,
     private authorisationService: AuthorisationService,
     private organisationService: OrganisationService,
@@ -67,7 +67,7 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
     this.currentDate = new Date();
     this.isCWSDistributor = this.authorisationService.isCWSDistributer();
     this.siteStockOutForm = this.formBuilder.group({
-      destination: new FormArray([]),
+      destination: new UntypedFormArray([]),
       totalQty: ['', [Validators.required, Validators.max(this.totalqty - this.totalStockOutFertilizer)]],
       date: [this.datePipe.transform(this.currentDate, 'yyyy-MM-dd'), Validators.required],
     });
@@ -137,7 +137,7 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
     }
   }
 
-  createDestination(): FormGroup {
+  createDestination(): UntypedFormGroup {
     return this.formBuilder.group({
       sect_id: ['', Validators.required],
       cell_id: ['', Validators.required],
@@ -147,24 +147,24 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
   }
 
   get formDestination() {
-    return this.siteStockOutForm.get('destination') as FormArray;
+    return this.siteStockOutForm.get('destination') as UntypedFormArray;
   }
 
   addDestination() {
-    (this.siteStockOutForm.controls.destination as FormArray).push(this.createDestination());
+    (this.siteStockOutForm.controls.destination as UntypedFormArray).push(this.createDestination());
     this.sectors.push(this.sectors[0]);
   }
 
   removeDestination(index: number) {
-    if ((this.siteStockOutForm.controls.destination as FormArray).length > 1) {
-      (this.siteStockOutForm.controls.destination as FormArray).removeAt(index);
+    if ((this.siteStockOutForm.controls.destination as UntypedFormArray).length > 1) {
+      (this.siteStockOutForm.controls.destination as UntypedFormArray).removeAt(index);
       this.computeTotalAllocated();
     }
   }
 
-  getDestinationFormGroup(index): FormGroup {
-    this.destinationList = this.siteStockOutForm.get('destination') as FormArray;
-    return this.destinationList.controls[index] as FormGroup;
+  getDestinationFormGroup(index): UntypedFormGroup {
+    this.destinationList = this.siteStockOutForm.get('destination') as UntypedFormArray;
+    return this.destinationList.controls[index] as UntypedFormGroup;
   }
 
   onChangeSector(index: number) {
@@ -291,10 +291,10 @@ export class RecordSiteStockOutComponent extends BasicComponent implements OnIni
   }
 
   computeTotalAllocated() {
-    const destinationList =  (this.siteStockOutForm.get('destination') as FormArray).controls;
+    const destinationList =  (this.siteStockOutForm.get('destination') as UntypedFormArray).controls;
     let total = 0;
     for(const destination of destinationList){
-      const group = (destination as FormGroup);
+      const group = (destination as UntypedFormGroup);
       total = total + group.controls.allocated.value;
     }
     this.stockOutTotalAllocated = total;

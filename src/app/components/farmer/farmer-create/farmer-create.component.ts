@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {
   AuthenticationService,
@@ -26,7 +26,7 @@ import {Location} from '@angular/common';
 export class FarmerCreateComponent
   extends BasicComponent
   implements OnInit, OnDestroy {
-  createForm: FormGroup;
+  createForm: UntypedFormGroup;
   treesProvinces: any;
   treesDistricts: any;
   treesSectors: any;
@@ -94,10 +94,10 @@ export class FarmerCreateComponent
   cell: any;
   village: any;
 
-  public requestList: FormArray;
+  public requestList: UntypedFormArray;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private farmerService: FarmerService,
@@ -117,15 +117,15 @@ export class FarmerCreateComponent
   }
 
   get formTreeAges() {
-    return this.createForm.get('treeAges') as FormArray;
+    return this.createForm.get('treeAges') as UntypedFormArray;
   }
 
   get formCertificates() {
-    return this.createForm.get('certificates') as FormArray;
+    return this.createForm.get('certificates') as UntypedFormArray;
   }
 
   get formPaymentChannel() {
-    return this.createForm.controls.paymentChannels as FormArray;
+    return this.createForm.controls.paymentChannels as UntypedFormArray;
   }
 
   ngOnInit() {
@@ -188,8 +188,8 @@ export class FarmerCreateComponent
       longitudeCoordinate: [''],
       latitudeCoordinate: [''],
       active: [''],
-      treeAges: new FormArray([]),
-      certificates: new FormArray([]),
+      treeAges: new UntypedFormArray([]),
+      certificates: new UntypedFormArray([]),
       numberOfTrees: ['', [Validators.required, Validators.pattern('[0-9]*')]],
     });
 
@@ -407,7 +407,7 @@ export class FarmerCreateComponent
   }
 
   formTreeVarieties(i: number) {
-    return this.formTreeAges.at(i).get('varieties') as FormArray;
+    return this.formTreeAges.at(i).get('varieties') as UntypedFormArray;
   }
 
   addTreeVariety(i: number) {
@@ -426,7 +426,7 @@ export class FarmerCreateComponent
         this.formBuilder.group({
           range,
           numOfTrees: [0],
-          varieties: new FormArray([]),
+          varieties: new UntypedFormArray([]),
         })
       );
       this.treeVarieties.forEach((variety, t) => {
@@ -441,7 +441,7 @@ export class FarmerCreateComponent
     });
   }
 
-  createCertificate(): FormGroup {
+  createCertificate(): UntypedFormGroup {
     return this.formBuilder.group({
       name: [''],
       identificationNumber: [''],
@@ -449,18 +449,18 @@ export class FarmerCreateComponent
   }
 
   addCertificate() {
-    (this.createForm.controls.certificates as FormArray).push(
+    (this.createForm.controls.certificates as UntypedFormArray).push(
       this.createCertificate()
     );
   }
 
   removeCertificate(index: number) {
-    (this.createForm.controls.certificates as FormArray).removeAt(index);
+    (this.createForm.controls.certificates as UntypedFormArray).removeAt(index);
   }
 
-  getCertificateFormGroup(index): FormGroup {
-    this.certificates = this.createForm.get('certificates') as FormArray;
-    return this.certificates.controls[index] as FormGroup;
+  getCertificateFormGroup(index): UntypedFormGroup {
+    this.certificates = this.createForm.get('certificates') as UntypedFormArray;
+    return this.certificates.controls[index] as UntypedFormGroup;
   }
 
   updateList(i: number, v: number) {
@@ -847,22 +847,22 @@ export class FarmerCreateComponent
   }
 
   addPaymentChannel() {
-    (this.createForm.controls.paymentChannels as FormArray).push(
+    (this.createForm.controls.paymentChannels as UntypedFormArray).push(
       this.createPaymentChannel()
     );
   }
 
-  getPaymentChannelFormGroup(index): FormGroup {
+  getPaymentChannelFormGroup(index): UntypedFormGroup {
     this.paymentChannels = this.createForm.controls
-      .paymentChannels as FormArray;
-    return this.paymentChannels.controls[index] as FormGroup;
+      .paymentChannels as UntypedFormArray;
+    return this.paymentChannels.controls[index] as UntypedFormGroup;
   }
 
   removePaymentChannel(index: number) {
-    (this.createForm.controls.paymentChannels as FormArray).removeAt(index);
+    (this.createForm.controls.paymentChannels as UntypedFormArray).removeAt(index);
   }
 
-  createPaymentChannel(): FormGroup {
+  createPaymentChannel(): UntypedFormGroup {
     return this.formBuilder.group({
       channelId: ['', Validators.required],
       account: ['', Validators.required],

@@ -5,7 +5,7 @@ import {DispatchProgressComponent} from './dispatch-progress/dispatch-progress.c
 import {FertilizerDistributionProgressComponent} from './fertilizer-distribution-progress/fertilizer-distribution-progress.component';
 import {SharedModule} from '../../../shared';
 import {OwlDateTimeModule, OwlNativeDateTimeModule} from 'ng-pick-datetime-ex';
-import {FusionChartsModule} from 'angular-fusioncharts';
+// import {FusionChartsModule} from 'angular-fusioncharts';
 import {GoogleChartsModule} from 'angular-google-charts';
 import {PesticideDistributionProgressComponent} from './pesticide-distribution-progress/pesticide-distribution-progress.component';
 
@@ -17,7 +17,8 @@ import {PesticideDistributionProgressComponent} from './pesticide-distribution-p
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
     DistributionReportRoutingModule,
-    FusionChartsModule, GoogleChartsModule
+    // FusionChartsModule,
+    GoogleChartsModule
   ]
 })
 export class DistributionReportModule {

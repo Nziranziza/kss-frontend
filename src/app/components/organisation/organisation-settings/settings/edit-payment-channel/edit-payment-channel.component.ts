@@ -1,6 +1,6 @@
 import {Component, Inject, Injector, Input, OnInit, PLATFORM_ID} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {HelperService} from '../../../../../core/helpers';
 import {AuthenticationService, OrganisationService} from '../../../../../core/services';
 import {isPlatformBrowser} from '@angular/common';
@@ -16,7 +16,7 @@ import {BasicComponent} from '../../../../../core/library';
 export class EditPaymentChannelComponent extends BasicComponent implements OnInit {
 
   modal: NgbActiveModal;
-  editChannelForm: FormGroup;
+  editChannelForm: UntypedFormGroup;
   organisationId: string;
   channels: any;
   banks: any;
@@ -24,7 +24,7 @@ export class EditPaymentChannelComponent extends BasicComponent implements OnIni
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
-    private injector: Injector, private formBuilder: FormBuilder,
+    private injector: Injector, private formBuilder: UntypedFormBuilder,
     private authenticationService: AuthenticationService,
     private paymentService: PaymentService,
     private route: ActivatedRoute,

@@ -1,5 +1,5 @@
 import {Component, Inject, Injector, Input, OnInit, PLATFORM_ID} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {PaymentService} from '../../../../core/services/payment.service';
 import {ActivatedRoute} from '@angular/router';
 import {
@@ -20,7 +20,7 @@ import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 })
 export class AddResultsComponent extends BasicComponent implements OnInit {
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(private formBuilder: UntypedFormBuilder,
               private paymentService: PaymentService,
               @Inject(PLATFORM_ID) private platformId: object,
               private injector: Injector,
@@ -37,7 +37,7 @@ export class AddResultsComponent extends BasicComponent implements OnInit {
   }
 
   modal: NgbActiveModal;
-  uploadResultsForm: FormGroup;
+  uploadResultsForm: UntypedFormGroup;
   organisationId: string;
   results: any;
   fileError: string;

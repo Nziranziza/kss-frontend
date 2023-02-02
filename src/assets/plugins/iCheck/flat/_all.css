@@ -3,7 +3,7 @@
 .icheckbox_flat,
 .iradio_flat {
     display: inline-block;
-    *display: inline;
+    display: inline;
     vertical-align: middle;
     margin: 0;
     padding: 0;
@@ -59,7 +59,7 @@
 .icheckbox_flat-red,
 .iradio_flat-red {
     display: inline-block;
-    *display: inline;
+    display: inline;
     vertical-align: middle;
     margin: 0;
     padding: 0;
@@ -115,7 +115,7 @@
 .icheckbox_flat-green,
 .iradio_flat-green {
     display: inline-block;
-    *display: inline;
+    display: inline;
     vertical-align: middle;
     margin: 0;
     padding: 0;
@@ -171,7 +171,7 @@
 .icheckbox_flat-blue,
 .iradio_flat-blue {
     display: inline-block;
-    *display: inline;
+    display: inline;
     vertical-align: middle;
     margin: 0;
     padding: 0;
@@ -227,7 +227,7 @@
 .icheckbox_flat-aero,
 .iradio_flat-aero {
     display: inline-block;
-    *display: inline;
+    display: inline;
     vertical-align: middle;
     margin: 0;
     padding: 0;
@@ -283,7 +283,7 @@
 .icheckbox_flat-grey,
 .iradio_flat-grey {
     display: inline-block;
-    *display: inline;
+    display: inline;
     vertical-align: middle;
     margin: 0;
     padding: 0;
@@ -339,7 +339,7 @@
 .icheckbox_flat-orange,
 .iradio_flat-orange {
     display: inline-block;
-    *display: inline;
+    display: inline;
     vertical-align: middle;
     margin: 0;
     padding: 0;
@@ -395,7 +395,7 @@
 .icheckbox_flat-yellow,
 .iradio_flat-yellow {
     display: inline-block;
-    *display: inline;
+    display: inline;
     vertical-align: middle;
     margin: 0;
     padding: 0;
@@ -451,7 +451,7 @@
 .icheckbox_flat-pink,
 .iradio_flat-pink {
     display: inline-block;
-    *display: inline;
+    display: inline;
     vertical-align: middle;
     margin: 0;
     padding: 0;
@@ -507,7 +507,7 @@
 .icheckbox_flat-purple,
 .iradio_flat-purple {
     display: inline-block;
-    *display: inline;
+    display: inline;
     vertical-align: middle;
     margin: 0;
     padding: 0;

@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {
   AuthenticationService,
@@ -21,7 +21,7 @@ import {BasicComponent} from '../../../../core';
 export class PesticideDistributionProgressComponent extends BasicComponent implements OnInit {
 
   title = 'Pesticide application progress';
-  checkProgressForm: FormGroup;
+  checkProgressForm: UntypedFormGroup;
   errors: any;
   loading = false;
   message: string;
@@ -52,7 +52,7 @@ export class PesticideDistributionProgressComponent extends BasicComponent imple
   private printableDetails = [];
   reportIsReady: boolean;
 
-  constructor(private formBuilder: FormBuilder, private siteService: SiteService,
+  constructor(private formBuilder: UntypedFormBuilder, private siteService: SiteService,
               private authorisationService: AuthorisationService,
               private authenticationService: AuthenticationService,
               private excelService: ExcelServicesService,

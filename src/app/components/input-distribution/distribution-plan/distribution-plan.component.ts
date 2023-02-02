@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {Router} from '@angular/router';
 import {AuthenticationService, ExcelServicesService, OrganisationService, OrganisationTypeService} from '../../../core';
 import {HelperService} from '../../../core';
@@ -17,7 +17,7 @@ import {Subject} from 'rxjs';
 export class DistributionPlanComponent implements OnInit {
 
   title = 'Distribution plan';
-  filterForm: FormGroup;
+  filterForm: UntypedFormGroup;
   errors: any;
   provinces: any;
   districts: any;
@@ -43,7 +43,7 @@ export class DistributionPlanComponent implements OnInit {
   isLoadingReport3 = false;
 
 
-  constructor(private formBuilder: FormBuilder, private siteService: SiteService,
+  constructor(private formBuilder: UntypedFormBuilder, private siteService: SiteService,
               private authorisationService: AuthorisationService,
               private excelService: ExcelServicesService,
               private authenticationService: AuthenticationService,

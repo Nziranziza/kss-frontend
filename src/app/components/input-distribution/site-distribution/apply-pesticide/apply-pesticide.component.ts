@@ -1,6 +1,6 @@
 import {Component, Inject, Injector, Input, OnInit, PLATFORM_ID} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
-import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 import {AuthenticationService, InputDistributionService, MessageService} from '../../../../core';
 import {HelperService} from '../../../../core';
 import {isPlatformBrowser} from '@angular/common';
@@ -18,14 +18,14 @@ export class ApplyPesticideComponent extends BasicComponent implements OnInit {
   @Input() regNumber;
   @Input() documentId;
   @Input() siteId;
-  distributionForm: FormGroup;
+  distributionForm: UntypedFormGroup;
   errors: string [];
   message: string;
   stocks = [];
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
-    private injector: Injector, private formBuilder: FormBuilder,
+    private injector: Injector, private formBuilder: UntypedFormBuilder,
     private authenticationService: AuthenticationService,
     private messageService: MessageService,
     private helper: HelperService, private inputDistributionService: InputDistributionService) {
@@ -37,15 +37,15 @@ export class ApplyPesticideComponent extends BasicComponent implements OnInit {
 
   ngOnInit(): void {
     this.distributionForm = this.formBuilder.group({
-      pesticides: new FormArray([])
+      pesticides: new UntypedFormArray([])
     });
     this.inputDistributionService.getCwsStockOuts(this.authenticationService.getCurrentUser()
       .info.org_id, this.siteId).subscribe((data) => {
       data.data.map((stock) => {
         if (stock.inputId.inputType === 'Pesticide' && stock.returnedQty === 0) {
-          const control = new FormControl(false);
+          const control = new UntypedFormControl(false);
           this.stocks.push(stock);
-          (this.distributionForm.controls.pesticides as FormArray).push(control);
+          (this.distributionForm.controls.pesticides as UntypedFormArray).push(control);
         }
       });
     });

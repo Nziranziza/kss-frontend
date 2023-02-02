@@ -1,5 +1,5 @@
 import {Component, Inject, Injector, Input, OnInit, PLATFORM_ID} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {BasicComponent} from '../../../../../core/library';
 import {PaymentService} from '../../../../../core/services/payment.service';
 import {HelperService} from '../../../../../core/helpers';
@@ -15,7 +15,7 @@ import {DatePipe, isPlatformBrowser} from '@angular/common';
 })
 export class EditCertificateComponent extends BasicComponent implements OnInit {
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(private formBuilder: UntypedFormBuilder,
               private paymentService: PaymentService,
               @Inject(PLATFORM_ID) private platformId: object,
               private injector: Injector,
@@ -30,7 +30,7 @@ export class EditCertificateComponent extends BasicComponent implements OnInit {
   }
 
   modal: NgbActiveModal;
-  editCertificateForm: FormGroup;
+  editCertificateForm: UntypedFormGroup;
   coffeeTypes = [];
   organisationId: string;
   certificate: any;

@@ -27,33 +27,32 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatDialogModule} from '@angular/material/dialog';
 
 @NgModule({
-  imports: [
-    CommonModule, BrowserAnimationsModule, MatDialogModule, MatIconModule
-  ],
-  providers: [
-    ApiService,
-    JwtService,
-    AuthenticationService,
-    OrganisationService,
-    HelperService,
-    FarmerService,
-    FarmService,
-    ConfirmDialogService,
-    OrganisationTypeService,
-    CookieService,
-    MessageService,
-    InputDistributionService,
-    WarehouseService,
-    SharedDataService,
-    AdminGuard,
-    CookieService,
-    PaymentService,
-    CoveredAreaResolverService,
-    FarmService,
-    /*{provide: ErrorHandler, useClass: ErrorCustomHandler}*/
-  ],
-  declarations: [ConfirmDialogComponent],
-  entryComponents: [ConfirmDialogComponent]
+    imports: [
+        CommonModule, BrowserAnimationsModule, MatDialogModule, MatIconModule
+    ],
+    providers: [
+        ApiService,
+        JwtService,
+        AuthenticationService,
+        OrganisationService,
+        HelperService,
+        FarmerService,
+        FarmService,
+        ConfirmDialogService,
+        OrganisationTypeService,
+        CookieService,
+        MessageService,
+        InputDistributionService,
+        WarehouseService,
+        SharedDataService,
+        AdminGuard,
+        CookieService,
+        PaymentService,
+        CoveredAreaResolverService,
+        FarmService,
+        /*{provide: ErrorHandler, useClass: ErrorCustomHandler}*/
+    ],
+    declarations: [ConfirmDialogComponent]
 })
 export class CoreModule {
 }
