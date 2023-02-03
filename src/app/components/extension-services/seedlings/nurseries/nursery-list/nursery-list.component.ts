@@ -66,7 +66,7 @@ export class NurseryListComponent
   @ViewChild(DataTableDirective, { static: false })
   dtElement: DataTableDirective;
   stats: Stats = {
-    sites:0,
+    sites: 0,
     remainingQty: 0,
     expectedQty: 0,
     prickedQty: 0,
@@ -91,7 +91,7 @@ export class NurseryListComponent
   getNurseries(deletetrigger: any = false): void {
     this.loading = true;
     const body = !this.authorisationService.isTechnoServeAdmin() ?
-      this.authenticationService.getCurrentUser().info.org_id : '';
+      { reference: this.authenticationService.getCurrentUser().info.org_id } : '';
     this.seedlingService.all(body).subscribe((data) => {
       this.nurseries = data.data.map((nursery) => {
         const prickedQty = nursery.stocks.reduce(

@@ -453,7 +453,9 @@ export class DashboardComponent extends BasicComponent implements OnInit {
   }
 
   getNurseries() {
-    this.seedlingService.all(this.authenticationService.getCurrentUser().info.org_id).subscribe((data) => {
+    const body = this.organisationId
+      ? {reference : this.organisationId} : {};
+    this.seedlingService.all(body).subscribe((data) => {
       this.nurseries = data.data;
       this.nurseries.unshift({ nurseryName: 'all nurseries', _id: '' });
     });
@@ -740,7 +742,7 @@ export class DashboardComponent extends BasicComponent implements OnInit {
             locationId: value,
           };
           this.siteService
-            .getZone({ prov_id: value, searchBy: 'province' })
+            .getZone({ prov_id: value, searchBy: 'province', partner: 'Technoserve' })
             .subscribe((data) => {
               if (data) {
                 this.organisations = data.content.filter((org) =>
@@ -775,7 +777,7 @@ export class DashboardComponent extends BasicComponent implements OnInit {
             locationId: value,
           };
           this.siteService
-            .getZone({ dist_id: value, searchBy: 'district' })
+            .getZone({ dist_id: value, searchBy: 'district', partner: 'Technoserve' })
             .subscribe((data) => {
               if (data) {
                 this.organisations = data.content.filter((org) =>
@@ -800,7 +802,6 @@ export class DashboardComponent extends BasicComponent implements OnInit {
       .get('sect_id'.toString())
       .valueChanges.subscribe((value) => {
 
-        this.newOrg = '';
         if (value !== '') {
           this.locationChangSector(this.dashboardForm, value);
           this.currentSelectedLocation = {
@@ -880,7 +881,6 @@ export class DashboardComponent extends BasicComponent implements OnInit {
       this.dashboardForm.controls.location
         .get('sect_id'.toString())
         .setValue('');
-      this.newOrg = '';
     }
   }
 

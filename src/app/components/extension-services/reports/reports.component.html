@@ -161,7 +161,7 @@
                 *ngFor="let sector of locationSectors"
                 value="{{ sector._id }}"
               >
-                {{ sector.name | titlecase }}
+                {{ sector?.name | titlecase }}
               </option>
             </select>
           </div>
@@ -169,7 +169,7 @@
             <select class="form-control" formControlName="cell_id">
               <option value="" selected>All cells</option>
               <option *ngFor="let cell of locationCells" value="{{ cell._id }}">
-                {{ cell.name | titlecase }}
+                {{ cell?.name | titlecase }}
               </option>
             </select>
           </div>
@@ -180,7 +180,7 @@
                 *ngFor="let village of locationVillages"
                 value="{{ village._id }}"
               >
-                {{ village.name | titlecase }}
+                {{ village?.name | titlecase }}
               </option>
             </select>
           </div>
@@ -247,7 +247,7 @@
 <div *ngIf="statsLoading" style="margin-top: 20px; margin-bottom: 20px">
   <app-loader></app-loader>
 </div>
-<div *ngIf="!statsLoading" class="summary-box">
+<div *ngIf="!statsLoading && canLoadData()" class="summary-box">
   <h3 class="text-center">{{ reportForm.value.reportFor }}</h3>
   <div class="row" style="margin-top: -15px">
     <span *ngIf="reportForm.value.reportFor === 'Farmer Groups'">
@@ -544,11 +544,11 @@
             <td>{{ visit.createdAt | date : "M/d/yy, hh:mm a" }}</td>
             <td>{{ visit.farm.upiNumber }}</td>
             <td>{{ visit.owner.lastName + " " + visit.owner.firstName }}</td>
-            <td>{{ visit.farm.location.prov_id.namek.toLowerCase() }}</td>
-            <td>{{ visit.farm.location.dist_id.name }}</td>
-            <td>{{ visit.farm.location.sect_id.name }}</td>
-            <td>{{ visit.farm.location.cell_id.name }}</td>
-            <td>{{ visit.farm.location.village_id.name }}</td>
+            <td>{{ visit.farm.location.prov_id?.namek.toLowerCase() }}</td>
+            <td>{{ visit.farm.location.dist_id?.name }}</td>
+            <td>{{ visit.farm.location.sect_id?.name }}</td>
+            <td>{{ visit.farm.location.cell_id?.name }}</td>
+            <td>{{ visit.farm.location.village_id?.name }}</td>
             <td>{{ visit.visitor.firstName }} {{ visit.visitor.lastName }}</td>
             <td>
               {{ visit.gap.gap_name }}
@@ -612,16 +612,16 @@
               {{ data.userInfo?.location?.prov_id?.namek.toLowerCase() }}
             </td>
             <td>
-              {{ data.userInfo.location?.dist_id.name }}
+              {{ data.userInfo.location?.dist_id?.name }}
             </td>
             <td>
-              {{ data.userInfo.location?.sect_id.name }}
+              {{ data.userInfo.location?.sect_id?.name }}
             </td>
             <td>
-              {{ data.userInfo.location?.cell_id.name }}
+              {{ data.userInfo.location?.cell_id?.name }}
             </td>
             <td>
-              {{ data.userInfo.location?.village_id.name }}
+              {{ data.userInfo.location?.village_id?.name }}
             </td>
             <td>
               {{
@@ -664,8 +664,9 @@
           <th>Village</th>
           <th>Total Trees</th>
           <th>Status</th>
-          <th>Reg Number</th>
-          <th>Owner names</th>
+          <th>Owner Reg Number</th>
+          <th>Owner Names</th>
+          <th>Owner Phone Number</th>
         </tr>
       </thead>
       <tbody>
@@ -673,19 +674,19 @@
           <tr *ngFor="let farm of data.requestInfo">
             <td>{{ farm.upiNumber }}</td>
             <td>
-              {{ farm.location.prov_id.namek.toLowerCase() }}
+              {{ farm.location.prov_id?.namek.toLowerCase() }}
             </td>
             <td>
-              {{ farm.location.dist_id.name }}
+              {{ farm.location.dist_id?.name }}
             </td>
             <td>
-              {{ farm.location.sect_id.name }}
+              {{ farm.location.sect_id?.name }}
             </td>
             <td>
-              {{ farm.location.cell_id.name }}
+              {{ farm.location.cell_id?.name }}
             </td>
             <td>
-              {{ farm.location.village_id.name }}
+              {{ farm.location.village_id?.name }}
             </td>
             <td>{{ farm?.numberOfTrees }}</td>
             <td>
@@ -698,6 +699,9 @@
                   ? data?.userInfo?.groupName
                   : data?.userInfo?.foreName + " " + data.userInfo?.surname
               }}
+            </td>
+            <td>
+              {{ data?.userInfo?.phone_number }}
             </td>
           </tr>
         </ng-container>

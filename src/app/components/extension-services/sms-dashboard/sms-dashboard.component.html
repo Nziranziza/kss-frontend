@@ -46,30 +46,95 @@
 </ng-template>
 <div>
   <div class="row">
-    <div class="col-sm-4">
+    <div class="col-sm-3">
       <div class="text-center stats-box">
         <h3>SMS Balance</h3>
-        <h1>{{ smsBalance.balance }}</h1>
+        <h1>{{ smsBalance.balance | number }}</h1>
       </div>
     </div>
-    <div *ngFor="let item of smsHistory.meta.summary">
-      <div class="col-sm-4">
-        <div [ngClass]="{'text-center stats-box': true, 'middle-box': item.status === statuses.DELIVERED, 'third-box': item.status === statuses.FAILED  }">
-          <h3>{{ item.status }} SMS</h3>
-          <h1>{{ item.count }}</h1>
-        </div>
+    <div class="col-sm-3 cursor-pointer" (click)="getSMSHistoryByStatus(statuses.DELIVERED)">
+      <div class="text-center stats-box middle-box">
+        <h3>Delivered SMS</h3>
+        <h1>{{ smsHistory.meta.summary.delivered || 0 | number }}</h1>
+      </div>
+    </div>
+    <div class="col-sm-3 cursor-pointer" (click)="getSMSHistoryByStatus(statuses.PENDING)">
+      <div class="text-center stats-box text-warning">
+        <h3>Pending SMS</h3>
+        <h1>{{ smsHistory.meta.summary.pending || 0 | number }}</h1>
+      </div>
+    </div>
+    <div class="col-sm-3 cursor-pointer" (click)="getSMSHistoryByStatus(statuses.FAILED)">
+      <div class="text-center stats-box text-danger">
+        <h3>Failed SMS</h3>
+        <h1>{{ smsHistory.meta.summary.failed || 0 | number }}</h1>
       </div>
     </div>
   </div>
 </div>
-<div class="row">
-  <div class="col-sm-6" style="margin-top: 25px">
+<div class="sms-tabs">
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active" (click)="onChangeTab('sms-history')">
+      <a aria-controls="" role="tab" data-toggle="tab"
+        ><span>SMS History</span></a
+      >
+    </li>
+    <li role="presentation" (click)="onChangeTab('sms-orders-history')">
+      <a aria-controls="" role="tab" data-toggle="tab"
+        ><span>SMS Orders History</span></a
+      >
+    </li>
+  </ul>
+</div>
+<div class="row" [hidden]="activeTab !== 'sms-history'">
+  <div class="col-sm-12" style="margin-top: 25px">
+    <form [formGroup]="filterForm" class="row" (ngSubmit)="onSubmit()">
+      <div class="form-group col-sm-4">
+        <div>
+          <select value="" class="form-control" formControlName="status">
+            <option value="" [selected]="true">All</option>
+            <ng-container *ngFor="let status of statusesArray">
+              <option value="{{ status }}">{{ status }}</option>
+            </ng-container>
+          </select>
+        </div>
+      </div>
+      <div class="form-group col-sm-4">
+        <input
+          formControlName="dateRange"
+          [selectMode]="'range'"
+          [owlDateTimeTrigger]="dt10"
+          [owlDateTime]="dt10"
+          class="form-control form-control-small"
+          placeholder="From: Dd/mm/yyyy ~ To: Dd/mm/yyyy"
+          dtOptions=""
+        />
+        <owl-date-time
+          #dt10
+          [pickerType]="'calendar'"
+          [scrollStrategy]="scrollStrategy"
+        ></owl-date-time>
+      </div>
+      <div class="col-sm-2">
+        <button class="btn btn-success">
+          <i class="fa fa-search"></i>
+          Search
+        </button>
+      </div>
+    </form>
     <div class="panel panel-default">
       <div class="panel-heading text-center">
         <h3 class="panel-title">SMS History</h3>
       </div>
+      <app-loader *ngIf="smsHistoryLoading"></app-loader>
       <div class="panel-body">
-        <table class="table table-striped">
+        <table
+          datatable
+          [dtTrigger]="dtTrigger"
+          [dtOptions]="dtOptions"
+          class="table table-striped"
+          [hidden]="smsHistoryLoading"
+        >
           <thead>
             <tr>
               <th>#</th>
@@ -85,14 +150,29 @@
               <td>{{ history.createdAt | date : "short" }}</td>
               <td>{{ history.recipient }}</td>
               <td>{{ history.content }}</td>
-              <td>{{ history.status }}</td>
+              <td>
+                <span
+                  [ngClass]="{
+                    badge: true,
+                    'badge-danger':
+                      history.status === statuses.FAILED ||
+                      history.status === statuses.UNREACHABLE ||
+                      history.status === statuses.REJECTED,
+                    'badge-success': history.status === statuses.DELIVERED,
+                    'badge-warning': history.status === statuses.PENDING
+                  }"
+                  >{{ history.status }}</span
+                >
+              </td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
   </div>
-  <div class="col-sm-6" style="margin-top: 25px">
+</div>
+<div class="row" [hidden]="activeTab !== 'sms-orders-history'">
+  <div class="col-sm-12" style="margin-top: 25px">
     <div class="panel panel-default">
       <div class="panel-heading text-center">
         <h3 class="panel-title">SMS Orders History</h3>

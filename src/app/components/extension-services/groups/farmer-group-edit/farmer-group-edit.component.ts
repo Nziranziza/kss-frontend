@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   AuthenticationService,
@@ -41,6 +41,7 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
   errors: any;
   provinces: any;
   filterForm: FormGroup;
+  editContactForm: FormGroup;
   parameters: any;
   loading = false;
   org: any;
@@ -51,6 +52,8 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
   groupMembers = [];
   time: any;
   id: string;
+  initialValue = '';
+  keyword = 'leaderName';
   scrollStrategy: ScrollStrategy;
   searchFields = [
     { value: 'reg_number', name: 'registration number' },
@@ -107,6 +110,9 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
         searchBy: ['reg_number'],
       }),
     });
+    this.editContactForm = this.formBuilder.group({
+      contacts: this.formBuilder.array([]),
+    });
     this.route.params.subscribe(params => {
       this.id = params['id'.toString()];
     });
@@ -115,6 +121,62 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
     this.onChanges();
   }
 
+  selectEvent(item) {
+    this.editForm.controls.leaderNames.setValue(item.leaderName);
+    this.editForm.controls.leaderPhoneNumber.setValue(item.phone_number);
+  }
+  deselectEvent() {
+    console.log('---------------');
+  }
+
+  // adding new contacts
+  addContacts() {
+    const departmentControl = (
+      this.editContactForm.get('contacts') as FormArray
+    ).controls;
+    this.searchResults.forEach((user) => {
+      departmentControl.push(
+        this.formBuilder.group({
+          userId: user.userInfo._id,
+          contact: user.userInfo.phone_number,
+        })
+      );
+    });
+  }
+
+
+  addContact(index) {
+    this.searchResults[index].editMode = true;
+  }
+
+  cancelEditContact(index) {
+    this.searchResults[index].editMode = false;
+  }
+
+  // submitting the contacts
+
+  submitContact(index) {
+    if (this.editContactForm.valid) {
+      const arrayControl = this.editContactForm.get('contacts') as FormArray;
+      const traineData = arrayControl.at(index);
+      this.searchResults[index].userInfo.phone_number = traineData.value.contact;
+      this.searchResults[index].editMode = false;
+      this.userService
+        .updateBasic({
+          id: traineData.value.userId,
+          phone_number: traineData.value.contact.toString(),
+          lastModifiedBy: {
+            _id: this.authenticationService.getCurrentUser().info._id,
+            name: this.authenticationService.getCurrentUser().info.surname,
+          },
+        })
+        .subscribe((newdata) => {
+          this.loading = false;
+        });
+    } else {
+      this.errors = this.helper.getFormValidationErrors(this.editContactForm);
+    }
+  }
   getGroupDetails() {
     this.groupService.get(this.id).subscribe(data => {
       const members = data.data.members;
@@ -128,6 +190,8 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
             phone_number: '',
             _id: member.userId,
           },
+          leaderName: '',
+          phone_number: '',
           selected: true
         };
         item.userInfo.regNumber = member.regNumber;
@@ -137,6 +201,8 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
           item.userInfo.foreName = member.firstName;
           item.userInfo.surname = member.lastName;
         }
+        item.leaderName = item.userInfo.groupName ? item.userInfo.groupName : item.userInfo.surname + ' ' + item.userInfo.foreName;
+        item.phone_number = member.phoneNumber;
         item.userInfo.phone_number = member.phoneNumber;
         this.groupMembers.push(item);
       });
@@ -176,7 +242,6 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
     this.editForm.markAllAsTouched();
     if (true) {
       const value = JSON.parse(JSON.stringify(this.editForm.value));
-      value.org_id = this.authenticationService.getCurrentUser().info.org_id;
       value.meetingSchedule.meetingDay = +value.meetingSchedule.meetingDay;
       const members = [];
       this.groupMembers.map((member) => {
@@ -191,7 +256,7 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
         },
         (err) => {
           this.loading = false;
-          this.errors = err.errors;
+          this.errors = err.error || err.errors ;
         }
       );
     } else {
@@ -252,6 +317,8 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
     this.searchResults.forEach((item) => {
       if (item.selected) {
         item.selected = false;
+        item.leaderName = item.userInfo.groupName ? item.userInfo.groupName : item.userInfo.surname + ' ' + item.userInfo.foreName;
+        item.phone_number = item.userInfo.phone_number;
         this.groupMembers.push(JSON.parse(JSON.stringify(item)));
       }
     });
@@ -298,6 +365,7 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
       this.organisationService.getFarmers(this.parameters).subscribe(
         (data) => {
           this.searchResults = data.data;
+          this.addContacts();
           this.loading = false;
         },
         (err) => {

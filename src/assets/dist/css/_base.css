@@ -624,3 +624,16 @@ table {
   padding-top: 0 !important;
   padding-bottom: 0 !important;
 }
+
+.badge-success {
+  background-color: #009c1f;
+}
+.badge-danger {
+  background-color: #a94442;
+}
+.badge-warning {
+  background-color: #8a6d3b;
+}
+.cursor-pointer {
+  cursor: pointer;
+}
