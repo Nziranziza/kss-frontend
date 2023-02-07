@@ -300,7 +300,7 @@ export class ReportsComponent extends BasicComponent implements OnInit {
               .getZone({
                 prov_id: value,
                 searchBy: "province",
-                partner: "Technoserve",
+                partner: "Technoserve Rwanda",
               })
               .subscribe((data) => {
                 if (data) {
@@ -327,7 +327,7 @@ export class ReportsComponent extends BasicComponent implements OnInit {
             .setValue("", { emitEvent: false });
           const valueData: any = this.valueNames(value, this.locationProvinces);
           this.filterHeader.location.prov_id = valueData.namee;
-          this.getStats();
+          this.newOrg = '';
         },
         () => {},
         () => {}
@@ -347,7 +347,7 @@ export class ReportsComponent extends BasicComponent implements OnInit {
             .getZone({
               dist_id: value,
               searchBy: "district",
-              partner: "Technoserve",
+              partner: "Technoserve Rwanda",
             })
             .subscribe((data) => {
               if (data) {
@@ -373,7 +373,7 @@ export class ReportsComponent extends BasicComponent implements OnInit {
           .setValue("", { emitEvent: false });
         const valueData: any = this.valueNames(value, this.locationDistricts);
         this.filterHeader.location.dist_id = valueData.name;
-        this.getStats();
+        this.newOrg = '';
       });
     this.reportForm.controls.filter
       .get("location.sect_id".toString())
