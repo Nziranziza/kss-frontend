@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {AuthorisationService, MessageService, UserService} from '../../../core/services';
-import {AuthenticationService, OrganisationService} from '../../../core/services';
-import {LocationService} from '../../../core/services';
-import {HelperService} from '../../../core/helpers';
-import {SiteService} from '../../../core/services';
+import {AuthorisationService, MessageService, UserService} from '../../../core';
+import {AuthenticationService, OrganisationService} from '../../../core';
+import {LocationService} from '../../../core';
+import {HelperService} from '../../../core';
+import {SiteService} from '../../../core';
 
 @Component({
   selector: 'app-user-edit',
@@ -107,14 +107,14 @@ export class UserEditComponent implements OnInit {
 
     this.route.params.subscribe(params => {
       this.userService.get(params['id'.toString()]).subscribe(user => {
+        this.editUser = user.content;
         this.organisationService.get(this.organisationId).subscribe(data => {
           this.org = data.content;
-
           this.isTechouseOrganisation(data.content);
           this.orgPossibleRoles = this.possibleRoles.filter(roles => data.content.organizationRole.includes(roles.value));
           this.orgPossibleRoles.map(role => {
             // Initiate user roles
-            if (user.content.userRoles.includes(role.value)) {
+            if (this.editUser.userRoles.includes(role.value)) {
               const control = new UntypedFormControl(true);
               (this.editForm.controls.userRoles as UntypedFormArray).push(control);
             } else {
@@ -123,8 +123,6 @@ export class UserEditComponent implements OnInit {
             }
           });
         });
-        this.editUser = user.content;
-
         if (this.isCWSAdmin &&
           (this.authorisationService.canEditUserType(+this.editUser.hasAccessTo.find(element => element.app === 2).userType))) {
           this.editForm.controls.userType.enable();
