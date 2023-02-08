@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {BasicComponent} from '../../../../core';
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
 
 import {
   AuthenticationService,
@@ -25,8 +25,8 @@ declare var $;
 })
 export class ParchmentPrepareTransferCartComponent extends BasicComponent implements OnInit, OnDestroy {
 
-  filterForm: FormGroup;
-  transferForm: FormGroup;
+  filterForm: UntypedFormGroup;
+  transferForm: UntypedFormGroup;
   cartItem = [];
   cart = [];
   title = 'Prepare parchments transfer';
@@ -43,7 +43,7 @@ export class ParchmentPrepareTransferCartComponent extends BasicComponent implem
 
   constructor(private parchmentService: ParchmentService,
               private router: Router,
-              private formBuilder: FormBuilder,
+              private formBuilder: UntypedFormBuilder,
               private coffeeTypeService: CoffeeTypeService,
               private confirmDialogService: ConfirmDialogService,
               private organisationService: OrganisationService,
@@ -76,7 +76,7 @@ export class ParchmentPrepareTransferCartComponent extends BasicComponent implem
     this.transferForm = this.formBuilder.group({
       destOrgId: ['', Validators.required],
       transferType: ['', Validators.required],
-      appliedCertificates: new FormArray([])
+      appliedCertificates: new UntypedFormArray([])
     });
 
     this.initialSearchValue = this.filterForm.value;
@@ -97,8 +97,8 @@ export class ParchmentPrepareTransferCartComponent extends BasicComponent implem
           }
         });
         this.certificates.map(() => {
-          const control = new FormControl({value: ''});
-          (this.transferForm.controls.appliedCertificates as FormArray).push(control);
+          const control = new UntypedFormControl({value: ''});
+          (this.transferForm.controls.appliedCertificates as UntypedFormArray).push(control);
         });
       }
     });

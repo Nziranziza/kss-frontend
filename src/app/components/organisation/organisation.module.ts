@@ -25,36 +25,31 @@ import { GoogleChartsModule } from "angular-google-charts";
 import { OrganisationDetailsComponent } from "./organisation-details/organisation-details.component";
 
 @NgModule({
-  declarations: [
-    OrganisationListComponent,
-    OrganisationEditComponent,
-    OrganisationCreateComponent,
-    OrganisationFarmersComponent,
-    OrganisationPendingFarmersComponent,
-    OrganisationSuppliersComponent,
-    SupplierDeliveriesComponent,
-    OrganisationSettingsComponent,
-    EditPaymentChannelComponent,
-    EditCertificateComponent,
-    OrganisationDetailsComponent,
-  ],
-  imports: [
-    CommonModule,
-    OrganisationRoutingModule,
-    RouterModule,
-    NgbModule,
-    NgxPaginationModule,
-    OrderModule,
-    SharedModule,
-    OwlDateTimeModule,
-    OwlNativeDateTimeModule,
-    GoogleMapsModule,
-    GoogleChartsModule,
-  ],
-  entryComponents: [
-    SupplierDeliveriesComponent,
-    EditPaymentChannelComponent,
-    EditCertificateComponent,
-  ],
+    declarations: [
+        OrganisationListComponent,
+        OrganisationEditComponent,
+        OrganisationCreateComponent,
+        OrganisationFarmersComponent,
+        OrganisationPendingFarmersComponent,
+        OrganisationSuppliersComponent,
+        SupplierDeliveriesComponent,
+        OrganisationSettingsComponent,
+        EditPaymentChannelComponent,
+        EditCertificateComponent,
+        OrganisationDetailsComponent,
+    ],
+    imports: [
+        CommonModule,
+        OrganisationRoutingModule,
+        RouterModule,
+        NgbModule,
+        NgxPaginationModule,
+        OrderModule,
+        SharedModule,
+        OwlDateTimeModule,
+        OwlNativeDateTimeModule,
+        GoogleMapsModule,
+        GoogleChartsModule,
+    ]
 })
 export class OrganisationModule {}

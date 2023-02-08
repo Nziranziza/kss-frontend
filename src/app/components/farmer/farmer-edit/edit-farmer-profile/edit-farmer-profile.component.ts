@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { isPlatformBrowser } from '@angular/common';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { LocationService, UserService } from '../../../../core';
 import { HelperService } from '../../../../core';
 import { AuthenticationService, FarmerService } from '../../../../core';
@@ -27,9 +27,9 @@ export class EditFarmerProfileComponent
   implements OnInit {
   modal: NgbActiveModal;
   @Input() farmer;
-  editFarmerProfileForm: FormGroup;
-  addPaymentChannelsForm: FormGroup;
-  editPaymentChannelForm: FormGroup;
+  editFarmerProfileForm: UntypedFormGroup;
+  addPaymentChannelsForm: UntypedFormGroup;
+  editPaymentChannelForm: UntypedFormGroup;
   provinces: any;
   districts: any;
   sectors: any;
@@ -51,7 +51,7 @@ export class EditFarmerProfileComponent
     private authenticationService: AuthenticationService,
     private injector: Injector,
     private router: Router,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private userService: UserService,
     private helper: HelperService,
     private locationService: LocationService,
@@ -90,7 +90,7 @@ export class EditFarmerProfileComponent
     });
 
     this.addPaymentChannelsForm = this.formBuilder.group({
-      paymentChannels: new FormArray([]),
+      paymentChannels: new UntypedFormArray([]),
     });
 
     this.locationService.getProvinces().subscribe((data) => {
@@ -267,7 +267,7 @@ export class EditFarmerProfileComponent
   }
 
   get formPaymentChannel() {
-    return this.addPaymentChannelsForm.controls.paymentChannels as FormArray;
+    return this.addPaymentChannelsForm.controls.paymentChannels as UntypedFormArray;
   }
 
   onChangePaymentChannel(index: number) {
@@ -284,24 +284,24 @@ export class EditFarmerProfileComponent
   }
 
   addPaymentChannel() {
-    (this.addPaymentChannelsForm.controls.paymentChannels as FormArray).push(
+    (this.addPaymentChannelsForm.controls.paymentChannels as UntypedFormArray).push(
       this.createPaymentChannel()
     );
   }
 
   removePaymentChannel(index: number) {
     (
-      this.addPaymentChannelsForm.controls.paymentChannels as FormArray
+      this.addPaymentChannelsForm.controls.paymentChannels as UntypedFormArray
     ).removeAt(index);
   }
 
-  getPaymentChannelFormGroup(index): FormGroup {
+  getPaymentChannelFormGroup(index): UntypedFormGroup {
     this.paymentChannels = this.addPaymentChannelsForm.controls
-      .paymentChannels as FormArray;
-    return this.paymentChannels.controls[index] as FormGroup;
+      .paymentChannels as UntypedFormArray;
+    return this.paymentChannels.controls[index] as UntypedFormGroup;
   }
 
-  createPaymentChannel(): FormGroup {
+  createPaymentChannel(): UntypedFormGroup {
     return this.formBuilder.group({
       paymentChannel: ['', Validators.required],
       subscriptionCode: ['', Validators.required],

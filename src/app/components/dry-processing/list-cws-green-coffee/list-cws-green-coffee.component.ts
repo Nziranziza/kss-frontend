@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {Router} from '@angular/router';
 import {
   AuthenticationService,
@@ -26,7 +26,7 @@ declare var $;
 export class ListCwsGreenCoffeeComponent extends BasicComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private router: Router, private confirmDialogService: ConfirmDialogService,
     private seasonService: SeasonService,
     private modal: NgbModal,
@@ -51,7 +51,7 @@ export class ListCwsGreenCoffeeComponent extends BasicComponent implements OnIni
   summary: any;
   results: any;
   orgId: string;
-  filterForm: FormGroup;
+  filterForm: UntypedFormGroup;
   currentDate: any;
   seasonStartingDate: string;
   organisations = [];

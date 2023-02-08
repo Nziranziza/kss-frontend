@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {
-  FormArray,
-  FormBuilder,
+  UntypedFormArray,
+  UntypedFormBuilder,
   FormControl,
-  FormGroup,
+  UntypedFormGroup,
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -33,7 +33,7 @@ export class FarmerGroupCreateComponent
   sectors: any[] = [];
   districts: any[] = [];
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private router: Router,
     private organisationService: OrganisationService,
     private messageService: MessageService,
@@ -49,11 +49,11 @@ export class FarmerGroupCreateComponent
     this.scrollStrategy = this.sso.noop();
   }
 
-  createForm: FormGroup;
-  editContactForm: FormGroup;
+  createForm: UntypedFormGroup;
+  editContactForm: UntypedFormGroup;
   errors: any;
   provinces: any;
-  filterForm: FormGroup;
+  filterForm: UntypedFormGroup;
   parameters: any;
   loading = false;
   org: any;
@@ -141,7 +141,7 @@ export class FarmerGroupCreateComponent
   // adding new contacts
   addContacts() {
     const departmentControl = (
-      this.editContactForm.get('contacts') as FormArray
+      this.editContactForm.get('contacts') as UntypedFormArray
     ).controls;
     this.searchResults.forEach((user) => {
       departmentControl.push(
@@ -165,7 +165,7 @@ export class FarmerGroupCreateComponent
 
   submitContact(index) {
     if (this.editContactForm.valid) {
-      const arrayControl = this.editContactForm.get('contacts') as FormArray;
+      const arrayControl = this.editContactForm.get('contacts') as UntypedFormArray;
       const traineData = arrayControl.at(index);
       this.searchResults[index].userInfo.phone_number = traineData.value.contact;
       this.searchResults[index].editMode = false;

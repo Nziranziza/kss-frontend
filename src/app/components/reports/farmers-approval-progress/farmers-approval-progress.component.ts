@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {Router} from '@angular/router';
 import {
   AuthenticationService,
@@ -24,7 +24,7 @@ import { ChartType } from 'angular-google-charts';
 export class FarmersApprovalProgressComponent extends BasicComponent implements OnInit {
 
   title = 'Farmers approval statistics';
-  filterForm: FormGroup;
+  filterForm: UntypedFormGroup;
   errors: any;
   provinces: any;
   districts: any;
@@ -50,7 +50,7 @@ export class FarmersApprovalProgressComponent extends BasicComponent implements 
   message: string;
   isCurrentUserDCC = false;
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(private formBuilder: UntypedFormBuilder,
               private router: Router, private organisationService: OrganisationService,
               private authorisationService: AuthorisationService,
               private farmerService: FarmerService,

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   AuthenticationService,
@@ -23,7 +23,7 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
   createForm: any[] = [];
   sectors: any[] = [];
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(private formBuilder: UntypedFormBuilder,
     private router: Router, private organisationService: OrganisationService,
     private messageService: MessageService,
     private route: ActivatedRoute,
@@ -37,11 +37,11 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
     this.scrollStrategy = this.sso.noop();
   }
 
-  editForm: FormGroup;
+  editForm: UntypedFormGroup;
   errors: any;
   provinces: any;
-  filterForm: FormGroup;
-  editContactForm: FormGroup;
+  filterForm: UntypedFormGroup;
+  editContactForm: UntypedFormGroup;
   parameters: any;
   loading = false;
   org: any;
@@ -132,7 +132,7 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
   // adding new contacts
   addContacts() {
     const departmentControl = (
-      this.editContactForm.get('contacts') as FormArray
+      this.editContactForm.get('contacts') as UntypedFormArray
     ).controls;
     this.searchResults.forEach((user) => {
       departmentControl.push(
@@ -157,7 +157,7 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
 
   submitContact(index) {
     if (this.editContactForm.valid) {
-      const arrayControl = this.editContactForm.get('contacts') as FormArray;
+      const arrayControl = this.editContactForm.get('contacts') as UntypedFormArray;
       const traineData = arrayControl.at(index);
       this.searchResults[index].userInfo.phone_number = traineData.value.contact;
       this.searchResults[index].editMode = false;

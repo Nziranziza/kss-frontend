@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { AuthenticationService, SmsService } from "src/app/core";
 import { ScrollStrategy } from '@angular/cdk/overlay';
@@ -19,10 +19,10 @@ export class SmsDashboardComponent implements OnInit {
   constructor(
     private modalService: NgbModal,
     private smsService: SmsService,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private authenticationService: AuthenticationService
   ) {}
-  createOrder: FormGroup;
+  createOrder: UntypedFormGroup;
   smsOrders: any[] = [];
   smsBalance: any = { balance: 0, rate: 10 };
   smsHistory: any = {
@@ -40,7 +40,7 @@ export class SmsDashboardComponent implements OnInit {
   statusesArray: string[] = Object.keys(this.statuses);
   activeTab: TabName = "sms-history";
   scrollStrategy: ScrollStrategy;
-  filterForm: FormGroup;
+  filterForm: UntypedFormGroup;
   dtTrigger: Subject<any> = new Subject<any>();
   dtOptions: DataTables.Settings = {};
   smsHistoryLoading = false;

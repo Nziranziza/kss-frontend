@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {Router} from '@angular/router';
 import {HelperService} from '../../../../core/helpers';
 import {MessageService, SiteService} from '../../../../core/services';
@@ -13,14 +13,14 @@ import {LocationService} from '../../../../core/services';
 })
 export class SiteCreateComponent implements OnInit {
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(private formBuilder: UntypedFormBuilder,
               private router: Router, private siteService: SiteService,
               private locationService: LocationService,
               private messageService: MessageService,
               private helper: HelperService, private organisationService: OrganisationService) {
   }
 
-  createForm: FormGroup;
+  createForm: UntypedFormGroup;
   errors: string[];
   organisations: any;
   provinces: any;

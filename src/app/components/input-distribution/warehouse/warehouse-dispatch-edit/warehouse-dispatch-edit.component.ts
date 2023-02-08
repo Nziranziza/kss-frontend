@@ -1,5 +1,5 @@
 import {Component, Inject, Injector, Input, OnInit, PLATFORM_ID, ViewChild} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {
   AuthenticationService,
   ConfirmDialogService,
@@ -22,7 +22,7 @@ import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 })
 export class WarehouseDispatchEditComponent extends BasicComponent implements OnInit {
 
-  constructor(private formBuilder: FormBuilder, private siteService: SiteService,
+  constructor(private formBuilder: UntypedFormBuilder, private siteService: SiteService,
               private warehouseService: WarehouseService,
               private router: Router, private confirmDialogService: ConfirmDialogService,
               private seasonService: SeasonService,
@@ -39,8 +39,8 @@ export class WarehouseDispatchEditComponent extends BasicComponent implements On
   }
 
   modal: NgbActiveModal;
-  updateDispatchForm: FormGroup;
-  filterForm: FormGroup;
+  updateDispatchForm: UntypedFormGroup;
+  filterForm: UntypedFormGroup;
   sites: any;
   provinces: any;
   districts: any;
@@ -71,8 +71,8 @@ export class WarehouseDispatchEditComponent extends BasicComponent implements On
         vehiclePlate: [''],
         vehicleModel: [''],
         date: [this.datePipe.transform(this.currentDate, 'yyyy-MM-dd', 'GMT+2'), Validators.required],
-        packageFertilizer: new FormArray([]),
-        packagePesticide: new FormArray([]),
+        packageFertilizer: new UntypedFormArray([]),
+        packagePesticide: new UntypedFormArray([]),
         totalQtyPesticide: [0],
         totalQtyFertilizer: [0]
       }),
@@ -106,21 +106,21 @@ export class WarehouseDispatchEditComponent extends BasicComponent implements On
         if (item.inputId.inputType === 'Fertilizer') {
           this.includeFertilizer = true;
           this.addPackageFertilizer();
-          i = (this.updateDispatchForm.controls.entries.get('packageFertilizer') as FormArray).length - 1;
-          ((this.updateDispatchForm.controls.entries.get('packageFertilizer') as FormArray).at(i) as FormGroup).get('bagSize')
+          i = (this.updateDispatchForm.controls.entries.get('packageFertilizer') as UntypedFormArray).length - 1;
+          ((this.updateDispatchForm.controls.entries.get('packageFertilizer') as UntypedFormArray).at(i) as UntypedFormGroup).get('bagSize')
             .setValue(item.quantityPerItem);
-          ((this.updateDispatchForm.controls.entries.get('packageFertilizer') as FormArray).at(i) as FormGroup).get('numberOfBags')
+          ((this.updateDispatchForm.controls.entries.get('packageFertilizer') as UntypedFormArray).at(i) as UntypedFormGroup).get('numberOfBags')
             .setValue(item.numberOfItems);
-          ((this.updateDispatchForm.controls.entries.get('packageFertilizer') as FormArray).at(i) as FormGroup).get('subTotal')
+          ((this.updateDispatchForm.controls.entries.get('packageFertilizer') as UntypedFormArray).at(i) as UntypedFormGroup).get('subTotal')
             .setValue(item.quantityPerItem * item.numberOfItems);
         }
         if (item.inputId.inputType === 'Pesticide') {
           this.includePesticide = true;
           this.addPackagePesticide();
-          i = (this.updateDispatchForm.controls.entries.get('packagePesticide') as FormArray).length - 1;
-          ((this.updateDispatchForm.controls.entries.get('packagePesticide') as FormArray).at(i) as FormGroup).get('pesticideType')
+          i = (this.updateDispatchForm.controls.entries.get('packagePesticide') as UntypedFormArray).length - 1;
+          ((this.updateDispatchForm.controls.entries.get('packagePesticide') as UntypedFormArray).at(i) as UntypedFormGroup).get('pesticideType')
             .setValue(item.inputId._id);
-          ((this.updateDispatchForm.controls.entries.get('packagePesticide') as FormArray).at(i) as FormGroup).get('qty')
+          ((this.updateDispatchForm.controls.entries.get('packagePesticide') as UntypedFormArray).at(i) as UntypedFormGroup).get('qty')
             .setValue(item.quantityPerItem);
         }
       });
@@ -128,35 +128,35 @@ export class WarehouseDispatchEditComponent extends BasicComponent implements On
   }
 
   get formPackageFertilizer() {
-    return this.updateDispatchForm.controls.entries.get('packageFertilizer') as FormArray;
+    return this.updateDispatchForm.controls.entries.get('packageFertilizer') as UntypedFormArray;
   }
 
   get formPackagePesticide() {
-    return this.updateDispatchForm.controls.entries.get('packagePesticide') as FormArray;
+    return this.updateDispatchForm.controls.entries.get('packagePesticide') as UntypedFormArray;
   }
 
   addPackageFertilizer() {
-    (this.updateDispatchForm.controls.entries.get('packageFertilizer') as FormArray).push(this.createPackageFertilizer());
+    (this.updateDispatchForm.controls.entries.get('packageFertilizer') as UntypedFormArray).push(this.createPackageFertilizer());
   }
 
   addPackagePesticide() {
-    (this.updateDispatchForm.controls.entries.get('packagePesticide') as FormArray).push(this.createPackagePesticide());
+    (this.updateDispatchForm.controls.entries.get('packagePesticide') as UntypedFormArray).push(this.createPackagePesticide());
   }
 
   removePackageFertilizer(index: number) {
-    (this.updateDispatchForm.controls.entries.get('packageFertilizer') as FormArray).removeAt(index);
+    (this.updateDispatchForm.controls.entries.get('packageFertilizer') as UntypedFormArray).removeAt(index);
   }
 
   removePackagePesticide(index: number) {
-    (this.updateDispatchForm.controls.entries.get('packagePesticide') as FormArray).removeAt(index);
+    (this.updateDispatchForm.controls.entries.get('packagePesticide') as UntypedFormArray).removeAt(index);
   }
 
-  getPackageFertilizerFormGroup(index): FormGroup {
-    this.packageFertilizer = this.updateDispatchForm.controls.entries.get('packageFertilizer') as FormArray;
-    return this.packageFertilizer.controls[index] as FormGroup;
+  getPackageFertilizerFormGroup(index): UntypedFormGroup {
+    this.packageFertilizer = this.updateDispatchForm.controls.entries.get('packageFertilizer') as UntypedFormArray;
+    return this.packageFertilizer.controls[index] as UntypedFormGroup;
   }
 
-  createPackageFertilizer(): FormGroup {
+  createPackageFertilizer(): UntypedFormGroup {
     return this.formBuilder.group({
       bagSize: [''],
       numberOfBags: [''],
@@ -164,7 +164,7 @@ export class WarehouseDispatchEditComponent extends BasicComponent implements On
     });
   }
 
-  createPackagePesticide(): FormGroup {
+  createPackagePesticide(): UntypedFormGroup {
     return this.formBuilder.group({
       pesticideType: [''],
       qty: ['']

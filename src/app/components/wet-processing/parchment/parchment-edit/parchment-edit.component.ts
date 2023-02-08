@@ -1,5 +1,5 @@
 import {Component, Inject, Injector, Input, OnInit, PLATFORM_ID} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AuthenticationService, CoffeeTypeService, ParchmentService, UserService} from '../../../../core/services';
 import {DatePipe, isPlatformBrowser} from '@angular/common';
@@ -14,7 +14,7 @@ import {BasicComponent} from '../../../../core/library';
 })
 export class ParchmentEditComponent  extends BasicComponent implements OnInit {
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(private formBuilder: UntypedFormBuilder,
               private router: Router, private parchmentService: ParchmentService,
               private coffeeTypeService: CoffeeTypeService,
               private datePipe: DatePipe,
@@ -31,7 +31,7 @@ export class ParchmentEditComponent  extends BasicComponent implements OnInit {
   }
 
   modal: NgbActiveModal;
-  recordParchmentForm: FormGroup;
+  recordParchmentForm: UntypedFormGroup;
   errors: string[];
   coffeeTypes = [];
   packaging: any;
@@ -46,7 +46,7 @@ export class ParchmentEditComponent  extends BasicComponent implements OnInit {
       coffeeType: ['', Validators.required],
       coffeeGrade: ['A', Validators.required],
       date: ['', Validators.required],
-      packaging: new FormArray([]),
+      packaging: new UntypedFormArray([]),
       totalKgs: ['', Validators.required],
       producedDate: [this.datePipe.transform(this.currentDate, 'yyyy-MM-dd'), Validators.required]
     });
@@ -65,11 +65,11 @@ export class ParchmentEditComponent  extends BasicComponent implements OnInit {
       this.parchment = data.content;
       this.parchment.package.forEach((item, i) => {
         this.addPackage();
-        ((this.recordParchmentForm.get('packaging') as FormArray).at(i) as FormGroup).get('bagSize')
+        ((this.recordParchmentForm.get('packaging') as UntypedFormArray).at(i) as UntypedFormGroup).get('bagSize')
           .setValue(item.bagSize);
-        ((this.recordParchmentForm.get('packaging') as FormArray).at(i) as FormGroup).get('numberOfBags')
+        ((this.recordParchmentForm.get('packaging') as UntypedFormArray).at(i) as UntypedFormGroup).get('numberOfBags')
           .setValue(item.numberOfBags);
-        ((this.recordParchmentForm.get('packaging') as FormArray).at(i) as FormGroup).get('subTotal')
+        ((this.recordParchmentForm.get('packaging') as UntypedFormArray).at(i) as UntypedFormGroup).get('subTotal')
           .setValue(item.bagSize * item.numberOfBags);
       });
       this.recordParchmentForm.controls.coffeeType.setValue(this.parchment.coffeeType._id);
@@ -80,23 +80,23 @@ export class ParchmentEditComponent  extends BasicComponent implements OnInit {
   }
 
   get formPackage() {
-    return this.recordParchmentForm.get('packaging') as FormArray;
+    return this.recordParchmentForm.get('packaging') as UntypedFormArray;
   }
 
   addPackage() {
-    (this.recordParchmentForm.get('packaging') as FormArray).push(this.createPackage());
+    (this.recordParchmentForm.get('packaging') as UntypedFormArray).push(this.createPackage());
   }
 
   removePackage(index: number) {
-    (this.recordParchmentForm.get('packaging') as FormArray).removeAt(index);
+    (this.recordParchmentForm.get('packaging') as UntypedFormArray).removeAt(index);
   }
 
-  getPackageFormGroup(index): FormGroup {
-    this.packaging = this.recordParchmentForm.get('packaging') as FormArray;
-    return this.packaging.at(index) as FormGroup;
+  getPackageFormGroup(index): UntypedFormGroup {
+    this.packaging = this.recordParchmentForm.get('packaging') as UntypedFormArray;
+    return this.packaging.at(index) as UntypedFormGroup;
   }
 
-  createPackage(): FormGroup {
+  createPackage(): UntypedFormGroup {
     return this.formBuilder.group({
       bagSize: [''],
       numberOfBags: [''],

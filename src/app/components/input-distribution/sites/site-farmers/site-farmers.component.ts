@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {
   AuthenticationService,
   AuthorisationService,
@@ -26,7 +26,7 @@ export class SiteFarmersComponent extends BasicComponent implements OnInit, OnDe
               private router: Router, private  confirmDialogService: ConfirmDialogService,
               private authorisationService: AuthorisationService,
               private route: ActivatedRoute,
-              private modal: NgbModal, private formBuilder: FormBuilder, private messageService: MessageService) {
+              private modal: NgbModal, private formBuilder: UntypedFormBuilder, private messageService: MessageService) {
     super();
     this.parameters = {
       length: 25,
@@ -34,7 +34,7 @@ export class SiteFarmersComponent extends BasicComponent implements OnInit, OnDe
       draw: 1
     };
   }
-  filterForm: FormGroup;
+  filterForm: UntypedFormGroup;
   maxSize = 9;
   order = 'userInfo.foreName';
   reverse = true;

@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AuthenticationService} from '../../../core';
 import {HelperService} from '../../../core';
@@ -16,13 +16,13 @@ export class RequestResetComponent extends BasicComponent implements OnInit {
 
   errors: any;
   message: string;
-  requestResetForm: FormGroup;
+  requestResetForm: UntypedFormGroup;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private authenticationService: AuthenticationService,
-    private formBuilder: FormBuilder, private helperService: HelperService
+    private formBuilder: UntypedFormBuilder, private helperService: HelperService
   ) {
     super();
   }

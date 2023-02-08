@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AuthenticationService, AuthorisationService, OrganisationService, OrganisationTypeService} from '../../../core';
 import {HelperService} from '../../../core';
@@ -14,7 +14,7 @@ import {BasicComponent} from '../../../core';
 })
 export class OrganisationEditComponent extends BasicComponent implements OnInit {
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(private formBuilder: UntypedFormBuilder,
               private route: ActivatedRoute, private router: Router, private helper: HelperService,
               private organisationService: OrganisationService, private locationService: LocationService,
               private authenticationService: AuthenticationService,
@@ -23,7 +23,7 @@ export class OrganisationEditComponent extends BasicComponent implements OnInit 
     super();
   }
 
-  editForm: FormGroup;
+  editForm: UntypedFormGroup;
   errors: any;
   genres: any[];
   possibleRoles: any[];
@@ -46,7 +46,7 @@ export class OrganisationEditComponent extends BasicComponent implements OnInit 
   coveredCellsSet = [[]];
   selectedCoveredVillages = [[]];
   selectedCoveredCells = [[]];
-  coveredSectorsList: FormArray;
+  coveredSectorsList: UntypedFormArray;
   showPartners = false;
   hasExpiration = false;
   isUserDCC = false;
@@ -70,9 +70,9 @@ export class OrganisationEditComponent extends BasicComponent implements OnInit 
         cell_id: [''],
         village_id: [''],
       }),
-      organizationRole: new FormArray([]),
-      organizationPartner: new FormArray([]),
-      coveredSectors: new FormArray([]),
+      organizationRole: new UntypedFormArray([]),
+      organizationPartner: new UntypedFormArray([]),
+      coveredSectors: new UntypedFormArray([]),
       contractStartingDate: [''],
       contractEndingDate: [''],
     });
@@ -89,11 +89,11 @@ export class OrganisationEditComponent extends BasicComponent implements OnInit 
           });
           this.possibleRoles.map(role => {
             if (data.content.organizationRole.includes(role.value)) {
-              const control = new FormControl(true);
-              (this.editForm.controls.organizationRole as FormArray).push(control);
+              const control = new UntypedFormControl(true);
+              (this.editForm.controls.organizationRole as UntypedFormArray).push(control);
             } else {
-              const control = new FormControl(false);
-              (this.editForm.controls.organizationRole as FormArray).push(control);
+              const control = new UntypedFormControl(false);
+              (this.editForm.controls.organizationRole as UntypedFormArray).push(control);
             }
           });
         });
@@ -103,11 +103,11 @@ export class OrganisationEditComponent extends BasicComponent implements OnInit 
             if (partner._id !== this.id) {
               if (data.content.organizationPartner &&
                 data.content.organizationPartner.findIndex(p => p._id === partner._id) !== -1) {
-                const control = new FormControl(true);
-                (this.editForm.controls.organizationPartner as FormArray).push(control);
+                const control = new UntypedFormControl(true);
+                (this.editForm.controls.organizationPartner as UntypedFormArray).push(control);
               } else {
-                const control = new FormControl(false);
-                (this.editForm.controls.organizationPartner as FormArray).push(control);
+                const control = new UntypedFormControl(false);
+                (this.editForm.controls.organizationPartner as UntypedFormArray).push(control);
               }
               this.showPartners = true;
             }
@@ -180,7 +180,7 @@ export class OrganisationEditComponent extends BasicComponent implements OnInit 
           }
           this.editForm.patchValue(org, {emitEvent: false});
           org.coveredSectors.map((sector, index) => {
-            (this.editForm.controls.coveredSectors as FormArray).push(this.newCoveredSector());
+            (this.editForm.controls.coveredSectors as UntypedFormArray).push(this.newCoveredSector());
             this.getCoveredSectorsFormGroup(index).patchValue(sector, {emitEvent: false});
           });
         } else {
@@ -198,7 +198,7 @@ export class OrganisationEditComponent extends BasicComponent implements OnInit 
     this.isSuperOrg = organisation.organizationRole.indexOf(0) > -1;
   }
 
-  newCoveredSector(): FormGroup {
+  newCoveredSector(): UntypedFormGroup {
     return this.formBuilder.group({
       coveredVillages: [[]],
       coveredCells: [[]],
@@ -207,11 +207,11 @@ export class OrganisationEditComponent extends BasicComponent implements OnInit 
   }
 
   get formCoveredSectors() {
-    return this.editForm.get('coveredSectors') as FormArray;
+    return this.editForm.get('coveredSectors') as UntypedFormArray;
   }
 
   addCoveredSector() {
-    (this.editForm.controls.coveredSectors as FormArray).push(this.newCoveredSector());
+    (this.editForm.controls.coveredSectors as UntypedFormArray).push(this.newCoveredSector());
     this.coveredCellsSet.push([]);
     this.selectedCoveredCells.push([]);
     this.coveredVillagesSet.push([]);
@@ -219,12 +219,12 @@ export class OrganisationEditComponent extends BasicComponent implements OnInit 
   }
 
   removeCoveredSector(index: number) {
-    (this.editForm.controls.coveredSectors as FormArray).removeAt(index);
+    (this.editForm.controls.coveredSectors as UntypedFormArray).removeAt(index);
   }
 
-  getCoveredSectorsFormGroup(index): FormGroup {
-    this.coveredSectorsList = this.editForm.get('coveredSectors') as FormArray;
-    return this.coveredSectorsList.controls[index] as FormGroup;
+  getCoveredSectorsFormGroup(index): UntypedFormGroup {
+    this.coveredSectorsList = this.editForm.get('coveredSectors') as UntypedFormArray;
+    return this.coveredSectorsList.controls[index] as UntypedFormGroup;
   }
 
   onChangeSector(index: number) {

@@ -11,7 +11,7 @@ import {
   ViewChildren
 } from '@angular/core';
 import {BasicComponent} from '../../../../core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {DataTableDirective} from 'angular-datatables';
 import {Subject} from 'rxjs';
 import {
@@ -41,7 +41,7 @@ declare var $;
 export class AddCoffeeItemComponent extends BasicComponent implements OnInit, OnDestroy, AfterViewInit {
 
   modal: NgbActiveModal;
-  filterForm: FormGroup;
+  filterForm: UntypedFormGroup;
   cartItem = [];
   cart = [];
   title = 'Prepare green coffee';
@@ -78,7 +78,7 @@ export class AddCoffeeItemComponent extends BasicComponent implements OnInit, On
   constructor(private parchmentService: ParchmentService,
               private router: Router,
               private dryMillService: DryProcessingService,
-              private formBuilder: FormBuilder,
+              private formBuilder: UntypedFormBuilder,
               private coffeeTypeService: CoffeeTypeService,
               private confirmDialogService: ConfirmDialogService,
               private organisationService: OrganisationService,

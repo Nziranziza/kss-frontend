@@ -9,7 +9,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TrainingService, GapService, Training } from '../../../../core';
 import { MessageService } from '../../../../core';
@@ -41,7 +41,7 @@ export class TrainingViewComponent
       this.modal = this.injector.get(NgbActiveModal);
     }
   }
-  createTraining: FormGroup;
+  createTraining: UntypedFormGroup;
   closeResult = '';
   training: Training;
   modal: NgbActiveModal;

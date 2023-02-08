@@ -24,30 +24,28 @@ import { ViewApplicationComponent } from './site-view-stockout/view-application/
 import {SiteViewStockoutComponent} from './site-view-stockout/site-view-stockout.component';
 
 @NgModule({
-  declarations: [DistributionPlanComponent,
-    SiteDistributionComponent,
-    RecordSiteStockOutComponent,
-    RecordSiteStockReturnComponent,
-    RecordSiteStockReturnComponent,
-    RecordDistributionComponent,
-    SiteViewDispatchComponent,
-    EditRequestComponent,
-    ConfirmDispatchComponent,
-    SiteViewStockoutComponent, ApplyPesticideComponent, ViewApplicationComponent],
-  imports: [
-    CommonModule,
-    NgbModule, NgxPaginationModule, OrderModule,
-    SharedModule,
-    BrowserAnimationsModule,
-    InputDistributionRoutingModule,
-    OwlDateTimeModule,
-    OwlNativeDateTimeModule,
-    SitesModule,
-    WarehouseModule,
-    DistributionReportModule
-  ],
-  entryComponents: [RecordDistributionComponent, ConfirmDispatchComponent, ApplyPesticideComponent,
-    RecordSiteStockReturnComponent, RecordSiteStockOutComponent, DeliveryDetailsComponent, ViewApplicationComponent]
+    declarations: [DistributionPlanComponent,
+        SiteDistributionComponent,
+        RecordSiteStockOutComponent,
+        RecordSiteStockReturnComponent,
+        RecordSiteStockReturnComponent,
+        RecordDistributionComponent,
+        SiteViewDispatchComponent,
+        EditRequestComponent,
+        ConfirmDispatchComponent,
+        SiteViewStockoutComponent, ApplyPesticideComponent, ViewApplicationComponent],
+    imports: [
+        CommonModule,
+        NgbModule, NgxPaginationModule, OrderModule,
+        SharedModule,
+        BrowserAnimationsModule,
+        InputDistributionRoutingModule,
+        OwlDateTimeModule,
+        OwlNativeDateTimeModule,
+        SitesModule,
+        WarehouseModule,
+        DistributionReportModule
+    ]
 })
 export class InputDistributionModule {
 }

@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {HelperService} from '../../../../core';
 import {
@@ -30,7 +30,7 @@ declare var $;
 })
 export class WarehouseDispatchComponent extends BasicComponent implements OnInit, OnDestroy {
 
-  constructor(private formBuilder: FormBuilder, private siteService: SiteService,
+  constructor(private formBuilder: UntypedFormBuilder, private siteService: SiteService,
               private warehouseService: WarehouseService,
               private router: Router, private confirmDialogService: ConfirmDialogService,
               private seasonService: SeasonService,
@@ -43,8 +43,8 @@ export class WarehouseDispatchComponent extends BasicComponent implements OnInit
     super();
   }
 
-  recordDispatchForm: FormGroup;
-  filterForm: FormGroup;
+  recordDispatchForm: UntypedFormGroup;
+  filterForm: UntypedFormGroup;
   sites: any;
   provinces: any;
   districts: any;
@@ -92,8 +92,8 @@ export class WarehouseDispatchComponent extends BasicComponent implements OnInit
         vehiclePlate: [''],
         vehicleModel: [''],
         date: [this.datePipe.transform(this.currentDate, 'yyyy-MM-dd', 'GMT+2'), Validators.required],
-        packageFertilizer: new FormArray([]),
-        packagePesticide: new FormArray([]),
+        packageFertilizer: new UntypedFormArray([]),
+        packagePesticide: new UntypedFormArray([]),
         totalQtyPesticide: [0],
         totalQtyFertilizer: [0]
       }),
@@ -161,35 +161,35 @@ export class WarehouseDispatchComponent extends BasicComponent implements OnInit
   }
 
   get formPackageFertilizer() {
-    return this.recordDispatchForm.controls.entries.get('packageFertilizer') as FormArray;
+    return this.recordDispatchForm.controls.entries.get('packageFertilizer') as UntypedFormArray;
   }
 
   get formPackagePesticide() {
-    return this.recordDispatchForm.controls.entries.get('packagePesticide') as FormArray;
+    return this.recordDispatchForm.controls.entries.get('packagePesticide') as UntypedFormArray;
   }
 
   addPackageFertilizer() {
-    (this.recordDispatchForm.controls.entries.get('packageFertilizer') as FormArray).push(this.createPackageFertilizer());
+    (this.recordDispatchForm.controls.entries.get('packageFertilizer') as UntypedFormArray).push(this.createPackageFertilizer());
   }
 
   addPackagePesticide() {
-    (this.recordDispatchForm.controls.entries.get('packagePesticide') as FormArray).push(this.createPackagePesticide());
+    (this.recordDispatchForm.controls.entries.get('packagePesticide') as UntypedFormArray).push(this.createPackagePesticide());
   }
 
   removePackageFertilizer(index: number) {
-    (this.recordDispatchForm.controls.entries.get('packageFertilizer') as FormArray).removeAt(index);
+    (this.recordDispatchForm.controls.entries.get('packageFertilizer') as UntypedFormArray).removeAt(index);
   }
 
   removePackagePesticide(index: number) {
-    (this.recordDispatchForm.controls.entries.get('packagePesticide') as FormArray).removeAt(index);
+    (this.recordDispatchForm.controls.entries.get('packagePesticide') as UntypedFormArray).removeAt(index);
   }
 
-  getPackageFertilizerFormGroup(index): FormGroup {
-    this.packageFertilizer = this.recordDispatchForm.controls.entries.get('packageFertilizer') as FormArray;
-    return this.packageFertilizer.controls[index] as FormGroup;
+  getPackageFertilizerFormGroup(index): UntypedFormGroup {
+    this.packageFertilizer = this.recordDispatchForm.controls.entries.get('packageFertilizer') as UntypedFormArray;
+    return this.packageFertilizer.controls[index] as UntypedFormGroup;
   }
 
-  createPackageFertilizer(): FormGroup {
+  createPackageFertilizer(): UntypedFormGroup {
     return this.formBuilder.group({
       bagSize: [''],
       numberOfBags: [''],
@@ -197,7 +197,7 @@ export class WarehouseDispatchComponent extends BasicComponent implements OnInit
     });
   }
 
-  createPackagePesticide(): FormGroup {
+  createPackagePesticide(): UntypedFormGroup {
     return this.formBuilder.group({
       pesticideType: [''],
       qty: ['']

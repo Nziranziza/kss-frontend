@@ -1,6 +1,6 @@
 import {Component, Inject, Injector, Input, OnInit, PLATFORM_ID} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {
   AuthenticationService,
   BasicComponent,
@@ -29,8 +29,8 @@ export class RecordDistributionComponent extends BasicComponent implements OnIni
   @Input() siteId;
   @Input() inputApplicationId;
   @Input() numberOfTrees;
-  distributionForm: FormGroup;
-  updateRequestForm: FormGroup;
+  distributionForm: UntypedFormGroup;
+  updateRequestForm: UntypedFormGroup;
   errors: string [];
   message: string;
   stockOuts: StockOut[] = [];
@@ -47,7 +47,7 @@ export class RecordDistributionComponent extends BasicComponent implements OnIni
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
-    private injector: Injector, private formBuilder: FormBuilder,
+    private injector: Injector, private formBuilder: UntypedFormBuilder,
     private authenticationService: AuthenticationService,
     private messageService: MessageService,
     private confirmDialogService: ConfirmDialogService,

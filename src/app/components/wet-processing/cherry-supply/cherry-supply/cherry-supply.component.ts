@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {HelperService} from '../../../../core';
 import {AuthenticationService, CherrySupplyService, ConfirmDialogService, UserService} from '../../../../core';
@@ -16,7 +16,7 @@ import {PaySingleFarmerComponent} from '../../../payments/organisation-pay-farme
 })
 export class CherrySupplyComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  constructor(private formBuilder: FormBuilder, private cherrySupplyService: CherrySupplyService,
+  constructor(private formBuilder: UntypedFormBuilder, private cherrySupplyService: CherrySupplyService,
               private route: ActivatedRoute,
               private confirmDialogService: ConfirmDialogService,
               private userService: UserService,
@@ -26,9 +26,9 @@ export class CherrySupplyComponent implements OnInit, OnDestroy, AfterViewInit {
               private location: Location, private authenticationService: AuthenticationService) {
   }
 
-  recordCherryDeliveryForm: FormGroup;
-  filterSuppliesForm: FormGroup;
-  paySuppliesForm: FormGroup;
+  recordCherryDeliveryForm: UntypedFormGroup;
+  filterSuppliesForm: UntypedFormGroup;
+  paySuppliesForm: UntypedFormGroup;
   errors: any;
   dtOptions: any = {};
   // @ts-ignore

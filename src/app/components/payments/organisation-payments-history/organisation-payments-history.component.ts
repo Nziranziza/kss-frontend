@@ -3,7 +3,7 @@ import {ActivatedRoute} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {AuthenticationService, AuthorisationService, ConfirmDialogService, MessageService, OrganisationService} from '../../../core';
 import {BasicComponent} from '../../../core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {DatePipe} from '@angular/common';
 import {PaymentService} from '../../../core/services/payment.service';
 import {PaymentHistoryDetailsComponent} from './payment-history-details/payment-history-details.component';
@@ -20,7 +20,7 @@ export class OrganisationPaymentsHistoryComponent extends BasicComponent impleme
               private messageService: MessageService,
               private authorisationService: AuthorisationService,
               private datePipe: DatePipe,
-              private formBuilder: FormBuilder,
+              private formBuilder: UntypedFormBuilder,
               private helper: HelperService,
               private paymentService: PaymentService,
               private authenticationService: AuthenticationService,
@@ -35,7 +35,7 @@ export class OrganisationPaymentsHistoryComponent extends BasicComponent impleme
   org: any;
   currentSeason: any;
   seasonStartingTime: string;
-  filterForm: FormGroup;
+  filterForm: UntypedFormGroup;
   parameters: any;
   paymentChannels: any;
   maxSize = 9;

@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {BasicComponent} from '../../../core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {HelperService} from '../../../core';
 import {AuthenticationService, AuthorisationService} from '../../../core';
 import {PaymentService} from '../../../core/services/payment.service';
@@ -14,7 +14,7 @@ import {ChartType} from 'angular-google-charts';
 })
 export class PaymentReportsComponent extends BasicComponent implements OnInit {
 
-  constructor(private formBuilder: FormBuilder, private helperService: HelperService,
+  constructor(private formBuilder: UntypedFormBuilder, private helperService: HelperService,
               private authorisationService: AuthorisationService,
               private paymentService: PaymentService,
               private datePipe: DatePipe,
@@ -22,7 +22,7 @@ export class PaymentReportsComponent extends BasicComponent implements OnInit {
     super();
   }
 
-  filterForm: FormGroup;
+  filterForm: UntypedFormGroup;
   seasonStartingTime: string;
   payment = {
     airtel: {amount: 0, transactions: 0},

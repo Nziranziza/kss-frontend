@@ -1,5 +1,5 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {AuthorisationService, FarmerService, MessageService, SiteService} from '../../../core/services';
 import {AuthenticationService} from '../../../core/services';
 import {BasicComponent} from '../../../core/library';
@@ -20,7 +20,7 @@ export class FarmerNeedApprovalListComponent extends BasicComponent implements O
 
   requestIds = [];
   title = 'Farmers info to be approved';
-  filterForm: FormGroup;
+  filterForm: UntypedFormGroup;
   sites: any;
   requests = [];
   /*---------------------------- DataTable variables --------------------*/
@@ -47,7 +47,7 @@ export class FarmerNeedApprovalListComponent extends BasicComponent implements O
 
   /*------------------------- End dataTable variables --------------------*/
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(private formBuilder: UntypedFormBuilder,
               private modal: NgbModal,
               private route: ActivatedRoute,
               private router: Router,

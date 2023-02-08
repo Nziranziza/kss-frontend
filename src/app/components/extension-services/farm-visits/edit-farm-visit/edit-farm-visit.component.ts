@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {
   AuthenticationService,
@@ -25,12 +25,12 @@ import { ScrollStrategy, ScrollStrategyOptions } from '@angular/cdk/overlay';
   ],
 })
 export class EditFarmVisitComponent extends BasicComponent implements OnInit {
-  scheduleVisit: FormGroup;
+  scheduleVisit: UntypedFormGroup;
   scrollStrategy: ScrollStrategy;
   errors: any;
   successDetails: any;
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private modalService: NgbModal,
     private groupService: GroupService,
     private authenticationService: AuthenticationService,

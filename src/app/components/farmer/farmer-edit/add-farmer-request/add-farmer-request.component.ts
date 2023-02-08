@@ -1,6 +1,6 @@
 import {Component, Inject, Injector, Input, OnInit, PLATFORM_ID,} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {HelperService} from '../../../../core';
 import {
   AuthenticationService,
@@ -26,7 +26,7 @@ export class AddFarmerRequestComponent
   implements OnInit {
   modal: NgbActiveModal;
   @Input() farmerId;
-  createForm: FormGroup;
+  createForm: UntypedFormGroup;
   provinces = [];
   districts = [];
   sectors = [];
@@ -81,13 +81,13 @@ export class AddFarmerRequestComponent
   };
   showUPILocations = false;
 
-  public requestList: FormArray;
+  public requestList: UntypedFormArray;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
     private router: Router,
     private injector: Injector,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private authenticationService: AuthenticationService,
     private siteService: SiteService,
     private organisationService: OrganisationService,
@@ -105,15 +105,15 @@ export class AddFarmerRequestComponent
   }
 
   get formTreeAges() {
-    return this.createForm.get('treeAges') as FormArray;
+    return this.createForm.get('treeAges') as UntypedFormArray;
   }
 
   get formCertificates() {
-    return this.createForm.get('certificates') as FormArray;
+    return this.createForm.get('certificates') as UntypedFormArray;
   }
 
   get formRequests() {
-    return this.createForm.get('requests') as FormArray;
+    return this.createForm.get('requests') as UntypedFormArray;
   }
 
   ngOnInit() {
@@ -146,8 +146,8 @@ export class AddFarmerRequestComponent
       longitudeCoordinate: [''],
       latitudeCoordinate: [''],
       active: [''],
-      treeAges: new FormArray([]),
-      certificates: new FormArray([]),
+      treeAges: new UntypedFormArray([]),
+      certificates: new UntypedFormArray([]),
       numberOfTrees: ['', [Validators.required, Validators.pattern('[0-9]*')]],
     });
     this.farmService.listTreeVarieties().subscribe((data) => {
@@ -250,7 +250,7 @@ export class AddFarmerRequestComponent
   }
 
   formTreeVarieties(i: number) {
-    return this.formTreeAges.at(i).get('varieties') as FormArray;
+    return this.formTreeAges.at(i).get('varieties') as UntypedFormArray;
   }
 
   addTreeVariety(i: number) {
@@ -269,7 +269,7 @@ export class AddFarmerRequestComponent
         this.formBuilder.group({
           range,
           numOfTrees: [0],
-          varieties: new FormArray([]),
+          varieties: new UntypedFormArray([]),
         })
       );
       this.treeVarieties.forEach((variety, t) => {
@@ -284,7 +284,7 @@ export class AddFarmerRequestComponent
     });
   }
 
-  createCertificate(): FormGroup {
+  createCertificate(): UntypedFormGroup {
     return this.formBuilder.group({
       name: [''],
       identificationNumber: [''],
@@ -292,18 +292,18 @@ export class AddFarmerRequestComponent
   }
 
   addCertificate() {
-    (this.createForm.controls.certificates as FormArray).push(
+    (this.createForm.controls.certificates as UntypedFormArray).push(
       this.createCertificate()
     );
   }
 
   removeCertificate(index: number) {
-    (this.createForm.controls.certificates as FormArray).removeAt(index);
+    (this.createForm.controls.certificates as UntypedFormArray).removeAt(index);
   }
 
-  getCertificateFormGroup(index): FormGroup {
-    this.certificates = this.createForm.get('certificates') as FormArray;
-    return this.certificates.controls[index] as FormGroup;
+  getCertificateFormGroup(index): UntypedFormGroup {
+    this.certificates = this.createForm.get('certificates') as UntypedFormArray;
+    return this.certificates.controls[index] as UntypedFormGroup;
   }
 
   updateList(i: number, v: number) {
