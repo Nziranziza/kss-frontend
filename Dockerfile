@@ -14,7 +14,7 @@ RUN sudo apt-get update && \
     curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash - && \
     sudo apt-get install -y nodejs && \
     sudo apt-get update -y && sudo apt upgrade -y && \
-    sudo npm install -g @angular/cli
+    sudo npm install @angular/cli@14.2.10 -g
 
 
 RUN sudo apt-get update && \
