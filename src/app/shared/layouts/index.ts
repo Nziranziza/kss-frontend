@@ -3,6 +3,7 @@ export * from '../../components/home/home-header/home-header.component';
 export * from './list-errors/list-errors.component';
 export * from './list-message/list-message.component';
 export * from './list-warnings/list-warnings.component';
+export * from './loading/loading.component';
 export * from './loader/loader.component';
 export * from './confirm-modal/confirm-modal.component';
 export * from './success-modal/success-modal.component';
