@@ -223,7 +223,7 @@
             </div>
           </div>
         </span>
-        <span *ngIf="reportForm.value.reportFor !== '' && !statsLoading">
+        <span *ngIf="reportForm.value.reportFor !== '' && !statsLoading && canLoadData()">
           <div class="col-xs-12 text-center" style="margin-top: 10px">
             <button
               class="btn btn-default"

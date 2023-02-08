@@ -742,7 +742,7 @@ export class DashboardComponent extends BasicComponent implements OnInit {
             locationId: value,
           };
           this.siteService
-            .getZone({ prov_id: value, searchBy: 'province', partner: 'Technoserve' })
+            .getZone({ prov_id: value, searchBy: 'province', partner: 'Technoserve Rwanda' })
             .subscribe((data) => {
               if (data) {
                 this.organisations = data.content.filter((org) =>
