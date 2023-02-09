@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { HttpHeaders } from '@angular/common/http';
 import {
   AuthenticationService,
@@ -12,7 +12,6 @@ import {
 import { SeasonService } from '../../../core';
 
 declare var $;
-
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -20,14 +19,13 @@ declare var $;
 })
 export class LoginComponent extends BasicComponent implements OnInit, OnDestroy {
 
-  authForm: FormGroup;
+  authForm: UntypedFormGroup;
   viewPasswordEnabled = false;
-
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private authenticationService: AuthenticationService,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private messageService: MessageService,
     private authorisationService: AuthorisationService,
     private organisationService: OrganisationService,
@@ -133,7 +131,7 @@ export class LoginComponent extends BasicComponent implements OnInit, OnDestroy 
       this.router.navigateByUrl('admin/warehouse/dispatches');
     } else if (this.authorisationService.isSiteManager()) {
       this.router.navigateByUrl('admin/input/site/distribution');
-    } else if (this.authorisationService.isTechnoServeAdmin()) {
+    } else if (this.authorisationService.isTechnoServeUser()) {
       this.router.navigateByUrl('admin/dashboard/extension');
     } else {
       this.router.navigateByUrl('admin/organisations');

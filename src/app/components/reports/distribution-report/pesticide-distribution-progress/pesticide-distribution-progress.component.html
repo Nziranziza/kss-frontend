@@ -85,7 +85,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-2 col-sm-4 col-xs-6">
+                 <!-- <div class="col-md-2 col-sm-4 col-xs-6">
                     <div class="form-group">
                       <span class="">Cell</span>
                       <div class="input-group input-group-sm">
@@ -101,7 +101,7 @@
                     </span>
                       </div>
                     </div>
-                  </div>
+                  </div>-->
                 </div>
               </div>
             </div>
@@ -114,8 +114,11 @@
                     (click)="exportAsXLSX()"><i
               class="fa fa-download"></i> Summary
             </button>
-            <button type="button" class="btn btn-default pull-right" (click)="downloadDetails()" [disabled]="!downloadDetailedEnabled">
+            <button type="button" class="btn btn-default btn-margin pull-right" (click)="downloadDetails()" [disabled]="!downloadDetailedEnabled">
               <app-downloading *ngIf="downloading"></app-downloading> Detailed xls
+            </button>
+            <button type="button" class="btn btn-default pull-right" (click)="downloadPdf()" [disabled]="!downloadDetailedEnabled">
+              <app-downloading *ngIf="pdfDownloading"></app-downloading> Detailed pdf
             </button>
           </div>
           <div class="col-xs-12" *ngIf="showData">
@@ -135,21 +138,21 @@
               <tbody>
               <tr *ngFor="let location of distributionProgress">
                 <td> {{ location.name }}</td>
-                <td> {{ location.totalNumberOfLands }}</td>
-                <td> {{ location.totalNumberOfTrees }}</td>
-                <td> {{ location.totalStockOut }}</td>
-                <td> {{ location.totalApplied }}</td>
-                <td> {{ location.totalAppliedTrees}}</td>
-                <td> {{ location.totalApproved }}</td>
+                <td> {{ location.totalNumberOfLands | number }}</td>
+                <td> {{ location.totalNumberOfTrees | number }}</td>
+                <td> {{ location.totalStockOut | number }}</td>
+                <td> {{ location.totalApplied | number }}</td>
+                <td> {{ location.totalAppliedTrees | number }}</td>
+                <td> {{ location.totalApproved | number }}</td>
               </tr>
               <tr>
                 <th> Total</th>
-                <th> {{ summarizeData('totalNumberOfLands') }}</th>
-                <th> {{ summarizeData('totalNumberOfTrees') }}</th>
-                <th> {{ summarizeData('totalStockOut') }}</th>
-                <th> {{ summarizeData('totalApplied') }}</th>
-                <th> {{ summarizeData('totalAppliedTrees') }}</th>
-                <th> {{ summarizeData('totalApproved') }}</th>
+                <th> {{ summarizeData('totalNumberOfLands') | number }}</th>
+                <th> {{ summarizeData('totalNumberOfTrees') | number }}</th>
+                <th> {{ summarizeData('totalStockOut') | number }}</th>
+                <th> {{ summarizeData('totalApplied') | number }}</th>
+                <th> {{ summarizeData('totalAppliedTrees') | number }}</th>
+                <th> {{ summarizeData('totalApproved') | number }}</th>
               </tr>
               </tbody>
             </table>

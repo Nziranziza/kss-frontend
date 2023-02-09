@@ -8,7 +8,7 @@ import {
   SeasonService,
   WarehouseService
 } from '../../../core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {Router} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {DatePipe} from '@angular/common';
@@ -24,7 +24,7 @@ declare var $;
 })
 export class GreenCoffeeListTransfersComponent  extends BasicComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(private formBuilder: UntypedFormBuilder,
               private router: Router, private confirmDialogService: ConfirmDialogService,
               private seasonService: SeasonService,
               private modal: NgbModal,
@@ -38,7 +38,7 @@ export class GreenCoffeeListTransfersComponent  extends BasicComponent implement
     super();
   }
 
-  filterForm: FormGroup;
+  filterForm: UntypedFormGroup;
   dtOptions: any = {};
   // @ts-ignore
   dtTrigger: Subject = new Subject();

@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {OrganisationTypeService} from '../../../core/services';
 import {HelperService} from '../../../core/helpers';
@@ -11,11 +11,11 @@ import {HelperService} from '../../../core/helpers';
 })
 export class OrganisationTypeCreateComponent implements OnInit {
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(private formBuilder: UntypedFormBuilder,
               private router: Router, private organisationTypeService: OrganisationTypeService, private helper: HelperService) {
   }
 
-  createForm: FormGroup;
+  createForm: UntypedFormGroup;
   errors: string[];
 
   ngOnInit() {

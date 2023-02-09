@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import {
   AuthenticationService,
@@ -24,7 +24,7 @@ import { SuccessModalComponent } from "src/app/shared";
 export class EditNurseryComponent extends BasicComponent implements OnInit {
   scrollStrategy: ScrollStrategy;
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     protected locationService: LocationService,
     private authenticationService: AuthenticationService,
     private organisationService: OrganisationService,
@@ -40,8 +40,8 @@ export class EditNurseryComponent extends BasicComponent implements OnInit {
     super(locationService, organisationService);
     this.scrollStrategy = this.sso.noop();
   }
-  addNursery: FormGroup;
-  editNursery: FormGroup;
+  addNursery: UntypedFormGroup;
+  editNursery: UntypedFormGroup;
   agronomist: any[] = [];
   treeVarieties: any[] = [{ name: "", _id: "" }];
   nurserySites: any[] = [];
@@ -61,7 +61,7 @@ export class EditNurseryComponent extends BasicComponent implements OnInit {
       ],
       siteAvailability: ["no"],
       agronomist: [""],
-      stockData: new FormArray([], Validators.required),
+      stockData: new UntypedFormArray([], Validators.required),
       location: this.formBuilder.group({
         prov_id: [""],
         dist_id: [""],
@@ -121,7 +121,7 @@ export class EditNurseryComponent extends BasicComponent implements OnInit {
           .get("representativeNumber".toString())
           .setValue(datas.representative.phoneNumber, { emitEvent: false });
         datas.stocks.map((item) => {
-          (this.addNursery.controls.stockData as FormArray).push(
+          (this.addNursery.controls.stockData as UntypedFormArray).push(
             this.formBuilder.group({
               variety: [
                 item.varietyId._id,
@@ -145,7 +145,7 @@ export class EditNurseryComponent extends BasicComponent implements OnInit {
               id: item._id || "",
               pickingDate: [item.pickedDate || ""],
               sowingDate: [item.sowingDate || ""],
-            }) as FormGroup
+            }) as UntypedFormGroup
           );
         });
       });
@@ -157,7 +157,7 @@ export class EditNurseryComponent extends BasicComponent implements OnInit {
   }
 
   get formData() {
-    return this.addNursery.get("stockData") as FormArray;
+    return this.addNursery.get("stockData") as UntypedFormArray;
   }
 
   getTreeVariety() {
@@ -172,7 +172,7 @@ export class EditNurseryComponent extends BasicComponent implements OnInit {
     });
   }
   addFirstStockItem() {
-    (this.addNursery.controls.stockData as FormArray).push(this.createStock());
+    (this.addNursery.controls.stockData as UntypedFormArray).push(this.createStock());
   }
 
   addStockItem() {
@@ -180,17 +180,17 @@ export class EditNurseryComponent extends BasicComponent implements OnInit {
       this.treeVarieties.length >
       this.addNursery.controls.stockData.value.length
     ) {
-      (this.addNursery.controls.stockData as FormArray).push(
+      (this.addNursery.controls.stockData as UntypedFormArray).push(
         this.createStock()
       );
       this.currentIndex++;
     }
   }
   removeStockItem(index: number) {
-    (this.addNursery.controls.stockData as FormArray).removeAt(index);
+    (this.addNursery.controls.stockData as UntypedFormArray).removeAt(index);
     this.currentIndex--;
   }
-  createStock(): FormGroup {
+  createStock(): UntypedFormGroup {
     return this.formBuilder.group({
       variety: [this.treeVarieties[this.currentIndex]._id],
       seed: [0],

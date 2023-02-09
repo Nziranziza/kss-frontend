@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {BasicComponent} from '../../../core';
 
 @Component({
@@ -10,12 +10,12 @@ import {BasicComponent} from '../../../core';
 export class OrganisationPayTopUpsComponent extends BasicComponent implements OnInit {
 
   previewImagePath: any;
-  depositForm: FormGroup;
+  depositForm: UntypedFormGroup;
   imageError: string;
   isImageSaved: boolean;
   cardImageBase64: string;
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: UntypedFormBuilder) {
     super();
   }
 

@@ -8,7 +8,7 @@ import {
   UserService
 } from '../../../core/services';
 import {ActivatedRoute} from '@angular/router';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Subject} from 'rxjs';
 import {ParchmentReportDetailComponent} from '../../reports/parchment-report/parchment-report-detail/parchment-report-detail.component';
@@ -29,7 +29,7 @@ export class OrganisationSuppliersComponent extends BasicComponent implements On
               private excelService: ExcelServicesService,
               private route: ActivatedRoute,
               private datePipe: DatePipe,
-              private formBuilder: FormBuilder,
+              private formBuilder: UntypedFormBuilder,
               private messageService: MessageService,
               private modal: NgbModal, private authorisationService: AuthorisationService) {
     super();
@@ -57,7 +57,7 @@ export class OrganisationSuppliersComponent extends BasicComponent implements On
   };
   subRegionFilter: any;
   seasonStartingTime: string;
-  filterForm: FormGroup;
+  filterForm: UntypedFormGroup;
   showData = false;
   parameters: any;
   errors = [];

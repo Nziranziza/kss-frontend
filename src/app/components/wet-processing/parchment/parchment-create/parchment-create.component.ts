@@ -1,5 +1,5 @@
 import {Component, Inject, Injector, OnInit, PLATFORM_ID} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {CoffeeTypeService, UserService} from '../../../../core/services';
 import {HelperService} from '../../../../core/helpers';
@@ -16,7 +16,7 @@ import {BasicComponent} from '../../../../core/library';
 })
 export class ParchmentCreateComponent extends BasicComponent implements OnInit {
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(private formBuilder: UntypedFormBuilder,
               private router: Router, private parchmentService: ParchmentService,
               private coffeeTypeService: CoffeeTypeService,
               private datePipe: DatePipe,
@@ -32,7 +32,7 @@ export class ParchmentCreateComponent extends BasicComponent implements OnInit {
   }
 
   modal: NgbActiveModal;
-  recordParchmentForm: FormGroup;
+  recordParchmentForm: UntypedFormGroup;
   errors: string[];
   coffeeTypes = [];
   packaging: any;
@@ -45,7 +45,7 @@ export class ParchmentCreateComponent extends BasicComponent implements OnInit {
       coffeeType: ['', Validators.required],
       coffeeGrade: ['A', Validators.required],
       date: ['', Validators.required],
-      packaging: new FormArray([]),
+      packaging: new UntypedFormArray([]),
       totalKgs: ['', Validators.required],
       producedDate: [this.datePipe.transform(this.currentDate, 'yyyy-MM-dd'), Validators.required]
     });
@@ -63,23 +63,23 @@ export class ParchmentCreateComponent extends BasicComponent implements OnInit {
   }
 
   get formPackage() {
-    return this.recordParchmentForm.get('packaging') as FormArray;
+    return this.recordParchmentForm.get('packaging') as UntypedFormArray;
   }
 
   addPackage() {
-    (this.recordParchmentForm.get('packaging') as FormArray).push(this.createPackage());
+    (this.recordParchmentForm.get('packaging') as UntypedFormArray).push(this.createPackage());
   }
 
   removePackage(index: number) {
-    (this.recordParchmentForm.get('packaging') as FormArray).removeAt(index);
+    (this.recordParchmentForm.get('packaging') as UntypedFormArray).removeAt(index);
   }
 
-  getPackageFormGroup(index): FormGroup {
-    this.packaging = this.recordParchmentForm.get('packaging') as FormArray;
-    return this.packaging.at(index) as FormGroup;
+  getPackageFormGroup(index): UntypedFormGroup {
+    this.packaging = this.recordParchmentForm.get('packaging') as UntypedFormArray;
+    return this.packaging.at(index) as UntypedFormGroup;
   }
 
-  createPackage(): FormGroup {
+  createPackage(): UntypedFormGroup {
     return this.formBuilder.group({
       bagSize: [''],
       numberOfBags: [''],

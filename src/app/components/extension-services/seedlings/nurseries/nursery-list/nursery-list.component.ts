@@ -1,6 +1,6 @@
-import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { DataTableDirective } from "angular-datatables";
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { DataTableDirective } from 'angular-datatables';
 import {
   AuthenticationService,
   MessageService,
@@ -13,11 +13,20 @@ import { Subject } from 'rxjs';
 import { ConfirmModalComponent } from 'src/app/shared';
 import { ViewNurseryComponent } from '../view-nursery/view-nursery.component';
 
+interface Stats {
+  sites: number;
+  remainingQty: number;
+  expectedQty: number;
+  prickedQty: number;
+  providedQty: number;
+  distributedQty: number;
+  germinationRate: number
+}
 
 @Component({
-  selector: "app-nursery-list",
-  templateUrl: "./nursery-list.component.html",
-  styleUrls: ["./nursery-list.component.css"],
+  selector: 'app-nursery-list',
+  templateUrl: './nursery-list.component.html',
+  styleUrls: ['./nursery-list.component.css'],
 })
 export class NurseryListComponent
   extends BasicComponent
@@ -32,7 +41,6 @@ export class NurseryListComponent
   ) {
     super();
   }
-  ngOnDestroy(): void { }
 
   nurseries: any[] = [];
   schedule;
@@ -41,71 +49,76 @@ export class NurseryListComponent
   showData = true;
   autoHide = false;
   responsive = false;
+  pageLoading = false;
   labels: any = {
-    previousLabel: "Prev",
-    nextLabel: "Next",
-    screenReaderPaginationLabel: "Pagination",
-    screenReaderPageLabel: "page",
+    previousLabel: 'Prev',
+    nextLabel: 'Next',
+    screenReaderPaginationLabel: 'Pagination',
+    screenReaderPageLabel: 'page',
     screenReaderCurrentLabel: `You're on page`,
   };
   config: any;
   dtOptions: any = {};
   loading = false;
-  totalSeeds: any[] = [];
-  totalPrickedOut: any[] = [];
-  prickedSum = 0;
-  seedsSum = 0;
-  totalDistributedSum: any[] = [];
-  distributeSum = 0;
   // @ts-ignore
   dtTrigger: Subject = new Subject();
   // @ts-ignore
   @ViewChild(DataTableDirective, { static: false })
   dtElement: DataTableDirective;
+  stats: Stats = {
+    sites: 0,
+    remainingQty: 0,
+    expectedQty: 0,
+    prickedQty: 0,
+    providedQty: 0,
+    distributedQty: 0,
+    germinationRate: 0
+  }
 
   ngOnInit() {
+    this.pageLoading = true;
     this.getNurseries();
     this.dtOptions = {
-      pagingType: "full_numbers",
+      pagingType: 'full_numbers',
       pageLength: 25,
       order: [],
     };
+    this.pageLoading = false;
   }
+
+  ngOnDestroy(): void { }
 
   getNurseries(deletetrigger: any = false): void {
     this.loading = true;
     const body = !this.authorisationService.isTechnoServeAdmin() ?
-      this.authenticationService.getCurrentUser().info.org_id : '';
+      { reference: this.authenticationService.getCurrentUser().info.org_id } : '';
     this.seedlingService.all(body).subscribe((data) => {
-      this.nurseries = data.data;
-      this.nurseries.map((nursery) => {
-        let sum = 0;
-        let prickedSum = 0;
-        let distributedSum = 0;
-        nursery.stocks.map((stock) => {
-          let distributedSeed = stock.remainingQty
-            ? stock.prickedQty - stock.remainingQty
-            : 0;
-          sum += stock.seeds;
-          prickedSum += stock.prickedQty || 0;
-          distributedSum += distributedSeed || 0;
-        });
-        this.totalSeeds.push(sum);
-        this.totalDistributedSum.push(distributedSum);
-        this.totalPrickedOut.push(prickedSum);
+      this.nurseries = data.data.map((nursery) => {
+        const prickedQty = nursery.stocks.reduce(
+          (acc, curr) => acc + (curr.prickedQty || 0),
+          0
+        );
+        const remainingQty = nursery.stocks.reduce(
+          (acc, curr) => acc + (curr.remainingQty || 0),
+          0
+        );
+        const distributedQty = prickedQty - remainingQty;
+        return {
+          ...nursery,
+          stockQty: nursery.stocks.reduce(
+            (acc, curr) => acc + (curr.seeds || 0),
+            0
+          ),
+          prickedQty,
+          distributedQty,
+        };
       });
-      this.totalSeeds.map((total) => {
-        this.seedsSum += total;
-      });
-      this.totalDistributedSum.map((distSum) => {
-        this.distributeSum += distSum;
-      });
-      this.totalPrickedOut.map((total) => {
-        this.prickedSum += total;
-      });
-      deletetrigger ? " " : this.dtTrigger.next();
+      deletetrigger ? ' ' : this.dtTrigger.next();
       this.loading = false;
     });
+    this.seedlingService.nurseryStats(body).subscribe(({ data }) => {
+      this.stats = data
+    })
     if (!deletetrigger) {
       this.config = {
         itemsPerPage: 10,
@@ -117,11 +130,11 @@ export class NurseryListComponent
 
   openDeleteModal(nursery: any, warning?: any) {
     const modalRef = this.modalService.open(ConfirmModalComponent);
-    modalRef.componentInstance.title = "Delete Nursery";
+    modalRef.componentInstance.title = 'Delete Nursery';
     modalRef.componentInstance.content =
-      "Are you sure you want to Delete this Nursery?";
-    modalRef.componentInstance.confirmButtonText = "Delete";
-    modalRef.componentInstance.cancelButtonText = "Cancel";
+      'Are you sure you want to Delete this Nursery?';
+    modalRef.componentInstance.confirmButtonText = 'Delete';
+    modalRef.componentInstance.cancelButtonText = 'Cancel';
     modalRef.componentInstance.warning = warning;
     modalRef.result.then((results) => {
       if (results.confirmed) {
@@ -129,7 +142,7 @@ export class NurseryListComponent
           () => {
             this.loading = true;
             this.getNurseries(true);
-            this.setMessage("Nursery successfully Deleted!");
+            this.setMessage('Nursery successfully Deleted!');
           },
           (err) => {
             this.errors = err.errors;

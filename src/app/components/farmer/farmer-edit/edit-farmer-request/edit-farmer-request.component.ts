@@ -1,6 +1,6 @@
 import { Component, Inject, Injector, Input, OnInit, PLATFORM_ID } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { FarmService, HelperService } from '../../../../core';
 import { AuthenticationService, FarmerService, OrganisationService, SiteService } from '../../../../core';
 import { isPlatformBrowser } from '@angular/common';
@@ -16,7 +16,7 @@ export class EditFarmerRequestComponent implements OnInit {
 
   modal: NgbActiveModal;
   @Input() land;
-  editFarmerRequestForm: FormGroup;
+  editFarmerRequestForm: UntypedFormGroup;
   errors: any;
   message: string;
   save = false;
@@ -72,7 +72,7 @@ export class EditFarmerRequestComponent implements OnInit {
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
-    private injector: Injector, private formBuilder: FormBuilder, private locationService: LocationService,
+    private injector: Injector, private formBuilder: UntypedFormBuilder, private locationService: LocationService,
     private helper: HelperService, private farmerService: FarmerService,
     private siteService: SiteService,
     private farmService: FarmService,
@@ -115,8 +115,8 @@ export class EditFarmerRequestComponent implements OnInit {
       longitudeCoordinate: [''],
       latitudeCoordinate: [''],
       active: [''],
-      certificates: new FormArray([]),
-      treeAges: new FormArray([])
+      certificates: new UntypedFormArray([]),
+      treeAges: new UntypedFormArray([])
     });
     const temp = {
       numberOfTrees: this.land.numberOfTrees,
@@ -174,18 +174,6 @@ export class EditFarmerRequestComponent implements OnInit {
           });
         });
       });
-    } else if (this.isUserSiteManager) {
-
-      /*this.siteService.get(this.authenticationService.getCurrentUser().orgInfo.distributionSites).subscribe((site) => {
-        this.site = site.content;
-        this.site.coveredAreas.coveredSectors.map((sector) => {
-          this.sectors.push({
-            _id: sector.sect_id,
-            name: sector.name
-          });
-        });
-      });*/
-
     } else {
       this.locationService.getSectors(this.land.location.dist_id._id).subscribe((sectors) => {
         this.sectors = sectors;
@@ -201,7 +189,7 @@ export class EditFarmerRequestComponent implements OnInit {
     this.onChanges();
   }
 
-  createCertificate(): FormGroup {
+  createCertificate(): UntypedFormGroup {
     return this.formBuilder.group({
       name: [''],
       identificationNumber: ['']
@@ -209,11 +197,11 @@ export class EditFarmerRequestComponent implements OnInit {
   }
 
   get formTreeAges() {
-    return this.editFarmerRequestForm.get('treeAges') as FormArray;
+    return this.editFarmerRequestForm.get('treeAges') as UntypedFormArray;
   }
 
   formTreeVarieties(i: number) {
-    return this.formTreeAges.at(i).get('varieties') as FormArray;
+    return this.formTreeAges.at(i).get('varieties') as UntypedFormArray;
   }
 
   addTreeVariety(i: number) {
@@ -229,7 +217,7 @@ export class EditFarmerRequestComponent implements OnInit {
         this.formBuilder.group({
           range,
           numOfTrees: [0],
-          varieties: new FormArray([])
+          varieties: new UntypedFormArray([])
         }));
       this.treeVarieties.forEach((variety, t) => {
         this.formTreeVarieties(i).push(
@@ -241,55 +229,24 @@ export class EditFarmerRequestComponent implements OnInit {
     });
   }
 
-
   get formCertificates() {
-    return this.editFarmerRequestForm.get('certificates') as FormArray;
+    return this.editFarmerRequestForm.get('certificates') as UntypedFormArray;
   }
 
   addCertificate() {
-    (this.editFarmerRequestForm.controls.certificates as FormArray).push(this.createCertificate());
+    (this.editFarmerRequestForm.controls.certificates as UntypedFormArray).push(this.createCertificate());
   }
 
   removeCertificate(index: number) {
-    (this.editFarmerRequestForm.controls.certificates as FormArray).removeAt(index);
+    (this.editFarmerRequestForm.controls.certificates as UntypedFormArray).removeAt(index);
   }
 
-  getCertificateFormGroup(index): FormGroup {
-    this.certificates = this.editFarmerRequestForm.get('certificates') as FormArray;
-    return this.certificates.controls[index] as FormGroup;
+  getCertificateFormGroup(index): UntypedFormGroup {
+    this.certificates = this.editFarmerRequestForm.get('certificates') as UntypedFormArray;
+    return this.certificates.controls[index] as UntypedFormGroup;
   }
 
   onChanges() {
-    this.editFarmerRequestForm.controls.location.get('prov_id'.toString()).valueChanges.subscribe(
-      (value) => {
-        if (value !== null) {
-          this.locationService.getDistricts(value).subscribe((data) => {
-            this.districts = data;
-            this.sectors = null;
-            this.cells = null;
-            this.villages = null;
-          });
-          if (this.isUserSiteManager && (!this.isUserCWSOfficer)) {
-            const temp = [];
-            this.site.coveredAreas.coveredSectors.map((sector) => {
-              temp.push({
-                _id: sector.sect_id,
-                name: sector.name
-              });
-            });
-            this.sectors.push(temp);
-          } else if (this.isUserCWSOfficer) {
-            this.filterCustomSectors(this.org);
-          } else {
-            this.locationService.getSectors(value).toPromise().then(data => {
-              this.sectors = data;
-              this.cells = [];
-              this.villages = [];
-            });
-          }
-        }
-      }
-    );
     this.editFarmerRequestForm.controls.treeAges.valueChanges.subscribe(
       (value) => {
         if (value !== null) {
@@ -304,39 +261,53 @@ export class EditFarmerRequestComponent implements OnInit {
           this.save = this.validForm;
         }
       });
-    this.editFarmerRequestForm.controls.location.get('dist_id'.toString()).valueChanges.subscribe(
+    this.editFarmerRequestForm.controls.location.get('prov_id'.toString()).valueChanges.subscribe(
       (value) => {
         if (value !== null) {
-          this.locationService.getSectors(value).subscribe((data) => {
-            this.sectors = data;
+          this.locationService.getDistricts(value).subscribe((data) => {
+            this.districts = data;
+            this.sectors = null;
             this.cells = null;
             this.villages = null;
           });
-          if (this.isUserCWSOfficer) {
-            this.filterCustomCells(this.org);
+        }
+      }
+    );
+    this.editFarmerRequestForm.controls.location.get('dist_id'.toString()).valueChanges.subscribe(
+      (value) => {
+        if (value !== null) {
+          if (this.isUserSiteManager && (!this.isUserCWSOfficer)) {
+            const temp = [];
+            this.site.coveredAreas.coveredSectors.map((sector) => {
+              temp.push({
+                _id: sector.sect_id,
+                name: sector.name
+              });
+            });
+            this.sectors.push(temp);
+          } else if (this.isUserCWSOfficer) {
+            this.filterCustomSectors(this.org);
           } else {
-            this.locationService.getCells(value).toPromise().then(data => {
-              this.cells = data;
-              this.villages = [];
+            this.locationService.getSectors(value).subscribe((data) => {
+              this.sectors = data;
             });
           }
+          this.cells = null;
+          this.villages = null;
         }
       }
     );
     this.editFarmerRequestForm.controls.location.get('sect_id'.toString()).valueChanges.subscribe(
       (value) => {
         if (value !== null) {
-          this.locationService.getCells(value).subscribe((data) => {
-            this.cells = data;
-            this.villages = null;
-          });
           if (this.isUserCWSOfficer) {
             this.filterCustomCells(this.org);
           } else {
-            this.locationService.getVillages(value).toPromise().then(data => {
-              this.villages = data;
+            this.locationService.getCells(value).subscribe((data) => {
+              this.cells = data;
             });
           }
+          this.villages = null;
         }
       }
     );
@@ -353,12 +324,6 @@ export class EditFarmerRequestComponent implements OnInit {
         }
       }
     );
-  }
-
-  initial() {
-    this.locationService.getProvinces().subscribe((data) => {
-      this.provinces = data;
-    });
   }
 
   updateList(i: number, v: number) {
@@ -378,7 +343,6 @@ export class EditFarmerRequestComponent implements OnInit {
 
   onSubmit() {
     this.editFarmerRequestForm.markAllAsTouched();
-
     if (this.editFarmerRequestForm.controls.upiNumber.value) {
       this.editFarmerRequestForm.controls.location.get('prov_id').clearValidators();
       this.editFarmerRequestForm.controls.location.get('prov_id').updateValueAndValidity();
@@ -458,7 +422,7 @@ export class EditFarmerRequestComponent implements OnInit {
     const i = org.coveredSectors.findIndex(element => element.sectorId._id === sectorId);
     const sector = org.coveredSectors[i];
     sector.coveredVillages.map((village) => {
-      if (villages.findIndex(el => el._id === village.village_id)) {
+      if (villages.findIndex(el => el._id === village.village_id) !== -1) {
         temp.push({
           _id: village.village_id,
           name: village.name
@@ -471,11 +435,9 @@ export class EditFarmerRequestComponent implements OnInit {
   validateUPI(event) {
     const upi = event.target.value
     this.showUPILocations = false;
-
     if (upi.length > 0) {
       this.editFarmerRequestForm.controls.upiNumber.setErrors({ invalid: true });
     }
-    // this.initial();
     this.checkIfUpiinValidZoning = {
       prov_id: true,
       dist_id: true,
@@ -484,7 +446,7 @@ export class EditFarmerRequestComponent implements OnInit {
       village_id: true
     };
 
-    if (upi.length >= 15) {
+    if (upi.length >= 10) {
       const body = {
         upiNumber: upi,
       };
@@ -492,7 +454,6 @@ export class EditFarmerRequestComponent implements OnInit {
         (data) => {
           this.upi = data.data;
           // Reset Validators
-          this.editFarmerRequestForm.controls.upiNumber.setErrors(null);
           this.editFarmerRequestForm.controls.upiNumber.setErrors(null);
 
           const payload = {
@@ -509,7 +470,6 @@ export class EditFarmerRequestComponent implements OnInit {
             },
             () => { },
             () => {
-
 
               const villagesSet = [];
               this.org.coveredSectors.map((sector) => {
@@ -531,7 +491,6 @@ export class EditFarmerRequestComponent implements OnInit {
                 this.editFarmerRequestForm.controls.upiNumber.setErrors({ Invalid: true });
               }
               else {
-
                 this.provinces = [{
                   _id: this.province.province_id,
                   namee: this.titleCase(this.upi.parcelLocation.province.provinceName)
@@ -603,5 +562,11 @@ export class EditFarmerRequestComponent implements OnInit {
 
   titleCase(word: string) {
     return word[0].toUpperCase() + word.substr(1).toLowerCase();
+  }
+
+  initial() {
+    this.locationService.getProvinces().subscribe((data) => {
+      this.provinces = data;
+    });
   }
 }

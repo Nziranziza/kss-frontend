@@ -40,10 +40,11 @@ export class AuthorisationService {
   }
 
   isAdmin() {
-    return (this.authenticationService.getCurrentUser().parameters.type === 1);
+    console.log(this.authenticationService.getCurrentUser());
+    return (+this.authenticationService.getCurrentUser().parameters.type === 1);
   }
 
-  isPartner() {
+  isTechnoServeUser() {
     this.userRoles = this.authenticationService.getCurrentUser().parameters.role;
     return !!this.userRoles.includes(11);
   }
@@ -68,7 +69,7 @@ export class AuthorisationService {
     return !!this.userRoles.includes(0);
   }
 
-  isTecnoserveUser() {
+  isPartnerUser() {
     this.userRoles = this.authenticationService.getCurrentUser().parameters.role;
     return !!this.userRoles.includes(11);
   }

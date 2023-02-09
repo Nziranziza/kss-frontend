@@ -99,7 +99,7 @@
   <div class="box">
     <div class="row">
       <br />
-      <div class="col-sm-10 col-centered">
+      <div class="col-xs-11 col-centered">
         <div class="form-group">
           <label class="control-label label-required">{{ "select_group" | translate }}
           </label>
@@ -127,16 +127,16 @@
         </div>
       </div>
       <span *ngIf="scheduleVisit.value.farmerGroup != '' && farmers?.length > 0">
-        <div class="col-sm-10 col-centered">
-          <div class="box" style="overflow: auto">
+        <div class="col-xs-11 col-centered">
+          <div class="box">
             <div class="box-body table-responsive no-border" style="font-size: 1.2rem">
               <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
-                     class="hover table table-responsive-lg table-striped" config>
+                class="hover table table-responsive-lg table-striped" config>
                 <thead>
                   <tr>
                     <th>
                       <input type="checkbox" (click)="selectAllFarmer($event.target.checked)" [(ngModel)]="allSelected"
-                             [ngModelOptions]="{ standalone: true }">
+                        [ngModelOptions]="{ standalone: true }">
                     </th>
                     <th>Full name</th>
                     <th class="all"></th>
@@ -149,7 +149,7 @@
                       <td>
                         <div style="text-align: center;">
                           <input type="checkbox" (click)="selectFarmer($event.target.checked, i)"
-                                 [(ngModel)]="farmers[i].farmSelected" [ngModelOptions]="{ standalone: true }">
+                            [(ngModel)]="farmers[i].farmSelected" [ngModelOptions]="{ standalone: true }">
                         </div>
                       </td>
                       <td> {{member.farmer}} </td>
@@ -168,11 +168,11 @@
                               <td style="padding-left: 40px">31+ </td>
                             </tr>
                             <tr style="font-size: 12px; background: transparent"
-                                *ngFor="let farmerFarm of member.farms, let d = index">
+                              *ngFor="let farmerFarm of member.farms, let d = index">
                               <td class="all">
                                 <div style="text-align: center;">
                                   <input type="checkbox" (click)="selectFarms($event.target.checked, i, d)"
-                                         [(ngModel)]="farmers[i].farms[d].selected" [ngModelOptions]="{ standalone: true }">
+                                    [(ngModel)]="farmers[i].farms[d].selected" [ngModelOptions]="{ standalone: true }">
                                 </div>
                               </td>
                               <td style="padding-left: 20px"> {{
@@ -239,13 +239,40 @@
           </div>
 
         </div>
-        <div class="col-sm-10 col-centered">
+        <div class="col-xs-11 col-centered">
+          <div class="form-group">
+            <label class="control-label label-required">
+              {{ "Is Gap Applied" | translate }}
+            </label>
+            <div class="row">
+              <div class="col-xs-2">
+
+                <div class="text-center">
+                  <h5 class="text-center">{{ "Yes" | translate }}</h5>
+                  <input type="radio" formControlName="isNotApplied" value="yes" style="margin-top: 5px" />
+                </div>
+
+              </div>
+
+              <div class="col-xs-2">
+                <div class="text-center">
+                  <h5 class="text-center">{{ "Not Applied" | translate }}</h5>
+                  <input type="radio" formControlName="isNotApplied" value="no" style="margin-top: 5px" />
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+        <div class="col-xs-11 col-centered" *ngIf="scheduleVisit.value.isNotApplied === 'yes' ">
           <div class="form-group">
             <label class="control-label label-required">
               {{ "select_gap_to_cover" | translate }}</label>
             <ng-multiselect-dropdown formControlName="adoptionGap" [placeholder]="'select gap'"
-                                     [settings]="gapDropdownSettings" [data]="gaps" [(ngModel)]="scheduleVisit.value.adoptionGap"
-                                     (onSelect)="onGapSelect($event)" required>
+              [settings]="gapDropdownSettings" [data]="gaps" [(ngModel)]="scheduleVisit.value.adoptionGap"
+              (onSelect)="onGapSelect($event)" (onSelectAll)="onGapSelectAll($event)"
+              (onDeSelectAll)="onGapDeSelectAll($event)" required>
             </ng-multiselect-dropdown>
             <app-inline-errors *ngIf="
                 scheduleVisit.controls.adoptionGap.invalid &&
@@ -255,7 +282,7 @@
             </app-inline-errors>
           </div>
         </div>
-        <div class="col-sm-10 col-centered">
+        <div class="col-xs-11 col-centered">
           <div class="form-group">
             <label class="control-label label-required">
               {{ "select_agronomist_to_visit" | translate }}</label>
@@ -275,35 +302,33 @@
             </app-inline-errors>
           </div>
         </div>
-        <div class="col-sm-10 col-centered">
-          <p style="font-weight: bold">{{ "date_time_visit" | translate }}</p>
-          <br />
-          <div class="col-sm-10 col-centered" formGroupName="date">
-            <div class="form-group">
-              <label class="control-label label-required">{{
-                "select_date" | translate
-                }}</label>
-              <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="visitDate" [min]="newDate"
-                     class="form-control" placeholder="Dd/mm/yyyy" />
-              <owl-date-time [pickerType]="'calendar'" [scrollStrategy]="scrollStrategy" #dt1></owl-date-time>
-              <app-inline-errors *ngIf="
-                  scheduleVisit.controls.date.get('visitDate').invalid &&
-                  (scheduleVisit.controls.date.get('visitDate').dirty ||
-                    scheduleVisit.controls.date.get('visitDate').touched)
-                " [errors]="scheduleVisit.controls.date.get('visitDate').errors" [label]="'visit date'">
-              </app-inline-errors>
+        <div class="col-xs-11 col-centered">
+          <div class="row text-center">
+            <div class="col-sm-4">
+              <div formGroupName="date">
+                <div class="form-group">
+                  <label class="control-label label-required">{{
+                    "select_date" | translate
+                    }}</label>
+                  <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="visitDate" [min]="newDate"
+                    class="form-control" placeholder="Dd/mm/yyyy" />
+                  <owl-date-time [pickerType]="'calendar'" [scrollStrategy]="scrollStrategy" #dt1></owl-date-time>
+                  <app-inline-errors *ngIf="
+                      scheduleVisit.controls.date.get('visitDate').invalid &&
+                      (scheduleVisit.controls.date.get('visitDate').dirty ||
+                        scheduleVisit.controls.date.get('visitDate').touched)
+                    " [errors]="scheduleVisit.controls.date.get('visitDate').errors" [label]="'visit date'">
+                  </app-inline-errors>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-        <div class="col-sm-10 col-centered">
-          <div class="row text-center" style="padding-left: 10%; padding-right: 10%">
-            <div class="col-sm-6">
+            <div class="col-sm-4">
               <div class="form-group">
                 <label class="control-label label-required">{{
                   "start_time" | translate
                   }}</label>
                 <input [owlDateTimeTrigger]="dt3" class="form-control" formControlName="startTime"
-                       [owlDateTime]="dt3" />
+                  [owlDateTime]="dt3" />
                 <owl-date-time [pickerType]="'timer'" [scrollStrategy]="scrollStrategy" #dt3></owl-date-time>
                 <app-inline-errors *ngIf="
                     scheduleVisit.controls.startTime.invalid &&
@@ -313,7 +338,7 @@
                 </app-inline-errors>
               </div>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-4">
               <div class="form-group">
                 <label class="control-label label-required">{{
                   "end_time" | translate
@@ -341,7 +366,7 @@
             </div>
           </div>
         </div>
-        <div class="col-sm-10 col-centered">
+        <div class="col-xs-11 col-centered">
           <div class="form-group">
             <label class="control-label label-required">{{
               "visit_description" | translate
@@ -358,38 +383,13 @@
       </span>
     </div>
     <br />
-    <div class="text-center" *ngIf="scheduleVisit.value.farmerGroup != ''">
-      <button type="button" class="btn" style="
-          width: 250px;
-          height: 50px;
-          margin-right: 10px;
-          background-color: #bababa;
-          color: #ffffff;
-        " routerLink="/admin/farm/visit/list">
-        {{ "cancel" | translate }}
-      </button>
-      <button class="btn" (click)="open(content)" [disabled]="loading" *ngIf="
-          scheduleVisit.controls.startTime.value <
-          scheduleVisit.controls.endTime.value
-        " style="
-          width: 250px;
-          height: 50px;
-          background-color: #4f210d;
-          color: #ffffff;
-        " [disabled]="loading">
-        <span *ngIf="!loading; else other_content">{{
-          "schedule_visit" | translate
-          }}</span>
-        <ng-template #other_content>
-          <div class="loader">
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
-            <div class="line"></div>
-          </div>
-        </ng-template>
-      </button>
-    </div>
-    <br />
   </div>
 </form>
+<div class="row" *ngIf="scheduleVisit.value.farmerGroup != '' && farmers?.length > 0">
+  <div class="col-xs-12">
+    <a class="btn btn-warning btn-margin pull-right" routerLink="/admin/farm/visit/list">Cancel</a>
+    <button type="button" class="btn btn-success pull-right" (click)="open(content)">
+      Schedule
+    </button>
+  </div>
+</div>

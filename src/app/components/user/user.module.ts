@@ -12,23 +12,19 @@ import { ChangeUserOrgComponent } from './change-user-org/change-user-org.compon
 import { AutocompleteLibModule } from 'angular-ng-autocomplete';
 
 @NgModule({
-  declarations: [UserListComponent, UserEditComponent, UserCreateComponent, UserDetailsComponent, ChangeUserOrgComponent],
-  imports: [
-    CommonModule,
-    UserRoutingModule,
-    SharedModule,
-    OwlDateTimeModule,
-    OwlNativeDateTimeModule,
-    RouterModule,
-    AutocompleteLibModule
-  ],
-  exports: [
-    UserRoutingModule
-  ],
-  entryComponents: [
-    UserDetailsComponent,
-    ChangeUserOrgComponent
-  ]
+    declarations: [UserListComponent, UserEditComponent, UserCreateComponent, UserDetailsComponent, ChangeUserOrgComponent],
+    imports: [
+        CommonModule,
+        UserRoutingModule,
+        SharedModule,
+        OwlDateTimeModule,
+        OwlNativeDateTimeModule,
+        RouterModule,
+        AutocompleteLibModule
+    ],
+    exports: [
+        UserRoutingModule
+    ]
 })
 export class UserModule {
 }

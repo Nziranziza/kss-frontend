@@ -7,32 +7,27 @@ import {
   Inject,
   Input,
   ViewChild,
-} from "@angular/core";
-import { NgbActiveModal, NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { FormBuilder, FormGroup } from "@angular/forms";
-import { ActivatedRoute, Router } from "@angular/router";
-import { TrainingService, GapService, Training } from "../../../../core";
-import { MessageService } from "../../../../core";
-import { BasicComponent } from "../../../../core";
-import { Subject } from "rxjs";
-import { DataTableDirective } from "angular-datatables";
-import { isPlatformBrowser } from "@angular/common";
-import { TrainingScheduleViewComponent } from "../../schedules/training-schedule-view/training-schedule-view.component";
+} from '@angular/core';
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { FormBuilder, UntypedFormGroup } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { TrainingService, GapService, Training } from '../../../../core';
+import { MessageService } from '../../../../core';
+import { BasicComponent } from '../../../../core';
+import { Subject } from 'rxjs';
+import { DataTableDirective } from 'angular-datatables';
+import { isPlatformBrowser } from '@angular/common';
+import { TrainingScheduleViewComponent } from '../../schedules/training-schedule-view/training-schedule-view.component';
 
 @Component({
-  selector: "app-training-view",
-  templateUrl: "./training-view.component.html",
-  styleUrls: ["../training-create/training-create.component.css"],
+  selector: 'app-training-view',
+  templateUrl: './training-view.component.html',
+  styleUrls: ['../training-create/training-create.component.css'],
 })
 export class TrainingViewComponent
   extends BasicComponent
   implements OnInit, OnDestroy
 {
-  createTraining: FormGroup;
-  closeResult = "";
-  training: Training;
-  modal: NgbActiveModal;
-  @Input() id: string;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
@@ -46,8 +41,11 @@ export class TrainingViewComponent
       this.modal = this.injector.get(NgbActiveModal);
     }
   }
-
-  ngOnDestroy(): void {}
+  createTraining: UntypedFormGroup;
+  closeResult = '';
+  training: Training;
+  modal: NgbActiveModal;
+  @Input() id: string;
 
   results: any[] = [];
   gaps: any[] = [];
@@ -57,10 +55,10 @@ export class TrainingViewComponent
   autoHide = false;
   responsive = false;
   labels: any = {
-    previousLabel: "Prev",
-    nextLabel: "Next",
-    screenReaderPaginationLabel: "Pagination",
-    screenReaderPageLabel: "page",
+    previousLabel: 'Prev',
+    nextLabel: 'Next',
+    screenReaderPaginationLabel: 'Pagination',
+    screenReaderPageLabel: 'page',
     screenReaderCurrentLabel: `You're on page`,
   };
   config: any;
@@ -73,9 +71,11 @@ export class TrainingViewComponent
   @ViewChild(DataTableDirective, { static: false })
   dtElement: DataTableDirective;
 
+  ngOnDestroy(): void {}
+
   ngOnInit() {
     this.dtOptions = {
-      pagingType: "full_numbers",
+      pagingType: 'full_numbers',
       pageLength: 10,
     };
     this.getTraining();
@@ -87,11 +87,10 @@ export class TrainingViewComponent
     this.trainingService.one(this.id).subscribe((data) => {
       if (data && data.data) {
         this.training = data.data;
-        this.dtTrigger.next();
       }
       this.config = {
         itemsPerPage: 10,
-        currentPage: 0 + 1,
+        currentPage: 1,
         totalItems: this.training.schedules.length,
       };
     });

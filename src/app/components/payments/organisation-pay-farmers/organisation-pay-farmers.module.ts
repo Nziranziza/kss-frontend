@@ -9,12 +9,12 @@ import {PayFarmersComponent} from './pay-farmers/pay-farmers.component';
 import {PreviewDeliveriesListComponent} from './pay-farmers/preview-deliveries-list/preview-deliveries-list.component';
 import {ConfirmPaymentComponent} from './pay-farmers/confirm-payment/confirm-payment.component';
 import {PaySingleFarmerComponent} from './pay-single-farmer/pay-single-farmer.component';
-import {FusionChartsModule} from 'angular-fusioncharts';
+// import {FusionChartsModule} from 'angular-fusioncharts';
 import {GoogleChartsModule} from 'angular-google-charts';
 
 @NgModule({
-  declarations: [SelectDeliveriesComponent, PayFarmersComponent,
-    PreviewDeliveriesListComponent, ConfirmPaymentComponent, PaySingleFarmerComponent],
+    declarations: [SelectDeliveriesComponent, PayFarmersComponent,
+        PreviewDeliveriesListComponent, ConfirmPaymentComponent, PaySingleFarmerComponent],
     imports: [
         CommonModule,
         OrganisationPayFarmersRoutingModule,
@@ -22,11 +22,10 @@ import {GoogleChartsModule} from 'angular-google-charts';
         OwlDateTimeModule,
         OwlNativeDateTimeModule,
         RouterModule,
-        FusionChartsModule,
+        // FusionChartsModule,
         GoogleChartsModule, OwlDateTimeModule
     ],
-  exports: [PaySingleFarmerComponent],
-  entryComponents: [PaySingleFarmerComponent]
+    exports: [PaySingleFarmerComponent]
 })
 export class OrganisationPayFarmersModule {
 }

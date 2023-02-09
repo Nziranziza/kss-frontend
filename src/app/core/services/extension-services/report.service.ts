@@ -61,4 +61,12 @@ export class ReportService {
   farmDownload(body: any, type: string): Observable<any> {
     return this.apiService.post('/coffeefarmers/report/download/' + type, body);
   }
+
+  nurseriesStats(body: any) {
+    return this.apiService.post('/v1.1/nurseries/statistics', body);
+  }
+
+  nurseriesDownload(body: any, type: string) {
+    return this.apiService.post(`/v1.1/nurseries/reports/download/${type}`, body)
+  }
 }

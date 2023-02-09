@@ -30,34 +30,37 @@ import { SuccessModalComponent } from './layouts';
 import { TranslateModule } from '@ngx-translate/core';
 import { SafePipe } from './pipes';
 import {HasServicesDirective} from './directives/has-services.directive';
+import { ButtonComponent } from './layouts/button/button.component';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    RouterModule,
-    MatIconModule,
-    MatDialogModule,
-    DataTablesModule,
-  ],
-
-  declarations: [ListErrorsComponent, LoaderComponent,
-    HomeHeaderComponent, HomeFooterComponent, ListMessageComponent,
-    RequiredRolesDirective, InternalDirective, LoaderComponent,
-    RequiredSeasonDirective, RequiredSeasonCherryDirective, HasPermissionDirective, HasServicesDirective,
-    DebounceClickDirective,
-    QuantityUnitComponent,
-    ListWarningsComponent,
-    InlineErrorsComponent,
-    DownloadingComponent,
-    SpinnerComponent,
-    LoadingComponent,
-    ConfirmModalComponent,
-    SuccessModalComponent,
-    SafePipe,
-  ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        HttpClientModule,
+        RouterModule,
+        MatIconModule,
+        MatDialogModule,
+        DataTablesModule,
+        NgxSpinnerModule,
+    ],
+    declarations: [ListErrorsComponent, LoaderComponent,
+        HomeHeaderComponent, HomeFooterComponent, ListMessageComponent,
+        RequiredRolesDirective, InternalDirective, LoaderComponent,
+        RequiredSeasonDirective, RequiredSeasonCherryDirective, HasPermissionDirective, HasServicesDirective,
+        DebounceClickDirective,
+        QuantityUnitComponent,
+        ListWarningsComponent,
+        InlineErrorsComponent,
+        DownloadingComponent,
+        SpinnerComponent,
+        LoadingComponent,
+        ConfirmModalComponent,
+        SuccessModalComponent,
+        SafePipe,
+        ButtonComponent,
+    ],
   exports: [
     CommonModule,
     FormsModule,
@@ -88,8 +91,9 @@ import {HasServicesDirective} from './directives/has-services.directive';
     InlineErrorsComponent,
     InlineErrorsComponent,
     TranslateModule,
-    SafePipe
-  ],
-  entryComponents: [ConfirmModalComponent, SuccessModalComponent],
+    SafePipe,
+    LoadingComponent,
+    LoadingComponent
+  ]
 })
 export class SharedModule {}

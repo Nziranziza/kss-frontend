@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {
   AuthenticationService,
@@ -21,7 +21,7 @@ import {BasicComponent} from '../../../../core';
 export class PesticideDistributionProgressComponent extends BasicComponent implements OnInit {
 
   title = 'Pesticide application progress';
-  checkProgressForm: FormGroup;
+  checkProgressForm: UntypedFormGroup;
   errors: any;
   loading = false;
   message: string;
@@ -48,10 +48,11 @@ export class PesticideDistributionProgressComponent extends BasicComponent imple
   request: any;
   site: any;
   downloading = false;
+  pdfDownloading = false;
   private printableDetails = [];
   reportIsReady: boolean;
 
-  constructor(private formBuilder: FormBuilder, private siteService: SiteService,
+  constructor(private formBuilder: UntypedFormBuilder, private siteService: SiteService,
               private authorisationService: AuthorisationService,
               private authenticationService: AuthenticationService,
               private excelService: ExcelServicesService,
@@ -200,21 +201,21 @@ export class PesticideDistributionProgressComponent extends BasicComponent imple
     this.checkProgressForm.controls.location.get('sect_id'.toString()).valueChanges.subscribe(
       (value) => {
         if (value !== '') {
-          if (this.isCWSUser) {
+          /*if (this.isCWSUser) {
             this.filterCustomCells(this.org);
           } else {
             this.locationService.getCells(value).subscribe((data) => {
               this.cells = data;
               this.villages = null;
             });
-          }
+          }*/
           this.sectorId = true;
         } else {
           this.sectorId = false;
         }
       }
     );
-    this.checkProgressForm.controls.location.get('cell_id'.toString()).valueChanges.subscribe(
+    /*this.checkProgressForm.controls.location.get('cell_id'.toString()).valueChanges.subscribe(
       (value) => {
         if (value !== '') {
 
@@ -227,7 +228,7 @@ export class PesticideDistributionProgressComponent extends BasicComponent imple
           this.cellId = false;
         }
       }
-    );
+    );*/
   }
 
   filterCustomSectors(org: any) {
@@ -285,10 +286,43 @@ export class PesticideDistributionProgressComponent extends BasicComponent imple
     });
   }
 
+  downloadPdf() {
+    this.pdfDownloading = true;
+    this.downloadDetailedEnabled = false;
+    const body = {
+      location: {},
+      appendix: undefined
+    };
+    if (this.request.location.searchBy === 'district') {
+      body.location['searchBy'.toString()] = 'district';
+      body.location['dist_id'.toString()] = this.request.location.dist_id;
+    }
+
+    if (this.request.location.searchBy === 'sector') {
+      body.location['searchBy'.toString()] = 'sector';
+      body.location['sect_id'.toString()] = this.request.location.sect_id;
+    }
+
+    if (this.request.location.searchBy === 'cell') {
+      body.location['searchBy'.toString()] = 'cell';
+      body.location['cell_id'.toString()] = this.request.location.cell_id;
+    }
+    body.appendix = this.request.appendix;
+    this.inputDistributionService.getDistributionProgressPesticideDetail(body).subscribe((data) => {
+      const downloadLink = document.createElement('a');
+      const fileName = 'pesticide_report.pdf';
+      downloadLink.href = `data:application/pdf;base64,${data.file}`;
+      downloadLink.download = fileName;
+      downloadLink.click();
+      this.pdfDownloading = false;
+      this.downloadDetailedEnabled = true;
+    });
+  }
+
   summarizeData(field: string){
     let sum = 0;
-    for(let i = 0; i < this.distributionProgress.length; i++) {
-      sum += this.distributionProgress[i][field];
+    for (const item of this.distributionProgress) {
+      sum += item[field];
     }
     return sum;
   }

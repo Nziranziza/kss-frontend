@@ -3,7 +3,7 @@ import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {DryProcessingService, ParchmentService} from '../../../../core/services';
 import {isPlatformBrowser} from '@angular/common';
 import {BasicComponent} from '../../../../core/library';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {HelperService} from '../../../../core/helpers';
 
 @Component({
@@ -15,13 +15,13 @@ export class EditDeliveryItemComponent extends BasicComponent implements OnInit 
 
   modal: NgbActiveModal;
   @Input() payload;
-  editForm: FormGroup;
+  editForm: UntypedFormGroup;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
     private dryProcessingService: DryProcessingService,
     private parchmentService: ParchmentService,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private helper: HelperService,
     private injector: Injector) {
 

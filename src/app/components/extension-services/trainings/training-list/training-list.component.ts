@@ -30,6 +30,8 @@ export class TrainingListComponent
     super();
   }
 
+  pageLoading = false;
+
   trainings: Training[] = [];
   maxSize = 5;
   directionLinks = true;
@@ -54,6 +56,7 @@ export class TrainingListComponent
   dtElement: DataTableDirective;
 
   ngOnInit() {
+    this.pageLoading = true;
     this.getTrainingList();
     this.getTrainingsStats({});
     this.dtOptions = {
@@ -62,6 +65,7 @@ export class TrainingListComponent
       order: [],
     };
     this.setMessage(this.messageService.getMessage());
+    this.pageLoading = false;
   }
 
   ngOnDestroy(): void {

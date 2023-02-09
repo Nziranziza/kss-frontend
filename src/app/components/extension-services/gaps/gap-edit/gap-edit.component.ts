@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 
@@ -14,7 +14,8 @@ export class GapEditComponent
   extends BasicComponent
   implements OnInit, OnDestroy {
   id: string;
-  createForm: FormGroup;
+  createForm: UntypedFormGroup;
+  gapTotalWeight: number = 100 - parseInt(this.cookieService.get('gapTotal-weight'), 10);
   approachs = [
     { id: 'mark_input', name: 'Marks Input' },
     { id: 'multiple_single', name: 'Multiple Choice - Single' },
@@ -26,11 +27,13 @@ export class GapEditComponent
   ];
   loading = false;
   adoptionOptionsVisible = false;
+  scoreStatus = [false, 0, 0, false];
+  answerScoreExceeded = false;
+  initialDataMode = false;
   gap: Gap;
-  gapTotalWeight = 100 - parseInt(this.cookieService.get('gapTotal-weight'), 10);
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private helperService: HelperService,
     private gapService: GapService,
     private messageService: MessageService,
@@ -41,8 +44,9 @@ export class GapEditComponent
     super();
   }
 
+
   get getQuestionSections() {
-    return this.createForm.get('sections') as FormArray;
+    return this.createForm.get('sections') as UntypedFormArray;
   }
 
   get name() {
@@ -54,7 +58,7 @@ export class GapEditComponent
   }
 
   get formCategory() {
-    return this.createForm.get('questions') as FormArray;
+    return this.createForm.get('questions') as UntypedFormArray;
   }
 
   get gapGame() {
@@ -83,9 +87,9 @@ export class GapEditComponent
     this.createForm = this.formBuilder.group({
       _id: [''],
       gap_name: ['', Validators.required],
-      sections: new FormArray([], Validators.required),
-      gap_weight: ['', [Validators.required, Validators.max(this.gapTotalWeight)]],
-      gap_score: ['', Validators.required],
+      sections: new UntypedFormArray([], Validators.required),
+      gap_weight: ['', [Validators.required]],
+      gap_score: ['', [Validators.required]],
       picture_text: ['', Validators.required]
     });
 
@@ -97,9 +101,11 @@ export class GapEditComponent
     this.gapService.one(this.id).subscribe((data) => {
       if (data && data.data) {
         this.gap = data.data;
+        this.gapTotalWeight = this.gapTotalWeight + this.gap.gap_weight;
         this.createForm.controls._id.setValue(this.gap._id);
         this.createForm.controls.gap_name.setValue(this.gap.gap_name);
         this.createForm.controls.gap_weight.setValue(this.gap.gap_weight);
+        this.createForm.controls.gap_weight.setValidators([Validators.max(this.gapTotalWeight)]);
         this.createForm.controls.gap_score.setValue(this.gap.gap_score);
         this.createForm.controls.picture_text.setValue(this.gap.picture_text);
         this.gap.sections.forEach((value, index) => {
@@ -109,8 +115,45 @@ export class GapEditComponent
     });
   }
 
+  // validate question score to overall score
+
+  validateScore(value: any) {
+    const totalScore = this.getGapScore.value;
+    let currentIndex = 0;
+    let parentIndex = 0;
+    let marks = 0;
+
+    // calculate total question score
+    const sumAllWeight = value.map((item, i) => {
+      parentIndex = i;
+      this.answerScoreExceeded = false;
+      const sum = item.questions.map((newWeight, index) => {
+        let currScore = 0;
+        currentIndex = index;
+        if (newWeight.weight) {
+          currScore = parseInt(newWeight.weight, 10);
+        }
+        if (newWeight.answers.length > 0) {
+          newWeight.answers.map((answer) => {
+            if (answer.weight > newWeight.weight) {
+              this.answerScoreExceeded = true;
+            }
+          })
+        }
+        return currScore;
+      }).reduce((currSum, prevSum) => currSum + prevSum, 0);
+      return sum
+    }).reduce((partialSum, a) => partialSum + a, 0);
+    if (totalScore - sumAllWeight <= 100) {
+      marks = totalScore - sumAllWeight;
+    }
+
+    // compare gap score and total question score and return current question
+    this.scoreStatus = [(totalScore !== sumAllWeight), currentIndex, parentIndex, marks > 0 ? true : false];
+  }
+
   populateSections(element: Section, index: number) {
-    const sections = this.createForm.controls.sections as FormArray;
+    const sections = this.createForm.controls.sections as UntypedFormArray;
     sections.push(this.createQuestionSection());
     sections.at(index).get('_id').setValue(element._id);
     sections.at(index).get('section_name').setValue(element.section_name);
@@ -144,20 +187,20 @@ export class GapEditComponent
   }
 
   // Method creates a new Form Group for a question
-  createQuestionSection(): FormGroup {
+  createQuestionSection(): UntypedFormGroup {
     return this.formBuilder.group({
       _id: [''],
       section_name: ['', Validators.required],
-      questions: new FormArray([])
+      questions: new UntypedFormArray([])
     });
   }
 
-  getSectionQuestions(qIndex: number): FormArray {
-    return this.getQuestionSections.at(qIndex).get('questions') as FormArray;
+  getSectionQuestions(qIndex: number): UntypedFormArray {
+    return this.getQuestionSections.at(qIndex).get('questions') as UntypedFormArray;
   }
 
-  getQuestionAnswers(sectionIndex: number, qstIndex: number): FormArray {
-    return this.getSectionQuestions(sectionIndex).at(qstIndex).get('answers') as FormArray;
+  getQuestionAnswers(sectionIndex: number, qstIndex: number): UntypedFormArray {
+    return this.getSectionQuestions(sectionIndex).at(qstIndex).get('answers') as UntypedFormArray;
   }
 
   getQuestionType(sectionIndex: number, qstIndex: number) {
@@ -188,7 +231,7 @@ export class GapEditComponent
 
   // Method Add a new question section to the GAP form
   addQuestionSection() {
-    const sections = (this.createForm.controls.sections as FormArray);
+    const sections = (this.createForm.controls.sections as UntypedFormArray);
     sections.push(this.createQuestionSection());
     this.addQuestionToSection(sections.length - 1);
   }
@@ -196,19 +239,19 @@ export class GapEditComponent
 
   // Method Add a new question section to the GAP form
   addQuestionToSection(sectionIndex) {
-    const section = (this.createForm.controls.sections as FormArray).controls[
+    const section = (this.createForm.controls.sections as UntypedFormArray).controls[
       sectionIndex
-    ] as FormGroup;
+    ] as UntypedFormGroup;
 
-    (section.controls.questions as FormArray).push(this.createQuestion());
+    (section.controls.questions as UntypedFormArray).push(this.createQuestion());
   }
 
   addAnswersToQuestion(sectionIndex, qstIndex) {
-    const section = (this.createForm.controls.sections as FormArray).controls[
+    const section = (this.createForm.controls.sections as UntypedFormArray).controls[
       sectionIndex
-    ] as FormGroup;
-    const question = (section.controls.questions as FormArray).controls[qstIndex] as FormGroup;
-    (question.controls.answers as FormArray).push(this.createAnswer());
+    ] as UntypedFormGroup;
+    const question = (section.controls.questions as UntypedFormArray).controls[qstIndex] as UntypedFormGroup;
+    (question.controls.answers as UntypedFormArray).push(this.createAnswer());
   }
 
   removeQuestionAnswer(sectionIndex, qstIndex, ansIndex) {
@@ -245,7 +288,7 @@ export class GapEditComponent
 
   onQuestionTypeSelected(sectionIndex: number, qstIndex: number) {
     const questions = this.getSectionQuestions(sectionIndex).controls;
-    const question = questions[qstIndex] as FormGroup;
+    const question = questions[qstIndex] as UntypedFormGroup;
 
     if (question.controls.question_type.value === 'multiple_single' || question.controls.question_type.value === 'multiple_apply') {
       this.removeAllQuestionAnswers(sectionIndex, qstIndex);
@@ -261,11 +304,11 @@ export class GapEditComponent
   }
 
   addAnswers(element: Answer, qIndex: number, aIndex: number) {
-    const question = (this.createForm.controls.questions as FormArray).controls[
+    const question = (this.createForm.controls.questions as UntypedFormArray).controls[
       qIndex
-    ] as FormGroup;
+    ] as UntypedFormGroup;
 
-    const answers = question.controls.answers as FormArray;
+    const answers = question.controls.answers as UntypedFormArray;
     answers.push(this.createAnswer());
     answers.at(aIndex).get('_id').setValue(element._id);
     answers.at(aIndex).get('answer').setValue(element.answer);
@@ -329,19 +372,19 @@ export class GapEditComponent
     return value;
   }
 
-  createQuestion(): FormGroup {
+  createQuestion(): UntypedFormGroup {
     return this.formBuilder.group({
       _id: [''],
       question: ['', Validators.required],
       description: ['', Validators.required],
       question_type: ['', Validators.required],
       weight: ['', Validators.required],
-      answers: new FormArray([]),
+      answers: new UntypedFormArray([]),
       is_not_applicable: [false, Validators.required]
     });
   }
 
-  createAnswer(): FormGroup {
+  createAnswer(): UntypedFormGroup {
     return this.formBuilder.group({
       _id: [''],
       answer: ['', Validators.required],
@@ -356,9 +399,9 @@ export class GapEditComponent
   }
 
   weight(index: number, aIndex: number) {
-    const answers = (this.formCategory.at(index).get('answers') as FormArray)
+    const answers = (this.formCategory.at(index).get('answers') as UntypedFormArray)
       .controls;
-    const answer = answers[aIndex] as FormGroup;
+    const answer = answers[aIndex] as UntypedFormGroup;
     return answer.controls.weight;
   }
 
@@ -368,7 +411,6 @@ export class GapEditComponent
 
   initial() {
   }
-
   ngOnDestroy() {
   }
 }

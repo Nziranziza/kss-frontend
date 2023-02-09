@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 import {Router} from '@angular/router';
 import {OrganisationService, OrganisationTypeService} from '../../../core';
 import {HelperService} from '../../../core';
@@ -13,14 +13,14 @@ import {MessageService} from '../../../core';
 })
 export class OrganisationCreateComponent implements OnInit {
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(private formBuilder: UntypedFormBuilder,
               private router: Router, private organisationService: OrganisationService,
               private messageService: MessageService,
               private helper: HelperService, private organisationTypeService: OrganisationTypeService,
               private locationService: LocationService) {
   }
 
-  createForm: FormGroup;
+  createForm: UntypedFormGroup;
   errors: any;
   genres: any[];
   possibleRoles: any[];
@@ -38,7 +38,7 @@ export class OrganisationCreateComponent implements OnInit {
   selectedCoveredCells = [];
   selectedRoles: any;
   selectedPartners: any;
-  coveredSectorsList: FormArray;
+  coveredSectorsList: UntypedFormArray;
   partners: any[];
 
   ngOnInit() {
@@ -55,9 +55,9 @@ export class OrganisationCreateComponent implements OnInit {
         cell_id: [''],
         village_id: [''],
       }),
-      organizationRole: new FormArray([]),
-      organizationPartner: new FormArray([]),
-      coveredSectors: new FormArray([]),
+      organizationRole: new UntypedFormArray([]),
+      organizationPartner: new UntypedFormArray([]),
+      coveredSectors: new UntypedFormArray([]),
       contractStartingDate: [''],
       contractEndingDate: [''],
     });
@@ -69,8 +69,8 @@ export class OrganisationCreateComponent implements OnInit {
       if (data) {
         this.partners = data.content;
         this.partners.map(() => {
-          const control = new FormControl(false);
-          (this.createForm.controls.organizationPartner as FormArray).push(control);
+          const control = new UntypedFormControl(false);
+          (this.createForm.controls.organizationPartner as UntypedFormArray).push(control);
         });
       }
     });
@@ -79,8 +79,8 @@ export class OrganisationCreateComponent implements OnInit {
         return {name: [key], value: data.content[key]};
       });
       this.possibleRoles.map(() => {
-        const control = new FormControl(false);
-        (this.createForm.controls.organizationRole as FormArray).push(control);
+        const control = new UntypedFormControl(false);
+        (this.createForm.controls.organizationRole as UntypedFormArray).push(control);
       });
     });
     this.initial();
@@ -151,7 +151,7 @@ export class OrganisationCreateComponent implements OnInit {
     }
   }
 
-  newCoveredSector(): FormGroup {
+  newCoveredSector(): UntypedFormGroup {
     return this.formBuilder.group({
       coveredCells: [[]],
       coveredVillages: [[]],
@@ -160,11 +160,11 @@ export class OrganisationCreateComponent implements OnInit {
   }
 
   get formCoveredSectors() {
-    return this.createForm.get('coveredSectors') as FormArray;
+    return this.createForm.get('coveredSectors') as UntypedFormArray;
   }
 
   addCoveredSector() {
-    (this.createForm.controls.coveredSectors as FormArray).push(this.newCoveredSector());
+    (this.createForm.controls.coveredSectors as UntypedFormArray).push(this.newCoveredSector());
     this.coveredCellsSet.push([]);
     this.selectedCoveredCells.push([]);
     this.coveredVillagesSet.push([]);
@@ -172,12 +172,12 @@ export class OrganisationCreateComponent implements OnInit {
   }
 
   removeCoveredSector(index: number) {
-    (this.createForm.controls.coveredSectors as FormArray).removeAt(index);
+    (this.createForm.controls.coveredSectors as UntypedFormArray).removeAt(index);
   }
 
-  getCoveredSectorsFormGroup(index): FormGroup {
-    this.coveredSectorsList = this.createForm.get('coveredSectors') as FormArray;
-    return this.coveredSectorsList.controls[index] as FormGroup;
+  getCoveredSectorsFormGroup(index): UntypedFormGroup {
+    this.coveredSectorsList = this.createForm.get('coveredSectors') as UntypedFormArray;
+    return this.coveredSectorsList.controls[index] as UntypedFormGroup;
   }
 
   onChangeSector(index: number) {

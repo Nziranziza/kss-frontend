@@ -1,6 +1,6 @@
 import {Component, Inject, Injector, Input, OnInit, PLATFORM_ID} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {AuthenticationService, InputDistributionService} from '../../../../core/services';
 import {MessageService} from '../../../../core/services';
 import {HelperService} from '../../../../core/helpers';
@@ -16,13 +16,13 @@ export class RecordSiteStockReturnComponent extends BasicComponent implements On
 
   modal: NgbActiveModal;
   @Input() stockOutId;
-  siteStockReturnForm: FormGroup;
+  siteStockReturnForm: UntypedFormGroup;
   errors: string [];
   message: string;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
-    private injector: Injector, private formBuilder: FormBuilder,
+    private injector: Injector, private formBuilder: UntypedFormBuilder,
     private authenticationService: AuthenticationService,
     private messageService: MessageService,
     private helper: HelperService, private inputDistributionService: InputDistributionService) {

@@ -1,4 +1,4 @@
-import {FormGroup} from '@angular/forms';
+import {UntypedFormGroup} from '@angular/forms';
 import {LocationService, OrganisationService} from '../services';
 
 export abstract class BasicComponent {
@@ -136,7 +136,7 @@ export abstract class BasicComponent {
     return temp;
   }
 
-  locationChangeProvince(form: FormGroup, value: string) {
+  locationChangeProvince(form: UntypedFormGroup, value: string) {
     if (value !== '') {
       this.basicLocationService.getDistricts(form.controls.location.get('prov_id'.toString()).value).subscribe((data) => {
         this.locationDistricts = data;
@@ -156,7 +156,7 @@ export abstract class BasicComponent {
     form.controls.location.get('village_id'.toString()).setValue('', {emitEvent: false});
   }
 
-  locationChangDistrict(form: FormGroup, value: string) {
+  locationChangDistrict(form: UntypedFormGroup, value: string) {
     if (value !== '') {
       this.basicLocationService.getSectors(form.controls.location.get('dist_id'.toString()).value).subscribe((data) => {
         this.locationSectors = data;
@@ -173,7 +173,7 @@ export abstract class BasicComponent {
     form.controls.location.get('village_id'.toString()).setValue('', {emitEvent: false});
   }
 
-  locationChangSector(form: FormGroup, value: string) {
+  locationChangSector(form: UntypedFormGroup, value: string) {
     if (value !== '') {
       this.basicLocationService.getCells(form.controls.location.get('sect_id'.toString()).value).subscribe((data) => {
         this.locationCells = data;
@@ -187,7 +187,7 @@ export abstract class BasicComponent {
     form.controls.location.get('village_id'.toString()).setValue('', {emitEvent: false});
   }
 
-  locationChangCell(form: FormGroup, value: string) {
+  locationChangCell(form: UntypedFormGroup, value: string) {
     if (value !== '') {
       this.basicLocationService.getVillages(form.controls.location.get('cell_id'.toString()).value).subscribe((data) => {
         this.locationVillages = data;

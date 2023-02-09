@@ -19,22 +19,21 @@ import { DeleteSiteModal } from './delete-site-modal/delete-site-modal-component
 import { SiteDispatchPlanComponent } from './site-dispatch-plan/site-dispatch-plan.component';
 
 @NgModule({
-  declarations: [SiteListComponent, SiteCreateComponent,
-    SiteEditComponent, SiteFarmersComponent, SitePendingFarmersComponent, SiteDetailsComponent, DeleteSiteModal, SiteDispatchPlanComponent],
-  imports: [
-    CommonModule,
-    OrganisationRoutingModule,
-    RouterModule,
-    NgbModule, NgxPaginationModule,
-    OrderModule,
-    SharedModule,
-    OwlDateTimeModule,
-    OwlNativeDateTimeModule,
-    SitesRoutingModule,
-    DataTablesModule
-  ],
-  schemas: [ CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA ],
-  entryComponents: [SiteDetailsComponent, DeleteSiteModal]
+    declarations: [SiteListComponent, SiteCreateComponent,
+        SiteEditComponent, SiteFarmersComponent, SitePendingFarmersComponent, SiteDetailsComponent, DeleteSiteModal, SiteDispatchPlanComponent],
+    imports: [
+        CommonModule,
+        OrganisationRoutingModule,
+        RouterModule,
+        NgbModule, NgxPaginationModule,
+        OrderModule,
+        SharedModule,
+        OwlDateTimeModule,
+        OwlNativeDateTimeModule,
+        SitesRoutingModule,
+        DataTablesModule
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
 })
 export class SitesModule {
 }

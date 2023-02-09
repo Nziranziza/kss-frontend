@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { HelperService } from "../../../../core/helpers";
 import { CoffeeTypeService } from "../../../../core/services";
@@ -12,7 +12,7 @@ import { ActivatedRoute } from "@angular/router";
 })
 export class CoffeeTypeEditComponent implements OnInit {
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private coffeeTypeService: CoffeeTypeService,
@@ -20,7 +20,7 @@ export class CoffeeTypeEditComponent implements OnInit {
   ) {}
 
   id: string;
-  createForm: FormGroup;
+  createForm: UntypedFormGroup;
   errors: string[];
   category: any;
   coffeeType: any;
@@ -35,12 +35,12 @@ export class CoffeeTypeEditComponent implements OnInit {
     this.createForm = this.formBuilder.group({
       _id: ["", Validators.required],
       name: ["", Validators.required],
-      category: new FormArray([]),
+      category: new UntypedFormArray([]),
       level: ["", Validators.required],
     });
   }
 
-  createCategory(): FormGroup {
+  createCategory(): UntypedFormGroup {
     return this.formBuilder.group({
       name: ["", Validators.required],
       _id: [""],
@@ -48,30 +48,30 @@ export class CoffeeTypeEditComponent implements OnInit {
   }
 
   get formCategory() {
-    return this.createForm.get("category") as FormArray;
+    return this.createForm.get("category") as UntypedFormArray;
   }
 
   addCategory(element, index) {
-    (this.createForm.controls.category as FormArray).push(
+    (this.createForm.controls.category as UntypedFormArray).push(
       this.createCategory()
     );
-    (this.createForm.controls.category as FormArray)
+    (this.createForm.controls.category as UntypedFormArray)
       .at(index)
       .get("name")
       .setValue(element.name);
-    (this.createForm.controls.category as FormArray)
+    (this.createForm.controls.category as UntypedFormArray)
       .at(index)
       .get("_id")
       .setValue(element._id);
   }
 
   removeCategory(index: number) {
-    (this.createForm.controls.category as FormArray).removeAt(index);
+    (this.createForm.controls.category as UntypedFormArray).removeAt(index);
   }
 
-  getCategoryFormGroup(index): FormGroup {
-    this.category = this.createForm.get("category") as FormArray;
-    return this.category.controls[index] as FormGroup;
+  getCategoryFormGroup(index): UntypedFormGroup {
+    this.category = this.createForm.get("category") as UntypedFormArray;
+    return this.category.controls[index] as UntypedFormGroup;
   }
 
   getCategory() {

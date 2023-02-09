@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {AuthorisationService, MessageService, UserService} from '../../../core/services';
-import {AuthenticationService, OrganisationService} from '../../../core/services';
-import {LocationService} from '../../../core/services';
-import {HelperService} from '../../../core/helpers';
-import {SiteService} from '../../../core/services';
+import {AuthorisationService, MessageService, UserService} from '../../../core';
+import {AuthenticationService, OrganisationService} from '../../../core';
+import {LocationService} from '../../../core';
+import {HelperService} from '../../../core';
+import {SiteService} from '../../../core';
 
 @Component({
   selector: 'app-user-edit',
@@ -15,7 +15,7 @@ import {SiteService} from '../../../core/services';
 
 export class UserEditComponent implements OnInit {
   organisationId: string;
-  editForm: FormGroup;
+  editForm: UntypedFormGroup;
   errors = [];
   userTypes: any[];
   orgPossibleRoles: any[];
@@ -55,7 +55,7 @@ export class UserEditComponent implements OnInit {
   hasSite = false;
   hideEmail = false;
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(private formBuilder: UntypedFormBuilder,
               private route: ActivatedRoute, private router: Router,
               private userService: UserService, private helper: HelperService,
               private organisationService: OrganisationService,
@@ -75,8 +75,8 @@ export class UserEditComponent implements OnInit {
       sex: ['', Validators.required],
       NID: [{value: '', disabled: true}],
       org_id: [''],
-      userType: [{value: '', disabled: (!this.authorisationService.isTechouseAdmin() && !this.authorisationService.isNaebAdmin()) }],
-      userRoles: new FormArray([]),
+      userType: [{value: '', disabled: (!this.authorisationService.isAdmin()) }],
+      userRoles: new UntypedFormArray([]),
       location: this.formBuilder.group({
         prov_id: [''],
         dist_id: [''],
@@ -107,24 +107,22 @@ export class UserEditComponent implements OnInit {
 
     this.route.params.subscribe(params => {
       this.userService.get(params['id'.toString()]).subscribe(user => {
+        this.editUser = user.content;
         this.organisationService.get(this.organisationId).subscribe(data => {
           this.org = data.content;
-
           this.isTechouseOrganisation(data.content);
           this.orgPossibleRoles = this.possibleRoles.filter(roles => data.content.organizationRole.includes(roles.value));
           this.orgPossibleRoles.map(role => {
             // Initiate user roles
-            if (user.content.userRoles.includes(role.value)) {
-              const control = new FormControl(true);
-              (this.editForm.controls.userRoles as FormArray).push(control);
+            if (this.editUser.userRoles.includes(role.value)) {
+              const control = new UntypedFormControl(true);
+              (this.editForm.controls.userRoles as UntypedFormArray).push(control);
             } else {
-              const control = new FormControl(false);
-              (this.editForm.controls.userRoles as FormArray).push(control);
+              const control = new UntypedFormControl(false);
+              (this.editForm.controls.userRoles as UntypedFormArray).push(control);
             }
           });
         });
-        this.editUser = user.content;
-
         if (this.isCWSAdmin &&
           (this.authorisationService.canEditUserType(+this.editUser.hasAccessTo.find(element => element.app === 2).userType))) {
           this.editForm.controls.userType.enable();
@@ -201,7 +199,7 @@ export class UserEditComponent implements OnInit {
           return {name: key, value: dt.content[key]};
         });
         this.userTypes = [...this.userTypes, ...temp].filter((v, i, a) => a.findIndex(t => (t.name === v.name)) === i);
-        if ((!this.authorisationService.isNaebAdmin()) && (!this.authorisationService.isTechouseUser()) ) {
+        if ((!this.authorisationService.isAdmin())) {
           const index = this.userTypes.findIndex(v => v.name === 'ADMIN');
           if (index > -1) {
             this.userTypes.splice(index, 1);
@@ -262,7 +260,7 @@ export class UserEditComponent implements OnInit {
               return {name: key, value: dt.content[key]};
             });
             this.userTypes = [...this.userTypes, ...temp].filter((v, i, a) => a.findIndex(t => (t.name === v.name)) === i);
-            if ((!this.authorisationService.isNaebAdmin()) && (!this.authorisationService.isTechouseUser()) ) {
+            if (!this.authorisationService.isAdmin()) {
               const index = this.userTypes.findIndex(v => v.name === 'ADMIN');
               if (index > -1) {
                 this.userTypes.splice(index, 1);

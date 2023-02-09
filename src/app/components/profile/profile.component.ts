@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AuthenticationService, SiteService} from '../../core';
 import {HelperService} from '../../core';
@@ -12,13 +12,13 @@ import {MessageService} from '../../core';
 })
 export class ProfileComponent implements OnInit {
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(private formBuilder: UntypedFormBuilder,
               private route: ActivatedRoute, private router: Router,
               private authenticationService: AuthenticationService, private siteService: SiteService,
               private helperService: HelperService, private messageService: MessageService) {
   }
 
-  changePasswordForm: FormGroup;
+  changePasswordForm: UntypedFormGroup;
   errors: string[];
   orgInfo: any;
   userInfo: any;

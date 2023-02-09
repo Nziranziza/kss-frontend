@@ -8,7 +8,7 @@ import {
   MessageService,
   SeasonService
 } from '../../../core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {Router} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {DatePipe} from '@angular/common';
@@ -25,7 +25,7 @@ declare var $;
 export class SwListGreenCoffeesComponent extends BasicComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private router: Router, private confirmDialogService: ConfirmDialogService,
     private seasonService: SeasonService,
     private modal: NgbModal,
@@ -50,7 +50,7 @@ export class SwListGreenCoffeesComponent extends BasicComponent implements OnIni
   summary: any;
   results: any;
   orgId: string;
-  filterForm: FormGroup;
+  filterForm: UntypedFormGroup;
   currentDate: any;
   seasonStartingDate: string;
   organisations = [];

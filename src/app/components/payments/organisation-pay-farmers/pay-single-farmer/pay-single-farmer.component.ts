@@ -1,5 +1,5 @@
 import {Component, Inject, Injector, Input, OnInit, PLATFORM_ID} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {BasicComponent} from '../../../../core';
 import {HelperService} from '../../../../core';
 import {isPlatformBrowser} from '@angular/common';
@@ -14,8 +14,8 @@ import {PaymentService} from '../../../../core/services/payment.service';
 })
 export class PaySingleFarmerComponent extends BasicComponent implements OnInit {
 
-  cashPaymentForm: FormGroup;
-  ePaymentForm: FormGroup;
+  cashPaymentForm: UntypedFormGroup;
+  ePaymentForm: UntypedFormGroup;
   modal: NgbActiveModal;
   @Input() paymentData;
   @Input() farmerUserId;
@@ -29,7 +29,7 @@ export class PaySingleFarmerComponent extends BasicComponent implements OnInit {
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
-    private injector: Injector, private formBuilder: FormBuilder,
+    private injector: Injector, private formBuilder: UntypedFormBuilder,
     private cherrySupplyService: CherrySupplyService,
     private organisationService: OrganisationService,
     private userService: UserService,

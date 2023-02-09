@@ -1,4 +1,5 @@
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB6rJxA0WuYgN4LPaHcP8uLrgOQ-BUc_5A"></script>
+<app-spinner [loading]="pageLoading"></app-spinner>
 <div class="filter-title-text" *ngIf="organisationId == undefined">
   Welcome to SKS - <span class="bold"> Dashboard - Extension Services </span>
 </div>
@@ -221,22 +222,22 @@
         </div>
         <div class="text-center">
           <p>Total Trainees</p>
-          <h4>{{ trainingsStats.totalInvitees }}</h4>
+          <h4>{{ trainingsStats.totalInvitees | number }}</h4>
         </div>
 
         <div class="row" style="margin-left: 15%; margin-right: 15%; margin-bottom: 5px">
           <div class="col-xs-6">
             <div class="text-center trainees-box">
               <p>Attended</p>
-              <h4>{{ trainingsStats.totalPresent }}</h4>
+              <h4>{{ trainingsStats.totalPresent | number }}</h4>
               <div class="row">
                 <div class="col-xs-6">
                   <i class="fa fa-male fa-2x" aria-hidden="true" style="color: #35a1ff"></i>
-                  <p>{{ trainingsStats.malePresent }}</p>
+                  <p>{{ trainingsStats.malePresent | number }}</p>
                 </div>
                 <div class="col-xs-6">
                   <i class="fa fa-female fa-2x" aria-hidden="true" style="color: #ff69f6"></i>
-                  <p>{{ trainingsStats.femalePresent }}</p>
+                  <p>{{ trainingsStats.femalePresent | number }}</p>
                 </div>
               </div>
             </div>
@@ -244,15 +245,15 @@
           <div class="col-xs-6">
             <div class="text-center trainees-box trainees-box-absent">
               <p>Not Attended</p>
-              <h4>{{ trainingsStats.totalAbsent }}</h4>
+              <h4>{{ trainingsStats.totalAbsent | number }}</h4>
               <div class="row">
                 <div class="col-xs-6">
                   <i class="fa fa-male fa-2x" aria-hidden="true" style="color: #35a1ff"></i>
-                  <p>{{ trainingsStats.maleAbsent }}</p>
+                  <p>{{ trainingsStats.maleAbsent | number }}</p>
                 </div>
                 <div class="col-xs-6">
                   <i class="fa fa-female fa-2x" aria-hidden="true" style="color: #ff69f6"></i>
-                  <p>{{ trainingsStats.femaleAbsent }}</p>
+                  <p>{{ trainingsStats.femaleAbsent | number }}</p>
                 </div>
               </div>
             </div>
@@ -315,7 +316,7 @@
                   <input [selectMode]="'range'" [owlDateTimeTrigger]="dt3" [owlDateTime]="dt3"
                     (ngModelChange)="seasonDateChange($event, 'visitFilters')" formControlName="filterByDate"
                     class="form-control form-control-small" placeholder="From: Dd/mm/yyyy ~ To: Dd/mm/yyyy"
-                    [min]="dateRangeMin['visitFilters']" [max]="dateRangeMax['visitFilters']" />
+                    [min]="dateRangeMin.visitFilters" [max]="dateRangeMax.visitFilters" />
                   <owl-date-time #dt3 [pickerType]="'calendar'" [scrollStrategy]="scrollStrategy"></owl-date-time>
                 </div>
               </div>
@@ -324,7 +325,7 @@
         </div>
         <div class="text-center">
           <p>Total Visited Farms</p>
-          <h4>{{ visitStats.totalVisits }}</h4>
+          <h4>{{ visitStats.totalVisits | number }}</h4>
         </div>
         <div class="row">
           <div class="col-md-6">
@@ -342,15 +343,15 @@
           <div class="col-md-6">
             <div class="text-center trainees-box" style="width: 60%; margin: 0 auto; margin-top: 8%">
               <p>Farmers</p>
-              <h4>{{ visitStats.totalFarmersVisited || 0 }}</h4>
+              <h4>{{ visitStats.totalFarmersVisited | number }}</h4>
               <div class="row">
                 <div class="col-xs-6">
                   <i class="fa fa-male fa-2x" aria-hidden="true" style="color: #35a1ff"></i>
-                  <p>{{ visitStats.maleFarmVisits }}</p>
+                  <p>{{ visitStats.maleFarmVisits | number }}</p>
                 </div>
                 <div class="col-xs-6">
                   <i class="fa fa-female fa-2x" aria-hidden="true" style="color: #ff69f6"></i>
-                  <p>{{ visitStats.femaleFarmVisits }}</p>
+                  <p>{{ visitStats.femaleFarmVisits | number }}</p>
                 </div>
               </div>
             </div>
@@ -445,11 +446,11 @@
           <div class="col-xs-4">
             <div class="text-center">
               <p>Seedling Distributed</p>
-              <h4>{{ totalSeedlings }}</h4>
+              <h4>{{ totalSeedlings | number }}</h4>
             </div>
             <div class="text-center" *ngFor="let seedling of seedlingStats">
               <p>{{ seedling.variety }}</p>
-              <h4>{{ seedling.totalQuantity }}</h4>
+              <h4>{{ seedling.totalQuantity | number }}</h4>
             </div>
           </div>
           <div class="col-xs-8">
@@ -520,11 +521,11 @@
             </div>
             <div class="col-xs-3" style="padding: 0 2px 0 0px">
               <h4>Trees</h4>
-              <h4>{{ farmDetails?.farm?.requestInfo.numberOfTrees }}</h4>
+              <h4>{{ farmDetails?.farm?.requestInfo.numberOfTrees | number }}</h4>
             </div>
             <div class="col-xs-3" style="padding: 0 5px 0 0px">
               <h4>Visits</h4>
-              <h4>{{ farmDetails?.visits }}</h4>
+              <h4>{{ farmDetails?.visits | number }}</h4>
             </div>
           </div>
         </div>

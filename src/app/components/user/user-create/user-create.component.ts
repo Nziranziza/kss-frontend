@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthorisationService, MessageService, UserService } from '../../../core';
 import { OrganisationService } from '../../../core';
@@ -15,7 +15,7 @@ import { SiteService } from '../../../core';
 export class UserCreateComponent implements OnInit {
 
   organisationId: string;
-  createForm: FormGroup;
+  createForm: UntypedFormGroup;
   errors = [];
   userTypes: any[];
   orgPossibleRoles = [];
@@ -45,7 +45,7 @@ export class UserCreateComponent implements OnInit {
   selectedRoles: any;
   hideEmail = false;
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(private formBuilder: UntypedFormBuilder,
     private route: ActivatedRoute, private router: Router,
     private userService: UserService,
     private siteService: SiteService,
@@ -76,7 +76,7 @@ export class UserCreateComponent implements OnInit {
       }),
       accountExpirationDate: [''],
       distributionSite: [''],
-      userRoles: new FormArray([])
+      userRoles: new UntypedFormArray([])
     });
     this.userService.userTypes().subscribe(data => {
       this.userTypes = Object.keys(data.content).map(key => {
@@ -271,7 +271,7 @@ export class UserCreateComponent implements OnInit {
             if (
               (!this.authorisationService.isNaebAdmin()) &&
               (!this.authorisationService.isTechouseUser()) &&
-              (!this.authorisationService.isTecnoserveUser())
+              (!this.authorisationService.isTechnoServeUser())
             ) {
               const index = this.userTypes.findIndex(v => v.name === 'ADMIN');
               if (index > -1) {
@@ -363,8 +363,8 @@ export class UserCreateComponent implements OnInit {
       this.isTechouseOrganisation(data.content);
       this.orgPossibleRoles = this.possibleRoles.filter(roles => data.content.organizationRole.includes(roles.value));
       this.orgPossibleRoles.map(() => {
-        const control = new FormControl(true);
-        (this.createForm.controls.userRoles as FormArray).push(control);
+        const control = new UntypedFormControl(true);
+        (this.createForm.controls.userRoles as UntypedFormArray).push(control);
       });
     });
   }

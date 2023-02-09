@@ -1,6 +1,6 @@
 import {Component, Inject, Injector, Input, OnInit, PLATFORM_ID} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {LocationService} from '../../../core';
 import {HelperService} from '../../../core';
 import {AuthenticationService, FarmerService} from '../../../core';
@@ -15,7 +15,7 @@ export class EditRequestComponent implements OnInit {
 
   modal: NgbActiveModal;
   @Input() land;
-  editFarmerRequestForm: FormGroup;
+  editFarmerRequestForm: UntypedFormGroup;
   errors: string [];
   message: string;
   submit = false;
@@ -25,7 +25,7 @@ export class EditRequestComponent implements OnInit {
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
-    private injector: Injector, private formBuilder: FormBuilder, private locationService: LocationService,
+    private injector: Injector, private formBuilder: UntypedFormBuilder, private locationService: LocationService,
     private helper: HelperService, private farmerService: FarmerService,
     private authenticationService: AuthenticationService) {
 

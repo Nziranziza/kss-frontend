@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {BasicComponent, FarmService, HelperService, MessageService} from '../../../../core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 
 @Component({
@@ -10,9 +10,9 @@ import {Router} from '@angular/router';
 })
 export class TreeVarietyCreateComponent extends BasicComponent implements OnInit {
 
-  createForm: FormGroup;
+  createForm: UntypedFormGroup;
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(private formBuilder: UntypedFormBuilder,
               private messageService: MessageService,
               private router: Router, private farmService: FarmService, private helper: HelperService) {
     super();

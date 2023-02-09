@@ -1,6 +1,6 @@
 import {Component, Inject, Injector, Input, OnInit, PLATFORM_ID} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {InputDistributionService} from '../../../../core';
 import {HelperService} from '../../../../core';
 import {isPlatformBrowser} from '@angular/common';
@@ -14,10 +14,10 @@ import {BasicComponent} from '../../../../core';
 export class EditInputComponent extends BasicComponent implements OnInit {
 
   modal: NgbActiveModal;
-  editInputForm: FormGroup;
+  editInputForm: UntypedFormGroup;
   @Input() input;
   constructor(@Inject(PLATFORM_ID) private platformId: object,
-              private injector: Injector, private formBuilder: FormBuilder,
+              private injector: Injector, private formBuilder: UntypedFormBuilder,
               private inputDistributionService: InputDistributionService,
               private helper: HelperService) {
     super();

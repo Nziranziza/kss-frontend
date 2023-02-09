@@ -14,20 +14,19 @@ import {OrderModule} from 'ngx-order-pipe';
 import {PaymentHistoryDetailsComponent} from './organisation-payments-history/payment-history-details/payment-history-details.component';
 
 @NgModule({
-  declarations: [OrganisationTopUpsComponent, OrganisationPaymentsHistoryComponent, OrganisationPayTopUpsComponent,
-    PaymentHistoryDetailsComponent],
-  imports: [
-    CommonModule,
-    PaymentsRoutingModule,
-    NgbModule, NgxPaginationModule,
-    OrderModule,
-    SharedModule,
-    OwlDateTimeModule,
-    OwlNativeDateTimeModule,
-    RouterModule,
-    CoreModule
-  ],
-  entryComponents: [PaymentHistoryDetailsComponent]
+    declarations: [OrganisationTopUpsComponent, OrganisationPaymentsHistoryComponent, OrganisationPayTopUpsComponent,
+        PaymentHistoryDetailsComponent],
+    imports: [
+        CommonModule,
+        PaymentsRoutingModule,
+        NgbModule, NgxPaginationModule,
+        OrderModule,
+        SharedModule,
+        OwlDateTimeModule,
+        OwlNativeDateTimeModule,
+        RouterModule,
+        CoreModule
+    ]
 })
 export class PaymentsModule {
 }

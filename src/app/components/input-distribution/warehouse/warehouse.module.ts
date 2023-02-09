@@ -10,16 +10,15 @@ import {DeliveryDetailsComponent} from './warehouse-entries/delivery-details/del
 import { WarehouseDispatchEditComponent } from './warehouse-dispatch-edit/warehouse-dispatch-edit.component';
 
 @NgModule({
-  declarations: [WarehouseEntriesComponent, WarehouseDispatchComponent, DeliveryDetailsComponent, WarehouseDispatchEditComponent],
-  imports: [
-    CommonModule,
-    SharedModule,
-    OwlDateTimeModule,
-    OwlNativeDateTimeModule,
-    DataTablesModule,
-    WarehouseRoutingModule
-  ],
-  entryComponents: [WarehouseDispatchEditComponent]
+    declarations: [WarehouseEntriesComponent, WarehouseDispatchComponent, DeliveryDetailsComponent, WarehouseDispatchEditComponent],
+    imports: [
+        CommonModule,
+        SharedModule,
+        OwlDateTimeModule,
+        OwlNativeDateTimeModule,
+        DataTablesModule,
+        WarehouseRoutingModule
+    ]
 })
 export class WarehouseModule {
 }

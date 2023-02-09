@@ -3,7 +3,7 @@ import {Router} from '@angular/router';
 import {BasicComponent} from '../../../../../core';
 import {PaymentProcessingService} from '../../../../../core/services/payment-processing.service';
 import {AuthenticationService, MessageService, OrganisationService} from '../../../../../core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {DatePipe} from '@angular/common';
 import {PaymentService} from '../../../../../core/services/payment.service';
 import {HelperService} from '../../../../../core';
@@ -18,7 +18,7 @@ export class ConfirmPaymentComponent extends BasicComponent implements OnInit {
   constructor(private router: Router,
               private authenticationService: AuthenticationService,
               private organisationService: OrganisationService,
-              private formBuilder: FormBuilder,
+              private formBuilder: UntypedFormBuilder,
               private messageService: MessageService,
               private datePipe: DatePipe,
               private paymentService: PaymentService,
@@ -30,7 +30,7 @@ export class ConfirmPaymentComponent extends BasicComponent implements OnInit {
   paymentSummary: any;
   organisationId: string;
   orgPaymentChannels: any;
-  selectPayerForm: FormGroup;
+  selectPayerForm: UntypedFormGroup;
   org: any;
   today: any;
   payerAccount: any;

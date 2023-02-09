@@ -54,7 +54,7 @@
               <label class="control-label label-required">Roles</label>
               <div class="checkbox" formArrayName="organizationRole"
                    *ngFor="let role of editForm.get('organizationRole')['controls']; let i = index">
-                <label *ngIf="possibleRoles[i].name != 'FARMER'">
+                <label *ngIf="possibleRoles[i].name != 'FARMER' && possibleRoles[i].name != 'TECHOUSE'">
                   <input type="checkbox" formControlName="{{i}}">
                   {{possibleRoles[i].name}}
                 </label>

@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {
-  FormBuilder,
+  UntypedFormArray,
+  UntypedFormBuilder,
   FormControl,
-  FormGroup,
+  UntypedFormGroup,
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -13,11 +14,13 @@ import {
   LocationService,
   MessageService,
   OrganisationService,
+  UserService,
 } from '../../../../core';
 import { isEmptyObject } from 'jquery';
 import { GroupService } from '../../../../core';
 import { SuccessModalComponent } from '../../../../shared';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ScrollStrategy, ScrollStrategyOptions } from '@angular/cdk/overlay';
 
 @Component({
   selector: 'app-farmer-group-create',
@@ -30,7 +33,7 @@ export class FarmerGroupCreateComponent
   sectors: any[] = [];
   districts: any[] = [];
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private router: Router,
     private organisationService: OrganisationService,
     private messageService: MessageService,
@@ -38,15 +41,19 @@ export class FarmerGroupCreateComponent
     private groupService: GroupService,
     private authenticationService: AuthenticationService,
     protected locationService: LocationService,
-    private helper: HelperService
+    private helper: HelperService,
+    private readonly sso: ScrollStrategyOptions,
+    private userService: UserService
   ) {
     super(locationService, organisationService);
+    this.scrollStrategy = this.sso.noop();
   }
 
-  createForm: FormGroup;
+  createForm: UntypedFormGroup;
+  editContactForm: UntypedFormGroup;
   errors: any;
   provinces: any;
-  filterForm: FormGroup;
+  filterForm: UntypedFormGroup;
   parameters: any;
   loading = false;
   org: any;
@@ -59,6 +66,7 @@ export class FarmerGroupCreateComponent
   nameAlreadyExist: boolean;
   initialValue = '';
   keyword = 'leaderName';
+  scrollStrategy: ScrollStrategy;
   searchFields = [
     { value: 'reg_number', name: 'registration number' },
     { value: 'nid', name: 'NID' },
@@ -98,6 +106,11 @@ export class FarmerGroupCreateComponent
         village_id: [''],
       }),
     });
+
+    this.editContactForm = this.formBuilder.group({
+      contacts: this.formBuilder.array([]),
+    });
+
     this.parameters = {
       length: 10,
       start: 0,
@@ -125,32 +138,51 @@ export class FarmerGroupCreateComponent
     this.basicInit(this.authenticationService.getCurrentUser().info.org_id);
     this.onChanges();
   }
-
-  onSubmit() {
-    this.createForm.markAllAsTouched();
-    if (this.createForm.valid) {
-      const value = JSON.parse(JSON.stringify(this.createForm.value));
-      value.location.prov_id = this.org.location.prov_id._id;
-      value.location.dist_id = this.org.location.dist_id._id;
-      value.org_id = this.authenticationService.getCurrentUser().info.org_id;
-      value.meetingSchedule.meetingDay = +value.meetingSchedule.meetingDay;
-      const members = [];
-      this.groupMembers.map((member) => {
-        members.push(member.userInfo._id);
-      });
-      value.members = members;
-      this.groupService.create(value).subscribe(
-        (results) => {
-          this.loading = false;
-          this.success(results.data.data.groupName);
-        },
-        (err) => {
-          this.loading = false;
-          this.errors = err.errors;
-        }
+  // adding new contacts
+  addContacts() {
+    const departmentControl = (
+      this.editContactForm.get('contacts') as UntypedFormArray
+    ).controls;
+    this.searchResults.forEach((user) => {
+      departmentControl.push(
+        this.formBuilder.group({
+          userId: user.userInfo._id,
+          contact: user.userInfo.phone_number,
+        })
       );
+    });
+  }
+
+  addContact(index) {
+    this.searchResults[index].editMode = true;
+  }
+
+  cancelEditContact(index) {
+    this.searchResults[index].editMode = false;
+  }
+
+  // submitting the contacts
+
+  submitContact(index) {
+    if (this.editContactForm.valid) {
+      const arrayControl = this.editContactForm.get('contacts') as UntypedFormArray;
+      const traineData = arrayControl.at(index);
+      this.searchResults[index].userInfo.phone_number = traineData.value.contact;
+      this.searchResults[index].editMode = false;
+      this.userService
+        .updateBasic({
+          id: traineData.value.userId,
+          phone_number: traineData.value.contact.toString(),
+          lastModifiedBy: {
+            _id: this.authenticationService.getCurrentUser().info._id,
+            name: this.authenticationService.getCurrentUser().info.surname,
+          },
+        })
+        .subscribe((newdata) => {
+          this.loading = false;
+        });
     } else {
-      this.errors = this.helper.getFormValidationErrors(this.createForm);
+      this.errors = this.helper.getFormValidationErrors(this.editContactForm);
     }
   }
 
@@ -186,7 +218,6 @@ export class FarmerGroupCreateComponent
   }
 
   selectEvent(item) {
-    console.log(item);
     this.createForm.controls.leaderNames.setValue(item.leaderName);
     this.createForm.controls.leaderPhoneNumber.setValue(item.phone_number);
   }
@@ -254,7 +285,6 @@ export class FarmerGroupCreateComponent
         this.groupMembers.push(JSON.parse(JSON.stringify(item)));
       }
     });
-    console.log(this.groupMembers);
   }
 
   removeMembersToGroup() {
@@ -300,6 +330,7 @@ export class FarmerGroupCreateComponent
       this.organisationService.getFarmers(this.parameters).subscribe(
         (data) => {
           this.searchResults = data.data;
+          this.addContacts();
           this.loading = false;
         },
         (err) => {
@@ -409,5 +440,33 @@ export class FarmerGroupCreateComponent
     modalRef.result.finally(() => {
       this.router.navigateByUrl('admin/farmers/group/list');
     });
+  }
+
+  onSubmit() {
+    this.createForm.markAllAsTouched();
+    if (this.createForm.valid) {
+      const value = JSON.parse(JSON.stringify(this.createForm.value));
+      value.location.prov_id = this.org.location.prov_id._id;
+      value.location.dist_id = this.org.location.dist_id._id;
+      value.org_id = this.authenticationService.getCurrentUser().info.org_id;
+      value.meetingSchedule.meetingDay = +value.meetingSchedule.meetingDay;
+      const members = [];
+      this.groupMembers.map((member) => {
+        members.push(member.userInfo._id);
+      });
+      value.members = members;
+      this.groupService.create(value).subscribe(
+        (results) => {
+          this.loading = false;
+          this.success(results.data.data.groupName);
+        },
+        (err) => {
+          this.loading = false;
+          this.errors = err.errors;
+        }
+      );
+    } else {
+      this.errors = this.helper.getFormValidationErrors(this.createForm);
+    }
   }
 }

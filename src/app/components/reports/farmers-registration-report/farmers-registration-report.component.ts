@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {ExcelServicesService, LocationService} from '../../../core';
 import {Router} from '@angular/router';
 import {AuthenticationService, FarmerService, OrganisationService, OrganisationTypeService} from '../../../core';
@@ -18,7 +18,7 @@ import {AuthorisationService} from '../../../core';
 export class FarmersRegistrationReportComponent implements OnInit {
 
   title = 'Farmers registration report';
-  filterForm: FormGroup;
+  filterForm: UntypedFormGroup;
   errors: any;
   provinces: any;
   districts: any;
@@ -50,7 +50,7 @@ export class FarmersRegistrationReportComponent implements OnInit {
   total = 0;
   isCurrentUserDCC = false;
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(private formBuilder: UntypedFormBuilder,
               private router: Router, private organisationService: OrganisationService,
               private authorisationService: AuthorisationService,
               private authenticationService: AuthenticationService,

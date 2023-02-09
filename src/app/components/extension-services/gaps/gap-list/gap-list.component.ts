@@ -32,6 +32,7 @@ export class GapListComponent
   mostAdopted: any = '';
   overallWeight = 0;
   gapTotalWeight = 0;
+  pageLoading = false;
 
   dtOptions: DataTables.Settings = {};
   loading = false;
@@ -39,6 +40,7 @@ export class GapListComponent
   dtTrigger: Subject = new Subject();
 
   ngOnInit() {
+    this.pageLoading = true;
     this.getGap();
     this.dtOptions = {
       pagingType: 'full_numbers',
@@ -46,6 +48,7 @@ export class GapListComponent
       order: [],
     };
     this.setMessage(this.messageService.getMessage());
+    this.pageLoading = false;
   }
 
 

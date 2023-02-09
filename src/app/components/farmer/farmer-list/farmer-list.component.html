@@ -24,7 +24,7 @@
       <form [formGroup]="filterForm">
         <div class="row">
           <div formGroupName="searchByLocation">
-            <div class="col-md-2" *ngIf="!isCurrentUserDCC">
+            <div class="col-md-2" *ngIf="!isDistrictCashCrop">
               <div class="form-group">
                 <div class="">
                   <select class="form-control" formControlName="searchBy">
@@ -38,7 +38,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-md-2" *ngIf="!isCurrentUserDCC">
+            <div class="col-md-2" *ngIf="!isDistrictCashCrop">
               <div class="form-group">
                 <div class="">
                   <select class="form-control" formControlName="prov_id">
@@ -60,7 +60,7 @@
                     class="form-control"
                     formControlName="dist_id"
                     disabled="true"
-                    *ngIf="isCurrentUserDCC; else enabled"
+                    *ngIf="isDistrictCashCrop; else enabled"
                   >
                     <option value=""></option>
                     <option

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   AuthenticationService,
@@ -11,6 +11,7 @@ import {
   OrganisationService, UserService
 } from '../../../../core';
 import { isEmptyObject } from 'jquery';
+import { ScrollStrategy, ScrollStrategyOptions } from '@angular/cdk/overlay';
 
 @Component({
   selector: 'app-farmer-group-edit',
@@ -22,7 +23,7 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
   createForm: any[] = [];
   sectors: any[] = [];
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(private formBuilder: UntypedFormBuilder,
     private router: Router, private organisationService: OrganisationService,
     private messageService: MessageService,
     private route: ActivatedRoute,
@@ -30,14 +31,17 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
     private groupService: GroupService,
     private authenticationService: AuthenticationService,
     protected locationService: LocationService,
+    private readonly sso: ScrollStrategyOptions,
     private helper: HelperService) {
     super(locationService, organisationService);
+    this.scrollStrategy = this.sso.noop();
   }
 
-  editForm: FormGroup;
+  editForm: UntypedFormGroup;
   errors: any;
   provinces: any;
-  filterForm: FormGroup;
+  filterForm: UntypedFormGroup;
+  editContactForm: UntypedFormGroup;
   parameters: any;
   loading = false;
   org: any;
@@ -48,6 +52,9 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
   groupMembers = [];
   time: any;
   id: string;
+  initialValue = '';
+  keyword = 'leaderName';
+  scrollStrategy: ScrollStrategy;
   searchFields = [
     { value: 'reg_number', name: 'registration number' },
     { value: 'nid', name: 'NID' },
@@ -70,7 +77,7 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
     this.editForm = this.formBuilder.group({
       groupName: [''],
       leaderNames: ['', Validators.required],
-      leaderPhoneNumber: ['', Validators.required, Validators.pattern("[0-9]{12}")],
+      leaderPhoneNumber: ['', Validators.required, Validators.pattern('[0-9]{12}')],
       description: [''],
       meetingSchedule: this.formBuilder.group({
         meetingDay: [''],
@@ -90,7 +97,6 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
       draw: 1,
       org_id: this.authenticationService.getCurrentUser().info.org_id
     };
-
     this.filterForm = this.formBuilder.group({
       searchOption: ['location'],
       searchByLocation: this.formBuilder.group({
@@ -104,60 +110,138 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
         searchBy: ['reg_number'],
       }),
     });
+    this.editContactForm = this.formBuilder.group({
+      contacts: this.formBuilder.array([]),
+    });
     this.route.params.subscribe(params => {
       this.id = params['id'.toString()];
-      this.groupService.get(params['id'.toString()]).subscribe(data => {
-        const members = data.data.members;
-        members.map((member) => {
-          const item = {
-            userInfo: {
-              regNumber: '',
-              groupName: '',
-              foreName: '',
-              surname: '',
-              phone_number: '',
-              _id: member.userId,
-            },
-            selected: true
-          };
-          item.userInfo.regNumber = member.regNumber;
-          if (member.groupName) {
-            item.userInfo.groupName = member.groupName;
-          } else {
-            item.userInfo.foreName = member.firstName;
-            item.userInfo.surname = member.lastName;
-          }
-          item.userInfo.phone_number = member.phoneNumber;
-          this.groupMembers.push(item);
-        });
-        this.editForm.controls.location
-          .get("prov_id".toString())
-          .setValue(data.data.location.prov_id._id, { emitEvent: true });
-        this.editForm.controls.location
-          .get("dist_id".toString())
-          .setValue(data.data.location.dist_id._id, { emitEvent: true });
-        this.editForm.controls.location
-          .get("sect_id".toString())
-          .setValue(data.data.location.sect_id._id, { emitEvent: true });
-        this.editForm.controls.location
-          .get("cell_id".toString())
-          .setValue(data.data.location.cell_id._id, { emitEvent: true });
-        this.editForm.controls.location
-          .get("village_id".toString())
-          .setValue(data.data.location.village_id._id, { emitEvent: true });
-        delete data.data.location
-        this.editForm.patchValue(data.data);
-      });
     });
+    this.getGroupDetails();
     this.basicInit(this.authenticationService.getCurrentUser().info.org_id);
     this.onChanges();
+  }
+
+  selectEvent(item) {
+    this.editForm.controls.leaderNames.setValue(item.leaderName);
+    this.editForm.controls.leaderPhoneNumber.setValue(item.phone_number);
+  }
+  deselectEvent() {
+    console.log('---------------');
+  }
+
+  // adding new contacts
+  addContacts() {
+    const departmentControl = (
+      this.editContactForm.get('contacts') as UntypedFormArray
+    ).controls;
+    this.searchResults.forEach((user) => {
+      departmentControl.push(
+        this.formBuilder.group({
+          userId: user.userInfo._id,
+          contact: user.userInfo.phone_number,
+        })
+      );
+    });
+  }
+
+
+  addContact(index) {
+    this.searchResults[index].editMode = true;
+  }
+
+  cancelEditContact(index) {
+    this.searchResults[index].editMode = false;
+  }
+
+  // submitting the contacts
+
+  submitContact(index) {
+    if (this.editContactForm.valid) {
+      const arrayControl = this.editContactForm.get('contacts') as UntypedFormArray;
+      const traineData = arrayControl.at(index);
+      this.searchResults[index].userInfo.phone_number = traineData.value.contact;
+      this.searchResults[index].editMode = false;
+      this.userService
+        .updateBasic({
+          id: traineData.value.userId,
+          phone_number: traineData.value.contact.toString(),
+          lastModifiedBy: {
+            _id: this.authenticationService.getCurrentUser().info._id,
+            name: this.authenticationService.getCurrentUser().info.surname,
+          },
+        })
+        .subscribe((newdata) => {
+          this.loading = false;
+        });
+    } else {
+      this.errors = this.helper.getFormValidationErrors(this.editContactForm);
+    }
+  }
+  getGroupDetails() {
+    this.groupService.get(this.id).subscribe(data => {
+      const members = data.data.members;
+      members.map((member) => {
+        const item = {
+          userInfo: {
+            regNumber: '',
+            groupName: '',
+            foreName: '',
+            surname: '',
+            phone_number: '',
+            _id: member.userId,
+          },
+          leaderName: '',
+          phone_number: '',
+          selected: true
+        };
+        item.userInfo.regNumber = member.regNumber;
+        if (member.groupName) {
+          item.userInfo.groupName = member.groupName;
+        } else {
+          item.userInfo.foreName = member.firstName;
+          item.userInfo.surname = member.lastName;
+        }
+        item.leaderName = item.userInfo.groupName ? item.userInfo.groupName : item.userInfo.surname + ' ' + item.userInfo.foreName;
+        item.phone_number = member.phoneNumber;
+        item.userInfo.phone_number = member.phoneNumber;
+        this.groupMembers.push(item);
+      });
+
+      this.editForm.controls.location
+        .get('prov_id'.toString())
+        .setValue(data.data.location.prov_id._id);
+      this.editForm.controls.location
+        .get('dist_id'.toString())
+        .setValue(data.data.location.dist_id._id);
+      this.editForm.controls.location
+        .get('sect_id'.toString())
+        .setValue(data.data.location.sect_id._id);
+      this.editForm.controls.location
+        .get('cell_id'.toString())
+        .setValue(data.data.location.cell_id._id);
+      this.editForm.controls.location
+        .get('village_id'.toString())
+        .setValue(data.data.location.village_id._id);
+      this.editForm.controls.meetingSchedule
+        .get('meetingDay'.toString())
+        .setValue(data.data.meetingSchedule.meetingDay);
+      this.editForm.controls.meetingSchedule
+        .get('meetingTime'.toString())
+        .setValue(data.data.meetingSchedule.meetingTime);
+      this.editForm.controls.description.setValue(
+        data.data.description
+      );
+      delete data.data.location
+      delete data.data.meetingSchedule
+      delete data.data.description
+      this.editForm.patchValue(data.data);
+    });
   }
 
   onSubmit() {
     this.editForm.markAllAsTouched();
     if (true) {
       const value = JSON.parse(JSON.stringify(this.editForm.value));
-      value.org_id = this.authenticationService.getCurrentUser().info.org_id;
       value.meetingSchedule.meetingDay = +value.meetingSchedule.meetingDay;
       const members = [];
       this.groupMembers.map((member) => {
@@ -172,7 +256,7 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
         },
         (err) => {
           this.loading = false;
-          this.errors = err.errors;
+          this.errors = err.error || err.errors ;
         }
       );
     } else {
@@ -233,6 +317,8 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
     this.searchResults.forEach((item) => {
       if (item.selected) {
         item.selected = false;
+        item.leaderName = item.userInfo.groupName ? item.userInfo.groupName : item.userInfo.surname + ' ' + item.userInfo.foreName;
+        item.phone_number = item.userInfo.phone_number;
         this.groupMembers.push(JSON.parse(JSON.stringify(item)));
       }
     });
@@ -241,7 +327,7 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
   removeMembersToGroup() {
     this.groupMembers.forEach((item) => {
       if (item.selected) {
-        this.groupMembers = this.groupMembers.filter(el => el.userInfo._id != item.userInfo._id);
+        this.groupMembers = this.groupMembers.filter(el => el.userInfo._id !== item.userInfo._id);
       }
     });
   }
@@ -279,6 +365,7 @@ export class FarmerGroupEditComponent extends BasicComponent implements OnInit {
       this.organisationService.getFarmers(this.parameters).subscribe(
         (data) => {
           this.searchResults = data.data;
+          this.addContacts();
           this.loading = false;
         },
         (err) => {

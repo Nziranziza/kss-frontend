@@ -1,7 +1,7 @@
-import { Component, Inject, Injector, Input, OnInit, PLATFORM_ID, } from '@angular/core';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { HelperService } from '../../../../core/helpers';
+import {Component, Inject, Injector, Input, OnInit, PLATFORM_ID,} from '@angular/core';
+import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
+import {UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
+import {HelperService} from '../../../../core';
 import {
   AuthenticationService,
   AuthorisationService,
@@ -11,10 +11,10 @@ import {
   MessageService,
   OrganisationService,
   SiteService,
-} from '../../../../core/services';
-import { isPlatformBrowser } from '@angular/common';
-import { Router } from '@angular/router';
-import { BasicComponent } from '../../../../core/library';
+} from '../../../../core';
+import {isPlatformBrowser} from '@angular/common';
+import {Router} from '@angular/router';
+import {BasicComponent} from '../../../../core';
 
 @Component({
   selector: 'app-add-farmer-request',
@@ -26,17 +26,12 @@ export class AddFarmerRequestComponent
   implements OnInit {
   modal: NgbActiveModal;
   @Input() farmerId;
-  createForm: FormGroup;
+  createForm: UntypedFormGroup;
   provinces = [];
   districts = [];
   sectors = [];
   cells = [];
   villages = [];
-  addressProvinces: any;
-  addressDistricts: any;
-  addressSectors: any;
-  addressCells: any;
-  addressVillages: any;
   loading = false;
   requestIndex = 0;
   currentSeason: any;
@@ -46,8 +41,8 @@ export class AddFarmerRequestComponent
   isUserCWSOfficer = false;
   user: any;
   site: any;
-  disableProvId = true;
-  disableDistId = true;
+  disableProvId = false;
+  disableDistId = false;
   provinceValue = '';
   districtValue = '';
   treeVarieties: any;
@@ -86,13 +81,13 @@ export class AddFarmerRequestComponent
   };
   showUPILocations = false;
 
-  public requestList: FormArray;
+  public requestList: UntypedFormArray;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
     private router: Router,
     private injector: Injector,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private authenticationService: AuthenticationService,
     private siteService: SiteService,
     private organisationService: OrganisationService,
@@ -110,15 +105,15 @@ export class AddFarmerRequestComponent
   }
 
   get formTreeAges() {
-    return this.createForm.get('treeAges') as FormArray;
+    return this.createForm.get('treeAges') as UntypedFormArray;
   }
 
   get formCertificates() {
-    return this.createForm.get('certificates') as FormArray;
+    return this.createForm.get('certificates') as UntypedFormArray;
   }
 
   get formRequests() {
-    return this.createForm.get('requests') as FormArray;
+    return this.createForm.get('requests') as UntypedFormArray;
   }
 
   ngOnInit() {
@@ -128,11 +123,11 @@ export class AddFarmerRequestComponent
       fertilizer_allocate: [0],
       location: this.formBuilder.group({
         prov_id: [
-          { value: '', disabled: this.disableProvId },
+          {value: '', disabled: this.disableProvId},
           Validators.required,
         ],
         dist_id: [
-          { value: '', disabled: this.disableDistId },
+          {value: '', disabled: this.disableDistId},
           Validators.required,
         ],
         sect_id: ['', Validators.required],
@@ -140,19 +135,19 @@ export class AddFarmerRequestComponent
         village_id: ['', Validators.required],
       }),
       location_if_upi: this.formBuilder.group({
-        prov_id: [{ value: '', disabled: true }],
-        dist_id: [{ value: '', disabled: true }],
-        sect_id: [{ value: '', disabled: true }],
-        cell_id: [{ value: '', disabled: true }],
-        village_id: [{ value: '', disabled: true }],
+        prov_id: [{value: '', disabled: true}],
+        dist_id: [{value: '', disabled: true}],
+        sect_id: [{value: '', disabled: true}],
+        cell_id: [{value: '', disabled: true}],
+        village_id: [{value: '', disabled: true}],
       }),
       upiNumber: [''],
       landOwner: [''],
       longitudeCoordinate: [''],
       latitudeCoordinate: [''],
       active: [''],
-      treeAges: new FormArray([]),
-      certificates: new FormArray([]),
+      treeAges: new UntypedFormArray([]),
+      certificates: new UntypedFormArray([]),
       numberOfTrees: ['', [Validators.required, Validators.pattern('[0-9]*')]],
     });
     this.farmService.listTreeVarieties().subscribe((data) => {
@@ -160,8 +155,7 @@ export class AddFarmerRequestComponent
       this.createAgeRanges();
     });
     this.currentSeason = this.authenticationService.getCurrentSeason();
-    this.isUserDistrictCashCrop =
-      this.authorisationService.isDistrictCashCropOfficer();
+    this.isUserDistrictCashCrop = this.authorisationService.isDistrictCashCropOfficer();
     this.isUserSiteManager = this.authorisationService.isSiteManager();
     this.isUserCWSOfficer = this.authorisationService.isCWSUser();
     this.user = this.authenticationService.getCurrentUser();
@@ -186,10 +180,11 @@ export class AddFarmerRequestComponent
         .subscribe((data) => {
           this.provinceValue = data.content.location.prov_id._id;
           this.districtValue = data.content.location.dist_id._id;
+          this.setDisabledLocation();
           this.locationService
             .getDistricts(data.content.location.prov_id._id)
             .subscribe((districts) => {
-              this.districts.push(districts);
+              this.districts = districts;
             });
           const temp = [];
           data.content.coveredSectors.map((sector) => {
@@ -198,33 +193,29 @@ export class AddFarmerRequestComponent
               name: sector.sectorId.name,
             });
           });
-          this.sectors.push(temp);
-          // (this.createForm.controls.requests as FormArray).push(
-          //   this.createRequest()
-          // );
+          this.sectors = temp;
         });
     } else if (this.isUserDistrictCashCrop) {
       this.provinceValue =
         this.authenticationService.getCurrentUser().info.location.prov_id;
       this.districtValue =
         this.authenticationService.getCurrentUser().info.location.dist_id;
+      this.setDisabledLocation();
       this.locationService
         .getDistricts(
           this.authenticationService.getCurrentUser().info.location.prov_id
         )
         .subscribe((districts) => {
-          this.districts.push(districts);
+          this.districts = districts;
         });
       this.locationService
         .getSectors(
           this.authenticationService.getCurrentUser().info.location.dist_id
         )
         .subscribe((sectors) => {
-          this.sectors.push(sectors);
+          this.sectors = sectors;
         });
-      // (this.createForm.controls.requests as FormArray).push(
-      //   this.createRequest()
-      // );
+
     } else if (this.isUserSiteManager && !this.isUserCWSOfficer) {
       this.siteService
         .get(
@@ -234,13 +225,11 @@ export class AddFarmerRequestComponent
           this.site = site.content;
           this.provinceValue = this.site.location.prov_id._id;
           this.districtValue = this.site.location.dist_id._id;
+          this.setDisabledLocation();
           this.locationService
             .getDistricts(this.site.location.prov_id._id)
             .subscribe((districts) => {
-              this.districts.push(districts);
-              // (this.createForm.controls.requests as FormArray).push(
-              //   this.createRequest()
-              // );
+              this.districts = districts ;
             });
           const temp = [];
           this.site.coveredAreas.coveredSectors.map((sector) => {
@@ -249,14 +238,9 @@ export class AddFarmerRequestComponent
               name: sector.name,
             });
           });
-          this.sectors.push(temp);
+          this.sectors = temp;
         });
-    } else {
-      // (this.createForm.controls.requests as FormArray).push(
-      //   this.createRequest()
-      // );
     }
-
     this.initial();
     this.onChange();
   }
@@ -266,7 +250,7 @@ export class AddFarmerRequestComponent
   }
 
   formTreeVarieties(i: number) {
-    return this.formTreeAges.at(i).get('varieties') as FormArray;
+    return this.formTreeAges.at(i).get('varieties') as UntypedFormArray;
   }
 
   addTreeVariety(i: number) {
@@ -285,7 +269,7 @@ export class AddFarmerRequestComponent
         this.formBuilder.group({
           range,
           numOfTrees: [0],
-          varieties: new FormArray([]),
+          varieties: new UntypedFormArray([]),
         })
       );
       this.treeVarieties.forEach((variety, t) => {
@@ -300,7 +284,7 @@ export class AddFarmerRequestComponent
     });
   }
 
-  createCertificate(): FormGroup {
+  createCertificate(): UntypedFormGroup {
     return this.formBuilder.group({
       name: [''],
       identificationNumber: [''],
@@ -308,18 +292,18 @@ export class AddFarmerRequestComponent
   }
 
   addCertificate() {
-    (this.createForm.controls.certificates as FormArray).push(
+    (this.createForm.controls.certificates as UntypedFormArray).push(
       this.createCertificate()
     );
   }
 
   removeCertificate(index: number) {
-    (this.createForm.controls.certificates as FormArray).removeAt(index);
+    (this.createForm.controls.certificates as UntypedFormArray).removeAt(index);
   }
 
-  getCertificateFormGroup(index): FormGroup {
-    this.certificates = this.createForm.get('certificates') as FormArray;
-    return this.certificates.controls[index] as FormGroup;
+  getCertificateFormGroup(index): UntypedFormGroup {
+    this.certificates = this.createForm.get('certificates') as UntypedFormArray;
+    return this.certificates.controls[index] as UntypedFormGroup;
   }
 
   updateList(i: number, v: number) {
@@ -330,7 +314,7 @@ export class AddFarmerRequestComponent
     this.formTreeAges
       .at(i)
       .get('numOfTrees')
-      .setValue(sum, { emitEvent: true });
+      .setValue(sum, {emitEvent: true});
     if (this.formTreeVarieties(i).at(v).get('number').value !== 0) {
       this.formTreeVarieties(i).at(v).get('selected').setValue(true);
     } else {
@@ -343,9 +327,8 @@ export class AddFarmerRequestComponent
     this.showUPILocations = false;
 
     if (upi.length > 0) {
-      this.createForm.controls.upiNumber.setErrors({ invalid: true });
+      this.createForm.controls.upiNumber.setErrors({invalid: true});
     }
-    // this.initial();
     this.checkIfUpiinValidZoning = {
       prov_id: true,
       dist_id: true,
@@ -391,13 +374,13 @@ export class AddFarmerRequestComponent
 
               if (this.province.province_id !== this.org.location.prov_id._id) {
                 this.checkIfUpiinValidZoning.prov_id = false
-                this.createForm.controls.upiNumber.setErrors({ Invalid: true });
+                this.createForm.controls.upiNumber.setErrors({Invalid: true});
               } else if (this.province.district_id !== this.org.location.dist_id._id) {
                 this.checkIfUpiinValidZoning.dist_id = false
-                this.createForm.controls.upiNumber.setErrors({ Invalid: true });
+                this.createForm.controls.upiNumber.setErrors({Invalid: true});
               } else if (!villagesSet.includes(this.province.village_id)) { // If yes, use location.
                 this.checkIfUpiinValidZoning.village_id = false
-                this.createForm.controls.upiNumber.setErrors({ Invalid: true });
+                this.createForm.controls.upiNumber.setErrors({Invalid: true});
               } else {
 
                 this.provinces = [{
@@ -450,130 +433,6 @@ export class AddFarmerRequestComponent
 
   titleCase(word: string) {
     return word[0].toUpperCase() + word.substr(1).toLowerCase();
-  }
-
-  getLocationInput(i: number, field: string) {
-    return this.getRequestsFormGroup(i).controls.location.get(field);
-  }
-
-  createRequest(): FormGroup {
-    return this.formBuilder.group({
-      numberOfTrees: [
-        '',
-        [Validators.required, Validators.min(1), Validators.pattern('[0-9]*')],
-      ],
-      fertilizer_need: [''],
-      fertilizer_allocate: [0],
-      location: this.formBuilder.group({
-        prov_id: [
-          { value: this.provinceValue, disabled: this.disableProvId },
-          Validators.required,
-        ],
-        dist_id: [
-          { value: this.districtValue, disabled: this.disableDistId },
-          Validators.required,
-        ],
-        sect_id: ['', Validators.required],
-        cell_id: ['', Validators.required],
-        village_id: ['', Validators.required],
-      }),
-    });
-  }
-
-  addRequest() {
-    (this.createForm.controls.requests as FormArray).push(this.createRequest());
-    this.locationService.getProvinces().subscribe((data) => {
-      this.provinces = data;
-    });
-    if (this.isUserDistrictCashCrop) {
-      this.locationService
-        .getDistricts(
-          this.authenticationService.getCurrentUser().info.location.prov_id
-        )
-        .subscribe((districts) => {
-          this.districts.push(districts);
-        });
-      this.locationService
-        .getSectors(
-          this.authenticationService.getCurrentUser().info.location.dist_id
-        )
-        .subscribe((sectors) => {
-          this.sectors.push(sectors);
-        });
-    } else if (this.isUserSiteManager) {
-      this.locationService
-        .getDistricts(this.site.location.prov_id)
-        .subscribe((districts) => {
-          this.districts.push(districts);
-        });
-      const temp = [];
-      this.site.coveredAreas.coveredSectors.map((sector) => {
-        temp.push({
-          _id: sector.sect_id,
-          name: sector.name,
-        });
-      });
-      this.sectors.push(temp);
-    }
-  }
-
-  removeRequest(index: number) {
-    (this.createForm.controls.requests as FormArray).removeAt(index);
-  }
-
-  getRequestsFormGroup(index): FormGroup {
-    this.requestList = this.createForm.get('requests') as FormArray;
-    return this.requestList.controls[index] as FormGroup;
-  }
-
-  onChangeProvince(index: number) {
-    const value = this.getRequestsFormGroup(index).controls.location.get(
-      'prov_id'.toString()
-    ).value;
-    if (value !== '') {
-      this.locationService.getDistricts(value).subscribe((data) => {
-        this.districts[index] = data;
-        this.sectors[index] = [];
-        this.cells[index] = [];
-        this.villages[index] = [];
-      });
-    }
-  }
-
-  onChangeDistrict(index: number) {
-    const value = this.getRequestsFormGroup(index).controls.location.get(
-      'dist_id'.toString()
-    ).value;
-    if (value !== '') {
-      this.locationService.getSectors(value).subscribe((data) => {
-        this.sectors[index] = data;
-        this.cells[index] = [];
-        this.villages[index] = [];
-      });
-    }
-  }
-
-  onChangeSector(index: number) {
-    const value = this.getRequestsFormGroup(index).controls.location.get(
-      'sect_id'.toString()
-    ).value;
-    if (value !== '') {
-      this.locationService.getCells(value).subscribe((data) => {
-        this.cells[index] = data;
-        this.villages[index] = [];
-      });
-    }
-  }
-
-  onChangeCell(index: number) {
-    const value = this.getRequestsFormGroup(index).controls.location.get(
-      'cell_id'.toString()
-    ).value;
-    if (value !== '') {
-      this.locationService.getVillages(value).subscribe((data) => {
-        this.villages[index] = data;
-      });
-    }
   }
 
   onSubmit() {
@@ -647,35 +506,6 @@ export class AddFarmerRequestComponent
     }
   }
 
-  filterCustomSectors(org: any, index: number) {
-    const temp = [];
-    org.coveredSectors.map((sector) => {
-      temp.push({
-        _id: sector.sectorId._id,
-        name: sector.sectorId.name,
-      });
-    });
-    this.sectors[index] = temp;
-  }
-
-  filterCustomCells(org: any, index: number) {
-    const temp = [];
-    const sectorId = this.getRequestsFormGroup(index).controls.location.get(
-      'sect_id'.toString()
-    ).value;
-    const i = org.coveredSectors.findIndex(
-      (element) => element.sectorId._id === sectorId
-    );
-    const sector = org.coveredSectors[i];
-    sector.coveredCells.map((cell) => {
-      temp.push({
-        _id: cell.cell_id,
-        name: cell.name,
-      });
-    });
-    this.cells[index] = temp;
-  }
-
   validateNumbers(value: any) {
     const numberOfTrees = this.createForm.controls.numberOfTrees.value;
     const sumAllNumOfTrees = value
@@ -691,18 +521,6 @@ export class AddFarmerRequestComponent
   }
 
   onChange() {
-    this.createForm.controls.location
-      .get('prov_id'.toString())
-      .valueChanges.subscribe((value) => {
-        if (value !== '') {
-          this.locationService.getDistricts(value).subscribe((data) => {
-            this.districts = data;
-            this.sectors = null;
-            this.cells = null;
-            this.villages = null;
-          });
-        }
-      });
     this.createForm.controls.treeAges.valueChanges.subscribe((value) => {
       if (value !== null) {
         this.validForm = this.validateNumbers(value);
@@ -717,73 +535,126 @@ export class AddFarmerRequestComponent
         this.save = this.validForm;
       }
     });
-    this.createForm.controls.location
-      .get('dist_id'.toString())
-      .valueChanges.subscribe((value) => {
-        if (value !== '') {
-          this.locationService.getSectors(value).subscribe((data) => {
-            this.sectors = data;
+    this.createForm.controls.location.get('prov_id'.toString()).valueChanges.subscribe(
+      (value) => {
+        if (value !== null) {
+          this.locationService.getDistricts(value).subscribe((data) => {
+            this.districts = data;
+            this.sectors = null;
             this.cells = null;
             this.villages = null;
           });
         }
-      });
-    this.createForm.controls.location
-      .get('sect_id'.toString())
-      .valueChanges.subscribe((value) => {
-        if (value !== '') {
-          this.locationService.getCells(value).subscribe((data) => {
-            this.cells = data;
-            this.villages = null;
-          });
+      }
+    );
+    this.createForm.controls.location.get('dist_id'.toString()).valueChanges.subscribe(
+      (value) => {
+        if (value !== null) {
+          if (this.isUserSiteManager && (!this.isUserCWSOfficer)) {
+            const temp = [];
+            this.site.coveredAreas.coveredSectors.map((sector) => {
+              temp.push({
+                _id: sector.sect_id,
+                name: sector.name
+              });
+            });
+            this.sectors = temp;
+          } else if (this.isUserCWSOfficer) {
+            this.filterCustomSectors(this.org);
+          } else {
+            this.locationService.getSectors(value).subscribe((data) => {
+              this.sectors = data;
+            });
+          }
+          this.cells = null;
+          this.villages = null;
         }
-      });
-    this.createForm.controls.location
-      .get('cell_id'.toString())
-      .valueChanges.subscribe((value) => {
-        if (value !== '') {
+      }
+    );
+    this.createForm.controls.location.get('sect_id'.toString()).valueChanges.subscribe(
+      (value) => {
+        if (value !== null) {
+          if (this.isUserCWSOfficer) {
+            this.filterCustomCells(this.org);
+          } else {
+            this.locationService.getCells(value).subscribe((data) => {
+              this.cells = data;
+            });
+          }
+          this.villages = null;
+        }
+      }
+    );
+    this.createForm.controls.location.get('cell_id'.toString()).valueChanges.subscribe(
+      (value) => {
+        if (value !== null) {
           this.locationService.getVillages(value).subscribe((data) => {
-            this.villages = data;
+            if (this.isUserCWSOfficer) {
+              this.filterCustomVillages(this.org, data);
+            } else {
+              this.villages = data;
+            }
           });
         }
+      }
+    );
+  }
+  filterCustomSectors(org: any) {
+    const temp = [];
+    org.coveredSectors.map((sector) => {
+      temp.push({
+        _id: sector.sectorId._id,
+        name: sector.sectorId.name
       });
+    });
+    this.sectors = temp;
   }
 
-  initial() {
-    this.locationService.getProvinces().subscribe((data) => {
-      this.provinces = data;
-      this.locationService
-        .getDistricts(this.org.location.prov_id._id)
-        .subscribe((dt) => {
-          this.districts = dt;
-          this.createForm.controls.location
-            .get('prov_id'.toString())
-            .patchValue(this.org.location.prov_id._id, { emitEvent: false });
-          this.createForm.controls.location
-            .get('dist_id'.toString())
-            .patchValue(this.org.location.dist_id._id, { emitEvent: false });
-          this.sectors = this.filterZoningSectors(this.org.coveredSectors);
-        });
+  filterCustomCells(org: any) {
+    const temp = [];
+    const sectorId = this.createForm.controls.location.get('sect_id'.toString()).value;
+    const i = org.coveredSectors.findIndex(element => element.sectorId._id === sectorId);
+    const sector = org.coveredSectors[i];
+    sector.coveredCells.map((cell) => {
+      temp.push({
+        _id: cell.cell_id,
+        name: cell.name
+      });
     });
+    this.cells = temp;
+    console.log(this.cells);
   }
 
   filterCustomVillages(org: any, villages: any) {
     const temp = [];
-    const sectorId = this.createForm.controls.location.get(
-      'sect_id'.toString()
-    ).value;
-    const i = org.coveredSectors.findIndex(
-      (element) => element.sectorId._id === sectorId
-    );
+    const sectorId = this.createForm.controls.location.get('sect_id'.toString()).value;
+    const i = org.coveredSectors.findIndex(element => element.sectorId._id === sectorId);
     const sector = org.coveredSectors[i];
     sector.coveredVillages.map((village) => {
-      if (villages.findIndex((el) => el._id === village.village_id)) {
+      if (villages.findIndex(el => el._id === village.village_id) !== -1) {
         temp.push({
           _id: village.village_id,
-          name: village.name,
+          name: village.name
         });
       }
     });
     this.villages = temp;
   }
+  initial() {
+    this.locationService.getProvinces().subscribe((data) => {
+      this.provinces = data;
+      this.setDisabledLocation();
+    });
+  }
+
+  setDisabledLocation() {
+    this.createForm.controls.location
+      .get('prov_id'.toString())
+      .patchValue(this.provinceValue, {emitEvent: false});
+
+    this.createForm.controls.location
+      .get('dist_id'.toString())
+      .patchValue(this.districtValue, {emitEvent: false});
+  }
+
 }

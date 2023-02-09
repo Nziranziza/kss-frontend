@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {AuthenticationService, AuthorisationService, OrganisationTypeService} from '../../../core';
 import {HelperService} from '../../../core';
 import {InputDistributionService} from '../../../core';
@@ -19,7 +19,7 @@ import {WarehouseDispatchEditComponent} from '../warehouse/warehouse-dispatch-ed
 
 export class SiteDistributionComponent extends BasicComponent implements OnInit {
 
-  constructor(private formBuilder: FormBuilder, private authenticationService: AuthenticationService,
+  constructor(private formBuilder: UntypedFormBuilder, private authenticationService: AuthenticationService,
               private organisationTypeService: OrganisationTypeService,
               private authorisationService: AuthorisationService,
               private inputDistributionService: InputDistributionService,
@@ -31,7 +31,7 @@ export class SiteDistributionComponent extends BasicComponent implements OnInit 
     super();
   }
 
-  getFarmerRequestsForm: FormGroup;
+  getFarmerRequestsForm: UntypedFormGroup;
   requests: any;
   regNumber: string;
   requestsOf: any;

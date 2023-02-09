@@ -17,28 +17,21 @@ import { ChannelListComponent } from './payment-channel/channel-list/channel-lis
 import { ChannelEditComponent } from './payment-channel/channel-edit/channel-edit.component';
 
 @NgModule({
-  declarations: [
-    SeasonParametersComponent,
-    CreateSeasonComponent,
-    EditSeasonComponent,
-    ChannelComponent,
-    CoffeeTypeComponent,
-    CoffeeTypeCreateComponent,
-    CoffeeTypeEditComponent,
-    DeleteTypeModal,
-    DistributionParametersComponent,
-    EditInputComponent,
-    EditSupplierComponent,
-    ChannelListComponent,
-    ChannelEditComponent,
-  ],
-  imports: [CommonModule, SettingsRoutingModule, SharedModule],
-  entryComponents: [
-    CreateSeasonComponent,
-    EditSeasonComponent,
-    EditSupplierComponent,
-    EditInputComponent,
-    DeleteTypeModal,
-  ]
+    declarations: [
+        SeasonParametersComponent,
+        CreateSeasonComponent,
+        EditSeasonComponent,
+        ChannelComponent,
+        CoffeeTypeComponent,
+        CoffeeTypeCreateComponent,
+        CoffeeTypeEditComponent,
+        DeleteTypeModal,
+        DistributionParametersComponent,
+        EditInputComponent,
+        EditSupplierComponent,
+        ChannelListComponent,
+        ChannelEditComponent,
+    ],
+    imports: [CommonModule, SettingsRoutingModule, SharedModule]
 })
 export class SettingsModule {}

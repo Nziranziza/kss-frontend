@@ -8,6 +8,7 @@
     </div>
   </div>
 </h3>
+<app-spinner [loading]="pageLoading"></app-spinner>
 <app-list-message [message]="message"></app-list-message>
 <app-list-errors [errorList]="errors"></app-list-errors>
 <div class="col-sm-12">
@@ -20,18 +21,18 @@
           </div>
           <div class="col-xs-2"></div>
         </div>
-        <div class="stats-box-text-item">{{ nurseries.length }}</div>
+        <div class="stats-box-text-item">{{ stats.sites | number }}</div>
       </div>
     </div>
     <div class="col-sm-2 small-spacing">
       <div class="stats-box">
         <div class="row">
           <div class="col-xs-10">
-            <div class="stats-box-text-header">Provided Seeds</div>
+            <div class="stats-box-text-header">Seeds Quantity</div>
           </div>
           <div class="col-xs-2"></div>
         </div>
-        <div class="stats-box-text-item">{{ seedsSum }} Kg</div>
+        <div class="stats-box-text-item">{{ stats.providedQty | number }} Kg</div>
       </div>
     </div>
     <div class="col-sm-2 small-spacing">
@@ -41,7 +42,7 @@
             <div class="stats-box-text-header">Expected Seedlings</div>
           </div>
         </div>
-        <div class="stats-box-text-item">{{ seedsSum * 2500 }}</div>
+        <div class="stats-box-text-item">{{ stats.expectedQty | number }}</div>
       </div>
     </div>
     <div class="col-sm-2 small-spacing">
@@ -51,19 +52,19 @@
             <div class="stats-box-text-header">Pricked Out Seedlings</div>
           </div>
         </div>
-        <div class="stats-box-text-item">{{ prickedSum }}</div>
+        <div class="stats-box-text-item">{{ stats.prickedQty | number }}</div>
       </div>
     </div>
     <div class="col-sm-2 small-spacing">
       <div class="stats-box">
         <div class="row">
           <div class="col-xs-10">
-            <div class="stats-box-text-header">Success Rate</div>
+            <div class="stats-box-text-header">Germination Rate</div>
           </div>
           <div class="col-xs-2"></div>
         </div>
         <div class="stats-box-text-item">
-          {{ (prickedSum * 100) / (seedsSum * 2500) | number: "1.2-2" }}%
+          {{ stats.germinationRate | number: "1.2-2" }}%
         </div>
       </div>
     </div>
@@ -74,7 +75,7 @@
             <div class="stats-box-text-header">Distributed Seedlings</div>
           </div>
         </div>
-        <div class="stats-box-text-item">{{ distributeSum }}</div>
+        <div class="stats-box-text-item">{{ stats.distributedQty | number }}</div>
       </div>
     </div>
   </div>
@@ -90,11 +91,17 @@
               <th>Date Added</th>
               <th>Name</th>
               <th>Owner</th>
-              <th>Location</th>
+              <th>Province</th>
+              <th>District</th>
+              <th>Sector</th>
+              <th>Cell</th>
+              <th>Village</th>
               <th>Seedlings Variety</th>
-              <th>Seeds Amount</th>
+              <th>Seeds Quantity</th>
+              <th>Pricked Out Quantity</th>
+              <th>Distributed Quantity</th>
               <th>Status</th>
-              <th style="width:18%" class="text-center">Actions</th>
+              <th class="text-center">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -103,11 +110,17 @@
                 <td>{{ nursery.createdAt | date: "short" }}</td>
                 <td>{{ nursery.nurseryName }}</td>
                 <td>{{ nursery.owner.name }}</td>
+                <td>{{ nursery.location.prov_id.name || nursery.location.prov_id.namek | titlecase }}</td>
+                <td>{{ nursery.location.dist_id.name }}</td>
+                <td>{{ nursery.location.sect_id.name }}</td>
                 <td>{{ nursery.location.cell_id.name }}</td>
+                <td>{{ nursery.location.village_id.name }}</td>
                 <td>{{ nursery.stocks.length }} Variety</td>
-                <td>{{ totalSeeds[i] }} Kg</td>
+                <td>{{ nursery.stockQty | number }} Kg</td>
+                <td>{{ nursery.prickedQty | number }}</td>
+                <td>{{ nursery.distributedQty | number }}</td>
                 <td>{{ nursery.status || "Active" }}</td>
-                <td style="width:18%" class="text-center">
+                <td class="text-center">
                   <button appRequiredSeason class="btn btn-action-no-border btn-margin details-button"
                     (click)="openViewModal(nursery._id)">
                     <em class="fa fa-eye"></em>

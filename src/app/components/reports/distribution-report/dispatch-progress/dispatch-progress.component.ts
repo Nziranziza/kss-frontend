@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Subject } from 'rxjs';
 import {
   AuthenticationService,
@@ -26,7 +26,7 @@ export class DispatchProgressComponent
   extends BasicComponent
   implements OnInit {
   title = 'Distribution progress';
-  checkProgressForm: FormGroup;
+  checkProgressForm: UntypedFormGroup;
   errors: any;
   loading = false;
   message: string;
@@ -56,7 +56,7 @@ export class DispatchProgressComponent
   };
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private siteService: SiteService,
     private authorisationService: AuthorisationService,
     private authenticationService: AuthenticationService,

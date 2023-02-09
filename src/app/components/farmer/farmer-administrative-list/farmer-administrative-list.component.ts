@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {Router} from '@angular/router';
 import {
   AuthenticationService,
@@ -22,7 +22,7 @@ import {BasicComponent} from '../../../core';
 export class FarmerAdministrativeListComponent extends BasicComponent implements OnInit {
 
   title = 'Farmers administrative list';
-  filterForm: FormGroup;
+  filterForm: UntypedFormGroup;
   provinces: any;
   districts: any;
   sectors: any;
@@ -54,7 +54,7 @@ export class FarmerAdministrativeListComponent extends BasicComponent implements
   };
   printable: any;
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(private formBuilder: UntypedFormBuilder,
               private router: Router, private organisationService: OrganisationService,
               private authorisationService: AuthorisationService,
               private authenticationService: AuthenticationService,

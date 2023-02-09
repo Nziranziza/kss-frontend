@@ -1,10 +1,10 @@
 FROM ubuntu:20.04
 RUN apt-get update && apt-get install -y sudo
 RUN adduser --disabled-password \
---gecos '' docker-deployer
+    --gecos '' docker-deployer
 RUN adduser docker-deployer sudo
 RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> \
-/etc/sudoers
+    /etc/sudoers
 
 USER docker-deployer
 RUN sudo apt-get update && \
@@ -14,7 +14,7 @@ RUN sudo apt-get update && \
     curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash - && \
     sudo apt-get install -y nodejs && \
     sudo apt-get update -y && sudo apt upgrade -y && \
-    sudo npm install -g @angular/cli
+    sudo npm install @angular/cli@14.2.10 -g
 
 
 RUN sudo apt-get update && \
@@ -35,6 +35,7 @@ COPY --chown=docker-deployer:docker-deployer . .
 EXPOSE 5050
 
 RUN npm i --legacy-peer-deps
-RUN ng build --prod --aot --configuration=production
+
+RUN ng build --aot --configuration production
 
 RUN sudo service nginx restart

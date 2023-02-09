@@ -1,0 +1,30 @@
+/*------------------------------------ expendable dataTable --------------------------------------*/
+
+.details-row {
+  &-title {
+    font-size: 12px !important;
+    font-weight: bolder;
+    margin-left: 25px;
+
+    &-sm {
+      font-size: 14px !important;
+      font-weight: bolder;
+      margin-left: 15px;
+    }
+
+  }
+
+  &-data {
+    font-size: 12px !important;
+
+    &-sm {
+      font-size: 14px !important;
+    }
+  }
+}
+
+.spinner-container {
+  text-align: center;
+  vertical-align: middle;
+  display: table-cell;
+}

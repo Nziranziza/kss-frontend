@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {
   AuthenticationService,
@@ -24,10 +24,10 @@ import { Subject } from 'rxjs';
   ],
 })
 export class ScheduleFarmVisitComponent extends BasicComponent implements OnInit {
-  scheduleVisit: FormGroup;
+  scheduleVisit: UntypedFormGroup;
   scrollStrategy: ScrollStrategy;
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private modalService: NgbModal,
     private groupService: GroupService,
     private authenticationService: AuthenticationService,
@@ -81,6 +81,7 @@ export class ScheduleFarmVisitComponent extends BasicComponent implements OnInit
       }),
       startTime: ['', Validators.required],
       endTime: ['', Validators.required],
+      isNotApplied: ['', Validators.required],
     });
     this.newDate.setDate(this.newDate.getDate() - 1);
 
@@ -88,7 +89,7 @@ export class ScheduleFarmVisitComponent extends BasicComponent implements OnInit
       singleSelection: false,
       idField: '_id',
       textField: 'name',
-      enableCheckAll: false,
+      enableCheckAll: true,
       selectAllText: 'Select All',
       unSelectAllText: 'UnSelect All',
       itemsShowLimit: 6,
@@ -135,10 +136,17 @@ export class ScheduleFarmVisitComponent extends BasicComponent implements OnInit
     );
     gapSelected.setValue(gapOptions, { emitEvent: false });
   }
+
   onGapSelectAll(items: any) {
     const gapSelected = this.scheduleVisit.get('adoptionGap'.toString());
-    gapSelected.setValue(items, { emitEvent: false });
+    this.gaps = this.gaps.filter((e) => e._id !== '');
+    gapSelected.setValue(items.filter((e) => e._id !== ''), { emitEvent: false });
   }
+
+  onGapDeSelectAll(items: any) {
+    const gapSelected = this.scheduleVisit.get('adoptionGap'.toString());
+  }
+
 
   getFarms(groupName: string) {
     const data = {
@@ -254,12 +262,7 @@ export class ScheduleFarmVisitComponent extends BasicComponent implements OnInit
   getGaps(): void {
     this.loading = true;
     this.gapService.all().subscribe((data) => {
-      const newData: any[] = [
-        {
-          _id: '',
-          name: 'Not Applied',
-        },
-      ];
+      const newData: any[] = [];
       data.data.forEach((newdata) => {
         newData.push({ _id: newdata._id, name: newdata.gap_name });
       });
@@ -273,6 +276,22 @@ export class ScheduleFarmVisitComponent extends BasicComponent implements OnInit
       .get('farmerGroup'.toString())
       .valueChanges.subscribe((value) => {
         this.getFarms(value);
+      });
+      this.scheduleVisit
+      .get('isNotApplied'.toString())
+      .valueChanges.subscribe((value) => {
+        if (value === 'no') {
+          const gapSelected = this.scheduleVisit.get('adoptionGap'.toString());
+          gapSelected.setValue(
+            [
+              {
+                _id: '',
+                name: 'Not Applied',
+              },
+            ],
+            { emitEvent: false }
+          );
+        }
       });
   }
 

@@ -1,6 +1,6 @@
 import {Component, Inject, Injector, Input, OnInit, PLATFORM_ID} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
-import {FormArray, FormBuilder, FormGroup} from '@angular/forms';
+import {UntypedFormArray, UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {AuthenticationService} from '../../../../core/services';
 import {HelperService} from '../../../../core/helpers';
 import {InputDistributionService} from '../../../../core/services';
@@ -16,13 +16,13 @@ export class ConfirmDispatchComponent implements OnInit {
 
   modal: NgbActiveModal;
   @Input() dispatch;
-  confirmForm: FormGroup;
+  confirmForm: UntypedFormGroup;
   errors: string [];
   message: string;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
-    private injector: Injector, private formBuilder: FormBuilder,
+    private injector: Injector, private formBuilder: UntypedFormBuilder,
     private authenticationService: AuthenticationService,
     private messageService: MessageService,
     private helper: HelperService, private inputDistributionService: InputDistributionService) {
@@ -34,13 +34,13 @@ export class ConfirmDispatchComponent implements OnInit {
 
   ngOnInit(): void {
     this.confirmForm = this.formBuilder.group({
-      entries: new FormArray([]),
+      entries: new UntypedFormArray([]),
     });
     const temp = [];
     this.dispatch.entries.forEach((entry) => {
       temp.push({
         entryId : entry._id,
-        receivedQty: (entry.numberOfItems *  entry.quantityPerItem),
+        receivedQty: (entry.numberOfItems * entry.quantityPerItem),
         comment: ''
       });
       this.addEntry();
@@ -49,14 +49,14 @@ export class ConfirmDispatchComponent implements OnInit {
   }
 
   get formEntries() {
-    return this.confirmForm.controls.entries as FormArray;
+    return this.confirmForm.controls.entries as UntypedFormArray;
   }
 
   addEntry() {
     (this.formEntries).push(this.createEntry());
   }
 
-  createEntry(): FormGroup {
+  createEntry(): UntypedFormGroup {
     return this.formBuilder.group({
       entryId: [''],
       receivedQty: [''],

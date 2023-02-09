@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 
@@ -13,7 +13,7 @@ import { BasicComponent, GapService, HelperService, MessageService } from '../..
 export class GapCreateComponent
   extends BasicComponent
   implements OnInit, OnDestroy {
-  createForm: FormGroup;
+  createForm: UntypedFormGroup;
   approachs = [
     { id: 'mark_input', name: 'Marks Input' },
     { id: 'multiple_single', name: 'Multiple Choice - Single' },
@@ -25,9 +25,11 @@ export class GapCreateComponent
   ];
   loading = false;
   gapTotalWeight = 100 - parseInt(this.cookieService.get('gapTotal-weight'), 10);
+  scoreStatus = [false, 0, 0, false];
+  answerScoreExceeded = false;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private helperService: HelperService,
     private gapService: GapService,
     private messageService: MessageService,
@@ -44,7 +46,7 @@ export class GapCreateComponent
   // FORMERLY formCategory
 
   get getQuestionSections() {
-    return this.createForm.get('sections') as FormArray;
+    return this.createForm.get('sections') as UntypedFormArray;
   }
 
   get gapGame() {
@@ -67,7 +69,7 @@ export class GapCreateComponent
     this.createForm = this.formBuilder.group({
       gap_name: ['', Validators.required],
       // description: ['Check whether is pruning correctly.', Validators.required],
-      sections: new FormArray([], Validators.required),
+      sections: new UntypedFormArray([], Validators.required),
       gap_weight: [0, [Validators.required, Validators.max(this.gapTotalWeight)]],
       gap_score: [100, Validators.required],
       picture_text: ['', Validators.required]
@@ -78,11 +80,12 @@ export class GapCreateComponent
 
     this.initial();
     this.setMessage(this.messageService.getMessage());
+    this.onChanges();
   }
 
   // Method Add a new question section to the GAP form
   addQuestionSection() {
-    const sections = (this.createForm.controls.sections as FormArray);
+    const sections = (this.createForm.controls.sections as UntypedFormArray);
     sections.push(this.createQuestionSection());
     this.addQuestionToSection(sections.length - 1);
   }
@@ -92,46 +95,84 @@ export class GapCreateComponent
   }
 
   // Method creates a new Form Group for a question
-  createQuestionSection(): FormGroup {
+  createQuestionSection(): UntypedFormGroup {
     return this.formBuilder.group({
       section_name: ['', Validators.required],
-      questions: new FormArray([])
+      questions: new UntypedFormArray([])
     });
   }
 
   // Method Add a new question section to the GAP form
   addQuestionToSection(sectionIndex) {
-    const section = (this.createForm.controls.sections as FormArray).controls[
+    const section = (this.createForm.controls.sections as UntypedFormArray).controls[
       sectionIndex
-    ] as FormGroup;
-
-    (section.controls.questions as FormArray).push(this.createQuestion());
+    ] as UntypedFormGroup;
+    (section.controls.questions as UntypedFormArray).push(this.createQuestion());
   }
 
-  createQuestion(): FormGroup {
+  createQuestion(): UntypedFormGroup {
     return this.formBuilder.group({
       question: ['', Validators.required],
       description: ['', Validators.required],
       question_type: ['', Validators.required],
-      weight: ['', Validators.required],
-      answers: new FormArray([]),
+      weight: [0, Validators.required],
+      answers: new UntypedFormArray([]),
       is_not_applicable: [false]
     });
   }
 
-  addAnswersToQuestion(sectionIndex, qstIndex) {
-    const section = (this.createForm.controls.sections as FormArray).controls[
-      sectionIndex
-    ] as FormGroup;
-    const question = (section.controls.questions as FormArray).controls[qstIndex] as FormGroup;
-    (question.controls.answers as FormArray).push(this.createAnswer());
+  // validate question score to overall score
+
+  validateScore(value: any) {
+    const totalScore = this.getGapScore.value;
+    let currentIndex = 0;
+    let parentIndex = 0;
+    let marks = 0;
+
+    // calculate total question score
+
+    console.log(value);
+    const sumAllWeight = value.map((item, i) => {
+      parentIndex = i;
+      this.answerScoreExceeded = false;
+      const sum = item.questions.map((newWeight, index) => {
+        let currScore = 0;
+        currentIndex = index;
+        if (newWeight.weight) {
+          currScore = parseInt(newWeight.weight, 10);
+        }
+        if (newWeight.answers.length > 0) {
+          newWeight.answers.map((answer) => {
+            if (answer.weight > newWeight.weight) {
+              this.answerScoreExceeded = true;
+            }
+          })
+        }
+        return currScore;
+      }).reduce((currSum, prevSum) => currSum + prevSum, 0);
+      return sum
+    }).reduce((partialSum, a) => partialSum + a, 0);
+    if (totalScore - sumAllWeight <= 100) {
+      marks = totalScore - sumAllWeight;
+    }
+
+    // compare gap score and total question score and return current question
+    return [(totalScore !== sumAllWeight), currentIndex, parentIndex, marks > 0 ? true : false];
   }
 
-  createAnswer(): FormGroup {
+  addAnswersToQuestion(sectionIndex, qstIndex) {
+    const section = (this.createForm.controls.sections as UntypedFormArray).controls[
+      sectionIndex
+    ] as UntypedFormGroup;
+    const question = (section.controls.questions as UntypedFormArray).controls[qstIndex] as UntypedFormGroup;
+    (question.controls.answers as UntypedFormArray).push(this.createAnswer());
+  }
+
+  createAnswer(): UntypedFormGroup {
     return this.formBuilder.group({
       answer: ['', Validators.required],
       description: ['', Validators.required],
-      weight: [20, Validators.required],
+      weight: [0, Validators.required],
       is_not_applicable: [false, Validators.required]
     });
   }
@@ -161,7 +202,7 @@ export class GapCreateComponent
 
   onQuestionTypeSelected(sectionIndex: number, qstIndex: number) {
     const questions = this.getSectionQuestions(sectionIndex).controls;
-    const question = questions[qstIndex] as FormGroup;
+    const question = questions[qstIndex] as UntypedFormGroup;
 
     if (question.controls.question_type.value === 'multiple_single' || question.controls.question_type.value === 'multiple_apply') {
       this.removeAllQuestionAnswers(sectionIndex, qstIndex);
@@ -197,12 +238,12 @@ export class GapCreateComponent
     return this.getQuestionAnswers(sectionIndex, qstIndex).at(answIndex).get('is_not_applicable').value;
   }
 
-  getSectionQuestions(qIndex: number): FormArray {
-    return this.getQuestionSections.at(qIndex).get('questions') as FormArray;
+  getSectionQuestions(qIndex: number): UntypedFormArray {
+    return this.getQuestionSections.at(qIndex).get('questions') as UntypedFormArray;
   }
 
-  getQuestionAnswers(sectionIndex: number, qstIndex: number): FormArray {
-    return this.getSectionQuestions(sectionIndex).at(qstIndex).get('answers') as FormArray;
+  getQuestionAnswers(sectionIndex: number, qstIndex: number): UntypedFormArray {
+    return this.getSectionQuestions(sectionIndex).at(qstIndex).get('answers') as UntypedFormArray;
   }
 
   getQuestionType(sectionIndex: number, qstIndex: number) {
@@ -268,6 +309,12 @@ export class GapCreateComponent
   }
 
   initial() {
+  }
+
+  onChanges() {
+    this.getQuestionSections.valueChanges.subscribe((value) => {
+      this.scoreStatus = this.validateScore(value);
+    });
   }
 
   ngOnDestroy() {

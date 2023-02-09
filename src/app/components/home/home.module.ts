@@ -7,12 +7,11 @@ import { SharedModule} from '../../shared';
 
 
 @NgModule({
-  declarations: [HomeComponent, PrivacyPoliceComponent],
-  imports: [
-    CommonModule,
-    HomeRoutingModule,
-    SharedModule
-  ],
-  entryComponents: [PrivacyPoliceComponent]
+    declarations: [HomeComponent, PrivacyPoliceComponent],
+    imports: [
+        CommonModule,
+        HomeRoutingModule,
+        SharedModule
+    ]
 })
 export class HomeModule { }
