@@ -344,12 +344,16 @@ export class UserEditComponent implements OnInit {
       user['userRoles'.toString()] = selectedRoles;
       user['org_id'.toString()] = this.organisationId;
       user['id'.toString()] = this.id;
+
       if (this.isTechouseOrg) {
         user['userRoles'.toString()] = [0];
       }
-      if ((!(selectedRoles.includes(6)) && (!(selectedRoles.includes(8))))) {
+
+      // If user is not a district cash crop
+      if (!selectedRoles.includes(6)) {
         delete user.location;
       }
+      // If user is not an input distributor
       if (!selectedRoles.includes(8)) {
         delete user.distributionSite;
         delete user.accountExpirationDate;
@@ -360,7 +364,7 @@ export class UserEditComponent implements OnInit {
         _id: this.authenticationService.getCurrentUser().info._id,
         name: this.authenticationService.getCurrentUser().info.surname
       };
-      // delete user.userType;
+
       this.helper.cleanObject(user);
       this.helper.cleanObject(user.location);
       if (!((this.editUser.fullyEditable) && (this.editUser.email !== user.email))) {
