@@ -35,6 +35,7 @@ COPY --chown=docker-deployer:docker-deployer . .
 EXPOSE 5050
 
 RUN npm i --legacy-peer-deps
+
 RUN ng build --aot --configuration production
 
 RUN sudo service nginx restart
