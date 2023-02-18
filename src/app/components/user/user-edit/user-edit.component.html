@@ -78,12 +78,12 @@
                 </select>
               </div>
             </div>
-            <div class="col-xs-6" *ngIf="!isTechouseOrg">
+            <div class="col-xs-6">
               <label class="control-label label-required">Roles</label>
               <div class="checkbox" formArrayName="userRoles" *ngFor="let role of editForm.get('userRoles')['controls']; let i = index">
                 <!-- Remove reception team as possible role for individuals -->
-                <ng-container *ngIf="orgPossibleRoles[i].name.value !== 7">
-                <label>
+                <ng-container *ngIf="orgPossibleRoles[i].value !== 7">
+                  <label *ngIf="orgPossibleRoles[i].name != 'RECEPTION_TEAM' ">
                   <input type="checkbox" formControlName="{{i}}">
                   {{orgPossibleRoles[i].name}}
                 </label>

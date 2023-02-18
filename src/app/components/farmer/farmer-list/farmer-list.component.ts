@@ -179,6 +179,7 @@ export class FarmerListComponent
 
       this.helper.cleanObject(filter.searchByLocation);
       this.parameters['search'.toString()] = filter;
+      this.parameters.start = 0;
       this.farmerService.getFarmers(this.parameters, this.as).subscribe(
         (data) => {
           this.farmers = data.data;

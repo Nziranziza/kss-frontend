@@ -102,7 +102,7 @@
                   let i = index
                 "
               >
-                <label>
+                <label *ngIf="orgPossibleRoles[i].name != 'RECEPTION_TEAM' ">
                   <input
                     type="checkbox"
                     formControlName="{{ i }}"
