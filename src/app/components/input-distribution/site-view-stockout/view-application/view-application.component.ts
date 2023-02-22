@@ -32,6 +32,9 @@ export class ViewApplicationComponent
   @Input() stockOut;
   recipients = [];
   objectKeys = Object.keys;
+
+  totalReceived = 0;
+  totalApproved = 0;
   printStockOuts = [];
   errors: string[];
   message: string;
@@ -171,6 +174,8 @@ export class ViewApplicationComponent
         ),
         APPROVED_QTY: item.farmerApprovedQty,
       };
+      this.totalReceived = this.totalReceived + Number(item.quantity);
+      this.totalApproved = this.totalApproved + Number(item.farmerApprovedQty);
       this.printStockOuts.push(temp);
     });
   }
