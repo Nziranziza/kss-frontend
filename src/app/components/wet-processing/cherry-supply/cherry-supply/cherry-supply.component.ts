@@ -22,7 +22,9 @@ export class CherrySupplyComponent implements OnInit, OnDestroy, AfterViewInit {
               private userService: UserService,
               private datePipe: DatePipe,
               private modal: NgbModal,
-              private router: Router, private helper: HelperService,
+
+              private router: Router,
+              private helper: HelperService,
               private location: Location, private authenticationService: AuthenticationService) {
   }
 

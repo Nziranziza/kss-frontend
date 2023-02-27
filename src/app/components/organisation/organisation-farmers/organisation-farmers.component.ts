@@ -195,7 +195,7 @@ export class OrganisationFarmersComponent
         .subscribe(data => {
           data.content.map((item) => {
             const temp = {
-              NAMES: item.userInfo.surname + '  ' + item.userInfo.foreName,
+              NAMES: item.userInfo.type === 2 ? item.userInfo.groupName: item.userInfo.surname + '  ' + item.userInfo.foreName,
               SEX: item.userInfo.sex,
               NID: item.userInfo.NID,
               PHONE: item.userInfo.phone_number,
