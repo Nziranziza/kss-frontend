@@ -22,5 +22,4 @@ export * from './user.service';
 export * from './warehouse.service';
 export * from './farm.services';
 export * from './extension-services';
-
-
+export * from './services.service';

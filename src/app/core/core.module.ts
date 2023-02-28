@@ -25,6 +25,7 @@ import {FarmService} from './services';
 import {ConfirmDialogComponent} from './services/layouts/confirm-dialog/confirm-dialog.component';
 import {MatIconModule} from '@angular/material/icon';
 import {MatDialogModule} from '@angular/material/dialog';
+import { ServicesService } from './services';
 
 @NgModule({
     imports: [
@@ -50,6 +51,7 @@ import {MatDialogModule} from '@angular/material/dialog';
         PaymentService,
         CoveredAreaResolverService,
         FarmService,
+        ServicesService
         /*{provide: ErrorHandler, useClass: ErrorCustomHandler}*/
     ],
     declarations: [ConfirmDialogComponent]
