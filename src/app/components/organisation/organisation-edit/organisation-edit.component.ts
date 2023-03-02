@@ -5,7 +5,7 @@ import {AuthenticationService, AuthorisationService, OrganisationService, Organi
 import {HelperService} from '../../../core';
 import {LocationService} from '../../../core';
 import {MessageService} from '../../../core';
-import {BasicComponent} from '../../../core';
+import {BasicComponent, ServicesService} from '../../../core';
 
 @Component({
   selector: 'app-organisation-edit',
@@ -19,7 +19,9 @@ export class OrganisationEditComponent extends BasicComponent implements OnInit 
               private organisationService: OrganisationService, private locationService: LocationService,
               private authenticationService: AuthenticationService,
               private authorisationService: AuthorisationService,
-              private organisationTypeService: OrganisationTypeService, private messageService: MessageService) {
+              private organisationTypeService: OrganisationTypeService, 
+              private messageService: MessageService,
+              private servicesService: ServicesService) {
     super();
   }
 
@@ -50,6 +52,8 @@ export class OrganisationEditComponent extends BasicComponent implements OnInit 
   showPartners = false;
   hasExpiration = false;
   isUserDCC = false;
+  services: any = [];
+  selectedServices = [];
 
   ngOnInit() {
     if (this.authorisationService.isDistrictCashCropOfficer()) {
@@ -75,6 +79,7 @@ export class OrganisationEditComponent extends BasicComponent implements OnInit 
       coveredSectors: new UntypedFormArray([]),
       contractStartingDate: [''],
       contractEndingDate: [''],
+      services: new UntypedFormArray([])
     });
     this.organisationTypeService.all().subscribe(types => {
       this.genres = types.content;
@@ -190,6 +195,19 @@ export class OrganisationEditComponent extends BasicComponent implements OnInit 
           this.editForm.controls['genreId'.toString()].setValue(org.genreId);
           this.editForm.patchValue(org, {emitEvent: false});
         }
+        this.servicesService.all().subscribe(res => {
+          this.services = res.data;
+          this.services.map(({id: serviceId }) => {
+            const foundService = data.content.services.find(serv => serv.serviceId === serviceId);
+            if(foundService) {
+              const control = new UntypedFormControl(true);
+              (this.editForm.controls.services as UntypedFormArray).push(control);
+            } else {
+              const control = new UntypedFormControl(false);
+              (this.editForm.controls.services as UntypedFormArray).push(control);
+            }
+          })
+        })
       });
     });
   }
@@ -308,7 +326,6 @@ export class OrganisationEditComponent extends BasicComponent implements OnInit 
       if(this.isSuperOrg) {
         this.selectedRoles.push(0);
       }
-      console.log(selectedRoles);
       const selectedPartners = this.editForm.value.organizationPartner
         .map((checked, index) => checked ? this.partners[index]._id : null)
         .filter(value => value !== null);
@@ -316,6 +333,7 @@ export class OrganisationEditComponent extends BasicComponent implements OnInit 
       const org = JSON.parse(JSON.stringify(val));
       org['organizationRole'.toString()] = selectedRoles;
       org['organizationPartner'.toString()] = selectedPartners;
+      org['services'.toString()] = this.selectedServices
       if (!(selectedRoles.includes(1) || selectedRoles.includes(2))) {
         delete org.location;
       } else if (this.authorisationService.isDistrictCashCropOfficer()) {
@@ -371,6 +389,10 @@ export class OrganisationEditComponent extends BasicComponent implements OnInit 
   }
 
   onChanges() {
+    this.editForm.controls['services'.toString()].valueChanges.subscribe((data) => {
+      this.selectedServices = data.map((checked, index) => checked ? this.services[index].id : null)
+      .filter(serv => serv)
+    });
     this.editForm.controls['organizationPartner'.toString()].valueChanges.subscribe(
       (data) => {
         this.selectedPartners = data
