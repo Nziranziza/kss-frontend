@@ -7,24 +7,24 @@
         <div class="box-body">
           <app-loader *ngIf="loading"></app-loader>
           <div class="row">
-            <section *ngIf="!isGroup" id="personal">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label class="control-label label-required">Type</label>
-                  <div class="radio">
-                    <label>
-                      <input [value]="farmerTypes[0]" formControlName="type" type="radio" />
-                      Individual
-                    </label>
-                  </div>
-                  <div class="radio">
-                    <label>
-                      <input [value]="farmerTypes[1]" formControlName="type" type="radio" />
-                      Group
-                    </label>
-                  </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="control-label label-required">Type</label>
+                <div class="radio">
+                  <label>
+                    <input [value]="farmerTypes[0]" formControlName="type" type="radio" />
+                    Individual
+                  </label>
+                </div>
+                <div class="radio">
+                  <label>
+                    <input [value]="farmerTypes[1]" formControlName="type" type="radio" />
+                    Group
+                  </label>
                 </div>
               </div>
+            </div>
+            <section *ngIf="!isGroup" id="personal">
               <div class="col-md-6">
                 <div class="form-group">
                   <label class="control-label label-required">NID</label>
