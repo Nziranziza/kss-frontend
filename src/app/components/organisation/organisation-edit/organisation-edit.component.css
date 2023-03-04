@@ -8,3 +8,7 @@ fieldset {
 fieldset legend {
   font-size: 14px;
 }
+
+.location {
+  margin: 0px !important;
+}
