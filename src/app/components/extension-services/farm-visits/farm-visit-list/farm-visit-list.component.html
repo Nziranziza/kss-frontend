@@ -76,7 +76,6 @@
         <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped">
           <thead>
             <tr>
-              <th>Date Added</th>
               <th>Farmer to visit</th>
               <th>Visit Description</th>
               <th>GAP to be Covered</th>
@@ -90,7 +89,6 @@
           <tbody>
             <ng-container *ngFor="let visit of visits">
               <tr>
-                <td>{{ visit?.createdAt | date: "short" }}</td>
                 <td>
                   <div *ngFor="let farm of visit.farms">
                     <span class="text-capitalize">
@@ -120,7 +118,7 @@
                   </span>
                 </td>
                 <td>
-                  {{ visit.date | date: "shortDate" }},
+                  {{ visit.date | date: "dd/MM/yyyy" }},
                   <div>
                     {{ visit?.expectedDuration?.from }} to
                     {{ visit?.expectedDuration?.to }}

@@ -53,7 +53,6 @@
         <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped">
           <thead>
             <tr>
-              <th>Date Added</th>
               <th>GAP Name</th>
               <th>GAP Overall Weight</th>
               <th>Observations/Adoption</th>
@@ -65,7 +64,6 @@
           <tbody>
             <ng-container *ngFor="let gap of gaps">
               <tr>
-                <td>{{ gap.createdAt | date: "short" }}</td>
                 <td>{{ gap.gap_name }}</td>
                 <td>{{ gap.gap_weight }}</td>
                 <td>{{ gap.sections.length }}</td>

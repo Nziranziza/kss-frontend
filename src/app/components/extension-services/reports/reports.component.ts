@@ -48,7 +48,9 @@ export class ReportsComponent extends BasicComponent implements OnInit {
   reportLoading = false;
   reportForm: UntypedFormGroup;
   @ViewChild("orgAuto") orgAuto: any;
-  dtOptions: DataTables.Settings = {};
+  dtOptions: DataTables.Settings = {
+    ordering: false
+  };
   // @ts-ignore
   dtTrigger: Subject = new Subject();
   groups: any[] = [];
@@ -883,5 +885,12 @@ export class ReportsComponent extends BasicComponent implements OnInit {
     this.selectedGroup = undefined;
     this.newOrg = undefined;
     this.newData = undefined;
+  }
+
+  getCurrentDate() {
+    return this.datePipe.transform(
+      new Date(),
+      "dd-MM-yyyy-h-mm-ss-a"
+    )
   }
 }

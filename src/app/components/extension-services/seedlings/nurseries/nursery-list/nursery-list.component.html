@@ -88,7 +88,6 @@
         <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped">
           <thead>
             <tr>
-              <th>Date Added</th>
               <th>Name</th>
               <th>Owner</th>
               <th>Province</th>
@@ -107,7 +106,6 @@
           <tbody>
             <ng-container *ngFor="let nursery of nurseries; let i = index">
               <tr>
-                <td>{{ nursery.createdAt | date: "short" }}</td>
                 <td>{{ nursery.nurseryName }}</td>
                 <td>{{ nursery.owner.name }}</td>
                 <td>{{ nursery.location.prov_id.name || nursery.location.prov_id.namek | titlecase }}</td>
