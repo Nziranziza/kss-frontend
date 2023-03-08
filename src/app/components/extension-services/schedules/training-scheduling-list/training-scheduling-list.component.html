@@ -45,7 +45,6 @@
         <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped">
           <thead>
             <tr>
-              <th>Date Added</th>
               <th>Training Module Title</th>
               <th>Start and End Date/Time</th>
               <th>Location</th>
@@ -58,11 +57,10 @@
           <tbody>
             <ng-container *ngFor="let schedule of schedules">
               <tr>
-                <td>{{ schedule?.createdAt | date: "short" }}</td>
                 <td>{{ schedule?.trainingId?.trainingName }}</td>
                 <td>
-                  {{ schedule?.startTime | date: "short" }}
-                  <div>{{ schedule?.endTime | date: "short" }}</div>
+                  {{ schedule?.startTime | date: "dd/MM/yyyy, h:mm a" }}
+                  <div>{{ schedule?.endTime | date: "dd/MM/yyyy, h:mm a" }}</div>
                 </td>
                 <td>
                   <span class="text-capitalize"> {{ schedule?.location.prov_id?.namek.toLowerCase() }} </span> >

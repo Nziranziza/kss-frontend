@@ -58,7 +58,9 @@ export class NurseryListComponent
     screenReaderCurrentLabel: `You're on page`,
   };
   config: any;
-  dtOptions: any = {};
+  dtOptions: DataTables.Settings = {
+    ordering: false
+  };
   loading = false;
   // @ts-ignore
   dtTrigger: Subject = new Subject();

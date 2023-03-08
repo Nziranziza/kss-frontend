@@ -27,20 +27,33 @@ export class SiteListComponent extends BasicComponent implements OnInit, OnDestr
   }
 
   message: string;
-  sites: any;
+  sites: any = {
+    1: [],
+  };
   loading = false;
+  showData = false;
+  config: any;
+  maxSize = 9;
+  autoHide = false;
+  responsive = false;
+  directionLinks = true;
+  parameters: any;
+  loadedPages: number[] = [];
 
   @ViewChild(DataTableDirective)
   dtElement: DataTableDirective;
   dtOptions: DataTables.Settings = {};
   // @ts-ignore
   dtTrigger: Subject = new Subject();
+  labels: any = {
+    previousLabel: 'Previous',
+    nextLabel: 'Next',
+    screenReaderPaginationLabel: 'Pagination',
+    screenReaderPageLabel: 'page',
+    screenReaderCurrentLabel: `You're on page`,
+  };
 
   ngOnInit() {
-    this.dtOptions = {
-      pagingType: 'full_numbers',
-      pageLength: 25
-    };
     this.getAllSites();
     this.message = this.messageService.getMessage();
   }
@@ -50,9 +63,18 @@ export class SiteListComponent extends BasicComponent implements OnInit, OnDestr
     if (!this.authorisationService.isDistrictCashCropOfficer()) {
       this.siteService.getAll().subscribe(data => {
         if (data) {
-          this.sites = data.content;
+          this.sites = {
+            [data?.meta?.page]: data.content,
+          };
           this.dtTrigger.next();
           this.loading = false;
+          this.config = {
+            itemsPerPage: data?.meta?.pageSize,
+            currentPage: data?.meta?.page,
+            totalItems: data?.meta?.total,
+          };
+          this.loadedPages = [...this.loadedPages, data?.meta?.page]
+          this.showData = true
         }
       });
     } else {
@@ -89,5 +111,32 @@ export class SiteListComponent extends BasicComponent implements OnInit, OnDestr
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
     this.messageService.clearMessage();
+  }
+
+  onPageChange(event: number) {
+    if(!this.loadedPages.find((page) => page === event)) {
+      this.sites = {
+        ...this.sites,
+        [Number(event)]: []
+      }
+      this.siteService.getAll({ page: event }).subscribe(data => {
+        if (data) {
+          this.sites = {
+            ...this.sites, 
+            [data?.meta?.page]: data.content
+          };
+          this.config = {
+            ...this.config,
+            currentPage: data?.meta?.page,
+          };
+          this.loadedPages = [...this.loadedPages, Number(data?.meta?.page)];
+        }
+      });
+    } else {
+      this.config = {
+        ...this.config,
+        currentPage: Number(event),
+      };
+    }
   }
 }

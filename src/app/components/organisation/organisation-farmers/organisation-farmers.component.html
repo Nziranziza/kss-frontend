@@ -325,7 +325,6 @@
         <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped">
           <thead>
             <tr>
-              <th>Date Added</th>
               <th (click)="setOrder('userInfo.foreName')">
                 Farmer Name <em class="fa fa-sort sorting"></em>
               </th>
@@ -360,7 +359,6 @@
                   | paginate: config
 
               ">
-              <td>{{ farmer?.userInfo?.createdAt | date: "short" }}</td>
               <td *ngIf="farmer.userInfo.type === 2; else foreName">
                 {{ farmer.userInfo.groupName }}
               </td>

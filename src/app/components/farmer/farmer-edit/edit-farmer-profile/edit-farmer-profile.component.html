@@ -312,6 +312,9 @@
                         <span class="label-required">Channel</span>
                         <select class="form-control" formControlName="paymentChannel"
                           (change)="onChangePaymentChannel(i)">
+                          <option [value]="undefined">
+                            Select payment channel
+                          </option>
                           <option *ngFor="let channel of channels" value="{{ channel._id }}">
                             {{ channel.channel }}
                           </option>
