@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {ApiService} from './api.service';
 import {Organisation} from '../models';
+import { HttpParams } from '@angular/common/http';
 
 
 @Injectable()
@@ -12,7 +13,7 @@ export class OrganisationService {
   }
 
   all(): Observable<any> {
-    return this.apiService.get('/organizations');
+    return this.apiService.get('/organizations', new HttpParams({fromObject: { limit: 1000 }}));
   }
 
   get(id: string): Observable<any> {

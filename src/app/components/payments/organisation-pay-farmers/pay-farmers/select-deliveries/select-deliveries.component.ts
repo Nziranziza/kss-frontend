@@ -34,7 +34,9 @@ export class SelectDeliveriesComponent extends BasicComponent implements OnInit,
   seasonStartingTime: string;
   filterForm: UntypedFormGroup;
   parameters: any;
-  dtOptions: any = {};
+  dtOptions: DataTables.Settings = {
+    pageLength: 25
+  };
   // @ts-ignore
   dtTrigger: Subject = new Subject();
   statistics = {
@@ -63,13 +65,6 @@ export class SelectDeliveriesComponent extends BasicComponent implements OnInit,
         to: new Date()
       },
       paymentChannel: 2
-    };
-
-    this.dtOptions = {
-      pagingType: 'full_numbers',
-      pageLength: 25,
-      columns: [{}, {}, {}, {}, {}, {class: 'all'}, {}],
-      responsive: true
     };
 
     this.filterForm = this.formBuilder.group({
