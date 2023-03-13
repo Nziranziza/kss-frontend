@@ -13,7 +13,7 @@
         <li
           id="preview"
           routerLink="/admin/pay-farmers/preview-deliveries"
-          routerLinkActive="active"
+          [ngClass]="{'active': currentURL === '/admin/pay-farmers/confirm-payment' || currentURL === '/admin/pay-farmers/preview-deliveries' }"
         >
           <strong>Preview</strong>
         </li>

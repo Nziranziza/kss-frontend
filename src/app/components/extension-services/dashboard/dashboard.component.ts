@@ -421,8 +421,10 @@ export class DashboardComponent extends BasicComponent implements OnInit {
     });
     this.pageLoading = true;
     this.route.parent.params.subscribe((params) => {
-      this.organisationId = params['organisationId'.toString()];
-      this.starterBody = { referenceId: params['organisationId'.toString()] };
+      this.organisationId = params["organisationId".toString()];
+      this.starterBody = {
+        referenceId: params["organisationId".toString()]
+      };
     });
 
     this.initial();
@@ -466,7 +468,10 @@ export class DashboardComponent extends BasicComponent implements OnInit {
     this.getTrainings({});
     this.getNurseries();
     this.getOrganisations();
-    this.getFarms(this.starterBody);
+    this.getFarms({
+      ...this.starterBody,
+      partnerId: this.authenticationService.getCurrentUser().info.org_id,
+    });
     this.seasonService.all().subscribe((data) => {
       this.seasons = data.content;
       this.currentSeason = this.authenticationService.getCurrentSeason();
@@ -487,10 +492,16 @@ export class DashboardComponent extends BasicComponent implements OnInit {
     this.getGapAdoptionStats(body);
     this.getVisitsStats(body);
     this.getSeedlingStats(body);
-    this.getFarmsStats(body);
+    this.getFarmsStats({
+      ...body,
+      partnerId: this.authenticationService.getCurrentUser().info.org_id,
+    });
     this.getTrainings(body);
     delete body.date;
-    this.getFarms(body);
+    this.getFarms({
+      ...body,
+      partnerId: this.authenticationService.getCurrentUser().info.org_id,
+    });
   }
 
   // get stats from filters
@@ -777,7 +788,7 @@ export class DashboardComponent extends BasicComponent implements OnInit {
             locationId: value,
           };
           this.siteService
-            .getZone({ dist_id: value, searchBy: 'district', partner: 'Technoserve' })
+            .getZone({ dist_id: value, searchBy: 'district', partner: 'Technoserve Rwanda' })
             .subscribe((data) => {
               if (data) {
                 this.organisations = data.content.filter((org) =>

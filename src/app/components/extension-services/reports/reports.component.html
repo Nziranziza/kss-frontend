@@ -373,7 +373,7 @@
     class="btn btn-default"
     style="margin-left: 10px"
     [href]="'data:application/pdf;base64,' + dataPdf | safe"
-    [download]="reportForm.value.reportFor + '-generalReport-' + getCurrentDate() + '.pdf'"
+    [download]="reportForm.value.reportFor + '-report-' + getCurrentDate() + '.pdf'"
   >
     export to PDF
   </a>
@@ -381,7 +381,7 @@
     class="btn btn-default"
     style="margin-left: 10px"
     [href]="'data:application/octet-stream;base64,' + dataCsv | safe"
-    [download]="reportForm.value.reportFor + '-generalReport-' + getCurrentDate() + '.csv'"
+    [download]="reportForm.value.reportFor + '-report-' + getCurrentDate() + '.csv'"
   >
     export to CSV
   </a>
@@ -389,7 +389,7 @@
     class="btn btn-default"
     style="margin-left: 10px"
     [href]="'data:application/octet-stream;base64,' + dataFile | safe"
-    [download]="reportForm.value.reportFor + '-generalReport-' + getCurrentDate() + '.xlsx'"
+    [download]="reportForm.value.reportFor + '-report-' + getCurrentDate() + '.xlsx'"
     >export to XLS</a
   >
 </div>

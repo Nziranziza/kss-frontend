@@ -7,6 +7,9 @@
   <div class="col-xs-12">
     <div class="box">
       <div class="box-body table-responsive">
+        <div [formGroup]="searchForm" class="search">
+          <label>Search: <input formControlName="search" placeholder="search" /></label>
+        </div>
         <app-loader *ngIf="loading"></app-loader>
         <table class="row-border hover table table-striped" *ngIf="showData">
           <thead>

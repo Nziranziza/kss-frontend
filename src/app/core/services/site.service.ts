@@ -17,7 +17,7 @@ export class SiteService {
   all(body: any): Observable<any> {
     return this.apiService.post('/site/list', body);
   }
-  getAll(params: { page?: number, limit?: number } = { page: 1, limit: 25 }): Observable<any> {
+  getAll(params: { page?: number, limit?: number, search?: string } = { page: 1, limit: 25, search: '' }): Observable<any> {
     const httpParams: HttpParams = new HttpParams({ fromObject: params })
     return this.apiService.get('/site', httpParams);
   }

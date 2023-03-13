@@ -41,21 +41,22 @@ export class HelperService {
     return errors;
   }
 
-  cleanObject(obj) {
-    if (obj !== '' && obj !== undefined && obj !== null) {
-      Object.keys(obj).forEach(key => {
-        if (typeof obj[key] === 'object') {
+  cleanObject (obj) {
+    if (typeof obj === "object" && obj !== null) {
+      Object.keys(obj).forEach((key) => {
+        const isEmptyObject = JSON.stringify(obj[key]) === "{}";
+        if (typeof obj[key] === "object" && obj !== null && !isEmptyObject) {
           obj[key] = this.cleanObject(obj[key]);
-          if (JSON.stringify(obj[key]) === '{}') {
-            delete obj[key];
-          }
         }
-        if (obj[key] === '' || obj[key] === undefined || obj[key] === null) {
+        const isNullable =
+          obj[key] === "" ||
+          obj[key] === undefined ||
+          obj[key] === null ||
+          isEmptyObject;
+        if (isNullable) {
           delete obj[key];
         }
       });
-    } else {
-      return;
     }
     return obj;
   }
