@@ -56,7 +56,6 @@
         <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped">
           <thead>
             <tr>
-              <th>Date added</th>
               <th>Group name</th>
               <th>leader names & contact</th>
               <th>Province</th>
@@ -77,7 +76,6 @@
           <tbody>
             <ng-container *ngFor="let group of groups">
               <tr>
-                <td>{{ group.createdAt | date: "y/LL/d - h:mm" }}</td>
                 <td>{{ group.groupName }}</td>
                 <td>{{ group.leaderNames }} > {{ group.leaderPhoneNumber }}</td>
                 <td>

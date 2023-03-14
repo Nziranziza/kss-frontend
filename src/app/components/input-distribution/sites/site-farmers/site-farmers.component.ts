@@ -42,7 +42,6 @@ export class SiteFarmersComponent extends BasicComponent implements OnInit, OnDe
   farmers = [];
   showData = false;
   title = 'Farmers';
-  id = 'farmers-list';
   parameters: any;
   config: any;
   autoHide = false;

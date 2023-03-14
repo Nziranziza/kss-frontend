@@ -7,8 +7,11 @@
   <div class="col-xs-12">
     <div class="box">
       <div class="box-body table-responsive">
+        <div [formGroup]="searchForm" class="search">
+          <label>Search: <input formControlName="search" placeholder="search" /></label>
+        </div>
         <app-loader *ngIf="loading"></app-loader>
-        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped">
+        <table class="row-border hover table table-striped" *ngIf="showData">
           <thead>
           <tr>
             <th>Name</th>
@@ -16,7 +19,7 @@
           </tr>
           </thead>
           <tbody>
-          <tr *ngFor="let site of sites">
+          <tr *ngFor="let site of sites[config.currentPage] | paginate: config">
             <td> {{ site.siteName }}</td>
             <td>
               <a class="btn btn-danger btn-margin btn-sm pull-right"
@@ -38,6 +41,30 @@
           </tr>
           </tbody>
         </table>
+        <div
+          style="width: 100%; border-top: 1px solid #0a0a0a"
+          *ngIf="showData"
+        >
+          <div style="clear: both; float: left; padding-top: 0.755em">
+            Showing {{ (config.currentPage - 1) * config.itemsPerPage + 1 }} to
+            {{ config.currentPage * config.itemsPerPage }} of
+            {{ config.totalItems }} entries
+          </div>
+          <pagination-controls
+            class="custom-pagination"
+            [maxSize]="maxSize"
+            [directionLinks]="directionLinks"
+            [autoHide]="autoHide"
+            [responsive]="responsive"
+            [previousLabel]="labels.previousLabel"
+            [nextLabel]="labels.nextLabel"
+            [screenReaderPaginationLabel]="labels.screenReaderPaginationLabel"
+            [screenReaderPageLabel]="labels.screenReaderPageLabel"
+            [screenReaderCurrentLabel]="labels.screenReaderCurrentLabel"
+            (pageChange)="onPageChange($event)"
+          >
+          </pagination-controls>
+        </div>
       </div>
     </div>
   </div>

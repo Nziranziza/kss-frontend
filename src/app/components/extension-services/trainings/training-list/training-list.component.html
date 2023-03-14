@@ -98,7 +98,6 @@
         <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped">
           <thead>
             <tr>
-              <th>Date Added</th>
               <th>Title</th>
               <th>Description</th>
               <th>Associated GAP</th>
@@ -110,7 +109,6 @@
           <tbody>
             <ng-container *ngFor="let training of trainings">
               <tr>
-                <td>{{ training.createdAt | date: "short" }}</td>
                 <td>{{ training.trainingName }}</td>
                 <td>{{ training.description }}</td>
                 <td>

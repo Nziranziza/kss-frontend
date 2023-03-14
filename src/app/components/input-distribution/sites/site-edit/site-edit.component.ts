@@ -111,16 +111,16 @@ export class SiteEditComponent implements OnInit{
               site['location'.toString()]['village_id'.toString()] = site.location.village_id._id;
             }
           }
-          this.editForm.patchValue(site);
+          this.editForm.patchValue(site, { emitEvent: false });
           this.editForm.controls.coveredAreas.get('coveredSectors'.toString()).patchValue(site.coveredAreas.coveredSectors);
           this.editForm.controls.coveredAreas.get('coveredCWS'.toString()).patchValue(site.coveredAreas.coveredCWS);
         });
-        if (site.location.cell_id) {
+        if (site.location.sect_id) {
           this.locationService.getCells(site.location.sect_id._id).subscribe((cells) => {
             this.cells = cells;
           });
         }
-        if (site.location.village_id) {
+        if (site.location.cell_id) {
           this.locationService.getVillages(site.location.cell_id._id).subscribe((villages) => {
             this.villages = villages;
           });

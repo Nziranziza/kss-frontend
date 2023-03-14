@@ -373,7 +373,7 @@
     class="btn btn-default"
     style="margin-left: 10px"
     [href]="'data:application/pdf;base64,' + dataPdf | safe"
-    download="generalReport.pdf"
+    [download]="reportForm.value.reportFor + '-report-' + getCurrentDate() + '.pdf'"
   >
     export to PDF
   </a>
@@ -381,7 +381,7 @@
     class="btn btn-default"
     style="margin-left: 10px"
     [href]="'data:application/octet-stream;base64,' + dataCsv | safe"
-    download="generalReport.csv"
+    [download]="reportForm.value.reportFor + '-report-' + getCurrentDate() + '.csv'"
   >
     export to CSV
   </a>
@@ -389,7 +389,7 @@
     class="btn btn-default"
     style="margin-left: 10px"
     [href]="'data:application/octet-stream;base64,' + dataFile | safe"
-    download="generalReport.xlsx"
+    [download]="reportForm.value.reportFor + '-report-' + getCurrentDate() + '.xlsx'"
     >export to XLS</a
   >
 </div>
@@ -443,7 +443,7 @@
             {{ schedule.trainees.NID ? getAge(schedule.trainees.NID) : "-" }}
           </td>
           <td>{{ schedule.trainingId.trainingName }}</td>
-          <td>{{ schedule.startTime | date : "M/d/yy, hh:mm a" }}</td>
+          <td>{{ schedule.startTime | date : "dd/MM/yyyy, hh:mm a" }}</td>
           <td>
             {{ schedule.venueName }}
           </td>
@@ -471,7 +471,6 @@
     >
       <thead>
         <tr>
-          <th>Date added</th>
           <th>Group name</th>
           <th>Leader names</th>
           <th>Leader phone number</th>
@@ -488,7 +487,6 @@
       <tbody>
         <ng-container *ngFor="let group of reportsTableData">
           <tr style="text-transform: capitalize">
-            <td>{{ group.createdAt | date : "M/d/yy, hh:mm a" }}</td>
             <td>{{ group.groupName }}</td>
             <td>{{ group.leaderNames }}</td>
             <td>{{ group.leaderPhoneNumber }}</td>
@@ -541,7 +539,7 @@
       <tbody>
         <ng-container *ngFor="let visit of reportsTableData">
           <tr>
-            <td>{{ visit.createdAt | date : "M/d/yy, hh:mm a" }}</td>
+            <td>{{ visit.createdAt | date : "dd/MM/yyyy, hh:mm a" }}</td>
             <td>{{ visit.farm.upiNumber }}</td>
             <td>{{ visit.owner.lastName + " " + visit.owner.firstName }}</td>
             <td>{{ visit.farm.location.prov_id?.namek.toLowerCase() }}</td>
@@ -722,7 +720,6 @@
     >
       <thead>
         <tr>
-          <th>Date Added</th>
           <th>Name</th>
           <th>Owner</th>
           <th>Province</th>
@@ -740,9 +737,6 @@
       <tbody>
         <ng-container *ngFor="let data of reportsTableData">
           <tr>
-            <td>
-              {{ data?.createdAt | date: "M/d/yy, hh:mm a" }}
-            </td>
             <td>{{ data?.name }}</td>
             <td>{{ data?.owner }}</td>
             <td>
