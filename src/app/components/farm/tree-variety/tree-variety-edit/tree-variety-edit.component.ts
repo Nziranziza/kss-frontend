@@ -9,10 +9,8 @@ import {ActivatedRoute, Router} from '@angular/router';
   styleUrls: ['./tree-variety-edit.component.css']
 })
 export class TreeVarietyEditComponent extends BasicComponent implements OnInit {
-
   editForm: UntypedFormGroup;
   id: string;
-
   constructor(private formBuilder: UntypedFormBuilder,
               private route: ActivatedRoute,
               private router: Router,
