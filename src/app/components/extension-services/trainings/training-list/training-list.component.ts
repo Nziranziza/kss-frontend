@@ -1,3 +1,4 @@
+import { ReportService } from './../../../../core/services/extension-services/report.service';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {
   TrainingService,
@@ -25,7 +26,8 @@ export class TrainingListComponent
     private messageService: MessageService,
     private trainingService: TrainingService,
     private modal: NgbModal,
-    private authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService,
+    private reportService: ReportService
   ) {
     super();
   }
@@ -48,7 +50,21 @@ export class TrainingListComponent
   config: any;
   dtOptions: any = {};
   loading = false;
-  trainingsStats: any;
+  trainingsStats: any = {
+    male: 0,
+    female: 0,
+    total: 0,
+    presence: {
+      male: 0,
+      female: 0,
+      total: 0,
+    },
+    absence: {
+      male: 0,
+      female: 0,
+      total: 0
+    }
+  };
   // @ts-ignore
   dtTrigger: Subject = new Subject();
   // @ts-ignore
@@ -89,10 +105,10 @@ export class TrainingListComponent
 
   getTrainingsStats(body: any): void {
     this.loading = true;
-    this.trainingService.getScheduleStats(body).subscribe((data) => {
+    this.reportService.trainingStats(body).subscribe((data) => {
       this.trainingsStats = data.data;
       this.loading = false;
-    });
+    })
   }
 
   openDeleteModal(trainingId: any, warning?: any) {

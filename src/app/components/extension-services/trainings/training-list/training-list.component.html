@@ -50,16 +50,16 @@
       <div class="row">
         <div class="col-sm-5">
           <div class="stats-box-text-item">
-            {{ trainingsStats?.totalPresent }}
+            {{ trainingsStats?.presence?.total }}
           </div>
         </div>
         <div class="col-xs-6 col-sm-3 text-center">
           <span style="white-space: pre"> Male </span>
-          {{ trainingsStats?.malePresent }}
+          {{ trainingsStats?.presence?.male }}
         </div>
         <div class="col-xs-6 col-sm-3 text-center">
           <span style="white-space: pre"> Female </span>
-          {{ trainingsStats?.femalePresent }}
+          {{ trainingsStats?.presence?.female }}
         </div>
       </div>
     </div>
@@ -75,16 +75,16 @@
       <div class="row">
         <div class="col-sm-5">
           <div class="stats-box-text-item">
-            {{ trainingsStats?.totalAbsent }}
+            {{ trainingsStats?.absence?.total }}
           </div>
         </div>
         <div class="col-xs-6 col-sm-3 text-center">
           <span style="white-space: pre"> Male </span>
-          {{ trainingsStats?.maleAbsent }}
+          {{ trainingsStats?.absence?.male }}
         </div>
         <div class="col-xs-6 col-sm-3 text-center">
           <span style="white-space: pre"> Female </span>
-          {{ trainingsStats?.femaleAbsent }}
+          {{ trainingsStats?.absence?.female }}
         </div>
       </div>
     </div>

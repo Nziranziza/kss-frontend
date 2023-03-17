@@ -6,18 +6,18 @@ import {
   BasicComponent,
   FarmService,
   GapService,
-  GroupService,
   LocationService,
   OrganisationService,
   SeasonService,
   TrainingService,
-  UserService,
-  VisitService,
   SeedlingService,
   SiteService,
+  ReportService,
+  HelperService
 } from 'src/app/core';
 import { ScrollStrategy, ScrollStrategyOptions } from '@angular/cdk/overlay';
 import { ActivatedRoute } from '@angular/router';
+import moment from 'moment';
 
 @Component({
   selector: 'app-dashboard',
@@ -31,16 +31,15 @@ export class DashboardComponent extends BasicComponent implements OnInit {
     protected locationService: LocationService,
     private organisationService: OrganisationService,
     private trainingService: TrainingService,
-    private userService: UserService,
-    private visitService: VisitService,
     private gapService: GapService,
     private seasonService: SeasonService,
-    private groupService: GroupService,
     private farmService: FarmService,
     private seedlingService: SeedlingService,
     private readonly sso: ScrollStrategyOptions,
     private route: ActivatedRoute,
-    private siteService: SiteService
+    private siteService: SiteService,
+    private reportService: ReportService,
+    private helperService: HelperService
   ) {
     super(locationService, organisationService);
     this.scrollStrategy = this.sso.noop();
@@ -135,13 +134,19 @@ export class DashboardComponent extends BasicComponent implements OnInit {
   trainings: any[] = [];
   trainers: any[] = [];
   trainingsStats: any = {
-    femaleAbsent: 0,
-    femalePresent: 0,
-    maleAbsent: 0,
-    malePresent: 0,
-    totalAbsent: 0,
-    totalInvitees: 0,
-    totalPresent: 0,
+    male: 0,
+    female: 0,
+    total: 0,
+    presence: {
+      male: 0,
+      female: 0,
+      total: 0
+    },
+    absence: {
+      male: 0,
+      female: 0,
+      total: 0
+    }
   };
   visitStats: any = { femaleFarmVisits: 0, maleFarmVisits: 0, totalVisits: 0 };
   gapAdoptionStats: any[] = [];
@@ -422,9 +427,9 @@ export class DashboardComponent extends BasicComponent implements OnInit {
     this.pageLoading = true;
     this.route.parent.params.subscribe((params) => {
       this.organisationId = params["organisationId".toString()];
-      this.starterBody = {
+      this.starterBody = this.helperService.cleanObject({
         referenceId: params["organisationId".toString()]
-      };
+      });
     });
 
     this.initial();
@@ -481,8 +486,15 @@ export class DashboardComponent extends BasicComponent implements OnInit {
       this.seasonChangeEffect('seedlingFilters');
       this.seasonChangeEffect('gapFilters');
       this.seasonChangeEffect('location');
+      this.starterBody = {
+        ...this.starterBody,
+        date: {
+          from: this.dateRangeMin.location,
+          to:  this.dateRangeMax.location
+        }
+      }
+      this.getGeneralStats(this.starterBody);
     });
-    this.getGeneralStats(this.starterBody);
     this.pageLoading = false;
   }
   // General stats from filters
@@ -490,7 +502,13 @@ export class DashboardComponent extends BasicComponent implements OnInit {
   getGeneralStats(body: any) {
     this.getTrainingsStats(body);
     this.getGapAdoptionStats(body);
-    this.getVisitsStats(body);
+    this.getVisitsStats({
+      ...body,
+      location: {
+        ...body?.location,
+        [body?.location?.searchBy]: body?.location?.locationId
+      }
+    });
     this.getSeedlingStats(body);
     this.getFarmsStats({
       ...body,
@@ -506,26 +524,27 @@ export class DashboardComponent extends BasicComponent implements OnInit {
 
   // get stats from filters
   getStats(filterBy: string) {
-    this.mainBody = {};
+    this.mainBody = {
+      ...this.starterBody,
+      ...this.mainBody
+    };
     if (filterBy !== '') {
       let value = [];
       value = this.dashboardForm.controls[filterBy].get('filterByDate').value;
       if (this.newOrg !== '') {
         this.mainBody.referenceId = this.newOrg;
       }
-      if (value) {
-        if (value.length > 1) {
-          if (typeof value[0].getMonth === 'function') {
-            this.mainBody.date = {
-              from: this.formatDate(value[0]),
-              to: this.formatDate(value[1]),
-            };
-          } else {
-            this.mainBody.date = {
-              from: value[0],
-              to: value[1],
-            };
-          }
+      if (value && value.length > 1) {
+        if (typeof value[0].getMonth === 'function') {
+          this.mainBody.date = {
+            from: this.formatDate(value[0]),
+            to: this.formatDate(value[1]),
+          };
+        } else {
+          this.mainBody.date = {
+            from: value[0],
+            to: value[1],
+          };
         }
       }
       const locationId = this.currentSelectedLocation;
@@ -536,7 +555,13 @@ export class DashboardComponent extends BasicComponent implements OnInit {
     if (filterBy === 'trainingFilters') {
       this.getTrainingsStats(this.mainBody);
     } else if (filterBy === 'visitFilters') {
-      this.getVisitsStats(this.mainBody);
+      this.getVisitsStats({
+        ...this.mainBody,
+        location: {
+          ...this.mainBody.location,
+          [this?.mainBody?.searchBy]: this.mainBody?.location?.locationId
+        }
+      });
     } else if (filterBy === 'seedlingFilters') {
       this.getSeedlingStats(this.mainBody);
     } else if (filterBy === 'gapFilters') {
@@ -657,9 +682,9 @@ export class DashboardComponent extends BasicComponent implements OnInit {
 
   getTrainingsStats(body: any): void {
     this.loading = true;
-    this.trainingService.getScheduleStats(body).subscribe((data) => {
+    this.reportService.trainingStats(body).subscribe((data) => {
       this.trainingsStats = data.data;
-      this.loading = false;
+      this.loading = false
     });
   }
 
@@ -715,12 +740,15 @@ export class DashboardComponent extends BasicComponent implements OnInit {
 
   getVisitsStats(body: any): void {
     this.loading = true;
-    this.visitService.getVisitsStats(body).subscribe((data) => {
-      this.visitStats = data.data;
-      this.graph.data = [];
-      this.graph.data.push(['Female', (this.visitStats.femaleFarmVisits * 100) /
-        this.visitStats.totalFarmersVisited], ['male', (this.visitStats.maleFarmVisits * 100) /
-          this.visitStats.totalFarmersVisited]);
+    this.reportService.visitStats(body).subscribe((data) => {
+      this.visitStats = data.data[0];
+      const femalePerc = (this.visitStats.numberFemaleVisited * 100) / (this.visitStats.numberOfFarmerVisited || 1 );
+      const malePerc = (this.visitStats.numberOfMaleVisited * 100) / (this.visitStats.numberOfFarmerVisited || 1 );
+      if(!femalePerc && !malePerc) {
+        this.graph.data = []
+      }  else {
+        this.graph.data = [['Female', femalePerc], ['male', malePerc]];
+      }
       this.loading = false;
     });
     this.graph = Object.assign([], this.graph);
@@ -867,15 +895,28 @@ export class DashboardComponent extends BasicComponent implements OnInit {
 
   // season filters
   seasonChangeEffect(group: string) {
-    const value =
+    const dateFormat = 'YYYY-MM-DD'
+    const seasonYear =
       this.dashboardForm.controls[group].get('season_id').value !== ''
         ? this.dashboardForm.controls[group].get('season_id').value
         : this.currentSeasonYear;
-    this.dateRangeMin[group] = `${parseFloat(value) - 1}-10-01`;
-    this.dateRangeMax[group] = `${value}-09-31`;
+    const selectedSeasonIndex = this.seasons.findIndex(season => season.year === Number(seasonYear));
+    let startDate: string, endDate: string;
+    if(selectedSeasonIndex !== -1) {
+      const season = this.seasons[selectedSeasonIndex];
+      startDate = moment(season.created_at).format(dateFormat);
+      if(season.isCurrent) {
+        endDate = moment().format(dateFormat)
+      } else {
+        const nextSeason = this.seasons[selectedSeasonIndex + 1];
+        endDate = moment(nextSeason.created_at).format(dateFormat);
+      }
+    }
+    this.dateRangeMin[group] = startDate;
+    this.dateRangeMax[group] = endDate;
     this.dashboardForm.controls[group]
       .get('filterByDate')
-      .setValue([`${parseFloat(value) - 1}-10-01`, `${value}-10-01`]);
+      .setValue([startDate, endDate]);
   }
 
   seasonChange(group: string) {
@@ -896,47 +937,54 @@ export class DashboardComponent extends BasicComponent implements OnInit {
   }
 
   seasonQuarterChange(group: string) {
+    const dateFormat = 'YYYY-MM-DD'
     const value = this.dashboardForm.controls[group].get('quarterId').value;
     const current =
       this.dashboardForm.controls[group].get('season_id').value !== ''
         ? this.dashboardForm.controls[group].get('season_id').value
         : this.currentSeasonYear;
-    if (value === '1') {
-      this.dateRangeMin[group] = `${parseFloat(current) - 1}-10-01`;
-      this.dateRangeMax[group] = `${current}-01-01`;
-      this.dashboardForm.controls[group]
-        .get('filterByDate')
-        .setValue([`${parseFloat(current) - 1}-10-01`, `${current}-01-01`]);
-    } else if (value === '2') {
-      this.dateRangeMin[group] = `${current}-01-01`;
-      this.dateRangeMax[group] = `${current}-04-01`;
-      this.dashboardForm.controls[group]
-        .get('filterByDate')
-        .setValue([`${current}-01-01`, `${current}-04-01`]);
-    } else if (value === '3') {
-      this.dateRangeMin[group] = `${current}-04-01`;
-      this.dateRangeMax[group] = `${current}-07-01`;
-      this.dashboardForm.controls[group]
-        .get('filterByDate')
-        .setValue([`${current}-04-01`, `${current}-07-01`]);
-    } else if (value === '4') {
-      this.dateRangeMin[group] = `${current}-07-01`;
-      this.dateRangeMax[group] = `${current}-10-01`;
-      this.dashboardForm.controls[group]
-        .get('filterByDate')
-        .setValue([`${current}-07-01`, `${current}-10-01`]);
-    } else if (value === '') {
-      this.dateRangeMin[group] = `${parseFloat(current) - 1}-10-01`;
-      this.dateRangeMax[group] = `${current}-10-01`;
-      this.dashboardForm.controls[group]
-        .get('filterByDate')
-        .setValue([`${parseFloat(current) - 1}-10-01`, `${current}-10-01`]);
+    const selectedSeasonIndex = this.seasons.findIndex(season => season.year === Number(current));
+    let startDate: string, endDate: string;
+    if (selectedSeasonIndex !== -1) {
+      const { created_at, isCurrent } = this.seasons[selectedSeasonIndex];
+      switch (value) {
+        case "1":
+          startDate = moment(created_at).format(dateFormat);
+          endDate = moment(created_at).add(3, "months").format(dateFormat);
+          break;
+        case "2":
+          startDate = moment(created_at).add(3, "months").format(dateFormat);
+          endDate = moment(created_at).add(6, "months").format(dateFormat);
+          break;
+        case "3":
+          startDate = moment(created_at).add(6, "months").format(dateFormat);
+          endDate = moment(created_at).add(9, "months").format(dateFormat);
+          break;
+        case "4":
+          startDate = moment(created_at).add(9, "months").format(dateFormat);
+          if (isCurrent) {
+            endDate = moment(created_at).add(12, "months").format(dateFormat);
+          } else {
+            const nextSeason = this.seasons[selectedSeasonIndex + 1];
+            endDate = moment(nextSeason.created_at).format(dateFormat);
+          }
+          break;
+        default:
+          this.seasonChangeEffect(group);
+      }
+      if(value !== '') {
+        this.dateRangeMin[group] = startDate;
+        this.dateRangeMax[group] = endDate;
+        this.dashboardForm.controls[group]
+          .get("filterByDate")
+          .setValue([startDate, endDate]);
+      }
     }
     this.getStats(group);
   }
 
   seasonDateChange(group: string) {
-    if (group !== 'location') {
+    if (group !== 'location' && typeof group === 'string') {
       this.getStats(group);
     }
   }

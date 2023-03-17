@@ -1,3 +1,4 @@
+import { ReportService } from './../../../../core/services/extension-services/report.service';
 import {
   Component,
   Injector,
@@ -8,7 +9,7 @@ import {
   Input,
 } from '@angular/core';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { TrainingService, GapService, Training } from '../../../../core';
+import { TrainingService } from '../../../../core';
 import { MessageService } from '../../../../core';
 import { BasicComponent } from '../../../../core';
 import { isPlatformBrowser } from '@angular/common';
@@ -27,7 +28,8 @@ export class TrainingScheduleViewComponent
     private injector: Injector,
     private trainingService: TrainingService,
     private messageService: MessageService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private reportService: ReportService
   ) {
     super();
     if (isPlatformBrowser(this.platformId)) {
@@ -43,7 +45,21 @@ export class TrainingScheduleViewComponent
   gaps: any[] = [];
   loading = false;
   dataReturned: any[] = [];
-  trainingsStats: any;
+  trainingsStats: any = {
+    male: 0,
+    female: 0,
+    total: 0,
+    presence: {
+      male: 0,
+      female: 0,
+      total: 0,
+    },
+    absence: {
+      male: 0,
+      female: 0,
+      total: 0
+    }
+  };
 
   ngOnDestroy(): void { }
 
@@ -61,14 +77,13 @@ export class TrainingScheduleViewComponent
 
   getTrainingsStats(): void {
     this.loading = true;
-    this.trainingService
-      .getScheduleStats({
-        scheduleId: this.id,
-      })
-      .subscribe((data) => {
-        this.trainingsStats = data.data;
-        this.loading = false;
-      });
+    this.reportService.trainingStats({
+      scheduleId: this.id
+    })
+    .subscribe((data) => {
+      this.trainingsStats = data.data;
+      this.loading = false;
+    });
   }
 
   open(content) {
