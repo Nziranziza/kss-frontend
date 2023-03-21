@@ -222,22 +222,22 @@
         </div>
         <div class="text-center">
           <p>Total Trainees</p>
-          <h4>{{ trainingsStats.totalInvitees | number }}</h4>
+          <h4>{{ trainingsStats.total | number }}</h4>
         </div>
 
         <div class="row" style="margin-left: 15%; margin-right: 15%; margin-bottom: 5px">
           <div class="col-xs-6">
             <div class="text-center trainees-box">
               <p>Attended</p>
-              <h4>{{ trainingsStats.totalPresent | number }}</h4>
+              <h4>{{ trainingsStats.presence.total | number }}</h4>
               <div class="row">
                 <div class="col-xs-6">
                   <i class="fa fa-male fa-2x" aria-hidden="true" style="color: #35a1ff"></i>
-                  <p>{{ trainingsStats.malePresent | number }}</p>
+                  <p>{{ trainingsStats.presence.male | number }}</p>
                 </div>
                 <div class="col-xs-6">
                   <i class="fa fa-female fa-2x" aria-hidden="true" style="color: #ff69f6"></i>
-                  <p>{{ trainingsStats.femalePresent | number }}</p>
+                  <p>{{ trainingsStats.presence.female | number }}</p>
                 </div>
               </div>
             </div>
@@ -245,15 +245,15 @@
           <div class="col-xs-6">
             <div class="text-center trainees-box trainees-box-absent">
               <p>Not Attended</p>
-              <h4>{{ trainingsStats.totalAbsent | number }}</h4>
+              <h4>{{ trainingsStats.absence.total | number }}</h4>
               <div class="row">
                 <div class="col-xs-6">
                   <i class="fa fa-male fa-2x" aria-hidden="true" style="color: #35a1ff"></i>
-                  <p>{{ trainingsStats.maleAbsent | number }}</p>
+                  <p>{{ trainingsStats.absence.male | number }}</p>
                 </div>
                 <div class="col-xs-6">
                   <i class="fa fa-female fa-2x" aria-hidden="true" style="color: #ff69f6"></i>
-                  <p>{{ trainingsStats.femaleAbsent | number }}</p>
+                  <p>{{ trainingsStats.absence.female | number }}</p>
                 </div>
               </div>
             </div>
@@ -323,9 +323,15 @@
             </div>
           </span>
         </div>
-        <div class="text-center">
-          <p>Total Visited Farms</p>
-          <h4>{{ visitStats.totalVisits | number }}</h4>
+        <div class="row">
+          <div class="text-center col-sm-6">
+            <p>Total Farm visits</p>
+            <h4>{{ visitStats.numberOfFarmVisits | number }}</h4>
+          </div>
+          <div class="text-center col-sm-6">
+            <p>Total Visited Farms</p>
+            <h4>{{ visitStats.numberOfFarmVisited | number }}</h4>
+          </div>
         </div>
         <div class="row">
           <div class="col-md-6">
@@ -343,15 +349,15 @@
           <div class="col-md-6">
             <div class="text-center trainees-box" style="width: 60%; margin: 0 auto; margin-top: 8%">
               <p>Farmers</p>
-              <h4>{{ visitStats.totalFarmersVisited | number }}</h4>
+              <h4>{{ visitStats.numberOfFarmerVisited | number }}</h4>
               <div class="row">
                 <div class="col-xs-6">
                   <i class="fa fa-male fa-2x" aria-hidden="true" style="color: #35a1ff"></i>
-                  <p>{{ visitStats.maleFarmVisits | number }}</p>
+                  <p>{{ visitStats.numberOfMaleVisited | number }}</p>
                 </div>
                 <div class="col-xs-6">
                   <i class="fa fa-female fa-2x" aria-hidden="true" style="color: #ff69f6"></i>
-                  <p>{{ visitStats.femaleFarmVisits | number }}</p>
+                  <p>{{ visitStats.numberFemaleVisited | number }}</p>
                 </div>
               </div>
             </div>
@@ -481,19 +487,15 @@
         <h4 class="text-center">Farms</h4>
         <div class="farm-graph-popup" style="margin-bottom: 5px">
           <div class="row text-center">
-            <div class="col-xs-3" style="padding: 0 2px 0 0px">
-              <h4>Total Farms</h4>
-              <h3>{{ generalFarmStats?.totalFarms | number: "1.0-0" }}</h3>
-            </div>
-            <div class="col-xs-3" style="padding: 0 2px 0 0px">
-              <h4>Total Visits</h4>
-              <h3>{{ generalFarmStats?.totalVisits | number: "1.0-0" }}</h3>
-            </div>
-            <div class="col-xs-3" style="padding: 0 2px 0 0px">
+            <div class="col-xs-4" style="padding: 0 2px 0 0px">
               <h4>Total Farmers</h4>
               <h3>{{ generalFarmStats?.totalFarmers | number: "1.0-0" }}</h3>
             </div>
-            <div class="col-xs-3" style="padding: 0 5px 0 0px">
+            <div class="col-xs-4" style="padding: 0 2px 0 0px">
+              <h4>Total Farms</h4>
+              <h3>{{ generalFarmStats?.totalFarms | number: "1.0-0" }}</h3>
+            </div>
+            <div class="col-xs-4" style="padding: 0 5px 0 0px">
               <h4>Total Trees</h4>
               <h3>{{ generalFarmStats?.totalTrees | number: "1.0-0" }}</h3>
             </div>

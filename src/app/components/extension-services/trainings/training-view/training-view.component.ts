@@ -1,3 +1,4 @@
+import { ReportService } from './../../../../core/services/extension-services/report.service';
 import {
   Component,
   Injector,
@@ -34,7 +35,8 @@ export class TrainingViewComponent
     private injector: Injector,
     private trainingService: TrainingService,
     private messageService: MessageService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private reportService: ReportService
   ) {
     super();
     if (isPlatformBrowser(this.platformId)) {
@@ -64,7 +66,21 @@ export class TrainingViewComponent
   config: any;
   dtOptions: any = {};
   loading = false;
-  trainingsStats: any;
+  trainingsStats: any = {
+    male: 0,
+    female: 0,
+    total: 0,
+    presence: {
+      male: 0,
+      female: 0,
+      total: 0,
+    },
+    absence: {
+      male: 0,
+      female: 0,
+      total: 0
+    }
+  };
   // @ts-ignore
   dtTrigger: Subject = new Subject();
   // @ts-ignore
@@ -98,14 +114,13 @@ export class TrainingViewComponent
 
   getTrainingsStats(): void {
     this.loading = true;
-    this.trainingService
-      .getScheduleStats({
-        trainingId: this.id,
-      })
-      .subscribe((data) => {
-        this.trainingsStats = data.data;
-        this.loading = false;
-      });
+    this.reportService.trainingStats({
+      trainingId: this.id
+    })
+    .subscribe((data) => {
+      this.trainingsStats = data.data;
+      this.loading = false;
+    });
   }
 
   openViewModal(id: string) {

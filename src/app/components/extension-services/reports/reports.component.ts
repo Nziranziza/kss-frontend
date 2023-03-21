@@ -15,6 +15,7 @@ import {
 } from 'src/app/core';
 import { DatePipe } from '@angular/common';
 import { isUndefined } from 'util';
+import moment from 'moment';
 
 @Component({
   selector: "app-reports",
@@ -117,6 +118,28 @@ export class ReportsComponent extends BasicComponent implements OnInit {
           trainingId: [""],
         }),
       }),
+    });
+    const currentSeason = this.authenticationService.getCurrentSeason();
+    this.seasonService.all().subscribe((data) => {
+      const dateFormat = "YYYY-MM-DD";
+      const seasons = data.content;
+      const selectedSeasonIndex = seasons.findIndex(
+        (season) => season.year === currentSeason.year
+      );
+      let startDate: string, endDate: string;
+      if (selectedSeasonIndex !== -1) {
+        const season = seasons[selectedSeasonIndex];
+        startDate = moment(season.created_at).format(dateFormat);
+        if (season.isCurrent) {
+          endDate = moment().format(dateFormat);
+        } else {
+          const nextSeason = seasons[selectedSeasonIndex + 1];
+          endDate = moment(nextSeason.created_at).format(dateFormat);
+        }
+      }
+      this.reportForm.controls.filter
+        .get("date")
+        .setValue([startDate, endDate]);
     });
     this.seasonStartingDate = this.datePipe.transform(
       this.authenticationService.getCurrentSeason().created_at,
@@ -592,32 +615,14 @@ export class ReportsComponent extends BasicComponent implements OnInit {
       };
       this.reportBody = body;
       this.reportService.trainingStats(body).subscribe((data) => {
-        let numberOfTrainees = 0;
-        let numberOfAttendedTrainees = 0;
-        let totalMales = 0;
-        let maleNumberOfAttendedTrainees = 0;
-        let femaleNumberOfAttendedTrainees = 0;
-        let totalFemales = 0;
-        data.data.forEach((data) => {
-          numberOfTrainees += data.numberOfTrainees;
-          numberOfAttendedTrainees += data.numberOfAttendedTrainees;
-          if (data.gender === "M" || data.gender === "m") {
-            totalMales += data.numberOfTrainees;
-            maleNumberOfAttendedTrainees += data.numberOfAttendedTrainees;
-          }
-
-          if (data.gender === "F" || data.gender === "f") {
-            totalFemales += data.numberOfTrainees;
-            femaleNumberOfAttendedTrainees += data.numberOfAttendedTrainees;
-          }
-        });
+    
         this.stats = {
-          numberOfTrainees,
-          numberOfAttendedTrainees,
-          totalMales,
-          totalFemales,
-          maleNumberOfAttendedTrainees,
-          femaleNumberOfAttendedTrainees,
+          numberOfTrainees: data?.data?.total,
+          numberOfAttendedTrainees: data?.data?.presence?.male + data?.data?.presence?.female,
+          totalMales: data?.data?.male,
+          totalFemales: data?.data?.female,
+          maleNumberOfAttendedTrainees: data?.data?.presence?.male,
+          femaleNumberOfAttendedTrainees: data?.data?.presence?.female,
         };
         this.statsLoading = false;
       });

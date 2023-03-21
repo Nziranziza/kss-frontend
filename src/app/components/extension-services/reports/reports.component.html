@@ -287,13 +287,17 @@
       </div>
     </span>
     <span *ngIf="reportForm.value.reportFor === 'Farm Visits'">
-      <div class="col-sm-6 text-center">
+      <div class="col-sm-4 text-center">
         <h4>Total Visits</h4>
         <h3>{{ stats?.numberOfFarmVisits || 0 | number }}</h3>
       </div>
-      <div class="col-sm-6 text-center">
+      <div class="col-sm-4 text-center">
+        <h4>Total Visited Farms</h4>
+        <h3>{{ stats?.numberOfFarmVisited || 0 | number }}</h3>
+      </div>
+      <div class="col-sm-4 text-center">
         <h4>Total Visited Farmers</h4>
-        <h3>{{ stats?.numberOfFarmVisits || 0 | number }}</h3>
+        <h3>{{ stats?.numberOfFarmerVisited || 0 | number }}</h3>
       </div>
     </span>
 
