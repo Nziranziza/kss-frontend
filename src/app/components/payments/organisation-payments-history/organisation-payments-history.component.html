@@ -1,5 +1,5 @@
 <h3>
-  Payment history
+  Payment Transaction history
 </h3>
 <app-list-warnings [warning]="warning"></app-list-warnings>
 <app-list-errors [errorList]="errors"></app-list-errors>
@@ -31,14 +31,14 @@
             <option *ngFor="let field of searchFields" value="{{field.value}}">{{field.name}}</option>
           </select>
           <input type="text" formControlName="term" class="form-control" placeholder="search.."
-                 style="margin-right: 10px">
+            style="margin-right: 10px">
         </ng-container>
         <ng-container formGroupName="date">
-          <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="from" class="form-control owl-date-input"
-                 placeholder="from..">
+          <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="from"
+            class="form-control owl-date-input" placeholder="from..">
           <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
           <input [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" formControlName="to" class="form-control owl-date-input"
-                 placeholder="to..">
+            placeholder="to..">
           <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
         </ng-container>
         <button class="btn btn-warning pull-right btn-margin" type="button" (click)="onClearFilter()">Clear</button>
@@ -54,55 +54,51 @@
       <div class="box-body table-responsive">
         <table class="row-border hover table table-striped">
           <thead>
-          <tr>
-            <th (click)="setOrder('transaction.regNumber')">REG number<i class="fa fa-sort sorting"></i></th>
-            <th (click)="setOrder('transaction.foreName')">First name<i class="fa fa-sort sorting"></i></th>
-            <th (click)="setOrder('transaction.surname')">Last name<i class="fa fa-sort sorting"></i></th>
-            <th (click)="setOrder('transaction.subscriptionNumber')">Subscription number<i class="fa fa-sort sorting"></i></th>
-            <th (click)="setOrder('transaction.amount')">Amount (Rwf)<i class="fa fa-sort sorting"></i></th>
-            <th (click)="setOrder('transaction.transactionID')">Transaction number<i class="fa fa-sort sorting"></i></th>
-            <th (click)="setOrder('transaction.status')">Status<i class="fa fa-sort sorting"></i></th>
-            <th> </th>
-          </tr>
+            <tr>
+              <th>BatchID</th>
+              <th>Beneficiaries</th>
+              <th>Total amount</th>
+            </tr>
           </thead>
-          <tbody *ngIf="showData">
-          <ng-container *ngFor="let payment of payments">
-          <tr *ngFor="let transaction of payment.beneficiaries | paginate: config">
-            <td> {{ transaction.regNumber }}</td>
-            <td> {{ transaction.foreName }}</td>
-            <td> {{ transaction.surname }}</td>
-            <td> {{ transaction.subscriptionNumber }}</td>
-            <td> {{ transaction.amount }}</td>
-            <td> {{ transaction.transactionID }}</td>
-            <td> {{ viewStatus(transaction.status) }}</td>
-            <td>
-              <button class="btn btn-default btn-sm btn-margin pull-right details-button"
-                      (click)="viewDeliveries(transaction.regNumber, transaction.deliveries)">...
-              </button>
-            </td>
-          </tr>
-          </ng-container>
+          <tbody>
+            <tr *ngFor="let payment of payments">
+              <td>{{ payment.batchID }}</td>
+              <td>
+                <table class="row-border hover table table-striped">
+                  <thead>
+                    <tr>
+                      <th>REG number</th>
+                      <th>First name</th>
+                      <th>Last name</th>
+                      <th>Subscription number</th>
+                      <th>Amount (Rwf)</th>
+                      <th>Transaction number</th>
+                      <th>Status</th>
+                      <th> </th>
+                    </tr>
+                  </thead>
+                  <tbody *ngIf="showData">
+                    <tr *ngFor="let transaction of payment.beneficiaries | paginate: config">
+                      <td> {{ transaction.regNumber }}</td>
+                      <td> {{ transaction.foreName }}</td>
+                      <td> {{ transaction.surname }}</td>
+                      <td> {{ transaction.subscriptionNumber }}</td>
+                      <td> {{ transaction.amount }}</td>
+                      <td> {{ transaction.transactionId }}</td>
+                      <td> {{ viewStatus(transaction.status) }}</td>
+                      <td>
+                        <button class="btn btn-default btn-sm btn-margin pull-right details-button"
+                          (click)="viewDeliveries(transaction.regNumber, transaction.deliveries)">...
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+              <td>{{ payment.totalAmountPaid }}</td>
+            </tr>
           </tbody>
         </table>
-        <div style="width: 100%;  border-top: 1px solid #0a0a0a;" *ngIf="showData">
-          <div style=" clear: both; float: left; padding-top: 0.755em;">Showing {{(config.currentPage - 1) *
-            config.itemsPerPage + 1}} to {{ ((config.currentPage * config.itemsPerPage) > config.totalItems) ?
-            config.totalItems : (config.currentPage * config.itemsPerPage)}}
-            of {{config.totalItems}} entries
-          </div>
-          <pagination-controls class="custom-pagination"
-                               [maxSize]="maxSize"
-                               [directionLinks]="directionLinks"
-                               [autoHide]="autoHide"
-                               [responsive]="responsive"
-                               [previousLabel]="labels.previousLabel"
-                               [nextLabel]="labels.nextLabel"
-                               [screenReaderPaginationLabel]="labels.screenReaderPaginationLabel"
-                               [screenReaderPageLabel]="labels.screenReaderPageLabel"
-                               [screenReaderCurrentLabel]="labels.screenReaderCurrentLabel"
-                               (pageChange)="onPageChange($event)">
-          </pagination-controls>
-        </div>
       </div>
     </div>
   </div>

@@ -1,0 +1,34 @@
+<h3>
+  Payment history by Farmers
+</h3>
+<app-list-warnings [warning]="warning"></app-list-warnings>
+<app-list-errors [errorList]="errors"></app-list-errors>
+<app-list-message [message]="message"></app-list-message>
+<div class="box">
+  <div class="box-body table-responsive">
+    <table class="row-border hover table table-striped">
+      <thead>
+        <tr>
+          <th>REG number</th>
+          <th>First name</th>
+          <th>Last name</th>
+          <th>Amount (Rwf)</th>
+          <td></td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let history of histories">
+          <td>{{history.regNumber}}</td>
+          <td>{{history.foreName}}</td>
+          <td>{{history.surname}}</td>
+          <td>{{history.totalAmount | number }}</td>
+          <td>
+            <button (click)="viewDetails(history)" class="btn btn-default btn-sm btn-margin pull-right details-button">
+              ...
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

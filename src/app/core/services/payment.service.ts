@@ -34,8 +34,12 @@ export class PaymentService {
     return this.apiService.post('/payment/cherries', data);
   }
 
-  getPaymentHistory(body: any): Observable<any> {
+  getPaymentHistory(body?: any): Observable<any> {
     return this.apiService.post('/payment/list', body);
+  }
+
+  getPaymentTransactions(body: any): Observable<any> {
+    return this.apiService.post('/payment/transactions', body);
   }
 
   getPaymentsReport(body: any): Observable<any> {

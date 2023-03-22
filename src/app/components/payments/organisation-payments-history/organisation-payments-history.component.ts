@@ -181,7 +181,7 @@ export class OrganisationPaymentsHistoryComponent extends BasicComponent impleme
   }
 
   getTransactions() {
-    this.paymentService.getPaymentHistory(this.parameters)
+    this.paymentService.getPaymentTransactions(this.parameters)
       .subscribe((dt) => {
         this.payments = dt.data;
         this.showData = true;
@@ -207,7 +207,7 @@ export class OrganisationPaymentsHistoryComponent extends BasicComponent impleme
   }
 
   updateHistory() {
-    this.paymentService.getPaymentHistory(this.parameters)
+    this.paymentService.getPaymentTransactions(this.parameters)
       .subscribe((dt) => {
         this.payments = dt.data;
         this.config = {

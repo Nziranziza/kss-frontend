@@ -1,0 +1,15 @@
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.modal-header::after,
+.modal-header::before {
+  display: none
+}
+.modal-header h3 {
+  margin: 2px;
+}
+.modal-body {
+  padding-top: 0px;
+}

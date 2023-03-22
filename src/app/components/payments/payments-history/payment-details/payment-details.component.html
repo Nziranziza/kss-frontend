@@ -1,0 +1,60 @@
+<div class="modal-header">
+  <h3>Payment Details</h3>
+  <i class="fa fa-times-circle close" style="font-size: 24px;" aria-label="Close" (click)="modal.dismiss()">
+  </i>
+</div>
+<div class="modal-body">
+  <div>
+    <table>
+      <tbody>
+        <tr>
+          <td>
+            <h5 style="font-weight: 600; margin: 2px">Name:</h5>
+          </td>
+          <td style="text-align: right"><span style="padding-left: 10px">{{ payment.foreName + ' ' + payment.surname }}</span></td>
+        </tr>
+        <tr>
+          <td>
+            <h5 style="font-weight: 600; margin: 2px">Reg Number:</h5>
+          </td>
+          <td style="text-align: right"><span style="padding-left: 10px">{{ payment.regNumber }}</span></td>
+        </tr>
+        <tr>
+          <td>
+            <h5 style="font-weight: 600; margin: 2px">Subscription Number:</h5>
+          </td>
+          <td style="text-align: right"><span style="padding-left: 10px">{{ payment.subscriptionNumber }}</span></td>
+        </tr>
+        <tr>
+          <td>
+            <h5 style="font-weight: 600; margin: 2px">Total Amount:</h5>
+          </td>
+          <td style="text-align: right"><span style="padding-left: 10px">{{ payment.totalAmount | number }}</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <h3>Transactions</h3>
+    <div class="box">
+      <div class="box-body table-responsive">
+        <table class="row-border hover table table-striped">
+          <thead>
+            <tr>
+              <th>TransactionID</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th>Payment Method</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let transaction of payment.transactions; let i = index">
+              <td>{{transaction.transactionId}}</td>
+              <td>{{transaction.amount | number }}</td>
+              <td>{{statuses[transaction.status]}}</td>
+              <td>{{paymentChannels[transaction.paymentChannel]}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

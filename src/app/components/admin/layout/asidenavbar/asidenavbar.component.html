@@ -164,6 +164,12 @@
             </a>
           </li>
           <li routerLinkActive="active" *appHasServices="['ONLINE_PAYMENT']">
+            <a routerLink="/admin/history/transactions/{{ user.org_id }}">
+              <i class="fa fa-circle-o"></i>
+              <span>Transactions</span>
+            </a>
+          </li>
+          <li routerLinkActive="active" *appHasServices="['ONLINE_PAYMENT']">
             <a routerLink="/admin/history/payments/{{ user.org_id }}">
               <i class="fa fa-circle-o"></i>
               <span>History</span>
