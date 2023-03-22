@@ -20,8 +20,8 @@
   <div class="row">
     <div class="col-xs-12">
       <div class="box">
-        <div class="box-body" style="overflow: hidden">
-          <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover table table-striped">
+        <div class="box-body table-responsive">
+          <table class="row-border hover table table-striped">
             <thead>
             <tr>
               <th>CherriesQty (kg)</th>
@@ -52,9 +52,9 @@
               <td><span style="color: #dca956">{{ (supply.paymentStatus.split("_")).join(" ") | lowercase }} </span>
               </td>
               <td>
-                <table style="background: transparent; width: 750px;" class="pull-right">
+                <table style="background: transparent" class="pull-right">
                   <tr style="font-size: 12px; background: transparent; font-weight: bold">
-                    <td>Amount paid (rwf)</td>
+                    <td style="padding-right: 10px;">Amount paid (rwf)</td>
                     <td>Payment approval status</td>
                   </tr>
                   <tr *ngFor="let payment of supply.payment"
