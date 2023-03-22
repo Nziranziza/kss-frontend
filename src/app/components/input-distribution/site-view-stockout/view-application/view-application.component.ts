@@ -30,9 +30,9 @@ export class ViewApplicationComponent
   implements OnInit, AfterViewInit {
   modal: NgbActiveModal;
   @Input() stockOut;
+  @Input() err = 'excess';
   recipients = [];
   objectKeys = Object.keys;
-
   totalReceived = 0;
   totalApproved = 0;
   printStockOuts = [];
@@ -65,11 +65,11 @@ export class ViewApplicationComponent
       pagingType: 'full_numbers',
       pageLength: 25,
     };
-    console.log(this.stockOut);
     this.recipients = this.groupBy(this.stockOut.recipients, 'regNumber');
     if (this.objectKeys(this.recipients)[0] !== undefined) {
       this.createExcelData(this.stockOut.recipients);
     }
+
   }
 
   groupBy = (items, key) => items.reduce(
@@ -83,16 +83,15 @@ export class ViewApplicationComponent
     {},
   );
 
-  onSubmit() {}
-
   ngAfterViewInit(): void {
     this.dtTrigger.next();
   }
 
-  cancelDistribution(stockId: string, inputType: string, recipient: any) {
+  cancelDistribution(stockId: string, inputType: string, recipient: any, reason?: number) {
+    const msg = reason === 0 ? 'reject': 'cancel';
     this.confirmDialogService
       .openConfirmDialog(
-        'Do you want to cancel the application. ' +
+        `Do you want to ${msg} the application. ` +
           'this action can not be undone.'
       )
       .afterClosed()
@@ -105,9 +104,9 @@ export class ViewApplicationComponent
               farmerRequestId: recipient.farmerRequestId,
               recipientId: recipient._id,
             };
-            this.inputDistributionService.cancelDistribution(body).subscribe(
+            this.inputDistributionService.cancelDistribution(body, reason).subscribe(
               (data) => {
-                this.setMessage('Successful cancelled!');
+                this.setMessage('Successful ' + msg);
                 this.stockOut.recipients = this.stockOut.recipients.filter(
                   (value) => {
                     return value.farmerRequestId !== recipient.farmerRequestId;
@@ -135,7 +134,7 @@ export class ViewApplicationComponent
               .cancelPesticideDistribution(body)
               .subscribe(
                 (data) => {
-                  this.setMessage('Successful cancelled!');
+                  this.setMessage('Successful ' + msg);
                   this.stockOut.recipients = this.stockOut.recipients.filter(
                     (value) => {
                       return (
@@ -158,8 +157,10 @@ export class ViewApplicationComponent
       });
   }
 
-  createExcelData(stockouts) {
-    stockouts.map((item) => {
+  createExcelData(recipients) {
+    this.totalReceived = 0;
+    this.totalApproved = 0;
+    recipients.map((item) => {
       const temp = {
         REG_NUMBER: item.regNumber,
         FARMER_NAME: `${item.foreName ? item.foreName : ''} ${

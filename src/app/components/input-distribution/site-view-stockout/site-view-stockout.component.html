@@ -107,7 +107,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let stockOut of stockOuts">
+        <tr *ngFor="let stockOut of stockOuts" [ngClass] = "getClass(hasError(stockOut))">
           <td>{{ stockOut.inputId.inputName }}</td>
           <td>{{ getDestination(stockOut.destination) }}</td>
           <td>{{ stockOut.totalQuantity }}
@@ -121,7 +121,7 @@
             <button class="btn btn-success btn-margin btn-sm pull-right" (click)="returnStockOut(stockOut._id)">
               Return
             </button>
-            <button class="btn btn-success btn-margin btn-sm pull-right" (click)="viewApplication(stockOut._id)">
+            <button class="btn btn-success btn-margin btn-sm pull-right" (click)="viewApplication(stockOut._id, hasError(stockOut))">
               Applications
             </button>
           </td>

@@ -52,7 +52,8 @@ export class SiteViewStockoutComponent extends BasicComponent implements OnInit,
   ngOnInit() {
     this.dtOptions = {
       pagingType: 'full_numbers',
-      pageLength: 25
+      pageLength: 25,
+      orderFixed: [6, 'desc']
     };
     this.route.params.subscribe(params => {
       this.siteId = params['siteId'.toString()];
@@ -196,9 +197,10 @@ export class SiteViewStockoutComponent extends BasicComponent implements OnInit,
     });
   }
 
-  viewApplication(stockId: string) {
+  viewApplication(stockId: string, error? : string) {
     const modalRef = this.modal.open(ViewApplicationComponent, {size: 'lg'});
     modalRef.componentInstance.stockOut = this.stockOuts.find(stock => stock._id === stockId);
+    modalRef.componentInstance.err = error;
     modalRef.result.finally(() => {
       this.inputDistributionService.getCwsStockOuts(this.org._id, this.siteId).subscribe((data) => {
         this.stockOuts = data.data;
@@ -214,12 +216,33 @@ export class SiteViewStockoutComponent extends BasicComponent implements OnInit,
     this.dtTrigger.unsubscribe();
   }
 
+  hasError(stockOut){
+    let total = 0;
+    total = stockOut.recipients.reduce((accumulator, currentValue) => accumulator + Number(currentValue.quantity), 0);
+    const excessError = total > stockOut.distributedQty || total > stockOut.totalQuantity;
+    let error;
+
+    error = excessError ? 'excess': error;
+
+    return error;
+  }
+
   getDestination(destinations) {
     let str = '';
     destinations.map((dest) => {
       str = str + ' - ' + dest.cell_id.name;
     });
     return str;
+  }
+
+  getClass(error: string) {
+    let cls = '';
+    if(error === 'missing')
+      cls = 'bg-yellow';
+
+    if (error === 'excess')
+      cls = 'bg-orange';
+    return cls;
   }
 
   rerender() {
