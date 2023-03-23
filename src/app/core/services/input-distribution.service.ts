@@ -59,8 +59,9 @@ export class InputDistributionService {
     return this.apiService.put('/inputapplication/record_stockreturn', body);
   }
 
-  cancelDistribution(data: any): Observable<any> {
-    return this.apiService.put('/inputapplication/cancel_distribution_and_update', data);
+  cancelDistribution(data: any, reason? : number): Observable<any> {
+    const url =  '/inputapplication/cancel_distribution_and_update/';
+    return this.apiService.put(reason !== undefined? url + reason.toString() : url + '', data);
   }
 
   cancelPesticideDistribution(data: any): Observable<any> {

@@ -223,11 +223,11 @@ export class FertilizerDistributionProgressComponent extends BasicComponent impl
             this.printable.push(print);
           });
         } else {
-          this.setMessage('Sorry no data found to this location');
+          this.setWarning('Sorry no data found to this location');
         }
       }, (err) => {
         if (err.status === 404) {
-          this.setMessage('Sorry no data found to this location');
+          this.setWarning('Sorry no data found to this location');
         } else {
           this.setError(err.errors);
         }

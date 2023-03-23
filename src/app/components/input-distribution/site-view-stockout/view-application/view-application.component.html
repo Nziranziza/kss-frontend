@@ -35,7 +35,6 @@
           <th>Received Qty</th>
           <th>Date</th>
           <th>Approved Qty</th>
-          <!--<th *ngIf="stockOut.input.inputType == 'Fertilizer'">Additional Fertilizer</th>-->
           <th></th>
         </tr>
         </thead>
@@ -59,10 +58,13 @@
             <td>{{ recipient.quantity }}</td>
             <td>{{ recipient.doneOn|date }}</td>
             <td>{{ recipient.farmerApprovedQty }}</td>
-           <!-- <td *ngIf="stockOut.input.inputType == 'Fertilizer'">{{ recipient.extra_fertilizer }}</td>-->
             <td>
+              <button class="btn btn-default btn-margin btn-sm pull-right"  *ngIf="err == 'excess'"
+                      (click)="cancelDistribution(stockOut._id, stockOut.inputId.inputType, recipient, 0)">
+                <i class="fa fa-recycle" aria-hidden="true"></i> Reject
+              </button>
               <button class="btn btn-default btn-margin btn-sm pull-right"
-                      (click)="cancelDistribution(stockOut._id, stockOut.inputId.inputType, recipient)">
+                      (click)="cancelDistribution(stockOut._id, stockOut.inputId.inputType, recipient, 0)">
                 <i class="fa fa-remove" aria-hidden="true"></i> Cancel
               </button>
             </td>
