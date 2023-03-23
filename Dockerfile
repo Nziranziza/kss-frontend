@@ -36,6 +36,6 @@ EXPOSE 5050
 
 RUN npm i --legacy-peer-deps
 
-RUN ng build --aot --configuration production
+RUN ng build --aot --configuration staging
 
 RUN sudo service nginx restart
