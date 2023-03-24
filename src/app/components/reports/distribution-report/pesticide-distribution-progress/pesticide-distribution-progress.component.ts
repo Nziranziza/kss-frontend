@@ -4,14 +4,16 @@ import {Subject} from 'rxjs';
 import {
   AuthenticationService,
   AuthorisationService,
-  ExcelServicesService, InputDistributionService, LocationService,
+  ExcelServicesService,
+  InputDistributionService,
+  LocationService,
   OrganisationService,
   OrganisationTypeService,
-  SiteService
+  SiteService,
+  BasicComponent
 } from '../../../../core';
 import {Router} from '@angular/router';
 import {HelperService} from '../../../../core';
-import {BasicComponent} from '../../../../core';
 
 @Component({
   selector: 'app-pesticide-distribution-progress',
