@@ -29,14 +29,19 @@ export class OrganisationPaymentsHistoryComponent extends BasicComponent impleme
     super();
   }
 
-  payments: any;
+  payments: any = {
+    1: []
+  };
   totalPayments: number;
   organisationId: string;
   org: any;
   currentSeason: any;
   seasonStartingTime: string;
   filterForm: UntypedFormGroup;
-  parameters: any;
+  parameters: any = {
+    page: 1,
+    limit: 25
+  };
   paymentChannels: any;
   maxSize = 9;
   order = 'transaction.regNumber';
@@ -47,6 +52,7 @@ export class OrganisationPaymentsHistoryComponent extends BasicComponent impleme
   config: any;
   autoHide = false;
   responsive = false;
+  loading = true;
   labels: any = {
     previousLabel: 'Previous',
     nextLabel: 'Next',
@@ -79,9 +85,8 @@ export class OrganisationPaymentsHistoryComponent extends BasicComponent impleme
         from: this.seasonStartingTime,
         to: new Date()
       },
-      length: 25,
-      start: 0,
-      draw: 1
+      limit: 25,
+      page: 1,
     };
 
     if (this.authorisationService.isCWSAdmin()) {
@@ -110,11 +115,22 @@ export class OrganisationPaymentsHistoryComponent extends BasicComponent impleme
   }
 
   onPageChange(event) {
-    this.config.currentPage = event;
-    if (event >= 1) {
-      this.parameters.start = (event - 1) * this.config.itemsPerPage;
+    this.parameters = {
+      ...this.parameters,
+      page: Number(event)
     }
-    this.updateHistory();
+    if(!this.payments[Number(event)]) {
+      this.payments = {
+        ...this.payments,
+        [Number(event)]: []
+      }
+      this.updateHistory();
+    } else {
+      this.config = {
+        ...this.config,
+        currentPage: Number(event),
+      }
+    }
   }
 
   setOrder(value: string) {
@@ -151,10 +167,21 @@ export class OrganisationPaymentsHistoryComponent extends BasicComponent impleme
   onChangeFarmerStatusFilter() {
     this.filterForm.controls.status.valueChanges.subscribe(
       (value) => {
+        this.config = {
+          ...this.config,
+          currentPage: 1
+        }
         if (value === '') {
-          delete this.parameters.status;
+          const { status, ...restParams } = this.parameters;
+          this.parameters = {
+            ...restParams,
+            page: 1
+          }
         } else {
-          this.parameters.status = +value;
+          this.parameters = {
+            ...this.parameters,
+            status: Number(value)
+          }
         }
         this.filterForm.controls.search.reset();
         this.filterForm.controls.search.get('searchBy').setValue('foreName');
@@ -167,10 +194,22 @@ export class OrganisationPaymentsHistoryComponent extends BasicComponent impleme
   onChangePaymentChannelFilter() {
     this.filterForm.controls.paymentChannel.valueChanges.subscribe(
       (value) => {
+        this.config = {
+          ...this.config,
+          currentPage: 1
+        }
         if (value === '') {
-          delete this.parameters.paymentChannel;
+          const { paymentChannel, ...restParams } = this.parameters;
+          this.parameters = {
+            ...restParams,
+            page: 1
+          }
         } else {
-          this.parameters.paymentChannel = +value;
+          this.parameters = {
+            ...this.parameters,
+            paymentChannel: Number(value),
+            page: 1
+          }
         }
         this.filterForm.controls.search.reset();
         this.filterForm.controls.search.get('searchBy').setValue('foreName');
@@ -181,15 +220,20 @@ export class OrganisationPaymentsHistoryComponent extends BasicComponent impleme
   }
 
   getTransactions() {
+    this.loading = true;
     this.paymentService.getPaymentTransactions(this.parameters)
-      .subscribe((dt) => {
-        this.payments = dt.data;
+      .subscribe(({ data, meta }) => {
+        this.payments = {
+          ...this.payments,
+          [meta?.page]: data
+        };
         this.showData = true;
         this.config = {
-          itemsPerPage: this.parameters.length,
-          currentPage: this.parameters.start + 1,
-          totalItems: dt.recordsTotal
+          itemsPerPage: meta?.pageSize,
+          currentPage: meta?.page,
+          totalItems: meta?.total
         };
+        this.loading = false;
       }, (err) => {
         if (err.status === 404) {
           this.payments = undefined;
@@ -207,14 +251,19 @@ export class OrganisationPaymentsHistoryComponent extends BasicComponent impleme
   }
 
   updateHistory() {
+    this.loading = true;
     this.paymentService.getPaymentTransactions(this.parameters)
-      .subscribe((dt) => {
-        this.payments = dt.data;
-        this.config = {
-          itemsPerPage: this.parameters.length,
-          currentPage: this.parameters.start + 1,
-          totalItems: dt.recordsTotal
+      .subscribe(({ data, meta }) => {
+        this.payments = {
+          ...this.payments,
+          [meta?.page]: data
         };
+        this.config = {
+          itemsPerPage: meta?.pageSize,
+          currentPage: meta?.page,
+          totalItems: meta?.total
+        };
+        this.loading = false;
       }, (err) => {
         if (err.status === 404) {
           this.setWarning('Payments not found!');
