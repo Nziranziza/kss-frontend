@@ -1,7 +1,7 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { HttpHeaders } from '@angular/common/http';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
+import {HttpHeaders} from '@angular/common/http';
 import {
   AuthenticationService,
   AuthorisationService,
@@ -9,9 +9,10 @@ import {
   MessageService,
   OrganisationService
 } from '../../../core';
-import { SeasonService } from '../../../core';
+import {SeasonService} from '../../../core';
 
 declare var $;
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -21,6 +22,7 @@ export class LoginComponent extends BasicComponent implements OnInit, OnDestroy 
 
   authForm: UntypedFormGroup;
   viewPasswordEnabled = false;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -55,7 +57,7 @@ export class LoginComponent extends BasicComponent implements OnInit, OnDestroy 
             'Content-Type': 'application/json',
             'x-auth-token': params.token
           });
-          const options = { headers };
+          const options = {headers};
           const body = {};
           this.authenticationService.unlock(body, options).subscribe(data => {
             if (data) {
@@ -89,23 +91,24 @@ export class LoginComponent extends BasicComponent implements OnInit, OnDestroy 
       this.authForm.controls.email.setValue(this.authForm.controls.email.value.replace(/\s/g, ''));
       const credentials = this.authForm.value;
       this.authenticationService.attemptAuth(credentials).subscribe(() => {
-        this.seasonService.all().subscribe((dt) => {
-          const seasons = dt.content;
-          seasons.forEach((item) => {
-            if (item.isCurrent) {
-              this.authenticationService.setCurrentSeason(item);
-            }
+          this.seasonService.all().subscribe((dt) => {
+            const seasons = dt.content;
+            seasons.forEach((item) => {
+              if (item.isCurrent) {
+                this.authenticationService.setCurrentSeason(item);
+              }
+            });
+          }, () => {
+          }, () => {
+            this.organisationService.getServices(this.authenticationService.getCurrentUser().info.org_id).subscribe((servicesDt) => {
+              const services = servicesDt.data;
+              this.authenticationService.setServices(services);
+            }, () => {
+            }, () => {
+              this.afterLogInRedirect();
+            });
           });
-        }, () => {
-        }, () => {
-          this.organisationService.getServices(this.authenticationService.getCurrentUser().info.org_id).subscribe((servicesDt) => {
-            const services = servicesDt.data;
-            this.authenticationService.setServices(services);
-          }, () => { }, () => {
-            this.afterLogInRedirect();
-          });
-        });
-      },
+        },
         err => {
           this.setError(err.errors);
         });
@@ -133,6 +136,8 @@ export class LoginComponent extends BasicComponent implements OnInit, OnDestroy 
       this.router.navigateByUrl('admin/input/site/distribution');
     } else if (this.authorisationService.isTechnoServeUser()) {
       this.router.navigateByUrl('admin/dashboard/extension');
+    } else if (this.authorisationService.isExporter()) {
+      this.router.navigateByUrl('/admin/cws/parchments/list');
     } else {
       this.router.navigateByUrl('admin/organisations');
     }

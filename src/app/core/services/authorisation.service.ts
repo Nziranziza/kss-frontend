@@ -147,6 +147,11 @@ export class AuthorisationService {
     return !!this.userRoles.includes(6);
   }
 
+  isExporter() {
+    this.userRoles = this.authenticationService.getCurrentUser().parameters.role;
+    return !!this.userRoles.includes(12);
+  }
+
   isSWAdmin() {
     this.userRoles = this.authenticationService.getCurrentUser().parameters.role;
     return !!(this.userRoles.includes(9) && +this.authenticationService.getCurrentUser().parameters.type === 1);
