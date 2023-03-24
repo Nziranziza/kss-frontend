@@ -21,7 +21,7 @@ export class HelperService {
 
   activeOrganisationEPaymentChannel = [2];
   activeFarmerEPaymentChannel = [2];
-  activeFarmerReceivingPaymentChannel = [2];
+  activeFarmerReceivingPaymentChannel = [4, 2];
 
 
   getFormValidationErrors(form) {

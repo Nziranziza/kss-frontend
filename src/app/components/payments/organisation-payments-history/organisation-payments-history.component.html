@@ -52,6 +52,7 @@
   <div class="col-xs-12">
     <div class="box">
       <div class="box-body table-responsive">
+        <app-loader *ngIf="loading"></app-loader>
         <table class="row-border hover table table-striped">
           <thead>
             <tr>
@@ -61,7 +62,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let payment of payments">
+            <tr *ngFor="let payment of payments[parameters.page]">
               <td>{{ payment.batchID }}</td>
               <td>
                 <table class="row-border hover table table-striped">
@@ -83,7 +84,7 @@
                       <td> {{ transaction.foreName }}</td>
                       <td> {{ transaction.surname }}</td>
                       <td> {{ transaction.subscriptionNumber }}</td>
-                      <td> {{ transaction.amount }}</td>
+                      <td> {{ transaction.amount | number }}</td>
                       <td> {{ transaction.transactionId }}</td>
                       <td> {{ viewStatus(transaction.status) }}</td>
                       <td>
@@ -99,6 +100,19 @@
             </tr>
           </tbody>
         </table>
+        <div style="width: 100%; border-top: 1px solid #0a0a0a" *ngIf="showData">
+          <div style="clear: both; float: left; padding-top: 0.755em">
+            Showing {{ (config.currentPage - 1) * config.itemsPerPage + 1 }} to
+            {{ config.currentPage * config.itemsPerPage }} of
+            {{ config.totalItems }} entries
+          </div>
+          <pagination-controls class="custom-pagination" [maxSize]="maxSize" [directionLinks]="directionLinks"
+            [autoHide]="autoHide" [responsive]="responsive" [previousLabel]="labels.previousLabel"
+            [nextLabel]="labels.nextLabel" [screenReaderPaginationLabel]="labels.screenReaderPaginationLabel"
+            [screenReaderPageLabel]="labels.screenReaderPageLabel"
+            [screenReaderCurrentLabel]="labels.screenReaderCurrentLabel" (pageChange)="onPageChange($event)">
+          </pagination-controls>
+        </div>
       </div>
     </div>
   </div>
