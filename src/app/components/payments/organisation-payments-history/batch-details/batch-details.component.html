@@ -1,0 +1,60 @@
+<div class="modal-header">
+  <h3>Batch details</h3>
+  <i class="fa fa-times-circle close" style="font-size: 24px;" aria-label="Close" (click)="modal.dismiss()">
+  </i>
+</div>
+<div class="modal-body">
+  <div>
+    <table>
+      <tbody>
+        <tr>
+          <td>
+            <h5 style="font-weight: 600; margin: 2px">BatchID:</h5>
+          </td>
+          <td style="text-align: right"><span style="padding-left: 10px">{{ batch.batchID }}</span></td>
+        </tr>
+        <tr>
+          <td>
+            <h5 style="font-weight: 600; margin: 2px">Total Amount(Rwf):</h5>
+          </td>
+          <td style="text-align: right"><span style="padding-left: 10px">{{ batch.totalAmountPaid | number }}</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <h3>Beneficiaries</h3>
+    <div class="box">
+      <div class="box-body table-responsive">
+        <table datatable class="row-border hover table table-striped">
+          <thead>
+            <tr>
+              <th>REG number</th>
+              <th>First name</th>
+              <th>Last name</th>
+              <th>Subscription number</th>
+              <th>Amount (Rwf)</th>
+              <th>Transaction number</th>
+              <th>Status</th>
+              <th> </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let transaction of batch.beneficiaries">
+              <td> {{ transaction.regNumber }}</td>
+              <td> {{ transaction.foreName }}</td>
+              <td> {{ transaction.surname }}</td>
+              <td> {{ transaction.subscriptionNumber }}</td>
+              <td> {{ transaction.amount | number }}</td>
+              <td> {{ transaction.transactionId }}</td>
+              <td> {{ viewStatus(transaction.status) }}</td>
+              <td>
+                <button class="btn btn-default btn-sm btn-margin pull-right details-button"
+                (click)="viewDeliveries(transaction.regNumber, transaction.deliveries)" >...
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

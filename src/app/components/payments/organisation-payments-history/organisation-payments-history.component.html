@@ -62,7 +62,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let payment of payments[parameters.page]">
+            <tr *ngFor="let payment of payments[parameters.page] | paginate: config">
               <td>{{ payment.batchID }}</td>
               <td>
                 <table class="row-border hover table table-striped">
@@ -79,7 +79,7 @@
                     </tr>
                   </thead>
                   <tbody *ngIf="showData">
-                    <tr *ngFor="let transaction of payment.beneficiaries | paginate: config">
+                    <tr *ngFor="let transaction of payment.beneficiaries.slice(0, 5)">
                       <td> {{ transaction.regNumber }}</td>
                       <td> {{ transaction.foreName }}</td>
                       <td> {{ transaction.surname }}</td>
@@ -95,6 +95,9 @@
                     </tr>
                   </tbody>
                 </table>
+                <button (click)="viewBeneficiaries(payment)" *ngIf="payment.beneficiaries.length > 5" class="btn btn-default btn-sm btn-margin pull-right details-button">
+                  {{payment.beneficiaries.length - 5 }} More Beneficiaries
+                </button>
               </td>
               <td>{{ payment.totalAmountPaid }}</td>
             </tr>
