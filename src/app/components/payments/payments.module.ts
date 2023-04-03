@@ -14,12 +14,14 @@ import {OrderModule} from 'ngx-order-pipe';
 import {PaymentHistoryDetailsComponent} from './organisation-payments-history/payment-history-details/payment-history-details.component';
 import { PaymentsHistoryComponent } from './payments-history/payments-history.component';
 import { PaymentDetailsComponent } from './payments-history/payment-details/payment-details.component';
+import { BatchDetailsComponent } from './organisation-payments-history/batch-details/batch-details.component';
 
 @NgModule({
     declarations: [OrganisationTopUpsComponent, OrganisationPaymentsHistoryComponent, OrganisationPayTopUpsComponent,
         PaymentHistoryDetailsComponent,
         PaymentsHistoryComponent,
-        PaymentDetailsComponent],
+        PaymentDetailsComponent,
+        BatchDetailsComponent],
     imports: [
         CommonModule,
         PaymentsRoutingModule,

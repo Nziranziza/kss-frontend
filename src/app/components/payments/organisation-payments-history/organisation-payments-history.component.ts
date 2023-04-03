@@ -1,3 +1,4 @@
+import { BatchDetailsComponent } from './batch-details/batch-details.component';
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
@@ -49,7 +50,11 @@ export class OrganisationPaymentsHistoryComponent extends BasicComponent impleme
   directionLinks = true;
   message: string;
   showData = false;
-  config: any;
+  config: any = {
+    itemsPerPage: 0,
+    currentPage: 1,
+    totalItems: 0
+  };
   autoHide = false;
   responsive = false;
   loading = true;
@@ -62,7 +67,6 @@ export class OrganisationPaymentsHistoryComponent extends BasicComponent impleme
   };
   searchFields = [
     {value: 'reg_number', name: 'registration number'},
-    {value: 'nid', name: 'nid'},
     {value: 'foreName', name: 'first name/group name'},
     {value: 'surname', name: 'last name'}
   ];
@@ -290,6 +294,11 @@ export class OrganisationPaymentsHistoryComponent extends BasicComponent impleme
     const modalRef = this.modal.open(PaymentHistoryDetailsComponent, {size: 'lg'});
     modalRef.componentInstance.regNumber = regNumber;
     modalRef.componentInstance.deliveries = paidDeliveries;
+  }
+
+  viewBeneficiaries(batch: any) {
+    const modalRef = this.modal.open(BatchDetailsComponent, { size: 'lg' })
+    modalRef.componentInstance.batch = batch;
   }
 
   viewStatus(value: number) {
