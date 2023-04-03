@@ -1,0 +1,30 @@
+<div class="d-flex justify-content-between align-items-center">
+  <h3>Integrated apps</h3>
+  <button type="button" class="btn btn-primary" (click)="openAppForm()">
+    ADD NEW APP
+  </button>
+</div>
+<div class="box">
+  <div class="box-body table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>App Name</th>
+          <th>App Id</th>
+          <th>Description</th>
+          <td></td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let app of apps">
+          <td>{{app.name}}</td>
+          <td>{{app.id}}</td>
+          <td>{{app.description}}</td>
+          <td>
+            <button class="btn btn-primary" (click)="openAppForm(app)">Edit</button>
+          </td>
+        </tr>
+      </tbody>
+  </table>
+  </div>
+</div>
