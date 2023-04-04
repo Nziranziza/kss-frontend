@@ -1,0 +1,58 @@
+<div class="modal-header">
+  <div class="d-flex justify-content-between align-items-center">
+    <h3 class="m-0">{{app?.id ? 'App Details' : 'Add new app'}}</h3>
+    <i class="fa fa-times-circle close" style="font-size: 24px;" aria-label="Close" (click)="modal.dismiss()">
+    </i>
+  </div>
+</div>
+<div class="modal-body pt-0">
+  <app-list-errors [errorList]="errors"></app-list-errors>
+  <div *ngIf="appKey" class="d-flex justify-content-between" style="margin-bottom: 10px;">
+    <div>
+      <span>This is the app key, should be kept in safe</span>
+      <div>
+        <span style="font-weight: 600; padding-right: 5px">App Key:</span>
+        <span>{{appKey}}</span>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex justify-content-end" *ngIf="!appKey && app?.id">
+    <button class="btn btn-primary" (click)="regenerateAppKey()">
+      <span *ngIf="!regenerateLoading; else other_content">Regenerate app key</span>
+      <ng-template #other_content>
+        <div class="loader">
+          <div class="line"></div>
+          <div class="line"></div>
+          <div class="line"></div>
+          <div class="line"></div>
+        </div>
+      </ng-template>
+    </button>
+  </div>
+  <form [formGroup]="appForm" (ngSubmit)="onSubmit()">
+    <div class="form-group has-feedback">
+      <label>Name</label>
+      <input type="text" formControlName="name" class="form-control" placeholder="Name" />
+    </div>
+    <div class="form-group has-feedback">
+      <label>Description</label>
+      <textarea rows="10" formControlName="description" class="form-control" placeholder="Description"></textarea>
+    </div>
+    <div class="d-flex justify-content-between">
+      <button class="btn btn-success" (click)="modal.dismiss()">
+        Close
+      </button>
+      <button class="btn btn-success" type="submit">
+        <span *ngIf="!saveLoading; else other_content">{{ app?.id ? 'Update' : 'Add' }}</span>
+        <ng-template #other_content>
+          <div class="loader">
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+          </div>
+        </ng-template>
+      </button>
+    </div>
+  </form>
+</div>

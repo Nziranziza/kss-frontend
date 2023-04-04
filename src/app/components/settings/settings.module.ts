@@ -15,6 +15,8 @@ import { EditSupplierComponent } from './distribution-parameters/edit-supplier/e
 import { ChannelComponent } from './payment-channel/channel-create/channel.component';
 import { ChannelListComponent } from './payment-channel/channel-list/channel-list.component';
 import { ChannelEditComponent } from './payment-channel/channel-edit/channel-edit.component';
+import { IntegrationsComponent } from './integrations/integrations.component';
+import { AppFormComponent } from './integrations/app-form/app-form.component';
 
 @NgModule({
     declarations: [
@@ -31,6 +33,8 @@ import { ChannelEditComponent } from './payment-channel/channel-edit/channel-edi
         EditSupplierComponent,
         ChannelListComponent,
         ChannelEditComponent,
+        IntegrationsComponent,
+        AppFormComponent
     ],
     imports: [CommonModule, SettingsRoutingModule, SharedModule]
 })

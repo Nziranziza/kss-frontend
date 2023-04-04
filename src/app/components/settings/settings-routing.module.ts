@@ -10,6 +10,7 @@ import { DistributionParametersComponent } from './distribution-parameters/distr
 import { ChannelComponent } from './payment-channel/channel-create/channel.component';
 import { ChannelListComponent } from './payment-channel/channel-list/channel-list.component';
 import { ChannelEditComponent } from './payment-channel/channel-edit/channel-edit.component';
+import { IntegrationsComponent } from './integrations/integrations.component';
 
 const routes: Routes = [
   {
@@ -49,6 +50,10 @@ const routes: Routes = [
         path: 'distribution-parameters',
         component: DistributionParametersComponent,
       },
+      {
+        path: 'integrations',
+        component: IntegrationsComponent
+      }
     ],
   },
 ];
