@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {
   TrainingService,
-  Training,
   AuthenticationService,
 } from '../../../../core';
 import { MessageService } from '../../../../core';
@@ -89,7 +88,7 @@ export class TrainingSchedulingListComponent
   }
 
   open(content) {
-    this.modalService.open(content, { size: 'sm', windowClass: 'modal-sm' });
+    this.modalService.open(content, { size: 'md' });
   }
 
   selectedSchedule(schedule) {
@@ -101,6 +100,7 @@ export class TrainingSchedulingListComponent
     const data = this.schedule._id;
     this.trainingService.sendMessage(data).subscribe((data) => {
       this.loading = false;
+      this.modal.dismissAll()
     });
   }
 
@@ -131,5 +131,9 @@ export class TrainingSchedulingListComponent
   openViewModal(id: string) {
     const modalRef = this.modal.open(TrainingScheduleViewComponent);
     modalRef.componentInstance.id = id;
+  }
+
+  getFailedSmsDeliveryTrainees(trainees: any) {
+    return trainees.filter(trainee => trainee.smsStatus !== 'DELIVERED')
   }
 }

@@ -1,8 +1,9 @@
+
 import {Component, OnInit} from '@angular/core';
 import {UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AuthenticationService, ExcelServicesService, OrganisationService, OrganisationTypeService} from '../../../core';
-import {HelperService} from '../../../core';
+import {HelperService, IntegrationsService} from '../../../core';
 import {LocationService} from '../../../core';
 import {ParchmentService} from '../../../core';
 import {AuthorisationService} from '../../../core';
@@ -13,6 +14,7 @@ import {ParchmentReportDetailComponent} from './parchment-report-detail/parchmen
 import {DatePipe} from '@angular/common';
 import {Subject} from 'rxjs';
 import { ChartType } from 'angular-google-charts';
+
 
 @Component({
   selector: 'app-parchment-report',
@@ -72,17 +74,24 @@ export class ParchmentReportComponent extends BasicComponent implements OnInit {
   isCurrentUserDCC;
   subRegionFilter: any;
   regionIds = [];
+  partners = [];
 
   constructor(private formBuilder: UntypedFormBuilder,
-              private authorisationService: AuthorisationService,
-              private authenticationService: AuthenticationService,
-              private excelService: ExcelServicesService,
-              private modal: NgbModal,
-              private route: ActivatedRoute,
-              private datePipe: DatePipe,
-              private router: Router, private organisationService: OrganisationService,
-              private helper: HelperService, private organisationTypeService: OrganisationTypeService,
-              private locationService: LocationService, private parchmentService: ParchmentService) {
+    private authorisationService: AuthorisationService,
+    private authenticationService: AuthenticationService,
+    private excelService: ExcelServicesService,
+    private modal: NgbModal,
+    private route: ActivatedRoute,
+    private datePipe: DatePipe,
+    private router: Router, 
+    private organisationService: OrganisationService,
+    private helper: HelperService, 
+    private organisationTypeService: OrganisationTypeService,
+    private locationService: LocationService, 
+    private parchmentService: ParchmentService,
+    private integrationService: IntegrationsService,
+    private helperService: HelperService
+    ) {
     super();
   }
 
@@ -100,7 +109,8 @@ export class ParchmentReportComponent extends BasicComponent implements OnInit {
         from: [this.datePipe.transform(this.seasonStartingTime,
           'yyyy-MM-dd', 'GMT+2')],
         to: [this.datePipe.transform(this.currentDate, 'yyyy-MM-dd', 'GMT+2')],
-      })
+      }),
+      appId: ['']
     });
     this.dtOptions = {
       pagingType: 'full_numbers',
@@ -108,6 +118,9 @@ export class ParchmentReportComponent extends BasicComponent implements OnInit {
     };
     this.initial();
     this.onChanges();
+    this.integrationService
+      .getIntegrations()
+      .subscribe(({ data }) => (this.partners = data));
   }
 
   get fromFilterDate() {
@@ -154,7 +167,7 @@ export class ParchmentReportComponent extends BasicComponent implements OnInit {
     this.subRegionFilter = JSON.parse(JSON.stringify(filters));
     this.setSubRegionFilter(this.subRegionFilter);
 
-    this.parchmentService.report(filters).subscribe((data) => {
+    this.parchmentService.report(this.helperService.cleanObject(filters)).subscribe((data) => {
       this.loading = false;
       const reports = [];
       this.regionIds = [];
