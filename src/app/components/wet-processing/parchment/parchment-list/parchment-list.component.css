@@ -1,0 +1,33 @@
+.info-box-icon {
+  border-radius: 2px 0 0 2px;
+  float: left;
+  width: 10%;
+  text-align: center;
+  font-size: 45px;
+  line-height: 90px;
+  background: rgb(232 215 192);
+  top: 0;
+  bottom: 0;
+  position: absolute;
+  min-height: 100px;
+}
+
+.info-box-content {
+  padding: 10px 10px;
+  margin-left: 50px;
+}
+
+.info-box-text {
+  color: #572007;
+  text-transform: capitalize;
+  font-weight: bolder;
+  display: contents;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.progress-description {
+  display: contents;
+}

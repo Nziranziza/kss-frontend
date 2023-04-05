@@ -99,7 +99,7 @@ export class OrganisationCreateComponent implements OnInit {
       const org = JSON.parse(JSON.stringify(val));
       org['organizationRole'.toString()] = selectedRoles;
       org['organizationPartner'.toString()] = selectedPartners;
-      if (!(selectedRoles.includes(1) || selectedRoles.includes(2))) {
+      if (!(selectedRoles.includes(1) || selectedRoles.includes(2) || selectedRoles.includes(12) )) {
         delete org.location;
       }
       if (!(selectedRoles.includes(1))) {
@@ -260,7 +260,7 @@ export class OrganisationCreateComponent implements OnInit {
           .map((checked, index) => checked ? this.possibleRoles[index].value : null)
           .filter(value => value !== null);
         this.needLocation = !!(this.selectedRoles.includes(1) ||
-          this.selectedRoles.includes(2));
+          this.selectedRoles.includes(2)|| this.selectedRoles.includes(12));
         if (this.selectedRoles.includes(1)) {
           this.coverVillages = true;
           if (this.formCoveredSectors.length < 1) {
