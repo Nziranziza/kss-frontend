@@ -116,13 +116,13 @@
               <span>{{ "parchments" | translate }}</span>
             </a>
           </li>
-          <li routerLinkActive="active" *appHasPermission="[1]">
+          <li routerLinkActive="active" *appHasPermission="[1, 12]">
             <a routerLink="/admin/cws/parchments/transfer/cart">
               <i class="fa fa-circle-o"></i>
               <span>Transfer</span>
             </a>
           </li>
-          <li routerLinkActive="active" *appHasPermission="[1]">
+          <li routerLinkActive="active" *appHasPermission="[1, 12]">
             <a routerLink="/admin/cws/parchments/transfer/history">
               <i class="fa fa-circle-o"></i>
               <span>Transfer history</span>
@@ -131,7 +131,7 @@
         </ul>
       </li>
       <ng-container *ngIf="hasGreenCoffee" appInternal>
-        <li class="treeview" routerLinkActive="active" *appHasPermission="[1]">
+        <li class="treeview" routerLinkActive="active" *appHasPermission="[1, 12]">
           <a href="#">
             <i class="fa fa-coffee"></i>
             <span>Green coffee</span>
@@ -140,7 +140,7 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li routerLinkActive="active" *appHasPermission="[1]">
+            <li routerLinkActive="active" *appHasPermission="[1, 12]">
               <a routerLink="/admin/cws/greencoffee/list">
                 <i class="fa fa-circle-o" aria-hidden="true"></i>
                 <span>&nbsp;Green coffee</span>
@@ -433,7 +433,17 @@
         </ul>
       </li>
       <li class="header">{{ "GENERAL" | translate }}</li>
-      <li class="treeview" routerLinkActive="active">
+      <li class="treeview" routerLinkActive="active" *appHasPermission="[
+                  0,
+                  6,
+                  [4, 1],
+                  [4, 11],
+                  [4, 12],
+                  5,
+                  [8, 1],
+                  [8, 2],
+                  1
+                ]">
         <a href="#">
           <i class="fa fa-bar-chart"></i><span>Reports</span>
           <span class="pull-right-container">

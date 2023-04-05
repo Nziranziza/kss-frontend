@@ -19,7 +19,7 @@ export class OrganisationEditComponent extends BasicComponent implements OnInit 
               private organisationService: OrganisationService, private locationService: LocationService,
               private authenticationService: AuthenticationService,
               private authorisationService: AuthorisationService,
-              private organisationTypeService: OrganisationTypeService, 
+              private organisationTypeService: OrganisationTypeService,
               private messageService: MessageService,
               private servicesService: ServicesService) {
     super();
@@ -124,7 +124,7 @@ export class OrganisationEditComponent extends BasicComponent implements OnInit 
         org['genreId'.toString()] = org.genre._id;
         delete org.genre;
         if (
-          org.organizationRole.includes(1) ||
+          org.organizationRole.includes(1) || org.organizationRole.includes(12) ||
           org.organizationRole.includes(2)) {
           if (org.location) {
             org['location'.toString()]['prov_id'.toString()] = org.location.prov_id ? org.location.prov_id._id : '';
@@ -142,7 +142,7 @@ export class OrganisationEditComponent extends BasicComponent implements OnInit 
         this.locationService.getProvinces().subscribe((provinces) => {
           this.provinces = provinces;
         });
-        if (org.location) {
+        if (org.location && org.coveredSectors ) {
           org.coveredSectors.map((sector, index) => {
             this.selectedCoveredVillages[index] = [];
             this.selectedCoveredCells[index] = [];
@@ -334,7 +334,7 @@ export class OrganisationEditComponent extends BasicComponent implements OnInit 
       org['organizationRole'.toString()] = selectedRoles;
       org['organizationPartner'.toString()] = selectedPartners;
       org['services'.toString()] = this.selectedServices
-      if (!(selectedRoles.includes(1) || selectedRoles.includes(2))) {
+      if (!(selectedRoles.includes(1) || selectedRoles.includes(2) || selectedRoles.includes(12) )) {
         delete org.location;
       } else if (this.authorisationService.isDistrictCashCropOfficer()) {
         org['location'.toString()]['prov_id'.toString()] = this.organisation.location.prov_id ? this.organisation.location.prov_id._id : '';
@@ -404,7 +404,8 @@ export class OrganisationEditComponent extends BasicComponent implements OnInit 
         this.selectedRoles = data
           .map((checked, index) => checked ? this.possibleRoles[index].value : null)
           .filter(value => value !== null);
-        this.needLocation = !!(this.selectedRoles.includes(1) || this.selectedRoles.includes(2));
+        this.needLocation = !!(this.selectedRoles.includes(1) ||
+          this.selectedRoles.includes(2)|| this.selectedRoles.includes(12));
         if (this.selectedRoles.includes(1)) {
           this.coverVillages = true;
           if (this.formCoveredSectors.length < 1) {

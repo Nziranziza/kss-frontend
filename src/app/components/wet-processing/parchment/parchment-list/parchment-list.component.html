@@ -9,12 +9,21 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-md-2 col-sm-3 col-xs-6" *ngFor="let production of summary">
-    <div class="info-box-content bg-yellow-gradient" style="margin-left: 0px">
-      <span class="info-box-text">{{ production.coffeeType }}</span>
-      <span class="progress-description" *ngFor="let item of production.grade | keyvalue">
-        Grade {{ item.key }} &nbsp;{{ item.value | number }}&#13199;
+  <div class="col-md-2 col-sm-6 col-xs-6" *ngFor="let production of summary">
+    <div class="info-box" >
+      <span class="info-box-icon bg-info">
       </span>
+      <div class="info-box-content" >
+        <span class="info-box-text" >{{ production.coffeeType }}</span>
+        <div *ngFor="let item of production.grade | keyvalue">
+        <span class="progress-description" >
+          Grade {{ item.key }}
+        </span> &nbsp;
+        <span style="font-weight: bolder">
+          {{ item.value | number }}&#13199;
+        </span>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -23,13 +32,13 @@
 <app-list-errors [errorList]="errors"></app-list-errors>
 <div class="row filter-form" style="margin-top: 15px;">
   <form [formGroup]="filterForm" (ngSubmit)="onFilter()">
-    <div class="col-lg-1 col-md-2 col-sm-3 col-xs-6">
+    <div class="col-lg-2 col-md-2 col-sm-3 col-xs-6">
       <select class="form-control" formControlName="type">
         <option value="">select type</option>
         <option *ngFor="let type of coffeeTypes" value="{{type._id}}"> {{ type.name }}</option>
       </select>
     </div>
-    <div class="col-lg-1 col-md-2 col-sm-3 col-xs-6">
+    <div class="col-lg-2 col-md-2 col-sm-6 col-xs-6">
       <select class="form-control" formControlName="grade">
         <option value="">select grade</option>
         <option value="A"> A</option>
@@ -38,19 +47,19 @@
       </select>
     </div>
     <ng-container formGroupName="producedDate">
-      <div class="col-lg-1 col-md-2 col-sm-3 col-xs-6">
+      <div class="col-lg-1 col-md-2 col-sm-12 col-xs-12">
         <div class="form-inline">
           <label class="control-label">Produced</label>
         </div>
       </div>
-      <div class="col-lg-1 col-md-2 col-sm-3 col-xs-6">
+      <div class="col-lg-1 col-md-2 col-sm-6 col-xs-6">
         <div class="form-group">
           <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="from" class="form-control"
                  placeholder="from .." [min]="seasonStartingDate" [max]="currentDate">
           <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
         </div>
       </div>
-      <div class="col-lg-1 col-md-2 col-sm-3 col-xs-6">
+      <div class="col-lg-1 col-md-2 col-sm-6 col-xs-6">
         <div class="form-group">
           <input [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" formControlName="to" class="form-control label-optional"
                  placeholder="to .." [min]="seasonStartingDate" [max]="currentDate">
@@ -59,27 +68,27 @@
       </div>
     </ng-container>
     <ng-container formGroupName="releaseDate">
-      <div class="col-lg-1 col-md-2 col-sm-3 col-xs-6">
+      <div class="col-lg-1 col-md-2 col-sm-12 col-xs-12">
         <div class="form-inline">
-          <label class="control-label">Released</label>
+          <label class="control-label">Transferred</label>
         </div>
       </div>
-      <div class="col-lg-1 col-md-2 col-sm-3 col-xs-6">
+      <div class="col-lg-1 col-md-2 col-sm-6 col-xs-6">
         <div class="form-group">
           <input [owlDateTimeTrigger]="dt3" [owlDateTime]="dt3" formControlName="from" class="form-control"
-                 placeholder="from .." [min]="seasonStartingDate" [max]="currentDate">
+                 placeholder="from..." [min]="seasonStartingDate" [max]="currentDate">
           <owl-date-time [pickerType]="'calendar'" #dt3></owl-date-time>
         </div>
       </div>
-      <div class="col-lg-1 col-md-2 col-sm-3 col-xs-6">
+      <div class="col-lg-1 col-md-2 col-sm-6 col-xs-6">
         <div class="form-group">
           <input [owlDateTimeTrigger]="dt4" [owlDateTime]="dt4" formControlName="to" class="form-control"
-                 placeholder="to .." [min]="seasonStartingDate" [max]="currentDate">
+                 placeholder="to..." [min]="seasonStartingDate" [max]="currentDate">
           <owl-date-time [pickerType]="'calendar'" #dt4></owl-date-time>
         </div>
       </div>
     </ng-container>
-    <div class="col-lg-2 col-md-4 col-sm-6 col-xs-12">
+    <div class="col-lg-2 col-md-4 col-sm-12 col-xs-12">
       <button class="btn btn-warning btn-margin pull-right" type="button" (click)="onClearFilter()">Clear</button>
       <button class="btn btn-success pull-right" type="submit"><i class="fa fa-search"></i> Search</button>
     </div>
