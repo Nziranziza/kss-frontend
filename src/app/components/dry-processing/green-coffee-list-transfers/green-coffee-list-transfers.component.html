@@ -6,7 +6,7 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-md-2 col-sm-3 col-xs-6" *ngFor="let production of summary">
+  <div class="col-md-2 col-sm-6 col-xs-6" *ngFor="let production of summary">
     <div class="info-box-content bg-yellow-gradient" style="margin-left: 0px">
       <span class="info-box-text">{{ production.coffeeType }}</span>
       <span class="progress-description" *ngFor="let item of production.grade | keyvalue">
@@ -16,7 +16,7 @@
   </div>
 </div>
 <div class="row filter-form" style="margin-bottom: 10px; margin-left: -15px; margin-top: 15px;">
-  <div class="col-xs-2">
+  <div class="col-md-3 col-sm-6 col-xs-12 c-input-padding">
     <div class="ng-autocomplete">
       <ng-autocomplete
         #destination
@@ -41,14 +41,14 @@
   </div>
   <form [formGroup]="filterForm" (ngSubmit)="onFilter()">
     <ng-container formGroupName="date">
-      <div class="col-xs-1">
+      <div class="col-md-2 col-sm-6 col-xs-12">
         <div class="form-group">
           <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="from" class="form-control"
                  placeholder="from date..">
           <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
         </div>
       </div>
-      <div class="col-xs-1">
+      <div class="col-md-2 col-sm-6 col-xs-12">
         <div class="form-group">
           <input [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" formControlName="to" class="form-control"
                  placeholder="to..">
@@ -56,7 +56,7 @@
         </div>
       </div>
     </ng-container>
-    <div class="col-xs-2">
+    <div class="col-md-5 col-sm-6 col-xs-12">
       <button class="btn btn-warning pull-right btn-margin" type="button" (click)="onClearFilter()">Clear</button>
       <button class="btn btn-success pull-right btn-margin" type="submit"><i class="fa fa-search"></i> Search</button>
     </div>

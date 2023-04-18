@@ -37,3 +37,9 @@
 .ng-autocomplete ::ng-deep .autocomplete-container .suggestions-container {
   box-shadow: none;
 }
+
+@media screen and (max-width: 768px) {
+  .c-input-padding {
+    padding-bottom: 10px;
+  }
+}
