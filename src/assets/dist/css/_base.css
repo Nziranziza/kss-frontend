@@ -452,9 +452,9 @@ table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>th:first-child:before 
   background-color: #f9f6f1;
 }
 
-.table-striped>tbody>tr:nth-of-type(odd):hover {
+/*.table-striped>tbody>tr:nth-of-type(odd):hover {
   background-color: white !important;
-}
+}*/
 
 /*----------------------------------------Alerts---------------------------------------------*/
 .alert {
@@ -637,3 +637,5 @@ table {
 .cursor-pointer {
   cursor: pointer;
 }
+
+

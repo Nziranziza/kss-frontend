@@ -31,6 +31,7 @@
         <tr>
           <th>REG Number</th>
           <th>Farmer Name</th>
+          <th>Number of Trees</th>
           <th>Allocated Qty</th>
           <th>Received Qty</th>
           <th>Date</th>
@@ -41,7 +42,7 @@
         <tbody>
         <ng-container *ngFor="let key of objectKeys(recipients)">
           <ng-container *ngIf="key != 'undefined'">
-          <tr *ngFor="let recipient of recipients[key]; let i = index">
+          <tr *ngFor="let recipient of recipients[key]; let i = index" [ngClass] = "recipient.outOfZone? 'bg-orange' : ''">
             <td *ngIf="i==0; else other">
                 {{ recipient.regNumber }}
             </td>
@@ -54,17 +55,20 @@
             <ng-template #other>
               <td style="color: transparent;">{{ key }}</td>
             </ng-template>
+            <td>{{ recipient.numberOfTrees }}</td>
             <td>{{ recipient.farmerAllocatedQty? recipient.farmerAllocatedQty: ''}}</td>
             <td>{{ recipient.quantity }}</td>
             <td>{{ recipient.doneOn|date }}</td>
             <td>{{ recipient.farmerApprovedQty }}</td>
             <td>
-              <button class="btn btn-default btn-margin btn-sm pull-right"  *ngIf="err == 'excess'"
-                      (click)="cancelDistribution(stockOut._id, stockOut.inputId.inputType, recipient, 0)">
-                <i class="fa fa-recycle" aria-hidden="true"></i> Reject
-              </button>
+              <ng-template *ngIf="excess">
+                  <button class="btn btn-default btn-margin btn-sm pull-right"
+                    (click)="cancelDistribution(stockOut._id, stockOut.inputId.inputType, recipient, 0)">
+                    <i class="fa fa-recycle" aria-hidden="true"></i> Reject
+                  </button>
+              </ng-template>
               <button class="btn btn-default btn-margin btn-sm pull-right"
-                      (click)="cancelDistribution(stockOut._id, stockOut.inputId.inputType, recipient, 0)">
+                      (click)="cancelDistribution(stockOut._id, stockOut.inputId.inputType, recipient, recipient.outOfZone? 1: undefined)">
                 <i class="fa fa-remove" aria-hidden="true"></i> Cancel
               </button>
             </td>
