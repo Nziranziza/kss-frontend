@@ -218,13 +218,17 @@ export class SiteViewStockoutComponent extends BasicComponent implements OnInit,
 
   hasError(stockOut){
     let total = 0;
-    total = stockOut.recipients.reduce((accumulator, currentValue) => accumulator + Number(currentValue.quantity), 0);
-    const excessError = total > stockOut.distributedQty || total > stockOut.totalQuantity;
-    let error;
-
-    error = excessError ? 'excess': error;
-
-    return error;
+    let err;
+    if(stockOut.inputId.inputType === 'Fertilizer') {
+      total = stockOut.recipients.reduce((accumulator, currentValue) => accumulator + Number(currentValue.quantity), 0);
+      const error = total > stockOut.distributedQty || total > stockOut.totalQuantity;
+      const warning = total < stockOut.distributedQty || total < stockOut.totalQuantity;
+      err = warning ? 'warning': err;
+      err = error ? 'error': err;
+      const index = stockOut.recipients.findIndex((recipient) => recipient.outOfZone && recipient.farmerRequestId);
+      err = index > -1 ? 'error': err;
+    }
+    return err
   }
 
   getDestination(destinations) {
@@ -237,10 +241,10 @@ export class SiteViewStockoutComponent extends BasicComponent implements OnInit,
 
   getClass(error: string) {
     let cls = '';
-    if(error === 'missing')
-      cls = 'bg-yellow';
+    if(error === 'warning')
+      cls = 'bg-gray';
 
-    if (error === 'excess')
+    if (error === 'error')
       cls = 'bg-orange';
     return cls;
   }

@@ -38,3 +38,8 @@
   box-shadow: none;
 }
 
+@media screen and (max-width: 768px) {
+  .c-input-padding {
+    padding-bottom: 10px;
+  }
+}

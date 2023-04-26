@@ -30,7 +30,7 @@ export class ViewApplicationComponent
   implements OnInit, AfterViewInit {
   modal: NgbActiveModal;
   @Input() stockOut;
-  @Input() err = 'excess';
+  excess: boolean;
   recipients = [];
   objectKeys = Object.keys;
   totalReceived = 0;
@@ -69,7 +69,8 @@ export class ViewApplicationComponent
     if (this.objectKeys(this.recipients)[0] !== undefined) {
       this.createExcelData(this.stockOut.recipients);
     }
-
+    const total = this.stockOut.recipients.reduce((accumulator, currentValue) => accumulator + Number(currentValue.quantity), 0);
+    this.excess = total > this.stockOut.distributedQty || total > this.stockOut.totalQuantity;
   }
 
   groupBy = (items, key) => items.reduce(
@@ -151,7 +152,7 @@ export class ViewApplicationComponent
                 (err) => {
                   this.setError(err.errors);
                 }
-              );
+            );
           }
         }
       });
