@@ -107,7 +107,7 @@ export class FarmVisitListComponent
   }
 
   open(content) {
-    this.modal.open(content, { size: 'sm', windowClass: 'modal-sm' });
+    this.modal.open(content, { size: 'md' });
   }
 
   selectedVisit(visit) {
